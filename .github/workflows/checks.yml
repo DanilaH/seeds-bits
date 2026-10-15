@@ -1,0 +1,55 @@
+name: Check and build prototype
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-checks
+          path: test-results/
+      - run: npm run build && npm run build:yandex
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seeds-bits-web
+          path: dist/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seeds-bits-yandex-draft
+          path: dist-yandex/
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v3
+      - run: npm ci
+      - run: npm run setup:android
+      - run: npm run sync:android
+      - run: chmod +x android/gradlew && cd android && ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seeds-bits-android-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk

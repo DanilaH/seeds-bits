@@ -1,0 +1,46 @@
+{
+  "name": "seeds-bits",
+  "version": "0.1.0",
+  "description": "Lightweight cross-platform Number Match puzzle",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "build:yandex": "tsc && vite build --mode yandex",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "preview": "vite preview --host 0.0.0.0",
+    "sync:android": "npm run build && cap sync android",
+    "sync:ios": "npm run build && cap sync ios",
+    "setup:android": "npm run build && cap add android",
+    "setup:ios": "npm run build && cap add ios"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanilaH/seeds-bits.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/DanilaH/seeds-bits/issues"
+  },
+  "homepage": "https://github.com/DanilaH/seeds-bits#readme",
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3",
+    "@playwright/test": "^1.64.1",
+    "prettier": "^3.9.10",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/preferences": "^8.0.1"
+  },
+  "private": true
+}
