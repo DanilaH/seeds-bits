@@ -171,6 +171,11 @@ function drawPath(path: Connection | null) {
   svg.innerHTML = `<path d="${d}"/><circle cx="${a[0]}" cy="${a[1]}" r="3"/><circle cx="${b[0]}" cy="${b[1]}" r="3"/>`;
 }
 function render() {
+  const focusedIndex = document.activeElement?.closest("#board")
+    ? (document.activeElement as HTMLElement).dataset.index
+    : undefined;
+  $<HTMLButtonElement>("lesson-next").disabled = busy;
+  $<HTMLButtonElement>("skip").disabled = busy;
   const values = board(),
     count = occupied(values),
     available = pairs(values);
@@ -210,6 +215,12 @@ function render() {
           : "Пар нет. Добавьте оставшиеся цифры.",
     );
   drawPath(highlight);
+  if (focusedIndex !== undefined) {
+    const target = $("board").querySelector<HTMLElement>(
+      `button[data-index="${focusedIndex}"]`,
+    );
+    target?.focus({ preventScroll: true });
+  }
 }
 function clearSelection() {
   selected = -1;
@@ -236,6 +247,7 @@ function loadLesson() {
   message("Попробуйте на маленьком поле");
 }
 function finishLesson() {
+  if (busy) return;
   lesson = -1;
   settings.tutorialDone = true;
   $("lesson").hidden = true;

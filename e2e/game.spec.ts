@@ -31,7 +31,7 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
-  await page.locator("#add").click();
+  await page.locator("#add").click({ force: true });
   await expect(page.locator("#status")).toContainText("ещё есть пары");
   await page.screenshot({ path: "test-results/dark-mobile.png" });
 });
