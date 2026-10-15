@@ -3,6 +3,9 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   page,
 }) => {
   await page.goto("/");
+  await page.locator("#skip").click();
+  await page.locator("#menu").click();
+  await page.locator("#learn").click();
   const clickCell = (i: number) => page.locator(`[data-index="${i}"]`).click();
   for (const [a, b] of [
     [0, 1],
@@ -26,14 +29,19 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   await expect(page.locator("#remaining")).toHaveText("26");
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("28");
-  await page.locator("#theme").click();
+  await page.locator("#menu").click();
+  await page.locator("#dark").check();
+  await page.locator("#close").click();
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
   await page.locator("#add").click({ force: true });
   await expect(page.locator("#status")).toContainText("ещё есть пары");
-  await page.screenshot({ path: "test-results/dark-mobile.png" });
+  await page.screenshot({
+    animations: "disabled",
+    path: "test-results/dark-mobile.png",
+  });
 });
 test("adds only when stuck, restores partial rows and rejects blocked pair", async ({
   page,
@@ -97,5 +105,8 @@ test("light layout has no horizontal overflow at narrow viewport", async ({
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await page.screenshot({ path: "test-results/light-mobile.png" });
+  await page.screenshot({
+    animations: "disabled",
+    path: "test-results/light-mobile.png",
+  });
 });

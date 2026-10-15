@@ -37,7 +37,7 @@ On macOS with supported Xcode: `npm run setup:ios` once, then `npm run sync:ios`
 ## Architecture
 
 - `src/core.ts`: immutable rules, pair enumeration, append, undo and validated save format.
-- `src/main.ts`: small DOM controller, six-step interactive tutorial, selected/hinted pair, settings, save queue.
+- `src/main.ts`: small DOM controller, two-step first run and six-step optional tutorial, selected/hinted pair, settings, save queue.
 - `src/platform.ts`: native Preferences, haptics and app lifecycle; Yandex lifecycle adapter.
 - `src/style.css`: light/dark styles, responsive nine-column board, reduced motion.
 - `tests/`: rule fixtures, independent differential validator, seeded play/undo/save simulations.
@@ -45,6 +45,6 @@ On macOS with supported Xcode: `npm run setup:ios` once, then `npm run sync:ios`
 
 ## Product decisions / limits
 
-See `docs/SPEC.md` and `docs/STATUS.md`. Rule version 0.1. Classic deterministic 1–19 start (zero omitted). Adding is free but only allowed when there are no pairs. No loss on repeated state/no pairs. All hints mean legal pair, not a guaranteed winning route. No advertisements, coins, daily challenges or leaderboards in the prototype.
+See `docs/SPEC.md` and `docs/STATUS.md`. Rule version 0.1. Classic deterministic 1–19 start (zero omitted). Adding is free but only allowed when there are no pairs. No loss on repeated state/no pairs. All hints mean legal pair, not a guaranteed winning route. 24 verified notebook tasks, daily calendar and monthly trophies are included in version 0.2. See `docs/VERSION_02.md`. No advertisements, coins or leaderboards.
 
 Provisional field guard: 1,800 logical cells. This is a protective implementation limit, **not** a measured mobile performance claim. At the limit, undo/new game remain available; no defeat is declared. Undo history has no artificial gameplay cap, but device storage is finite; failed saves are explicitly surfaced with a retry action.

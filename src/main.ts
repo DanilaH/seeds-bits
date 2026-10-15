@@ -1,3 +1,4 @@
+import { emblem } from "./trophies";
 import "./style.css";
 import {
   WIDTH,
@@ -15,11 +16,27 @@ import {
   type Session,
   type Connection,
 } from "./core";
+import {
+  notebook,
+  daily,
+  today,
+  days,
+  trophy,
+  FIRST_MONTH,
+  puzzleSession,
+  availableDay,
+  type Puzzle,
+} from "./puzzles";
+import { fresh, readProgress, type Progress } from "./progress";
 import * as platform from "./platform";
 const $ = <T extends HTMLElement>(id: string) =>
   document.getElementById(id) as T;
 const KEY = "seeds-bits.session.v1",
   SETTINGS = "seeds-bits.settings.v1";
+const PROGRESS = "seeds-bits.progress.v2";
+let progress: Progress = fresh(),
+  shortLesson = false,
+  calendarMonth = today().slice(0, 7);
 let session: Session = newSession(),
   selected = -1,
   highlight: Connection | null = null,
@@ -84,7 +101,7 @@ const icons = {
 const icon = (name: keyof typeof icons) =>
   `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки<span>ИГРА С ЧИСЛАМИ</span></div><button id="theme" class="plain" aria-label="Переключить тему">◐</button></header><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> цифр</span></section><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✳</span><h1>Чистое поле.</h1><p>Все пары найдены. Хорошая работа.</p><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><p id="status" role="status" aria-live="polite"></p><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span>Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><button id="resume" class="primary">Продолжить игру</button><button id="new" class="secondary">Новая игра</button><button id="learn" class="secondary">Как играть</button><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><p class="fine">Без спешки. Без ограничения ходов.<br>Прототип · правила 0.1</p></div><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">▦</button></header><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Поле очищено</h1><p id="win-stats"></p><div id="award" hidden></div><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span>Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><button id="resume" class="primary">Продолжить игру</button><button id="new" class="secondary">Новая игра</button><nav class="mode-nav"><button id="classic-mode" class="secondary">Классика</button><button id="book-mode" class="secondary">Тетрадь · 24 задачи</button><button id="daily-mode" class="secondary">Задача дня</button><button id="trophies-mode" class="secondary">Мои трофеи</button></nav><button id="learn" class="secondary">Как играть</button><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div></div><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
 $("app").inert = true;
@@ -96,13 +113,14 @@ function message(text: string) {
 }
 function save() {
   if (lesson < 0) session.current.scroll = viewport.scrollTop;
-  const data = JSON.stringify(session),
-    prefs = JSON.stringify(settings);
+  progress.sessions[progress.active] = session;
+  const bundle = JSON.stringify(progress);
+  const prefs = JSON.stringify(settings);
   saveQueue = saveQueue
     .catch(() => {})
     .then(async () => {
       try {
-        await platform.write(KEY, data);
+        await platform.write(PROGRESS, bundle);
         await platform.write(SETTINGS, prefs);
         saveFailed = false;
         $("retry-save").hidden = true;
@@ -140,7 +158,9 @@ function feedback() {
         gain = audio.createGain();
       osc.connect(gain);
       gain.connect(audio.destination);
-      osc.frequency.setValueAtTime(660, audio.currentTime);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(320, audio.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(120, audio.currentTime + 0.08);
       gain.gain.setValueAtTime(0.025, audio.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.12);
       osc.start();
@@ -151,24 +171,98 @@ function feedback() {
   }
 }
 function drawPath(path: Connection | null) {
-  const svg = $("paths");
-  svg.innerHTML = "";
-  if (!path) return;
-  const w = $("board").clientWidth / WIDTH;
-  const point = (i: number) => [
-    (i % WIDTH) * w + w / 2,
-    Math.floor(i / WIDTH) * w + w / 2,
-  ];
-  const a = point(path.a),
-    b = point(path.b);
-  let d = `M${a[0]},${a[1]} L${b[0]},${b[1]}`;
-  if (path.kind === "reading") {
-    const [lo, hi] = [Math.min(path.a, path.b), Math.max(path.a, path.b)],
-      p = point(lo),
-      q = point(hi);
-    d = `M${p[0]},${p[1]} H${w * WIDTH - 2} M2,${q[1]} H${q[0]}`;
+  $("paths").innerHTML = "";
+  if (path?.kind === "reading") {
+    const w = $("board").clientWidth / 9;
+    $("paths").innerHTML =
+      `<path d="M${w * 9 - 9},${Math.floor(path.a / 9) * w + w * 0.8}h6m-3,-3l3,3 -3,3 M9,${Math.floor(path.b / 9) * w + w * 0.8}H3m3,-3l-3,3 3,3"/>`;
   }
-  svg.innerHTML = `<path d="${d}"/><circle cx="${a[0]}" cy="${a[1]}" r="3"/><circle cx="${b[0]}" cy="${b[1]}" r="3"/>`;
+  updateJump();
+}
+const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+function motion(el: Element | null, frames: Keyframe[], duration = 160) {
+  if (el && !reduced()) el.animate(frames, { duration, easing: "ease-out" });
+}
+function cell(i: number) {
+  return $("board").querySelector<HTMLElement>(`[data-index="${i}"]`);
+}
+function updateJump() {
+  const button = $("hint-jump");
+  button.hidden = true;
+  if (!highlight) return;
+  const rect = viewport.getBoundingClientRect();
+  const other =
+    selected === highlight.a
+      ? highlight.b
+      : selected === highlight.b
+        ? highlight.a
+        : highlight.b;
+  const c = cell(other)?.getBoundingClientRect();
+  if (!c) return;
+  if (c.top < rect.top || c.bottom > rect.bottom) {
+    button.hidden = false;
+    button.textContent =
+      c.top < rect.top ? "↑ Вторая цифра выше" : "↓ Вторая цифра ниже";
+    button.onclick = () =>
+      cell(other)?.scrollIntoView({
+        block: "center",
+        behavior: reduced() ? "instant" : "smooth",
+      });
+  }
+}
+function digitWord(n: number) {
+  return n % 10 === 1 && n % 100 !== 11
+    ? "цифра"
+    : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)
+      ? "цифры"
+      : "цифр";
+}
+function activePuzzle(): Puzzle | undefined {
+  return (
+    notebook.find((p) => p.id === progress.active) ??
+    (progress.active.startsWith("daily-v1-")
+      ? daily(progress.active.slice(9))
+      : undefined)
+  );
+}
+function complete() {
+  if (progress.active === "classic" || progress.done.includes(progress.active))
+    return;
+  progress.done.push(progress.active);
+  save();
+}
+function renderWin() {
+  const id = progress.active;
+  $("win-stats").textContent =
+    `Пар убрано: ${session.current.moves} · Добавлений: ${session.current.additions} · Подсказок: ${progress.hints[id] ?? 0}`;
+  const i = notebook.findIndex((p) => p.id === id);
+  $("play-again").textContent =
+    i >= 0 && i < 23
+      ? "Следующая задача"
+      : i === 23
+        ? "К тетради"
+        : id.startsWith("daily")
+          ? "К календарю"
+          : "Ещё партия";
+  const award = $("award");
+  award.hidden = true;
+  if (i >= 0) {
+    const page = Math.floor(i / 6);
+    const n = notebook
+      .slice(page * 6, page * 6 + 6)
+      .filter((p) => progress.done.includes(p.id)).length;
+    award.hidden = false;
+    award.textContent =
+      n === 6
+        ? `✓ Страница ${page + 1} завершена`
+        : `Страница ${page + 1} · ${n} из 6`;
+  }
+  if (id.startsWith("daily")) {
+    const m = id.slice(9, 16),
+      t = trophy(m, progress.done);
+    award.hidden = false;
+    award.textContent = `${t.count} из ${days(m).length} дней · ${["До первого трофея — 7 задач", "Бронзовый трофей", "Серебряный трофей", "Золотой трофей"][t.tier]}`;
+  }
 }
 function render() {
   const focusedIndex = document.activeElement?.closest("#board")
@@ -180,8 +274,15 @@ function render() {
     count = occupied(values),
     available = pairs(values);
   $("remaining").textContent = String(count);
+  $("noun").textContent = digitWord(count);
   $("mode").textContent =
-    lesson >= 0 ? "Знакомство с игрой" : "Классическая партия";
+    lesson >= 0
+      ? "Как играть"
+      : progress.active === "classic"
+        ? "Классика"
+        : progress.active.startsWith("book")
+          ? `Тетрадь · задача ${notebook.findIndex((p) => p.id === progress.active) + 1}`
+          : `Задача дня · ${progress.active.slice(9).split("-").reverse().join(".")}`;
   $("board").innerHTML = Array.from(
     { length: Math.ceil(values.length / WIDTH) * WIDTH },
     (_, i) =>
@@ -190,6 +291,7 @@ function render() {
         : `<span class="cell empty" data-index="${i}" aria-hidden="true"></span>`,
   ).join("");
   $("win").hidden = count > 0 || lesson >= 0;
+  if (!count && lesson < 0) renderWin();
   $("board-wrap").hidden = count === 0;
   $<HTMLButtonElement>("undo").disabled =
     busy ||
@@ -201,18 +303,36 @@ function render() {
   $("add").setAttribute(
     "aria-disabled",
     String(
-      busy || !count || available.length > 0 || (lesson >= 0 && lesson !== 5),
+      busy ||
+        !count ||
+        available.length > 0 ||
+        (lesson >= 0 && lesson !== 5) ||
+        (lesson < 0 && progress.active !== "classic"),
     ),
   );
   $("add-label").textContent =
-    available.length || !count ? "Добавить" : `Добавить ${count}`;
+    progress.active !== "classic" && lesson < 0
+      ? "Добавить"
+      : available.length || !count
+        ? "Добавить"
+        : `Добавить ${count}`;
+  $("add").classList.toggle(
+    "ready",
+    !available.length &&
+      count > 0 &&
+      (progress.active === "classic" || lesson === 5),
+  );
   if (lesson < 0 && !saveFailed)
     message(
       count === 0
         ? "Партия завершена"
         : available.length
-          ? "Одинаковые цифры или сумма 10"
-          : "Пар нет. Добавьте оставшиеся цифры.",
+          ? highlight
+            ? "Соедините две отмеченные цифры"
+            : "Одинаковые цифры или сумма 10"
+          : progress.active === "classic"
+            ? "Пар нет. Добавьте оставшиеся цифры."
+            : "Пар нет. Отмените ход или начните задачу заново.",
     );
   drawPath(highlight);
   if (focusedIndex !== undefined) {
@@ -226,7 +346,8 @@ function clearSelection() {
   selected = -1;
   highlight = null;
 }
-function startLesson() {
+function startLesson(short = false) {
+  shortLesson = short;
   if (busy) return;
   session.current.scroll = viewport.scrollTop;
   lesson = 0;
@@ -238,7 +359,8 @@ function loadLesson() {
   lessonPhase = 0;
   clearSelection();
   $("lesson").hidden = false;
-  $("lesson-step").textContent = `${lesson + 1} / ${lessons.length}`;
+  $("lesson-step").textContent =
+    `${lesson + 1} / ${shortLesson ? 2 : lessons.length}`;
   $("lesson-title").textContent = lessons[lesson].title;
   $("lesson-text").textContent = lessons[lesson].text;
   $("lesson-next").hidden = true;
@@ -268,8 +390,9 @@ async function choose(i: number) {
   if (lesson >= 0 && lessonPhase === 2) return;
   if (selected < 0) {
     selected = i;
-    highlight = null;
+    if (highlight && i !== highlight.a && i !== highlight.b) highlight = null;
     render();
+    motion(cell(i), [{ transform: "scale(.92)" }, { transform: "scale(1)" }]);
     return;
   }
   const a = selected,
@@ -278,6 +401,12 @@ async function choose(i: number) {
     selected = i;
     highlight = null;
     render();
+    motion(cell(a), [{ background: "#dba5a5" }, { background: "transparent" }]);
+    motion(cell(i), [
+      { transform: "translateX(-3px)" },
+      { transform: "translateX(3px)" },
+      { transform: "translateX(0)" },
+    ]);
     message(
       {
         same: "Выберите другую цифру",
@@ -297,29 +426,65 @@ async function choose(i: number) {
   highlight = result.path;
   render();
   feedback();
-  await new Promise((r) => setTimeout(r, 160));
+  for (const n of [a, i]) cell(n)?.classList.add("erasing");
+  await new Promise((r) => setTimeout(r, reduced() ? 0 : 100));
   const oldLength = values.length,
     next = removePair(values, a, i);
+  const blank = [...values];
+  blank[a] = blank[i] = 0;
+  const positions = new Map<number, number>();
+  let offset = 0;
+  for (let row = 0; row < blank.length; row += 9) {
+    if (!blank.slice(row, row + 9).some(Boolean)) {
+      offset += 9;
+      continue;
+    }
+    for (let c = row; c < Math.min(row + 9, blank.length); c++)
+      positions.set(c - offset, c);
+  }
+  const w = $("board").clientWidth / 9;
   if (lesson >= 0) {
     lessonBoard = next;
     lessonPhase = 2;
     $("lesson-next").hidden = false;
-    $("lesson-next").textContent = lesson === 5 ? "Начать игру" : "Дальше";
+    $("lesson-next").textContent =
+      lesson === 5 || (shortLesson && lesson === 1) ? "Начать игру" : "Дальше";
   } else {
     session = commit(session, next, "pair", viewport.scrollTop);
     hintIndex = 0;
+    if (!occupied(next)) complete();
     save();
   }
   clearSelection();
-  render();
-  if (next.length < oldLength) {
-    $("board").classList.add("settling");
-    await new Promise((r) => setTimeout(r, 150));
-    $("board").classList.remove("settling");
-  }
   busy = false;
   render();
+  if (next.length < oldLength) {
+    for (const [n, old] of positions)
+      if (n !== old)
+        motion(
+          cell(n),
+          [
+            {
+              transform: `translateY(${(Math.floor(old / 9) - Math.floor(n / 9)) * w}px)`,
+            },
+            { transform: "translateY(0)" },
+          ],
+          170,
+        );
+  }
   if (lesson >= 0) message("Получилось!");
+  else if (result.path.kind === "reading")
+    teach(
+      "reading",
+      "Конец строки продолжается в начале следующей. Пустоты не мешают.",
+    );
+  else if (
+    Math.abs((a % 9) - (i % 9)) ===
+    Math.abs(Math.floor(a / 9) - Math.floor(i / 9))
+  )
+    teach("diagonal", "По диагонали тоже можно: если между цифрами пусто.");
+  else if (Math.abs(a - i) > 9)
+    teach("gaps", "Пустые клетки между цифрами не мешают соединению.");
   if (!occupied(board()) && lesson < 0) platform.gameplay(false);
 }
 function add() {
@@ -327,6 +492,12 @@ function add() {
   const values = board();
   if (lesson >= 0 && lesson !== 5) return;
   if (!occupied(values)) return;
+  if (lesson < 0 && progress.active !== "classic") {
+    message(
+      "В короткой задаче цифры не добавляются. Есть решение из начальной позиции: используйте отмену.",
+    );
+    return;
+  }
   if (pairs(values).length) {
     message("На поле ещё есть пары. Можно воспользоваться подсказкой.");
     return;
@@ -343,7 +514,19 @@ function add() {
     }
     clearSelection();
     render();
-    viewport.scrollTop = viewport.scrollHeight;
+    cell(values.length)?.scrollIntoView({
+      block: "center",
+      behavior: reduced() ? "instant" : "smooth",
+    });
+    for (let j = values.length; j < next.length; j++)
+      motion(
+        cell(j),
+        [
+          { background: "var(--selected)", opacity: 0.3 },
+          { background: "transparent", opacity: 1 },
+        ],
+        240,
+      );
     if (lesson === 5) message("Теперь нажмите «Отмена»");
   } catch {
     message(
@@ -363,10 +546,19 @@ function undoAction() {
     return;
   }
   if (lesson >= 0) return;
+  const before = [...session.current.board];
   session = undo(session);
   clearSelection();
   render();
   viewport.scrollTop = session.current.scroll;
+  session.current.board.forEach((v, i) => {
+    if (v && v !== before[i])
+      motion(
+        cell(i),
+        [{ background: "var(--selected)" }, { background: "transparent" }],
+        220,
+      );
+  });
   save();
   platform.gameplay(occupied(board()) > 0);
 }
@@ -375,6 +567,8 @@ function hint() {
   const available = pairs(board());
   if (!available.length) return;
   highlight = available[hintIndex++ % available.length];
+  progress.hints[progress.active] = (progress.hints[progress.active] ?? 0) + 1;
+  save();
   selected = -1;
   render();
   const top = Math.min(highlight.a, highlight.b);
@@ -386,6 +580,24 @@ function hint() {
         ? "instant"
         : "smooth",
     });
+  const ca = cell(highlight.a),
+    cb = cell(highlight.b);
+  if (
+    ca &&
+    cb &&
+    Math.abs(cb.offsetTop - ca.offsetTop) + ca.offsetHeight <=
+      viewport.clientHeight
+  ) {
+    viewport.scrollTo({
+      top: Math.max(
+        0,
+        (ca.offsetTop + cb.offsetTop) / 2 -
+          viewport.clientHeight / 2 +
+          ca.offsetHeight / 2,
+      ),
+      behavior: reduced() ? "instant" : "smooth",
+    });
+  }
   message(
     highlight.kind === "reading"
       ? "Допустимая пара: конец строки → начало следующей"
@@ -398,13 +610,15 @@ function closeMenu() {
 }
 function openMenu() {
   if (busy) return;
+  $("collection").hidden = true;
   $("menu-content").hidden = false;
   $("confirm-content").hidden = true;
-  dialog.showModal();
+  if (!dialog.open) dialog.showModal();
   platform.gameplay(false);
 }
 function reset() {
-  session = newSession();
+  session = activePuzzle() ? puzzleSession(activePuzzle()!) : newSession();
+  progress.hints[progress.active] = 0;
   clearSelection();
   if (lesson >= 0) {
     lesson = -1;
@@ -444,21 +658,32 @@ $("add").onclick = add;
 $("menu").onclick = openMenu;
 $("close").onclick = closeMenu;
 $("resume").onclick = closeMenu;
-$("theme").onclick = () => setTheme(settings.theme !== "dark");
+$("book-top").onclick = () => openCollection("book");
 $("new").onclick = () => {
+  if (!session.history.length || !occupied(session.current.board)) {
+    reset();
+    return;
+  }
   $("menu-content").hidden = true;
   $("confirm-content").hidden = false;
 };
 $("cancel-new").onclick = () => {
+  $("collection").hidden = true;
   $("menu-content").hidden = false;
   $("confirm-content").hidden = true;
 };
 $("confirm-new").onclick = reset;
-$("play-again").onclick = reset;
-$("learn").onclick = startLesson;
+$("play-again").onclick = () => {
+  const i = notebook.findIndex((p) => p.id === progress.active);
+  if (i >= 0 && i < 23) switchGame(notebook[i + 1].id);
+  else if (i === 23) openCollection("book");
+  else if (progress.active.startsWith("daily")) openCollection("calendar");
+  else reset();
+};
+$("learn").onclick = () => startLesson();
 $("skip").onclick = finishLesson;
 $("lesson-next").onclick = () => {
-  if (lesson === 5) finishLesson();
+  if (lesson === 5 || (shortLesson && lesson === 1)) finishLesson();
   else {
     lesson++;
     loadLesson();
@@ -476,6 +701,7 @@ $("retry-save").onclick = () => {
 dialog.addEventListener("cancel", () => platform.gameplay(!paused));
 let scrollTimer: ReturnType<typeof setTimeout>;
 viewport.addEventListener("scroll", () => {
+  updateJump();
   clearTimeout(scrollTimer);
   scrollTimer = setTimeout(() => {
     if (lesson < 0) save();
@@ -496,6 +722,12 @@ async function boot() {
   try {
     const stored = await platform.read(KEY);
     if (stored) session = decode(stored);
+    progress.sessions.classic = session;
+    const bundle = await platform.read(PROGRESS);
+    if (bundle) {
+      progress = readProgress(bundle);
+      session = progress.sessions[progress.active];
+    }
   } catch {
     warning = "Сохранение не удалось прочитать. Открыта новая партия.";
   }
@@ -545,9 +777,140 @@ async function boot() {
       }
     })
     .catch(() => {});
-  if (!settings.tutorialDone) startLesson();
+  if (!settings.tutorialDone) startLesson(true);
   platform.ready();
   platform.gameplay(true);
   if (warning) message(warning);
 }
+function teach(id: string, text: string) {
+  if (progress.seen.includes(id)) return;
+  progress.seen.push(id);
+  message(text);
+  save();
+}
+function switchGame(id: string) {
+  if (busy) return;
+  if (id.startsWith("daily") && !availableDay(id.slice(9))) return;
+  if (lesson < 0) session.current.scroll = viewport.scrollTop;
+  progress.sessions[progress.active] = session;
+  progress.active = id;
+  const p = activePuzzle();
+  session = progress.sessions[id] ?? (p ? puzzleSession(p) : newSession());
+  lesson = -1;
+  $("lesson").hidden = true;
+  clearSelection();
+  closeMenu();
+  render();
+  viewport.scrollTop = session.current.scroll;
+  save();
+}
+const months = () => {
+  const result: string[] = [];
+  const end = today().slice(0, 7);
+  let m = FIRST_MONTH;
+  while (m <= end && result.length < 1200) {
+    result.push(m);
+    const [y, n] = m.split("-").map(Number);
+    m = n === 12 ? `${y + 1}-01` : `${y}-${String(n + 1).padStart(2, "0")}`;
+  }
+  return result;
+};
+const monthName = (m: string) =>
+  new Date(Number(m.slice(0, 4)), Number(m.slice(5)) - 1, 1).toLocaleDateString(
+    "ru",
+    { month: "long", year: "numeric" },
+  );
+function openCollection(kind: "book" | "calendar" | "trophies") {
+  if (busy) return;
+  openMenu();
+  $("menu-content").hidden = true;
+  const panel = $("collection");
+  panel.hidden = false;
+  let html = '<button class="text-button" id="collection-back">← Меню</button>';
+  if (kind === "book") {
+    html +=
+      '<h2>Тетрадь</h2><p class="intro">24 небольшие задачи. Решайте в своём темпе.</p>';
+    for (let p = 0; p < 4; p++) {
+      const group = notebook.slice(p * 6, p * 6 + 6),
+        n = group.filter((x) => progress.done.includes(x.id)).length;
+      html += `<section class="book-page"><div class="page-heading"><h3>Страница ${p + 1}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((x) => `<button class="task ${progress.done.includes(x.id) ? "done" : ""}" data-game="${x.id}" aria-label="Задача ${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? ", решена" : ""}">${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? "<small>✓</small>" : ""}</button>`).join("")}</div>${n === 6 ? '<p class="stamp">Завершено ✓</p>' : ""}</section>`;
+    }
+  } else if (kind === "calendar") {
+    if (calendarMonth > today().slice(0, 7))
+      calendarMonth = today().slice(0, 7);
+    const t = trophy(calendarMonth, progress.done),
+      weekday =
+        (new Date(
+          Number(calendarMonth.slice(0, 4)),
+          Number(calendarMonth.slice(5)) - 1,
+          1,
+        ).getDay() +
+          6) %
+        7;
+    html += `<h2>Задача дня</h2><div class="month-nav"><button id="prev-month" aria-label="Предыдущий месяц" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>‹</button><h3>${monthName(calendarMonth)}</h3><button id="next-month" aria-label="Следующий месяц" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>›</button></div><div class="calendar">${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
+      calendarMonth,
+    )
+      .map(
+        (d) =>
+          `<button class="task ${progress.done.includes("daily-v1-" + d) ? "done" : ""} ${d === today() ? "today" : ""}" data-game="daily-v1-${d}" ${!availableDay(d) ? "disabled" : ""} aria-label="${d}${progress.done.includes("daily-v1-" + d) ? ", решена" : ""}">${Number(d.slice(-2))}${progress.done.includes("daily-v1-" + d) ? "<small>✓</small>" : ""}</button>`,
+      )
+      .join(
+        "",
+      )}</div><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="intro">Пропущенные дни доступны. Подсказки не влияют на трофеи.</p><button class="primary" id="today-task">${progress.done.includes("daily-v1-" + today()) ? "Повторить сегодняшнюю" : "Играть сегодня"}</button><p class="fine">Трофеи: 7 задач · 14 задач · весь месяц</p>`;
+  } else {
+    html +=
+      '<h2>Мои трофеи</h2><p class="intro">Один трофей месяца: бронза за 7 задач, серебро за 14, золото за весь месяц.</p>';
+    for (const m of months().reverse()) {
+      const t = trophy(m, progress.done);
+      html += `<button class="trophy tier-${t.tier}" data-month="${m}"><span class="medal">${emblem(m)}</span><span><strong>${monthName(m)}</strong><small>${["Пока не получен", "Бронза", "Серебро", "Золото"][t.tier]} · ${t.count}/${days(m).length}</small></span></button>`;
+    }
+  }
+  panel.innerHTML = html;
+  $("collection-back").onclick = openMenu;
+  panel.querySelectorAll<HTMLElement>("[data-game]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        const id = b.dataset.game!;
+        switchGame(id);
+        if (!occupied(session.current.board)) reset();
+      }),
+  );
+  panel.querySelectorAll<HTMLElement>("[data-month]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        calendarMonth = b.dataset.month!;
+        openCollection("calendar");
+      }),
+  );
+  if (kind === "calendar") {
+    for (const [id, delta] of [
+      ["prev-month", -1],
+      ["next-month", 1],
+    ] as const)
+      $(id).onclick = () => {
+        const d = new Date(
+          Number(calendarMonth.slice(0, 4)),
+          Number(calendarMonth.slice(5)) - 1 + delta,
+          1,
+        );
+        calendarMonth = today(d).slice(0, 7);
+        openCollection("calendar");
+      };
+    $("today-task").onclick = () => {
+      switchGame(daily(today()).id);
+      if (!occupied(session.current.board)) reset();
+    };
+  }
+  motion(panel, [
+    { opacity: 0, transform: "translateY(6px)" },
+    { opacity: 1, transform: "translateY(0)" },
+  ]);
+}
+$("classic-mode").onclick = () => switchGame("classic");
+$("book-mode").onclick = () => openCollection("book");
+$("daily-mode").onclick = () => {
+  calendarMonth = today().slice(0, 7);
+  openCollection("calendar");
+};
+$("trophies-mode").onclick = () => openCollection("trophies");
 void boot();
