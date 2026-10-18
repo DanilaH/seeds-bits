@@ -101,7 +101,7 @@ const icons = {
 const icon = (name: keyof typeof icons) =>
   `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">▦</button></header><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Поле очищено</h1><p id="win-stats"></p><div id="award" hidden></div><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span>Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><button id="resume" class="primary">Продолжить игру</button><button id="new" class="secondary">Новая игра</button><nav class="mode-nav"><button id="classic-mode" class="secondary">Классика</button><button id="book-mode" class="secondary">Тетрадь · 24 задачи</button><button id="daily-mode" class="secondary">Задача дня</button><button id="trophies-mode" class="secondary">Мои трофеи</button></nav><button id="learn" class="secondary">Как играть</button><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div></div><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">▦</button></header><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><details class="result-details"><summary>Итоги партии</summary><p id="win-stats"></p></details><div id="award" hidden></div><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span>Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">↗</span></button><button id="book-mode" class="mode-link"><span>Тетрадь<small>24 небольшие задачи</small></span><span aria-hidden="true">↗</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small>Календарь задач</small></span><span aria-hidden="true">↗</span></button></nav><div class="home-links"><button id="trophies-mode" class="text-button">Коллекция</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><button id="settings-back" class="text-button">← Меню</button><h2>Настройки</h2><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
 $("app").inert = true;
@@ -122,8 +122,10 @@ function save() {
       try {
         await platform.write(PROGRESS, bundle);
         await platform.write(SETTINGS, prefs);
+        const recovered = saveFailed;
         saveFailed = false;
         $("retry-save").hidden = true;
+        if (recovered) message("Партия сохранена");
       } catch {
         saveFailed = true;
         $("retry-save").hidden = false;
@@ -140,7 +142,7 @@ function applyTheme() {
     .querySelector('meta[name="theme-color"]')
     ?.setAttribute(
       "content",
-      settings.theme === "dark" ? "#171e25" : "#f6f7f4",
+      settings.theme === "dark" ? "#202724" : "#fafbf9",
     );
 }
 function setTheme(dark: boolean) {
@@ -159,7 +161,7 @@ function feedback() {
       osc.connect(gain);
       gain.connect(audio.destination);
       osc.type = "sine";
-      osc.frequency.setValueAtTime(320, audio.currentTime);
+      osc.frequency.setValueAtTime(220 + Math.random() * 35, audio.currentTime);
       osc.frequency.exponentialRampToValueAtTime(120, audio.currentTime + 0.08);
       gain.gain.setValueAtTime(0.025, audio.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.12);
@@ -261,7 +263,7 @@ function renderWin() {
     const m = id.slice(9, 16),
       t = trophy(m, progress.done);
     award.hidden = false;
-    award.textContent = `${t.count} из ${days(m).length} дней · ${["До первого трофея — 7 задач", "Бронзовый трофей", "Серебряный трофей", "Золотой трофей"][t.tier]}`;
+    award.textContent = `${t.count} из ${days(m).length} дней · ${["Первый трофей — за 7 задач", "Бронзовый трофей", "Серебряный трофей", "Золотой трофей"][t.tier]}`;
   }
 }
 function render() {
@@ -273,6 +275,35 @@ function render() {
   const values = board(),
     count = occupied(values),
     available = pairs(values);
+  document
+    .querySelector(".game")!
+    .classList.toggle(
+      "compact-game",
+      lesson < 0 && progress.active !== "classic",
+    );
+  $("add").hidden = lesson < 0 && progress.active !== "classic";
+  const taskIndex = notebook.findIndex((p) => p.id === progress.active);
+  const marks = $("page-progress");
+  marks.hidden = lesson >= 0 || taskIndex < 0;
+  if (taskIndex >= 0) {
+    const pageIndex = Math.floor(taskIndex / 6);
+    marks.innerHTML = `<span>Страница ${pageIndex + 1}</span><div>${notebook
+      .slice(pageIndex * 6, pageIndex * 6 + 6)
+      .map(
+        (p) =>
+          `<i class="${progress.done.includes(p.id) ? "finished" : p.id === progress.active ? "current" : ""}">${progress.done.includes(p.id) ? "✓" : ""}</i>`,
+      )
+      .join("")}</div>`;
+    marks.setAttribute(
+      "aria-label",
+      `Страница ${pageIndex + 1}, задача ${(taskIndex % 6) + 1} из 6`,
+    );
+  }
+  $("restart-task").hidden =
+    lesson >= 0 ||
+    progress.active === "classic" ||
+    !count ||
+    available.length > 0;
   $("remaining").textContent = String(count);
   $("noun").textContent = digitWord(count);
   $("mode").textContent =
@@ -427,9 +458,16 @@ async function choose(i: number) {
   render();
   feedback();
   for (const n of [a, i]) cell(n)?.classList.add("erasing");
-  await new Promise((r) => setTimeout(r, reduced() ? 0 : 100));
   const oldLength = values.length,
     next = removePair(values, a, i);
+  // Commit the accepted move before awaiting a decorative animation.
+  if (lesson < 0) {
+    session = commit(session, next, "pair", viewport.scrollTop);
+    hintIndex = 0;
+    if (!occupied(next)) complete();
+    save();
+  }
+  await new Promise((r) => setTimeout(r, reduced() ? 0 : 100));
   const blank = [...values];
   blank[a] = blank[i] = 0;
   const positions = new Map<number, number>();
@@ -449,11 +487,6 @@ async function choose(i: number) {
     $("lesson-next").hidden = false;
     $("lesson-next").textContent =
       lesson === 5 || (shortLesson && lesson === 1) ? "Начать игру" : "Дальше";
-  } else {
-    session = commit(session, next, "pair", viewport.scrollTop);
-    hintIndex = 0;
-    if (!occupied(next)) complete();
-    save();
   }
   clearSelection();
   busy = false;
@@ -473,17 +506,18 @@ async function choose(i: number) {
         );
   }
   if (lesson >= 0) message("Получилось!");
-  else if (result.path.kind === "reading")
+  else if (occupied(next) && result.path.kind === "reading")
     teach(
       "reading",
       "Конец строки продолжается в начале следующей. Пустоты не мешают.",
     );
   else if (
+    occupied(next) &&
     Math.abs((a % 9) - (i % 9)) ===
-    Math.abs(Math.floor(a / 9) - Math.floor(i / 9))
+      Math.abs(Math.floor(a / 9) - Math.floor(i / 9))
   )
     teach("diagonal", "По диагонали тоже можно: если между цифрами пусто.");
-  else if (Math.abs(a - i) > 9)
+  else if (occupied(next) && Math.abs(a - i) > 9)
     teach("gaps", "Пустые клетки между цифрами не мешают соединению.");
   if (!occupied(board()) && lesson < 0) platform.gameplay(false);
 }
@@ -606,10 +640,30 @@ function hint() {
 }
 function closeMenu() {
   dialog.close();
+  document.body.classList.remove("navigation-open");
   platform.gameplay(!paused && occupied(board()) > 0);
+}
+function navigateBack(native = false): boolean {
+  if (busy) return true;
+  if (dialog.open) {
+    if ($("menu-content").hidden) openMenu();
+    else if (native) return false;
+    else closeMenu();
+  } else if (lesson >= 0) finishLesson();
+  else openMenu();
+  return true;
 }
 function openMenu() {
   if (busy) return;
+  document.body.classList.add("navigation-open");
+  dialog.dataset.screen = "home";
+  $("settings-panel").hidden = true;
+  $("resume-context").textContent = $("mode").textContent;
+  $("resume").textContent = occupied(board())
+    ? session.history.length
+      ? "Продолжить игру"
+      : "Играть"
+    : "Посмотреть результат";
   $("collection").hidden = true;
   $("menu-content").hidden = false;
   $("confirm-content").hidden = true;
@@ -665,14 +719,21 @@ $("new").onclick = () => {
     return;
   }
   $("menu-content").hidden = true;
+  $("settings-panel").hidden = true;
   $("confirm-content").hidden = false;
 };
-$("cancel-new").onclick = () => {
-  $("collection").hidden = true;
-  $("menu-content").hidden = false;
-  $("confirm-content").hidden = true;
+$("cancel-new").onclick = openMenu;
+$("settings-open").onclick = () => {
+  $("menu-content").hidden = true;
+  $("settings-panel").hidden = false;
+  dialog.dataset.screen = "settings";
 };
+$("settings-back").onclick = openMenu;
 $("confirm-new").onclick = reset;
+$("restart-task").onclick = () => {
+  openMenu();
+  $("new").click();
+};
 $("play-again").onclick = () => {
   const i = notebook.findIndex((p) => p.id === progress.active);
   if (i >= 0 && i < 23) switchGame(notebook[i + 1].id);
@@ -698,7 +759,16 @@ for (const key of ["sound", "vibration"] as const)
 $("retry-save").onclick = () => {
   save();
 };
-dialog.addEventListener("cancel", () => platform.gameplay(!paused));
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && dialog.open) {
+    e.preventDefault();
+    navigateBack();
+  }
+});
+dialog.addEventListener("cancel", (e) => {
+  e.preventDefault();
+  navigateBack();
+});
 let scrollTimer: ReturnType<typeof setTimeout>;
 viewport.addEventListener("scroll", () => {
   updateJump();
@@ -720,13 +790,17 @@ window.addEventListener("pagehide", save);
 async function boot() {
   let warning = "";
   try {
-    const stored = await platform.read(KEY);
-    if (stored) session = decode(stored);
-    progress.sessions.classic = session;
     const bundle = await platform.read(PROGRESS);
     if (bundle) {
-      progress = readProgress(bundle);
+      progress = readProgress(bundle, () => {
+        warning =
+          "Повреждённую партию не удалось восстановить. Остальной прогресс сохранён.";
+      });
       session = progress.sessions[progress.active];
+    } else {
+      const stored = await platform.read(KEY);
+      if (stored) session = decode(stored);
+      progress.sessions.classic = session;
     }
   } catch {
     warning = "Сохранение не удалось прочитать. Открыта новая партия.";
@@ -777,9 +851,11 @@ async function boot() {
       }
     })
     .catch(() => {});
+  void platform.listenBack(() => navigateBack(true)).catch(() => {});
   if (!settings.tutorialDone) startLesson(true);
+  else openMenu();
   platform.ready();
-  platform.gameplay(true);
+  platform.gameplay(!dialog.open);
   if (warning) message(warning);
 }
 function teach(id: string, text: string) {
@@ -823,6 +899,7 @@ const monthName = (m: string) =>
 function openCollection(kind: "book" | "calendar" | "trophies") {
   if (busy) return;
   openMenu();
+  dialog.dataset.screen = kind;
   $("menu-content").hidden = true;
   const panel = $("collection");
   panel.hidden = false;
@@ -833,7 +910,7 @@ function openCollection(kind: "book" | "calendar" | "trophies") {
     for (let p = 0; p < 4; p++) {
       const group = notebook.slice(p * 6, p * 6 + 6),
         n = group.filter((x) => progress.done.includes(x.id)).length;
-      html += `<section class="book-page"><div class="page-heading"><h3>Страница ${p + 1}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((x) => `<button class="task ${progress.done.includes(x.id) ? "done" : ""}" data-game="${x.id}" aria-label="Задача ${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? ", решена" : ""}">${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? "<small>✓</small>" : ""}</button>`).join("")}</div>${n === 6 ? '<p class="stamp">Завершено ✓</p>' : ""}</section>`;
+      html += `<section class="book-page ${n === 6 ? "page-done" : group.some((x) => x.id === progress.active) ? "page-current" : ""}"><div class="page-heading"><h3>Страница ${p + 1}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((x) => `<button class="task ${progress.done.includes(x.id) ? "done" : ""}" data-game="${x.id}" aria-label="Задача ${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? ", решена" : ""}">${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? "<small>✓</small>" : ""}</button>`).join("")}</div>${n === 6 ? '<p class="stamp">Завершено ✓</p>' : ""}</section>`;
     }
   } else if (kind === "calendar") {
     if (calendarMonth > today().slice(0, 7))
@@ -856,7 +933,7 @@ function openCollection(kind: "book" | "calendar" | "trophies") {
       )
       .join(
         "",
-      )}</div><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="intro">Пропущенные дни доступны. Подсказки не влияют на трофеи.</p><button class="primary" id="today-task">${progress.done.includes("daily-v1-" + today()) ? "Повторить сегодняшнюю" : "Играть сегодня"}</button><p class="fine">Трофеи: 7 задач · 14 задач · весь месяц</p>`;
+      )}</div><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="intro">Любой прошедший день можно решить позже. Здесь не нужно успевать.</p><button class="primary" id="today-task">${progress.done.includes("daily-v1-" + today()) ? "Повторить сегодняшнюю" : "Играть сегодня"}</button><p class="fine">Трофеи: 7 задач · 14 задач · весь месяц</p>`;
   } else {
     html +=
       '<h2>Мои трофеи</h2><p class="intro">Один трофей месяца: бронза за 7 задач, серебро за 14, золото за весь месяц.</p>';

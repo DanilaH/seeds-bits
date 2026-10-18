@@ -16,10 +16,14 @@ export const fresh = (): Progress => ({
   seen: [],
 });
 const validId = (id: string) =>
-  id === "classic" ||
-  /^book-v1-([1-9]|1\d|2[0-4])$/.test(id) ||
-  /^daily-v1-\d{4}-\d{2}-\d{2}$/.test(id);
-export function readProgress(raw: string): Progress {
+  typeof id === "string" &&
+  (id === "classic" ||
+    /^book-v1-([1-9]|1\d|2[0-4])$/.test(id) ||
+    /^daily-v1-\d{4}-\d{2}-\d{2}$/.test(id));
+export function readProgress(
+  raw: string,
+  onRecovery: () => void = () => {},
+): Progress {
   const p = JSON.parse(raw);
   if (
     p?.version !== 2 ||
@@ -31,7 +35,13 @@ export function readProgress(raw: string): Progress {
     throw Error("Invalid progress");
   const clean = fresh();
   for (const [id, s] of Object.entries(p.sessions))
-    if (validId(id)) clean.sessions[id] = decode(JSON.stringify(s));
+    if (validId(id)) {
+      try {
+        clean.sessions[id] = decode(JSON.stringify(s));
+      } catch {
+        onRecovery();
+      }
+    }
   clean.active = clean.sessions[p.active] ? p.active : "classic";
   clean.done = [
     ...new Set<string>(

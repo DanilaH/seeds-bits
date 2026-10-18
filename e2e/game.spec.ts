@@ -3,6 +3,9 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   page,
 }) => {
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator("#skip").click();
   await page.locator("#menu").click();
   await page.locator("#learn").click();
@@ -26,13 +29,20 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   await clickCell(9);
   await expect(page.locator("#remaining")).toHaveText("26");
   await page.reload();
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await expect(page.locator("#remaining")).toHaveText("26");
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("28");
   await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
   await page.locator("#dark").check();
   await page.locator("#close").click();
   await page.reload();
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
@@ -61,6 +71,9 @@ test("adds only when stuck, restores partial rows and rejects blocked pair", asy
     );
   });
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator("#add").click();
   await expect(page.locator("#remaining")).toHaveText("4");
   await page.locator("#undo").click();
@@ -87,6 +100,9 @@ test("win state and quick repeated clicks", async ({ page }) => {
     );
   });
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator('[data-index="0"]').click();
   await page.locator('[data-index="1"]').dblclick();
   await expect(page.locator("#win")).toBeVisible();
@@ -99,6 +115,9 @@ test("light layout has no horizontal overflow at narrow viewport", async ({
 }) => {
   await page.setViewportSize({ width: 320, height: 640 });
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator("#skip").click();
   expect(
     await page.evaluate(

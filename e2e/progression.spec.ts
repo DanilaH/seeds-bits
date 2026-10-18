@@ -12,6 +12,9 @@ test("notebook solution, page stamp, replay and classic restore", async ({
   page,
 }) => {
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator('[data-index="0"]').click();
   await page.locator('[data-index="9"]').click();
   await expect(page.locator("#remaining")).toHaveText("26");
@@ -39,6 +42,9 @@ test("notebook solution, page stamp, replay and classic restore", async ({
   await page.locator("#classic-mode").click();
   await expect(page.locator("#remaining")).toHaveText("26");
   await page.reload();
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await expect(page.locator("#remaining")).toHaveText("26");
   await page.locator("#menu").click();
   await page.locator("#book-mode").click();
@@ -46,6 +52,9 @@ test("notebook solution, page stamp, replay and classic restore", async ({
 });
 test("hint remains after first choice and settings apply", async ({ page }) => {
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator("#hint").click();
   const a = page.locator(".hinted").first();
   await a.click();
@@ -55,6 +64,7 @@ test("hint remains after first choice and settings apply", async ({ page }) => {
     path: "test-results/game-light-v2.png",
   });
   await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
   await page.locator("#dark").check();
   await page.screenshot({
     animations: "disabled",
@@ -71,6 +81,9 @@ test("daily calendar closes future days and persists trophy", async ({
 }) => {
   await page.clock.setFixedTime(new Date("2026-10-15T12:00:00"));
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator("#menu").click();
   await page.locator("#daily-mode").click();
   await expect(
@@ -88,6 +101,9 @@ test("daily calendar closes future days and persists trophy", async ({
   }
   await expect(page.locator("#award")).toContainText("1 из 31");
   await page.reload();
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await expect(page.locator("#win")).toBeVisible();
   await page.locator("#play-again").click();
   await expect(page.locator('[data-game="daily-v1-2026-10-01"]')).toHaveClass(
@@ -99,6 +115,9 @@ test("quick onboarding ends after two exercises", async ({ page }) => {
     localStorage.removeItem("seeds-bits.settings.v1"),
   );
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   for (let i = 0; i < 2; i++) {
     await page.locator('[data-index="0"]').click();
     await page.locator('[data-index="1"]').click();
@@ -124,6 +143,9 @@ test("long hint navigates without losing selection", async ({ page }) => {
     ),
   );
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator("#hint").click();
   await page.locator('[data-index="0"]').click();
   await expect(page.locator("#hint-jump")).toBeVisible();
@@ -156,6 +178,9 @@ test("bronze trophy survives replay, widths and dark calendar", async ({
     );
   });
   await page.goto("/");
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  if (await page.locator("#resume").isVisible())
+    await page.locator("#resume").click();
   await page.locator("#menu").click();
   await page.locator("#trophies-mode").click();
   await expect(page.locator(".tier-1")).toContainText("Бронза");
@@ -175,7 +200,9 @@ test("bronze trophy survives replay, widths and dark calendar", async ({
   }
   await page.locator("#close").click();
   await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
   await page.locator("#dark").check();
+  await page.locator("#settings-back").click();
   await page.locator("#daily-mode").click();
   await page.screenshot({
     animations: "disabled",

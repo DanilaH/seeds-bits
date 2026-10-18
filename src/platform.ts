@@ -56,3 +56,12 @@ export async function listenAppState(
     );
   }
 }
+
+/** Android Back follows our screens; at home it backgrounds the app. */
+export async function listenBack(onBack: () => boolean): Promise<void> {
+  if (Capacitor.getPlatform() !== "android") return;
+  const { App } = await import("@capacitor/app");
+  await App.addListener("backButton", () => {
+    if (!onBack()) void App.minimizeApp();
+  });
+}
