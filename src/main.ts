@@ -44,7 +44,8 @@ let session: Session = newSession(),
   highlight: Connection | null = null,
   busy = false,
   paused = false,
-  saveFailed = false;
+  saveFailed = false,
+  saveRecovered = false;
 let settings = {
   theme: "light",
   sound: false,
@@ -161,7 +162,10 @@ function save() {
         const recovered = saveFailed;
         saveFailed = false;
         showSaveState();
-        if (recovered) message("Партия сохранена");
+        if (recovered) {
+          saveRecovered = true;
+          message("Партия сохранена");
+        }
       } catch (error) {
         storageConflict = error instanceof platform.SaveConflict;
         saveFailed = true;
@@ -388,15 +392,17 @@ function render() {
   );
   if (lesson < 0 && !saveFailed)
     message(
-      count === 0
-        ? "Партия завершена"
-        : available.length
-          ? highlight
-            ? "Соедините две отмеченные цифры"
-            : "Одинаковые цифры или сумма 10"
-          : progress.active === "classic"
-            ? "Пар нет. Добавьте оставшиеся цифры."
-            : "Пар нет. Отмените ход или начните задачу заново.",
+      saveRecovered
+        ? "Партия сохранена"
+        : count === 0
+          ? "Партия завершена"
+          : available.length
+            ? highlight
+              ? "Соедините две отмеченные цифры"
+              : "Одинаковые цифры или сумма 10"
+            : progress.active === "classic"
+              ? "Пар нет. Добавьте оставшиеся цифры."
+              : "Пар нет. Отмените ход или начните задачу заново.",
     );
   drawPath(highlight);
   if (focusedIndex !== undefined) {
@@ -452,6 +458,7 @@ function finishLesson() {
   platform.gameplay(true);
 }
 async function choose(i: number) {
+  saveRecovered = false;
   if (busy || paused || dialog.open) return;
   const values = board();
   if (!values[i] || selected === i) {
@@ -575,6 +582,7 @@ async function choose(i: number) {
   if (!occupied(board()) && lesson < 0) platform.gameplay(false);
 }
 function add() {
+  saveRecovered = false;
   if (busy || paused) return;
   const values = board();
   if (lesson >= 0 && lesson !== 5) return;
@@ -622,6 +630,7 @@ function add() {
   }
 }
 function undoAction() {
+  saveRecovered = false;
   if (busy || paused) return;
   if (lesson === 5 && lessonPhase === 1) {
     lessonBoard = [...lessons[5].cells];
@@ -650,6 +659,7 @@ function undoAction() {
   platform.gameplay(occupied(board()) > 0);
 }
 function hint() {
+  saveRecovered = false;
   if (busy || paused || lesson >= 0) return;
   const available = availablePairs(board());
   if (progress.active !== "classic") {
@@ -768,6 +778,7 @@ function openMenu() {
   platform.gameplay(false);
 }
 function reset() {
+  saveRecovered = false;
   session = activePuzzle() ? puzzleSession(activePuzzle()!) : newSession();
   progress.hints[progress.active] = 0;
   clearSelection();
@@ -964,6 +975,7 @@ function teach(id: string, text: string) {
   save();
 }
 function switchGame(id: string) {
+  saveRecovered = false;
   if (busy) return;
   if (id.startsWith("daily") && !availableDay(id.slice(9))) return;
   if (lesson < 0) session.current.scroll = viewport.scrollTop;
