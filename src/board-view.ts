@@ -5,6 +5,9 @@ export class BoardView {
   private values: number[] = [];
   private marked = new Set<number>();
   constructor(private root: HTMLElement) {}
+  cell(index: number) {
+    return this.nodes[index] ?? null;
+  }
   remap(positions: Map<number, number>) {
     const old = this.nodes;
     this.nodes = [...positions.keys()].map((n) => old[positions.get(n)!]);

@@ -225,7 +225,7 @@ function motion(el: Element | null, frames: Keyframe[], duration = 160) {
   if (el && !reduced()) el.animate(frames, { duration, easing: "ease-out" });
 }
 function cell(i: number) {
-  return $("board").querySelector<HTMLElement>(`[data-index="${i}"]`);
+  return boardView.cell(i);
 }
 function updateJump() {
   const button = $("hint-jump");
@@ -529,11 +529,29 @@ async function choose(i: number) {
       positions.set(c - offset, c);
   }
   const oldRects = new Map<HTMLElement, DOMRect>();
-  for (const old of positions.values()) {
-    const node = cell(old);
-    if (node) oldRects.set(node, node.getBoundingClientRect());
+  const boardRect = $("board").getBoundingClientRect();
+  const previousHeight = boardRect.height;
+  if (next.length < oldLength && !reduced()) {
+    const viewRect = viewport.getBoundingClientRect();
+    const rowHeight = boardRect.width / WIDTH;
+    const firstRow = Math.max(
+      0,
+      Math.floor((viewRect.top - boardRect.top) / rowHeight) - 1,
+    );
+    const lastRow =
+      Math.ceil((viewRect.bottom - boardRect.top) / rowHeight) + 1;
+    for (const [nextIndex, oldIndex] of positions) {
+      const oldRow = Math.floor(oldIndex / WIDTH),
+        nextRow = Math.floor(nextIndex / WIDTH);
+      if (
+        (oldRow < firstRow || oldRow > lastRow) &&
+        (nextRow < firstRow || nextRow > lastRow)
+      )
+        continue;
+      const node = cell(oldIndex);
+      if (node) oldRects.set(node, node.getBoundingClientRect());
+    }
   }
-  const previousHeight = $("board").getBoundingClientRect().height;
   const hadBoardFocus = $("board").contains(document.activeElement);
   boardView.remap(positions);
   if (lesson >= 0) {
@@ -552,13 +570,19 @@ async function choose(i: number) {
       (lesson >= 0 ? $("lesson-next") : $("play-again"))
     ).focus({ preventScroll: true });
   if (next.length < oldLength && !reduced()) {
-    for (const [node, rect] of oldRects) {
-      if (!node.isConnected) continue;
-      const dy = rect.top - node.getBoundingClientRect().top;
+    // Read every destination before starting animations; interleaving them forces
+    // layout once per cell on long boards.
+    const movements = [...oldRects]
+      .filter(([node]) => node.isConnected)
+      .map(([node, rect]) => ({
+        node,
+        dy: rect.top - node.getBoundingClientRect().top,
+      }));
+    const height = $("board").getBoundingClientRect().height;
+    for (const { node, dy } of movements) {
       if (Math.abs(dy) > 1)
         motion(node, [{ translate: `0 ${dy}px` }, { translate: "0 0" }], 170);
     }
-    const height = $("board").getBoundingClientRect().height;
     motion(
       $("board"),
       [{ height: `${previousHeight}px` }, { height: `${height}px` }],
