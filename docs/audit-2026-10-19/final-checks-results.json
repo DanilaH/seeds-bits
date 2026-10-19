@@ -1,0 +1,121 @@
+[
+  {
+    "name": "storage-error-verified",
+    "data": {
+      "message": "Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.",
+      "statusVisible": false,
+      "retryHiddenAttribute": null,
+      "retryVisible": false,
+      "afterClose": true
+    }
+  },
+  {
+    "name": "touch-targets-verified",
+    "data": [
+      {
+        "width": 320,
+        "day": {
+          "x": 142.703125,
+          "y": 288.15155029296875,
+          "width": 34.578125,
+          "height": 34.578125
+        },
+        "cell": {
+          "x": 6,
+          "y": 124,
+          "width": 34.328125,
+          "height": 34.328125
+        }
+      },
+      {
+        "width": 360,
+        "day": {
+          "x": 161,
+          "y": 291.07861328125,
+          "width": 38,
+          "height": 38
+        },
+        "cell": {
+          "x": 13,
+          "y": 124,
+          "width": 37.21875,
+          "height": 37.21875
+        }
+      },
+      {
+        "width": 390,
+        "day": {
+          "x": 173.84375,
+          "y": 290.22869873046875,
+          "width": 42.296875,
+          "height": 42.296875
+        },
+        "cell": {
+          "x": 13,
+          "y": 124,
+          "width": 40.546875,
+          "height": 40.546875
+        }
+      },
+      {
+        "width": 430,
+        "day": {
+          "x": 191,
+          "y": 287,
+          "width": 48,
+          "height": 48
+        },
+        "cell": {
+          "x": 13,
+          "y": 124,
+          "width": 45,
+          "height": 45
+        }
+      }
+    ]
+  },
+  {
+    "name": "two-tabs-read-fresh",
+    "data": {
+      "firstTabDigits": "26",
+      "freshTabDigits": "28"
+    }
+  },
+  {
+    "name": "hint-repeat-after-undo-task7",
+    "data": {
+      "steps": [
+        [
+          2,
+          22
+        ],
+        [
+          7,
+          25
+        ],
+        [
+          9,
+          10
+        ]
+      ],
+      "again": [
+        9,
+        10
+      ]
+    }
+  },
+  {
+    "name": "hint-task20-recheck",
+    "data": {
+      "moves": 13,
+      "remaining": "0"
+    }
+  },
+  {
+    "name": "animation-frames",
+    "data": {
+      "frameTime": 60,
+      "duration": 170
+    }
+  }
+]

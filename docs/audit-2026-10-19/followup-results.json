@@ -1,0 +1,1701 @@
+[
+  {
+    "name": "landscape-recheck-and-rotation",
+    "data": [
+      {
+        "width": 844,
+        "height": 390,
+        "initial": {
+          "viewport": {
+            "x": 177,
+            "y": 251.140625,
+            "w": 490,
+            "h": 0,
+            "bottom": 251.140625,
+            "visible": true
+          },
+          "board": {
+            "x": 177,
+            "y": 251.140625,
+            "w": 490,
+            "h": 55.34375,
+            "bottom": 306.484375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 177,
+            "y": 132,
+            "w": 490,
+            "h": 111.140625,
+            "bottom": 243.140625,
+            "visible": true
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 303.71875,
+            "y": 268.34375,
+            "w": 236.546875,
+            "h": 19.59375,
+            "bottom": 287.9375,
+            "visible": true
+          },
+          "undo": {
+            "x": 181,
+            "y": 310.140625,
+            "w": 155.328125,
+            "h": 49,
+            "bottom": 359.140625,
+            "visible": true
+          },
+          "hint": {
+            "x": 344.328125,
+            "y": 310.140625,
+            "w": 155.328125,
+            "h": 49,
+            "bottom": 359.140625,
+            "visible": true
+          },
+          "add": {
+            "x": 507.65625,
+            "y": 310.140625,
+            "w": 155.328125,
+            "h": 49,
+            "bottom": 359.140625,
+            "visible": true
+          }
+        },
+        "hit": "<div class=\"status-wrap\"><button id=\"hint-jump\" class=\"text-button\" hidden=\"\"></button><p id=\"status\" role=\"status\" aria-live=\"polite\">Попробуйте на маленьком п",
+        "classic": {
+          "viewport": {
+            "x": 177,
+            "y": 132,
+            "w": 490,
+            "h": 99,
+            "bottom": 231,
+            "visible": true
+          },
+          "board": {
+            "x": 177,
+            "y": 132,
+            "w": 490,
+            "h": 218.375,
+            "bottom": 350.375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 296.265625,
+            "y": 248.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 267.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 181,
+            "y": 290,
+            "w": 155.328125,
+            "h": 49,
+            "bottom": 339,
+            "visible": true
+          },
+          "hint": {
+            "x": 344.328125,
+            "y": 290,
+            "w": 155.328125,
+            "h": 49,
+            "bottom": 339,
+            "visible": true
+          },
+          "add": {
+            "x": 507.65625,
+            "y": 290,
+            "w": 155.328125,
+            "h": 49,
+            "bottom": 339,
+            "visible": true
+          }
+        },
+        "book": {
+          "viewport": {
+            "x": 177,
+            "y": 161,
+            "w": 490,
+            "h": 70,
+            "bottom": 231,
+            "visible": true
+          },
+          "board": {
+            "x": 177,
+            "y": 177,
+            "w": 490,
+            "h": 272.71875,
+            "bottom": 449.71875,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 296.265625,
+            "y": 248.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 267.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 181,
+            "y": 290,
+            "w": 237,
+            "h": 49,
+            "bottom": 339,
+            "visible": true
+          },
+          "hint": {
+            "x": 426,
+            "y": 290,
+            "w": 237,
+            "h": 49,
+            "bottom": 339,
+            "visible": true
+          },
+          "add": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        }
+      },
+      {
+        "width": 667,
+        "height": 375,
+        "initial": {
+          "viewport": {
+            "x": 75.5,
+            "y": 218.140625,
+            "w": 516,
+            "h": 30.859375,
+            "bottom": 249,
+            "visible": true
+          },
+          "board": {
+            "x": 75.5,
+            "y": 218.140625,
+            "w": 516,
+            "h": 58.234375,
+            "bottom": 276.375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 75.5,
+            "y": 99,
+            "w": 516,
+            "h": 111.140625,
+            "bottom": 210.140625,
+            "visible": true
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 215.21875,
+            "y": 266.203125,
+            "w": 236.546875,
+            "h": 19.59375,
+            "bottom": 285.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 79.5,
+            "y": 308,
+            "w": 164,
+            "h": 49,
+            "bottom": 357,
+            "visible": true
+          },
+          "hint": {
+            "x": 251.5,
+            "y": 308,
+            "w": 164,
+            "h": 49,
+            "bottom": 357,
+            "visible": true
+          },
+          "add": {
+            "x": 423.5,
+            "y": 308,
+            "w": 164,
+            "h": 49,
+            "bottom": 357,
+            "visible": true
+          }
+        },
+        "hit": "<button class=\"cell\" data-index=\"0\" aria-label=\"4, строка 1, столбец 1\" aria-pressed=\"false\">4</button>",
+        "classic": {
+          "viewport": {
+            "x": 75.5,
+            "y": 99,
+            "w": 516,
+            "h": 150,
+            "bottom": 249,
+            "visible": true
+          },
+          "board": {
+            "x": 75.5,
+            "y": 99,
+            "w": 516,
+            "h": 229.9375,
+            "bottom": 328.9375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 207.765625,
+            "y": 266.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 285.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 79.5,
+            "y": 308,
+            "w": 164,
+            "h": 49,
+            "bottom": 357,
+            "visible": true
+          },
+          "hint": {
+            "x": 251.5,
+            "y": 308,
+            "w": 164,
+            "h": 49,
+            "bottom": 357,
+            "visible": true
+          },
+          "add": {
+            "x": 423.5,
+            "y": 308,
+            "w": 164,
+            "h": 49,
+            "bottom": 357,
+            "visible": true
+          }
+        },
+        "book": {
+          "viewport": {
+            "x": 75.5,
+            "y": 128,
+            "w": 516,
+            "h": 121,
+            "bottom": 249,
+            "visible": true
+          },
+          "board": {
+            "x": 75.5,
+            "y": 144,
+            "w": 516,
+            "h": 287.171875,
+            "bottom": 431.171875,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 207.765625,
+            "y": 266.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 285.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 79.5,
+            "y": 308,
+            "w": 250,
+            "h": 49,
+            "bottom": 357,
+            "visible": true
+          },
+          "hint": {
+            "x": 337.5,
+            "y": 308,
+            "w": 250,
+            "h": 49,
+            "bottom": 357,
+            "visible": true
+          },
+          "add": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        }
+      },
+      {
+        "width": 740,
+        "height": 360,
+        "initial": {
+          "viewport": {
+            "x": 112,
+            "y": 218.140625,
+            "w": 516,
+            "h": 15.859375,
+            "bottom": 234,
+            "visible": true
+          },
+          "board": {
+            "x": 112,
+            "y": 218.140625,
+            "w": 516,
+            "h": 58.234375,
+            "bottom": 276.375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 112,
+            "y": 99,
+            "w": 516,
+            "h": 111.140625,
+            "bottom": 210.140625,
+            "visible": true
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 251.71875,
+            "y": 251.203125,
+            "w": 236.546875,
+            "h": 19.59375,
+            "bottom": 270.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 116,
+            "y": 293,
+            "w": 164,
+            "h": 49,
+            "bottom": 342,
+            "visible": true
+          },
+          "hint": {
+            "x": 288,
+            "y": 293,
+            "w": 164,
+            "h": 49,
+            "bottom": 342,
+            "visible": true
+          },
+          "add": {
+            "x": 460,
+            "y": 293,
+            "w": 164,
+            "h": 49,
+            "bottom": 342,
+            "visible": true
+          }
+        },
+        "hit": "<div class=\"status-wrap\"><button id=\"hint-jump\" class=\"text-button\" hidden=\"\"></button><p id=\"status\" role=\"status\" aria-live=\"polite\">Попробуйте на маленьком п",
+        "classic": {
+          "viewport": {
+            "x": 112,
+            "y": 99,
+            "w": 516,
+            "h": 135,
+            "bottom": 234,
+            "visible": true
+          },
+          "board": {
+            "x": 112,
+            "y": 99,
+            "w": 516,
+            "h": 229.9375,
+            "bottom": 328.9375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 244.265625,
+            "y": 251.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 270.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 116,
+            "y": 293,
+            "w": 164,
+            "h": 49,
+            "bottom": 342,
+            "visible": true
+          },
+          "hint": {
+            "x": 288,
+            "y": 293,
+            "w": 164,
+            "h": 49,
+            "bottom": 342,
+            "visible": true
+          },
+          "add": {
+            "x": 460,
+            "y": 293,
+            "w": 164,
+            "h": 49,
+            "bottom": 342,
+            "visible": true
+          }
+        },
+        "book": {
+          "viewport": {
+            "x": 112,
+            "y": 128,
+            "w": 516,
+            "h": 106,
+            "bottom": 234,
+            "visible": true
+          },
+          "board": {
+            "x": 112,
+            "y": 144,
+            "w": 516,
+            "h": 287.171875,
+            "bottom": 431.171875,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 244.265625,
+            "y": 251.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 270.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 116,
+            "y": 293,
+            "w": 250,
+            "h": 49,
+            "bottom": 342,
+            "visible": true
+          },
+          "hint": {
+            "x": 374,
+            "y": 293,
+            "w": 250,
+            "h": 49,
+            "bottom": 342,
+            "visible": true
+          },
+          "add": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        }
+      },
+      {
+        "width": 568,
+        "height": 320,
+        "initial": {
+          "viewport": {
+            "x": 26,
+            "y": 218.140625,
+            "w": 516,
+            "h": 0,
+            "bottom": 218.140625,
+            "visible": true
+          },
+          "board": {
+            "x": 26,
+            "y": 218.140625,
+            "w": 516,
+            "h": 58.234375,
+            "bottom": 276.375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 26,
+            "y": 99,
+            "w": 516,
+            "h": 111.140625,
+            "bottom": 210.140625,
+            "visible": true
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 165.71875,
+            "y": 235.34375,
+            "w": 236.546875,
+            "h": 19.59375,
+            "bottom": 254.9375,
+            "visible": true
+          },
+          "undo": {
+            "x": 30,
+            "y": 277.140625,
+            "w": 164,
+            "h": 49,
+            "bottom": 326.140625,
+            "visible": true
+          },
+          "hint": {
+            "x": 202,
+            "y": 277.140625,
+            "w": 164,
+            "h": 49,
+            "bottom": 326.140625,
+            "visible": true
+          },
+          "add": {
+            "x": 374,
+            "y": 277.140625,
+            "w": 164,
+            "h": 49,
+            "bottom": 326.140625,
+            "visible": true
+          }
+        },
+        "hit": "<div class=\"status-wrap\"><button id=\"hint-jump\" class=\"text-button\" hidden=\"\"></button><p id=\"status\" role=\"status\" aria-live=\"polite\">Попробуйте на маленьком п",
+        "classic": {
+          "viewport": {
+            "x": 26,
+            "y": 99,
+            "w": 516,
+            "h": 95,
+            "bottom": 194,
+            "visible": true
+          },
+          "board": {
+            "x": 26,
+            "y": 99,
+            "w": 516,
+            "h": 229.9375,
+            "bottom": 328.9375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 158.265625,
+            "y": 211.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 230.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 30,
+            "y": 253,
+            "w": 164,
+            "h": 49,
+            "bottom": 302,
+            "visible": true
+          },
+          "hint": {
+            "x": 202,
+            "y": 253,
+            "w": 164,
+            "h": 49,
+            "bottom": 302,
+            "visible": true
+          },
+          "add": {
+            "x": 374,
+            "y": 253,
+            "w": 164,
+            "h": 49,
+            "bottom": 302,
+            "visible": true
+          }
+        },
+        "book": {
+          "viewport": {
+            "x": 26,
+            "y": 128,
+            "w": 516,
+            "h": 66,
+            "bottom": 194,
+            "visible": true
+          },
+          "board": {
+            "x": 26,
+            "y": 144,
+            "w": 516,
+            "h": 287.171875,
+            "bottom": 431.171875,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 158.265625,
+            "y": 211.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 230.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 30,
+            "y": 253,
+            "w": 250,
+            "h": 49,
+            "bottom": 302,
+            "visible": true
+          },
+          "hint": {
+            "x": 288,
+            "y": 253,
+            "w": 250,
+            "h": 49,
+            "bottom": 302,
+            "visible": true
+          },
+          "add": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        }
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "initial": {
+          "viewport": {
+            "x": 12,
+            "y": 306.5,
+            "w": 366,
+            "h": 354.5,
+            "bottom": 661,
+            "visible": true
+          },
+          "board": {
+            "x": 12,
+            "y": 306.5,
+            "w": 366,
+            "h": 41.5625,
+            "bottom": 348.0625,
+            "visible": true
+          },
+          "lesson": {
+            "x": 12,
+            "y": 123,
+            "w": 366,
+            "h": 167.5,
+            "bottom": 290.5,
+            "visible": true
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 76.71875,
+            "y": 695.203125,
+            "w": 236.546875,
+            "h": 19.59375,
+            "bottom": 714.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 16,
+            "y": 756,
+            "w": 114,
+            "h": 70,
+            "bottom": 826,
+            "visible": true
+          },
+          "hint": {
+            "x": 138,
+            "y": 756,
+            "w": 114,
+            "h": 70,
+            "bottom": 826,
+            "visible": true
+          },
+          "add": {
+            "x": 260,
+            "y": 756,
+            "w": 114,
+            "h": 70,
+            "bottom": 826,
+            "visible": true
+          }
+        },
+        "hit": "<button class=\"cell\" data-index=\"0\" aria-label=\"4, строка 1, столбец 1\" aria-pressed=\"false\">4</button>",
+        "classic": {
+          "viewport": {
+            "x": 12,
+            "y": 123,
+            "w": 366,
+            "h": 538,
+            "bottom": 661,
+            "visible": true
+          },
+          "board": {
+            "x": 12,
+            "y": 123,
+            "w": 366,
+            "h": 163.25,
+            "bottom": 286.25,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 69.265625,
+            "y": 695.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 714.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 16,
+            "y": 756,
+            "w": 114,
+            "h": 70,
+            "bottom": 826,
+            "visible": true
+          },
+          "hint": {
+            "x": 138,
+            "y": 756,
+            "w": 114,
+            "h": 70,
+            "bottom": 826,
+            "visible": true
+          },
+          "add": {
+            "x": 260,
+            "y": 756,
+            "w": 114,
+            "h": 70,
+            "bottom": 826,
+            "visible": true
+          }
+        },
+        "book": {
+          "viewport": {
+            "x": 12,
+            "y": 152,
+            "w": 366,
+            "h": 509,
+            "bottom": 661,
+            "visible": true
+          },
+          "board": {
+            "x": 12,
+            "y": 227.953125,
+            "w": 366,
+            "h": 203.8125,
+            "bottom": 431.765625,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 69.265625,
+            "y": 695.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 714.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 16,
+            "y": 756,
+            "w": 175,
+            "h": 70,
+            "bottom": 826,
+            "visible": true
+          },
+          "hint": {
+            "x": 199,
+            "y": 756,
+            "w": 175,
+            "h": 70,
+            "bottom": 826,
+            "visible": true
+          },
+          "add": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        }
+      },
+      {
+        "width": 1366,
+        "height": 768,
+        "initial": {
+          "viewport": {
+            "x": 438,
+            "y": 339.5,
+            "w": 490,
+            "h": 212.5,
+            "bottom": 552,
+            "visible": true
+          },
+          "board": {
+            "x": 438,
+            "y": 339.5,
+            "w": 490,
+            "h": 55.34375,
+            "bottom": 394.84375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 438,
+            "y": 156,
+            "w": 490,
+            "h": 167.5,
+            "bottom": 323.5,
+            "visible": true
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 564.71875,
+            "y": 586.203125,
+            "w": 236.546875,
+            "h": 19.59375,
+            "bottom": 605.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 442,
+            "y": 647,
+            "w": 155.328125,
+            "h": 70,
+            "bottom": 717,
+            "visible": true
+          },
+          "hint": {
+            "x": 605.328125,
+            "y": 647,
+            "w": 155.328125,
+            "h": 70,
+            "bottom": 717,
+            "visible": true
+          },
+          "add": {
+            "x": 768.65625,
+            "y": 647,
+            "w": 155.328125,
+            "h": 70,
+            "bottom": 717,
+            "visible": true
+          }
+        },
+        "hit": "<button class=\"cell\" data-index=\"0\" aria-label=\"4, строка 1, столбец 1\" aria-pressed=\"false\">4</button>",
+        "classic": {
+          "viewport": {
+            "x": 438,
+            "y": 156,
+            "w": 490,
+            "h": 396,
+            "bottom": 552,
+            "visible": true
+          },
+          "board": {
+            "x": 438,
+            "y": 156,
+            "w": 490,
+            "h": 218.375,
+            "bottom": 374.375,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 557.265625,
+            "y": 586.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 605.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 442,
+            "y": 647,
+            "w": 155.328125,
+            "h": 70,
+            "bottom": 717,
+            "visible": true
+          },
+          "hint": {
+            "x": 605.328125,
+            "y": 647,
+            "w": 155.328125,
+            "h": 70,
+            "bottom": 717,
+            "visible": true
+          },
+          "add": {
+            "x": 768.65625,
+            "y": 647,
+            "w": 155.328125,
+            "h": 70,
+            "bottom": 717,
+            "visible": true
+          }
+        },
+        "book": {
+          "viewport": {
+            "x": 438,
+            "y": 185,
+            "w": 490,
+            "h": 367,
+            "bottom": 552,
+            "visible": true
+          },
+          "board": {
+            "x": 438,
+            "y": 254.109375,
+            "w": 490,
+            "h": 272.71875,
+            "bottom": 526.828125,
+            "visible": true
+          },
+          "lesson": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "lesson-next": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "status": {
+            "x": 557.265625,
+            "y": 586.203125,
+            "w": 251.453125,
+            "h": 19.59375,
+            "bottom": 605.796875,
+            "visible": true
+          },
+          "undo": {
+            "x": 442,
+            "y": 647,
+            "w": 237,
+            "h": 70,
+            "bottom": 717,
+            "visible": true
+          },
+          "hint": {
+            "x": 687,
+            "y": 647,
+            "w": 237,
+            "h": 70,
+            "bottom": 717,
+            "visible": true
+          },
+          "add": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "storage-error-hidden-in-menu",
+    "data": {
+      "status": "",
+      "statusVisible": false,
+      "retryVisible": false,
+      "promise": "Прогресс сохраняется автоматически."
+    }
+  },
+  {
+    "name": "touch-targets-and-contrast",
+    "error": "TimeoutError: page.goto: Timeout 4000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5190/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "name": "zoom-200-percent-proxy",
+    "data": {
+      "viewport": {
+        "x": 24,
+        "y": 816.5,
+        "w": 342,
+        "h": 505.5,
+        "bottom": 1322,
+        "visible": true
+      },
+      "board": {
+        "x": 24,
+        "y": 816.5,
+        "w": 342,
+        "h": 57,
+        "bottom": 873.5,
+        "visible": true
+      },
+      "lesson": {
+        "x": 24,
+        "y": 246,
+        "w": 342,
+        "h": 538.5,
+        "bottom": 784.5,
+        "visible": true
+      },
+      "lesson-next": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0,
+        "bottom": 0,
+        "visible": false
+      },
+      "status": {
+        "x": 40,
+        "y": 1370.8125,
+        "w": 310,
+        "h": 78.375,
+        "bottom": 1449.1875,
+        "visible": true
+      },
+      "undo": {
+        "x": 32,
+        "y": 1512,
+        "w": 128.171875,
+        "h": 140,
+        "bottom": 1652,
+        "visible": true
+      },
+      "hint": {
+        "x": 176.171875,
+        "y": 1512,
+        "w": 171.96875,
+        "h": 140,
+        "bottom": 1652,
+        "visible": true
+      },
+      "add": {
+        "x": 364.140625,
+        "y": 1512,
+        "w": 156.953125,
+        "h": 140,
+        "bottom": 1652,
+        "visible": true
+      }
+    }
+  },
+  {
+    "name": "long-board-render-timing",
+    "data": [
+      {
+        "size": 28,
+        "samples": [
+          4,
+          0.5,
+          0.6999999992549419,
+          1,
+          1.699999999254942,
+          0.5,
+          1.800000000745058,
+          0.8000000007450581,
+          2.800000000745058,
+          0.8999999985098839,
+          1.699999999254942,
+          1.2000000029802322,
+          2.199999999254942,
+          1.5999999977648258,
+          0.7000000029802322,
+          2.2999999970197678,
+          0.8000000007450581,
+          1.199999999254942,
+          0.5,
+          3,
+          2.100000001490116,
+          4.699999999254942,
+          1.1000000014901161,
+          1.800000000745058,
+          1,
+          0.6999999992549419,
+          0.8999999985098839,
+          1.5,
+          1.5,
+          1.5,
+          3.600000001490116,
+          2,
+          3.199999999254942,
+          7.300000000745058,
+          3.699999999254942,
+          0.6000000014901161,
+          12.299999997019768,
+          0.8000000007450581,
+          0.4000000022351742,
+          2.5
+        ]
+      },
+      {
+        "size": 1800,
+        "samples": [
+          68.80000000074506,
+          42.399999998509884,
+          32.20000000298023,
+          50.400000002235174,
+          73.39999999850988,
+          28.399999998509884,
+          63.899999998509884,
+          54.70000000298023,
+          43.400000002235174,
+          42.19999999925494,
+          30.5,
+          51.69999999925494,
+          44.69999999925494,
+          38,
+          30.300000000745058,
+          23.100000001490116,
+          33.599999997764826,
+          33,
+          27,
+          97.80000000074506,
+          36.30000000074506,
+          43.69999999925494,
+          45.100000001490116,
+          30.099999997764826,
+          346.5,
+          122.69999999925494,
+          110.19999999925494,
+          77.80000000074506,
+          214.5,
+          237.69999999925494,
+          183.19999999925494,
+          56,
+          44.100000001490116,
+          39.69999999925494,
+          36.400000002235174,
+          39.79999999701977,
+          68.90000000223517,
+          84.80000000074506,
+          73.5,
+          29.5
+        ]
+      }
+    ]
+  },
+  {
+    "name": "animation-probe-repeated",
+    "data": [
+      {
+        "before": [
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          }
+        ],
+        "after": [
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.065999999795665
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          }
+        ],
+        "after": [
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 0
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          },
+          {
+            "state": "running",
+            "connected": true,
+            "time": 0
+          }
+        ],
+        "after": [
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          },
+          {
+            "state": "running",
+            "connected": false,
+            "time": 50.09499999960787
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "tutorial-resume-scroll-preserved",
+    "data": {
+      "scroll": 274
+    }
+  }
+]

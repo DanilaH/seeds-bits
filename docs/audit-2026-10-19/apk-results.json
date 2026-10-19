@@ -1,0 +1,32 @@
+[
+  {
+    "artifact": 12130982174,
+    "package": "com.seedsbits.game",
+    "versionName": "1.0",
+    "versionCode": "1",
+    "debuggable": "true",
+    "certSha256": [
+      "5545d3b7bad647029dc3881d5d774b5328aa0a283deb12225d8bb63b92eb646e"
+    ],
+    "permissions": [
+      "android.permission.INTERNET",
+      "com.seedsbits.game.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+      "android.permission.VIBRATE"
+    ]
+  },
+  {
+    "artifact": 11999453346,
+    "package": "com.seedsbits.game",
+    "versionName": "1.0",
+    "versionCode": "1",
+    "debuggable": "true",
+    "certSha256": [
+      "7b6c28526b726a4d9a2ff041205f176ce8a985fe50edbb2766c404b2eb0ccd55"
+    ],
+    "permissions": [
+      "android.permission.INTERNET",
+      "com.seedsbits.game.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+      "android.permission.VIBRATE"
+    ]
+  }
+]

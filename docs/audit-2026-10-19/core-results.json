@@ -1,0 +1,1384 @@
+{
+  "hints": [
+    {
+      "id": "book-v1-1",
+      "solved": true,
+      "remaining": 0,
+      "steps": 4,
+      "badFirst": null,
+      "searchNodes": 3
+    },
+    {
+      "id": "book-v1-2",
+      "solved": true,
+      "remaining": 0,
+      "steps": 4,
+      "badFirst": null,
+      "searchNodes": 3
+    },
+    {
+      "id": "book-v1-3",
+      "solved": true,
+      "remaining": 0,
+      "steps": 5,
+      "badFirst": null,
+      "searchNodes": 4
+    },
+    {
+      "id": "book-v1-4",
+      "solved": true,
+      "remaining": 0,
+      "steps": 5,
+      "badFirst": null,
+      "searchNodes": 4
+    },
+    {
+      "id": "book-v1-5",
+      "solved": true,
+      "remaining": 0,
+      "steps": 6,
+      "badFirst": null,
+      "searchNodes": 5
+    },
+    {
+      "id": "book-v1-6",
+      "solved": true,
+      "remaining": 0,
+      "steps": 6,
+      "badFirst": null,
+      "searchNodes": 5
+    },
+    {
+      "id": "book-v1-7",
+      "solved": false,
+      "remaining": 4,
+      "steps": 5,
+      "badFirst": {
+        "move": 3,
+        "pair": {
+          "a": 9,
+          "b": 10,
+          "kind": "straight"
+        },
+        "values": [
+          1,
+          9
+        ],
+        "board": [
+          0,
+          0,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0,
+          0,
+          1,
+          9,
+          1,
+          0,
+          1,
+          9,
+          6,
+          0,
+          0,
+          1,
+          0,
+          2,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "searchNodes": 12
+    },
+    {
+      "id": "book-v1-8",
+      "solved": true,
+      "remaining": 0,
+      "steps": 7,
+      "badFirst": null,
+      "searchNodes": 6
+    },
+    {
+      "id": "book-v1-9",
+      "solved": true,
+      "remaining": 0,
+      "steps": 8,
+      "badFirst": null,
+      "searchNodes": 7
+    },
+    {
+      "id": "book-v1-10",
+      "solved": true,
+      "remaining": 0,
+      "steps": 8,
+      "badFirst": null,
+      "searchNodes": 7
+    },
+    {
+      "id": "book-v1-11",
+      "solved": true,
+      "remaining": 0,
+      "steps": 9,
+      "badFirst": null,
+      "searchNodes": 8
+    },
+    {
+      "id": "book-v1-12",
+      "solved": true,
+      "remaining": 0,
+      "steps": 9,
+      "badFirst": null,
+      "searchNodes": 8
+    },
+    {
+      "id": "book-v1-13",
+      "solved": true,
+      "remaining": 0,
+      "steps": 10,
+      "badFirst": null,
+      "searchNodes": 9
+    },
+    {
+      "id": "book-v1-14",
+      "solved": true,
+      "remaining": 0,
+      "steps": 10,
+      "badFirst": null,
+      "searchNodes": 9
+    },
+    {
+      "id": "book-v1-15",
+      "solved": true,
+      "remaining": 0,
+      "steps": 11,
+      "badFirst": null,
+      "searchNodes": 10
+    },
+    {
+      "id": "book-v1-16",
+      "solved": true,
+      "remaining": 0,
+      "steps": 11,
+      "badFirst": null,
+      "searchNodes": 10
+    },
+    {
+      "id": "book-v1-17",
+      "solved": true,
+      "remaining": 0,
+      "steps": 12,
+      "badFirst": null,
+      "searchNodes": 11
+    },
+    {
+      "id": "book-v1-18",
+      "solved": true,
+      "remaining": 0,
+      "steps": 12,
+      "badFirst": null,
+      "searchNodes": 11
+    },
+    {
+      "id": "book-v1-19",
+      "solved": false,
+      "remaining": 6,
+      "steps": 10,
+      "badFirst": {
+        "move": 5,
+        "pair": {
+          "a": 6,
+          "b": 22,
+          "kind": "straight"
+        },
+        "values": [
+          8,
+          2
+        ],
+        "board": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          8,
+          1,
+          6,
+          0,
+          0,
+          0,
+          2,
+          3,
+          0,
+          9,
+          1,
+          6,
+          0,
+          0,
+          7,
+          3,
+          2,
+          0,
+          0,
+          0,
+          2,
+          4,
+          8,
+          2,
+          0,
+          4,
+          7,
+          9,
+          0,
+          0
+        ]
+      },
+      "searchNodes": 140
+    },
+    {
+      "id": "book-v1-20",
+      "solved": true,
+      "remaining": 0,
+      "steps": 13,
+      "badFirst": null,
+      "searchNodes": 12
+    },
+    {
+      "id": "book-v1-21",
+      "solved": true,
+      "remaining": 0,
+      "steps": 14,
+      "badFirst": null,
+      "searchNodes": 13
+    },
+    {
+      "id": "book-v1-22",
+      "solved": true,
+      "remaining": 0,
+      "steps": 14,
+      "badFirst": null,
+      "searchNodes": 13
+    },
+    {
+      "id": "book-v1-23",
+      "solved": true,
+      "remaining": 0,
+      "steps": 15,
+      "badFirst": null,
+      "searchNodes": 14
+    },
+    {
+      "id": "book-v1-24",
+      "solved": false,
+      "remaining": 4,
+      "steps": 13,
+      "badFirst": {
+        "move": 9,
+        "pair": {
+          "a": 4,
+          "b": 5,
+          "kind": "straight"
+        },
+        "values": [
+          9,
+          1
+        ],
+        "board": [
+          0,
+          0,
+          0,
+          0,
+          9,
+          1,
+          0,
+          2,
+          0,
+          0,
+          4,
+          9,
+          6,
+          0,
+          8,
+          0,
+          0,
+          1,
+          6,
+          4,
+          4,
+          1,
+          0,
+          9,
+          0,
+          4,
+          0
+        ]
+      },
+      "searchNodes": 76
+    }
+  ],
+  "longClassics": [
+    {
+      "run": 0,
+      "moves": 30,
+      "adds": 3,
+      "maxCells": 59,
+      "remaining": 0,
+      "historyChars": 4152,
+      "reason": "solved"
+    },
+    {
+      "run": 1,
+      "moves": 17,
+      "adds": 1,
+      "maxCells": 28,
+      "remaining": 0,
+      "historyChars": 1702,
+      "reason": "solved"
+    },
+    {
+      "run": 2,
+      "moves": 62,
+      "adds": 9,
+      "maxCells": 80,
+      "remaining": 0,
+      "historyChars": 10689,
+      "reason": "solved"
+    },
+    {
+      "run": 3,
+      "moves": 23,
+      "adds": 2,
+      "maxCells": 37,
+      "remaining": 0,
+      "historyChars": 2685,
+      "reason": "solved"
+    },
+    {
+      "run": 4,
+      "moves": 34,
+      "adds": 6,
+      "maxCells": 43,
+      "remaining": 0,
+      "historyChars": 4264,
+      "reason": "solved"
+    },
+    {
+      "run": 5,
+      "moves": 54,
+      "adds": 9,
+      "maxCells": 66,
+      "remaining": 0,
+      "historyChars": 7817,
+      "reason": "solved"
+    },
+    {
+      "run": 6,
+      "moves": 71,
+      "adds": 10,
+      "maxCells": 88,
+      "remaining": 0,
+      "historyChars": 12251,
+      "reason": "solved"
+    },
+    {
+      "run": 7,
+      "moves": 14,
+      "adds": 0,
+      "maxCells": 28,
+      "remaining": 0,
+      "historyChars": 1374,
+      "reason": "solved"
+    },
+    {
+      "run": 8,
+      "moves": 34,
+      "adds": 7,
+      "maxCells": 37,
+      "remaining": 0,
+      "historyChars": 3777,
+      "reason": "solved"
+    },
+    {
+      "run": 9,
+      "moves": 86,
+      "adds": 12,
+      "maxCells": 73,
+      "remaining": 0,
+      "historyChars": 15522,
+      "reason": "solved"
+    },
+    {
+      "run": 10,
+      "moves": 121,
+      "adds": 15,
+      "maxCells": 90,
+      "remaining": 0,
+      "historyChars": 23373,
+      "reason": "solved"
+    },
+    {
+      "run": 11,
+      "moves": 47,
+      "adds": 6,
+      "maxCells": 86,
+      "remaining": 0,
+      "historyChars": 7698,
+      "reason": "solved"
+    },
+    {
+      "run": 12,
+      "moves": 51,
+      "adds": 7,
+      "maxCells": 71,
+      "remaining": 0,
+      "historyChars": 8283,
+      "reason": "solved"
+    },
+    {
+      "run": 13,
+      "moves": 30,
+      "adds": 6,
+      "maxCells": 35,
+      "remaining": 0,
+      "historyChars": 3464,
+      "reason": "solved"
+    },
+    {
+      "run": 14,
+      "moves": 24,
+      "adds": 3,
+      "maxCells": 35,
+      "remaining": 0,
+      "historyChars": 2690,
+      "reason": "solved"
+    },
+    {
+      "run": 15,
+      "moves": 36,
+      "adds": 6,
+      "maxCells": 38,
+      "remaining": 0,
+      "historyChars": 4194,
+      "reason": "solved"
+    },
+    {
+      "run": 16,
+      "moves": 27,
+      "adds": 3,
+      "maxCells": 44,
+      "remaining": 0,
+      "historyChars": 3349,
+      "reason": "solved"
+    },
+    {
+      "run": 17,
+      "moves": 28,
+      "adds": 5,
+      "maxCells": 37,
+      "remaining": 0,
+      "historyChars": 3129,
+      "reason": "solved"
+    },
+    {
+      "run": 18,
+      "moves": 67,
+      "adds": 10,
+      "maxCells": 76,
+      "remaining": 0,
+      "historyChars": 11185,
+      "reason": "solved"
+    },
+    {
+      "run": 19,
+      "moves": 27,
+      "adds": 3,
+      "maxCells": 37,
+      "remaining": 0,
+      "historyChars": 3105,
+      "reason": "solved"
+    },
+    {
+      "run": 20,
+      "moves": 24,
+      "adds": 3,
+      "maxCells": 35,
+      "remaining": 0,
+      "historyChars": 2644,
+      "reason": "solved"
+    },
+    {
+      "run": 21,
+      "moves": 23,
+      "adds": 2,
+      "maxCells": 45,
+      "remaining": 0,
+      "historyChars": 2851,
+      "reason": "solved"
+    },
+    {
+      "run": 22,
+      "moves": 49,
+      "adds": 7,
+      "maxCells": 78,
+      "remaining": 0,
+      "historyChars": 7667,
+      "reason": "solved"
+    },
+    {
+      "run": 23,
+      "moves": 66,
+      "adds": 8,
+      "maxCells": 86,
+      "remaining": 0,
+      "historyChars": 11401,
+      "reason": "solved"
+    },
+    {
+      "run": 24,
+      "moves": 63,
+      "adds": 9,
+      "maxCells": 79,
+      "remaining": 0,
+      "historyChars": 10287,
+      "reason": "solved"
+    },
+    {
+      "run": 25,
+      "moves": 32,
+      "adds": 5,
+      "maxCells": 37,
+      "remaining": 0,
+      "historyChars": 3779,
+      "reason": "solved"
+    },
+    {
+      "run": 26,
+      "moves": 37,
+      "adds": 5,
+      "maxCells": 48,
+      "remaining": 0,
+      "historyChars": 4923,
+      "reason": "solved"
+    },
+    {
+      "run": 27,
+      "moves": 18,
+      "adds": 1,
+      "maxCells": 35,
+      "remaining": 0,
+      "historyChars": 1880,
+      "reason": "solved"
+    },
+    {
+      "run": 28,
+      "moves": 29,
+      "adds": 3,
+      "maxCells": 53,
+      "remaining": 0,
+      "historyChars": 3841,
+      "reason": "solved"
+    },
+    {
+      "run": 29,
+      "moves": 56,
+      "adds": 7,
+      "maxCells": 70,
+      "remaining": 0,
+      "historyChars": 9031,
+      "reason": "solved"
+    },
+    {
+      "run": 30,
+      "moves": 29,
+      "adds": 5,
+      "maxCells": 37,
+      "remaining": 0,
+      "historyChars": 3151,
+      "reason": "solved"
+    },
+    {
+      "run": 31,
+      "moves": 101,
+      "adds": 12,
+      "maxCells": 142,
+      "remaining": 0,
+      "historyChars": 22077,
+      "reason": "solved"
+    },
+    {
+      "run": 32,
+      "moves": 24,
+      "adds": 3,
+      "maxCells": 35,
+      "remaining": 0,
+      "historyChars": 2716,
+      "reason": "solved"
+    },
+    {
+      "run": 33,
+      "moves": 25,
+      "adds": 3,
+      "maxCells": 40,
+      "remaining": 0,
+      "historyChars": 3045,
+      "reason": "solved"
+    },
+    {
+      "run": 34,
+      "moves": 18,
+      "adds": 1,
+      "maxCells": 35,
+      "remaining": 0,
+      "historyChars": 1984,
+      "reason": "solved"
+    },
+    {
+      "run": 35,
+      "moves": 30,
+      "adds": 5,
+      "maxCells": 37,
+      "remaining": 0,
+      "historyChars": 3341,
+      "reason": "solved"
+    },
+    {
+      "run": 36,
+      "moves": 33,
+      "adds": 5,
+      "maxCells": 47,
+      "remaining": 0,
+      "historyChars": 4281,
+      "reason": "solved"
+    },
+    {
+      "run": 37,
+      "moves": 59,
+      "adds": 9,
+      "maxCells": 70,
+      "remaining": 0,
+      "historyChars": 8835,
+      "reason": "solved"
+    },
+    {
+      "run": 38,
+      "moves": 47,
+      "adds": 6,
+      "maxCells": 77,
+      "remaining": 0,
+      "historyChars": 7341,
+      "reason": "solved"
+    },
+    {
+      "run": 39,
+      "moves": 26,
+      "adds": 2,
+      "maxCells": 52,
+      "remaining": 0,
+      "historyChars": 3473,
+      "reason": "solved"
+    },
+    {
+      "run": 40,
+      "moves": 51,
+      "adds": 6,
+      "maxCells": 84,
+      "remaining": 0,
+      "historyChars": 8825,
+      "reason": "solved"
+    },
+    {
+      "run": 41,
+      "moves": 38,
+      "adds": 6,
+      "maxCells": 52,
+      "remaining": 0,
+      "historyChars": 5003,
+      "reason": "solved"
+    },
+    {
+      "run": 42,
+      "moves": 30,
+      "adds": 4,
+      "maxCells": 54,
+      "remaining": 0,
+      "historyChars": 3953,
+      "reason": "solved"
+    },
+    {
+      "run": 43,
+      "moves": 43,
+      "adds": 8,
+      "maxCells": 59,
+      "remaining": 0,
+      "historyChars": 5990,
+      "reason": "solved"
+    },
+    {
+      "run": 44,
+      "moves": 29,
+      "adds": 4,
+      "maxCells": 37,
+      "remaining": 0,
+      "historyChars": 3327,
+      "reason": "solved"
+    },
+    {
+      "run": 45,
+      "moves": 30,
+      "adds": 3,
+      "maxCells": 59,
+      "remaining": 0,
+      "historyChars": 4110,
+      "reason": "solved"
+    },
+    {
+      "run": 46,
+      "moves": 70,
+      "adds": 9,
+      "maxCells": 94,
+      "remaining": 0,
+      "historyChars": 12935,
+      "reason": "solved"
+    },
+    {
+      "run": 47,
+      "moves": 24,
+      "adds": 3,
+      "maxCells": 35,
+      "remaining": 0,
+      "historyChars": 2760,
+      "reason": "solved"
+    },
+    {
+      "run": 48,
+      "moves": 41,
+      "adds": 6,
+      "maxCells": 49,
+      "remaining": 0,
+      "historyChars": 5625,
+      "reason": "solved"
+    },
+    {
+      "run": 49,
+      "moves": 30,
+      "adds": 6,
+      "maxCells": 35,
+      "remaining": 0,
+      "historyChars": 3560,
+      "reason": "solved"
+    }
+  ],
+  "daily": [
+    {
+      "day": "2026-10-01",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2026-10-02",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2026-10-03",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2026-10-04",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2026-10-05",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2026-10-06",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2026-10-07",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2026-10-08",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2026-10-09",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2026-10-10",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2026-10-11",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2026-10-12",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2026-10-13",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2026-10-14",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2026-10-15",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2026-10-16",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2026-10-17",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2026-10-18",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2026-10-19",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2026-10-20",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2026-10-21",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2026-10-22",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2026-10-23",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2026-10-24",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2026-10-25",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2026-10-26",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2026-10-27",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2026-10-28",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2026-10-29",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2026-10-30",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2026-10-31",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2026-11-01",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2026-11-02",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2026-11-03",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2026-11-04",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2026-11-05",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2026-11-06",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2026-11-07",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2026-11-08",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2026-11-09",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2026-11-10",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2026-11-11",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2026-11-12",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2026-11-13",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2026-11-14",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2026-11-15",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2026-11-16",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2026-11-17",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2026-11-18",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2026-11-19",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2026-11-20",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2026-11-21",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2026-11-22",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2026-11-23",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2026-11-24",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2026-11-25",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2026-11-26",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2026-11-27",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2026-11-28",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2026-11-29",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2026-11-30",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2027-01-01",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2027-01-02",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2027-01-03",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2027-01-04",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2027-01-05",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2027-01-06",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2027-01-07",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2027-01-08",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2027-01-09",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2027-01-10",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2027-01-11",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2027-01-12",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2027-01-13",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2027-01-14",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2027-01-15",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2027-01-16",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2027-01-17",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2027-01-18",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2027-01-19",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2027-01-20",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2027-01-21",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2027-01-22",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2027-01-23",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2027-01-24",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2027-01-25",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2027-01-26",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2027-01-27",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2027-01-28",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2027-01-29",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2027-01-30",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2027-01-31",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2028-02-01",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2028-02-02",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2028-02-03",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2028-02-04",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2028-02-05",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2028-02-06",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2028-02-07",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2028-02-08",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2028-02-09",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2028-02-10",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2028-02-11",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2028-02-12",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2028-02-13",
+      "digits": 30,
+      "verified": true
+    },
+    {
+      "day": "2028-02-14",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2028-02-15",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2028-02-16",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2028-02-17",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2028-02-18",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2028-02-19",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2028-02-20",
+      "digits": 26,
+      "verified": true
+    },
+    {
+      "day": "2028-02-21",
+      "digits": 28,
+      "verified": true
+    },
+    {
+      "day": "2028-02-22",
+      "digits": 22,
+      "verified": true
+    },
+    {
+      "day": "2028-02-23",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2028-02-24",
+      "digits": 18,
+      "verified": true
+    },
+    {
+      "day": "2028-02-25",
+      "digits": 20,
+      "verified": true
+    },
+    {
+      "day": "2028-02-26",
+      "digits": 32,
+      "verified": true
+    },
+    {
+      "day": "2028-02-27",
+      "digits": 16,
+      "verified": true
+    },
+    {
+      "day": "2028-02-28",
+      "digits": 24,
+      "verified": true
+    },
+    {
+      "day": "2028-02-29",
+      "digits": 26,
+      "verified": true
+    }
+  ]
+}

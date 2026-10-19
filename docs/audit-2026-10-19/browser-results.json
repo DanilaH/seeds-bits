@@ -1,0 +1,376 @@
+[
+  {
+    "name": "keyboard-focus-after-removal",
+    "data": {
+      "active": "BODY",
+      "id": "",
+      "remaining": "26",
+      "afterArrow": "<body class=\"\"><div id=\"app\"><main class=\"game\"><header><button id=\"menu\" class=\"plain\" aria-label=\"Открыть меню\"><span "
+    }
+  },
+  {
+    "name": "layout-matrix",
+    "error": "TimeoutError: locator.click: Timeout 4000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-index=\"0\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"cell\" data-index=\"0\" aria-pressed=\"false\" aria-label=\"4, строка 1, столбец 1\">4</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"status-wrap\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <p id=\"lesson-text\">Нажмите на две четвёрки. Одинаковые цифры составл…</p> from <section id=\"lesson\">…</section> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"status-wrap\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"status-wrap\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <p id=\"lesson-text\">Нажмите на две четвёрки. Одинаковые цифры составл…</p> from <section id=\"lesson\">…</section> subtree intercepts pointer events\u001b[22m\n\u001b[2m  2 × retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"status-wrap\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n"
+  },
+  {
+    "name": "modal-scroll-and-focus",
+    "data": {
+      "before": 207,
+      "scroll": 0,
+      "focused": "",
+      "dialogName": null
+    }
+  },
+  {
+    "name": "hint-only-playthrough",
+    "data": [
+      {
+        "task": 1,
+        "moves": 4,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 2,
+        "moves": 4,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 3,
+        "moves": 5,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 4,
+        "moves": 5,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 5,
+        "moves": 6,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 6,
+        "moves": 6,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 7,
+        "moves": 5,
+        "remaining": "4",
+        "status": "Пар нет. Отмените ход или начните задачу заново."
+      },
+      {
+        "task": 8,
+        "moves": 7,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 9,
+        "moves": 8,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 10,
+        "moves": 8,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 11,
+        "moves": 9,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 12,
+        "moves": 9,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 13,
+        "moves": 10,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 14,
+        "moves": 10,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 15,
+        "moves": 11,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 16,
+        "moves": 11,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 17,
+        "moves": 12,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 18,
+        "moves": 12,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 19,
+        "moves": 10,
+        "remaining": "6",
+        "status": "Пар нет. Отмените ход или начните задачу заново."
+      },
+      {
+        "task": 20,
+        "moves": 12,
+        "remaining": "2",
+        "status": "Одинаковые цифры или сумма 10"
+      },
+      {
+        "task": 21,
+        "moves": 14,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 22,
+        "moves": 14,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 23,
+        "moves": 15,
+        "remaining": "0",
+        "status": "Партия завершена"
+      },
+      {
+        "task": 24,
+        "moves": 13,
+        "remaining": "4",
+        "status": "Пар нет. Отмените ход или начните задачу заново."
+      }
+    ]
+  },
+  {
+    "name": "completed-next-task-replay",
+    "data": {
+      "mode": "Тетрадь · задача 2",
+      "remaining": "0",
+      "win": true
+    }
+  },
+  {
+    "name": "animation-interruption",
+    "data": {
+      "during": [
+        {
+          "duration": 170,
+          "target": "0"
+        },
+        {
+          "duration": 170,
+          "target": "1"
+        },
+        {
+          "duration": 170,
+          "target": "2"
+        },
+        {
+          "duration": 170,
+          "target": "3"
+        },
+        {
+          "duration": 170,
+          "target": "4"
+        },
+        {
+          "duration": 170,
+          "target": "5"
+        },
+        {
+          "duration": 170,
+          "target": "6"
+        },
+        {
+          "duration": 170,
+          "target": "7"
+        },
+        {
+          "duration": 170,
+          "target": "8"
+        }
+      ],
+      "after": [
+        {
+          "duration": 160,
+          "target": "0"
+        }
+      ],
+      "frames": [
+        {
+          "ms": 5.799999997019768,
+          "remaining": "11",
+          "animations": 2
+        },
+        {
+          "ms": 15.099999997764826,
+          "remaining": "11",
+          "animations": 2
+        },
+        {
+          "ms": 31.599999997764826,
+          "remaining": "11",
+          "animations": 2
+        },
+        {
+          "ms": 49.29999999701977,
+          "remaining": "11",
+          "animations": 2
+        },
+        {
+          "ms": 65.29999999701977,
+          "remaining": "11",
+          "animations": 2
+        },
+        {
+          "ms": 82.09999999776483,
+          "remaining": "11",
+          "animations": 2
+        },
+        {
+          "ms": 98.69999999925494,
+          "remaining": "11",
+          "animations": 2
+        },
+        {
+          "ms": 118,
+          "remaining": "9",
+          "animations": 9
+        },
+        {
+          "ms": 145.19999999925494,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 150.39999999850988,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 164.09999999776483,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 184.69999999925494,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 199.09999999776483,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 220.79999999701977,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 231.19999999925494,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 248.09999999776483,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 264.0999999977648,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 281.79999999701977,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 298.5,
+          "remaining": "9",
+          "animations": 1
+        },
+        {
+          "ms": 316.69999999925494,
+          "remaining": "9",
+          "animations": 0
+        },
+        {
+          "ms": 333.5,
+          "remaining": "9",
+          "animations": 0
+        },
+        {
+          "ms": 349.29999999701977,
+          "remaining": "9",
+          "animations": 0
+        },
+        {
+          "ms": 364.3999999985099,
+          "remaining": "9",
+          "animations": 0
+        },
+        {
+          "ms": 380.8999999985099,
+          "remaining": "9",
+          "animations": 0
+        },
+        {
+          "ms": 397.8999999985099,
+          "remaining": "9",
+          "animations": 0
+        },
+        {
+          "ms": 415.3999999985099,
+          "remaining": "9",
+          "animations": 0
+        }
+      ]
+    }
+  },
+  {
+    "name": "reduced-motion",
+    "data": {
+      "animations": 0
+    }
+  },
+  {
+    "name": "two-tabs-lost-progress",
+    "data": {
+      "firstMoves": 1,
+      "savedMoves": 0,
+      "remaining": "26"
+    }
+  }
+]
