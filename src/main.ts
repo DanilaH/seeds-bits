@@ -1,3 +1,5 @@
+import { BoardView } from "./board-view";
+import { createSolver } from "./solver";
 import { emblem } from "./trophies";
 import "./style.css";
 import {
@@ -49,6 +51,9 @@ let settings = {
   vibration: false,
   tutorialDone: false,
 };
+let lastStored: string | null = null,
+  storageConflict = false;
+const solve = createSolver();
 let saveQueue = Promise.resolve(),
   hintIndex = 0,
   lesson = -1,
@@ -101,7 +106,8 @@ const icons = {
 const icon = (name: keyof typeof icons) =>
   `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">▦</button></header><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><details class="result-details"><summary>Итоги партии</summary><p id="win-stats"></p></details><div id="award" hidden></div><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span>Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">↗</span></button><button id="book-mode" class="mode-link"><span>Тетрадь<small>24 небольшие задачи</small></span><span aria-hidden="true">↗</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small>Календарь задач</small></span><span aria-hidden="true">↗</span></button></nav><div class="home-links"><button id="trophies-mode" class="text-button">Коллекция</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><button id="settings-back" class="text-button">← Меню</button><h2>Настройки</h2><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">▦</button></header><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><details class="result-details"><summary>Итоги партии</summary><p id="win-stats"></p></details><div id="award" hidden></div><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span>Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">↗</span></button><button id="book-mode" class="mode-link"><span>Тетрадь<small>24 небольшие задачи</small></span><span aria-hidden="true">↗</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small>Календарь задач</small></span><span aria-hidden="true">↗</span></button></nav><div class="home-links"><button id="trophies-mode" class="text-button">Коллекция</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><button id="settings-back" class="text-button">← Меню</button><h2>Настройки</h2><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
 $("app").inert = true;
@@ -111,27 +117,47 @@ function board() {
 function message(text: string) {
   $("status").textContent = text;
 }
+const notice = document.createElement("aside");
+notice.id = "save-notice";
+notice.setAttribute("role", "status");
+notice.hidden = true;
+notice.innerHTML =
+  '<p id="save-warning"></p><button id="load-latest" class="text-button" hidden>Загрузить сохранённую партию</button>';
+notice.append($("retry-save"));
+document.querySelector(".game")!.prepend(notice);
+$("load-latest").onclick = () => location.reload();
+function showSaveState() {
+  const parent = dialog.open ? dialog : document.querySelector(".game")!;
+  if (notice.parentElement !== parent) parent.prepend(notice);
+  notice.hidden = !saveFailed;
+  $("save-warning").textContent = storageConflict
+    ? "В другой вкладке есть более новое сохранение. Оно защищено от перезаписи."
+    : "Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.";
+  $("load-latest").hidden = !storageConflict;
+  $("retry-save").hidden = !saveFailed || storageConflict;
+}
 function save() {
+  if (storageConflict) return;
   if (lesson < 0) session.current.scroll = viewport.scrollTop;
   progress.sessions[progress.active] = session;
-  const bundle = JSON.stringify(progress);
-  const prefs = JSON.stringify(settings);
+  const bundle = JSON.stringify(progress),
+    prefs = JSON.stringify(settings);
   saveQueue = saveQueue
     .catch(() => {})
     .then(async () => {
+      if (storageConflict) return;
       try {
-        await platform.write(PROGRESS, bundle);
-        await platform.write(SETTINGS, prefs);
+        await platform.saveState(PROGRESS, bundle, lastStored, SETTINGS, prefs);
+        lastStored = bundle;
         const recovered = saveFailed;
         saveFailed = false;
-        $("retry-save").hidden = true;
+        showSaveState();
         if (recovered) message("Партия сохранена");
-      } catch {
+      } catch (error) {
+        storageConflict = error instanceof platform.SaveConflict;
         saveFailed = true;
-        $("retry-save").hidden = false;
-        message(
-          "Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.",
-        );
+        showSaveState();
+        message($("save-warning").textContent!);
       }
     });
 }
@@ -267,6 +293,7 @@ function renderWin() {
   }
 }
 function render() {
+  $("recover-task").hidden = true;
   const focusedIndex = document.activeElement?.closest("#board")
     ? (document.activeElement as HTMLElement).dataset.index
     : undefined;
@@ -314,13 +341,7 @@ function render() {
         : progress.active.startsWith("book")
           ? `Тетрадь · задача ${notebook.findIndex((p) => p.id === progress.active) + 1}`
           : `Задача дня · ${progress.active.slice(9).split("-").reverse().join(".")}`;
-  $("board").innerHTML = Array.from(
-    { length: Math.ceil(values.length / WIDTH) * WIDTH },
-    (_, i) =>
-      values[i]
-        ? `<button class="cell${i === selected ? " selected" : ""}${highlight && (i === highlight.a || i === highlight.b) ? " hinted" : ""}" data-index="${i}" aria-label="${values[i]}, строка ${Math.floor(i / WIDTH) + 1}, столбец ${(i % WIDTH) + 1}" aria-pressed="${i === selected}">${values[i]}</button>`
-        : `<span class="cell empty" data-index="${i}" aria-hidden="true"></span>`,
-  ).join("");
+  boardView.render(values, selected, highlight);
   $("win").hidden = count > 0 || lesson >= 0;
   if (!count && lesson < 0) renderWin();
   $("board-wrap").hidden = count === 0;
@@ -330,7 +351,10 @@ function render() {
       ? !(lesson === 5 && lessonPhase === 1)
       : !session.history.length);
   $<HTMLButtonElement>("hint").disabled =
-    busy || lesson >= 0 || !available.length;
+    busy ||
+    lesson >= 0 ||
+    !count ||
+    (progress.active === "classic" && !available.length);
   $("add").setAttribute(
     "aria-disabled",
     String(
@@ -370,7 +394,11 @@ function render() {
     const target = $("board").querySelector<HTMLElement>(
       `button[data-index="${focusedIndex}"]`,
     );
-    target?.focus({ preventScroll: true });
+    (
+      target ??
+      $("board").querySelector<HTMLElement>("button") ??
+      (lesson >= 0 ? $("lesson-next") : $("play-again"))
+    ).focus({ preventScroll: true });
   }
 }
 function clearSelection() {
@@ -393,7 +421,11 @@ function loadLesson() {
   $("lesson-step").textContent =
     `${lesson + 1} / ${shortLesson ? 2 : lessons.length}`;
   $("lesson-title").textContent = lessons[lesson].title;
-  $("lesson-text").textContent = lessons[lesson].text;
+  $("lesson-text").textContent =
+    lessons[lesson].text +
+    (shortLesson && lesson === 1
+      ? " На большом поле соединяйте по горизонтали, вертикали или диагонали: другие цифры между ними мешают, пустые клетки — нет."
+      : "");
   $("lesson-next").hidden = true;
   viewport.scrollTop = 0;
   render();
@@ -480,7 +512,14 @@ async function choose(i: number) {
     for (let c = row; c < Math.min(row + 9, blank.length); c++)
       positions.set(c - offset, c);
   }
-  const w = $("board").clientWidth / 9;
+  const oldRects = new Map<HTMLElement, DOMRect>();
+  for (const old of positions.values()) {
+    const node = cell(old);
+    if (node) oldRects.set(node, node.getBoundingClientRect());
+  }
+  const previousHeight = $("board").getBoundingClientRect().height;
+  const hadBoardFocus = $("board").contains(document.activeElement);
+  boardView.remap(positions);
   if (lesson >= 0) {
     lessonBoard = next;
     lessonPhase = 2;
@@ -491,19 +530,24 @@ async function choose(i: number) {
   clearSelection();
   busy = false;
   render();
-  if (next.length < oldLength) {
-    for (const [n, old] of positions)
-      if (n !== old)
-        motion(
-          cell(n),
-          [
-            {
-              transform: `translateY(${(Math.floor(old / 9) - Math.floor(n / 9)) * w}px)`,
-            },
-            { transform: "translateY(0)" },
-          ],
-          170,
-        );
+  if (hadBoardFocus && !$("board").contains(document.activeElement))
+    (
+      $("board").querySelector<HTMLElement>("button") ??
+      (lesson >= 0 ? $("lesson-next") : $("play-again"))
+    ).focus({ preventScroll: true });
+  if (next.length < oldLength && !reduced()) {
+    for (const [node, rect] of oldRects) {
+      if (!node.isConnected) continue;
+      const dy = rect.top - node.getBoundingClientRect().top;
+      if (Math.abs(dy) > 1)
+        motion(node, [{ translate: `0 ${dy}px` }, { translate: "0 0" }], 170);
+    }
+    const height = $("board").getBoundingClientRect().height;
+    motion(
+      $("board"),
+      [{ height: `${previousHeight}px` }, { height: `${height}px` }],
+      170,
+    );
   }
   if (lesson >= 0) message("Получилось!");
   else if (occupied(next) && result.path.kind === "reading")
@@ -599,8 +643,49 @@ function undoAction() {
 function hint() {
   if (busy || paused || lesson >= 0) return;
   const available = pairs(board());
-  if (!available.length) return;
-  highlight = available[hintIndex++ % available.length];
+  if (progress.active !== "classic") {
+    const advice = solve(board());
+    if (advice.kind === "dead") {
+      let recovery = -1;
+      for (let i = session.history.length - 1; i >= 0; i--) {
+        if (solve(session.history[i].board).kind === "move") {
+          recovery = i;
+          break;
+        }
+      }
+      if (recovery >= 0) {
+        const index = recovery;
+        $("recover-task").hidden = false;
+        $("recover-task").textContent = `Вернуться к решаемому полю`;
+        $("recover-task").onclick = () => {
+          session = {
+            rules: 1,
+            current: session.history[index],
+            history: session.history.slice(0, index),
+          };
+          clearSelection();
+          render();
+          viewport.scrollTop = session.current.scroll;
+          save();
+          hint();
+        };
+        message(
+          "Из этой позиции решения нет. Можно вернуться к решаемому полю.",
+        );
+      } else message("Из этой позиции решения нет. Начните задачу заново.");
+      return;
+    }
+    if (advice.kind !== "move") {
+      message(
+        "Не удалось быстро найти надёжный ход. Попробуйте отменить последний.",
+      );
+      return;
+    }
+    highlight = advice.pair;
+  } else {
+    if (!available.length) return;
+    highlight = available[hintIndex++ % available.length];
+  }
   progress.hints[progress.active] = (progress.hints[progress.active] ?? 0) + 1;
   save();
   selected = -1;
@@ -640,6 +725,7 @@ function hint() {
 }
 function closeMenu() {
   dialog.close();
+  showSaveState();
   document.body.classList.remove("navigation-open");
   platform.gameplay(!paused && occupied(board()) > 0);
 }
@@ -668,6 +754,8 @@ function openMenu() {
   $("menu-content").hidden = false;
   $("confirm-content").hidden = true;
   if (!dialog.open) dialog.showModal();
+  showSaveState();
+  $("resume").focus({ preventScroll: true });
   platform.gameplay(false);
 }
 function reset() {
@@ -727,6 +815,7 @@ $("settings-open").onclick = () => {
   $("menu-content").hidden = true;
   $("settings-panel").hidden = false;
   dialog.dataset.screen = "settings";
+  $("settings-back").focus();
 };
 $("settings-back").onclick = openMenu;
 $("confirm-new").onclick = reset;
@@ -791,6 +880,7 @@ async function boot() {
   let warning = "";
   try {
     const bundle = await platform.read(PROGRESS);
+    lastStored = bundle;
     if (bundle) {
       progress = readProgress(bundle, () => {
         warning =
@@ -872,6 +962,10 @@ function switchGame(id: string) {
   progress.active = id;
   const p = activePuzzle();
   session = progress.sessions[id] ?? (p ? puzzleSession(p) : newSession());
+  if (p && !occupied(session.current.board)) {
+    session = puzzleSession(p);
+    progress.hints[id] = 0;
+  }
   lesson = -1;
   $("lesson").hidden = true;
   clearSelection();
@@ -905,12 +999,11 @@ function openCollection(kind: "book" | "calendar" | "trophies") {
   panel.hidden = false;
   let html = '<button class="text-button" id="collection-back">← Меню</button>';
   if (kind === "book") {
-    html +=
-      '<h2>Тетрадь</h2><p class="intro">24 небольшие задачи. Решайте в своём темпе.</p>';
+    html += '<h2>Тетрадь</h2><p class="intro">24 небольшие задачи.</p>';
     for (let p = 0; p < 4; p++) {
       const group = notebook.slice(p * 6, p * 6 + 6),
         n = group.filter((x) => progress.done.includes(x.id)).length;
-      html += `<section class="book-page ${n === 6 ? "page-done" : group.some((x) => x.id === progress.active) ? "page-current" : ""}"><div class="page-heading"><h3>Страница ${p + 1}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((x) => `<button class="task ${progress.done.includes(x.id) ? "done" : ""}" data-game="${x.id}" aria-label="Задача ${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? ", решена" : ""}">${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? "<small>✓</small>" : ""}</button>`).join("")}</div>${n === 6 ? '<p class="stamp">Завершено ✓</p>' : ""}</section>`;
+      html += `<section class="book-page ${n === 6 ? "page-done" : group.some((x) => x.id === progress.active) ? "page-current" : ""}"><div class="page-heading"><h3>Страница ${p + 1}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((x) => `<button class="task ${progress.done.includes(x.id) ? "done" : ""}" data-game="${x.id}" ${x.id === progress.active ? 'aria-current="true"' : ""} aria-label="Задача ${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? ", решена" : ""}">${notebook.indexOf(x) + 1}${progress.done.includes(x.id) ? "<small>✓</small>" : ""}</button>`).join("")}</div>${n === 6 ? '<p class="stamp">Завершено ✓</p>' : ""}</section>`;
     }
   } else if (kind === "calendar") {
     if (calendarMonth > today().slice(0, 7))
@@ -944,6 +1037,7 @@ function openCollection(kind: "book" | "calendar" | "trophies") {
   }
   panel.innerHTML = html;
   $("collection-back").onclick = openMenu;
+  $("collection-back").focus({ preventScroll: true });
   panel.querySelectorAll<HTMLElement>("[data-game]").forEach(
     (b) =>
       (b.onclick = () => {

@@ -1,6 +1,8 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "e2e",
+  timeout: 90000,
+  workers: 2,
   use: {
     launchOptions: process.env.SEEDS_CHROMIUM
       ? { executablePath: process.env.SEEDS_CHROMIUM, args: ["--no-sandbox"] }

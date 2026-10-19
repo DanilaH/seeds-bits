@@ -18,8 +18,30 @@ export async function initPlatform(
   onPause: () => void,
   onResume: () => void,
 ): Promise<void> {
-  if (isYandex && window.YaGames) {
-    sdk = await window.YaGames.init();
+  if (isYandex) {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      sdk = await Promise.race([
+        (async () => {
+          if (!window.YaGames)
+            await new Promise<void>((resolve, reject) => {
+              const script = document.createElement("script");
+              script.src = "/sdk.js";
+              script.async = true;
+              script.onload = () => resolve();
+              script.onerror = () => reject(new Error("SDK unavailable"));
+              document.head.append(script);
+            });
+          if (!window.YaGames) throw new Error("SDK missing");
+          return window.YaGames.init();
+        })(),
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(() => reject(new Error("SDK timeout")), 4000);
+        }),
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
     sdk.on?.("game_api_pause", onPause);
     sdk.on?.("game_api_resume", onResume);
   }
@@ -64,4 +86,25 @@ export async function listenBack(onBack: () => boolean): Promise<void> {
   await App.addListener("backButton", () => {
     if (!onBack()) void App.minimizeApp();
   });
+}
+
+export const native = Capacitor.isNativePlatform();
+export class SaveConflict extends Error {}
+/** Serialize cooperating tabs and reject stale snapshots before touching either key. */
+export async function saveState(
+  key: string,
+  value: string,
+  expected: string | null,
+  settingsKey: string,
+  settings: string,
+) {
+  const persist = async () => {
+    if (!native && localStorage.getItem(key) !== expected)
+      throw new SaveConflict();
+    await write(settingsKey, settings);
+    await write(key, value);
+  };
+  if (!native && navigator.locks)
+    await navigator.locks.request("seeds-save", persist);
+  else await persist();
 }

@@ -1327,3 +1327,65 @@ dialog[data-screen="home"] .dialog-head h2 {
     padding: 12px 4px;
   }
 }
+/* Keep grid lines stationary while digits settle; preserve available height. */
+#board {
+  border: 0;
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: calc(100% / 9) calc((100cqw) / 9);
+  box-shadow: inset -1px -1px var(--line);
+  grid-auto-rows: calc(100cqw / 9);
+  align-content: start;
+  overflow: clip;
+}
+#board-wrap {
+  container-type: inline-size;
+}
+.cell {
+  border: 0;
+  aspect-ratio: auto;
+}
+#save-notice {
+  flex-shrink: 0;
+  padding: 10px;
+  border: 1px solid var(--accent);
+  background: var(--paper);
+  font-size: 13px;
+}
+#save-notice p {
+  margin: 0;
+}
+.task[aria-current="true"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+@media (max-height: 500px) {
+  .game {
+    height: 100dvh;
+    margin: 0 auto;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+  .game:has(#lesson:not([hidden])) {
+    display: block;
+  }
+  .game:has(#lesson:not([hidden])) #viewport {
+    min-height: 140px;
+    overflow: visible;
+  }
+  .game:has(#lesson:not([hidden])) #lesson {
+    margin-bottom: 8px;
+  }
+  .game:has(#lesson:not([hidden])) .status-wrap {
+    min-height: 40px;
+  }
+  dialog {
+    height: 100dvh;
+    margin: 0 auto;
+    border-radius: 0;
+  }
+  .game-meta {
+    padding: 5px;
+  }
+}

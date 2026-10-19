@@ -5,14 +5,4 @@ export default defineConfig(({ mode }) => ({
     outDir: mode === "yandex" ? "dist-yandex" : "dist",
     target: "es2022",
   },
-  plugins: [
-    {
-      name: "yandex-sdk",
-      transformIndexHtml(html) {
-        return mode === "yandex"
-          ? html.replace("</head>", '<script src="/sdk.js"></script></head>')
-          : html;
-      },
-    },
-  ],
 }));

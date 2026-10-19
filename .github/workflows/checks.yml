@@ -47,9 +47,10 @@ jobs:
       - uses: android-actions/setup-android@v4
       - run: npm ci
       - run: npm run setup:android
+      - run: node scripts/configure-android.mjs
       - run: npm run sync:android
       - run: chmod +x android/gradlew && cd android && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: seeds-bits-android-debug
+          name: seeds-bits-android-preview-intermediate
           path: android/app/build/outputs/apk/debug/app-debug.apk
