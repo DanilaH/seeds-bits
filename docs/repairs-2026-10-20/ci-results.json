@@ -1,0 +1,13 @@
+{
+  "sourceCommit": "6df0576026829c253ca5e4536aef6f08a91e9c91",
+  "run": 39310095519,
+  "androidJob": 118257138968,
+  "webJob": 118257139253,
+  "unitPassed": 16,
+  "e2ePassed": 25,
+  "web": "success",
+  "android": "success",
+  "localLongBoard": "passed 51.1s",
+  "ciLongBoard": "passed 10.7s",
+  "nativeDeviceTested": false
+}
