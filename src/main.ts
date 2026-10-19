@@ -114,6 +114,15 @@ $("app").inert = true;
 function board() {
   return lesson >= 0 ? lessonBoard : session.current.board;
 }
+let pairBoard: readonly number[] | undefined;
+let pairCache: Connection[] = [];
+function availablePairs(values: readonly number[]) {
+  if (pairBoard !== values) {
+    pairBoard = values;
+    pairCache = pairs(values);
+  }
+  return pairCache;
+}
 function message(text: string) {
   $("status").textContent = text;
 }
@@ -301,7 +310,7 @@ function render() {
   $<HTMLButtonElement>("skip").disabled = busy;
   const values = board(),
     count = occupied(values),
-    available = pairs(values);
+    available = availablePairs(values);
   document
     .querySelector(".game")!
     .classList.toggle(
@@ -576,7 +585,7 @@ function add() {
     );
     return;
   }
-  if (pairs(values).length) {
+  if (availablePairs(values).length) {
     message("На поле ещё есть пары. Можно воспользоваться подсказкой.");
     return;
   }
@@ -642,7 +651,7 @@ function undoAction() {
 }
 function hint() {
   if (busy || paused || lesson >= 0) return;
-  const available = pairs(board());
+  const available = availablePairs(board());
   if (progress.active !== "classic") {
     const advice = solve(board());
     if (advice.kind === "dead") {
