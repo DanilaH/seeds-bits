@@ -215,6 +215,7 @@ test("F07 enlarged body text and save failure in short landscape remain reachabl
   );
   save("landscape-save-failure", metrics);
   expect(metrics.viewport.height).toBeGreaterThan(100);
+  await expect(page.locator("#undo")).toBeEnabled();
   await page.locator("#menu").click();
   await expect(page.locator("#dialog")).toBeVisible();
 });
@@ -230,6 +231,7 @@ test("F08 navigation stress and tab conflict never silently overwrite", async ({
   await pair(page);
   await pair(other);
   await expect(other.locator("#save-notice")).toContainText("другой вкладке");
+  await expect(page.locator("#undo")).toBeEnabled();
   for (let i = 0; i < 15; i++) {
     await page.locator("#menu").click();
     await page.locator("#book-mode").click();
