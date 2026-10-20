@@ -508,7 +508,7 @@ test("A16 long saved history retains responsiveness and measures actual save cos
       saves: (window as any).saveDurations,
     })),
   );
-  expect((await data(page)).sessions.classic.history.length).toBe(801);
+  expect((await data(page)).sessions.classic.packedHistory.length).toBe(801);
 });
 test("A17 accessibility contrast and motion timing measurements on actual built UI", async ({
   page,

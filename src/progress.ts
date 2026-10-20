@@ -1,3 +1,4 @@
+import { packSession, unpackSession } from "./history-codec";
 import { jars, type Jars } from "./jars";
 import { decode, newSession, occupied, type Session } from "./core";
 export type Progress = {
@@ -29,10 +30,10 @@ export function readProgress(
   onRecovery: () => void = () => {},
 ): Progress {
   const p = JSON.parse(raw);
-  if (p?.version > 3 || p?.meta?.version > 1 || p?.jars?.version > 1)
+  if (p?.version > 4 || p?.meta?.version > 1 || p?.jars?.version > 1)
     throw new FutureProgress("Newer save format");
   if (
-    (p?.version !== 2 && p?.version !== 3) ||
+    (p?.version !== 2 && p?.version !== 3 && p?.version !== 4) ||
     !validId(p.active) ||
     !p.sessions ||
     !Array.isArray(p.done) ||
@@ -43,7 +44,21 @@ export function readProgress(
   for (const [id, s] of Object.entries(p.sessions))
     if (validId(id)) {
       try {
-        clean.sessions[id] = decode(JSON.stringify(s));
+        if (p.version === 4) {
+          try {
+            clean.sessions[id] = unpackSession(s);
+          } catch {
+            const packed = s as { rules: number; current: unknown };
+            clean.sessions[id] = decode(
+              JSON.stringify({
+                rules: packed?.rules,
+                current: packed?.current,
+                history: [],
+              }),
+            );
+            onRecovery();
+          }
+        } else clean.sessions[id] = decode(JSON.stringify(s));
       } catch {
         onRecovery();
       }
@@ -165,4 +180,15 @@ export function recordCompletion(p: Progress, task: string) {
   if (!(p.hints[task] ?? 0)) m.unassisted++;
   if (task === "classic") jars(p).wins++;
   if (task !== "classic" && !p.done.includes(task)) p.done.push(task);
+}
+
+/** Wire v4 prevents older builds from silently dropping compact undo history. */
+export function serializeProgress(p: Progress): string {
+  return JSON.stringify({
+    ...p,
+    version: 4,
+    sessions: Object.fromEntries(
+      Object.entries(p.sessions).map(([id, s]) => [id, packSession(s)]),
+    ),
+  });
 }

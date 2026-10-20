@@ -68,6 +68,7 @@ for (const [width, height] of [
         p = JSON.parse(localStorage.getItem(k)!);
       p.sessions.classic.current.board = [5, 5];
       p.sessions.classic.history = [];
+      p.sessions.classic.packedHistory = [];
       localStorage.setItem(k, JSON.stringify(p));
     });
     await page.reload();

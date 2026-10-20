@@ -70,7 +70,7 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
   );
   expect(p.jars.seeds).toBe(26);
   expect(p.jars.wins).toBe(1);
-  expect(p.version).toBe(3);
+  expect(p.version).toBe(4);
   await expect(page.locator("#jar-percent")).toContainText("2/60");
   await page.locator("#jar-meter").click();
   await expect(page.locator(".jar-keepsake")).toHaveCount(1);

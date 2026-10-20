@@ -38,6 +38,7 @@ import {
 import {
   fresh,
   readProgress,
+  serializeProgress,
   FutureProgress,
   metadata,
   startAttempt,
@@ -228,7 +229,7 @@ function save(state = progress, game = session) {
   metadata(state);
   if (lesson < 0 && !busy) game.current.scroll = viewport.scrollTop;
   state.sessions[state.active] = game;
-  const bundle = JSON.stringify(state),
+  const bundle = serializeProgress(state),
     prefs = JSON.stringify(settings);
   saveQueue = saveQueue
     .catch(() => {})
@@ -411,7 +412,7 @@ function renderWin() {
     award.hidden = false;
     award.textContent =
       n === 6
-        ? `✓ Страница ${page + 1} завершена`
+        ? `✓ Страница ${(page % 4) + 1} завершена`
         : `Страница ${(page % 4) + 1} · ${n} из 6`;
   }
   if (id.startsWith("daily")) {
@@ -1117,7 +1118,10 @@ viewport.addEventListener("scroll", () => {
     if (lesson < 0) save();
   }, 200);
 });
-window.addEventListener("resize", () => drawPath(highlight));
+window.addEventListener("resize", () => {
+  flights.clear();
+  drawPath(highlight);
+});
 document.addEventListener("visibilitychange", () => {
   paused = document.hidden;
   if (paused) flights.clear();
@@ -1265,6 +1269,7 @@ async function switchGame(id: string) {
   if (id.startsWith("book") && volumeOf(id) > 0) {
     busy = true;
     dialog.inert = true;
+    document.getElementById("book-load-error")?.remove();
     const loading = document.createElement("p");
     loading.setAttribute("role", "status");
     loading.textContent = "Открываю тетрадь…";
@@ -1272,9 +1277,26 @@ async function switchGame(id: string) {
     try {
       await loadNotebook();
     } catch {
-      message("Не удалось открыть тетрадь. Попробуйте ещё раз.");
+      const error = document.createElement("div");
+      error.id = "book-load-error";
+      error.setAttribute("role", "alert");
+      const text = document.createElement("p");
+      text.textContent =
+        "Не удалось открыть тетрадь. Перезагрузите игру, чтобы повторить загрузку. Текущая партия будет сохранена.";
+      const retry = document.createElement("button");
+      retry.className = "secondary";
+      retry.textContent = "Сохранить и перезагрузить";
+      retry.onclick = async () => {
+        retry.disabled = true;
+        await save();
+        if (!saveFailed && !futureSave && !storageConflict) location.reload();
+        else retry.disabled = false;
+      };
+      error.append(text, retry);
+      $("collection").prepend(error);
       return;
     } finally {
+      loading.remove();
       busy = false;
       dialog.inert = false;
     }
@@ -1283,13 +1305,27 @@ async function switchGame(id: string) {
   if (lesson < 0 && !busy) session.current.scroll = viewport.scrollTop;
   progress.sessions[progress.active] = session;
   flights.clear();
-  const candidate = structuredClone(progress);
+  // Sessions are replaced on moves; retain their immutable histories and caches.
+  const candidate: Progress = {
+    ...progress,
+    sessions: { ...progress.sessions },
+    hints: { ...progress.hints },
+    done: [...progress.done],
+    seen: [...progress.seen],
+    meta: progress.meta
+      ? { ...progress.meta, attempts: { ...progress.meta.attempts } }
+      : undefined,
+    jars: progress.jars ? { ...progress.jars } : undefined,
+  };
   if (
     progress.active !== id &&
     progress.active !== "classic" &&
     !occupied(session.current.board)
   )
-    candidate.sessions[progress.active].history = [];
+    candidate.sessions[progress.active] = {
+      ...candidate.sessions[progress.active],
+      history: [],
+    };
 
   candidate.active = id;
   const p =
@@ -1322,17 +1358,11 @@ async function switchGame(id: string) {
   render();
   viewport.scrollTop = session.current.scroll;
 }
-const months = () => {
-  const result: string[] = [];
-  const end = today().slice(0, 7);
-  let m = FIRST_MONTH;
-  while (m <= end && result.length < 1200) {
-    result.push(m);
-    const [y, n] = m.split("-").map(Number);
-    m = n === 12 ? `${y + 1}-01` : `${y}-${String(n + 1).padStart(2, "0")}`;
-  }
-  return result;
-};
+const months = () =>
+  Array.from(
+    { length: 12 },
+    (_, i) => `${trophyYear}-${String(i + 1).padStart(2, "0")}`,
+  ).filter((m) => m >= FIRST_MONTH && m <= today().slice(0, 7));
 const monthName = (m: string) =>
   new Date(Number(m.slice(0, 4)), Number(m.slice(5)) - 1, 1).toLocaleDateString(
     "ru",
@@ -1375,10 +1405,13 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
           ? !status(v).started
           : status(v).started && status(v).n < 24);
     const candidates = Array.from({ length: 100 }, (_, i) => i).filter(allowed);
-    if (!candidates.includes(selectedVolume) && candidates.length)
-      selectedVolume = candidates[0];
-    const chapter = Math.floor(selectedVolume / 10),
-      stats = status(selectedVolume);
+    const chapter = Math.floor(selectedVolume / 10);
+    const chapterCandidates = candidates.filter(
+      (v) => Math.floor(v / 10) === chapter,
+    );
+    if (!chapterCandidates.includes(selectedVolume) && chapterCandidates.length)
+      selectedVolume = chapterCandidates[0];
+    const stats = status(selectedVolume);
     html += `<h2>Тетради</h2><p class="intro">100 тетрадей · 2400 задач</p><div class="archive-controls"><label>Раздел<select id="book-chapter">${chapterNames.map((n, i) => `<option value="${i}" ${i === chapter ? "selected" : ""}>${i + 1}. ${n}</option>`).join("")}</select></label><label>Показать<select id="book-filter">${[
       ["all", "Все"],
       ["new", "Не начаты"],
@@ -1396,7 +1429,7 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
           `<button class="volume-cover ${v === selectedVolume ? "current" : ""}" data-volume="${v}" style="--cover-hue:${(v * 37) % 360}" aria-label="Тетрадь ${v + 1}, ${status(v).n} из 24"><strong>${v + 1}</strong><small>${status(v).n}/24</small></button>`,
       )
       .join("")}</div>`;
-    if (candidates.length) {
+    if (chapterCandidates.length) {
       const tasks = volumeTasks(selectedVolume);
       const continuing =
         tasks.find(
@@ -1491,7 +1524,6 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
     };
     $("book-chapter").onchange = () => {
       selectedVolume = Number($<HTMLSelectElement>("book-chapter").value) * 10;
-      bookFilter = "all";
       openCollection("book");
     };
     panel.querySelectorAll<HTMLElement>("[data-volume]").forEach(
