@@ -132,11 +132,13 @@ test("all 24 notebook games finish by following reliable hints", async ({
           es.map((e) => Number((e as HTMLElement).dataset.index)),
         );
       expect(ids).toHaveLength(2);
+      const before = Number(await page.locator("#remaining").textContent());
       await page.evaluate(([a, b]) => {
         (document.querySelector(`[data-index="${a}"]`) as HTMLElement).click();
         (document.querySelector(`[data-index="${b}"]`) as HTMLElement).click();
       }, ids);
       await expect(page.locator("#skip")).toBeEnabled();
+      await expect(page.locator("#remaining"), `task ${n} move ${move}, ids ${ids}`).toHaveText(String(before - 2));
     }
     await expect(page.locator("#remaining")).toHaveText("0");
   }
