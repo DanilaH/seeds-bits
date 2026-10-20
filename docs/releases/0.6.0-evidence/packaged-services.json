@@ -1,0 +1,12 @@
+{
+  "configurationPresent": {
+    "appmetrica_api_key": true,
+    "yandex_banner_id": true,
+    "yandex_interstitial_id": true,
+    "yandex_rewarded_id": true
+  },
+  "sdkClassesPackaged": true,
+  "applicationClassRegistered": true,
+  "liveAdFillVerified": false,
+  "dashboardDeliveryVerified": false
+}
