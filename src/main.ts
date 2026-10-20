@@ -1559,8 +1559,9 @@ $("calendar-open").onclick = () => {
 };
 $("progress-open").onclick = () => openCollection("progress");
 function updateHome() {
+  const finished = new Set(progress.done);
   $("book-count").textContent =
-    `${notebook.filter((p) => progress.done.includes(p.id)).length} из ${notebook.length} решено`;
+    `${notebook.filter((p) => finished.has(p.id)).length} из ${notebook.length} решено`;
   const id = `daily-v1-${today()}`;
   $("daily-state").textContent = progress.done.includes(id)
     ? "Решено · повторить"

@@ -38,7 +38,7 @@ for (let run=0; run<3; run++) for (const version of ['before','after']) {
   }
   await page.waitForTimeout(200);
   const end=await metrics();
-  results.push({run,version,...await page.evaluate(()=>({longTasks:window.auditTasks,boardAttributeMutations:window.auditMutations})),metricsMs:Object.fromEntries(['TaskDuration','ScriptDuration','LayoutDuration','RecalcStyleDuration'].map(k=>[k,Math.round((end[k]-start[k])*1000)]))});
+  results.push({run,version,...await page.evaluate(()=>({longTasks:window.auditTasks,boardAttributeMutations:window.auditMutations})),counts:Object.fromEntries(['LayoutCount','RecalcStyleCount'].map(k=>[k,end[k]-start[k]])),metricsMs:Object.fromEntries(['TaskDuration','ScriptDuration','LayoutDuration','RecalcStyleDuration'].map(k=>[k,Math.round((end[k]-start[k])*1000)]))});
   await context.close();
 }
 await browser.close();await new Promise(r=>server.close(r));

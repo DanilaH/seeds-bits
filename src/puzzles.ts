@@ -169,10 +169,11 @@ export function nextTask(
   done: readonly string[],
   now = today(),
 ): string | undefined {
+  const finished = new Set(done);
   const index = notebook.findIndex((p) => p.id === id);
   if (index >= 0)
     return [...notebook.slice(index + 1), ...notebook.slice(0, index)].find(
-      (p) => !done.includes(p.id),
+      (p) => !finished.has(p.id),
     )?.id;
   if (!id.startsWith("daily-v1-")) return;
   const start = id.slice(9);
@@ -181,12 +182,12 @@ export function nextTask(
     return today(new Date(y, m - 1, d + delta));
   };
   for (let day = step(start, 1); day <= now; day = step(day, 1))
-    if (availableDay(day, now) && !done.includes(`daily-v1-${day}`))
+    if (availableDay(day, now) && !finished.has(`daily-v1-${day}`))
       return `daily-v1-${day}`;
   for (
     let day = step(start > now ? step(now, 1) : start, -1);
     day >= `${FIRST_MONTH}-01`;
     day = step(day, -1)
   )
-    if (!done.includes(`daily-v1-${day}`)) return `daily-v1-${day}`;
+    if (!finished.has(`daily-v1-${day}`)) return `daily-v1-${day}`;
 }

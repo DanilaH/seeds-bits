@@ -1494,8 +1494,8 @@ dialog[data-screen="home"] .dialog-head h2 {
   bottom: 1px;
   left: 1px;
   right: 1px;
-  height: var(--fill, 0%);
-  max-height: calc(100% - 5px);
+  height: calc(100% - 5px);
+  clip-path: inset(calc(100% - var(--fill, 0%)) 0 0 0);
   border-radius: 3px 3px 9px 9px;
   background-color: var(--jar-color, #b58b51);
   background-image:
@@ -1504,7 +1504,7 @@ dialog[data-screen="home"] .dialog-head h2 {
   background-size:
     9px 12px,
     11px 9px;
-  transition: height 0.18s ease-out;
+  transition: clip-path 0.18s ease-out;
 }
 .jar-caption {
   display: flex;
@@ -1645,4 +1645,26 @@ header .jar-glass {
   header .jar-caption {
     font-size: 11px;
   }
+}
+.flying-seed {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 6px;
+  transform-origin: 100% 50%;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, #bd975c70);
+  will-change: transform, opacity;
+}
+.flying-seed::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -1px;
+  width: 6px;
+  height: 8px;
+  border-radius: 65% 35% 60% 40%;
+  background: #b58b51;
+  box-shadow: inset -1px 0 #ead3a4;
 }

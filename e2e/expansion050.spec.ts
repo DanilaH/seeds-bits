@@ -168,3 +168,29 @@ test("reduced motion suppresses flight frames and small classic layout stays usa
   ).toBeGreaterThan(100);
   await page.screenshot({ path: "test-results/050-classic.png" });
 });
+test("decorative seed flights stay bounded and clear on background without losing earned seeds", async ({
+  page,
+}) => {
+  await start(page);
+  await page.locator("#resume").click();
+  await page.evaluate(() => {
+    (document.querySelector('[data-index="0"]') as HTMLElement).click();
+    (document.querySelector('[data-index="1"]') as HTMLElement).click();
+  });
+  await expect(page.locator(".flying-seed")).toHaveCount(2);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", {
+      get: () => true,
+      configurable: true,
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect(page.locator(".flying-seed")).toHaveCount(0);
+  await expect(page.locator("#jar-percent")).toContainText("2/24");
+  expect(
+    await page.evaluate(
+      (k) => JSON.parse(localStorage.getItem(k)!).jars.seeds,
+      key,
+    ),
+  ).toBe(2);
+});

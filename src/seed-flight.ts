@@ -1,21 +1,11 @@
-type Point = { x: number; y: number };
-type Flight = {
-  from: Point;
-  control: Point;
-  to: Point;
-  start: number;
-  duration: number;
-  land: () => void;
-};
-/** One decorative canvas; bounded particles and no layout reads in the frame loop. */
+/** Bounded transform animations: no full-screen canvas, per-frame JS or layout reads. */
 export class SeedFlight {
-  private canvas = document.createElement("canvas");
-  private flights: Flight[] = [];
-  private frame = 0;
+  private layer = document.createElement("div");
+  private active = new Map<HTMLElement, () => void>();
   constructor() {
-    this.canvas.id = "seed-flights";
-    this.canvas.setAttribute("aria-hidden", "true");
-    document.body.append(this.canvas);
+    this.layer.id = "seed-flights";
+    this.layer.setAttribute("aria-hidden", "true");
+    document.body.append(this.layer);
   }
   fly(rects: DOMRect[], target: HTMLElement, land: () => void) {
     if (
@@ -25,90 +15,65 @@ export class SeedFlight {
       rects.forEach(land);
       return;
     }
-    const r = target.getBoundingClientRect(),
-      to = { x: r.left + r.width / 2, y: r.top + r.height * 0.55 };
-    this.canvas.width = innerWidth * devicePixelRatio;
-    this.canvas.height = innerHeight * devicePixelRatio;
+    const box = target.getBoundingClientRect(),
+      tx = box.left + box.width / 2,
+      ty = box.top + box.height * 0.55;
     for (const [i, r] of rects.entries()) {
-      if (this.flights.length >= 12) {
+      if (this.active.size >= 12) {
         land();
         continue;
       }
-      const from = {
-        x: Math.max(8, Math.min(innerWidth - 8, r.left + r.width / 2)),
-        y: Math.max(8, Math.min(innerHeight - 8, r.top + r.height / 2)),
-      };
-      const side = from.x < to.x ? -1 : 1;
-      this.flights.push({
-        from,
-        to,
-        control: {
-          x: Math.max(
-            8,
-            Math.min(
-              innerWidth - 8,
-              (from.x + to.x) / 2 + side * (24 + Math.random() * 45),
-            ),
-          ),
-          y: Math.max(12, Math.min(from.y, to.y) - 20 - Math.random() * 40),
-        },
-        start: performance.now() + i * 55,
-        duration:
-          420 +
-          Math.min(220, Math.abs(from.y - to.y) * 0.3) +
-          Math.random() * 70,
-        land,
+      const x = Math.max(8, Math.min(innerWidth - 8, r.left + r.width / 2));
+      const y = Math.max(8, Math.min(innerHeight - 8, r.top + r.height / 2));
+      const side = x < tx ? -1 : 1;
+      const cx = Math.max(
+        8,
+        Math.min(
+          innerWidth - 8,
+          (x + tx) / 2 + side * (24 + Math.random() * 45),
+        ),
+      );
+      const cy = Math.max(12, Math.min(y, ty) - 20 - Math.random() * 40);
+      const seed = document.createElement("i");
+      seed.className = "flying-seed";
+
+      this.layer.append(seed);
+      const duration =
+        420 + Math.min(220, Math.abs(y - ty) * 0.3) + Math.random() * 70;
+      const frames = Array.from({ length: 33 }, (_, step) => {
+        const t = step / 32,
+          px = (1 - t) ** 2 * x + 2 * (1 - t) * t * cx + t * t * tx,
+          py = (1 - t) ** 2 * y + 2 * (1 - t) * t * cy + t * t * ty;
+        const angle =
+          (Math.atan2(
+            2 * (1 - t) * (cy - y) + 2 * t * (ty - cy),
+            2 * (1 - t) * (cx - x) + 2 * t * (tx - cx),
+          ) *
+            180) /
+          Math.PI;
+        return {
+          transform: `translate3d(${px - 30}px,${py - 3}px,0) rotate(${angle}deg)`,
+          opacity: Math.min(1, t * 12),
+          offset: t,
+        };
       });
+      const animation = seed.animate(frames, {
+        duration,
+        delay: i * 55,
+        easing: "cubic-bezier(.3,.05,.65,1)",
+        fill: "both",
+      });
+      const finish = () => {
+        if (!this.active.delete(seed)) return;
+        animation.cancel();
+        seed.remove();
+        land();
+      };
+      this.active.set(seed, finish);
+      animation.onfinish = finish;
     }
-    if (!this.frame) this.frame = requestAnimationFrame(this.draw);
   }
   clear() {
-    cancelAnimationFrame(this.frame);
-    this.frame = 0;
-    const old = this.flights;
-    this.flights = [];
-    old.forEach((f) => f.land());
-    this.canvas
-      .getContext("2d")
-      ?.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    for (const finish of [...this.active.values()]) finish();
   }
-  private draw = (now: number) => {
-    const ctx = this.canvas.getContext("2d")!;
-    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-    const point = (f: Flight, t: number) => ({
-      x:
-        (1 - t) ** 2 * f.from.x +
-        2 * (1 - t) * t * f.control.x +
-        t * t * f.to.x,
-      y:
-        (1 - t) ** 2 * f.from.y +
-        2 * (1 - t) * t * f.control.y +
-        t * t * f.to.y,
-    });
-    const pending: Flight[] = [];
-    for (const f of this.flights) {
-      const t = Math.max(0, Math.min(1, (now - f.start) / f.duration));
-      if (now < f.start) {
-        pending.push(f);
-        continue;
-      }
-      if (t >= 1) {
-        f.land();
-        continue;
-      }
-      pending.push(f);
-      for (let j = 7; j >= 0; j--) {
-        const p = point(f, Math.max(0, t - j * 0.018));
-        ctx.globalAlpha = (1 - j / 8) * 0.7;
-        ctx.fillStyle = "#bd975c";
-        ctx.beginPath();
-        ctx.ellipse(p.x, p.y, j ? 2 : 3.2, j ? 2 : 4.6, -0.5, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    ctx.globalAlpha = 1;
-    this.flights = pending;
-    this.frame = pending.length ? requestAnimationFrame(this.draw) : 0;
-  };
 }
