@@ -1,0 +1,30 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:36:55] "GET / HTTP/1.1" 200 -
+
+Running 2 tests using 1 worker
+
+(node:33) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:36:57] "GET / HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:36:57] "GET /assets/index-D8m8HPqn.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:36:57] "GET /assets/index-SxZ3Aqye.js HTTP/1.1" 200 -
+HEAVY_HISTORY { longTasks: [], saves: [ { ms: 17, bytes: 2925164 } ] }
+  ✓  1 scripts/audit-0.4.0/browser.spec.ts:109:1 › A16 long saved history retains responsiveness and measures actual save cost (9.9s)
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:37:07] "GET / HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:37:07] "GET /assets/index-SxZ3Aqye.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:37:07] "GET /assets/index-D8m8HPqn.css HTTP/1.1" 200 -
+ANIMATIONS [
+  { duration: 120, frames: [ [Object], [Object] ] },
+  { duration: 120, frames: [ [Object], [Object] ] },
+  { duration: 100, frames: [ [Object], [Object] ] },
+  { duration: 100, frames: [ [Object], [Object] ] },
+  { duration: 100, frames: [ [Object], [Object] ] },
+  { duration: 120, frames: [ [Object], [Object] ] },
+  { duration: 120, frames: [ [Object], [Object] ] },
+  { duration: 120, frames: [ [Object], [Object] ] },
+  { duration: 160, frames: [ [Object], [Object] ] }
+]
+CONTRAST_INPUT [{"theme":"light","paper":"rgb(250, 251, 249)","labels":[{"text":"Классика","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Очистите поле от цифр","color":"rgb(104, 118, 112)","size":"12px"},{"text":"1 из 24 решено","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Начать","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Мой прогресс","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Коллекция","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Как играть","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Настройки","color":"rgb(104, 118, 112)","size":"12px"}]},{"theme":"dark","paper":"rgb(32, 39, 36)","labels":[{"text":"Классика","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Очистите поле от цифр","color":"rgb(160, 173, 164)","size":"12px"},{"text":"1 из 24 решено","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Начать","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Мой прогресс","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Коллекция","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Как играть","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Настройки","color":"rgb(160, 173, 164)","size":"12px"}]}]
+  ✓  2 scripts/audit-0.4.0/browser.spec.ts:115:1 › A17 accessibility contrast and motion timing measurements on actual built UI (723ms)
+
+  2 passed (12.1s)

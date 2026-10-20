@@ -1,0 +1,20 @@
+[
+  {
+    kind: 'resolved',
+    inert: false,
+    status: 'Попробуйте на маленьком поле',
+    lessonHidden: false
+  },
+  {
+    kind: 'rejected',
+    inert: false,
+    status: 'Сервис площадки недоступен. Можно играть без него.',
+    lessonHidden: false
+  },
+  {
+    kind: 'pending',
+    inert: false,
+    status: 'Сервис площадки недоступен. Можно играть без него.',
+    lessonHidden: false
+  }
+]

@@ -1,0 +1,220 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:37:59] "GET / HTTP/1.1" 200 -
+
+Running 5 tests using 1 worker
+
+(node:37) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:00] "GET / HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:00] "GET /assets/index-D8m8HPqn.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:00] "GET /assets/index-SxZ3Aqye.js HTTP/1.1" 200 -
+CORRUPT_META ← Меню
+Мой прогресс
+Тетрадь
+0 из 24
+Решено дейликов
+0
+Завершено партий
+0
+Без подсказок
+0
+
+Партии и прохождения без подсказок считаются с 20.10.2026. Старые отметки задач сохранены.
+
+Коллекция
+
+Прогресс сохраняется на этом устройстве.
+  ✘  1 scripts/audit-0.4.0/browser.spec.ts:9:1 › A01 damage isolated to metadata does not discard valid tasks and boards (5.7s)
+(node:115) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:06] "GET / HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:06] "GET /assets/index-D8m8HPqn.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:06] "GET /assets/index-SxZ3Aqye.js HTTP/1.1" 200 -
+FUTURE_SCHEMA {
+  version: 1,
+  since: '2026-10-20T10:38:06.954Z',
+  attempts: {
+    classic: { id: '2eab6a78-260b-452d-89d7-ad549e55ae5d', completed: false }
+  },
+  completed: 0,
+  unassisted: 0
+}
+  ✘  2 scripts/audit-0.4.0/browser.spec.ts:17:1 › A02 unsupported future metadata is not overwritten by ordinary interaction (979ms)
+(node:213) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:08] "GET / HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:08] "GET /assets/index-D8m8HPqn.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:08] "GET /assets/index-SxZ3Aqye.js HTTP/1.1" 200 -
+SWITCH_FAILURE {
+  mode: 'Тетрадь · задача 2',
+  saved: 'classic',
+  warning: 'Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.\n' +
+    '\n' +
+    'Повторить сохранение'
+}
+  ✘  3 scripts/audit-0.4.0/browser.spec.ts:24:1 › A03 failed save must not open a newly selected task as if persisted (6.1s)
+(node:295) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:15] "GET / HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:15] "GET /assets/index-SxZ3Aqye.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:15] "GET /assets/index-D8m8HPqn.css HTTP/1.1" 200 -
+CLOCK_ROLLBACK Тетрадь
+1 из 24
+Решено дейликов
+0
+Завершено партий
+5
+Без подсказок
+3
+  ✘  4 scripts/audit-0.4.0/browser.spec.ts:40:1 › A05 record of solved daily remains in statistics when device clock moves backward (5.4s)
+(node:368) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:22] "GET / HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:22] "GET /assets/index-D8m8HPqn.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [20/Oct/2026 06:38:22] "GET /assets/index-SxZ3Aqye.js HTTP/1.1" 200 -
+  ✘  5 scripts/audit-0.4.0/browser.spec.ts:45:1 › A06 midnight calendar refresh preserves keyboard focus on the current control (565ms)
+
+
+  1) scripts/audit-0.4.0/browser.spec.ts:9:1 › A01 damage isolated to metadata does not discard valid tasks and boards 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('.progress-stats dd').first()
+    Expected: "1 из 24"
+    Received: "0 из 24"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" locator('.progress-stats dd').first() with timeout 5000ms
+      - waiting for locator('.progress-stats dd').first()
+        14 × locator resolved to <dd>0 из 24</dd>
+           - unexpected value "0 из 24"
+
+
+      13 |  console.log('CORRUPT_META',await page.locator('#collection').innerText());
+      14 |  await page.screenshot({animations:'disabled',path:'docs/audit-0.4.0/corrupt-meta.png'});
+    > 15 |  await expect(page.locator('.progress-stats dd').first()).toHaveText('1 из 24');
+         |                                                           ^
+      16 | });
+      17 | test('A02 unsupported future metadata is not overwritten by ordinary interaction',async({page})=>{
+      18 |  const p=state();p.meta.version=99;await seed(page,p);await page.goto('/');await page.locator('#resume').click();
+        at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:15:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/audit040/browser-A01-damage-isolate-36fdb-card-valid-tasks-and-boards/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/audit040/browser-A01-damage-isolate-36fdb-card-valid-tasks-and-boards/error-context.md
+
+  2) scripts/audit-0.4.0/browser.spec.ts:17:1 › A02 unsupported future metadata is not overwritten by ordinary interaction 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 99
+    Received: 1
+
+      20 |  await page.waitForTimeout(300);const actual=await data(page);console.log('FUTURE_SCHEMA',actual.meta);
+      21 |  expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k+'.recovery')!).meta.version,KEY)).toBe(99);
+    > 22 |  expect(actual.meta.version).toBe(99);
+         |                              ^
+      23 | });
+      24 | test('A03 failed save must not open a newly selected task as if persisted',async({page})=>{
+      25 |  await seed(page);await page.goto('/');
+        at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:22:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/audit040/browser-A02-unsupported-fu-c4bdf-ten-by-ordinary-interaction/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/audit040/browser-A02-unsupported-fu-c4bdf-ten-by-ordinary-interaction/error-context.md
+
+  3) scripts/audit-0.4.0/browser.spec.ts:24:1 › A03 failed save must not open a newly selected task as if persisted 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('#dialog')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" locator('#dialog') with timeout 5000ms
+      - waiting for locator('#dialog')
+        14 × locator resolved to <dialog id="dialog" data-screen="book" aria-label="Меню Семечек">…</dialog>
+           - unexpected value "hidden"
+
+
+      28 |  console.log('SWITCH_FAILURE',{mode:await page.locator('#mode').textContent(),saved:(await data(page)).active,warning:await page.locator('#save-notice').innerText()});
+      29 |  await page.screenshot({animations:'disabled',path:'docs/audit-0.4.0/switch-save-failed.png'});
+    > 30 |  await expect(page.locator('#dialog')).toBeVisible();
+         |                                        ^
+      31 | });
+      32 | test('A04 undo/re-win, reload and restart count exactly once per attempt',async({page})=>{
+      33 |  await seed(page);await page.goto('/');await page.locator('#resume').click();await pair(page);
+        at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:30:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/audit040/browser-A03-failed-save-mu-f10e3-lected-task-as-if-persisted/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/audit040/browser-A03-failed-save-mu-f10e3-lected-task-as-if-persisted/error-context.md
+
+  4) scripts/audit-0.4.0/browser.spec.ts:40:1 › A05 record of solved daily remains in statistics when device clock moves backward 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('.progress-stats dd').nth(1)
+    Expected: "1"
+    Received: "0"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" locator('.progress-stats dd').nth(1) with timeout 5000ms
+      - waiting for locator('.progress-stats dd').nth(1)
+        14 × locator resolved to <dd>0</dd>
+           - unexpected value "0"
+
+
+      41 |  await page.clock.setFixedTime(new Date('2026-10-19T12:00:00'));const p=state();p.done.push('daily-v1-2026-10-20');await seed(page,p);await page.goto('/');await page.locator('#progress-open').click();
+      42 |  console.log('CLOCK_ROLLBACK',await page.locator('.progress-stats').innerText());
+    > 43 |  await expect(page.locator('.progress-stats dd').nth(1)).toHaveText('1');
+         |                                                          ^
+      44 | });
+      45 | test('A06 midnight calendar refresh preserves keyboard focus on the current control',async({page})=>{
+      46 |  await page.clock.install({time:new Date('2026-10-20T23:59:59')});await seed(page);await page.goto('/');await page.locator('#calendar-open').click();
+        at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:43:58
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/audit040/browser-A05-record-of-solv-1777f-device-clock-moves-backward/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/audit040/browser-A05-record-of-solv-1777f-device-clock-moves-backward/error-context.md
+
+  5) scripts/audit-0.4.0/browser.spec.ts:45:1 › A06 midnight calendar refresh preserves keyboard focus on the current control 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "daily-v1-2026-10-10"
+    Received: null
+
+      46 |  await page.clock.install({time:new Date('2026-10-20T23:59:59')});await seed(page);await page.goto('/');await page.locator('#calendar-open').click();
+      47 |  await page.locator('[data-game="daily-v1-2026-10-10"]').focus();await page.clock.fastForward(2000);
+    > 48 |  expect(await page.evaluate(()=>document.activeElement?.getAttribute('data-game'))).toBe('daily-v1-2026-10-10');
+         |                                                                                     ^
+      49 | });
+      50 | test('A07 all notebook finished gives reachable replay and never awards unique progress twice',async({page})=>{
+      51 |  const p:any=state();p.active='book-v1-24';p.sessions['book-v1-24']={rules:1,current:snapshot([5,5]),history:[]};p.done=Array.from({length:23},(_,i)=>`book-v1-${i+1}`);await seed(page,p);await page.goto('/');await page.locator('#resume').click();await pair(page);
+        at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:48:85
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/audit040/browser-A06-midnight-calen-d7842-ocus-on-the-current-control/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/audit040/browser-A06-midnight-calen-d7842-ocus-on-the-current-control/error-context.md
+
+  5 failed
+    scripts/audit-0.4.0/browser.spec.ts:9:1 › A01 damage isolated to metadata does not discard valid tasks and boards 
+    scripts/audit-0.4.0/browser.spec.ts:17:1 › A02 unsupported future metadata is not overwritten by ordinary interaction 
+    scripts/audit-0.4.0/browser.spec.ts:24:1 › A03 failed save must not open a newly selected task as if persisted 
+    scripts/audit-0.4.0/browser.spec.ts:40:1 › A05 record of solved daily remains in statistics when device clock moves backward 
+    scripts/audit-0.4.0/browser.spec.ts:45:1 › A06 midnight calendar refresh preserves keyboard focus on the current control 

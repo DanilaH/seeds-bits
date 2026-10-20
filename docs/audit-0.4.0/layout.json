@@ -1,0 +1,429 @@
+[
+  {
+    "w": 320,
+    "h": 568,
+    "menuScroll": true,
+    "targets": [
+      {
+        "id": "resume",
+        "w": 284,
+        "h": 54,
+        "font": "16px"
+      },
+      {
+        "id": "classic-mode",
+        "w": 284,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "book-mode",
+        "w": 284,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "daily-mode",
+        "w": 284,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "calendar-open",
+        "w": 284,
+        "h": 48,
+        "font": "15px"
+      },
+      {
+        "id": "progress-open",
+        "w": 94.625,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "trophies-mode",
+        "w": 77.03125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "learn",
+        "w": 78.078125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "settings-open",
+        "w": 75.78125,
+        "h": 44,
+        "font": "12px"
+      }
+    ]
+  },
+  {
+    "w": 360,
+    "h": 640,
+    "menuScroll": false,
+    "targets": [
+      {
+        "id": "resume",
+        "w": 308,
+        "h": 54,
+        "font": "16px"
+      },
+      {
+        "id": "classic-mode",
+        "w": 308,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "book-mode",
+        "w": 308,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "daily-mode",
+        "w": 308,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "calendar-open",
+        "w": 308,
+        "h": 48,
+        "font": "15px"
+      },
+      {
+        "id": "progress-open",
+        "w": 94.625,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "trophies-mode",
+        "w": 77.03125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "learn",
+        "w": 78.078125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "settings-open",
+        "w": 75.78125,
+        "h": 44,
+        "font": "12px"
+      }
+    ]
+  },
+  {
+    "w": 390,
+    "h": 844,
+    "menuScroll": false,
+    "targets": [
+      {
+        "id": "resume",
+        "w": 338,
+        "h": 54,
+        "font": "16px"
+      },
+      {
+        "id": "classic-mode",
+        "w": 338,
+        "h": 80,
+        "font": "19px"
+      },
+      {
+        "id": "book-mode",
+        "w": 338,
+        "h": 80,
+        "font": "19px"
+      },
+      {
+        "id": "daily-mode",
+        "w": 338,
+        "h": 80,
+        "font": "19px"
+      },
+      {
+        "id": "calendar-open",
+        "w": 338,
+        "h": 48,
+        "font": "15px"
+      },
+      {
+        "id": "progress-open",
+        "w": 94.625,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "trophies-mode",
+        "w": 77.03125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "learn",
+        "w": 78.078125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "settings-open",
+        "w": 75.78125,
+        "h": 44,
+        "font": "12px"
+      }
+    ]
+  },
+  {
+    "w": 568,
+    "h": 320,
+    "menuScroll": true,
+    "targets": [
+      {
+        "id": "resume",
+        "w": 390,
+        "h": 54,
+        "font": "16px"
+      },
+      {
+        "id": "classic-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "book-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "daily-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "calendar-open",
+        "w": 390,
+        "h": 48,
+        "font": "15px"
+      },
+      {
+        "id": "progress-open",
+        "w": 94.625,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "trophies-mode",
+        "w": 77.03125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "learn",
+        "w": 78.078125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "settings-open",
+        "w": 75.78125,
+        "h": 44,
+        "font": "12px"
+      }
+    ]
+  },
+  {
+    "w": 600,
+    "h": 320,
+    "menuScroll": true,
+    "targets": [
+      {
+        "id": "resume",
+        "w": 390,
+        "h": 54,
+        "font": "16px"
+      },
+      {
+        "id": "classic-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "book-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "daily-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "calendar-open",
+        "w": 390,
+        "h": 48,
+        "font": "15px"
+      },
+      {
+        "id": "progress-open",
+        "w": 94.625,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "trophies-mode",
+        "w": 77.03125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "learn",
+        "w": 78.078125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "settings-open",
+        "w": 75.78125,
+        "h": 44,
+        "font": "12px"
+      }
+    ]
+  },
+  {
+    "w": 844,
+    "h": 390,
+    "menuScroll": true,
+    "targets": [
+      {
+        "id": "resume",
+        "w": 390,
+        "h": 54,
+        "font": "16px"
+      },
+      {
+        "id": "classic-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "book-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "daily-mode",
+        "w": 390,
+        "h": 68,
+        "font": "19px"
+      },
+      {
+        "id": "calendar-open",
+        "w": 390,
+        "h": 48,
+        "font": "15px"
+      },
+      {
+        "id": "progress-open",
+        "w": 94.625,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "trophies-mode",
+        "w": 77.03125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "learn",
+        "w": 78.078125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "settings-open",
+        "w": 75.78125,
+        "h": 44,
+        "font": "12px"
+      }
+    ]
+  },
+  {
+    "w": 768,
+    "h": 1024,
+    "menuScroll": false,
+    "targets": [
+      {
+        "id": "resume",
+        "w": 390,
+        "h": 54,
+        "font": "16px"
+      },
+      {
+        "id": "classic-mode",
+        "w": 390,
+        "h": 80,
+        "font": "19px"
+      },
+      {
+        "id": "book-mode",
+        "w": 390,
+        "h": 80,
+        "font": "19px"
+      },
+      {
+        "id": "daily-mode",
+        "w": 390,
+        "h": 80,
+        "font": "19px"
+      },
+      {
+        "id": "calendar-open",
+        "w": 390,
+        "h": 48,
+        "font": "15px"
+      },
+      {
+        "id": "progress-open",
+        "w": 94.625,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "trophies-mode",
+        "w": 77.03125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "learn",
+        "w": 78.078125,
+        "h": 44,
+        "font": "12px"
+      },
+      {
+        "id": "settings-open",
+        "w": 75.78125,
+        "h": 44,
+        "font": "12px"
+      }
+    ]
+  }
+]

@@ -1,0 +1,835 @@
+{
+  "config": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/scratch/93d2c459edce/seeds-bits/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "scripts/audit-0.4.0/playwright.config.ts"
+    ],
+    "configFile": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/playwright.config.ts",
+    "rootDir": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0",
+        "testIgnore": [],
+        "testMatch": [
+          "browser.spec.ts"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0",
+        "snapshotDir": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0",
+        "testIgnore": [],
+        "testMatch": "browser.spec.ts",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5198",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "launchOptions": {
+            "executablePath": "/tmp/seeds-audit-chromium",
+            "args": [
+              "--no-sandbox"
+            ]
+          },
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "docs/audit-0.4.0/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "python -m http.server 5198 --bind 127.0.0.1 --directory /tmp/seeds-audit040-web",
+      "url": "http://127.0.0.1:5198",
+      "reuseExistingServer": false
+    }
+  },
+  "suites": [
+    {
+      "title": "browser.spec.ts",
+      "file": "browser.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "A01 damage isolated to metadata does not discard valid tasks and boards",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5764,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.progress-stats dd').first()\nExpected: \u001b[32m\"\u001b[7m1\u001b[27m из 24\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m0\u001b[27m из 24\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('.progress-stats dd').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.progress-stats dd').first()\u001b[22m\n\u001b[2m    13 × locator resolved to <dd>0 из 24</dd>\u001b[22m\n\u001b[2m       - unexpected value \"0 из 24\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.progress-stats dd').first()\nExpected: \u001b[32m\"\u001b[7m1\u001b[27m из 24\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m0\u001b[27m из 24\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('.progress-stats dd').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.progress-stats dd').first()\u001b[22m\n\u001b[2m    13 × locator resolved to <dd>0 из 24</dd>\u001b[22m\n\u001b[2m       - unexpected value \"0 из 24\"\u001b[22m\n\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:14:59",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                      "column": 59,
+                      "line": 14
+                    },
+                    "snippet": "  12 |  console.log('CORRUPT_META',await page.locator('#collection').innerText());\n  13 |  await page.screenshot({animations:'disabled',path:'docs/audit-0.4.0/corrupt-meta.png'});\n> 14 |  await expect(page.locator('.progress-stats dd').first()).toHaveText('1 из 24');\n     |                                                           ^\n  15 | });\n  16 | test('A02 unsupported future metadata is not overwritten by ordinary interaction',async({page})=>{\n  17 |  const p=state();p.meta.version=99;await seed(page,p);await page.goto('/');await page.locator('#resume').click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                        "column": 59,
+                        "line": 14
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.progress-stats dd').first()\nExpected: \u001b[32m\"\u001b[7m1\u001b[27m из 24\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m0\u001b[27m из 24\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('.progress-stats dd').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.progress-stats dd').first()\u001b[22m\n\u001b[2m    13 × locator resolved to <dd>0 из 24</dd>\u001b[22m\n\u001b[2m       - unexpected value \"0 из 24\"\u001b[22m\n\n\n  12 |  console.log('CORRUPT_META',await page.locator('#collection').innerText());\n  13 |  await page.screenshot({animations:'disabled',path:'docs/audit-0.4.0/corrupt-meta.png'});\n> 14 |  await expect(page.locator('.progress-stats dd').first()).toHaveText('1 из 24');\n     |                                                           ^\n  15 | });\n  16 | test('A02 unsupported future metadata is not overwritten by ordinary interaction',async({page})=>{\n  17 |  const p=state();p.meta.version=99;await seed(page,p);await page.goto('/');await page.locator('#resume').click();\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:14:59"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "CORRUPT_META ← Меню\nМой прогресс\nТетрадь\n0 из 24\nРешено дейликов\n0\nЗавершено партий\n0\nБез подсказок\n0\n\nПартии и прохождения без подсказок считаются с 20.10.2026. Старые отметки задач сохранены.\n\nКоллекция\n\nПрогресс сохраняется на этом устройстве.\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:35:39.164Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A01-damage-isolate-36fdb-card-valid-tasks-and-boards/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A01-damage-isolate-36fdb-card-valid-tasks-and-boards/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                    "column": 59,
+                    "line": 14
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-0a5490bd16ea0a47b8a1",
+          "file": "browser.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "A02 unsupported future metadata is not overwritten by ordinary interaction",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1193,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m99\u001b[39m\nReceived: \u001b[31m1\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m99\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:20:30",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                      "column": 30,
+                      "line": 20
+                    },
+                    "snippet": "  18 |  await page.locator('[data-index=\"0\"]').click();await page.locator('[data-index=\"9\"]').click();\n  19 |  await page.waitForTimeout(300);const actual=await data(page);console.log('FUTURE_SCHEMA',actual.meta);\n> 20 |  expect(actual.meta.version).toBe(99);\n     |                              ^\n  21 | });\n  22 | test('A03 failed save must not open a newly selected task as if persisted',async({page})=>{\n  23 |  await seed(page);await page.goto('/');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                        "column": 30,
+                        "line": 20
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m99\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n\n  18 |  await page.locator('[data-index=\"0\"]').click();await page.locator('[data-index=\"9\"]').click();\n  19 |  await page.waitForTimeout(300);const actual=await data(page);console.log('FUTURE_SCHEMA',actual.meta);\n> 20 |  expect(actual.meta.version).toBe(99);\n     |                              ^\n  21 | });\n  22 | test('A03 failed save must not open a newly selected task as if persisted',async({page})=>{\n  23 |  await seed(page);await page.goto('/');\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:20:30"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "FUTURE_SCHEMA {\n  version: \u001b[33m1\u001b[39m,\n  since: \u001b[32m'2026-10-20T10:35:46.240Z'\u001b[39m,\n  attempts: {\n    classic: { id: \u001b[32m'c26e1b80-817b-495a-8d9f-a66034ed396e'\u001b[39m, completed: \u001b[33mfalse\u001b[39m }\n  },\n  completed: \u001b[33m0\u001b[39m,\n  unassisted: \u001b[33m0\u001b[39m\n}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:35:45.971Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A02-unsupported-fu-c4bdf-ten-by-ordinary-interaction/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A02-unsupported-fu-c4bdf-ten-by-ordinary-interaction/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                    "column": 30,
+                    "line": 20
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-02c5130193ee30b6e33a",
+          "file": "browser.spec.ts",
+          "line": 16,
+          "column": 1
+        },
+        {
+          "title": "A03 failed save must not open a newly selected task as if persisted",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6000,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#dialog')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('#dialog') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#dialog')\u001b[22m\n\u001b[2m    13 × locator resolved to <dialog id=\"dialog\" data-screen=\"book\" aria-label=\"Меню Семечек\">…</dialog>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#dialog')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('#dialog') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#dialog')\u001b[22m\n\u001b[2m    13 × locator resolved to <dialog id=\"dialog\" data-screen=\"book\" aria-label=\"Меню Семечек\">…</dialog>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:28:40",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                      "column": 40,
+                      "line": 28
+                    },
+                    "snippet": "  26 |  console.log('SWITCH_FAILURE',{mode:await page.locator('#mode').textContent(),saved:(await data(page)).active,warning:await page.locator('#save-notice').innerText()});\n  27 |  await page.screenshot({animations:'disabled',path:'docs/audit-0.4.0/switch-save-failed.png'});\n> 28 |  await expect(page.locator('#dialog')).toBeVisible();\n     |                                        ^\n  29 | });\n  30 | test('A04 undo/re-win, reload and restart count exactly once per attempt',async({page})=>{\n  31 |  await seed(page);await page.goto('/');await page.locator('#resume').click();await pair(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                        "column": 40,
+                        "line": 28
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#dialog')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('#dialog') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#dialog')\u001b[22m\n\u001b[2m    13 × locator resolved to <dialog id=\"dialog\" data-screen=\"book\" aria-label=\"Меню Семечек\">…</dialog>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n\n  26 |  console.log('SWITCH_FAILURE',{mode:await page.locator('#mode').textContent(),saved:(await data(page)).active,warning:await page.locator('#save-notice').innerText()});\n  27 |  await page.screenshot({animations:'disabled',path:'docs/audit-0.4.0/switch-save-failed.png'});\n> 28 |  await expect(page.locator('#dialog')).toBeVisible();\n     |                                        ^\n  29 | });\n  30 | test('A04 undo/re-win, reload and restart count exactly once per attempt',async({page})=>{\n  31 |  await seed(page);await page.goto('/');await page.locator('#resume').click();await pair(page);\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:28:40"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "SWITCH_FAILURE {\n  mode: \u001b[32m'Тетрадь · задача 2'\u001b[39m,\n  saved: \u001b[32m'classic'\u001b[39m,\n  warning: \u001b[32m'Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.\\n'\u001b[39m +\n    \u001b[32m'\\n'\u001b[39m +\n    \u001b[32m'Повторить сохранение'\u001b[39m\n}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:35:48.211Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A03-failed-save-mu-f10e3-lected-task-as-if-persisted/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A03-failed-save-mu-f10e3-lected-task-as-if-persisted/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                    "column": 40,
+                    "line": 28
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-2cbdd4fd0997b8896d7e",
+          "file": "browser.spec.ts",
+          "line": 22,
+          "column": 1
+        },
+        {
+          "title": "A04 undo/re-win, reload and restart count exactly once per attempt",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1527,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:35:55.096Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-ad0dabc787dba87c743d",
+          "file": "browser.spec.ts",
+          "line": 30,
+          "column": 1
+        },
+        {
+          "title": "A05 record of solved daily remains in statistics when device clock moves backward",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5491,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.progress-stats dd').nth(1)\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('.progress-stats dd').nth(1) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.progress-stats dd').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>0</dd>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.progress-stats dd').nth(1)\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('.progress-stats dd').nth(1) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.progress-stats dd').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>0</dd>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:41:58",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                      "column": 58,
+                      "line": 41
+                    },
+                    "snippet": "  39 |  await page.clock.setFixedTime(new Date('2026-10-19T12:00:00'));const p=state();p.done.push('daily-v1-2026-10-20');await seed(page,p);await page.goto('/');await page.locator('#progress-open').click();\n  40 |  console.log('CLOCK_ROLLBACK',await page.locator('.progress-stats').innerText());\n> 41 |  await expect(page.locator('.progress-stats dd').nth(1)).toHaveText('1');\n     |                                                          ^\n  42 | });\n  43 | test('A06 midnight calendar refresh preserves keyboard focus on the current control',async({page})=>{\n  44 |  await page.clock.install({time:new Date('2026-10-20T23:59:59')});await seed(page);await page.goto('/');await page.locator('#calendar-open').click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                        "column": 58,
+                        "line": 41
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.progress-stats dd').nth(1)\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" locator('.progress-stats dd').nth(1) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.progress-stats dd').nth(1)\u001b[22m\n\u001b[2m    14 × locator resolved to <dd>0</dd>\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  39 |  await page.clock.setFixedTime(new Date('2026-10-19T12:00:00'));const p=state();p.done.push('daily-v1-2026-10-20');await seed(page,p);await page.goto('/');await page.locator('#progress-open').click();\n  40 |  console.log('CLOCK_ROLLBACK',await page.locator('.progress-stats').innerText());\n> 41 |  await expect(page.locator('.progress-stats dd').nth(1)).toHaveText('1');\n     |                                                          ^\n  42 | });\n  43 | test('A06 midnight calendar refresh preserves keyboard focus on the current control',async({page})=>{\n  44 |  await page.clock.install({time:new Date('2026-10-20T23:59:59')});await seed(page);await page.goto('/');await page.locator('#calendar-open').click();\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:41:58"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "CLOCK_ROLLBACK Тетрадь\n1 из 24\nРешено дейликов\n0\nЗавершено партий\n5\nБез подсказок\n3\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:35:56.782Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A05-record-of-solv-1777f-device-clock-moves-backward/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A05-record-of-solv-1777f-device-clock-moves-backward/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                    "column": 58,
+                    "line": 41
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-e4203df839303f3b4ec9",
+          "file": "browser.spec.ts",
+          "line": 38,
+          "column": 1
+        },
+        {
+          "title": "A06 midnight calendar refresh preserves keyboard focus on the current control",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 488,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"daily-v1-2026-10-10\"\u001b[39m\nReceived: \u001b[31mnull\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"daily-v1-2026-10-10\"\u001b[39m\nReceived: \u001b[31mnull\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:46:85",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                      "column": 85,
+                      "line": 46
+                    },
+                    "snippet": "  44 |  await page.clock.install({time:new Date('2026-10-20T23:59:59')});await seed(page);await page.goto('/');await page.locator('#calendar-open').click();\n  45 |  await page.locator('[data-game=\"daily-v1-2026-10-10\"]').focus();await page.clock.fastForward(2000);\n> 46 |  expect(await page.evaluate(()=>document.activeElement?.getAttribute('data-game'))).toBe('daily-v1-2026-10-10');\n     |                                                                                     ^\n  47 | });\n  48 | test('A07 all notebook finished gives reachable replay and never awards unique progress twice',async({page})=>{\n  49 |  const p:any=state();p.active='book-v1-24';p.sessions['book-v1-24']={rules:1,current:snapshot([5,5]),history:[]};p.done=Array.from({length:23},(_,i)=>`book-v1-${i+1}`);await seed(page,p);await page.goto('/');await page.locator('#resume').click();await pair(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                        "column": 85,
+                        "line": 46
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"daily-v1-2026-10-10\"\u001b[39m\nReceived: \u001b[31mnull\u001b[39m\n\n  44 |  await page.clock.install({time:new Date('2026-10-20T23:59:59')});await seed(page);await page.goto('/');await page.locator('#calendar-open').click();\n  45 |  await page.locator('[data-game=\"daily-v1-2026-10-10\"]').focus();await page.clock.fastForward(2000);\n> 46 |  expect(await page.evaluate(()=>document.activeElement?.getAttribute('data-game'))).toBe('daily-v1-2026-10-10');\n     |                                                                                     ^\n  47 | });\n  48 | test('A07 all notebook finished gives reachable replay and never awards unique progress twice',async({page})=>{\n  49 |  const p:any=state();p.active='book-v1-24';p.sessions['book-v1-24']={rules:1,current:snapshot([5,5]),history:[]};p.done=Array.from({length:23},(_,i)=>`book-v1-${i+1}`);await seed(page,p);await page.goto('/');await page.locator('#resume').click();await pair(page);\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts:46:85"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:02.946Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A06-midnight-calen-d7842-ocus-on-the-current-control/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/test-results/audit040/browser-A06-midnight-calen-d7842-ocus-on-the-current-control/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.4.0/browser.spec.ts",
+                    "column": 85,
+                    "line": 46
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-acb95eaf0285d8f8c042",
+          "file": "browser.spec.ts",
+          "line": 43,
+          "column": 1
+        },
+        {
+          "title": "A07 all notebook finished gives reachable replay and never awards unique progress twice",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1226,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:04.228Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-8219696f77d140bc3a65",
+          "file": "browser.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "A08 offline already loaded APK web assets remain playable and save/reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1108,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:05.603Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-e56d0c3f4d28f4a97215",
+          "file": "browser.spec.ts",
+          "line": 52,
+          "column": 1
+        },
+        {
+          "title": "A09 reduced motion has no running decorative animations during selection and menus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 398,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:06.722Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-0c2e9de537e18be76b80",
+          "file": "browser.spec.ts",
+          "line": 55,
+          "column": 1
+        },
+        {
+          "title": "A10 portrait, landscape, dark and enlarged type screens are reachable; capture target sizes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1464,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "LAYOUT_MEASUREMENTS [{\"w\":320,\"h\":568,\"menuScroll\":true,\"targets\":[{\"id\":\"resume\",\"w\":284,\"h\":54,\"font\":\"16px\"},{\"id\":\"classic-mode\",\"w\":284,\"h\":68,\"font\":\"19px\"},{\"id\":\"book-mode\",\"w\":284,\"h\":68,\"font\":\"19px\"},{\"id\":\"daily-mode\",\"w\":284,\"h\":68,\"font\":\"19px\"},{\"id\":\"calendar-open\",\"w\":284,\"h\":48,\"font\":\"15px\"},{\"id\":\"progress-open\",\"w\":94.625,\"h\":44,\"font\":\"12px\"},{\"id\":\"trophies-mode\",\"w\":77.03125,\"h\":44,\"font\":\"12px\"},{\"id\":\"learn\",\"w\":78.078125,\"h\":44,\"font\":\"12px\"},{\"id\":\"settings-open\",\"w\":75.78125,\"h\":44,\"font\":\"12px\"}]},{\"w\":360,\"h\":640,\"menuScroll\":false,\"targets\":[{\"id\":\"resume\",\"w\":308,\"h\":54,\"font\":\"16px\"},{\"id\":\"classic-mode\",\"w\":308,\"h\":68,\"font\":\"19px\"},{\"id\":\"book-mode\",\"w\":308,\"h\":68,\"font\":\"19px\"},{\"id\":\"daily-mode\",\"w\":308,\"h\":68,\"font\":\"19px\"},{\"id\":\"calendar-open\",\"w\":308,\"h\":48,\"font\":\"15px\"},{\"id\":\"progress-open\",\"w\":94.625,\"h\":44,\"font\":\"12px\"},{\"id\":\"trophies-mode\",\"w\":77.03125,\"h\":44,\"font\":\"12px\"},{\"id\":\"learn\",\"w\":78.078125,\"h\":44,\"font\":\"12px\"},{\"id\":\"settings-open\",\"w\":75.78125,\"h\":44,\"font\":\"12px\"}]},{\"w\":390,\"h\":844,\"menuScroll\":false,\"targets\":[{\"id\":\"resume\",\"w\":338,\"h\":54,\"font\":\"16px\"},{\"id\":\"classic-mode\",\"w\":338,\"h\":80,\"font\":\"19px\"},{\"id\":\"book-mode\",\"w\":338,\"h\":80,\"font\":\"19px\"},{\"id\":\"daily-mode\",\"w\":338,\"h\":80,\"font\":\"19px\"},{\"id\":\"calendar-open\",\"w\":338,\"h\":48,\"font\":\"15px\"},{\"id\":\"progress-open\",\"w\":94.625,\"h\":44,\"font\":\"12px\"},{\"id\":\"trophies-mode\",\"w\":77.03125,\"h\":44,\"font\":\"12px\"},{\"id\":\"learn\",\"w\":78.078125,\"h\":44,\"font\":\"12px\"},{\"id\":\"settings-open\",\"w\":75.78125,\"h\":44,\"font\":\"12px\"}]},{\"w\":568,\"h\":320,\"menuScroll\":true,\"targets\":[{\"id\":\"resume\",\"w\":390,\"h\":54,\"font\":\"16px\"},{\"id\":\"classic-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"book-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"daily-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"calendar-open\",\"w\":390,\"h\":48,\"font\":\"15px\"},{\"id\":\"progress-open\",\"w\":94.625,\"h\":44,\"font\":\"12px\"},{\"id\":\"trophies-mode\",\"w\":77.03125,\"h\":44,\"font\":\"12px\"},{\"id\":\"learn\",\"w\":78.078125,\"h\":44,\"font\":\"12px\"},{\"id\":\"settings-open\",\"w\":75.78125,\"h\":44,\"font\":\"12px\"}]},{\"w\":600,\"h\":320,\"menuScroll\":true,\"targets\":[{\"id\":\"resume\",\"w\":390,\"h\":54,\"font\":\"16px\"},{\"id\":\"classic-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"book-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"daily-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"calendar-open\",\"w\":390,\"h\":48,\"font\":\"15px\"},{\"id\":\"progress-open\",\"w\":94.625,\"h\":44,\"font\":\"12px\"},{\"id\":\"trophies-mode\",\"w\":77.03125,\"h\":44,\"font\":\"12px\"},{\"id\":\"learn\",\"w\":78.078125,\"h\":44,\"font\":\"12px\"},{\"id\":\"settings-open\",\"w\":75.78125,\"h\":44,\"font\":\"12px\"}]},{\"w\":844,\"h\":390,\"menuScroll\":true,\"targets\":[{\"id\":\"resume\",\"w\":390,\"h\":54,\"font\":\"16px\"},{\"id\":\"classic-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"book-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"daily-mode\",\"w\":390,\"h\":68,\"font\":\"19px\"},{\"id\":\"calendar-open\",\"w\":390,\"h\":48,\"font\":\"15px\"},{\"id\":\"progress-open\",\"w\":94.625,\"h\":44,\"font\":\"12px\"},{\"id\":\"trophies-mode\",\"w\":77.03125,\"h\":44,\"font\":\"12px\"},{\"id\":\"learn\",\"w\":78.078125,\"h\":44,\"font\":\"12px\"},{\"id\":\"settings-open\",\"w\":75.78125,\"h\":44,\"font\":\"12px\"}]},{\"w\":768,\"h\":1024,\"menuScroll\":false,\"targets\":[{\"id\":\"resume\",\"w\":390,\"h\":54,\"font\":\"16px\"},{\"id\":\"classic-mode\",\"w\":390,\"h\":80,\"font\":\"19px\"},{\"id\":\"book-mode\",\"w\":390,\"h\":80,\"font\":\"19px\"},{\"id\":\"daily-mode\",\"w\":390,\"h\":80,\"font\":\"19px\"},{\"id\":\"calendar-open\",\"w\":390,\"h\":48,\"font\":\"15px\"},{\"id\":\"progress-open\",\"w\":94.625,\"h\":44,\"font\":\"12px\"},{\"id\":\"trophies-mode\",\"w\":77.03125,\"h\":44,\"font\":\"12px\"},{\"id\":\"learn\",\"w\":78.078125,\"h\":44,\"font\":\"12px\"},{\"id\":\"settings-open\",\"w\":75.78125,\"h\":44,\"font\":\"12px\"}]}]\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:07.133Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-39d8b9219485fff0009f",
+          "file": "browser.spec.ts",
+          "line": 59,
+          "column": 1
+        },
+        {
+          "title": "A11 scrolling a long board during pair animations preserves nodes and undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6157,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "LONG_TASKS_MS [ \u001b[33m80\u001b[39m, \u001b[33m83\u001b[39m, \u001b[33m78\u001b[39m, \u001b[33m116\u001b[39m ]\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:08.610Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-2fb1ff94c7b21b658cd1",
+          "file": "browser.spec.ts",
+          "line": 78,
+          "column": 1
+        },
+        {
+          "title": "A12 fast contradictory inputs during removal cannot create extra result or lose board",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 609,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:14.792Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-dc03f43f87d8d0daf648",
+          "file": "browser.spec.ts",
+          "line": 91,
+          "column": 1
+        },
+        {
+          "title": "A13 no forced audio; enabling sound creates feedback, disabling stops new sounds",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2043,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:15.412Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-c38ab26b794ac953f4e3",
+          "file": "browser.spec.ts",
+          "line": 97,
+          "column": 1
+        },
+        {
+          "title": "A14 old tab cannot discard new statistics, and reload latest recovers them",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1560,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:17.466Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-e0b192a8c34fb61357b4",
+          "file": "browser.spec.ts",
+          "line": 102,
+          "column": 1
+        },
+        {
+          "title": "A15 solved final available day leads back to usable archive without future access",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1230,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T10:36:19.036Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-1899d8819576873fb56d",
+          "file": "browser.spec.ts",
+          "line": 106,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-20T10:35:38.056Z",
+    "duration": 42266.377,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}
