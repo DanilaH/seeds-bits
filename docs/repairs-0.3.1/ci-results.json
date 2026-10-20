@@ -1,0 +1,12 @@
+{
+  "commit": "9bcc090c25fee98216d38fa94eccb9ee54dcd77b",
+  "run": 39393995914,
+  "webJob": 118532081596,
+  "androidJob": 118532081429,
+  "androidArtifact": 12250867401,
+  "unitPassed": 18,
+  "browserPassed": 33,
+  "web": "success",
+  "android": "success",
+  "nativeDeviceTested": false
+}

@@ -50,7 +50,10 @@ try {
   const hintMs = Date.now() - t,
     highlighted = await page.locator(".hinted").count();
   if (highlighted !== 2) throw Error("No verified pair");
-  await page.screenshot({ path: out + "/hard-daily-fixed.png" });
+  await page.screenshot({
+    animations: "disabled",
+    path: out + "/hard-daily-fixed.png",
+  });
   await context.close();
   const warningContext = await browser.newContext({
       viewport: { width: 320, height: 568 },
@@ -65,9 +68,15 @@ try {
   });
   await warningPage.goto("http://127.0.0.1:5199");
   await warningPage.waitForSelector("#read-notice");
-  await warningPage.screenshot({ path: out + "/warning-menu.png" });
+  await warningPage.screenshot({
+    animations: "disabled",
+    path: out + "/warning-menu.png",
+  });
   await warningPage.locator("#resume").click();
-  await warningPage.screenshot({ path: out + "/warning-game.png" });
+  await warningPage.screenshot({
+    animations: "disabled",
+    path: out + "/warning-game.png",
+  });
   const fieldHeight = await warningPage
     .locator("#viewport")
     .evaluate((e) => e.getBoundingClientRect().height);
