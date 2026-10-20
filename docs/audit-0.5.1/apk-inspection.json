@@ -1,0 +1,17 @@
+{
+  "package": "com.seedsbits.game.preview",
+  "version": "0.5.1",
+  "versionCode": "1022",
+  "minSdk": "24",
+  "targetSdk": "36",
+  "permissions": [
+    "android.permission.VIBRATE",
+    "com.seedsbits.game.preview.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+    "android.permission.INTERNET"
+  ],
+  "debuggable": "true",
+  "allowBackup": "true",
+  "usesCleartextTraffic": null,
+  "signedV2": true,
+  "signedV3": true
+}

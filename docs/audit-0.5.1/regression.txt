@@ -1,0 +1,136 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[WebServer] (node:135) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[WebServer] (node:148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 67 tests using 2 workers
+
+(node:182) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:183) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 e2e/audit-fixes.spec.ts:11:1 › corrupt save notice remains visible until dismissed and original bytes are backed up (2.1s)
+  ✓   3 e2e/audit-fixes.spec.ts:41:1 › different settings fields merge across tabs and update both interfaces (4.0s)
+  ✓   2 e2e/calm-layout.spec.ts:2:1 › home hides board, layouts fit and modes survive settings and restart (9.9s)
+  ✓   5 e2e/expansion050.spec.ts:52:1 › jar fills with flights, never blocks next move, survives undo/reload and records one win (3.2s)
+  ✓   4 e2e/audit-fixes.spec.ts:71:3 › hard daily 2028-03-19 has responsive verified hints through completion (7.5s)
+  ✓   6 e2e/expansion050.spec.ts:78:1 › archive exposes January 2025 and keeps future dates closed in 2028 (1.7s)
+  ✓   8 e2e/expansion050.spec.ts:99:1 › 100 notebooks remain navigable and final huge board has legible digits, working hints and undo (5.8s)
+  ✓   9 e2e/expansion050.spec.ts:151:1 › reduced motion suppresses flight frames and small classic layout stays usable (1.3s)
+  ✓   7 e2e/audit-fixes.spec.ts:71:3 › hard daily 2028-08-16 has responsive verified hints through completion (8.6s)
+  ✓  10 e2e/expansion050.spec.ts:172:1 › decorative seed flights stay bounded and clear on background without losing earned seeds (727ms)
+  ✓  11 e2e/audit-fixes.spec.ts:97:1 › late worker result cannot affect another task (2.6s)
+  ✓  13 e2e/audit-fixes.spec.ts:116:1 › unavailable worker provides usable fallback without nonexistent undo (1.8s)
+  ✓  14 e2e/audit-fixes.spec.ts:134:1 › background and resume during pair animation preserve the next playable row (1.8s)
+  ✓  12 e2e/game.spec.ts:2:1 › complete tutorial, remove a pair, undo, restore and change theme (7.8s)
+  ✓  15 e2e/audit-fixes.spec.ts:175:1 › mode is persisted before its board appears even when the save lock is delayed (4.1s)
+  ✓  17 e2e/hardening.spec.ts:10:1 › a valid move is saved before its animation finishes (2.9s)
+  ✓  16 e2e/game.spec.ts:56:1 › adds only when stuck, restores partial rows and rejects blocked pair (4.8s)
+  ✓  18 e2e/hardening.spec.ts:45:1 › escape steps back from collections and settings without discarding game (2.6s)
+  ✓  19 e2e/game.spec.ts:87:1 › win state and quick repeated clicks (3.5s)
+  ✓  21 e2e/game.spec.ts:116:1 › light layout has no horizontal overflow at narrow viewport (1.2s)
+  ✓  20 e2e/hardening.spec.ts:58:1 › dead end restart can be cancelled and undo recovers the board (2.7s)
+  ✓  23 e2e/hardening.spec.ts:93:1 › obsolete damaged save does not override current progress (2.3s)
+  ✓  22 e2e/landscape051.spec.ts:9:3 › landscape 568x320: readable board, scroll, results and rotation (3.1s)
+  ✓  24 e2e/hardening.spec.ts:108:1 › failed storage is visible and retry preserves the accepted move (1.5s)
+  ✓  25 e2e/landscape051.spec.ts:9:3 › landscape 667x375: readable board, scroll, results and rotation (3.6s)
+  ✓  27 e2e/landscape051.spec.ts:9:3 › landscape 844x390: readable board, scroll, results and rotation (3.0s)
+  ✓  28 e2e/landscape051.spec.ts:9:3 › landscape 1024x600: readable board, scroll, results and rotation (3.1s)
+  ✓  29 e2e/landscape051.spec.ts:9:3 › landscape 1280x800: readable board, scroll, results and rotation (3.0s)
+  ✓  30 e2e/meta.spec.ts:29:1 › win and reload count one attempt and preserve migrated progress (1.7s)
+  ✓  31 e2e/meta.spec.ts:59:1 › small screens and enlarged text keep menu and progress reachable (4.0s)
+  ✓  32 e2e/meta.spec.ts:91:1 › midnight refresh opens new today and preserves an earlier daily (1.7s)
+  ✓  33 e2e/meta.spec.ts:113:1 › failed result save blocks next party; retry persists one result (1.8s)
+  ✓  26 e2e/hardening.spec.ts:133:1 › large classic board survives repeated moves, mode changes and reload (21.3s)
+  ✓  35 e2e/repairs.spec.ts:24:1 › selection preserves nodes and keyboard focus survives a removed pair (1.2s)
+  ✓  36 e2e/repairs.spec.ts:47:1 › landscape tutorial buttons remain reachable at every step (5.3s)
+  ✓  37 e2e/repairs.spec.ts:73:1 › failed save stays visible while settings are open (705ms)
+  ✓  38 e2e/repairs.spec.ts:87:1 › stale tab cannot overwrite a newer game (2.5s)
+  ✓  34 e2e/progression.spec.ts:11:1 › notebook solution, page stamp, replay and classic restore (12.6s)
+  ✓  40 e2e/progression.spec.ts:53:1 › hint remains after first choice and settings apply (1.4s)
+  ✓  41 e2e/progression.spec.ts:79:1 › daily calendar closes future days and persists trophy (5.8s)
+  ✓  42 e2e/progression.spec.ts:116:1 › quick onboarding ends after two exercises (913ms)
+  ✓  43 e2e/progression.spec.ts:132:1 › long hint navigates without losing selection (1.1s)
+  ✓  44 e2e/progression.spec.ts:159:1 › bronze trophy survives replay, widths and dark calendar (2.4s)
+CORRUPT_META ← Меню
+Мой прогресс
+Тетрадь
+1 из 2400
+Решено дейликов
+0
+Завершено партий
+0
+Без подсказок
+0
+
+Партии и прохождения без подсказок считаются с 20.10.2026. Старые отметки задач сохранены.
+
+Коллекция
+
+Прогресс сохраняется на этом устройстве.
+  ✓  45 e2e/repairs041.spec.ts:52:1 › A01 damage isolated to metadata does not discard valid tasks and boards (857ms)
+FUTURE_SCHEMA {
+  version: 99,
+  since: '2026-10-20T00:00:00Z',
+  attempts: { classic: { id: 'audit-1', completed: false } },
+  completed: 5,
+  unassisted: 3
+}
+  ✓  46 e2e/repairs041.spec.ts:75:1 › A02 unsupported future metadata is not overwritten by ordinary interaction (1.3s)
+SWITCH_FAILURE {
+  mode: 'Классика',
+  saved: 'classic',
+  warning: 'Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.\n' +
+    '\n' +
+    'Повторить сохранение'
+}
+  ✓  47 e2e/repairs041.spec.ts:96:1 › A03 failed save must not open a newly selected task as if persisted (1.2s)
+  ✓  48 e2e/repairs041.spec.ts:122:1 › A04 finished result, reload and restart count exactly once per attempt (1.8s)
+CLOCK_ROLLBACK Тетрадь
+1 из 2400
+Решено дейликов
+1
+Завершено партий
+5
+Без подсказок
+3
+  ✓  49 e2e/repairs041.spec.ts:145:1 › A05 record of solved daily remains in statistics when device clock moves backward (767ms)
+  ✓  50 e2e/repairs041.spec.ts:160:1 › A06 midnight calendar refresh preserves keyboard focus on the current control (1.4s)
+  ✓  51 e2e/repairs041.spec.ts:175:1 › A07 completed first notebook leads to next volume and keeps reachable replay and never awards unique progress twice (2.7s)
+  ✓  52 e2e/repairs041.spec.ts:200:1 › A08 offline already loaded APK web assets remain playable and save/reload (1.6s)
+  ✓  53 e2e/repairs041.spec.ts:215:1 › A09 reduced motion has no running decorative animations during selection and menus (1.6s)
+LAYOUT_MEASUREMENTS [{"w":320,"h":568,"menuScroll":false,"targets":[{"id":"resume","w":284,"h":54,"font":"16px"},{"id":"classic-mode","w":284,"h":64,"font":"19px"},{"id":"book-mode","w":284,"h":64,"font":"19px"},{"id":"daily-mode","w":284,"h":64,"font":"19px"},{"id":"calendar-open","w":284,"h":48,"font":"15px"},{"id":"progress-open","w":138,"h":44,"font":"14px"},{"id":"trophies-mode","w":138,"h":44,"font":"14px"},{"id":"learn","w":138,"h":44,"font":"14px"},{"id":"settings-open","w":138,"h":44,"font":"14px"}]},{"w":360,"h":640,"menuScroll":false,"targets":[{"id":"resume","w":308,"h":54,"font":"16px"},{"id":"classic-mode","w":308,"h":64,"font":"19px"},{"id":"book-mode","w":308,"h":64,"font":"19px"},{"id":"daily-mode","w":308,"h":64,"font":"19px"},{"id":"calendar-open","w":308,"h":48,"font":"15px"},{"id":"progress-open","w":150,"h":44,"font":"14px"},{"id":"trophies-mode","w":150,"h":44,"font":"14px"},{"id":"learn","w":150,"h":44,"font":"14px"},{"id":"settings-open","w":150,"h":44,"font":"14px"}]},{"w":390,"h":844,"menuScroll":false,"targets":[{"id":"resume","w":338,"h":54,"font":"16px"},{"id":"classic-mode","w":338,"h":80,"font":"19px"},{"id":"book-mode","w":338,"h":80,"font":"19px"},{"id":"daily-mode","w":338,"h":80,"font":"19px"},{"id":"calendar-open","w":338,"h":48,"font":"15px"},{"id":"progress-open","w":165,"h":44,"font":"14px"},{"id":"trophies-mode","w":165,"h":44,"font":"14px"},{"id":"learn","w":165,"h":44,"font":"14px"},{"id":"settings-open","w":165,"h":44,"font":"14px"}]},{"w":568,"h":320,"menuScroll":true,"targets":[{"id":"resume","w":390,"h":54,"font":"16px"},{"id":"classic-mode","w":390,"h":64,"font":"19px"},{"id":"book-mode","w":390,"h":64,"font":"19px"},{"id":"daily-mode","w":390,"h":64,"font":"19px"},{"id":"calendar-open","w":390,"h":48,"font":"15px"},{"id":"progress-open","w":191,"h":44,"font":"14px"},{"id":"trophies-mode","w":191,"h":44,"font":"14px"},{"id":"learn","w":191,"h":44,"font":"14px"},{"id":"settings-open","w":191,"h":44,"font":"14px"}]},{"w":600,"h":320,"menuScroll":true,"targets":[{"id":"resume","w":390,"h":54,"font":"16px"},{"id":"classic-mode","w":390,"h":64,"font":"19px"},{"id":"book-mode","w":390,"h":64,"font":"19px"},{"id":"daily-mode","w":390,"h":64,"font":"19px"},{"id":"calendar-open","w":390,"h":48,"font":"15px"},{"id":"progress-open","w":191,"h":44,"font":"14px"},{"id":"trophies-mode","w":191,"h":44,"font":"14px"},{"id":"learn","w":191,"h":44,"font":"14px"},{"id":"settings-open","w":191,"h":44,"font":"14px"}]},{"w":844,"h":390,"menuScroll":true,"targets":[{"id":"resume","w":390,"h":54,"font":"16px"},{"id":"classic-mode","w":390,"h":64,"font":"19px"},{"id":"book-mode","w":390,"h":64,"font":"19px"},{"id":"daily-mode","w":390,"h":64,"font":"19px"},{"id":"calendar-open","w":390,"h":48,"font":"15px"},{"id":"progress-open","w":191,"h":44,"font":"14px"},{"id":"trophies-mode","w":191,"h":44,"font":"14px"},{"id":"learn","w":191,"h":44,"font":"14px"},{"id":"settings-open","w":191,"h":44,"font":"14px"}]},{"w":768,"h":1024,"menuScroll":false,"targets":[{"id":"resume","w":390,"h":54,"font":"16px"},{"id":"classic-mode","w":390,"h":80,"font":"19px"},{"id":"book-mode","w":390,"h":80,"font":"19px"},{"id":"daily-mode","w":390,"h":80,"font":"19px"},{"id":"calendar-open","w":390,"h":48,"font":"15px"},{"id":"progress-open","w":191,"h":44,"font":"14px"},{"id":"trophies-mode","w":191,"h":44,"font":"14px"},{"id":"learn","w":191,"h":44,"font":"14px"},{"id":"settings-open","w":191,"h":44,"font":"14px"}]}]
+  ✓  54 e2e/repairs041.spec.ts:241:1 › A10 portrait, landscape, dark and enlarged type screens are reachable; capture target sizes (3.0s)
+LONG_TASKS_MS [
+  53,  54, 135,  77, 100,  59, 82,
+  73, 131, 126,  54,  65, 105, 69,
+  87,  53,  96, 126,  76,  79, 54,
+  76, 129, 441,  53
+]
+  ✓  55 e2e/repairs041.spec.ts:319:1 › A11 scrolling a long board during pair animations preserves nodes and undo (14.3s)
+  ✓  56 e2e/repairs041.spec.ts:358:1 › A12 fast contradictory inputs during removal cannot create extra result or lose board (989ms)
+  ✓  57 e2e/repairs041.spec.ts:383:1 › A13 no forced audio; enabling sound creates feedback, disabling stops new sounds (4.3s)
+  ✓  58 e2e/repairs041.spec.ts:425:1 › A14 old tab cannot discard new statistics, and reload latest recovers them (2.9s)
+  ✓  59 e2e/repairs041.spec.ts:444:1 › A15 solved final available day leads back to usable archive without future access (1.8s)
+HEAVY_HISTORY {
+  longTasks: [ 92, 159 ],
+  saves: [ { ms: 23.699999999254942, bytes: 2925238 } ]
+}
+  ✓  60 e2e/repairs041.spec.ts:469:1 › A16 long saved history retains responsiveness and measures actual save cost (31.9s)
+ANIMATIONS [
+  { duration: 100, frames: [ [Object], [Object] ] },
+  { duration: 160, frames: [ [Object], [Object] ] }
+]
+CONTRAST_INPUT [{"theme":"light","paper":"rgb(250, 251, 249)","labels":[{"text":"Классика","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Очистите поле от цифр","color":"rgb(104, 118, 112)","size":"12px"},{"text":"1 из 2400 решено","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Начать","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Мой прогресс","color":"rgb(104, 118, 112)","size":"14px"},{"text":"Коллекция","color":"rgb(104, 118, 112)","size":"14px"},{"text":"Как играть","color":"rgb(104, 118, 112)","size":"14px"},{"text":"Настройки","color":"rgb(104, 118, 112)","size":"14px"}]},{"theme":"dark","paper":"rgb(32, 39, 36)","labels":[{"text":"Классика","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Очистите поле от цифр","color":"rgb(160, 173, 164)","size":"12px"},{"text":"1 из 2400 решено","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Начать","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Мой прогресс","color":"rgb(160, 173, 164)","size":"14px"},{"text":"Коллекция","color":"rgb(160, 173, 164)","size":"14px"},{"text":"Как играть","color":"rgb(160, 173, 164)","size":"14px"},{"text":"Настройки","color":"rgb(160, 173, 164)","size":"14px"}]}]
+  ✓  61 e2e/repairs041.spec.ts:513:1 › A17 accessibility contrast and motion timing measurements on actual built UI (1.1s)
+  ✓  62 e2e/repairs041.spec.ts:554:1 › failed switch can retry without lost attempt or rapid-click double transition (1.5s)
+  ✓  63 e2e/repairs041.spec.ts:587:1 › backup recovery is explicit and survives reload (2.2s)
+  ✓  64 e2e/repairs041.spec.ts:601:1 › compact home keeps settings within first viewport and touch targets at least 44px (1.3s)
+  ✓  39 e2e/repairs.spec.ts:116:1 › all 24 notebook games finish by following reliable hints (2.1m)
+  ✓  65 e2e/repairs.spec.ts:148:1 › dead puzzle offers a recovery to a solvable position (1.2s)
+  ✓  66 e2e/repairs.spec.ts:191:1 › next skips completed tasks and explicit replay remains playable (1.8s)
+  ✓  67 e2e/repairs.spec.ts:227:1 › fast selection retains the moving cell instead of replacing it (1.1s)
+
+  67 passed (3.6m)

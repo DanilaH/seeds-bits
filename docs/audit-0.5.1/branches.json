@@ -1,0 +1,312 @@
+{
+  "results": [
+    {
+      "id": "book-v1-24",
+      "pair": {
+        "a": 1,
+        "b": 2,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 9
+    },
+    {
+      "id": "book-v1-24",
+      "pair": {
+        "a": 1,
+        "b": 9,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 4
+    },
+    {
+      "id": "book-v1-24",
+      "pair": {
+        "a": 2,
+        "b": 12,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 2
+    },
+    {
+      "id": "book-v1-48",
+      "pair": {
+        "a": 0,
+        "b": 2,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 1
+    },
+    {
+      "id": "book-v1-48",
+      "pair": {
+        "a": 3,
+        "b": 11,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 0
+    },
+    {
+      "id": "book-v1-48",
+      "pair": {
+        "a": 3,
+        "b": 13,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 0
+    },
+    {
+      "id": "book-v1-240",
+      "pair": {
+        "a": 1,
+        "b": 19,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 0
+    },
+    {
+      "id": "book-v1-240",
+      "pair": {
+        "a": 2,
+        "b": 29,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 0
+    },
+    {
+      "id": "book-v1-240",
+      "pair": {
+        "a": 7,
+        "b": 13,
+        "kind": "reading"
+      },
+      "kind": "move",
+      "ms": 0
+    },
+    {
+      "id": "book-v1-480",
+      "pair": {
+        "a": 6,
+        "b": 8,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 3
+    },
+    {
+      "id": "book-v1-480",
+      "pair": {
+        "a": 6,
+        "b": 14,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 5
+    },
+    {
+      "id": "book-v1-480",
+      "pair": {
+        "a": 6,
+        "b": 24,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 4
+    },
+    {
+      "id": "book-v1-960",
+      "pair": {
+        "a": 1,
+        "b": 10,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 47
+    },
+    {
+      "id": "book-v1-960",
+      "pair": {
+        "a": 2,
+        "b": 4,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 25
+    },
+    {
+      "id": "book-v1-960",
+      "pair": {
+        "a": 2,
+        "b": 22,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 22
+    },
+    {
+      "id": "book-v1-1440",
+      "pair": {
+        "a": 0,
+        "b": 1,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 29
+    },
+    {
+      "id": "book-v1-1440",
+      "pair": {
+        "a": 0,
+        "b": 10,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 5
+    },
+    {
+      "id": "book-v1-1440",
+      "pair": {
+        "a": 1,
+        "b": 10,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 5
+    },
+    {
+      "id": "book-v1-1920",
+      "pair": {
+        "a": 5,
+        "b": 45,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 73
+    },
+    {
+      "id": "book-v1-1920",
+      "pair": {
+        "a": 6,
+        "b": 10,
+        "kind": "reading"
+      },
+      "kind": "move",
+      "ms": 32
+    },
+    {
+      "id": "book-v1-1920",
+      "pair": {
+        "a": 6,
+        "b": 26,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 52
+    },
+    {
+      "id": "book-v1-2160",
+      "pair": {
+        "a": 0,
+        "b": 18,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 42
+    },
+    {
+      "id": "book-v1-2160",
+      "pair": {
+        "a": 0,
+        "b": 30,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 33
+    },
+    {
+      "id": "book-v1-2160",
+      "pair": {
+        "a": 5,
+        "b": 6,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 40
+    },
+    {
+      "id": "book-v1-2376",
+      "pair": {
+        "a": 2,
+        "b": 11,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 24
+    },
+    {
+      "id": "book-v1-2376",
+      "pair": {
+        "a": 3,
+        "b": 13,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 24
+    },
+    {
+      "id": "book-v1-2376",
+      "pair": {
+        "a": 5,
+        "b": 7,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 28
+    },
+    {
+      "id": "book-v1-2400",
+      "pair": {
+        "a": 0,
+        "b": 9,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 34
+    },
+    {
+      "id": "book-v1-2400",
+      "pair": {
+        "a": 1,
+        "b": 10,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 24
+    },
+    {
+      "id": "book-v1-2400",
+      "pair": {
+        "a": 4,
+        "b": 5,
+        "kind": "straight"
+      },
+      "kind": "move",
+      "ms": 21
+    }
+  ],
+  "dates": [
+    "2025-01-01",
+    "2028-02-29",
+    "2028-06-20",
+    "2099-12-31",
+    "2100-02-28",
+    "2400-02-29"
+  ]
+}

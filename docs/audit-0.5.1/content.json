@@ -1,0 +1,153 @@
+{
+  "puzzles": 2400,
+  "movesIndependentlyValidated": 246605,
+  "failures": [],
+  "elapsedSeconds": 12.72,
+  "unfinished100VolumeBytes": 5287143,
+  "lastVolume": [
+    {
+      "id": "book-v1-2377",
+      "digits": 488,
+      "cells": 963,
+      "moves": 244
+    },
+    {
+      "id": "book-v1-2378",
+      "digits": 514,
+      "cells": 963,
+      "moves": 257
+    },
+    {
+      "id": "book-v1-2379",
+      "digits": 576,
+      "cells": 972,
+      "moves": 288
+    },
+    {
+      "id": "book-v1-2380",
+      "digits": 526,
+      "cells": 963,
+      "moves": 263
+    },
+    {
+      "id": "book-v1-2381",
+      "digits": 558,
+      "cells": 972,
+      "moves": 279
+    },
+    {
+      "id": "book-v1-2382",
+      "digits": 528,
+      "cells": 972,
+      "moves": 264
+    },
+    {
+      "id": "book-v1-2383",
+      "digits": 504,
+      "cells": 954,
+      "moves": 252
+    },
+    {
+      "id": "book-v1-2384",
+      "digits": 500,
+      "cells": 954,
+      "moves": 250
+    },
+    {
+      "id": "book-v1-2385",
+      "digits": 566,
+      "cells": 963,
+      "moves": 283
+    },
+    {
+      "id": "book-v1-2386",
+      "digits": 512,
+      "cells": 963,
+      "moves": 256
+    },
+    {
+      "id": "book-v1-2387",
+      "digits": 532,
+      "cells": 972,
+      "moves": 266
+    },
+    {
+      "id": "book-v1-2388",
+      "digits": 540,
+      "cells": 963,
+      "moves": 270
+    },
+    {
+      "id": "book-v1-2389",
+      "digits": 508,
+      "cells": 963,
+      "moves": 254
+    },
+    {
+      "id": "book-v1-2390",
+      "digits": 482,
+      "cells": 963,
+      "moves": 241
+    },
+    {
+      "id": "book-v1-2391",
+      "digits": 496,
+      "cells": 954,
+      "moves": 248
+    },
+    {
+      "id": "book-v1-2392",
+      "digits": 484,
+      "cells": 972,
+      "moves": 242
+    },
+    {
+      "id": "book-v1-2393",
+      "digits": 498,
+      "cells": 972,
+      "moves": 249
+    },
+    {
+      "id": "book-v1-2394",
+      "digits": 542,
+      "cells": 963,
+      "moves": 271
+    },
+    {
+      "id": "book-v1-2395",
+      "digits": 466,
+      "cells": 963,
+      "moves": 233
+    },
+    {
+      "id": "book-v1-2396",
+      "digits": 594,
+      "cells": 972,
+      "moves": 297
+    },
+    {
+      "id": "book-v1-2397",
+      "digits": 484,
+      "cells": 963,
+      "moves": 242
+    },
+    {
+      "id": "book-v1-2398",
+      "digits": 488,
+      "cells": 972,
+      "moves": 244
+    },
+    {
+      "id": "book-v1-2399",
+      "digits": 516,
+      "cells": 945,
+      "moves": 258
+    },
+    {
+      "id": "book-v1-2400",
+      "digits": 536,
+      "cells": 972,
+      "moves": 268
+    }
+  ]
+}

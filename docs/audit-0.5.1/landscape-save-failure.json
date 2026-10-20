@@ -1,0 +1,37 @@
+{
+  "viewport": {
+    "x": 12,
+    "y": 8,
+    "width": 326,
+    "height": 197.71875,
+    "bottom": 205.71875
+  },
+  "save-notice": {
+    "x": 12,
+    "y": 205.71875,
+    "width": 544,
+    "height": 106.28125,
+    "bottom": 312
+  },
+  "menu": {
+    "x": 362,
+    "y": 8,
+    "width": 44,
+    "height": 44,
+    "bottom": 52
+  },
+  "retry-save": {
+    "x": 23,
+    "y": 257,
+    "width": 189.5625,
+    "height": 44,
+    "bottom": 301
+  },
+  "undo": {
+    "x": 356,
+    "y": 153.71875,
+    "width": 56.078125,
+    "height": 52,
+    "bottom": 205.71875
+  }
+}

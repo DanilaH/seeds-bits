@@ -1,0 +1,939 @@
+{
+  "config": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/scratch/93d2c459edce/seeds-bits/node_modules/.bin/playwright",
+      "test",
+      "--config",
+      "scripts/audit-0.5.1/playwright.config.ts"
+    ],
+    "configFile": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/playwright.config.ts",
+    "rootDir": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1",
+        "testIgnore": [],
+        "testMatch": [
+          "browser.spec.ts"
+        ],
+        "timeout": 20000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1",
+        "snapshotDir": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1",
+        "testIgnore": [],
+        "testMatch": "browser.spec.ts",
+        "timeout": 20000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5198",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "launchOptions": {
+            "executablePath": "/tmp/seeds-audit-chromium",
+            "args": [
+              "--no-sandbox"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "docs/audit-0.5.1/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "python3 -m http.server 5198 --bind 127.0.0.1 --directory /tmp/seeds051-audit-apk",
+      "url": "http://127.0.0.1:5198",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "browser.spec.ts",
+      "file": "browser.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "F01 second notebook completed page uses local page number",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1165,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"✓ Страница \u001b[7m1\u001b[27m завершена\"\u001b[39m\nReceived: \u001b[31m\"✓ Страница \u001b[7m5\u001b[27m завершена\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"✓ Страница \u001b[7m1\u001b[27m завершена\"\u001b[39m\nReceived: \u001b[31m\"✓ Страница \u001b[7m5\u001b[27m завершена\"\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:18:16",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 16,
+                      "line": 18
+                    },
+                    "snippet": "  16 |  await seed(page,'book-v1-30',[5,5],Array.from({length:5},(_,i)=>`book-v1-${i+25}`));await boot(page);await pair(page);await expect(page.locator(\"#win\")).toBeVisible();\n  17 |  const award=await page.locator('#award').innerText();save('page-number',{award,expected:'Страница 1 завершена'});await page.screenshot({path:out+'/page-number.png'});\n> 18 |  expect(award).toBe('✓ Страница 1 завершена');\n     |                ^\n  19 | });\n  20 | test('F02 book chunk failure is visible in open modal and retry clears loading',async({page})=>{\n  21 |  await seed(page);let blocked=true;await page.route('**/notebook-extra-*.js',r=>blocked?r.abort():r.continue());"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 16,
+                        "line": 18
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"✓ Страница \u001b[7m1\u001b[27m завершена\"\u001b[39m\nReceived: \u001b[31m\"✓ Страница \u001b[7m5\u001b[27m завершена\"\u001b[39m\n\n  16 |  await seed(page,'book-v1-30',[5,5],Array.from({length:5},(_,i)=>`book-v1-${i+25}`));await boot(page);await pair(page);await expect(page.locator(\"#win\")).toBeVisible();\n  17 |  const award=await page.locator('#award').innerText();save('page-number',{award,expected:'Страница 1 завершена'});await page.screenshot({path:out+'/page-number.png'});\n> 18 |  expect(award).toBe('✓ Страница 1 завершена');\n     |                ^\n  19 | });\n  20 | test('F02 book chunk failure is visible in open modal and retry clears loading',async({page})=>{\n  21 |  await seed(page);let blocked=true;await page.route('**/notebook-extra-*.js',r=>blocked?r.abort():r.continue());\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:18:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:47:37.778Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F01-second-noteboo-4a122-page-uses-local-page-number/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 16,
+                    "line": 18
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-e85a68edf692b303800e",
+          "file": "browser.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "F02 book chunk failure is visible in open modal and retry clears loading",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2229,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Не удалось\"\u001b[39m\nReceived string:    \u001b[31m\"Семечки\u001b[39m\n\u001b[31m×·\u001b[39m\n\u001b[31mОткрываю тетрадь…·\u001b[39m\n\u001b[31m← Меню\u001b[39m\n\u001b[31mТетради·\u001b[39m\n\u001b[31m100 тетрадей · 2400 задач·\u001b[39m\n\u001b[31mРаздел\u001b[39m\n\u001b[31m1. Первые страницы\u001b[39m\n\u001b[31m2. Лёгкие линии\u001b[39m\n\u001b[31m3. Переплетения\u001b[39m\n\u001b[31m4. Простор\u001b[39m\n\u001b[31m5. Длинные дорожки\u001b[39m\n\u001b[31m6. Большие страницы\u001b[39m\n\u001b[31m7. Глубина\u001b[39m\n\u001b[31m8. Дальние маршруты\u001b[39m\n\u001b[31m9. Широкий горизонт\u001b[39m\n\u001b[31m10. Большое путешествие\u001b[39m\n\u001b[31mПоказать\u001b[39m\n\u001b[31mВсе\u001b[39m\n\u001b[31mНе начаты\u001b[39m\n\u001b[31mВ процессе\u001b[39m\n\u001b[31mПройдены\u001b[39m\n\u001b[31m1\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m2\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m3\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m5\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m6\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m7\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m8\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m9\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m10\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31mТетрадь 2\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31mПродолжить тетрадь\u001b[39m\n\u001b[31mСтраница 1\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m1\u001b[39m\n\u001b[31m2\u001b[39m\n\u001b[31m3\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31m5\u001b[39m\n\u001b[31m6\u001b[39m\n\u001b[31mСтраница 2\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m7\u001b[39m\n\u001b[31m8\u001b[39m\n\u001b[31m9\u001b[39m\n\u001b[31m10\u001b[39m\n\u001b[31m11\u001b[39m\n\u001b[31m12\u001b[39m\n\u001b[31mСтраница 3\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m13\u001b[39m\n\u001b[31m14\u001b[39m\n\u001b[31m15\u001b[39m\n\u001b[31m16\u001b[39m\n\u001b[31m17\u001b[39m\n\u001b[31m18\u001b[39m\n\u001b[31mСтраница 4\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m19\u001b[39m\n\u001b[31m20\u001b[39m\n\u001b[31m21\u001b[39m\n\u001b[31m22\u001b[39m\n\u001b[31m23\u001b[39m\n\u001b[31m24\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Не удалось\"\u001b[39m\nReceived string:    \u001b[31m\"Семечки\u001b[39m\n\u001b[31m×·\u001b[39m\n\u001b[31mОткрываю тетрадь…·\u001b[39m\n\u001b[31m← Меню\u001b[39m\n\u001b[31mТетради·\u001b[39m\n\u001b[31m100 тетрадей · 2400 задач·\u001b[39m\n\u001b[31mРаздел\u001b[39m\n\u001b[31m1. Первые страницы\u001b[39m\n\u001b[31m2. Лёгкие линии\u001b[39m\n\u001b[31m3. Переплетения\u001b[39m\n\u001b[31m4. Простор\u001b[39m\n\u001b[31m5. Длинные дорожки\u001b[39m\n\u001b[31m6. Большие страницы\u001b[39m\n\u001b[31m7. Глубина\u001b[39m\n\u001b[31m8. Дальние маршруты\u001b[39m\n\u001b[31m9. Широкий горизонт\u001b[39m\n\u001b[31m10. Большое путешествие\u001b[39m\n\u001b[31mПоказать\u001b[39m\n\u001b[31mВсе\u001b[39m\n\u001b[31mНе начаты\u001b[39m\n\u001b[31mВ процессе\u001b[39m\n\u001b[31mПройдены\u001b[39m\n\u001b[31m1\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m2\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m3\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m5\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m6\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m7\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m8\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m9\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m10\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31mТетрадь 2\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31mПродолжить тетрадь\u001b[39m\n\u001b[31mСтраница 1\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m1\u001b[39m\n\u001b[31m2\u001b[39m\n\u001b[31m3\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31m5\u001b[39m\n\u001b[31m6\u001b[39m\n\u001b[31mСтраница 2\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m7\u001b[39m\n\u001b[31m8\u001b[39m\n\u001b[31m9\u001b[39m\n\u001b[31m10\u001b[39m\n\u001b[31m11\u001b[39m\n\u001b[31m12\u001b[39m\n\u001b[31mСтраница 3\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m13\u001b[39m\n\u001b[31m14\u001b[39m\n\u001b[31m15\u001b[39m\n\u001b[31m16\u001b[39m\n\u001b[31m17\u001b[39m\n\u001b[31m18\u001b[39m\n\u001b[31mСтраница 4\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m19\u001b[39m\n\u001b[31m20\u001b[39m\n\u001b[31m21\u001b[39m\n\u001b[31m22\u001b[39m\n\u001b[31m23\u001b[39m\n\u001b[31m24\"\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:26:17",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 17,
+                      "line": 26
+                    },
+                    "snippet": "  24 |  await page.locator('[data-game=\"book-v1-25\"]').click();await page.waitForTimeout(500);\n  25 |  save('chunk-failure',{before,dialogOpen:await page.locator('#dialog').isVisible(),after:await page.locator('#dialog').innerText(),status:await page.locator('#status').textContent()});await page.screenshot({path:out+'/chunk-failure.png'});\n> 26 |  expect(before).toContain('Не удалось');await expect(page.locator('#dialog')).toBeHidden();\n     |                 ^\n  27 | });\n  28 | test('F03 completed volume filter does not silently reset when changing section',async({page})=>{\n  29 |  await seed(page,'classic',[5,5],Array.from({length:24},(_,i)=>`book-v1-${i+1}`));await page.goto('/');await page.locator('#book-mode').click();await page.locator('#book-filter').selectOption('done');await page.locator('#book-chapter').selectOption('9');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 17,
+                        "line": 26
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Не удалось\"\u001b[39m\nReceived string:    \u001b[31m\"Семечки\u001b[39m\n\u001b[31m×·\u001b[39m\n\u001b[31mОткрываю тетрадь…·\u001b[39m\n\u001b[31m← Меню\u001b[39m\n\u001b[31mТетради·\u001b[39m\n\u001b[31m100 тетрадей · 2400 задач·\u001b[39m\n\u001b[31mРаздел\u001b[39m\n\u001b[31m1. Первые страницы\u001b[39m\n\u001b[31m2. Лёгкие линии\u001b[39m\n\u001b[31m3. Переплетения\u001b[39m\n\u001b[31m4. Простор\u001b[39m\n\u001b[31m5. Длинные дорожки\u001b[39m\n\u001b[31m6. Большие страницы\u001b[39m\n\u001b[31m7. Глубина\u001b[39m\n\u001b[31m8. Дальние маршруты\u001b[39m\n\u001b[31m9. Широкий горизонт\u001b[39m\n\u001b[31m10. Большое путешествие\u001b[39m\n\u001b[31mПоказать\u001b[39m\n\u001b[31mВсе\u001b[39m\n\u001b[31mНе начаты\u001b[39m\n\u001b[31mВ процессе\u001b[39m\n\u001b[31mПройдены\u001b[39m\n\u001b[31m1\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m2\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m3\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m5\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m6\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m7\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m8\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m9\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31m10\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31mТетрадь 2\u001b[39m\n\u001b[31m0/24\u001b[39m\n\u001b[31mПродолжить тетрадь\u001b[39m\n\u001b[31mСтраница 1\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m1\u001b[39m\n\u001b[31m2\u001b[39m\n\u001b[31m3\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31m5\u001b[39m\n\u001b[31m6\u001b[39m\n\u001b[31mСтраница 2\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m7\u001b[39m\n\u001b[31m8\u001b[39m\n\u001b[31m9\u001b[39m\n\u001b[31m10\u001b[39m\n\u001b[31m11\u001b[39m\n\u001b[31m12\u001b[39m\n\u001b[31mСтраница 3\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m13\u001b[39m\n\u001b[31m14\u001b[39m\n\u001b[31m15\u001b[39m\n\u001b[31m16\u001b[39m\n\u001b[31m17\u001b[39m\n\u001b[31m18\u001b[39m\n\u001b[31mСтраница 4\u001b[39m\n\u001b[31m0/6\u001b[39m\n\u001b[31m19\u001b[39m\n\u001b[31m20\u001b[39m\n\u001b[31m21\u001b[39m\n\u001b[31m22\u001b[39m\n\u001b[31m23\u001b[39m\n\u001b[31m24\"\u001b[39m\n\n  24 |  await page.locator('[data-game=\"book-v1-25\"]').click();await page.waitForTimeout(500);\n  25 |  save('chunk-failure',{before,dialogOpen:await page.locator('#dialog').isVisible(),after:await page.locator('#dialog').innerText(),status:await page.locator('#status').textContent()});await page.screenshot({path:out+'/chunk-failure.png'});\n> 26 |  expect(before).toContain('Не удалось');await expect(page.locator('#dialog')).toBeHidden();\n     |                 ^\n  27 | });\n  28 | test('F03 completed volume filter does not silently reset when changing section',async({page})=>{\n  29 |  await seed(page,'classic',[5,5],Array.from({length:24},(_,i)=>`book-v1-${i+1}`));await page.goto('/');await page.locator('#book-mode').click();await page.locator('#book-filter').selectOption('done');await page.locator('#book-chapter').selectOption('9');\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:26:17"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:47:40.090Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F02-book-chunk-fai-cf6f1-al-and-retry-clears-loading/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 17,
+                    "line": 26
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-7d03397cbd30f5845652",
+          "file": "browser.spec.ts",
+          "line": 20,
+          "column": 1
+        },
+        {
+          "title": "F03 completed volume filter does not silently reset when changing section",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 790,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"done\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"done\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:31:58",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 58,
+                      "line": 31
+                    },
+                    "snippet": "  29 |  await seed(page,'classic',[5,5],Array.from({length:24},(_,i)=>`book-v1-${i+1}`));await page.goto('/');await page.locator('#book-mode').click();await page.locator('#book-filter').selectOption('done');await page.locator('#book-chapter').selectOption('9');\n  30 |  save('filter',{value:await page.locator('#book-filter').inputValue(),covers:await page.locator('[data-volume]').count()});\n> 31 |  expect(await page.locator('#book-filter').inputValue()).toBe('done');\n     |                                                          ^\n  32 | });\n  33 | test('F04 calendar 2028 leap-day and 2125 trophies',async({page})=>{\n  34 |  await page.clock.setFixedTime(new Date('2028-06-20T12:00:00'));await seed(page);await page.goto('/');await page.locator('#calendar-open').click();await page.locator('#calendar-month').selectOption('02');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 58,
+                        "line": 31
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"done\"\u001b[39m\nReceived: \u001b[31m\"all\"\u001b[39m\n\n  29 |  await seed(page,'classic',[5,5],Array.from({length:24},(_,i)=>`book-v1-${i+1}`));await page.goto('/');await page.locator('#book-mode').click();await page.locator('#book-filter').selectOption('done');await page.locator('#book-chapter').selectOption('9');\n  30 |  save('filter',{value:await page.locator('#book-filter').inputValue(),covers:await page.locator('[data-volume]').count()});\n> 31 |  expect(await page.locator('#book-filter').inputValue()).toBe('done');\n     |                                                          ^\n  32 | });\n  33 | test('F04 calendar 2028 leap-day and 2125 trophies',async({page})=>{\n  34 |  await page.clock.setFixedTime(new Date('2028-06-20T12:00:00'));await seed(page);await page.goto('/');await page.locator('#calendar-open').click();await page.locator('#calendar-month').selectOption('02');\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:31:58"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:47:44.099Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F03-completed-volu-4fcf2-reset-when-changing-section/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 58,
+                    "line": 31
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-7e277004e0b7e73085a1",
+          "file": "browser.spec.ts",
+          "line": 28,
+          "column": 1
+        },
+        {
+          "title": "F04 calendar 2028 leap-day and 2125 trophies",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1200,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m6\u001b[39m\nReceived: \u001b[31m0\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m6\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:37:106",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 106,
+                      "line": 37
+                    },
+                    "snippet": "  35 |  await expect(page.locator('[data-game=\"daily-v1-2028-02-29\"]')).toBeEnabled();await expect(page.locator('[data-game=\"daily-v1-2028-02-30\"]')).toHaveCount(0);\n  36 |  await page.clock.setFixedTime(new Date('2125-06-20T12:00:00'));await page.locator('#collection-back').click();await page.locator('#trophies-mode').click();await page.locator('#trophy-year').selectOption('2125');\n> 37 |  const n=await page.locator('[data-month]').count();save('long-calendar',{year:2125,months:n});expect(n).toBe(6);\n     |                                                                                                          ^\n  38 | });\n  39 | test('F05 rotation during flights settles rewards and leaves no particles',async({page})=>{\n  40 |  await seed(page,'classic',Array(40).fill(5),[],22);await boot(page);await pair(page);await page.setViewportSize({width:844,height:390});await page.waitForTimeout(1200);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 106,
+                        "line": 37
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m6\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\n  35 |  await expect(page.locator('[data-game=\"daily-v1-2028-02-29\"]')).toBeEnabled();await expect(page.locator('[data-game=\"daily-v1-2028-02-30\"]')).toHaveCount(0);\n  36 |  await page.clock.setFixedTime(new Date('2125-06-20T12:00:00'));await page.locator('#collection-back').click();await page.locator('#trophies-mode').click();await page.locator('#trophy-year').selectOption('2125');\n> 37 |  const n=await page.locator('[data-month]').count();save('long-calendar',{year:2125,months:n});expect(n).toBe(6);\n     |                                                                                                          ^\n  38 | });\n  39 | test('F05 rotation during flights settles rewards and leaves no particles',async({page})=>{\n  40 |  await seed(page,'classic',Array(40).fill(5),[],22);await boot(page);await pair(page);await page.setViewportSize({width:844,height:390});await page.waitForTimeout(1200);\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:37:106"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:47:46.212Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F04-calendar-2028-leap-day-and-2125-trophies/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 106,
+                    "line": 37
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-fc3b71d2dddd92d23fcb",
+          "file": "browser.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "F05 rotation during flights settles rewards and leaves no particles",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2807,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:47:49.045Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-69616cf89183086379ab",
+          "file": "browser.spec.ts",
+          "line": 39,
+          "column": 1
+        },
+        {
+          "title": "F06 collection pagination retains all jars across pages",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2119,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:47:52.225Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-ea9faf16e53dbe49c615",
+          "file": "browser.spec.ts",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "F07 enlarged body text and save failure in short landscape remain reachable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1924,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:47:54.383Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-893751b9b6915da42b17",
+          "file": "browser.spec.ts",
+          "line": 49,
+          "column": 1
+        },
+        {
+          "title": "F08 navigation stress and tab conflict never silently overwrite",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12261,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:47:56.321Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-991bdba777a081b7acec",
+          "file": "browser.spec.ts",
+          "line": 57,
+          "column": 1
+        },
+        {
+          "title": "F09 dead notebook controls do not overlap sidebar metadata",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1063,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:65:287",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 287,
+                      "line": 65
+                    },
+                    "snippet": "  63 | test('F09 dead notebook controls do not overlap sidebar metadata',async({page})=>{\n  64 |  await page.setViewportSize({width:568,height:320});await seed(page,'book-v1-25',[1,2]);await boot(page);await page.screenshot({path:out+'/dead-landscape.png'});\n> 65 |  const m=await page.evaluate(()=>{const a=document.querySelector('.status-wrap')!.getBoundingClientRect(),b=document.querySelector('#page-progress')!.getBoundingClientRect();return{statusTop:a.top,pageBottom:b.bottom,overlap:a.top<b.bottom}});save('dead-landscape',m);expect(m.overlap).toBe(false);\n     |                                                                                                                                                                                                                                                                                               ^\n  66 | });\n  67 | test('F10 ordinary text save failure does not overlap jar and mode',async({page})=>{\n  68 |  await page.setViewportSize({width:568,height:320});await seed(page,'classic',Array(90).fill(5));await boot(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 287,
+                        "line": 65
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n\n  63 | test('F09 dead notebook controls do not overlap sidebar metadata',async({page})=>{\n  64 |  await page.setViewportSize({width:568,height:320});await seed(page,'book-v1-25',[1,2]);await boot(page);await page.screenshot({path:out+'/dead-landscape.png'});\n> 65 |  const m=await page.evaluate(()=>{const a=document.querySelector('.status-wrap')!.getBoundingClientRect(),b=document.querySelector('#page-progress')!.getBoundingClientRect();return{statusTop:a.top,pageBottom:b.bottom,overlap:a.top<b.bottom}});save('dead-landscape',m);expect(m.overlap).toBe(false);\n     |                                                                                                                                                                                                                                                                                               ^\n  66 | });\n  67 | test('F10 ordinary text save failure does not overlap jar and mode',async({page})=>{\n  68 |  await page.setViewportSize({width:568,height:320});await seed(page,'classic',Array(90).fill(5));await boot(page);\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:65:287"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:48:08.604Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F09-dead-notebook--bd939-ot-overlap-sidebar-metadata/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 287,
+                    "line": 65
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-8414108bc8e40598d1f5",
+          "file": "browser.spec.ts",
+          "line": 63,
+          "column": 1
+        },
+        {
+          "title": "F10 ordinary text save failure does not overlap jar and mode",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1429,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:70:349",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 349,
+                      "line": 70
+                    },
+                    "snippet": "  68 |  await page.setViewportSize({width:568,height:320});await seed(page,'classic',Array(90).fill(5));await boot(page);\n  69 |  await page.evaluate(()=>{const original=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='seeds-bits.progress.v2')throw new DOMException('full','QuotaExceededError');return original.call(this,k,v)}});await pair(page);await expect(page.locator('#save-notice')).toBeVisible();\n> 70 |  await page.screenshot({path:out+'/normal-save-failure.png'});const m=await page.evaluate(()=>{const a=document.querySelector('.status-wrap')!.getBoundingClientRect(),b=document.querySelector('.game-meta')!.getBoundingClientRect();return{statusTop:a.top,modeBottom:b.bottom,overlap:a.top<b.bottom}});save('normal-save-failure',m);expect(m.overlap).toBe(false);\n     |                                                                                                                                                                                                                                                                                                                                                             ^\n  71 | });\n  72 | test('F11 offscreen hint can scroll to second number in landscape',async({page})=>{\n  73 |  await page.setViewportSize({width:568,height:320});const b=Array(540).fill(0);b[0]=b[539]=5;await seed(page,'classic',b);await boot(page);await page.locator('#hint').click();await expect(page.locator('.hinted')).toHaveCount(2);await expect(page.locator('#hint-jump')).toBeVisible();await page.screenshot({path:out+'/hint-landscape.png'});save('hint-hit-target',await page.locator('#hint-jump').evaluate(el=>{const r=el.getBoundingClientRect();return{rect:{x:r.x,y:r.y,w:r.width,h:r.height},hit:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.outerHTML.slice(0,200),parentOverflow:getComputedStyle(el.parentElement!).overflow}}));await page.locator('#hint-jump').click({timeout:1500});await expect(page.locator('[data-index=\"539\"]')).toBeInViewport();await page.screenshot({path:out+'/hint-landscape.png'});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 349,
+                        "line": 70
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n\n  68 |  await page.setViewportSize({width:568,height:320});await seed(page,'classic',Array(90).fill(5));await boot(page);\n  69 |  await page.evaluate(()=>{const original=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='seeds-bits.progress.v2')throw new DOMException('full','QuotaExceededError');return original.call(this,k,v)}});await pair(page);await expect(page.locator('#save-notice')).toBeVisible();\n> 70 |  await page.screenshot({path:out+'/normal-save-failure.png'});const m=await page.evaluate(()=>{const a=document.querySelector('.status-wrap')!.getBoundingClientRect(),b=document.querySelector('.game-meta')!.getBoundingClientRect();return{statusTop:a.top,modeBottom:b.bottom,overlap:a.top<b.bottom}});save('normal-save-failure',m);expect(m.overlap).toBe(false);\n     |                                                                                                                                                                                                                                                                                                                                                             ^\n  71 | });\n  72 | test('F11 offscreen hint can scroll to second number in landscape',async({page})=>{\n  73 |  await page.setViewportSize({width:568,height:320});const b=Array(540).fill(0);b[0]=b[539]=5;await seed(page,'classic',b);await boot(page);await page.locator('#hint').click();await expect(page.locator('.hinted')).toHaveCount(2);await expect(page.locator('#hint-jump')).toBeVisible();await page.screenshot({path:out+'/hint-landscape.png'});save('hint-hit-target',await page.locator('#hint-jump').evaluate(el=>{const r=el.getBoundingClientRect();return{rect:{x:r.x,y:r.y,w:r.width,h:r.height},hit:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.outerHTML.slice(0,200),parentOverflow:getComputedStyle(el.parentElement!).overflow}}));await page.locator('#hint-jump').click({timeout:1500});await expect(page.locator('[data-index=\"539\"]')).toBeInViewport();await page.screenshot({path:out+'/hint-landscape.png'});\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:70:349"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:48:10.703Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F10-ordinary-text--9fef9-es-not-overlap-jar-and-mode/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 349,
+                    "line": 70
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-458dafeb3b2ad66b0ca9",
+          "file": "browser.spec.ts",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "title": "F11 offscreen hint can scroll to second number in landscape",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3028,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#hint-jump')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"hint-jump\" class=\"text-button\">↓ Вторая цифра ниже</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#hint-jump')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"hint-jump\" class=\"text-button\">↓ Вторая цифра ниже</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:73:673",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 673,
+                      "line": 73
+                    },
+                    "snippet": "  71 | });\n  72 | test('F11 offscreen hint can scroll to second number in landscape',async({page})=>{\n> 73 |  await page.setViewportSize({width:568,height:320});const b=Array(540).fill(0);b[0]=b[539]=5;await seed(page,'classic',b);await boot(page);await page.locator('#hint').click();await expect(page.locator('.hinted')).toHaveCount(2);await expect(page.locator('#hint-jump')).toBeVisible();await page.screenshot({path:out+'/hint-landscape.png'});save('hint-hit-target',await page.locator('#hint-jump').evaluate(el=>{const r=el.getBoundingClientRect();return{rect:{x:r.x,y:r.y,w:r.width,h:r.height},hit:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.outerHTML.slice(0,200),parentOverflow:getComputedStyle(el.parentElement!).overflow}}));await page.locator('#hint-jump').click({timeout:1500});await expect(page.locator('[data-index=\"539\"]')).toBeInViewport();await page.screenshot({path:out+'/hint-landscape.png'});\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^\n  74 | });\n  75 | test('F12 doubling every text size keeps menu and play reachable',async({page})=>{\n  76 |  await page.setViewportSize({width:667,height:375});await seed(page);await boot(page);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 673,
+                        "line": 73
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#hint-jump')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"hint-jump\" class=\"text-button\">↓ Вторая цифра ниже</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <main class=\"game\">…</main> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\n\n  71 | });\n  72 | test('F11 offscreen hint can scroll to second number in landscape',async({page})=>{\n> 73 |  await page.setViewportSize({width:568,height:320});const b=Array(540).fill(0);b[0]=b[539]=5;await seed(page,'classic',b);await boot(page);await page.locator('#hint').click();await expect(page.locator('.hinted')).toHaveCount(2);await expect(page.locator('#hint-jump')).toBeVisible();await page.screenshot({path:out+'/hint-landscape.png'});save('hint-hit-target',await page.locator('#hint-jump').evaluate(el=>{const r=el.getBoundingClientRect();return{rect:{x:r.x,y:r.y,w:r.width,h:r.height},hit:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.outerHTML.slice(0,200),parentOverflow:getComputedStyle(el.parentElement!).overflow}}));await page.locator('#hint-jump').click({timeout:1500});await expect(page.locator('[data-index=\"539\"]')).toBeInViewport();await page.screenshot({path:out+'/hint-landscape.png'});\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^\n  74 | });\n  75 | test('F12 doubling every text size keeps menu and play reachable',async({page})=>{\n  76 |  await page.setViewportSize({width:667,height:375});await seed(page);await boot(page);\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:73:673"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:48:13.520Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F11-offscreen-hint-f4758--second-number-in-landscape/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 673,
+                    "line": 73
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-bf257557b7f8782cef2d",
+          "file": "browser.spec.ts",
+          "line": 72,
+          "column": 1
+        },
+        {
+          "title": "F12 doubling every text size keeps menu and play reachable",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 977,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:78:492",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 492,
+                      "line": 78
+                    },
+                    "snippet": "  76 |  await page.setViewportSize({width:667,height:375});await seed(page);await boot(page);\n  77 |  await page.evaluate(()=>{const targets=[...document.querySelectorAll<HTMLElement>('button, p, label, h1, h2, h3, strong, small, #mode, #page-progress')];const sizes=targets.map(e=>parseFloat(getComputedStyle(e).fontSize));targets.forEach((e,i)=>e.style.fontSize=(sizes[i]*2)+'px')});\n> 78 |  await page.screenshot({path:out+'/enlarged-landscape.png'});const m=await page.evaluate(()=>{const a=document.querySelector('.status-wrap')!.getBoundingClientRect(),b=document.querySelector('.game-meta')!.getBoundingClientRect();return{statusTop:a.top,modeBottom:b.bottom,overlap:a.top<b.bottom,overflow:document.documentElement.scrollWidth>innerWidth}});save('enlarged-landscape',m);await page.locator('#menu').click();await expect(page.locator('#dialog')).toBeVisible();expect(m.overlap).toBe(false);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^\n  79 | });\n  80 | for(const [w,h] of [[390,844],[844,390],[1280,800]]) test(`F13 hint hit test ${w}x${h}`,async({page})=>{\n  81 |  await page.setViewportSize({width:w,height:h});const board=Array(540).fill(0);board[0]=board[539]=5;await seed(page,'classic',board);await boot(page);await page.locator('#hint').click();await expect(page.locator('.hinted')).toHaveCount(2);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 492,
+                        "line": 78
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n\n  76 |  await page.setViewportSize({width:667,height:375});await seed(page);await boot(page);\n  77 |  await page.evaluate(()=>{const targets=[...document.querySelectorAll<HTMLElement>('button, p, label, h1, h2, h3, strong, small, #mode, #page-progress')];const sizes=targets.map(e=>parseFloat(getComputedStyle(e).fontSize));targets.forEach((e,i)=>e.style.fontSize=(sizes[i]*2)+'px')});\n> 78 |  await page.screenshot({path:out+'/enlarged-landscape.png'});const m=await page.evaluate(()=>{const a=document.querySelector('.status-wrap')!.getBoundingClientRect(),b=document.querySelector('.game-meta')!.getBoundingClientRect();return{statusTop:a.top,modeBottom:b.bottom,overlap:a.top<b.bottom,overflow:document.documentElement.scrollWidth>innerWidth}});save('enlarged-landscape',m);await page.locator('#menu').click();await expect(page.locator('#dialog')).toBeVisible();expect(m.overlap).toBe(false);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^\n  79 | });\n  80 | for(const [w,h] of [[390,844],[844,390],[1280,800]]) test(`F13 hint hit test ${w}x${h}`,async({page})=>{\n  81 |  await page.setViewportSize({width:w,height:h});const board=Array(540).fill(0);board[0]=board[539]=5;await seed(page,'classic',board);await boot(page);await page.locator('#hint').click();await expect(page.locator('.hinted')).toHaveCount(2);\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:78:492"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:48:19.054Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F12-doubling-every-4ffca-eps-menu-and-play-reachable/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 492,
+                    "line": 78
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-69813785cdf000606012",
+          "file": "browser.spec.ts",
+          "line": 75,
+          "column": 1
+        },
+        {
+          "title": "F13 hint hit test 390x844",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1022,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:48:22.843Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-d0ac02a18626b88ce627",
+          "file": "browser.spec.ts",
+          "line": 80,
+          "column": 54
+        },
+        {
+          "title": "F13 hint hit test 844x390",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1152,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:82:360",
+                    "location": {
+                      "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                      "column": 360,
+                      "line": 82
+                    },
+                    "snippet": "  80 | for(const [w,h] of [[390,844],[844,390],[1280,800]]) test(`F13 hint hit test ${w}x${h}`,async({page})=>{\n  81 |  await page.setViewportSize({width:w,height:h});const board=Array(540).fill(0);board[0]=board[539]=5;await seed(page,'classic',board);await boot(page);await page.locator('#hint').click();await expect(page.locator('.hinted')).toHaveCount(2);\n> 82 |  const m=await page.locator('#hint-jump').evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{w:innerWidth,h:innerHeight,label:el.textContent,hitsButton:hit===el||el.contains(hit),hitTag:hit?.tagName}});save(`hint-${w}`,m);await page.screenshot({path:out+`/hint-${w}.png`});expect(m.hitsButton).toBe(true);\n     |                                                                                                                                                                                                                                                                                                                                                                        ^\n  83 | });\n  84 | test('F14 fresh reload recovers blocked notebook chunk',async({page})=>{\n  85 |  await seed(page);let blocked=true;await page.route('**/notebook-extra-*.js',r=>blocked?r.abort():r.continue());await page.goto('/');await page.locator('#book-mode').click();await page.locator('[data-volume=\"1\"]').click();await page.locator('[data-game=\"book-v1-25\"]').click();await page.waitForTimeout(250);blocked=false;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                        "column": 360,
+                        "line": 82
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  80 | for(const [w,h] of [[390,844],[844,390],[1280,800]]) test(`F13 hint hit test ${w}x${h}`,async({page})=>{\n  81 |  await page.setViewportSize({width:w,height:h});const board=Array(540).fill(0);board[0]=board[539]=5;await seed(page,'classic',board);await boot(page);await page.locator('#hint').click();await expect(page.locator('.hinted')).toHaveCount(2);\n> 82 |  const m=await page.locator('#hint-jump').evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{w:innerWidth,h:innerHeight,label:el.textContent,hitsButton:hit===el||el.contains(hit),hitTag:hit?.tagName}});save(`hint-${w}`,m);await page.screenshot({path:out+`/hint-${w}.png`});expect(m.hitsButton).toBe(true);\n     |                                                                                                                                                                                                                                                                                                                                                                        ^\n  83 | });\n  84 | test('F14 fresh reload recovers blocked notebook chunk',async({page})=>{\n  85 |  await seed(page);let blocked=true;await page.route('**/notebook-extra-*.js',r=>blocked?r.abort():r.continue());await page.goto('/');await page.locator('#book-mode').click();await page.locator('[data-volume=\"1\"]').click();await page.locator('[data-game=\"book-v1-25\"]').click();await page.waitForTimeout(250);blocked=false;\n    at /workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts:82:360"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:48:24.475Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/workspace/scratch/93d2c459edce/seeds-bits/docs/audit-0.5.1/browser-results/browser-F13-hint-hit-test-844x390/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/workspace/scratch/93d2c459edce/seeds-bits/scripts/audit-0.5.1/browser.spec.ts",
+                    "column": 360,
+                    "line": 82
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-b5ed7beaddcccb400b8f",
+          "file": "browser.spec.ts",
+          "line": 80,
+          "column": 54
+        },
+        {
+          "title": "F13 hint hit test 1280x800",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 730,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:48:27.562Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-fd5de242ff8d650dfe4d",
+          "file": "browser.spec.ts",
+          "line": 80,
+          "column": 54
+        },
+        {
+          "title": "F14 fresh reload recovers blocked notebook chunk",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 20000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2368,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-20T12:48:28.526Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fbeac1b2decfba2c3acd-72660457a7aa1b3766e2",
+          "file": "browser.spec.ts",
+          "line": 84,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-20T12:47:35.676Z",
+    "duration": 55308.331,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 9,
+    "flaky": 0
+  }
+}
