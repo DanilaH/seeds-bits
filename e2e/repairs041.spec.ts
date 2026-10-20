@@ -119,15 +119,15 @@ test("A03 failed save must not open a newly selected task as if persisted", asyn
   });
   await expect(page.locator("#dialog")).toBeVisible();
 });
-test("A04 undo/re-win, reload and restart count exactly once per attempt", async ({
+test("A04 finished result, reload and restart count exactly once per attempt", async ({
   page,
 }) => {
   await seed(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await pair(page);
-  await page.locator("#undo").click();
-  await pair(page);
+  await expect(page.locator("#undo")).toBeHidden();
+  await expect(page.locator("#win-stats")).toBeVisible();
   await page.reload();
   await page.locator("#progress-open").click();
   await expect(page.locator(".progress-stats dd")).toHaveText([
