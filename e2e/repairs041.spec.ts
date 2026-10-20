@@ -383,7 +383,15 @@ test("A12 fast contradictory inputs during removal cannot create extra result or
 test("A13 no forced audio; enabling sound creates feedback, disabling stops new sounds", async ({
   page,
 }) => {
-  await seed(page);
+  const p = state();
+  p.sessions.classic.current = snapshot([5, 5, 5, 5]);
+  await seed(page, p);
+  const removePair = async () => {
+    await page.locator('[data-index="0"]').click();
+    await page.locator('[data-index="1"]').click();
+    await expect(page.locator("#remaining")).toHaveText("2");
+    await expect(page.locator("#undo")).toBeEnabled();
+  };
   await page.addInitScript(() => {
     (window as any).tones = 0;
     const Original = window.AudioContext;
@@ -396,14 +404,14 @@ test("A13 no forced audio; enabling sound creates feedback, disabling stops new 
   });
   await page.goto("/");
   await page.locator("#resume").click();
-  await pair(page);
+  await removePair();
   expect(await page.evaluate(() => (window as any).tones)).toBe(0);
   await page.locator("#undo").click();
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
   await page.locator("#sound").check();
   await page.locator("#close").click();
-  await pair(page);
+  await removePair();
   expect(await page.evaluate(() => (window as any).tones)).toBeGreaterThan(0);
   await page.locator("#undo").click();
   await page.locator("#menu").click();
@@ -411,7 +419,7 @@ test("A13 no forced audio; enabling sound creates feedback, disabling stops new 
   await page.locator("#sound").uncheck();
   const tonesBefore = await page.evaluate(() => (window as any).tones);
   await page.locator("#close").click();
-  await pair(page);
+  await removePair();
   expect(await page.evaluate(() => (window as any).tones)).toBe(tonesBefore);
 });
 test("A14 old tab cannot discard new statistics, and reload latest recovers them", async ({
