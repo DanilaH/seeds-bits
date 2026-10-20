@@ -145,7 +145,10 @@ test("failed result save blocks next party; retry persists one result", async ({
       ),
     )
     .toBe(1);
-  await page.locator("#play-again").dblclick();
+  await page.locator("#play-again").evaluate((button) => {
+    (button as HTMLButtonElement).click();
+    (button as HTMLButtonElement).click();
+  });
   await expect(page.locator("#remaining")).toHaveText("28");
   await expect
     .poll(() =>
