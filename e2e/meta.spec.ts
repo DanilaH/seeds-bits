@@ -26,18 +26,15 @@ test.beforeEach(async ({ page }) => {
       );
   });
 });
-test("win, undo, re-win and reload count one attempt and preserve migrated progress", async ({
+test("win and reload count one attempt and preserve migrated progress", async ({
   page,
 }) => {
   await page.goto("/");
   await page.locator("#resume").click();
-  for (let i = 0; i < 2; i++) {
-    await page.locator('[data-index="0"]').click();
-    await page.locator('[data-index="1"]').click();
-    await expect(page.locator("#win")).toBeVisible();
-    await expect(page.locator("#undo")).toBeEnabled();
-    if (!i) await page.locator("#undo").click();
-  }
+  await page.locator('[data-index="0"]').click();
+  await page.locator('[data-index="1"]').click();
+  await expect(page.locator("#win")).toBeVisible();
+  await expect(page.locator("#undo")).toBeHidden();
   await expect
     .poll(() =>
       page.evaluate(

@@ -1,6 +1,6 @@
 {
   "name": "seeds-bits",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Lightweight cross-platform Number Match puzzle",
   "scripts": {
     "dev": "vite --host 0.0.0.0",

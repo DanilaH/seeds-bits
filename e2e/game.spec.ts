@@ -106,9 +106,12 @@ test("win state and quick repeated clicks", async ({ page }) => {
   await page.locator('[data-index="0"]').click();
   await page.locator('[data-index="1"]').dblclick();
   await expect(page.locator("#win")).toBeVisible();
-  await page.locator("#undo").click();
-  await expect(page.locator("#remaining")).toHaveText("2");
+  await expect(page.locator("footer")).toBeHidden();
+  await expect(page.locator("#win-stats")).toBeVisible();
+  await expect(page.locator("#win summary")).toHaveCount(0);
+  await page.locator("#play-again").click();
   await expect(page.locator("#win")).toBeHidden();
+  await expect(page.locator("footer")).toBeVisible();
 });
 test("light layout has no horizontal overflow at narrow viewport", async ({
   page,

@@ -56,11 +56,12 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
   await page.locator("#resume").click();
   await pair(page);
   await expect(page.locator("#remaining")).toHaveText("2");
+  await page.locator("#undo").click();
+  await pair(page);
   await pair(page);
   await expect(page.locator("#win")).toBeVisible();
   await expect(page.locator("#jar-percent")).toContainText("2/60");
-  await page.locator("#undo").click();
-  await pair(page);
+  await expect(page.locator("footer")).toBeHidden();
   await page.reload();
   await page.locator("#resume").click();
   const p = await page.evaluate(
