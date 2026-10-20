@@ -133,6 +133,7 @@ test("failed result save blocks next party; retry persists one result", async ({
   await expect(page.locator("#win")).toBeVisible();
   await expect(page.locator("#retry-save")).toBeVisible();
   await page.locator("#play-again").click();
+  await expect(page.locator("#play-again")).toBeEnabled();
   await expect(page.locator("#win")).toBeVisible();
   await page.evaluate(() => (window as any).restoreWrites());
   await page.locator("#retry-save").click();

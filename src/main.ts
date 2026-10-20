@@ -971,8 +971,10 @@ $("restart-task").onclick = () => {
 $("play-again").onclick = async () => {
   if (busy) return;
   busy = true;
+  $<HTMLButtonElement>("play-again").disabled = true;
   await save();
   busy = false;
+  $<HTMLButtonElement>("play-again").disabled = false;
   if (saveFailed) return;
   const next = nextTask(progress.active, progress.done);
   if (next) await switchGame(next);
