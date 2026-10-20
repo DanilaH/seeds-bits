@@ -32,7 +32,10 @@ test("corrupt save notice remains visible until dismissed and original bytes are
   await expect(page.locator("#read-notice")).toBeVisible();
   await page.locator("#menu").click();
   await expect(page.locator("#dialog #read-notice")).toBeVisible();
-  await page.locator("#read-notice button").click();
+  await page
+    .locator("#read-notice")
+    .getByRole("button", { name: "Понятно", exact: true })
+    .click();
   await expect(page.locator("#read-notice")).toBeHidden();
 });
 test("different settings fields merge across tabs and update both interfaces", async ({

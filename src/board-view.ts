@@ -4,17 +4,29 @@ export class BoardView {
   private nodes: HTMLElement[] = [];
   private values: number[] = [];
   private marked = new Set<number>();
+  private remapped = false;
   constructor(private root: HTMLElement) {}
   cell(index: number) {
     return this.nodes[index] ?? null;
   }
   remap(positions: Map<number, number>) {
     const old = this.nodes;
+    this.remapped =
+      positions.size !== old.length ||
+      [...positions].some(([to, from]) => to !== from);
+    for (const i of this.marked) {
+      old[i]?.classList.remove("selected", "hinted");
+      old[i]?.setAttribute("aria-pressed", "false");
+    }
+    this.marked.clear();
     this.nodes = [...positions.keys()].map((n) => old[positions.get(n)!]);
-    this.values = [];
+    this.values = [...positions.keys()].map(
+      (n) => this.values[positions.get(n)!],
+    );
   }
   render(values: Board, selected: number, hint: Connection | null) {
     const changed =
+      this.remapped ||
       values.length !== this.values.length ||
       values.some((v, i) => v !== this.values[i]);
     if (changed) {
@@ -24,34 +36,44 @@ export class BoardView {
       for (let i = 0; i < length; i++) {
         const value = values[i] || 0;
         let node = this.nodes[i];
+        if (
+          node &&
+          this.values[i] === value &&
+          node.dataset.index === String(i)
+        ) {
+          desired.push(node);
+          continue;
+        }
         if (!node || (node.tagName === "BUTTON") !== Boolean(value)) {
           node = document.createElement(value ? "button" : "span");
           node.className = value ? "cell" : "cell empty";
           if (!value) node.setAttribute("aria-hidden", "true");
         }
-        node.dataset.index = String(i);
+        if (node.dataset.index !== String(i)) node.dataset.index = String(i);
         if (value) {
           if (node.textContent !== String(value))
             node.textContent = String(value);
-          node.setAttribute(
-            "aria-label",
-            `${value}, строка ${Math.floor(i / WIDTH) + 1}, столбец ${(i % WIDTH) + 1}`,
-          );
+          const label = `${value}, строка ${Math.floor(i / WIDTH) + 1}, столбец ${(i % WIDTH) + 1}`;
+          if (node.getAttribute("aria-label") !== label)
+            node.setAttribute("aria-label", label);
         }
-        node.classList.remove("erasing", "selected", "hinted");
-        if (value) node.setAttribute("aria-pressed", "false");
+        if (node.matches(".erasing, .selected, .hinted"))
+          node.classList.remove("erasing", "selected", "hinted");
+        if (value && node.getAttribute("aria-pressed") !== "false")
+          node.setAttribute("aria-pressed", "false");
         desired.push(node);
       }
       const keep = new Set(desired);
       for (const child of [...this.root.children])
         if (!keep.has(child as HTMLElement)) child.remove();
-      desired.forEach((node, i) => {
-        if (this.root.children[i] !== node)
-          this.root.insertBefore(node, this.root.children[i] ?? null);
-      });
+      let cursor = this.root.firstElementChild;
+      for (const node of desired) {
+        if (cursor === node) cursor = cursor.nextElementSibling;
+        else this.root.insertBefore(node, cursor);
+      }
       this.nodes = desired;
       this.values = [...values];
-      this.marked.clear();
+      this.remapped = false;
     }
     const marked = new Set(
       [selected, hint?.a ?? -1, hint?.b ?? -1].filter((i) => i >= 0),

@@ -21,11 +21,14 @@ const validId = (id: string) =>
   (id === "classic" ||
     /^book-v1-([1-9]|1\d|2[0-4])$/.test(id) ||
     /^daily-v1-\d{4}-\d{2}-\d{2}$/.test(id));
+export class FutureProgress extends Error {}
 export function readProgress(
   raw: string,
   onRecovery: () => void = () => {},
 ): Progress {
   const p = JSON.parse(raw);
+  if (p?.version > 2 || p?.meta?.version > 1)
+    throw new FutureProgress("Newer save format");
   if (
     p?.version !== 2 ||
     !validId(p.active) ||
@@ -59,31 +62,36 @@ export function readProgress(
       clean.hints[id] = Number(n);
   if (p.meta !== undefined) {
     const m = p.meta;
-    if (
-      m?.version !== 1 ||
-      typeof m.since !== "string" ||
-      !Number.isFinite(Date.parse(m.since)) ||
-      !Number.isSafeInteger(m.completed) ||
-      m.completed < 0 ||
-      !Number.isSafeInteger(m.unassisted) ||
-      m.unassisted < 0 ||
-      m.unassisted > m.completed ||
-      !m.attempts ||
-      typeof m.attempts !== "object" ||
-      Array.isArray(m.attempts)
-    )
-      throw Error("Invalid statistics");
-    for (const [id, value] of Object.entries(m.attempts)) {
-      const a = value as Attempt;
+    try {
       if (
-        !validId(id) ||
-        !a ||
-        typeof a.id !== "string" ||
-        typeof a.completed !== "boolean"
+        m?.version !== 1 ||
+        typeof m.since !== "string" ||
+        !Number.isFinite(Date.parse(m.since)) ||
+        !Number.isSafeInteger(m.completed) ||
+        m.completed < 0 ||
+        !Number.isSafeInteger(m.unassisted) ||
+        m.unassisted < 0 ||
+        m.unassisted > m.completed ||
+        !m.attempts ||
+        typeof m.attempts !== "object" ||
+        Array.isArray(m.attempts)
       )
-        throw Error("Invalid attempt");
+        throw Error("Invalid statistics");
+      for (const [id, value] of Object.entries(m.attempts)) {
+        const a = value as Attempt;
+        if (
+          !validId(id) ||
+          !a ||
+          typeof a.id !== "string" ||
+          typeof a.completed !== "boolean"
+        )
+          throw Error("Invalid attempt");
+      }
+      clean.meta = m;
+    } catch {
+      // Statistics are optional; keep valid boards, completion marks and trophies.
+      onRecovery();
     }
-    clean.meta = m;
   }
   metadata(clean);
   return clean;

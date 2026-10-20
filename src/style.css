@@ -1418,3 +1418,38 @@ dialog[data-screen="home"] .dialog-head h2 {
 .home-links {
   flex-wrap: wrap;
 }
+
+/* Keep every home action visible on a compact phone without shrinking hit areas. */
+.home-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 8px;
+}
+.home-links .text-button {
+  font-size: 14px;
+  min-height: 44px;
+}
+@media (max-height: 650px) {
+  dialog[data-screen="home"] {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .home-title {
+    padding-bottom: 6px;
+  }
+  .home-title h1 {
+    margin: 0 0 6px;
+  }
+  #resume-context {
+    margin: 6px 0 10px;
+  }
+  .mode-link {
+    padding: 8px 4px;
+  }
+  .mode-link small {
+    margin-top: 3px;
+  }
+  .home-links {
+    margin-top: 4px;
+  }
+}
