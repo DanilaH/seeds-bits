@@ -1390,5 +1390,31 @@ dialog[data-screen="home"] .dialog-head h2 {
   }
 }
 
-#read-notice { padding: 10px 14px; background: var(--selected); border: 1px solid currentColor; border-radius: 8px; margin: 8px 0; }
-#read-notice p { margin: 0 0 6px; }
+#read-notice {
+  padding: 10px 14px;
+  background: var(--selected);
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+#read-notice p {
+  margin: 0 0 6px;
+}
+
+.progress-stats {
+  margin: 20px 0;
+}
+.progress-stats div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line, #89958b40);
+}
+.progress-stats dd {
+  margin: 0;
+  font-weight: 650;
+}
+.home-links {
+  flex-wrap: wrap;
+}

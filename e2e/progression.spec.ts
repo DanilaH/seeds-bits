@@ -85,7 +85,7 @@ test("daily calendar closes future days and persists trophy", async ({
   if (await page.locator("#resume").isVisible())
     await page.locator("#resume").click();
   await page.locator("#menu").click();
-  await page.locator("#daily-mode").click();
+  await page.locator("#calendar-open").click();
   await expect(
     page.locator('[data-game="daily-v1-2026-10-16"]'),
   ).toBeDisabled();
@@ -106,9 +106,10 @@ test("daily calendar closes future days and persists trophy", async ({
     await page.locator("#resume").click();
   await expect(page.locator("#win")).toBeVisible();
   await page.locator("#play-again").click();
-  await expect(page.locator('[data-game="daily-v1-2026-10-01"]')).toHaveClass(
-    /done/,
-  );
+  await expect(page.locator("#mode")).toContainText("2");
+  await page.locator("#menu").click();
+  await page.locator("#calendar-open").click();
+  await expect(page.locator('[data-game="daily-v1-2026-10-01"]')).toHaveClass(/done/);
 });
 test("quick onboarding ends after two exercises", async ({ page }) => {
   await page.addInitScript(() =>
@@ -203,7 +204,7 @@ test("bronze trophy survives replay, widths and dark calendar", async ({
   await page.locator("#settings-open").click();
   await page.locator("#dark").check();
   await page.locator("#settings-back").click();
-  await page.locator("#daily-mode").click();
+  await page.locator("#calendar-open").click();
   await page.screenshot({
     animations: "disabled",
     path: "test-results/calendar-dark.png",

@@ -1,4 +1,4 @@
-import notebookData from "./notebook.json" with {type:"json"};
+import notebookData from "./notebook.json" with { type: "json" };
 import { checkPair, removePair, type Connection, type Session } from "./core";
 export const FIRST_MONTH = "2026-10";
 export type Puzzle = { id: string; board: number[]; solution: Connection[] };
@@ -134,4 +134,31 @@ export function puzzleSession(p: Puzzle): Session {
     current: { board: [...p.board], scroll: 0, moves: 0, additions: 0 },
     history: [],
   };
+}
+
+export function nextTask(
+  id: string,
+  done: readonly string[],
+  now = today(),
+): string | undefined {
+  const index = notebook.findIndex((p) => p.id === id);
+  if (index >= 0)
+    return [...notebook.slice(index + 1), ...notebook.slice(0, index)].find(
+      (p) => !done.includes(p.id),
+    )?.id;
+  if (!id.startsWith("daily-v1-")) return;
+  const start = id.slice(9);
+  const step = (day: string, delta: number) => {
+    const [y, m, d] = day.split("-").map(Number);
+    return today(new Date(y, m - 1, d + delta));
+  };
+  for (let day = step(start, 1); day <= now; day = step(day, 1))
+    if (availableDay(day, now) && !done.includes(`daily-v1-${day}`))
+      return `daily-v1-${day}`;
+  for (
+    let day = step(start > now ? step(now, 1) : start, -1);
+    day >= `${FIRST_MONTH}-01`;
+    day = step(day, -1)
+  )
+    if (!done.includes(`daily-v1-${day}`)) return `daily-v1-${day}`;
 }

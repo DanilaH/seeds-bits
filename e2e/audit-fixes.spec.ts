@@ -70,7 +70,7 @@ for (const date of ["2028-03-19", "2028-08-16"])
   }) => {
     await page.clock.setFixedTime(new Date(date + "T12:00:00+05:00"));
     await page.goto("/");
-    await page.locator("#daily-mode").click();
+    await page.locator("#calendar-open").click();
     await page.locator("#today-task").click();
     await expect(page.locator("#dialog")).toBeHidden();
     await expect(page.locator("#hint")).toBeEnabled();

@@ -184,7 +184,7 @@ test("dead puzzle offers a recovery to a solvable position", async ({
     );
   expect(ids).not.toEqual([9, 10]);
 });
-test("next previously completed task opens a playable replay", async ({
+test("next skips completed tasks and explicit replay remains playable", async ({
   page,
 }) => {
   await page.addInitScript(() =>
@@ -214,6 +214,9 @@ test("next previously completed task opens a playable replay", async ({
   await start(page);
   await pair(page, 0, 1);
   await page.locator("#play-again").click();
+  await expect(page.locator("#mode")).toHaveText("Тетрадь · задача 3");
+  await page.locator("#book-top").click();
+  await page.locator('[data-game="book-v1-2"]').click();
   await expect(page.locator("#mode")).toHaveText("Тетрадь · задача 2");
   await expect(page.locator("#win")).toBeHidden();
 });
