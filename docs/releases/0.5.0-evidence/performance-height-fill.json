@@ -1,0 +1,135 @@
+[
+  {
+    "run": 0,
+    "version": "before",
+    "longTasks": [
+      54,
+      110,
+      89,
+      117,
+      52,
+      53,
+      99
+    ],
+    "boardAttributeMutations": 10868,
+    "counts": {
+      "LayoutCount": 243,
+      "RecalcStyleCount": 458
+    },
+    "metricsMs": {
+      "TaskDuration": 3473,
+      "ScriptDuration": 136,
+      "LayoutDuration": 956,
+      "RecalcStyleDuration": 217
+    }
+  },
+  {
+    "run": 0,
+    "version": "after",
+    "longTasks": [
+      51,
+      59,
+      54
+    ],
+    "boardAttributeMutations": 10868,
+    "counts": {
+      "LayoutCount": 424,
+      "RecalcStyleCount": 608
+    },
+    "metricsMs": {
+      "TaskDuration": 3159,
+      "ScriptDuration": 134,
+      "LayoutDuration": 687,
+      "RecalcStyleDuration": 196
+    }
+  },
+  {
+    "run": 1,
+    "version": "before",
+    "longTasks": [
+      59,
+      57,
+      53,
+      52,
+      61
+    ],
+    "boardAttributeMutations": 10868,
+    "counts": {
+      "LayoutCount": 245,
+      "RecalcStyleCount": 441
+    },
+    "metricsMs": {
+      "TaskDuration": 3280,
+      "ScriptDuration": 136,
+      "LayoutDuration": 839,
+      "RecalcStyleDuration": 206
+    }
+  },
+  {
+    "run": 1,
+    "version": "after",
+    "longTasks": [
+      69,
+      51,
+      87,
+      60,
+      67,
+      50,
+      58
+    ],
+    "boardAttributeMutations": 10868,
+    "counts": {
+      "LayoutCount": 407,
+      "RecalcStyleCount": 619
+    },
+    "metricsMs": {
+      "TaskDuration": 4632,
+      "ScriptDuration": 196,
+      "LayoutDuration": 935,
+      "RecalcStyleDuration": 313
+    }
+  },
+  {
+    "run": 2,
+    "version": "before",
+    "longTasks": [
+      107
+    ],
+    "boardAttributeMutations": 10868,
+    "counts": {
+      "LayoutCount": 239,
+      "RecalcStyleCount": 429
+    },
+    "metricsMs": {
+      "TaskDuration": 2863,
+      "ScriptDuration": 122,
+      "LayoutDuration": 693,
+      "RecalcStyleDuration": 152
+    }
+  },
+  {
+    "run": 2,
+    "version": "after",
+    "longTasks": [
+      59,
+      229,
+      519,
+      566,
+      55,
+      141,
+      161,
+      185
+    ],
+    "boardAttributeMutations": 10868,
+    "counts": {
+      "LayoutCount": 386,
+      "RecalcStyleCount": 583
+    },
+    "metricsMs": {
+      "TaskDuration": 6143,
+      "ScriptDuration": 385,
+      "LayoutDuration": 1724,
+      "RecalcStyleDuration": 586
+    }
+  }
+]

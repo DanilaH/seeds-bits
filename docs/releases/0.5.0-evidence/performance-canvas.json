@@ -1,0 +1,106 @@
+[
+  {
+    "run": 0,
+    "version": "before",
+    "longTasks": [
+      84,
+      79,
+      91,
+      51
+    ],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 2949,
+      "ScriptDuration": 110,
+      "LayoutDuration": 693,
+      "RecalcStyleDuration": 189
+    }
+  },
+  {
+    "run": 0,
+    "version": "after",
+    "longTasks": [
+      104,
+      62,
+      63,
+      304,
+      150,
+      78,
+      113,
+      54,
+      59,
+      57,
+      92,
+      51,
+      434,
+      104,
+      54,
+      54
+    ],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 5554,
+      "ScriptDuration": 231,
+      "LayoutDuration": 1207,
+      "RecalcStyleDuration": 226
+    }
+  },
+  {
+    "run": 1,
+    "version": "before",
+    "longTasks": [
+      54,
+      79
+    ],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 2795,
+      "ScriptDuration": 103,
+      "LayoutDuration": 669,
+      "RecalcStyleDuration": 164
+    }
+  },
+  {
+    "run": 1,
+    "version": "after",
+    "longTasks": [
+      88
+    ],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 3542,
+      "ScriptDuration": 174,
+      "LayoutDuration": 716,
+      "RecalcStyleDuration": 161
+    }
+  },
+  {
+    "run": 2,
+    "version": "before",
+    "longTasks": [],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 2385,
+      "ScriptDuration": 108,
+      "LayoutDuration": 580,
+      "RecalcStyleDuration": 133
+    }
+  },
+  {
+    "run": 2,
+    "version": "after",
+    "longTasks": [
+      217,
+      90,
+      217,
+      80
+    ],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 3734,
+      "ScriptDuration": 217,
+      "LayoutDuration": 714,
+      "RecalcStyleDuration": 162
+    }
+  }
+]
