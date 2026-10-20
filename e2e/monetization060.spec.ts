@@ -1,0 +1,228 @@
+import { test, expect, type Page } from "@playwright/test";
+const key = "seeds-bits.progress.v2";
+async function install(
+  page: Page,
+  opts: {
+    exhausted?: boolean;
+    outcome?: string;
+    pending?: boolean;
+    won?: boolean;
+  } = {},
+) {
+  await page.addInitScript(
+    ({ key, opts }) => {
+      const w = window as any;
+      w.adsCalls = [];
+      w.adsAcks = [];
+      w.adsEvents = [];
+      w.adsListeners = [];
+      w.bannerCalls = [];
+      if (!sessionStorage.seeded) {
+        sessionStorage.seeded = "1";
+        localStorage.setItem(
+          "seeds-bits.settings.v1",
+          JSON.stringify({ tutorialDone: true, sound: true }),
+        );
+        localStorage.setItem(
+          key,
+          JSON.stringify({
+            version: 3,
+            active: "classic",
+            sessions: {
+              classic: {
+                rules: 1,
+                current: {
+                  board: opts.won ? [] : Array(18).fill(5),
+                  moves: opts.won ? 9 : 0,
+                  additions: 0,
+                  scroll: 0,
+                },
+                history: [],
+              },
+            },
+            hints: {},
+            done: [],
+            seen: [],
+            meta: {
+              version: 1,
+              since: "2026-10-20",
+              completed: opts.won ? 1 : 0,
+              unassisted: 0,
+              attempts: {
+                classic: {
+                  id: "attempt-060",
+                  completed: !!opts.won,
+                  hintBonus: 0,
+                  hintKeys: opts.exhausted ? ["one", "two", "three"] : [],
+                },
+              },
+            },
+          }),
+        );
+      }
+      const receipt = { token: "native-reward-060", attempt: "attempt-060" };
+      w.__SEEDS_ADS_TEST__ = {
+        initialize: async () => ({
+          enabled: true,
+          test: true,
+          reward: opts.pending && !localStorage.ack060 ? receipt : undefined,
+        }),
+        addListener: async (_: any, f: any) => {
+          w.adsListeners.push(f);
+          return { remove: async () => {} };
+        },
+        banner: async (o: any) => {
+          w.bannerCalls.push(o);
+        },
+        preload: async () => {},
+        acknowledge: async (o: any) => {
+          w.adsAcks.push(o.token);
+          localStorage.ack060 = "1";
+        },
+        report: async (o: any) => {
+          w.adsEvents.push(o);
+        },
+        pending: async () => ({}),
+        show: async (o: any) => {
+          w.adsCalls.push(o);
+          if (opts.outcome === "error") throw Error("unavailable");
+          if (opts.outcome === "unavailable" || o.kind === "interstitial")
+            return { status: "unavailable" };
+          const ad = document.createElement("button");
+          ad.id = "fake-ad";
+          ad.textContent = "Закрыть тестовую рекламу";
+          ad.style.cssText = "position:fixed;inset:0;z-index:99999";
+          document.body.append(ad);
+          await new Promise<void>((r) => (ad.onclick = () => r()));
+          ad.remove();
+          if (opts.outcome === "closed")
+            return { shown: true, status: "closed" };
+          for (const f of w.adsListeners) {
+            f(receipt);
+            f(receipt);
+          }
+          return { shown: true, status: "closed", reward: receipt };
+        },
+      };
+    },
+    { key, opts },
+  );
+  await page.goto("/");
+  await page.locator("#resume").click();
+}
+async function offer(page: Page) {
+  await page.locator("#hint").click();
+  await expect(page.locator("#hint-offer")).toBeVisible();
+}
+test("reward is explicit, pauses input, granted once, persists and is acknowledged after saving", async ({
+  page,
+}) => {
+  await install(page, { exhausted: true });
+  await offer(page);
+  expect(await page.evaluate(() => (window as any).adsCalls.length)).toBe(0);
+  await page.locator("#watch-hints").click();
+  await expect(page.locator("#fake-ad")).toBeVisible();
+  expect(await page.locator("#app").evaluate((e) => e.inert)).toBe(true);
+  await page.locator("#fake-ad").click();
+  await expect(page.locator("#hint-label")).toContainText("3");
+  await expect
+    .poll(() => page.evaluate(() => (window as any).adsAcks.length))
+    .toBeGreaterThan(0);
+  const p = await page.evaluate(
+    (k) => JSON.parse(localStorage.getItem(k)!),
+    key,
+  );
+  expect(p.meta.attempts.classic.hintBonus).toBe(3);
+  expect(p.meta.rewardReceipts).toEqual(["native-reward-060"]);
+  await page.reload();
+  await page.locator("#resume").click();
+  await expect(page.locator("#hint-label")).toContainText("3");
+});
+for (const outcome of ["closed", "unavailable", "error"])
+  test(`reward ${outcome} leaves budget intact and UI playable`, async ({
+    page,
+  }) => {
+    await install(page, { exhausted: true, outcome });
+    await offer(page);
+    await page.locator("#watch-hints").click();
+    if (outcome === "closed") await page.locator("#fake-ad").click();
+    await expect(page.locator("#status")).toContainText(
+      outcome === "closed" ? "не начислены" : "недоступна",
+    );
+    await expect(page.locator("#hint-label")).toContainText("0");
+    expect(await page.locator("#app").evaluate((e) => e.inert)).toBe(false);
+    await page.locator("#board button").nth(0).click();
+    await page.locator("#board button").nth(1).click();
+    await expect(page.locator("#remaining")).toHaveText("16");
+  });
+test("pending native reward is recovered on boot and never doubled on reload", async ({
+  page,
+}) => {
+  await install(page, { exhausted: true, pending: true });
+  await expect(page.locator("#hint-label")).toContainText("3");
+  await page.reload();
+  await page.locator("#resume").click();
+  await expect(page.locator("#hint-label")).toContainText("3");
+});
+test("failed reward save retains native receipt until retry and recovery", async ({
+  page,
+}) => {
+  await install(page, { exhausted: true });
+  await offer(page);
+  // Fail only after the pre-ad save; award storage must precede native acknowledgment.
+  await page.locator("#watch-hints").click();
+  await expect(page.locator("#fake-ad")).toBeVisible();
+  await page.evaluate(() => {
+    const orig = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (k, v) {
+      if (k === "seeds-bits.progress.v2") throw Error("full");
+      return orig.call(this, k, v);
+    };
+  });
+  await page.locator("#fake-ad").click();
+  await expect(page.locator("#save-notice")).toBeVisible();
+  expect(await page.evaluate(() => (window as any).adsAcks.length)).toBe(0);
+});
+test("banner reserves space, never overlaps controls, hides in menu, landscape and tutorial", async ({
+  page,
+}) => {
+  await install(page);
+  await expect
+    .poll(() =>
+      page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
+    )
+    .toBe(true);
+  const geometry = await page.evaluate(() => ({
+    ad: document.querySelector("#ad-space")!.getBoundingClientRect().toJSON(),
+    footer: document.querySelector("footer")!.getBoundingClientRect().toJSON(),
+  }));
+  expect(geometry.footer.bottom).toBeLessThanOrEqual(geometry.ad.y - 8);
+  await page.locator("#menu").click();
+  await expect
+    .poll(() =>
+      page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
+    )
+    .toBe(false);
+  await page.locator("#resume").click();
+  await page.setViewportSize({ width: 844, height: 390 });
+  await expect
+    .poll(() =>
+      page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
+    )
+    .toBe(false);
+  await expect(page.locator("#ad-space")).toBeHidden();
+  await page.locator("#menu").click();
+  await page.locator("#learn").click();
+  await expect(page.locator("#ad-space")).toBeHidden();
+});
+test("unavailable interstitial does not block next party and only runs after result action", async ({
+  page,
+}) => {
+  await install(page, { won: true });
+  expect(await page.evaluate(() => (window as any).adsCalls.length)).toBe(0);
+  await page.locator("#play-again").click();
+  await expect(page.locator("#board button").first()).toBeVisible();
+  expect(
+    await page.evaluate(() => (window as any).adsCalls.map((o: any) => o.kind)),
+  ).toEqual(["interstitial"]);
+});

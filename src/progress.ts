@@ -103,7 +103,26 @@ export function readProgress(
           typeof a.completed !== "boolean"
         )
           throw Error("Invalid attempt");
+        if (
+          a.hintBonus !== undefined &&
+          (!Number.isSafeInteger(a.hintBonus) || a.hintBonus < 0)
+        )
+          throw Error("Invalid hint bonus");
+        if (
+          a.hintKeys !== undefined &&
+          (!Array.isArray(a.hintKeys) ||
+            !a.hintKeys.every((k) => typeof k === "string" && k.length <= 4000))
+        )
+          throw Error("Invalid hint history");
       }
+      if (
+        m.rewardReceipts !== undefined &&
+        (!Array.isArray(m.rewardReceipts) ||
+          !m.rewardReceipts.every(
+            (t: unknown) => typeof t === "string" && t.length <= 100,
+          ))
+      )
+        throw Error("Invalid rewards");
       clean.meta = m;
     } catch {
       // Statistics are optional; keep valid boards, completion marks and trophies.
@@ -135,13 +154,19 @@ export function readProgress(
   return clean;
 }
 
-export type Attempt = { id: string; completed: boolean };
+export type Attempt = {
+  id: string;
+  completed: boolean;
+  hintBonus?: number;
+  hintKeys?: string[];
+};
 export type Meta = {
   version: 1;
   since: string;
   attempts: Record<string, Attempt>;
   completed: number;
   unassisted: number;
+  rewardReceipts?: string[];
 };
 export function metadata(p: Progress): Meta {
   if (!p.meta) {

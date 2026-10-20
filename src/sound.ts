@@ -1,4 +1,9 @@
 let context: AudioContext | undefined;
+let blocked = false;
+export function blockSound(value: boolean) {
+  blocked = value;
+  if (value) suspendSound();
+}
 let voices = 0,
   lastSelection = 0;
 export function suspendSound() {
@@ -8,7 +13,7 @@ export function playSound(
   kind: "select" | "pair" | "land" | "milestone" | "full",
   enabled: boolean,
 ) {
-  if (!enabled || document.hidden || voices >= 6) return;
+  if (blocked || !enabled || document.hidden || voices >= 6) return;
   if (kind === "select" && performance.now() - lastSelection < 45) return;
   if (kind === "select") lastSelection = performance.now();
   try {

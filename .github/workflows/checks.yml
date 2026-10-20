@@ -3,6 +3,12 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      ads_mode:
+        description: Yandex ad mode (test for device QA, live for release)
+        type: choice
+        options: [test, live]
+        default: test
 permissions:
   contents: read
 jobs:
@@ -48,6 +54,13 @@ jobs:
       - run: npm ci
       - run: npm run setup:android
       - run: node scripts/configure-android.mjs
+        env:
+          APPMETRICA_API_KEY: ${{ secrets.APPMETRICA_API_KEY || vars.APPMETRICA_API_KEY }}
+          YANDEX_BANNER_AD_UNIT_ID: ${{ secrets.YANDEX_BANNER_AD_UNIT_ID || vars.YANDEX_BANNER_AD_UNIT_ID }}
+          YANDEX_INTERSTITIAL_AD_UNIT_ID: ${{ secrets.YANDEX_INTERSTITIAL_AD_UNIT_ID || vars.YANDEX_INTERSTITIAL_AD_UNIT_ID }}
+          YANDEX_REWARDED_AD_UNIT_ID: ${{ secrets.YANDEX_REWARDED_AD_UNIT_ID || vars.YANDEX_REWARDED_AD_UNIT_ID }}
+          ADS_MODE: ${{ inputs.ads_mode || 'test' }}
+          REQUIRE_MOBILE_CONFIG: ${{ github.event_name != 'pull_request' }}
       - run: npm run sync:android
       - run: chmod +x android/gradlew && cd android && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4

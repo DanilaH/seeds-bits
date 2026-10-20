@@ -1803,3 +1803,49 @@ header .jar-glass {
   border: 1px solid var(--accent);
   margin-bottom: 12px;
 }
+
+/* Native ads occupy a fixed slot; network callbacks never resize the board. */
+:root {
+  --ad-reserve: 0px;
+}
+#ad-space {
+  display: none;
+}
+#hint-offer {
+  max-width: 390px;
+  width: calc(100% - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: 24px;
+}
+#hint-offer h2 {
+  margin-top: 0;
+}
+#hint-offer button {
+  width: 100%;
+  margin-top: 10px;
+  min-height: 48px;
+}
+@media (orientation: portrait) and (min-height: 600px) {
+  :root.has-mobile-ads:not(:has(#lesson:not([hidden]))) {
+    --ad-reserve: calc(88px + env(safe-area-inset-bottom));
+  }
+  .has-mobile-ads .game {
+    height: calc(100dvh - var(--ad-reserve));
+  }
+  .has-mobile-ads:not(:has(#lesson:not([hidden]))) #ad-space {
+    display: block;
+    position: fixed;
+    left: max(16px, env(safe-area-inset-left));
+    right: max(16px, env(safe-area-inset-right));
+    bottom: calc(4px + env(safe-area-inset-bottom));
+    height: 72px;
+    max-width: 400px;
+    margin: auto;
+    pointer-events: none;
+  }
+}
+.game {
+  padding-left: max(22px, env(safe-area-inset-left));
+  padding-right: max(22px, env(safe-area-inset-right));
+}
