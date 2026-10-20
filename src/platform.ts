@@ -105,7 +105,12 @@ export async function saveState(
     const defaults = JSON.parse(settings);
     let latest: Record<string, unknown> = {};
     try {
-      latest = JSON.parse((await read(settingsKey)) ?? "{}") ?? {};
+      latest =
+        JSON.parse(
+          (native
+            ? await read(settingsKey)
+            : localStorage.getItem(settingsKey)) ?? "{}",
+        ) ?? {};
     } catch {
       /* Keep valid defaults. */
     }
@@ -115,8 +120,14 @@ export async function saveState(
         merged[field] = latest[field];
       if (Object.hasOwn(patch, field)) merged[field] = patch[field];
     }
-    await write(settingsKey, JSON.stringify(merged));
-    await write(key, value);
+    if (native) {
+      await write(settingsKey, JSON.stringify(merged));
+      await write(key, value);
+    } else {
+      // Keep the read/merge/write section synchronous while holding the lock.
+      localStorage.setItem(settingsKey, JSON.stringify(merged));
+      localStorage.setItem(key, value);
+    }
     return merged;
   };
   if (!native && navigator.locks)

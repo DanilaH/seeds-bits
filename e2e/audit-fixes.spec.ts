@@ -167,3 +167,30 @@ test("background and resume during pair animation preserve the next playable row
   await page.locator('[data-index="1"]').click();
   await expect(page.locator("#win")).toBeVisible();
 });
+test("mode is persisted before its board appears even when the save lock is delayed", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.locator("#book-mode").click();
+  await page.locator('[data-game="book-v1-1"]').click();
+  await page.locator("#menu").click();
+  await page.evaluate(() => {
+    const request = navigator.locks.request.bind(navigator.locks);
+    navigator.locks.request = ((name: string, callback: any) =>
+      request(name, async (lock) => {
+        await new Promise((r) => setTimeout(r, 350));
+        return callback(lock);
+      })) as typeof navigator.locks.request;
+  });
+  await page.locator("#classic-mode").click();
+  await expect(page.locator("#mode")).toHaveText("Классика");
+  expect(
+    await page.evaluate(
+      () => JSON.parse(localStorage.getItem("seeds-bits.progress.v2")!).active,
+    ),
+  ).toBe("classic");
+  await page.reload();
+  await page.locator("#resume").click();
+  await expect(page.locator("#mode")).toHaveText("Классика");
+  await expect(page.locator("#remaining")).toHaveText("28");
+});

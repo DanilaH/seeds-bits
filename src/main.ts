@@ -167,7 +167,7 @@ function showSaveState() {
 }
 function save() {
   if (storageConflict) return;
-  if (lesson < 0) session.current.scroll = viewport.scrollTop;
+  if (lesson < 0 && !busy) session.current.scroll = viewport.scrollTop;
   progress.sessions[progress.active] = session;
   const bundle = JSON.stringify(progress),
     prefs = JSON.stringify(settings);
@@ -203,6 +203,7 @@ function save() {
         message($("save-warning").textContent!);
       }
     });
+  return saveQueue;
 }
 function applySettings(incoming: Record<string, unknown>) {
   for (const key of ["theme", "sound", "vibration", "tutorialDone"] as const) {
@@ -1103,11 +1104,11 @@ function teach(id: string, text: string) {
   message(text);
   save();
 }
-function switchGame(id: string) {
+async function switchGame(id: string) {
   saveRecovered = false;
   if (busy) return;
   if (id.startsWith("daily") && !availableDay(id.slice(9))) return;
-  if (lesson < 0) session.current.scroll = viewport.scrollTop;
+  if (lesson < 0 && !busy) session.current.scroll = viewport.scrollTop;
   progress.sessions[progress.active] = session;
   progress.active = id;
   const p = activePuzzle();
@@ -1119,10 +1120,13 @@ function switchGame(id: string) {
   lesson = -1;
   $("lesson").hidden = true;
   clearSelection();
+  // A newly displayed mode must already be the persisted active mode.
+  busy = true;
+  await save();
+  busy = false;
   closeMenu();
   render();
   viewport.scrollTop = session.current.scroll;
-  save();
 }
 const months = () => {
   const result: string[] = [];
