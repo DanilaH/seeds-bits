@@ -1,0 +1,24 @@
+import {chromium} from '@playwright/test';
+import {createServer} from 'node:http';
+import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+import {resolve,extname} from 'node:path';
+const out='docs/releases/0.5.1-evidence';mkdirSync(out,{recursive:true});
+const server=createServer((req,res)=>{try{const p=resolve('dist','.'+(req.url==='/'?'/index.html':req.url.split('?')[0]));res.setHeader('Content-Type',{'.js':'text/javascript','.css':'text/css','.html':'text/html'}[extname(p)]||'application/octet-stream');res.end(readFileSync(p));}catch{res.writeHead(404);res.end();}});
+await new Promise(r=>server.listen(5195,'127.0.0.1',r));
+const browser=await chromium.launch({executablePath:'/tmp/seeds-audit-chromium',args:['--no-sandbox']});
+const context=await browser.newContext({viewport:{width:667,height:375}});
+const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.addInitScript(()=>{
+ localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true,sound:true}));
+ localStorage.setItem('seeds-bits.progress.v2',JSON.stringify({version:3,active:'classic',sessions:{classic:{rules:1,current:{board:Array(72).fill(1),scroll:0,moves:0,additions:0},history:[]}},done:[],seen:[],hints:{},meta:{version:1,since:'2026-10-20',completed:0,unassisted:0,attempts:{classic:{id:'visual',completed:false}}},jars:{version:1,seeds:22,wins:0,attempt:'visual',highWater:0}}));
+});
+await page.goto('http://127.0.0.1:5195');await page.locator('#resume').click();
+await page.locator('#menu').click();await page.locator('#book-mode').click();await page.locator('#book-chapter').selectOption('9');await page.locator('[data-volume="99"]').click();await page.screenshot({path:out+'/notebooks.png'});
+await page.locator('[data-game="book-v1-2400"]').click();await page.waitForFunction(()=>!document.querySelector('#dialog').open);
+await page.screenshot({path:out+'/notebook-landscape.png'});
+await page.locator('#hint').click();await page.waitForFunction(()=>document.querySelectorAll('.hinted').length===2);
+await page.locator('#menu').click();await page.locator('#settings-open').click();await page.locator('#dark').check();await page.locator('#close').click();
+await page.screenshot({path:out+'/notebook-landscape-dark.png'});
+await browser.close();await new Promise(r=>server.close(r));
+writeFileSync(out+'/visual-check.json',JSON.stringify({errors},null,2)+'\n');
+if(errors.length)throw Error(errors.join('\n'));
