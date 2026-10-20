@@ -251,3 +251,36 @@ test("native safe-area changes reposition the banner and preserve the control ga
   expect(g.footer.bottom).toBeLessThanOrEqual(g.ad.y - 8);
   await page.screenshot({ path: "test-results/ads-safe-area-portrait.png" });
 });
+test("analytics starts once on gameplay, not on opening home or returning to a saved attempt", async ({
+  page,
+}) => {
+  await install(page);
+  expect(
+    await page.evaluate(
+      () =>
+        (window as any).adsEvents.filter((e: any) => e.name === "game_start")
+          .length,
+    ),
+  ).toBe(0);
+  await page.locator("#board button").nth(0).click();
+  await page.locator("#board button").nth(1).click();
+  await expect(page.locator("#undo")).toBeEnabled();
+  await page.locator("#undo").click();
+  expect(
+    await page.evaluate(
+      () =>
+        (window as any).adsEvents.filter((e: any) => e.name === "game_start")
+          .length,
+    ),
+  ).toBe(1);
+  await page.reload();
+  await page.locator("#resume").click();
+  await page.locator("#board button").nth(0).click();
+  expect(
+    await page.evaluate(
+      () =>
+        (window as any).adsEvents.filter((e: any) => e.name === "game_start")
+          .length,
+    ),
+  ).toBe(0);
+});

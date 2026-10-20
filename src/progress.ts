@@ -157,6 +157,7 @@ export function readProgress(
 export type Attempt = {
   id: string;
   completed: boolean;
+  analyticsStarted?: boolean;
   hintBonus?: number;
   hintKeys?: string[];
 };

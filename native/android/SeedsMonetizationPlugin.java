@@ -85,7 +85,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   @PluginMethod public void report(PluginCall call) {
     String name = call.getString("name", "");
-    if (name.matches("game_(start|complete)|hint_(used|offer|reward_granted)|save_error")) {
+    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_error")) {
       JSObject data = call.getObject("data", new JSObject());
       data.put("test", getContext().getResources().getBoolean(R.bool.ads_test_mode));
       if (!getContext().getString(R.string.appmetrica_api_key).isEmpty()) AppMetrica.reportEvent(name, data.toString());

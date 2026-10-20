@@ -394,6 +394,14 @@ function gameMode() {
       ? "notebook"
       : "daily";
 }
+function markGameStarted() {
+  if (lesson >= 0 || !adsBridge) return;
+  const attempt = hintAttempt(progress);
+  if (attempt.analyticsStarted) return;
+  attempt.analyticsStarted = true;
+  track("game_start", { mode: gameMode(), attempt: attempt.id });
+  void save();
+}
 function updateBanner() {
   if (bannerFrame) return;
   bannerFrame = requestAnimationFrame(() => {
@@ -729,6 +737,7 @@ async function choose(i: number) {
     return;
   }
   if (lesson >= 0 && lessonPhase === 2) return;
+  markGameStarted();
   if (selected < 0) {
     selected = i;
     playSound("select", settings.sound);
@@ -911,6 +920,7 @@ async function choose(i: number) {
 function add() {
   saveRecovered = false;
   if (busy || paused) return;
+  markGameStarted();
   const values = board();
   if (lesson >= 0 && lesson !== 5) return;
   if (!occupied(values)) return;
@@ -988,6 +998,7 @@ function undoAction() {
 async function hint() {
   saveRecovered = false;
   if (busy || paused || lesson >= 0 || hintPending) return;
+  markGameStarted();
   const available = availablePairs(board());
   if (progress.active !== "classic") {
     const generation = ++hintGeneration,
@@ -1165,7 +1176,7 @@ function reset() {
   closeMenu();
   render();
   save();
-  track("game_start", { mode: gameMode(), reason: "restart" });
+  track("game_open", { mode: gameMode(), reason: "restart" });
 }
 $("board").addEventListener("click", (e) => {
   const target = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
@@ -1402,7 +1413,7 @@ async function boot() {
     updateBanner();
   }, receiveReward);
   $("app").inert = false;
-  track("game_start", { mode: gameMode(), reason: "resume" });
+  track("game_open", { mode: gameMode(), reason: "resume" });
   void platform
     .listenAppState((active) => {
       appForeground = active;
@@ -1526,7 +1537,7 @@ async function switchGame(id: string) {
   closeMenu();
   render();
   viewport.scrollTop = session.current.scroll;
-  track("game_start", { mode: gameMode(), reason: "switch" });
+  track("game_open", { mode: gameMode(), reason: "switch" });
 }
 const months = () =>
   Array.from(
