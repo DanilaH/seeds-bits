@@ -416,6 +416,10 @@ new MutationObserver(updateBanner).observe(hintOffer, {
   attributeFilter: ["open"],
 });
 new ResizeObserver(updateBanner).observe($("ad-space"));
+new MutationObserver(updateBanner).observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ["style"],
+});
 window.addEventListener("resize", updateBanner);
 function receiveReward(r: RewardReceipt): Promise<void> {
   rewardQueue = rewardQueue
@@ -423,10 +427,16 @@ function receiveReward(r: RewardReceipt): Promise<void> {
     .then(async () => {
       if (futureSave || storageConflict) return;
       const already = metadata(progress).rewardReceipts?.includes(r.token);
-      if (!grantReward(progress, r)) return;
+      // A restored backup can predate the rewarded attempt. Keep the earned help.
+      const target = Object.values(metadata(progress).attempts).some(
+        (a) => a.id === r.attempt,
+      )
+        ? r
+        : { ...r, attempt: hintAttempt(progress).id };
+      if (!grantReward(progress, target)) return;
       await save();
       if (!saveFailed && !futureSave && !storageConflict) {
-        await adsBridge?.acknowledge({ token: r.token });
+        await adsBridge?.acknowledge({ token: r.token }).catch(() => {});
         if (!already)
           track("hint_reward_granted", { count: 3, mode: gameMode() });
       }
@@ -448,11 +458,13 @@ $("watch-hints").onclick = async () => {
   if (rewardRequest || saveFailed || storageConflict || futureSave) return;
   rewardRequest = true;
   hintOffer.close();
+  $("app").inert = true;
   try {
     const attempt = hintAttempt(progress).id;
     await save();
     if (saveFailed || storageConflict || futureSave) return;
     const result = await showAd("rewarded", attempt);
+    $("app").inert = true;
     if (result.reward) await receiveReward(result.reward);
     await rewardQueue;
     render();
@@ -465,6 +477,7 @@ $("watch-hints").onclick = async () => {
     );
   } finally {
     rewardRequest = false;
+    $("app").inert = adActive;
     updateBanner();
   }
 };

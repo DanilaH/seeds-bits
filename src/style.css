@@ -65,7 +65,8 @@ button:disabled {
   background: var(--paper);
   display: flex;
   flex-direction: column;
-  padding: env(safe-area-inset-top) 22px env(safe-area-inset-bottom);
+  padding: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) 22px
+    var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
   box-shadow: 0 0 60px var(--shadow);
 }
 header {
@@ -541,7 +542,8 @@ header {
   font-size: 14px;
 }
 footer {
-  padding: 10px 4px max(12px, env(safe-area-inset-bottom));
+  padding: 10px 4px
+    max(12px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
   gap: 8px;
 }
 .action {
@@ -1025,7 +1027,10 @@ h1 {
   color: var(--accent);
 }
 footer {
-  padding-bottom: max(18px, env(safe-area-inset-bottom));
+  padding-bottom: max(
+    18px,
+    var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))
+  );
 }
 .primary {
   border-radius: 12px;
@@ -1051,8 +1056,9 @@ dialog {
   margin: auto;
   border: 0;
   border-radius: 0;
-  padding: max(14px, env(safe-area-inset-top)) 26px
-    max(24px, env(safe-area-inset-bottom));
+  padding: max(14px, var(--safe-area-inset-top, env(safe-area-inset-top, 0px)))
+    26px
+    max(24px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
   box-shadow: none;
 }
 dialog::backdrop {
@@ -1675,9 +1681,10 @@ header .jar-glass {
     max-width: 1000px;
     height: 100dvh;
     margin: 0 auto;
-    padding: max(8px, env(safe-area-inset-top))
-      max(12px, env(safe-area-inset-right))
-      max(8px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    padding: max(8px, var(--safe-area-inset-top, env(safe-area-inset-top, 0px)))
+      max(12px, var(--safe-area-inset-right, env(safe-area-inset-right, 0px)))
+      max(8px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)))
+      max(12px, var(--safe-area-inset-left, env(safe-area-inset-left, 0px)));
     overflow: hidden;
     border-radius: 0;
   }
@@ -1828,7 +1835,9 @@ header .jar-glass {
 }
 @media (orientation: portrait) and (min-height: 600px) {
   :root.has-mobile-ads:not(:has(#lesson:not([hidden]))) {
-    --ad-reserve: calc(88px + env(safe-area-inset-bottom));
+    --ad-reserve: calc(
+      88px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))
+    );
   }
   .has-mobile-ads .game {
     height: calc(100dvh - var(--ad-reserve));
@@ -1836,9 +1845,17 @@ header .jar-glass {
   .has-mobile-ads:not(:has(#lesson:not([hidden]))) #ad-space {
     display: block;
     position: fixed;
-    left: max(16px, env(safe-area-inset-left));
-    right: max(16px, env(safe-area-inset-right));
-    bottom: calc(4px + env(safe-area-inset-bottom));
+    left: max(
+      16px,
+      var(--safe-area-inset-left, env(safe-area-inset-left, 0px))
+    );
+    right: max(
+      16px,
+      var(--safe-area-inset-right, env(safe-area-inset-right, 0px))
+    );
+    bottom: calc(
+      4px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))
+    );
     height: 72px;
     max-width: 400px;
     margin: auto;
@@ -1846,6 +1863,12 @@ header .jar-glass {
   }
 }
 .game {
-  padding-left: max(22px, env(safe-area-inset-left));
-  padding-right: max(22px, env(safe-area-inset-right));
+  padding-left: max(
+    22px,
+    var(--safe-area-inset-left, env(safe-area-inset-left, 0px))
+  );
+  padding-right: max(
+    22px,
+    var(--safe-area-inset-right, env(safe-area-inset-right, 0px))
+  );
 }

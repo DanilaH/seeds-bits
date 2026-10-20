@@ -226,3 +226,28 @@ test("unavailable interstitial does not block next party and only runs after res
     await page.evaluate(() => (window as any).adsCalls.map((o: any) => o.kind)),
   ).toEqual(["interstitial"]);
 });
+test("native safe-area changes reposition the banner and preserve the control gap", async ({
+  page,
+}) => {
+  await install(page);
+  await page.evaluate(() => {
+    const s = document.documentElement.style;
+    s.setProperty("--safe-area-inset-top", "32px");
+    s.setProperty("--safe-area-inset-bottom", "36px");
+    s.setProperty("--safe-area-inset-left", "24px");
+    s.setProperty("--safe-area-inset-right", "20px");
+  });
+  await expect
+    .poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.y))
+    .toBe(732);
+  const g = await page.evaluate(() => ({
+    ad: document.querySelector("#ad-space")!.getBoundingClientRect().toJSON(),
+    footer: document.querySelector("footer")!.getBoundingClientRect().toJSON(),
+    header: document.querySelector("header")!.getBoundingClientRect().toJSON(),
+  }));
+  expect(g.header.y).toBeGreaterThanOrEqual(32);
+  expect(g.ad.x).toBeGreaterThanOrEqual(24);
+  expect(g.ad.bottom).toBeLessThanOrEqual(844 - 36);
+  expect(g.footer.bottom).toBeLessThanOrEqual(g.ad.y - 8);
+  await page.screenshot({ path: "test-results/ads-safe-area-portrait.png" });
+});
