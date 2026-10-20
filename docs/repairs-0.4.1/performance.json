@@ -1,0 +1,113 @@
+[
+  {
+    "run": 0,
+    "version": "before",
+    "longTasks": [
+      54
+    ],
+    "boardAttributeMutations": 107228,
+    "metricsMs": {
+      "TaskDuration": 2613,
+      "ScriptDuration": 94,
+      "LayoutDuration": 534,
+      "RecalcStyleDuration": 133
+    }
+  },
+  {
+    "run": 0,
+    "version": "after",
+    "longTasks": [
+      58,
+      54,
+      51,
+      84,
+      69
+    ],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 3587,
+      "ScriptDuration": 134,
+      "LayoutDuration": 737,
+      "RecalcStyleDuration": 201
+    }
+  },
+  {
+    "run": 1,
+    "version": "before",
+    "longTasks": [
+      83,
+      71,
+      56,
+      65,
+      50,
+      74
+    ],
+    "boardAttributeMutations": 107228,
+    "metricsMs": {
+      "TaskDuration": 3648,
+      "ScriptDuration": 186,
+      "LayoutDuration": 726,
+      "RecalcStyleDuration": 175
+    }
+  },
+  {
+    "run": 1,
+    "version": "after",
+    "longTasks": [
+      91,
+      80,
+      56,
+      113,
+      57
+    ],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 3647,
+      "ScriptDuration": 176,
+      "LayoutDuration": 773,
+      "RecalcStyleDuration": 211
+    }
+  },
+  {
+    "run": 2,
+    "version": "before",
+    "longTasks": [
+      87,
+      97,
+      53,
+      75,
+      52,
+      70,
+      63,
+      61,
+      54,
+      76,
+      79
+    ],
+    "boardAttributeMutations": 107228,
+    "metricsMs": {
+      "TaskDuration": 4006,
+      "ScriptDuration": 152,
+      "LayoutDuration": 851,
+      "RecalcStyleDuration": 234
+    }
+  },
+  {
+    "run": 2,
+    "version": "after",
+    "longTasks": [
+      81,
+      65,
+      51,
+      50,
+      59
+    ],
+    "boardAttributeMutations": 10868,
+    "metricsMs": {
+      "TaskDuration": 3199,
+      "ScriptDuration": 151,
+      "LayoutDuration": 701,
+      "RecalcStyleDuration": 176
+    }
+  }
+]

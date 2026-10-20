@@ -1,0 +1,14 @@
+{
+  "package": "com.seedsbits.game.preview",
+  "versionName": "0.4.1",
+  "versionCode": "1017",
+  "appName": "Семечки · тест",
+  "sha256": "9bb072ec1dfb7540d3364d620fab9b95f9069c138ee04f65084e34ec0784fe83",
+  "size": 4204281,
+  "certSha256": [
+    "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30"
+  ],
+  "sameCertificateAs040": true,
+  "webAssetsMatched": 9,
+  "nativeDeviceTested": false
+}

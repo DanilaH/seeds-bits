@@ -1,0 +1,648 @@
+﻿2026-10-20T11:15:24.3846428Z Current runner version: '2.337.0'
+2026-10-20T11:15:24.3883497Z ##[group]Runner Image Provisioner
+2026-10-20T11:15:24.3884935Z Hosted Compute Agent
+2026-10-20T11:15:24.3886136Z Version: 20261012.601
+2026-10-20T11:15:24.3887326Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-20T11:15:24.3888646Z Build Date: 2026-10-12T17:48:21Z
+2026-10-20T11:15:24.3890339Z Worker ID: {1fa8fe87-985f-47b2-a671-0caf6790f0f2}
+2026-10-20T11:15:24.3891618Z Region: centralus
+2026-10-20T11:15:24.3892830Z Cloud: Azure
+2026-10-20T11:15:24.3893870Z ##[endgroup]
+2026-10-20T11:15:24.3896089Z ##[group]Operating System
+2026-10-20T11:15:24.3897343Z Ubuntu
+2026-10-20T11:15:24.3898012Z 24.04.5
+2026-10-20T11:15:24.3898591Z LTS
+2026-10-20T11:15:24.3899139Z ##[endgroup]
+2026-10-20T11:15:24.3899710Z ##[group]Runner Image
+2026-10-20T11:15:24.3900804Z Image: ubuntu-24.04
+2026-10-20T11:15:24.3901479Z Version: 20261012.334.1
+2026-10-20T11:15:24.3902838Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-20T11:15:24.3904418Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-20T11:15:24.3905881Z ##[endgroup]
+2026-10-20T11:15:24.3907038Z ##[group]GITHUB_TOKEN Permissions
+2026-10-20T11:15:24.3909298Z Contents: read
+2026-10-20T11:15:24.3910306Z Metadata: read
+2026-10-20T11:15:24.3911023Z ##[endgroup]
+2026-10-20T11:15:24.3913192Z Secret source: Actions
+2026-10-20T11:15:24.3914109Z Cache mode: write
+2026-10-20T11:15:24.3915286Z Prepare workflow directory
+2026-10-20T11:15:24.4325107Z Prepare all required actions
+2026-10-20T11:15:24.4396694Z Getting action download info
+2026-10-20T11:15:24.6935899Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-20T11:15:24.8133649Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-20T11:15:24.9039574Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-20T11:15:25.1278723Z Complete job name: web
+2026-10-20T11:15:25.2098522Z ##[group]Run actions/checkout@v4
+2026-10-20T11:15:25.2099402Z with:
+2026-10-20T11:15:25.2100065Z   repository: DanilaH/seeds-bits
+2026-10-20T11:15:25.2103817Z   token: ***
+2026-10-20T11:15:25.2104242Z   ssh-strict: true
+2026-10-20T11:15:25.2104671Z   ssh-user: git
+2026-10-20T11:15:25.2105106Z   persist-credentials: true
+2026-10-20T11:15:25.2105580Z   clean: true
+2026-10-20T11:15:25.2106013Z   sparse-checkout-cone-mode: true
+2026-10-20T11:15:25.2106519Z   fetch-depth: 1
+2026-10-20T11:15:25.2106934Z   fetch-tags: false
+2026-10-20T11:15:25.2107367Z   show-progress: true
+2026-10-20T11:15:25.2107802Z   lfs: false
+2026-10-20T11:15:25.2108201Z   submodules: false
+2026-10-20T11:15:25.2108635Z   set-safe-directory: true
+2026-10-20T11:15:25.2109133Z   allow-unsafe-pr-checkout: false
+2026-10-20T11:15:25.2110069Z ##[endgroup]
+2026-10-20T11:15:25.3153767Z Syncing repository: DanilaH/seeds-bits
+2026-10-20T11:15:25.3156293Z ##[group]Getting Git version info
+2026-10-20T11:15:25.3157557Z Working directory is '/home/runner/work/seeds-bits/seeds-bits'
+2026-10-20T11:15:25.3159259Z [command]/usr/bin/git version
+2026-10-20T11:15:25.3262366Z git version 2.55.0
+2026-10-20T11:15:25.3281599Z ##[endgroup]
+2026-10-20T11:15:25.3301954Z Temporarily overriding HOME='/home/runner/work/_temp/42d63474-9407-4eb1-895a-eb8e06cef001' before making global git config changes
+2026-10-20T11:15:25.3304285Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T11:15:25.3305694Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/seeds-bits/seeds-bits
+2026-10-20T11:15:25.3355999Z Deleting the contents of '/home/runner/work/seeds-bits/seeds-bits'
+2026-10-20T11:15:25.3361885Z ##[group]Initializing the repository
+2026-10-20T11:15:25.3366330Z [command]/usr/bin/git init /home/runner/work/seeds-bits/seeds-bits
+2026-10-20T11:15:25.3495151Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-20T11:15:25.3497763Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-20T11:15:25.3499805Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-20T11:15:25.3501954Z hint: call:
+2026-10-20T11:15:25.3503004Z hint:
+2026-10-20T11:15:25.3504221Z hint: 	git config --global init.defaultBranch <name>
+2026-10-20T11:15:25.3505590Z hint:
+2026-10-20T11:15:25.3506843Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-20T11:15:25.3508724Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-20T11:15:25.3510710Z hint:
+2026-10-20T11:15:25.3511915Z hint: 	git branch -m <name>
+2026-10-20T11:15:25.3513123Z hint:
+2026-10-20T11:15:25.3514556Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-20T11:15:25.3516835Z Initialized empty Git repository in /home/runner/work/seeds-bits/seeds-bits/.git/
+2026-10-20T11:15:25.3521640Z [command]/usr/bin/git remote add origin https://github.com/DanilaH/seeds-bits
+2026-10-20T11:15:25.3578808Z ##[endgroup]
+2026-10-20T11:15:25.3580907Z ##[group]Disabling automatic garbage collection
+2026-10-20T11:15:25.3583751Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-20T11:15:25.3627861Z ##[endgroup]
+2026-10-20T11:15:25.3629207Z ##[group]Setting up auth
+2026-10-20T11:15:25.3636552Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T11:15:25.3674408Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T11:15:25.4088538Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T11:15:25.4146770Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T11:15:25.4411645Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T11:15:25.4451471Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T11:15:25.4709599Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-20T11:15:25.4775527Z ##[endgroup]
+2026-10-20T11:15:25.4777015Z ##[group]Fetching the repository
+2026-10-20T11:15:25.4787911Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5e074ade0308edd3014d1f86641418dac334f143:refs/remotes/origin/main
+2026-10-20T11:15:26.1585888Z From https://github.com/DanilaH/seeds-bits
+2026-10-20T11:15:26.1601896Z  * [new ref]         5e074ade0308edd3014d1f86641418dac334f143 -> origin/main
+2026-10-20T11:15:26.1605986Z ##[endgroup]
+2026-10-20T11:15:26.1607355Z ##[group]Determining the checkout info
+2026-10-20T11:15:26.1608887Z ##[endgroup]
+2026-10-20T11:15:26.1610033Z [command]/usr/bin/git sparse-checkout disable
+2026-10-20T11:15:26.1665342Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-20T11:15:26.1704407Z ##[group]Checking out the ref
+2026-10-20T11:15:26.1710989Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-20T11:15:26.1924073Z Switched to a new branch 'main'
+2026-10-20T11:15:26.1928501Z branch 'main' set up to track 'origin/main'.
+2026-10-20T11:15:26.1935445Z ##[endgroup]
+2026-10-20T11:15:26.1981153Z [command]/usr/bin/git log -1 --format=%H
+2026-10-20T11:15:26.2008760Z 5e074ade0308edd3014d1f86641418dac334f143
+2026-10-20T11:15:26.2471049Z ##[group]Run actions/setup-node@v4
+2026-10-20T11:15:26.2472453Z with:
+2026-10-20T11:15:26.2473406Z   node-version: 24
+2026-10-20T11:15:26.2474421Z   cache: npm
+2026-10-20T11:15:26.2475390Z   always-auth: false
+2026-10-20T11:15:26.2476462Z   check-latest: false
+2026-10-20T11:15:26.2486671Z   token: ***
+2026-10-20T11:15:26.2487663Z ##[endgroup]
+2026-10-20T11:15:26.3987171Z (node:2314) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-20T11:15:26.3992294Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-20T11:15:26.3997443Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-20T11:15:26.4001207Z ##[group]Environment details
+2026-10-20T11:15:26.7864738Z node: v24.21.0
+2026-10-20T11:15:26.7865317Z npm: 11.19.0
+2026-10-20T11:15:26.7865590Z yarn: 1.22.22
+2026-10-20T11:15:26.7866695Z ##[endgroup]
+2026-10-20T11:15:26.7931654Z [command]/opt/hostedtoolcache/node/24.21.0/x64/bin/npm config get cache
+2026-10-20T11:15:26.9088583Z /home/runner/.npm
+2026-10-20T11:15:27.0623842Z npm cache is not found
+2026-10-20T11:15:27.0767710Z ##[group]Run npm ci
+2026-10-20T11:15:27.0768094Z npm ci
+2026-10-20T11:15:27.1036105Z shell: /usr/bin/bash -e {0}
+2026-10-20T11:15:27.1036497Z ##[endgroup]
+2026-10-20T11:15:29.3899472Z npm warn deprecated uuid@7.0.3: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+2026-10-20T11:15:30.7625044Z 
+2026-10-20T11:15:30.7627513Z added 145 packages, and audited 146 packages in 4s
+2026-10-20T11:15:30.7628093Z 
+2026-10-20T11:15:30.7628423Z 25 packages are looking for funding
+2026-10-20T11:15:30.7631983Z   run `npm fund` for details
+2026-10-20T11:15:30.8078072Z 
+2026-10-20T11:15:30.8086504Z 3 moderate severity vulnerabilities
+2026-10-20T11:15:30.8086790Z 
+2026-10-20T11:15:30.8087086Z To address all issues (including breaking changes), run:
+2026-10-20T11:15:30.8087494Z   npm audit fix --force
+2026-10-20T11:15:30.8087667Z 
+2026-10-20T11:15:30.8087903Z Run `npm audit` for details.
+2026-10-20T11:15:30.8725267Z ##[group]Run npm test
+2026-10-20T11:15:30.8725724Z npm test
+2026-10-20T11:15:30.8808552Z shell: /usr/bin/bash -e {0}
+2026-10-20T11:15:30.8808858Z ##[endgroup]
+2026-10-20T11:15:30.9999257Z 
+2026-10-20T11:15:31.0000104Z > seeds-bits@0.4.1 test
+2026-10-20T11:15:31.0000672Z > vitest run
+2026-10-20T11:15:31.0000913Z 
+2026-10-20T11:15:31.3179565Z 
+2026-10-20T11:15:31.3183968Z  RUN  v5.0.4 /home/runner/work/seeds-bits/seeds-bits
+2026-10-20T11:15:31.3184683Z 
+2026-10-20T11:15:31.6365665Z  ✓ tests/meta.test.ts (6 tests) 18ms
+2026-10-20T11:15:31.8299243Z  ✓ tests/puzzles.test.ts (4 tests) 204ms
+2026-10-20T11:15:32.0059059Z  ✓ tests/recovery.test.ts (2 tests) 12ms
+2026-10-20T11:15:32.3022239Z  ✓ tests/advice.test.ts (4 tests) 455ms
+2026-10-20T11:15:32.3051839Z    ✓ known solution seeds solve all 730 daily puzzles without searching 349ms
+2026-10-20T11:15:34.6697829Z  ✓ tests/core.test.ts (9 tests) 3081ms
+2026-10-20T11:15:34.6710388Z    ✓ differentially checks 3000 seeded boards against independent coordinate validator 347ms
+2026-10-20T11:15:34.6713139Z    ✓ 100 seeded classical simulations preserve counts, serialize, undo and never corrupt 2719ms
+2026-10-20T11:15:34.6760536Z 
+2026-10-20T11:15:34.6761428Z  Test Files  5 passed (5)
+2026-10-20T11:15:34.6762409Z       Tests  25 passed (25)
+2026-10-20T11:15:34.6763153Z    Start at  11:15:31
+2026-10-20T11:15:34.6764077Z    Duration  3.35s (tests 89%, transform 7%, import 3%, worker 1%)
+2026-10-20T11:15:34.6778098Z 
+2026-10-20T11:15:34.7106072Z ##[group]Run npx playwright install --with-deps chromium
+2026-10-20T11:15:34.7106538Z npx playwright install --with-deps chromium
+2026-10-20T11:15:34.7169687Z shell: /usr/bin/bash -e {0}
+2026-10-20T11:15:34.7170106Z ##[endgroup]
+2026-10-20T11:15:35.5029746Z Installing dependencies...
+2026-10-20T11:15:35.5115875Z Switching to root user to install dependencies...
+2026-10-20T11:15:35.6241832Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-20T11:15:35.6435576Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-20T11:15:35.6597652Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-20T11:15:35.6641726Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-20T11:15:35.6685831Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-20T11:15:35.6707718Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-20T11:15:35.7498383Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
+2026-10-20T11:15:35.7691749Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [618 kB]
+2026-10-20T11:15:35.7831656Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [557 kB]
+2026-10-20T11:15:35.8694159Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+2026-10-20T11:15:35.8778757Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
+2026-10-20T11:15:35.8784665Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1704 kB]
+2026-10-20T11:15:35.8878578Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+2026-10-20T11:15:35.8906016Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+2026-10-20T11:15:35.8994066Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+2026-10-20T11:15:35.9865020Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1145 kB]
+2026-10-20T11:15:35.9955119Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-20T11:15:35.9974389Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1222 kB]
+2026-10-20T11:15:36.0034622Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+2026-10-20T11:15:36.0493263Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+2026-10-20T11:15:36.0574172Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+2026-10-20T11:15:39.0665713Z Fetched 12.5 MB in 1s (9563 kB/s)
+2026-10-20T11:15:39.9914231Z Reading package lists...
+2026-10-20T11:15:40.0148660Z Reading package lists...
+2026-10-20T11:15:40.2406113Z Building dependency tree...
+2026-10-20T11:15:40.2414008Z Reading state information...
+2026-10-20T11:15:40.4181462Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+2026-10-20T11:15:40.4182433Z libasound2t64 set to manually installed.
+2026-10-20T11:15:40.4183365Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-20T11:15:40.4184310Z libatk-bridge2.0-0t64 set to manually installed.
+2026-10-20T11:15:40.4185167Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-20T11:15:40.4185927Z libatk1.0-0t64 set to manually installed.
+2026-10-20T11:15:40.4186658Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-20T11:15:40.4187343Z libatspi2.0-0t64 set to manually installed.
+2026-10-20T11:15:40.4187988Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-10-20T11:15:40.4188471Z libcairo2 set to manually installed.
+2026-10-20T11:15:40.4188913Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+2026-10-20T11:15:40.4190147Z libcups2t64 set to manually installed.
+2026-10-20T11:15:40.4190654Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-10-20T11:15:40.4191302Z libdbus-1-3 set to manually installed.
+2026-10-20T11:15:40.4191974Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+2026-10-20T11:15:40.4192383Z libdrm2 set to manually installed.
+2026-10-20T11:15:40.4192790Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+2026-10-20T11:15:40.4193172Z libgbm1 set to manually installed.
+2026-10-20T11:15:40.4193582Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+2026-10-20T11:15:40.4194194Z libglib2.0-0t64 set to manually installed.
+2026-10-20T11:15:40.4194612Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-10-20T11:15:40.4194993Z libnspr4 set to manually installed.
+2026-10-20T11:15:40.4195376Z libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+2026-10-20T11:15:40.4195854Z libnss3 set to manually installed.
+2026-10-20T11:15:40.4196549Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-10-20T11:15:40.4197270Z libpango-1.0-0 set to manually installed.
+2026-10-20T11:15:40.4197999Z libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+2026-10-20T11:15:40.4198703Z libx11-6 set to manually installed.
+2026-10-20T11:15:40.4199118Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-10-20T11:15:40.4199478Z libxcb1 set to manually installed.
+2026-10-20T11:15:40.4200300Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-10-20T11:15:40.4201092Z libxcomposite1 set to manually installed.
+2026-10-20T11:15:40.4201842Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-10-20T11:15:40.4202366Z libxdamage1 set to manually installed.
+2026-10-20T11:15:40.4202760Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-10-20T11:15:40.4203154Z libxext6 set to manually installed.
+2026-10-20T11:15:40.4203597Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-10-20T11:15:40.4204311Z libxfixes3 set to manually installed.
+2026-10-20T11:15:40.4205069Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-10-20T11:15:40.4205787Z libxkbcommon0 set to manually installed.
+2026-10-20T11:15:40.4206544Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-10-20T11:15:40.4207271Z libxrandr2 set to manually installed.
+2026-10-20T11:15:40.4208148Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-10-20T11:15:40.4209164Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-10-20T11:15:40.4210233Z libfontconfig1 set to manually installed.
+2026-10-20T11:15:40.4211065Z libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+2026-10-20T11:15:40.4211831Z libfreetype6 set to manually installed.
+2026-10-20T11:15:40.4212556Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-10-20T11:15:40.4213285Z fonts-liberation set to manually installed.
+2026-10-20T11:15:40.4213988Z The following additional packages will be installed:
+2026-10-20T11:15:40.4214680Z   xfonts-encodings xfonts-utils xserver-common
+2026-10-20T11:15:40.4215245Z Recommended packages:
+2026-10-20T11:15:40.4215780Z   fonts-ipafont-mincho fonts-tlwg-loma xfonts-base
+2026-10-20T11:15:40.4403628Z The following NEW packages will be installed:
+2026-10-20T11:15:40.4404623Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-10-20T11:15:40.4412681Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-10-20T11:15:40.4413386Z   xfonts-utils
+2026-10-20T11:15:40.4423410Z The following packages will be upgraded:
+2026-10-20T11:15:40.4423804Z   xserver-common xvfb
+2026-10-20T11:15:40.4601329Z 2 upgraded, 9 newly installed, 0 to remove and 79 not upgraded.
+2026-10-20T11:15:40.4602000Z Need to get 22.0 MB of archives.
+2026-10-20T11:15:40.4602449Z After this operation, 79.5 MB of additional disk space will be used.
+2026-10-20T11:15:40.4602949Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-20T11:15:40.5141370Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-10-20T11:15:40.5915557Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-10-20T11:15:40.7886635Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-10-20T11:15:40.8256588Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-10-20T11:15:40.8773825Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-10-20T11:15:40.9855663Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-10-20T11:15:41.0203947Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-10-20T11:15:41.0642425Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-10-20T11:15:41.1038332Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-10-20T11:15:41.1498188Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 xserver-common all 2:21.1.12-1ubuntu1.9 [35.0 kB]
+2026-10-20T11:15:41.1886506Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 xvfb amd64 2:21.1.12-1ubuntu1.9 [877 kB]
+2026-10-20T11:15:42.1174732Z Fetched 22.0 MB in 1s (24.3 MB/s)
+2026-10-20T11:15:42.2697379Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-10-20T11:15:42.4035264Z (Reading database ... 
+2026-10-20T11:15:42.4035822Z (Reading database ... 5%
+2026-10-20T11:15:42.4036204Z (Reading database ... 10%
+2026-10-20T11:15:42.4036543Z (Reading database ... 15%
+2026-10-20T11:15:42.4036862Z (Reading database ... 20%
+2026-10-20T11:15:42.4037184Z (Reading database ... 25%
+2026-10-20T11:15:42.4037500Z (Reading database ... 30%
+2026-10-20T11:15:42.4037833Z (Reading database ... 35%
+2026-10-20T11:15:42.4038143Z (Reading database ... 40%
+2026-10-20T11:15:42.4038452Z (Reading database ... 45%
+2026-10-20T11:15:42.4038776Z (Reading database ... 50%
+2026-10-20T11:15:42.5168750Z (Reading database ... 55%
+2026-10-20T11:15:42.6134553Z (Reading database ... 60%
+2026-10-20T11:15:42.8034885Z (Reading database ... 65%
+2026-10-20T11:15:43.0083939Z (Reading database ... 70%
+2026-10-20T11:15:43.2139232Z (Reading database ... 75%
+2026-10-20T11:15:43.3569635Z (Reading database ... 80%
+2026-10-20T11:15:43.5565266Z (Reading database ... 85%
+2026-10-20T11:15:43.6790531Z (Reading database ... 90%
+2026-10-20T11:15:43.8663860Z (Reading database ... 95%
+2026-10-20T11:15:43.8664505Z (Reading database ... 100%
+2026-10-20T11:15:43.8665417Z (Reading database ... 203540 files and directories currently installed.)
+2026-10-20T11:15:43.8708514Z Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-10-20T11:15:43.8808709Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-20T11:15:44.1136138Z Selecting previously unselected package fonts-freefont-ttf.
+2026-10-20T11:15:44.1262832Z Preparing to unpack .../01-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-10-20T11:15:44.1272115Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-20T11:15:44.2322522Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-10-20T11:15:44.2450547Z Preparing to unpack .../02-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-10-20T11:15:44.2457984Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-20T11:15:44.2670176Z Selecting previously unselected package fonts-unifont.
+2026-10-20T11:15:44.2796094Z Preparing to unpack .../03-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-10-20T11:15:44.2815547Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-10-20T11:15:44.3860420Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-20T11:15:44.4007323Z Preparing to unpack .../04-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-20T11:15:44.4115795Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-20T11:15:44.8838646Z Selecting previously unselected package xfonts-encodings.
+2026-10-20T11:15:44.8967237Z Preparing to unpack .../05-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-10-20T11:15:44.8977234Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-20T11:15:44.9273825Z Selecting previously unselected package xfonts-utils.
+2026-10-20T11:15:44.9402147Z Preparing to unpack .../06-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-10-20T11:15:44.9420786Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-10-20T11:15:44.9800128Z Selecting previously unselected package xfonts-cyrillic.
+2026-10-20T11:15:44.9927500Z Preparing to unpack .../07-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-10-20T11:15:44.9934933Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-20T11:15:45.0264240Z Selecting previously unselected package xfonts-scalable.
+2026-10-20T11:15:45.0390154Z Preparing to unpack .../08-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-10-20T11:15:45.0398186Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-20T11:15:45.0763172Z Preparing to unpack .../09-xserver-common_2%3a21.1.12-1ubuntu1.9_all.deb ...
+2026-10-20T11:15:45.0785035Z Unpacking xserver-common (2:21.1.12-1ubuntu1.9) over (2:21.1.12-1ubuntu1.8) ...
+2026-10-20T11:15:45.1141385Z Preparing to unpack .../10-xvfb_2%3a21.1.12-1ubuntu1.9_amd64.deb ...
+2026-10-20T11:15:45.1163193Z Unpacking xvfb (2:21.1.12-1ubuntu1.9) over (2:21.1.12-1ubuntu1.8) ...
+2026-10-20T11:15:45.1694649Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-20T11:15:45.1818841Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-20T11:15:45.1840179Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-20T11:15:45.1859754Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-20T11:15:45.1879717Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-20T11:15:45.1944408Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-10-20T11:15:45.1960178Z Setting up xserver-common (2:21.1.12-1ubuntu1.9) ...
+2026-10-20T11:15:45.1975511Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-10-20T11:15:45.1991290Z Setting up xvfb (2:21.1.12-1ubuntu1.9) ...
+2026-10-20T11:15:45.2007945Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-10-20T11:15:45.2067459Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-20T11:15:45.2335794Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-20T11:15:45.2607040Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-20T11:15:45.2628436Z Not building database; man-db/auto-update is not 'true'.
+2026-10-20T11:15:45.2642523Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-20T11:15:45.9821619Z 
+2026-10-20T11:15:45.9822303Z Running kernel seems to be up-to-date.
+2026-10-20T11:15:45.9824520Z 
+2026-10-20T11:15:45.9824878Z No services need to be restarted.
+2026-10-20T11:15:45.9825186Z 
+2026-10-20T11:15:45.9825476Z No containers need to be restarted.
+2026-10-20T11:15:45.9825766Z 
+2026-10-20T11:15:45.9826059Z No user sessions are running outdated binaries.
+2026-10-20T11:15:45.9826514Z 
+2026-10-20T11:15:45.9826991Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-20T11:15:46.9099335Z Downloading Chrome for Testing 156.0.8078.4 (playwright chromium v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-linux64.zip
+2026-10-20T11:15:47.3380327Z |                                                                                |   0% of 191.1 MiB
+2026-10-20T11:15:47.6952770Z |■■■■■■■■                                                                        |  10% of 191.1 MiB
+2026-10-20T11:15:47.7920381Z |■■■■■■■■■■■■■■■■                                                                |  20% of 191.1 MiB
+2026-10-20T11:15:47.8911271Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 191.1 MiB
+2026-10-20T11:15:47.9601832Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 191.1 MiB
+2026-10-20T11:15:48.0582614Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 191.1 MiB
+2026-10-20T11:15:48.1581933Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 191.1 MiB
+2026-10-20T11:15:48.2601960Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 191.1 MiB
+2026-10-20T11:15:48.3500288Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 191.1 MiB
+2026-10-20T11:15:48.4205722Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 191.1 MiB
+2026-10-20T11:15:48.4997165Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 191.1 MiB
+2026-10-20T11:15:51.8271240Z Chrome for Testing 156.0.8078.4 (playwright chromium v1248) downloaded to /home/runner/.cache/ms-playwright/chromium-1248
+2026-10-20T11:15:51.8275937Z Downloading FFmpeg (playwright ffmpeg v1013) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1013/ffmpeg-linux.zip
+2026-10-20T11:15:52.3175087Z |                                                                                |   0% of 2.2 MiB
+2026-10-20T11:15:52.3742444Z |■■■■■■■■                                                                        |  10% of 2.2 MiB
+2026-10-20T11:15:52.4063738Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.2 MiB
+2026-10-20T11:15:52.4292584Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.2 MiB
+2026-10-20T11:15:52.4467732Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.2 MiB
+2026-10-20T11:15:52.4596182Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.2 MiB
+2026-10-20T11:15:52.4668202Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.2 MiB
+2026-10-20T11:15:52.4821189Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.2 MiB
+2026-10-20T11:15:52.4891365Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.2 MiB
+2026-10-20T11:15:52.5027434Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.2 MiB
+2026-10-20T11:15:52.5075507Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.2 MiB
+2026-10-20T11:15:52.5731985Z FFmpeg (playwright ffmpeg v1013) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1013
+2026-10-20T11:15:52.5735500Z Downloading Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-headless-shell-linux64.zip
+2026-10-20T11:15:53.2309707Z |                                                                                |   0% of 120 MiB
+2026-10-20T11:15:53.5753278Z |■■■■■■■■                                                                        |  10% of 120 MiB
+2026-10-20T11:15:53.6537346Z |■■■■■■■■■■■■■■■■                                                                |  20% of 120 MiB
+2026-10-20T11:15:53.7202147Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 120 MiB
+2026-10-20T11:15:53.8020813Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 120 MiB
+2026-10-20T11:15:53.8518157Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 120 MiB
+2026-10-20T11:15:53.9647544Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 120 MiB
+2026-10-20T11:15:54.0242624Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 120 MiB
+2026-10-20T11:15:54.0759400Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+2026-10-20T11:15:54.1189037Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+2026-10-20T11:15:54.1735592Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+2026-10-20T11:15:56.6415985Z Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1248
+2026-10-20T11:15:56.6753355Z ##[group]Run npm run test:e2e
+2026-10-20T11:15:56.6753674Z npm run test:e2e
+2026-10-20T11:15:56.6817678Z shell: /usr/bin/bash -e {0}
+2026-10-20T11:15:56.6817943Z ##[endgroup]
+2026-10-20T11:15:56.7873199Z 
+2026-10-20T11:15:56.7874382Z > seeds-bits@0.4.1 test:e2e
+2026-10-20T11:15:56.7874923Z > playwright test
+2026-10-20T11:15:56.7875152Z 
+2026-10-20T11:15:58.6432459Z 
+2026-10-20T11:15:58.6433119Z Running 57 tests using 2 workers
+2026-10-20T11:15:58.6433509Z 
+2026-10-20T11:16:00.2599429Z   ✓   2 e2e/audit-fixes.spec.ts:11:1 › corrupt save notice remains visible until dismissed and original bytes are backed up (850ms)
+2026-10-20T11:16:01.9762985Z   ✓   3 e2e/audit-fixes.spec.ts:41:1 › different settings fields merge across tabs and update both interfaces (1.7s)
+2026-10-20T11:16:06.0600199Z   ✓   1 e2e/calm-layout.spec.ts:2:1 › home hides board, layouts fit and modes survive settings and restart (6.7s)
+2026-10-20T11:16:07.3495292Z   ✓   4 e2e/audit-fixes.spec.ts:71:3 › hard daily 2028-03-19 has responsive verified hints through completion (5.4s)
+2026-10-20T11:16:09.4242102Z   ✓   5 e2e/game.spec.ts:2:1 › complete tutorial, remove a pair, undo, restore and change theme (3.3s)
+2026-10-20T11:16:10.0022587Z   ✓   7 e2e/game.spec.ts:56:1 › adds only when stuck, restores partial rows and rejects blocked pair (563ms)
+2026-10-20T11:16:10.6933080Z   ✓   8 e2e/game.spec.ts:87:1 › win state and quick repeated clicks (682ms)
+2026-10-20T11:16:10.8880461Z   ✓   9 e2e/game.spec.ts:113:1 › light layout has no horizontal overflow at narrow viewport (183ms)
+2026-10-20T11:16:11.6863633Z   ✓  10 e2e/hardening.spec.ts:10:1 › a valid move is saved before its animation finishes (776ms)
+2026-10-20T11:16:12.1255450Z   ✓  11 e2e/hardening.spec.ts:45:1 › escape steps back from collections and settings without discarding game (428ms)
+2026-10-20T11:16:12.5653776Z   ✓   6 e2e/audit-fixes.spec.ts:71:3 › hard daily 2028-08-16 has responsive verified hints through completion (5.2s)
+2026-10-20T11:16:12.8525524Z   ✓  12 e2e/hardening.spec.ts:58:1 › dead end restart can be cancelled and undo recovers the board (716ms)
+2026-10-20T11:16:13.7718702Z   ✓  14 e2e/hardening.spec.ts:93:1 › obsolete damaged save does not override current progress (906ms)
+2026-10-20T11:16:14.4539059Z   ✓  13 e2e/audit-fixes.spec.ts:97:1 › late worker result cannot affect another task (1.9s)
+2026-10-20T11:16:14.6187607Z   ✓  15 e2e/hardening.spec.ts:108:1 › failed storage is visible and retry preserves the accepted move (833ms)
+2026-10-20T11:16:15.1422136Z   ✓  16 e2e/audit-fixes.spec.ts:116:1 › unavailable worker provides usable fallback without nonexistent undo (675ms)
+2026-10-20T11:16:16.0677431Z   ✓  18 e2e/audit-fixes.spec.ts:134:1 › background and resume during pair animation preserve the next playable row (914ms)
+2026-10-20T11:16:18.0658609Z   ✓  19 e2e/audit-fixes.spec.ts:175:1 › mode is persisted before its board appears even when the save lock is delayed (2.0s)
+2026-10-20T11:16:19.3423941Z   ✓  20 e2e/meta.spec.ts:29:1 › win, undo, re-win and reload count one attempt and preserve migrated progress (1.3s)
+2026-10-20T11:16:21.7717691Z   ✓  21 e2e/meta.spec.ts:62:1 › small screens and enlarged text keep menu and progress reachable (2.4s)
+2026-10-20T11:16:22.7997701Z   ✓  22 e2e/meta.spec.ts:94:1 › midnight refresh opens new today and preserves an earlier daily (1.0s)
+2026-10-20T11:16:23.8202273Z   ✓  23 e2e/meta.spec.ts:116:1 › failed result save blocks next party; retry persists one result (1.0s)
+2026-10-20T11:16:25.4188620Z   ✓  17 e2e/hardening.spec.ts:133:1 › large classic board survives repeated moves, mode changes and reload (10.8s)
+2026-10-20T11:16:26.0172296Z   ✓  25 e2e/repairs.spec.ts:24:1 › selection preserves nodes and keyboard focus survives a removed pair (577ms)
+2026-10-20T11:16:30.0341882Z   ✓  26 e2e/repairs.spec.ts:47:1 › landscape tutorial buttons remain reachable at every step (4.0s)
+2026-10-20T11:16:30.5330954Z   ✓  27 e2e/repairs.spec.ts:73:1 › failed save stays visible while settings are open (484ms)
+2026-10-20T11:16:32.1220195Z   ✓  28 e2e/repairs.spec.ts:87:1 › stale tab cannot overwrite a newer game (1.6s)
+2026-10-20T11:16:34.0834032Z   ✓  24 e2e/progression.spec.ts:11:1 › notebook solution, page stamp, replay and classic restore (10.2s)
+2026-10-20T11:16:34.9555497Z   ✓  30 e2e/progression.spec.ts:53:1 › hint remains after first choice and settings apply (858ms)
+2026-10-20T11:16:39.1184468Z   ✓  31 e2e/progression.spec.ts:79:1 › daily calendar closes future days and persists trophy (4.2s)
+2026-10-20T11:16:39.8859420Z   ✓  32 e2e/progression.spec.ts:114:1 › quick onboarding ends after two exercises (755ms)
+2026-10-20T11:16:40.5908171Z   ✓  33 e2e/progression.spec.ts:130:1 › long hint navigates without losing selection (693ms)
+2026-10-20T11:16:41.8069070Z   ✓  34 e2e/progression.spec.ts:157:1 › bronze trophy survives replay, widths and dark calendar (1.2s)
+2026-10-20T11:16:42.2075543Z CORRUPT_META ← Меню
+2026-10-20T11:16:42.2076040Z Мой прогресс
+2026-10-20T11:16:42.2076414Z Тетрадь
+2026-10-20T11:16:42.2076764Z 1 из 24
+2026-10-20T11:16:42.2077159Z Решено дейликов
+2026-10-20T11:16:42.2077488Z 0
+2026-10-20T11:16:42.2077827Z Завершено партий
+2026-10-20T11:16:42.2078149Z 0
+2026-10-20T11:16:42.2078479Z Без подсказок
+2026-10-20T11:16:42.2078796Z 0
+2026-10-20T11:16:42.2078948Z 
+2026-10-20T11:16:42.2079357Z Партии и прохождения без подсказок считаются с 20.10.2026. Старые отметки задач сохранены.
+2026-10-20T11:16:42.2079647Z 
+2026-10-20T11:16:42.2079759Z Коллекция
+2026-10-20T11:16:42.2080051Z 
+2026-10-20T11:16:42.2080265Z Прогресс сохраняется на этом устройстве.
+2026-10-20T11:16:42.2417047Z   ✓  35 e2e/repairs041.spec.ts:52:1 › A01 damage isolated to metadata does not discard valid tasks and boards (412ms)
+2026-10-20T11:16:42.9757998Z FUTURE_SCHEMA {
+2026-10-20T11:16:42.9758940Z   version: 99,
+2026-10-20T11:16:42.9759352Z   since: '2026-10-20T00:00:00Z',
+2026-10-20T11:16:42.9760271Z   attempts: { classic: { id: 'audit-1', completed: false } },
+2026-10-20T11:16:42.9760896Z   completed: 5,
+2026-10-20T11:16:42.9761274Z   unassisted: 3
+2026-10-20T11:16:42.9761675Z }
+2026-10-20T11:16:42.9912529Z   ✓  36 e2e/repairs041.spec.ts:75:1 › A02 unsupported future metadata is not overwritten by ordinary interaction (737ms)
+2026-10-20T11:16:43.7934891Z SWITCH_FAILURE {
+2026-10-20T11:16:43.7935429Z   mode: 'Классика',
+2026-10-20T11:16:43.7935677Z   saved: 'classic',
+2026-10-20T11:16:43.7936233Z   warning: 'Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.\n' +
+2026-10-20T11:16:43.7936662Z     '\n' +
+2026-10-20T11:16:43.7936916Z     'Повторить сохранение'
+2026-10-20T11:16:43.7937161Z }
+2026-10-20T11:16:43.8250425Z   ✓  37 e2e/repairs041.spec.ts:96:1 › A03 failed save must not open a newly selected task as if persisted (821ms)
+2026-10-20T11:16:45.1627827Z   ✓  38 e2e/repairs041.spec.ts:122:1 › A04 undo/re-win, reload and restart count exactly once per attempt (1.3s)
+2026-10-20T11:16:45.5518063Z CLOCK_ROLLBACK Тетрадь
+2026-10-20T11:16:45.5518405Z 1 из 24
+2026-10-20T11:16:45.5518642Z Решено дейликов
+2026-10-20T11:16:45.5518856Z 1
+2026-10-20T11:16:45.5519092Z Завершено партий
+2026-10-20T11:16:45.5519288Z 5
+2026-10-20T11:16:45.5519541Z Без подсказок
+2026-10-20T11:16:45.5520172Z 3
+2026-10-20T11:16:45.5653677Z   ✓  39 e2e/repairs041.spec.ts:145:1 › A05 record of solved daily remains in statistics when device clock moves backward (391ms)
+2026-10-20T11:16:45.9852901Z   ✓  40 e2e/repairs041.spec.ts:160:1 › A06 midnight calendar refresh preserves keyboard focus on the current control (410ms)
+2026-10-20T11:16:47.1535086Z   ✓  41 e2e/repairs041.spec.ts:175:1 › A07 all notebook finished gives reachable replay and never awards unique progress twice (1.2s)
+2026-10-20T11:16:48.1013850Z   ✓  42 e2e/repairs041.spec.ts:197:1 › A08 offline already loaded APK web assets remain playable and save/reload (936ms)
+2026-10-20T11:16:48.3817572Z   ✓  43 e2e/repairs041.spec.ts:212:1 › A09 reduced motion has no running decorative animations during selection and menus (271ms)
+2026-10-20T11:16:49.4404432Z LAYOUT_MEASUREMENTS [{"w":320,"h":568,"menuScroll":false,"targets":[{"id":"resume","w":284,"h":54,"font":"16px"},{"id":"classic-mode","w":284,"h":64,"font":"19px"},{"id":"book-mode","w":284,"h":64,"font":"19px"},{"id":"daily-mode","w":284,"h":64,"font":"19px"},{"id":"calendar-open","w":284,"h":48,"font":"15px"},{"id":"progress-open","w":138,"h":44,"font":"14px"},{"id":"trophies-mode","w":138,"h":44,"font":"14px"},{"id":"learn","w":138,"h":44,"font":"14px"},{"id":"settings-open","w":138,"h":44,"font":"14px"}]},{"w":360,"h":640,"menuScroll":false,"targets":[{"id":"resume","w":308,"h":54,"font":"16px"},{"id":"classic-mode","w":308,"h":64,"font":"19px"},{"id":"book-mode","w":308,"h":64,"font":"19px"},{"id":"daily-mode","w":308,"h":64,"font":"19px"},{"id":"calendar-open","w":308,"h":48,"font":"15px"},{"id":"progress-open","w":150,"h":44,"font":"14px"},{"id":"trophies-mode","w":150,"h":44,"font":"14px"},{"id":"learn","w":150,"h":44,"font":"14px"},{"id":"settings-open","w":150,"h":44,"font":"14px"}]},{"w":390,"h":844,"menuScroll":false,"targets":[{"id":"resume","w":338,"h":54,"font":"16px"},{"id":"classic-mode","w":338,"h":80,"font":"19px"},{"id":"book-mode","w":338,"h":80,"font":"19px"},{"id":"daily-mode","w":338,"h":80,"font":"19px"},{"id":"calendar-open","w":338,"h":48,"font":"15px"},{"id":"progress-open","w":165,"h":44,"font":"14px"},{"id":"trophies-mode","w":165,"h":44,"font":"14px"},{"id":"learn","w":165,"h":44,"font":"14px"},{"id":"settings-open","w":165,"h":44,"font":"14px"}]},{"w":568,"h":320,"menuScroll":true,"targets":[{"id":"resume","w":390,"h":54,"font":"16px"},{"id":"classic-mode","w":390,"h":64,"font":"19px"},{"id":"book-mode","w":390,"h":64,"font":"19px"},{"id":"daily-mode","w":390,"h":64,"font":"19px"},{"id":"calendar-open","w":390,"h":48,"font":"15px"},{"id":"progress-open","w":191,"h":44,"font":"14px"},{"id":"trophies-mode","w":191,"h":44,"font":"14px"},{"id":"learn","w":191,"h":44,"font":"14px"},{"id":"settings-open","w":191,"h":44,"font":"14px"}]},{"w":600,"h":320,"menuScroll":true,"targets":[{"id":"resume","w":390,"h":54,"font":"16px"},{"id":"classic-mode","w":390,"h":64,"font":"19px"},{"id":"book-mode","w":390,"h":64,"font":"19px"},{"id":"daily-mode","w":390,"h":64,"font":"19px"},{"id":"calendar-open","w":390,"h":48,"font":"15px"},{"id":"progress-open","w":191,"h":44,"font":"14px"},{"id":"trophies-mode","w":191,"h":44,"font":"14px"},{"id":"learn","w":191,"h":44,"font":"14px"},{"id":"settings-open","w":191,"h":44,"font":"14px"}]},{"w":844,"h":390,"menuScroll":true,"targets":[{"id":"resume","w":390,"h":54,"font":"16px"},{"id":"classic-mode","w":390,"h":64,"font":"19px"},{"id":"book-mode","w":390,"h":64,"font":"19px"},{"id":"daily-mode","w":390,"h":64,"font":"19px"},{"id":"calendar-open","w":390,"h":48,"font":"15px"},{"id":"progress-open","w":191,"h":44,"font":"14px"},{"id":"trophies-mode","w":191,"h":44,"font":"14px"},{"id":"learn","w":191,"h":44,"font":"14px"},{"id":"settings-open","w":191,"h":44,"font":"14px"}]},{"w":768,"h":1024,"menuScroll":false,"targets":[{"id":"resume","w":390,"h":54,"font":"16px"},{"id":"classic-mode","w":390,"h":80,"font":"19px"},{"id":"book-mode","w":390,"h":80,"font":"19px"},{"id":"daily-mode","w":390,"h":80,"font":"19px"},{"id":"calendar-open","w":390,"h":48,"font":"15px"},{"id":"progress-open","w":191,"h":44,"font":"14px"},{"id":"trophies-mode","w":191,"h":44,"font":"14px"},{"id":"learn","w":191,"h":44,"font":"14px"},{"id":"settings-open","w":191,"h":44,"font":"14px"}]}]
+2026-10-20T11:16:49.4509286Z   ✓  44 e2e/repairs041.spec.ts:238:1 › A10 portrait, landscape, dark and enlarged type screens are reachable; capture target sizes (1.1s)
+2026-10-20T11:16:54.9525898Z LONG_TASKS_MS []
+2026-10-20T11:16:54.9624772Z   ✓  45 e2e/repairs041.spec.ts:316:1 › A11 scrolling a long board during pair animations preserves nodes and undo (5.5s)
+2026-10-20T11:16:55.5522030Z   ✓  46 e2e/repairs041.spec.ts:355:1 › A12 fast contradictory inputs during removal cannot create extra result or lose board (579ms)
+2026-10-20T11:16:57.4861140Z   ✓  47 e2e/repairs041.spec.ts:380:1 › A13 no forced audio; enabling sound creates feedback, disabling stops new sounds (1.9s)
+2026-10-20T11:16:58.9016692Z   ✓  48 e2e/repairs041.spec.ts:413:1 › A14 old tab cannot discard new statistics, and reload latest recovers them (1.4s)
+2026-10-20T11:17:00.0740550Z   ✓  49 e2e/repairs041.spec.ts:432:1 › A15 solved final available day leads back to usable archive without future access (1.2s)
+2026-10-20T11:17:01.2268661Z HEAVY_HISTORY { longTasks: [], saves: [ { ms: 10.19999999999709, bytes: 2925164 } ] }
+2026-10-20T11:17:07.2523030Z   ✓  50 e2e/repairs041.spec.ts:457:1 › A16 long saved history retains responsiveness and measures actual save cost (7.2s)
+2026-10-20T11:17:07.8412422Z ANIMATIONS [
+2026-10-20T11:17:07.8413471Z   { duration: 120, frames: [ [Object], [Object] ] },
+2026-10-20T11:17:07.8414514Z   { duration: 120, frames: [ [Object], [Object] ] },
+2026-10-20T11:17:07.8415954Z   { duration: 100, frames: [ [Object], [Object] ] },
+2026-10-20T11:17:07.8416937Z   { duration: 120, frames: [ [Object], [Object] ] },
+2026-10-20T11:17:07.8417454Z   { duration: 120, frames: [ [Object], [Object] ] },
+2026-10-20T11:17:07.8417855Z   { duration: 120, frames: [ [Object], [Object] ] },
+2026-10-20T11:17:07.8418208Z   { duration: 160, frames: [ [Object], [Object] ] }
+2026-10-20T11:17:07.8418751Z ]
+2026-10-20T11:17:07.8424287Z CONTRAST_INPUT [{"theme":"light","paper":"rgb(250, 251, 249)","labels":[{"text":"Классика","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Очистите поле от цифр","color":"rgb(104, 118, 112)","size":"12px"},{"text":"1 из 24 решено","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Начать","color":"rgb(104, 118, 112)","size":"12px"},{"text":"Мой прогресс","color":"rgb(104, 118, 112)","size":"14px"},{"text":"Коллекция","color":"rgb(104, 118, 112)","size":"14px"},{"text":"Как играть","color":"rgb(104, 118, 112)","size":"14px"},{"text":"Настройки","color":"rgb(104, 118, 112)","size":"14px"}]},{"theme":"dark","paper":"rgb(32, 39, 36)","labels":[{"text":"Классика","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Очистите поле от цифр","color":"rgb(160, 173, 164)","size":"12px"},{"text":"1 из 24 решено","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Начать","color":"rgb(160, 173, 164)","size":"12px"},{"text":"Мой прогресс","color":"rgb(160, 173, 164)","size":"14px"},{"text":"Коллекция","color":"rgb(160, 173, 164)","size":"14px"},{"text":"Как играть","color":"rgb(160, 173, 164)","size":"14px"},{"text":"Настройки","color":"rgb(160, 173, 164)","size":"14px"}]}]
+2026-10-20T11:17:07.8565214Z   ✓  51 e2e/repairs041.spec.ts:501:1 › A17 accessibility contrast and motion timing measurements on actual built UI (589ms)
+2026-10-20T11:17:08.8997011Z   ✓  52 e2e/repairs041.spec.ts:542:1 › failed switch can retry without lost attempt or rapid-click double transition (1.0s)
+2026-10-20T11:17:09.3904038Z   ✓  53 e2e/repairs041.spec.ts:575:1 › backup recovery is explicit and survives reload (477ms)
+2026-10-20T11:17:09.5917286Z   ✓  54 e2e/repairs041.spec.ts:589:1 › compact home keeps settings within first viewport and touch targets at least 44px (172ms)
+2026-10-20T11:17:43.3171723Z   ✓  29 e2e/repairs.spec.ts:116:1 › all 24 notebook games finish by following reliable hints (1.2m)
+2026-10-20T11:17:43.8444545Z   ✓  55 e2e/repairs.spec.ts:148:1 › dead puzzle offers a recovery to a solvable position (516ms)
+2026-10-20T11:17:45.0533790Z   ✓  56 e2e/repairs.spec.ts:191:1 › next skips completed tasks and explicit replay remains playable (1.2s)
+2026-10-20T11:17:45.7096616Z   ✓  57 e2e/repairs.spec.ts:227:1 › fast selection retains the moving cell instead of replacing it (635ms)
+2026-10-20T11:17:45.7679570Z 
+2026-10-20T11:17:45.7684919Z   57 passed (1.8m)
+2026-10-20T11:17:45.8048827Z ##[group]Run actions/upload-artifact@v4
+2026-10-20T11:17:45.8049151Z with:
+2026-10-20T11:17:45.8049350Z   name: browser-checks
+2026-10-20T11:17:45.8049578Z   path: test-results/
+2026-10-20T11:17:45.8049825Z   if-no-files-found: warn
+2026-10-20T11:17:45.8050388Z   compression-level: 6
+2026-10-20T11:17:45.8050608Z   overwrite: false
+2026-10-20T11:17:45.8050818Z   include-hidden-files: false
+2026-10-20T11:17:45.8051057Z ##[endgroup]
+2026-10-20T11:17:45.9729731Z (node:4437) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-20T11:17:45.9730916Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-20T11:17:45.9853610Z With the provided path, there will be 22 files uploaded
+2026-10-20T11:17:45.9862048Z Artifact name is valid!
+2026-10-20T11:17:45.9862702Z Root directory input is valid!
+2026-10-20T11:17:46.2543631Z Beginning upload of artifact content to blob storage
+2026-10-20T11:17:46.3347742Z (node:4437) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-20T11:17:46.6586586Z Uploaded bytes 566988
+2026-10-20T11:17:46.6989725Z Finished uploading artifact content to blob storage!
+2026-10-20T11:17:46.6991300Z SHA256 digest of uploaded artifact zip is 483db9cc0105f78937614816e7684681a4f1b76f999f350ed7b91ab4a1e31c6d
+2026-10-20T11:17:46.6992657Z Finalizing artifact upload
+2026-10-20T11:17:47.0002693Z Artifact browser-checks.zip successfully finalized. Artifact ID 12260048786
+2026-10-20T11:17:47.0004219Z Artifact browser-checks has been successfully uploaded! Final size is 566988 bytes. Artifact ID is 12260048786
+2026-10-20T11:17:47.0011245Z Artifact download URL: https://github.com/DanilaH/seeds-bits/actions/runs/39413640035/artifacts/12260048786
+2026-10-20T11:17:47.0136186Z ##[group]Run npm run build && npm run build:yandex
+2026-10-20T11:17:47.0136574Z npm run build && npm run build:yandex
+2026-10-20T11:17:47.0198818Z shell: /usr/bin/bash -e {0}
+2026-10-20T11:17:47.0199080Z ##[endgroup]
+2026-10-20T11:17:47.1246436Z 
+2026-10-20T11:17:47.1247009Z > seeds-bits@0.4.1 build
+2026-10-20T11:17:47.1247523Z > tsc && vite build
+2026-10-20T11:17:47.1247684Z 
+2026-10-20T11:17:47.5658173Z vite v8.3.4 building client environment for production...
+2026-10-20T11:17:47.5818020Z transforming...
+2026-10-20T11:17:47.6284236Z ✓ 24 modules transformed.
+2026-10-20T11:17:47.6436009Z rendering chunks...
+2026-10-20T11:17:47.6604316Z computing gzip size...
+2026-10-20T11:17:47.6612004Z dist/index.html                         0.63 kB │ gzip:  0.43 kB
+2026-10-20T11:17:47.6612829Z dist/assets/advice-worker-BRLUw0Yp.js   2.05 kB
+2026-10-20T11:17:47.6613431Z dist/assets/index-CYk50ghV.css         18.80 kB │ gzip:  4.87 kB
+2026-10-20T11:17:47.6614116Z dist/assets/esm-CGNB4rXZ.js             0.32 kB │ gzip:  0.23 kB
+2026-10-20T11:17:47.6614698Z dist/assets/esm-BeZIZZTu.js             0.54 kB │ gzip:  0.37 kB
+2026-10-20T11:17:47.6615232Z dist/assets/web-CKm3gi_i.js             0.84 kB │ gzip:  0.40 kB
+2026-10-20T11:17:47.6615777Z dist/assets/web-DsfTje44.js             0.95 kB │ gzip:  0.48 kB
+2026-10-20T11:17:47.6616716Z dist/assets/web-DzaO2v36.js             1.19 kB │ gzip:  0.54 kB
+2026-10-20T11:17:47.6617783Z dist/assets/index-DwEtIxW-.js          64.09 kB │ gzip: 21.64 kB
+2026-10-20T11:17:47.6618275Z 
+2026-10-20T11:17:47.6618592Z ✓ built in 90ms
+2026-10-20T11:17:47.7816205Z 
+2026-10-20T11:17:47.7816980Z > seeds-bits@0.4.1 build:yandex
+2026-10-20T11:17:47.7817722Z > tsc && vite build --mode yandex
+2026-10-20T11:17:47.7818081Z 
+2026-10-20T11:17:48.2082770Z vite v8.3.4 building client environment for yandex...
+2026-10-20T11:17:48.2180941Z transforming...
+2026-10-20T11:17:48.2635104Z ✓ 24 modules transformed.
+2026-10-20T11:17:48.2767618Z rendering chunks...
+2026-10-20T11:17:48.2935274Z computing gzip size...
+2026-10-20T11:17:48.2951956Z dist-yandex/index.html                         0.63 kB │ gzip:  0.43 kB
+2026-10-20T11:17:48.2952894Z dist-yandex/assets/advice-worker-BRLUw0Yp.js   2.05 kB
+2026-10-20T11:17:48.2954055Z dist-yandex/assets/index-CYk50ghV.css         18.80 kB │ gzip:  4.87 kB
+2026-10-20T11:17:48.2955239Z dist-yandex/assets/esm-loPnzyvn.js             0.32 kB │ gzip:  0.23 kB
+2026-10-20T11:17:48.2956461Z dist-yandex/assets/esm-D4I8vRO3.js             0.54 kB │ gzip:  0.37 kB
+2026-10-20T11:17:48.2957659Z dist-yandex/assets/web-GrJSZTnv.js             0.84 kB │ gzip:  0.40 kB
+2026-10-20T11:17:48.2958866Z dist-yandex/assets/web-D3R1wqXf.js             0.95 kB │ gzip:  0.48 kB
+2026-10-20T11:17:48.2960447Z dist-yandex/assets/web-DGWPQ0Uw.js             1.19 kB │ gzip:  0.54 kB
+2026-10-20T11:17:48.2961702Z dist-yandex/assets/index-D_rcJ1bB.js          64.74 kB │ gzip: 21.88 kB
+2026-10-20T11:17:48.2962267Z 
+2026-10-20T11:17:48.2962695Z ✓ built in 86ms
+2026-10-20T11:17:48.3236007Z ##[group]Run actions/upload-artifact@v4
+2026-10-20T11:17:48.3236345Z with:
+2026-10-20T11:17:48.3236573Z   name: seeds-bits-web
+2026-10-20T11:17:48.3236822Z   path: dist/
+2026-10-20T11:17:48.3237055Z   if-no-files-found: warn
+2026-10-20T11:17:48.3237513Z   compression-level: 6
+2026-10-20T11:17:48.3237749Z   overwrite: false
+2026-10-20T11:17:48.3237989Z   include-hidden-files: false
+2026-10-20T11:17:48.3238250Z ##[endgroup]
+2026-10-20T11:17:48.5010385Z (node:4552) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-20T11:17:48.5011885Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-20T11:17:48.5095221Z With the provided path, there will be 9 files uploaded
+2026-10-20T11:17:48.5120897Z Artifact name is valid!
+2026-10-20T11:17:48.5121912Z Root directory input is valid!
+2026-10-20T11:17:48.7742173Z Beginning upload of artifact content to blob storage
+2026-10-20T11:17:48.8092656Z (node:4552) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-20T11:17:48.9764318Z Uploaded bytes 30996
+2026-10-20T11:17:49.0196524Z Finished uploading artifact content to blob storage!
+2026-10-20T11:17:49.0197961Z SHA256 digest of uploaded artifact zip is a2358cb47aecdfb93be6f5c2fad41173adfb470c42d18b23f96458248bb8e7b5
+2026-10-20T11:17:49.0199244Z Finalizing artifact upload
+2026-10-20T11:17:49.2360660Z Artifact seeds-bits-web.zip successfully finalized. Artifact ID 12259759106
+2026-10-20T11:17:49.2362062Z Artifact seeds-bits-web has been successfully uploaded! Final size is 30996 bytes. Artifact ID is 12259759106
+2026-10-20T11:17:49.2367505Z Artifact download URL: https://github.com/DanilaH/seeds-bits/actions/runs/39413640035/artifacts/12259759106
+2026-10-20T11:17:49.2506827Z ##[group]Run actions/upload-artifact@v4
+2026-10-20T11:17:49.2507141Z with:
+2026-10-20T11:17:49.2507359Z   name: seeds-bits-yandex-draft
+2026-10-20T11:17:49.2507627Z   path: dist-yandex/
+2026-10-20T11:17:49.2507857Z   if-no-files-found: warn
+2026-10-20T11:17:49.2508108Z   compression-level: 6
+2026-10-20T11:17:49.2508356Z   overwrite: false
+2026-10-20T11:17:49.2508577Z   include-hidden-files: false
+2026-10-20T11:17:49.2508827Z ##[endgroup]
+2026-10-20T11:17:49.4247299Z (node:4564) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-20T11:17:49.4248257Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-20T11:17:49.4334732Z With the provided path, there will be 9 files uploaded
+2026-10-20T11:17:49.4342762Z Artifact name is valid!
+2026-10-20T11:17:49.4343504Z Root directory input is valid!
+2026-10-20T11:17:49.6973637Z Beginning upload of artifact content to blob storage
+2026-10-20T11:17:49.7327909Z (node:4564) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-20T11:17:49.8684779Z Uploaded bytes 31247
+2026-10-20T11:17:49.9045005Z Finished uploading artifact content to blob storage!
+2026-10-20T11:17:49.9046367Z SHA256 digest of uploaded artifact zip is d5fb48cebe722828965723aa227e8d40575c4cf2aec6cdec7185789a04090ae1
+2026-10-20T11:17:49.9047513Z Finalizing artifact upload
+2026-10-20T11:17:50.1198282Z Artifact seeds-bits-yandex-draft.zip successfully finalized. Artifact ID 12260468537
+2026-10-20T11:17:50.1199693Z Artifact seeds-bits-yandex-draft has been successfully uploaded! Final size is 31247 bytes. Artifact ID is 12260468537
+2026-10-20T11:17:50.1206427Z Artifact download URL: https://github.com/DanilaH/seeds-bits/actions/runs/39413640035/artifacts/12260468537
+2026-10-20T11:17:50.1377036Z Post job cleanup.
+2026-10-20T11:17:50.2627876Z (node:4576) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-20T11:17:50.2629408Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-20T11:17:50.2862637Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/seeds-bits/seeds-bits --files-from manifest.txt --use-compress-program zstdmt
+2026-10-20T11:17:50.5660722Z Failed to save: Unable to reserve cache with key node-cache-Linux-x64-npm-61eced5ac7d6a8ef8cf4b56c3a4148af6b2d477a588e1cbe411be34e16f6c85d, another job may be creating this cache.
+2026-10-20T11:17:50.5840466Z Post job cleanup.
+2026-10-20T11:17:50.6753631Z [command]/usr/bin/git version
+2026-10-20T11:17:50.6813424Z git version 2.55.0
+2026-10-20T11:17:50.6868293Z Temporarily overriding HOME='/home/runner/work/_temp/339c56e8-bd0a-478a-952f-ded656ec380d' before making global git config changes
+2026-10-20T11:17:50.6870234Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T11:17:50.6876610Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/seeds-bits/seeds-bits
+2026-10-20T11:17:50.6935698Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T11:17:50.7002210Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T11:17:50.7279062Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T11:17:50.7313659Z http.https://github.com/.extraheader
+2026-10-20T11:17:50.7326647Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-20T11:17:50.7367952Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T11:17:50.7634994Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T11:17:50.7679787Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T11:17:50.8076778Z Cleaning up orphan processes
+2026-10-20T11:17:50.8444082Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+
