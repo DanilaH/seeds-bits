@@ -8,8 +8,25 @@ import {
 export type Advice =
   { kind: "move"; pair: Connection } | { kind: "solved" | "dead" | "unknown" };
 /** Bounded exact search for small puzzles only. Never present an unverified move as help. */
-export function createSolver(limit = 50000) {
+export function createSolver(
+  limit = 50000,
+  known?: { board: Board; solution: Connection[] },
+) {
   const memo = new Map<string, Connection | null>();
+  if (known) {
+    let board = known.board;
+    const verified: [string, Connection][] = [];
+    try {
+      for (const pair of known.solution) {
+        verified.push([board.join(""), pair]);
+        board = removePair(board, pair.a, pair.b);
+      }
+      if (!occupied(board))
+        for (const [key, pair] of verified) memo.set(key, pair);
+    } catch {
+      /* Ignore invalid supplied paths; exact search remains available. */
+    }
+  }
   return (initial: Board): Advice => {
     let visited = 0;
     const search = (board: Board): Connection | null => {

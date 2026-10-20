@@ -1,5 +1,5 @@
 import { BoardView } from "./board-view";
-import { createSolver } from "./solver";
+import { requestAdvice } from "./advice-client";
 import { emblem } from "./trophies";
 import "./style.css";
 import {
@@ -54,7 +54,10 @@ let settings = {
 };
 let lastStored: string | null = null,
   storageConflict = false;
-const solve = createSolver();
+let hintGeneration = 0;
+let hintPending = false;
+let readWarning = "";
+const settingsDirty: Record<string, unknown> = {};
 let saveQueue = Promise.resolve(),
   hintIndex = 0,
   lesson = -1,
@@ -134,11 +137,27 @@ notice.hidden = true;
 notice.innerHTML =
   '<p id="save-warning"></p><button id="load-latest" class="text-button" hidden>Загрузить сохранённую партию</button>';
 notice.append($("retry-save"));
+const readNotice = document.createElement("aside");
+readNotice.id = "read-notice";
+readNotice.setAttribute("role", "alert");
+readNotice.hidden = true;
+const readText = document.createElement("p"),
+  dismissRead = document.createElement("button");
+dismissRead.className = "text-button";
+dismissRead.textContent = "Понятно";
+dismissRead.onclick = () => {
+  readWarning = "";
+  showSaveState();
+};
+readNotice.append(readText, dismissRead);
 document.querySelector(".game")!.prepend(notice);
 $("load-latest").onclick = () => location.reload();
 function showSaveState() {
   const parent = dialog.open ? dialog : document.querySelector(".game")!;
   if (notice.parentElement !== parent) parent.prepend(notice);
+  if (readNotice.parentElement !== parent) parent.prepend(readNotice);
+  readNotice.hidden = !readWarning;
+  readText.textContent = readWarning;
   notice.hidden = !saveFailed;
   $("save-warning").textContent = storageConflict
     ? "В другой вкладке есть более новое сохранение. Оно защищено от перезаписи."
@@ -157,7 +176,18 @@ function save() {
     .then(async () => {
       if (storageConflict) return;
       try {
-        await platform.saveState(PROGRESS, bundle, lastStored, SETTINGS, prefs);
+        const patch = { ...settingsDirty };
+        const merged = await platform.saveState(
+          PROGRESS,
+          bundle,
+          lastStored,
+          SETTINGS,
+          prefs,
+          patch,
+        );
+        for (const key of Object.keys(patch))
+          if (settingsDirty[key] === patch[key]) delete settingsDirty[key];
+        applySettings(merged);
         lastStored = bundle;
         const recovered = saveFailed;
         saveFailed = false;
@@ -174,6 +204,25 @@ function save() {
       }
     });
 }
+function applySettings(incoming: Record<string, unknown>) {
+  for (const key of ["theme", "sound", "vibration", "tutorialDone"] as const) {
+    if (Object.hasOwn(settingsDirty, key)) continue;
+    if (key === "theme")
+      settings.theme = incoming.theme === "dark" ? "dark" : "light";
+    else settings[key] = incoming[key] === true;
+  }
+  applyTheme();
+  $<HTMLInputElement>("sound").checked = settings.sound;
+  $<HTMLInputElement>("vibration").checked = settings.vibration;
+}
+window.addEventListener("storage", (event) => {
+  if (event.key !== SETTINGS || !event.newValue) return;
+  try {
+    applySettings(JSON.parse(event.newValue));
+  } catch {
+    /* Preserve the current valid settings. */
+  }
+});
 function applyTheme() {
   document.documentElement.dataset.theme = settings.theme;
   $<HTMLInputElement>("dark").checked = settings.theme === "dark";
@@ -186,6 +235,7 @@ function applyTheme() {
 }
 function setTheme(dark: boolean) {
   settings.theme = dark ? "dark" : "light";
+  settingsDirty.theme = settings.theme;
   applyTheme();
   save();
 }
@@ -366,6 +416,7 @@ function render() {
   $<HTMLButtonElement>("hint").disabled =
     busy ||
     lesson >= 0 ||
+    hintPending ||
     !count ||
     (progress.active === "classic" && !available.length);
   $("add").setAttribute(
@@ -416,7 +467,12 @@ function render() {
     ).focus({ preventScroll: true });
   }
 }
+function cancelHint() {
+  hintGeneration++;
+  hintPending = false;
+}
 function clearSelection() {
+  cancelHint();
   selected = -1;
   highlight = null;
 }
@@ -450,6 +506,7 @@ function finishLesson() {
   if (busy) return;
   lesson = -1;
   settings.tutorialDone = true;
+  settingsDirty.tutorialDone = true;
   $("lesson").hidden = true;
   clearSelection();
   render();
@@ -458,6 +515,7 @@ function finishLesson() {
   platform.gameplay(true);
 }
 async function choose(i: number) {
+  cancelHint();
   saveRecovered = false;
   if (busy || paused || dialog.open) return;
   const values = board();
@@ -682,20 +740,35 @@ function undoAction() {
   save();
   platform.gameplay(occupied(board()) > 0);
 }
-function hint() {
+async function hint() {
   saveRecovered = false;
-  if (busy || paused || lesson >= 0) return;
+  if (busy || paused || lesson >= 0 || hintPending) return;
   const available = availablePairs(board());
   if (progress.active !== "classic") {
-    const advice = solve(board());
+    const generation = ++hintGeneration,
+      originalBoard = board(),
+      originalSession = session;
+    hintPending = true;
+    $<HTMLButtonElement>("hint").disabled = true;
+    message("Ищу подсказку…");
+    const result = await requestAdvice(
+      originalBoard,
+      session.history,
+      activePuzzle()!,
+    );
+    if (
+      generation !== hintGeneration ||
+      board() !== originalBoard ||
+      session !== originalSession ||
+      lesson >= 0 ||
+      dialog.open ||
+      paused
+    )
+      return;
+    hintPending = false;
+    $<HTMLButtonElement>("hint").disabled = false;
+    const { advice, recovery } = result;
     if (advice.kind === "dead") {
-      let recovery = -1;
-      for (let i = session.history.length - 1; i >= 0; i--) {
-        if (solve(session.history[i].board).kind === "move") {
-          recovery = i;
-          break;
-        }
-      }
       if (recovery >= 0) {
         const index = recovery;
         $("recover-task").hidden = false;
@@ -720,7 +793,9 @@ function hint() {
     }
     if (advice.kind !== "move") {
       message(
-        "Не удалось быстро найти надёжный ход. Попробуйте отменить последний.",
+        session.history.length
+          ? "Не удалось найти подсказку. Можно отменить последний ход или продолжить самостоятельно."
+          : "Не удалось найти подсказку. Попробуйте ещё раз или продолжите самостоятельно.",
       );
       return;
     }
@@ -768,6 +843,7 @@ function hint() {
 }
 function closeMenu() {
   dialog.close();
+  render();
   showSaveState();
   document.body.classList.remove("navigation-open");
   platform.gameplay(!paused && occupied(board()) > 0);
@@ -784,6 +860,8 @@ function navigateBack(native = false): boolean {
 }
 function openMenu() {
   if (busy) return;
+  cancelHint();
+  if (!busy) render();
   document.body.classList.add("navigation-open");
   dialog.dataset.screen = "home";
   $("settings-panel").hidden = true;
@@ -887,6 +965,7 @@ $("dark").onchange = () => setTheme($<HTMLInputElement>("dark").checked);
 for (const key of ["sound", "vibration"] as const)
   $(key).onchange = () => {
     settings[key] = $<HTMLInputElement>(key).checked;
+    settingsDirty[key] = settings[key];
     save();
   };
 $("retry-save").onclick = () => {
@@ -913,6 +992,8 @@ viewport.addEventListener("scroll", () => {
 window.addEventListener("resize", () => drawPath(highlight));
 document.addEventListener("visibilitychange", () => {
   paused = document.hidden;
+  cancelHint();
+  if (!busy) render();
   platform.gameplay(!paused && !dialog.open && occupied(board()) > 0);
   if (paused) {
     save();
@@ -926,10 +1007,27 @@ async function boot() {
     const bundle = await platform.read(PROGRESS);
     lastStored = bundle;
     if (bundle) {
-      progress = readProgress(bundle, () => {
-        warning =
-          "Повреждённую партию не удалось восстановить. Остальной прогресс сохранён.";
-      });
+      try {
+        progress = readProgress(bundle, () => {
+          warning =
+            "Повреждённую партию не удалось восстановить. Остальной прогресс сохранён.";
+          readWarning = warning;
+        });
+      } catch (error) {
+        try {
+          await platform.write(PROGRESS + ".recovery", bundle);
+        } catch {
+          /* Warning remains visible even when backup storage is unavailable. */
+        }
+        throw error;
+      }
+      if (readWarning) {
+        try {
+          await platform.write(PROGRESS + ".recovery", bundle);
+        } catch {
+          /* Keep the recovery notice. */
+        }
+      }
       session = progress.sessions[progress.active];
     } else {
       const stored = await platform.read(KEY);
@@ -938,6 +1036,7 @@ async function boot() {
     }
   } catch {
     warning = "Сохранение не удалось прочитать. Открыта новая партия.";
+    readWarning = warning;
   }
   try {
     const raw = await platform.read(SETTINGS);
@@ -962,12 +1061,15 @@ async function boot() {
     await platform.initPlatform(
       () => {
         paused = true;
+        cancelHint();
+        if (!busy) render();
         platform.gameplay(false);
         void audio?.suspend();
         save();
       },
       () => {
         paused = false;
+        if (!busy) render();
         platform.gameplay(!dialog.open && occupied(board()) > 0);
       },
     );
@@ -978,6 +1080,8 @@ async function boot() {
   void platform
     .listenAppState((active) => {
       paused = !active;
+      cancelHint();
+      if (!busy) render();
       platform.gameplay(active && !dialog.open && occupied(board()) > 0);
       if (!active) {
         save();
@@ -991,6 +1095,7 @@ async function boot() {
   platform.ready();
   platform.gameplay(!dialog.open);
   if (warning) message(warning);
+  showSaveState();
 }
 function teach(id: string, text: string) {
   if (progress.seen.includes(id)) return;

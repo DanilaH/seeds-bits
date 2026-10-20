@@ -125,6 +125,7 @@ test("all 24 notebook games finish by following reliable hints", async ({
     for (let move = 0; move < 20; move++) {
       if ((await page.locator("#remaining").textContent()) === "0") break;
       await page.locator("#hint").click();
+      await expect(page.locator(".hinted")).toHaveCount(2);
       const ids = await page
         .locator(".hinted")
         .evaluateAll((es) =>
@@ -175,6 +176,7 @@ test("dead puzzle offers a recovery to a solvable position", async ({
   await expect(page.locator("#recover-task")).toBeVisible();
   await page.locator("#recover-task").click();
   await expect(page.locator("#remaining")).toHaveText("10");
+  await expect(page.locator(".hinted")).toHaveCount(2);
   const ids = await page
     .locator(".hinted")
     .evaluateAll((es) =>

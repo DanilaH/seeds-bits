@@ -1389,3 +1389,6 @@ dialog[data-screen="home"] .dialog-head h2 {
     padding: 5px;
   }
 }
+
+#read-notice { padding: 10px 14px; background: var(--selected); border: 1px solid currentColor; border-radius: 8px; margin: 8px 0; }
+#read-notice p { margin: 0 0 6px; }

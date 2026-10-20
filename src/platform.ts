@@ -97,14 +97,29 @@ export async function saveState(
   expected: string | null,
   settingsKey: string,
   settings: string,
+  patch: Record<string, unknown> = {},
 ) {
   const persist = async () => {
     if (!native && localStorage.getItem(key) !== expected)
       throw new SaveConflict();
-    await write(settingsKey, settings);
+    const defaults = JSON.parse(settings);
+    let latest: Record<string, unknown> = {};
+    try {
+      latest = JSON.parse((await read(settingsKey)) ?? "{}") ?? {};
+    } catch {
+      /* Keep valid defaults. */
+    }
+    const merged = { ...defaults };
+    for (const field of Object.keys(defaults)) {
+      if (typeof latest[field] === typeof defaults[field])
+        merged[field] = latest[field];
+      if (Object.hasOwn(patch, field)) merged[field] = patch[field];
+    }
+    await write(settingsKey, JSON.stringify(merged));
     await write(key, value);
+    return merged;
   };
   if (!native && navigator.locks)
-    await navigator.locks.request("seeds-save", persist);
-  else await persist();
+    return await navigator.locks.request("seeds-save", persist);
+  else return await persist();
 }

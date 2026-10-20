@@ -26,3 +26,28 @@ it("detects the former task-seven hint trap and respects the search budget", () 
   expect(createSolver()(board).kind).toBe("dead");
   expect(createSolver(0)(notebook[6].board).kind).toBe("unknown");
 });
+it("known solution seeds solve all 730 daily puzzles without searching", () => {
+  for (let n = 0; n < 730; n++) {
+    const p = daily(
+      new Date(Date.UTC(2026, 9, 1 + n)).toISOString().slice(0, 10),
+    );
+    const solve = createSolver(0, p);
+    let board = p.board;
+    while (occupied(board)) {
+      const a = solve(board);
+      expect(a.kind, p.id).toBe("move");
+      if (a.kind !== "move") break;
+      board = removePair(board, a.pair.a, a.pair.b);
+    }
+    expect(occupied(board)).toBe(0);
+  }
+}, 30000);
+it("invalid supplied solutions cannot certify a move", () => {
+  const p = notebook[0];
+  expect(
+    createSolver(0, {
+      board: p.board,
+      solution: [{ a: 0, b: 0, kind: "straight" }],
+    })(p.board).kind,
+  ).toBe("unknown");
+});
