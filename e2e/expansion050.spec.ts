@@ -188,10 +188,12 @@ test("decorative seed flights stay bounded and clear on background without losin
   });
   await expect(page.locator(".flying-seed")).toHaveCount(0);
   await expect(page.locator("#jar-percent")).toContainText("2/24");
-  expect(
-    await page.evaluate(
-      (k) => JSON.parse(localStorage.getItem(k)!).jars.seeds,
-      key,
-    ),
-  ).toBe(2);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        (k) => JSON.parse(localStorage.getItem(k)!).jars.seeds,
+        key,
+      ),
+    )
+    .toBe(2);
 });
