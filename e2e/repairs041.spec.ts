@@ -69,7 +69,7 @@ test("A01 damage isolated to metadata does not discard valid tasks and boards", 
     path: "test-results/repairs041/corrupt-meta.png",
   });
   await expect(page.locator(".progress-stats dd").first()).toHaveText(
-    "1 из 24",
+    "1 из 2400",
   );
 });
 test("A02 unsupported future metadata is not overwritten by ordinary interaction", async ({
@@ -131,7 +131,7 @@ test("A04 undo/re-win, reload and restart count exactly once per attempt", async
   await page.reload();
   await page.locator("#progress-open").click();
   await expect(page.locator(".progress-stats dd")).toHaveText([
-    "1 из 24",
+    "1 из 2400",
     "0",
     "6",
     "4",
@@ -172,7 +172,7 @@ test("A06 midnight calendar refresh preserves keyboard focus on the current cont
     ),
   ).toBe("daily-v1-2026-10-10");
 });
-test("A07 all notebook finished gives reachable replay and never awards unique progress twice", async ({
+test("A07 completed first notebook leads to next volume and keeps reachable replay and never awards unique progress twice", async ({
   page,
 }) => {
   const p: any = state();
@@ -187,8 +187,11 @@ test("A07 all notebook finished gives reachable replay and never awards unique p
   await page.goto("/");
   await page.locator("#resume").click();
   await pair(page);
-  await expect(page.locator("#play-again")).toHaveText("К тетради");
+  await expect(page.locator("#play-again")).toHaveText("Следующая тетрадь");
   await page.locator("#play-again").click();
+  await expect(page.locator("#mode")).toHaveText("Тетрадь 2 · задача 1");
+  await page.locator("#book-top").click();
+  await page.locator('[data-volume="0"]').click();
   await expect(page.locator(".task.done")).toHaveCount(24);
   await page.locator('[data-game="book-v1-24"]').click();
   await expect(page.locator("#win")).toBeHidden();
@@ -401,14 +404,15 @@ test("A13 no forced audio; enabling sound creates feedback, disabling stops new 
   await page.locator("#sound").check();
   await page.locator("#close").click();
   await pair(page);
-  expect(await page.evaluate(() => (window as any).tones)).toBe(1);
+  expect(await page.evaluate(() => (window as any).tones)).toBeGreaterThan(0);
   await page.locator("#undo").click();
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
   await page.locator("#sound").uncheck();
+  const tonesBefore = await page.evaluate(() => (window as any).tones);
   await page.locator("#close").click();
   await pair(page);
-  expect(await page.evaluate(() => (window as any).tones)).toBe(1);
+  expect(await page.evaluate(() => (window as any).tones)).toBe(tonesBefore);
 });
 test("A14 old tab cannot discard new statistics, and reload latest recovers them", async ({
   page,
@@ -432,9 +436,9 @@ test("A14 old tab cannot discard new statistics, and reload latest recovers them
 test("A15 solved final available day leads back to usable archive without future access", async ({
   page,
 }) => {
-  await page.clock.setFixedTime(new Date("2026-10-01T12:00:00"));
+  await page.clock.setFixedTime(new Date("2025-01-01T12:00:00"));
   const p: any = state();
-  p.active = "daily-v1-2026-10-01";
+  p.active = "daily-v1-2025-01-01";
   p.sessions[p.active] = { rules: 1, current: snapshot([5, 5]), history: [] };
   await seed(page, p);
   await page.goto("/");
@@ -442,9 +446,9 @@ test("A15 solved final available day leads back to usable archive without future
   await pair(page);
   await page.locator("#play-again").click();
   await expect(
-    page.locator('[data-game="daily-v1-2026-10-02"]'),
+    page.locator('[data-game="daily-v1-2025-01-02"]'),
   ).toBeDisabled();
-  await expect(page.locator('[data-game="daily-v1-2026-10-01"]')).toHaveClass(
+  await expect(page.locator('[data-game="daily-v1-2025-01-01"]')).toHaveClass(
     /done/,
   );
   await page.locator("#today-task").click();
@@ -582,7 +586,7 @@ test("backup recovery is explicit and survives reload", async ({ page }) => {
   }, KEY);
   await page.reload();
   await page.locator("#restore-backup").click();
-  await expect(page.locator("#book-count")).toHaveText("2 из 24 решено");
+  await expect(page.locator("#book-count")).toHaveText("2 из 2400 решено");
   expect((await data(page)).done).toEqual(["book-v1-1", "book-v1-2"]);
 });
 
@@ -592,6 +596,7 @@ test("compact home keeps settings within first viewport and touch targets at lea
   await page.setViewportSize({ width: 320, height: 568 });
   await seed(page);
   await page.goto("/");
+  await expect(page.locator("#dialog")).toBeVisible();
   expect(
     await page
       .locator("#dialog")

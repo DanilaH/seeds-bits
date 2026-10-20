@@ -1,6 +1,10 @@
 import notebookData from "./notebook.json" with { type: "json" };
 import { checkPair, removePair, type Connection, type Session } from "./core";
-export const FIRST_MONTH = "2026-10";
+let extra: (string | number[])[][] | undefined;
+export async function loadNotebook() {
+  extra ??= (await import("./notebook-extra.json")).default;
+}
+export const FIRST_MONTH = "2025-01";
 export type Puzzle = { id: string; board: number[]; solution: Connection[] };
 function random(seed: number) {
   return () => {
@@ -91,7 +95,31 @@ export function makePuzzle(
   }
   return { id, board: initial, solution };
 }
-export const notebook = notebookData as Puzzle[];
+export const notebook: Puzzle[] = [
+  ...(notebookData as Puzzle[]),
+  ...Array.from({ length: 2376 }, (_, i) => {
+    let decoded: number[] | undefined, path: Connection[] | undefined;
+    return {
+      id: `book-v1-${i + 25}`,
+      get board() {
+        return (decoded ??= [...(extra![i][0] as string)].map(Number));
+      },
+      get solution() {
+        if (!path) {
+          path = [];
+          const flat = extra![i][1] as number[];
+          for (let j = 0; j < flat.length; j += 3)
+            path.push({
+              a: flat[j],
+              b: flat[j + 1],
+              kind: flat[j + 2] ? "reading" : "straight",
+            });
+        }
+        return path;
+      },
+    };
+  }),
+];
 export function daily(day: string) {
   return makePuzzle(
     `daily-v1-${day}`,

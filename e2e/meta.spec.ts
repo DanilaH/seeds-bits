@@ -49,7 +49,7 @@ test("win, undo, re-win and reload count one attempt and preserve migrated progr
   await page.reload();
   await page.locator("#progress-open").click();
   await expect(page.locator(".progress-stats dd")).toHaveText([
-    "1 из 24",
+    "1 из 2400",
     "0",
     "1",
     "1",

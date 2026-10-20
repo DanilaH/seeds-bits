@@ -24,7 +24,7 @@ test("home hides board, layouts fit and modes survive settings and restart", asy
   await expect(page.locator("#add")).toBeHidden();
   await expect(page.locator("#page-progress")).toHaveAttribute(
     "aria-label",
-    "Страница 1, задача 1 из 6",
+    "Тетрадь 1 · стр. 1, задача 1 из 6",
   );
   await page.screenshot({
     path: "test-results/task-light.png",

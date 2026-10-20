@@ -109,7 +109,9 @@ test("daily calendar closes future days and persists trophy", async ({
   await expect(page.locator("#mode")).toContainText("2");
   await page.locator("#menu").click();
   await page.locator("#calendar-open").click();
-  await expect(page.locator('[data-game="daily-v1-2026-10-01"]')).toHaveClass(/done/);
+  await expect(page.locator('[data-game="daily-v1-2026-10-01"]')).toHaveClass(
+    /done/,
+  );
 });
 test("quick onboarding ends after two exercises", async ({ page }) => {
   await page.addInitScript(() =>
@@ -189,7 +191,7 @@ test("bronze trophy survives replay, widths and dark calendar", async ({
     animations: "disabled",
     path: "test-results/trophy-bronze.png",
   });
-  await page.locator(".trophy").click();
+  await page.locator('[data-month="2026-10"]').click();
   await expect(page.locator(".task.done")).toHaveCount(7);
   for (const width of [320, 360, 390, 430]) {
     await page.setViewportSize({ width, height: 740 });

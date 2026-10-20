@@ -1,15 +1,17 @@
+import { jars, type Jars } from "./jars";
 import { decode, newSession, occupied, type Session } from "./core";
 export type Progress = {
-  version: 2;
+  version: 3;
   active: string;
   sessions: Record<string, Session>;
   hints: Record<string, number>;
   done: string[];
   seen: string[];
   meta?: Meta;
+  jars?: Jars;
 };
 export const fresh = (): Progress => ({
-  version: 2,
+  version: 3,
   active: "classic",
   sessions: { classic: newSession() },
   hints: {},
@@ -19,7 +21,7 @@ export const fresh = (): Progress => ({
 const validId = (id: string) =>
   typeof id === "string" &&
   (id === "classic" ||
-    /^book-v1-([1-9]|1\d|2[0-4])$/.test(id) ||
+    (/^book-v1-[1-9]\d*$/.test(id) && Number(id.slice(8)) <= 2400) ||
     /^daily-v1-\d{4}-\d{2}-\d{2}$/.test(id));
 export class FutureProgress extends Error {}
 export function readProgress(
@@ -27,10 +29,10 @@ export function readProgress(
   onRecovery: () => void = () => {},
 ): Progress {
   const p = JSON.parse(raw);
-  if (p?.version > 2 || p?.meta?.version > 1)
+  if (p?.version > 3 || p?.meta?.version > 1 || p?.jars?.version > 1)
     throw new FutureProgress("Newer save format");
   if (
-    p?.version !== 2 ||
+    (p?.version !== 2 && p?.version !== 3) ||
     !validId(p.active) ||
     !p.sessions ||
     !Array.isArray(p.done) ||
@@ -94,6 +96,27 @@ export function readProgress(
     }
   }
   metadata(clean);
+  if (p.jars !== undefined) {
+    const j = p.jars;
+    if (
+      j?.version === 1 &&
+      [j.seeds, j.wins, j.highWater].every(
+        (n) => Number.isSafeInteger(n) && n >= 0,
+      ) &&
+      typeof j.attempt === "string"
+    )
+      clean.jars = j;
+    else onRecovery();
+  }
+  const jar = jars(clean),
+    attempt = metadata(clean).attempts.classic?.id ?? "legacy";
+  if (jar.attempt !== attempt) {
+    jar.attempt = attempt;
+    jar.highWater = Math.max(
+      jar.highWater,
+      clean.sessions.classic.current.moves,
+    );
+  }
   return clean;
 }
 
@@ -125,6 +148,11 @@ export function metadata(p: Progress): Meta {
 }
 export function startAttempt(p: Progress, task: string) {
   metadata(p).attempts[task] = { id: crypto.randomUUID(), completed: false };
+  if (task === "classic") {
+    const j = jars(p);
+    j.attempt = metadata(p).attempts.classic.id;
+    j.highWater = 0;
+  }
 }
 export function recordCompletion(p: Progress, task: string) {
   const m = metadata(p);
@@ -135,5 +163,6 @@ export function recordCompletion(p: Progress, task: string) {
   a.completed = true;
   m.completed++;
   if (!(p.hints[task] ?? 0)) m.unassisted++;
+  if (task === "classic") jars(p).wins++;
   if (task !== "classic" && !p.done.includes(task)) p.done.push(task);
 }

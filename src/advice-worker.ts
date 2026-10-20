@@ -1,16 +1,18 @@
 import { createSolver } from "./solver";
 import type { Puzzle } from "./puzzles";
-import type { Board, Snapshot } from "./core";
+import { occupied, type Board, type Snapshot } from "./core";
 self.onmessage = (
   event: MessageEvent<{ board: Board; history: Snapshot[]; puzzle: Puzzle }>,
 ) => {
   const { board, history, puzzle } = event.data;
-  const solve = createSolver(50000, puzzle),
+  const solve = createSolver(occupied(board) > 100 ? 2000 : 50000, puzzle),
     advice = solve(board);
   let recovery = -1;
-  if (advice.kind === "dead")
+  const recoverySolve =
+    advice.kind === "unknown" ? createSolver(0, puzzle) : solve;
+  if (advice.kind === "dead" || advice.kind === "unknown")
     for (let i = history.length - 1; i >= 0; i--) {
-      if (solve(history[i].board).kind === "move") {
+      if (recoverySolve(history[i].board).kind === "move") {
         recovery = i;
         break;
       }

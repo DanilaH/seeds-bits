@@ -34,11 +34,12 @@ test("reload and undo/re-win cannot duplicate a result; explicit repeat can", ()
 });
 test("next notebook skips wins and wraps; exhausted notebook has no next", () => {
   expect(nextTask("book-v1-1", ["book-v1-1", "book-v1-2"])).toBe("book-v1-3");
-  expect(nextTask("book-v1-24", ["book-v1-24"])).toBe("book-v1-1");
+  expect(nextTask("book-v1-24", ["book-v1-24"])).toBe("book-v1-25");
+  expect(nextTask("book-v1-2400", ["book-v1-2400"])).toBe("book-v1-1");
   expect(
     nextTask(
-      "book-v1-24",
-      Array.from({ length: 24 }, (_, i) => `book-v1-${i + 1}`),
+      "book-v1-2400",
+      Array.from({ length: 2400 }, (_, i) => `book-v1-${i + 1}`),
     ),
   ).toBeUndefined();
 });
@@ -50,7 +51,7 @@ test("daily advances then searches backwards without opening future dates", () =
     nextTask("daily-v1-2026-10-03", ["daily-v1-2026-10-03"], "2026-10-03"),
   ).toBe("daily-v1-2026-10-02");
   expect(
-    nextTask("daily-v1-2026-10-01", ["daily-v1-2026-10-01"], "2026-10-01"),
+    nextTask("daily-v1-2025-01-01", ["daily-v1-2025-01-01"], "2025-01-01"),
   ).toBeUndefined();
   expect(nextTask("daily-v1-2028-02-28", [], "2028-03-01")).toBe(
     "daily-v1-2028-02-29",

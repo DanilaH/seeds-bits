@@ -1,6 +1,7 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import {
   notebook,
+  loadNotebook,
   daily,
   days,
   trophy,
@@ -10,19 +11,26 @@ import {
 import { checkPair, removePair, occupied } from "../src/core";
 import { fresh, readProgress } from "../src/progress";
 describe("verified content and calendar", () => {
-  it("solves every notebook task with distinct arrangements", () => {
-    expect(new Set(notebook.map((p) => JSON.stringify(p.board))).size).toBe(24);
-    for (const p of notebook) {
-      let b = p.board;
-      expect(b.length).toBeLessThanOrEqual(45);
-      expect(occupied(b)).toBeGreaterThanOrEqual(8);
-      for (const pair of p.solution) {
-        expect(checkPair(b, pair.a, pair.b).ok).toBe(true);
-        b = removePair(b, pair.a, pair.b);
+  beforeAll(loadNotebook);
+  it(
+    "solves every notebook task with distinct arrangements",
+    { timeout: 120000 },
+    () => {
+      expect(new Set(notebook.map((p) => JSON.stringify(p.board))).size).toBe(
+        2400,
+      );
+      for (const p of notebook) {
+        let b = p.board;
+        expect(b.length).toBeLessThanOrEqual(1000);
+        expect(occupied(b)).toBeGreaterThanOrEqual(8);
+        for (const pair of p.solution) {
+          expect(checkPair(b, pair.a, pair.b).ok).toBe(true);
+          b = removePair(b, pair.a, pair.b);
+        }
+        expect(b).toEqual([]);
       }
-      expect(b).toEqual([]);
-    }
-  });
+    },
+  );
   it("constructs solvable deterministic daily tasks across leap and year boundaries", () => {
     for (const month of ["2026-10", "2026-12", "2027-01", "2028-02"])
       for (const d of days(month)) {
@@ -43,7 +51,7 @@ describe("verified content and calendar", () => {
     expect(trophy("2026-10", d.slice(0, 14)).tier).toBe(2);
     expect(trophy("2026-10", d).tier).toBe(3);
     expect(availableDay("2026-10-16", "2026-10-15")).toBe(false);
-    expect(availableDay("2026-09-30", "2026-10-15")).toBe(false);
+    expect(availableDay("2024-12-31", "2026-10-15")).toBe(false);
     expect(availableDay("2026-10-01", "2026-10-15")).toBe(true);
   });
   it("roundtrips multiple games without sharing state", () => {

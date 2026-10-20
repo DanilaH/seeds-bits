@@ -1,0 +1,505 @@
+{
+  "tasks": 2400,
+  "preserved": 24,
+  "uniqueNewShapes": 2376,
+  "minDigits": 12,
+  "maxDigits": 594,
+  "maxCells": 972,
+  "volumes": [
+    {
+      "volume": 2,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 3,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 4,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 5,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 6,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 7,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 8,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 9,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 10,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 11,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 12,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 13,
+      "minDigits": 12,
+      "maxDigits": 30
+    },
+    {
+      "volume": 14,
+      "minDigits": 12,
+      "maxDigits": 32
+    },
+    {
+      "volume": 15,
+      "minDigits": 26,
+      "maxDigits": 62
+    },
+    {
+      "volume": 16,
+      "minDigits": 30,
+      "maxDigits": 62
+    },
+    {
+      "volume": 17,
+      "minDigits": 30,
+      "maxDigits": 62
+    },
+    {
+      "volume": 18,
+      "minDigits": 26,
+      "maxDigits": 62
+    },
+    {
+      "volume": 19,
+      "minDigits": 26,
+      "maxDigits": 62
+    },
+    {
+      "volume": 20,
+      "minDigits": 26,
+      "maxDigits": 58
+    },
+    {
+      "volume": 21,
+      "minDigits": 26,
+      "maxDigits": 58
+    },
+    {
+      "volume": 22,
+      "minDigits": 46,
+      "maxDigits": 88
+    },
+    {
+      "volume": 23,
+      "minDigits": 42,
+      "maxDigits": 90
+    },
+    {
+      "volume": 24,
+      "minDigits": 42,
+      "maxDigits": 84
+    },
+    {
+      "volume": 25,
+      "minDigits": 44,
+      "maxDigits": 88
+    },
+    {
+      "volume": 26,
+      "minDigits": 44,
+      "maxDigits": 90
+    },
+    {
+      "volume": 27,
+      "minDigits": 42,
+      "maxDigits": 90
+    },
+    {
+      "volume": 28,
+      "minDigits": 68,
+      "maxDigits": 116
+    },
+    {
+      "volume": 29,
+      "minDigits": 64,
+      "maxDigits": 114
+    },
+    {
+      "volume": 30,
+      "minDigits": 60,
+      "maxDigits": 108
+    },
+    {
+      "volume": 31,
+      "minDigits": 60,
+      "maxDigits": 114
+    },
+    {
+      "volume": 32,
+      "minDigits": 60,
+      "maxDigits": 114
+    },
+    {
+      "volume": 33,
+      "minDigits": 60,
+      "maxDigits": 114
+    },
+    {
+      "volume": 34,
+      "minDigits": 80,
+      "maxDigits": 132
+    },
+    {
+      "volume": 35,
+      "minDigits": 84,
+      "maxDigits": 138
+    },
+    {
+      "volume": 36,
+      "minDigits": 80,
+      "maxDigits": 134
+    },
+    {
+      "volume": 37,
+      "minDigits": 80,
+      "maxDigits": 138
+    },
+    {
+      "volume": 38,
+      "minDigits": 102,
+      "maxDigits": 154
+    },
+    {
+      "volume": 39,
+      "minDigits": 102,
+      "maxDigits": 156
+    },
+    {
+      "volume": 40,
+      "minDigits": 110,
+      "maxDigits": 158
+    },
+    {
+      "volume": 41,
+      "minDigits": 102,
+      "maxDigits": 160
+    },
+    {
+      "volume": 42,
+      "minDigits": 102,
+      "maxDigits": 160
+    },
+    {
+      "volume": 43,
+      "minDigits": 126,
+      "maxDigits": 178
+    },
+    {
+      "volume": 44,
+      "minDigits": 126,
+      "maxDigits": 190
+    },
+    {
+      "volume": 45,
+      "minDigits": 126,
+      "maxDigits": 180
+    },
+    {
+      "volume": 46,
+      "minDigits": 126,
+      "maxDigits": 166
+    },
+    {
+      "volume": 47,
+      "minDigits": 152,
+      "maxDigits": 198
+    },
+    {
+      "volume": 48,
+      "minDigits": 144,
+      "maxDigits": 198
+    },
+    {
+      "volume": 49,
+      "minDigits": 128,
+      "maxDigits": 198
+    },
+    {
+      "volume": 50,
+      "minDigits": 148,
+      "maxDigits": 198
+    },
+    {
+      "volume": 51,
+      "minDigits": 148,
+      "maxDigits": 192
+    },
+    {
+      "volume": 52,
+      "minDigits": 162,
+      "maxDigits": 226
+    },
+    {
+      "volume": 53,
+      "minDigits": 168,
+      "maxDigits": 226
+    },
+    {
+      "volume": 54,
+      "minDigits": 168,
+      "maxDigits": 224
+    },
+    {
+      "volume": 55,
+      "minDigits": 166,
+      "maxDigits": 234
+    },
+    {
+      "volume": 56,
+      "minDigits": 176,
+      "maxDigits": 250
+    },
+    {
+      "volume": 57,
+      "minDigits": 182,
+      "maxDigits": 250
+    },
+    {
+      "volume": 58,
+      "minDigits": 182,
+      "maxDigits": 246
+    },
+    {
+      "volume": 59,
+      "minDigits": 204,
+      "maxDigits": 278
+    },
+    {
+      "volume": 60,
+      "minDigits": 204,
+      "maxDigits": 270
+    },
+    {
+      "volume": 61,
+      "minDigits": 208,
+      "maxDigits": 276
+    },
+    {
+      "volume": 62,
+      "minDigits": 196,
+      "maxDigits": 284
+    },
+    {
+      "volume": 63,
+      "minDigits": 224,
+      "maxDigits": 304
+    },
+    {
+      "volume": 64,
+      "minDigits": 242,
+      "maxDigits": 316
+    },
+    {
+      "volume": 65,
+      "minDigits": 218,
+      "maxDigits": 296
+    },
+    {
+      "volume": 66,
+      "minDigits": 226,
+      "maxDigits": 314
+    },
+    {
+      "volume": 67,
+      "minDigits": 238,
+      "maxDigits": 316
+    },
+    {
+      "volume": 68,
+      "minDigits": 230,
+      "maxDigits": 324
+    },
+    {
+      "volume": 69,
+      "minDigits": 248,
+      "maxDigits": 326
+    },
+    {
+      "volume": 70,
+      "minDigits": 242,
+      "maxDigits": 356
+    },
+    {
+      "volume": 71,
+      "minDigits": 258,
+      "maxDigits": 354
+    },
+    {
+      "volume": 72,
+      "minDigits": 254,
+      "maxDigits": 336
+    },
+    {
+      "volume": 73,
+      "minDigits": 292,
+      "maxDigits": 366
+    },
+    {
+      "volume": 74,
+      "minDigits": 276,
+      "maxDigits": 366
+    },
+    {
+      "volume": 75,
+      "minDigits": 266,
+      "maxDigits": 366
+    },
+    {
+      "volume": 76,
+      "minDigits": 272,
+      "maxDigits": 356
+    },
+    {
+      "volume": 77,
+      "minDigits": 292,
+      "maxDigits": 374
+    },
+    {
+      "volume": 78,
+      "minDigits": 300,
+      "maxDigits": 384
+    },
+    {
+      "volume": 79,
+      "minDigits": 294,
+      "maxDigits": 394
+    },
+    {
+      "volume": 80,
+      "minDigits": 326,
+      "maxDigits": 408
+    },
+    {
+      "volume": 81,
+      "minDigits": 314,
+      "maxDigits": 418
+    },
+    {
+      "volume": 82,
+      "minDigits": 334,
+      "maxDigits": 398
+    },
+    {
+      "volume": 83,
+      "minDigits": 330,
+      "maxDigits": 428
+    },
+    {
+      "volume": 84,
+      "minDigits": 336,
+      "maxDigits": 420
+    },
+    {
+      "volume": 85,
+      "minDigits": 340,
+      "maxDigits": 440
+    },
+    {
+      "volume": 86,
+      "minDigits": 372,
+      "maxDigits": 458
+    },
+    {
+      "volume": 87,
+      "minDigits": 356,
+      "maxDigits": 440
+    },
+    {
+      "volume": 88,
+      "minDigits": 368,
+      "maxDigits": 462
+    },
+    {
+      "volume": 89,
+      "minDigits": 362,
+      "maxDigits": 468
+    },
+    {
+      "volume": 90,
+      "minDigits": 402,
+      "maxDigits": 480
+    },
+    {
+      "volume": 91,
+      "minDigits": 380,
+      "maxDigits": 456
+    },
+    {
+      "volume": 92,
+      "minDigits": 408,
+      "maxDigits": 476
+    },
+    {
+      "volume": 93,
+      "minDigits": 390,
+      "maxDigits": 492
+    },
+    {
+      "volume": 94,
+      "minDigits": 394,
+      "maxDigits": 502
+    },
+    {
+      "volume": 95,
+      "minDigits": 432,
+      "maxDigits": 526
+    },
+    {
+      "volume": 96,
+      "minDigits": 416,
+      "maxDigits": 530
+    },
+    {
+      "volume": 97,
+      "minDigits": 422,
+      "maxDigits": 540
+    },
+    {
+      "volume": 98,
+      "minDigits": 444,
+      "maxDigits": 548
+    },
+    {
+      "volume": 99,
+      "minDigits": 446,
+      "maxDigits": 568
+    },
+    {
+      "volume": 100,
+      "minDigits": 466,
+      "maxDigits": 594
+    }
+  ]
+}
