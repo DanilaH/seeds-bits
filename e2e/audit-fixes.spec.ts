@@ -72,6 +72,8 @@ for (const date of ["2028-03-19", "2028-08-16"])
     await page.goto("/");
     await page.locator("#daily-mode").click();
     await page.locator("#today-task").click();
+    await expect(page.locator("#dialog")).toBeHidden();
+    await expect(page.locator("#hint")).toBeEnabled();
     for (let n = 0; n < 20 && (await page.locator("#win").isHidden()); n++) {
       const blocked = await page.evaluate(async () => {
         const t = performance.now();
