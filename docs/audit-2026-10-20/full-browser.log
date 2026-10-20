@@ -1,0 +1,87 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[WebServer] (node:40) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[WebServer] (node:53) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 32 tests using 2 workers
+
+(node:87) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:88) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 e2e/game.spec.ts:2:1 › complete tutorial, remove a pair, undo, restore and change theme (3.9s)
+  ✓   3 e2e/game.spec.ts:56:1 › adds only when stuck, restores partial rows and rejects blocked pair (703ms)
+  ✓   4 e2e/game.spec.ts:87:1 › win state and quick repeated clicks (788ms)
+  ✓   5 e2e/game.spec.ts:113:1 › light layout has no horizontal overflow at narrow viewport (293ms)
+  ✓   6 e2e/hardening.spec.ts:10:1 › a valid move is saved before its animation finishes (769ms)
+  ✓   1 e2e/calm-layout.spec.ts:2:1 › home hides board, layouts fit and modes survive settings and restart (6.9s)
+  ✓   7 e2e/hardening.spec.ts:45:1 › escape steps back from collections and settings without discarding game (560ms)
+CORRUPT_INITIAL {"dialogWarning":"×\nсемечки\nИграть\n\nКлассика\n\nКлассика\nОчистите поле от цифр\n↗\nТетрадь\n24 небольшие задачи\n↗\nЗадача дня\nКалендарь задач\n↗\nКоллекция\nКак играть\nНастройки","status":""}
+  ✘   8 e2e/independent-audit.spec.ts:5:1 › corrupt save warning is visible in initial menu and survives resume (272ms)
+(node:352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 e2e/hardening.spec.ts:58:1 › dead end restart can be cancelled and undo recovers the board (919ms)
+  ✓  10 e2e/independent-audit.spec.ts:12:1 › winning move then undo and reload keeps actual board and historical completion (1.1s)
+  ✓  11 e2e/hardening.spec.ts:93:1 › obsolete damaged save does not override current progress (1.1s)
+  ✓  12 e2e/independent-audit.spec.ts:18:1 › simultaneous pair, undo, menu and mode presses cannot corrupt board (1.0s)
+  ✓  13 e2e/hardening.spec.ts:108:1 › failed storage is visible and retry preserves the accepted move (987ms)
+  ✓  14 e2e/independent-audit.spec.ts:23:1 › reduced motion disables board and interface animations (338ms)
+LARGE_TEXT {"width":320,"viewport":320,"field":343}
+  ✓  16 e2e/independent-audit.spec.ts:28:1 › 200 percent text and 320px viewport keep footer controls reachable (507ms)
+  ✓  17 e2e/independent-audit.spec.ts:33:1 › hint with no history and dead board offers a reachable restart (567ms)
+  ✓  18 e2e/independent-audit.spec.ts:37:1 › keyboard arrow stays in grid and focus survives two collapses (878ms)
+  ✓  15 e2e/hardening.spec.ts:133:1 › large classic board survives repeated moves, mode changes and reload (11.9s)
+  ✓  20 e2e/repairs.spec.ts:24:1 › selection preserves nodes and keyboard focus survives a removed pair (643ms)
+  ✓  19 e2e/progression.spec.ts:11:1 › notebook solution, page stamp, replay and classic restore (10.9s)
+  ✓  22 e2e/progression.spec.ts:53:1 › hint remains after first choice and settings apply (1.1s)
+  ✓  21 e2e/repairs.spec.ts:47:1 › landscape tutorial buttons remain reachable at every step (4.8s)
+  ✓  24 e2e/repairs.spec.ts:73:1 › failed save stays visible while settings are open (615ms)
+  ✓  23 e2e/progression.spec.ts:79:1 › daily calendar closes future days and persists trophy (4.6s)
+  ✓  26 e2e/progression.spec.ts:113:1 › quick onboarding ends after two exercises (669ms)
+  ✓  25 e2e/repairs.spec.ts:87:1 › stale tab cannot overwrite a newer game (2.0s)
+  ✓  27 e2e/progression.spec.ts:129:1 › long hint navigates without losing selection (799ms)
+  ✓  29 e2e/progression.spec.ts:156:1 › bronze trophy survives replay, widths and dark calendar (1.4s)
+  ✓  28 e2e/repairs.spec.ts:116:1 › all 24 notebook games finish by following reliable hints (1.2m)
+  ✓  30 e2e/repairs.spec.ts:143:1 › dead puzzle offers a recovery to a solvable position (820ms)
+  ✓  31 e2e/repairs.spec.ts:185:1 › next previously completed task opens a playable replay (1.3s)
+  ✓  32 e2e/repairs.spec.ts:218:1 › fast selection retains the moving cell instead of replacing it (837ms)
+
+
+  1) e2e/independent-audit.spec.ts:5:1 › corrupt save warning is visible in initial menu and survives resume 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "не удалось"
+    Received string:    "×
+    семечки
+    Играть·
+    Классика·
+    Классика
+    Очистите поле от цифр
+    ↗
+    Тетрадь
+    24 небольшие задачи
+    ↗
+    Задача дня
+    Календарь задач
+    ↗
+    Коллекция
+    Как играть
+    Настройки"
+
+       8 |  const dialogWarning=await page.locator('#dialog').innerText();
+       9 |  console.log('CORRUPT_INITIAL',JSON.stringify({dialogWarning,status:await page.locator('#status').innerText()}));
+    > 10 |  expect(dialogWarning).toContain('не удалось');
+         |                        ^
+      11 | });
+      12 | test('winning move then undo and reload keeps actual board and historical completion',async({page})=>{
+      13 |  await page.addInitScript(s=>{if(!localStorage.getItem('seeds-bits.progress.v2'))localStorage.setItem('seeds-bits.progress.v2',JSON.stringify({version:2,active:'book-v1-1',sessions:{'book-v1-1':{rules:1,current:s,history:[]}},done:[],seen:[],hints:{}}));},snap([5,5]));
+        at /workspace/scratch/93d2c459edce/seeds-bits/e2e/independent-audit.spec.ts:10:24
+
+    Error Context: test-results/independent-audit-corrupt--07694-al-menu-and-survives-resume/error-context.md
+
+  1 failed
+    e2e/independent-audit.spec.ts:5:1 › corrupt save warning is visible in initial menu and survives resume 
+  31 passed (1.8m)

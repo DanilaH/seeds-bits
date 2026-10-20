@@ -1,0 +1,10 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+ RUN  v5.0.4 /workspace/scratch/93d2c459edce/seeds-bits
+
+
+ Test Files  5 passed (5)
+      Tests  18 passed (18)
+   Start at  03:45:50
+   Duration  10.23s (tests 98%, transform 1%, import 1%)
+

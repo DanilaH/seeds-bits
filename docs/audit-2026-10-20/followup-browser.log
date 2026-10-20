@@ -1,0 +1,41 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[WebServer] (node:32) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[WebServer] (node:45) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:79) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TWO_TAB_PREFS {"theme":"light","sound":true,"vibration":false,"tutorialDone":true}
+  ✘  1 e2e/independent-audit.spec.ts:41:1 › settings changes in another tab do not silently reset theme (2.2s)
+(node:176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+WARNING_DETAIL {"inert":false,"status":"Сохранение не удалось прочитать. Открыта новая партия.","dialog":"Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.Загрузить сохранённую партиюПовторить сохранениеСемечки×семечкиИгратьКлассикаКлассикаОчистите поле от цифр↗Тетрадь24 небольшие задачи↗Задача дняКалендарь задач↗КоллекцияКак игратьНастройки← МенюНастройкиТёмная темаЗвукВибрацияНачать текущую партию зановоПрогресс сохраняется автоматически.Начать новую партию? Текущее поле и история отмены будут заменены.Начать зановоОставить текущую","noticeHidden":true}
+WARNING_AFTER_SELECTION Одинаковые цифры или сумма 10
+  ✓  2 e2e/independent-audit.spec.ts:48:1 › corrupt save warning visibility is independently measured after boot (800ms)
+
+
+  1) e2e/independent-audit.spec.ts:41:1 › settings changes in another tab do not silently reset theme 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "dark"
+    Received: "light"
+
+      44 |  await page.locator('#menu').click();await page.locator('#settings-open').click();await page.locator('#dark').check();await page.waitForTimeout(150);
+      45 |  await second.locator('#sound').check();await second.waitForTimeout(250);
+    > 46 |  const s=await second.evaluate(()=>JSON.parse(localStorage.getItem('seeds-bits.settings.v1')!));console.log('TWO_TAB_PREFS',JSON.stringify(s));expect(s.theme).toBe('dark');
+         |                                                                                                                                                                ^
+      47 | });
+      48 | test('corrupt save warning visibility is independently measured after boot',async({page})=>{
+      49 |  await page.addInitScript(()=>localStorage.setItem('seeds-bits.progress.v2','{broken'));
+        at /workspace/scratch/93d2c459edce/seeds-bits/e2e/independent-audit.spec.ts:46:160
+
+    Error Context: test-results/independent-audit-settings-7bced-do-not-silently-reset-theme/error-context.md
+
+  1 failed
+    e2e/independent-audit.spec.ts:41:1 › settings changes in another tab do not silently reset theme 
+  1 passed (7.0s)
