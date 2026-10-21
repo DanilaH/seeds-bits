@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 test("privacy is readable offline and returns to settings without overlapping screens", async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
   await page.addInitScript(() =>
     localStorage.setItem(
       "seeds-bits.settings.v1",
@@ -16,6 +17,11 @@ test("privacy is readable offline and returns to settings without overlapping sc
     "хранятся на устройстве",
   );
   await expect(page.locator("#settings-panel")).toBeHidden();
+  expect(
+    await page
+      .locator("#collection h2")
+      .evaluate((e) => e.scrollWidth <= e.clientWidth + 1),
+  ).toBe(true);
   await expect(page.locator("#collection a").first()).toHaveAttribute(
     "href",
     "https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md",
