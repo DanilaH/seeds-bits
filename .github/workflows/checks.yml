@@ -27,8 +27,9 @@ jobs:
       - run: npm test
       - run: npx vitest run --config scripts/regression-061/vitest.config.ts
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
       - run: npx playwright test --config scripts/regression-061/playwright.config.ts
+      - run: npm run test:e2e
+        if: ${{ !cancelled() }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

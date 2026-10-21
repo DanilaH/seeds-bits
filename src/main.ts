@@ -483,6 +483,7 @@ $("cancel-hints").onclick = () => {
 };
 $("watch-hints").onclick = async () => {
   if (rewardRequest || saveFailed || storageConflict || futureSave) return;
+  let outcomeMessage = "";
   rewardRequest = true;
   hintOffer.close();
   syncPauseState();
@@ -494,17 +495,16 @@ $("watch-hints").onclick = async () => {
     syncPauseState();
     if (result.reward) await receiveReward(result.reward);
     await rewardQueue;
-    render();
-    message(
+    outcomeMessage =
       hintsLeft(hintAttempt(progress)) > 0
         ? "Добавлено 3 подсказки"
         : result.status === "closed"
           ? "Видео закрыто. Подсказки не начислены."
-          : "Реклама сейчас недоступна. Попробуйте позже.",
-    );
+          : "Реклама сейчас недоступна. Попробуйте позже.";
   } finally {
     rewardRequest = false;
     syncPauseState();
+    if (outcomeMessage && !saveFailed) message(outcomeMessage);
     updateBanner();
   }
 };

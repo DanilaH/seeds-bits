@@ -38,12 +38,21 @@ declare global {
     __SEEDS_ADS_TEST__?: MonetizationBridge;
   }
 }
-const plugin = registerPlugin<MonetizationBridge>("SeedsMonetization");
+export const nativePlugin = registerPlugin<
+  MonetizationBridge & {
+    persistState(options: {
+      key: string;
+      value: string;
+      settingsKey: string;
+      settings: string;
+    }): Promise<void>;
+  }
+>("SeedsMonetization");
 export const bridge =
   import.meta.env.DEV && window.__SEEDS_ADS_TEST__
     ? window.__SEEDS_ADS_TEST__
     : Capacitor.getPlatform() === "android"
-      ? plugin
+      ? nativePlugin
       : undefined;
 export let monetized = false;
 export let adActive = false;
