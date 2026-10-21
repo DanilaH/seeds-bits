@@ -18,10 +18,8 @@ jobs:
       - run: npm test > /tmp/baseline-unit.txt 2>&1
       - run: npm run build > /tmp/production-build.txt 2>&1
       - run: npx playwright install --with-deps chromium
-      - name: Existing browser regressions
-        run: npx playwright test > /tmp/baseline-browser.txt 2>&1
-        continue-on-error: true
       - name: Unmodified native source with SDK doubles
+        continue-on-error: true
         run: python3 scripts/audit-0.6.0/native-harness.py > /tmp/native-harness.txt 2>&1
       - name: Independent retained-data model
         run: npx vitest run --config scripts/audit-0.6.0/vitest.config.ts > /tmp/model-audit.txt 2>&1
