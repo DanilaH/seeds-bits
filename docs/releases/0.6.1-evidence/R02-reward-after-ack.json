@@ -1,0 +1,5 @@
+{
+  "bonus": 3,
+  "expected": 3,
+  "nativeTokenGeneration": "requires native harness confirmation"
+}

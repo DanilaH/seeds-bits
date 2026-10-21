@@ -1,0 +1,15 @@
+{
+  "runtime": "8214d880d92ae7c4a227770f7aad68c45197a5d1",
+  "ci": "https://github.com/DanilaH/seeds-bits/actions/runs/39556789120",
+  "conclusion": "success",
+  "unitTests": 43,
+  "adversarialModels": 2,
+  "standardBrowserTests": 93,
+  "adversarialBrowserTests": 15,
+  "nativeBridgeWithSdkDoubles": 16,
+  "androidBuild": "success",
+  "webBuild": "success",
+  "yandexBuild": "success",
+  "additionalLocalHeavyLegacyMigration": "passed",
+  "physicalAndroidSdkAcceptance": "not performed"
+}

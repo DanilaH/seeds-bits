@@ -1,0 +1,42 @@
+{
+  "file": "seeds-0.6.1-test.apk",
+  "sha256": "59ee95a40079995c686920d83660553cab05ba8a88378724a17e744255387e45",
+  "bytes": 10331010,
+  "package": "com.seedsbits.game.preview",
+  "name": "Семечки · тест",
+  "versionName": "0.6.1",
+  "versionCode": "1033",
+  "debuggable": "true",
+  "application": "com.seedsbits.game.preview.SeedsApplication",
+  "adsTestMode": "true",
+  "configuredClientFields": {
+    "appmetrica_api_key": true,
+    "yandex_banner_id": true,
+    "yandex_interstitial_id": true,
+    "yandex_rewarded_id": true
+  },
+  "packagedClasses": {
+    "monetizationBridge": true,
+    "yandexAds": true,
+    "appMetrica": true
+  },
+  "cleanWebAssets": {
+    "assets/advice-worker-6LRsD5M8.js": true,
+    "assets/esm-CS6DP6G3.js": true,
+    "assets/esm-CnKU4Q-2.js": true,
+    "assets/index-CzM9KfeM.css": true,
+    "assets/index-DQeTfAcM.js": true,
+    "assets/notebook-extra-B_1ZZVK0.js": true,
+    "assets/web-BiPQ0FrP.js": true,
+    "assets/web-OfJ8vZnx.js": true,
+    "assets/web-efqvtU73.js": true,
+    "index.html": true
+  },
+  "extraStaleAssets": false,
+  "certificateSha256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+  "signatureVerified": {
+    "v2": true,
+    "v3": true,
+    "matchesEstablishedPreviewCertificate": true
+  }
+}

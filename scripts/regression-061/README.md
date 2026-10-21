@@ -16,4 +16,6 @@ The native harness needs a JDK (`javac`, `java`). It compiles the actual plugin 
 
 Browser probes mock the native bridge and lifecycle delivery while exercising the real UI and handlers. R02 repeats the same receipt: the real native duplicate-token boundary is covered by N01/N15. R14 fails progress writing after an earned reward, verifies that acknowledgement is withheld, then retries and verifies one persisted bonus before acknowledgement.
 
+R15 deterministically fails saving while the offer is already open; tapping Watch must expose save recovery instead of leaving the modal over it. R03 waits for the initial save before injecting a failure during the pre-ad save.
+
 The model creates the same 100 unfinished volumes and 6,830 legitimate hint reveals used in the original audit. Full undo histories are kept. A separate corruption check preserves completion statistics when an optional hint field is invalid. SHA-256 and old-key migration are also checked by the standard unit suite.
