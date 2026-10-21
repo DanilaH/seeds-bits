@@ -64,10 +64,11 @@ async function capture(name, viewport, action, dark = false) {
             classic: {
               rules: 1,
               current: {
-                board: [
-                  2, 7, 5, 3, 4, 9, 1, 6, 3, 5, 8, 4, 6, 2, 9, 1, 7, 5, 3, 6, 8,
-                  2, 4, 9, 5, 1, 7, 3,
-                ],
+                board: Array.from({ length: 19 }, (_, i) => String(i + 1))
+                  .join("")
+                  .replaceAll("0", "")
+                  .split("")
+                  .map(Number),
                 moves: 0,
                 additions: 0,
                 scroll: 0,
