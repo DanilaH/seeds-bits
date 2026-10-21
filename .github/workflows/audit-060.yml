@@ -1,0 +1,43 @@
+name: Independent 0.6.0 audit
+on:
+  push:
+    branches: [audit-independent-060]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - run: npm ci
+      - run: npm test > /tmp/baseline-unit.txt 2>&1
+      - run: npm run build > /tmp/production-build.txt 2>&1
+      - run: npx playwright install --with-deps chromium
+      - name: Existing browser regressions
+        run: npx playwright test > /tmp/baseline-browser.txt 2>&1
+        continue-on-error: true
+      - name: Unmodified native source with SDK doubles
+        run: python3 scripts/audit-0.6.0/native-harness.py > /tmp/native-harness.txt 2>&1
+      - name: Independent retained-data model
+        run: npx vitest run --config scripts/audit-0.6.0/vitest.config.ts > /tmp/model-audit.txt 2>&1
+        continue-on-error: true
+      - name: Independent adversarial browser scenarios
+        run: npx playwright test --config scripts/audit-0.6.0/playwright.config.ts > /tmp/browser-audit.txt 2>&1
+        continue-on-error: true
+      - name: Collect audit evidence
+        if: always()
+        run: |
+          mkdir -p docs/audit-0.6.0/logs
+          cp /tmp/baseline-unit.txt /tmp/production-build.txt /tmp/baseline-browser.txt /tmp/native-harness.txt /tmp/model-audit.txt /tmp/browser-audit.txt docs/audit-0.6.0/logs/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-audit-060
+          path: |
+            docs/audit-0.6.0/
+            test-results/audit060/

@@ -1,6 +1,7 @@
 name: Check and build prototype
 on:
   push:
+    branches-ignore: [audit-independent-060]
   pull_request:
   workflow_dispatch:
     inputs:
