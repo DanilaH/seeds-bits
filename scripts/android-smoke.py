@@ -5,11 +5,27 @@ package='com.seedsbits.game'
 def adb(*args,check=True):
  return subprocess.run(['adb',*args],check=check,capture_output=True,text=True).stdout
 
+capture_id=0
+capture_retries=[]
 def snapshot():
- adb('shell','uiautomator','dump','/sdcard/seeds-ui.xml')
- raw=adb('shell','cat','/sdcard/seeds-ui.xml')
- (out/'last-ui.xml').write_text(raw)
- return ET.fromstring(raw)
+ global capture_id
+ # Android 35 UiAutomation can lose its Binder connection after process restart.
+ # Retry acquisition only; never retry or bypass a game-state assertion.
+ for attempt in range(6):
+  capture_id+=1
+  name=f"/sdcard/seeds-ui-{capture_id}.xml"
+  try:
+   dump=subprocess.run(['adb','shell','uiautomator','dump',name],capture_output=True,text=True,timeout=25)
+   if dump.returncode:raise RuntimeError(f"uiautomator exit {dump.returncode}: {dump.stderr}")
+   raw=adb('shell','cat',name)
+   tree=ET.fromstring(raw)
+   (out/'last-ui.xml').write_text(raw)
+   return tree
+  except (RuntimeError,subprocess.SubprocessError,ET.ParseError) as error:
+   capture_retries.append(str(error))
+   if attempt==5:raise
+   time.sleep(2)
+ raise AssertionError('No accessibility snapshot')
 def center(node):
  p=list(map(int,re.findall(r'\d+',node.get('bounds',''))));assert len(p)==4
  return ((p[0]+p[2])//2,(p[1]+p[3])//2)
@@ -69,5 +85,5 @@ try:
  tap(wait_label(['Открыть меню']));tap(wait_label(['Настройки']));tap(wait_label(['Конфиденциальность']));wait_label(['Назад']);checks['privacyAccessibleOffline']=True
  screenshot('privacy.png')
 finally:
- (out/'acceptance.json').write_text(json.dumps({'environment':'Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised','checks':checks},indent=2)+'\n')
+ (out/'acceptance.json').write_text(json.dumps({'environment':'Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised','checks':checks,'accessibilityAcquisitionRetries':capture_retries},indent=2)+'\n')
  (out/'logcat.txt').write_text(adb('logcat','-d','-t','500',check=False))

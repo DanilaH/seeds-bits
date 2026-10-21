@@ -1,6 +1,7 @@
 name: Check and build
 on:
   push:
+    branches-ignore: [qa/rustore-1.0.0]
   pull_request:
   workflow_dispatch:
     inputs:
