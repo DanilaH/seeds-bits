@@ -1281,8 +1281,16 @@ for (const key of ["sound", "vibration"] as const)
     settingsDirty[key] = settings[key];
     save();
   };
-$("retry-save").onclick = () => {
-  save();
+$("retry-save").onclick = async () => {
+  await save();
+  if (saveFailed || storageConflict || futureSave) return;
+  // A failed reward save leaves its native receipt pending until a durable retry.
+  try {
+    const pending = await adsBridge?.pending();
+    if (pending?.reward) await receiveReward(pending.reward);
+  } catch {
+    // Keep the receipt for the next retry or launch; the game remains usable.
+  }
 };
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && dialog.open) {

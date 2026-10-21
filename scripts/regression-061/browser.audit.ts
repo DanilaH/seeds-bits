@@ -441,3 +441,48 @@ test("R13 repeat hint is free after confirmed undo persistence", async ({
   await page.locator("#hint").click();
   await expect(page.locator("#hint-label")).toContainText("2");
 });
+
+test("R14 reward save failure keeps receipt until a successful retry", async ({
+  page,
+}) => {
+  await boot(page);
+  await reveal(page);
+  await page.locator("#watch-hints").click();
+  await expect
+    .poll(() => page.evaluate(() => (window as any).calls.length))
+    .toBe(1);
+  await page.evaluate(() => {
+    const w = window as any;
+    const original = Storage.prototype.setItem;
+    w.restoreStorage = () => {
+      Storage.prototype.setItem = original;
+    };
+    Storage.prototype.setItem = function (k, v) {
+      if (k === "seeds-bits.progress.v2")
+        throw Error("disk full after earned reward");
+      return original.call(this, k, v);
+    };
+    const reward = {
+      token: "earned-before-disk-failure",
+      attempt: "audit-attempt",
+    };
+    w.__SEEDS_ADS_TEST__.pending = async () => ({ reward });
+    w.finishAd({ status: "closed", shown: true, reward });
+  });
+  await expect(page.locator("#save-notice")).toBeVisible();
+  await expect
+    .poll(() => page.locator("#app").evaluate((e) => e.inert))
+    .toBe(false);
+  expect(await page.evaluate(() => (window as any).acks.length)).toBe(0);
+  await page.evaluate(() => (window as any).restoreStorage());
+  await page.locator("#retry-save").click();
+  await expect
+    .poll(() => page.evaluate(() => (window as any).acks.length))
+    .toBe(1);
+  const saved = await page.evaluate(
+    (k) => JSON.parse(localStorage.getItem(k)!),
+    key,
+  );
+  expect(saved.meta.attempts.classic.hintBonus).toBe(3);
+  expect(saved.meta.rewardReceipts).toContain("earned-before-disk-failure");
+});
