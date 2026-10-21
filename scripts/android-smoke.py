@@ -56,7 +56,7 @@ try:
  adb('shell','settings','put','global','airplane_mode_on','1')
  adb('shell','settings','put','global','http_proxy','127.0.0.1:9')
  launch();checks['launchOffline']=True
- tap(wait_label(['Пропустить']));tap(wait_label(['Играть','Продолжить игру']))
+ tap(wait_label(['Пропустить']))
  found=wait_cells(28);checks['tutorialSkipAndClassic']=True
  a,b=pair(found);tap(a);tap(b);wait_cells(26);checks['removePair']=True
  tap(wait_label(['Отмена']));found=wait_cells(28);checks['undo']=True
