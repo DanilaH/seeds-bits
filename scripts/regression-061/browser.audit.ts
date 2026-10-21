@@ -162,6 +162,16 @@ test("R03 saving failure before watching must leave retry reachable", async ({
 }) => {
   await boot(page);
   await reveal(page);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        (k) =>
+          JSON.parse(localStorage.getItem(k)!).meta.attempts.classic
+            .analyticsStarted,
+        key,
+      ),
+    )
+    .toBe(true);
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     Storage.prototype.setItem = function (k, v) {
@@ -485,4 +495,38 @@ test("R14 reward save failure keeps receipt until a successful retry", async ({
   );
   expect(saved.meta.attempts.classic.hintBonus).toBe(3);
   expect(saved.meta.rewardReceipts).toContain("earned-before-disk-failure");
+});
+
+test("R15 pre-existing save failure closes reward offer and exposes retry", async ({
+  page,
+}) => {
+  await boot(page);
+  await reveal(page);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        (k) =>
+          JSON.parse(localStorage.getItem(k)!).meta.attempts.classic
+            .analyticsStarted,
+        key,
+      ),
+    )
+    .toBe(true);
+  await page.evaluate(() => {
+    const original = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (k, v) {
+      if (k === "seeds-bits.progress.v2")
+        throw Error("disk full while offer open");
+      return original.call(this, k, v);
+    };
+    window.dispatchEvent(new Event("pagehide"));
+  });
+  await expect(page.locator("#save-notice")).toBeVisible();
+  await page.locator("#watch-hints").click();
+  await expect(page.locator("#hint-offer")).toBeHidden();
+  await expect(page.locator("#retry-save")).toBeVisible();
+  expect(await page.locator("#app").evaluate((e) => e.inert)).toBe(false);
+  expect(await page.evaluate(() => (window as any).calls.length)).toBe(0);
+  await page.locator("#menu").click();
+  await expect(page.locator("#dialog")).toBeVisible();
 });

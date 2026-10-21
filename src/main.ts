@@ -482,7 +482,13 @@ $("cancel-hints").onclick = () => {
   updateBanner();
 };
 $("watch-hints").onclick = async () => {
-  if (rewardRequest || saveFailed || storageConflict || futureSave) return;
+  if (rewardRequest) return;
+  if (saveFailed || storageConflict || futureSave) {
+    hintOffer.close();
+    showSaveState();
+    updateBanner();
+    return;
+  }
   let outcomeMessage = "";
   rewardRequest = true;
   hintOffer.close();
