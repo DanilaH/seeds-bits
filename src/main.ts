@@ -156,7 +156,7 @@ document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
-$("app").inert = true;
+syncPauseState();
 function board() {
   return lesson >= 0 ? lessonBoard : session.current.board;
 }
@@ -379,6 +379,25 @@ function activePuzzle(): Puzzle | undefined {
   );
 }
 let appForeground = true;
+let platformPaused = false;
+function syncPauseState() {
+  paused =
+    !appForeground ||
+    platformPaused ||
+    document.hidden ||
+    adActive ||
+    rewardRequest;
+  $("app").inert = adActive || rewardRequest;
+  blockSound(paused);
+  if (paused) {
+    flights.clear();
+    cancelHint();
+    suspendSound();
+  }
+  if (!busy) render();
+  platform.gameplay(!paused && !dialog.open && occupied(board()) > 0);
+  updateBanner();
+}
 let rewardQueue = Promise.resolve();
 let rewardRequest = false;
 let bannerFrame = 0;
@@ -466,13 +485,13 @@ $("watch-hints").onclick = async () => {
   if (rewardRequest || saveFailed || storageConflict || futureSave) return;
   rewardRequest = true;
   hintOffer.close();
-  $("app").inert = true;
+  syncPauseState();
   try {
     const attempt = hintAttempt(progress).id;
     await save();
     if (saveFailed || storageConflict || futureSave) return;
     const result = await showAd("rewarded", attempt);
-    $("app").inert = true;
+    syncPauseState();
     if (result.reward) await receiveReward(result.reward);
     await rewardQueue;
     render();
@@ -485,7 +504,7 @@ $("watch-hints").onclick = async () => {
     );
   } finally {
     rewardRequest = false;
-    $("app").inert = adActive;
+    syncPauseState();
     updateBanner();
   }
 };
@@ -1123,7 +1142,7 @@ function closeMenu() {
   platform.gameplay(!paused && occupied(board()) > 0);
 }
 function navigateBack(native = false): boolean {
-  if (adActive) return true;
+  if (adActive || rewardRequest) return true;
   if (hintOffer.open) {
     hintOffer.close();
     return true;
@@ -1138,7 +1157,7 @@ function navigateBack(native = false): boolean {
   return true;
 }
 function openMenu() {
-  if (busy || adActive) return;
+  if (busy || adActive || rewardRequest) return;
   flights.clear();
   updateHome();
   cancelHint();
@@ -1161,7 +1180,7 @@ function openMenu() {
   platform.gameplay(false);
 }
 function reset() {
-  if (busy || saveFailed || adActive) return;
+  if (busy || saveFailed || adActive || rewardRequest) return;
   earnedAward = "";
   startAttempt(progress, progress.active);
   saveRecovered = false;
@@ -1231,7 +1250,7 @@ $("restart-task").onclick = () => {
   $("new").click();
 };
 $("play-again").onclick = async () => {
-  if (busy || adActive) return;
+  if (busy || adActive || rewardRequest) return;
   busy = true;
   $<HTMLButtonElement>("play-again").disabled = true;
   await save();
@@ -1288,15 +1307,8 @@ window.addEventListener("resize", () => {
   drawPath(highlight);
 });
 document.addEventListener("visibilitychange", () => {
-  paused = document.hidden || adActive;
-  if (paused) flights.clear();
-  cancelHint();
-  if (!busy) render();
-  platform.gameplay(!paused && !dialog.open && occupied(board()) > 0);
-  if (paused) {
-    if (!busy) save();
-    suspendSound();
-  }
+  syncPauseState();
+  if (paused && !busy) save();
 });
 window.addEventListener("pagehide", () => {
   if (!busy) save();
@@ -1383,55 +1395,33 @@ async function boot() {
   try {
     await platform.initPlatform(
       () => {
-        paused = true;
-        cancelHint();
-        if (!busy) render();
-        platform.gameplay(false);
-        suspendSound();
+        platformPaused = true;
+        syncPauseState();
         if (!busy) save();
       },
       () => {
-        paused = document.hidden || adActive;
-        if (!busy) render();
-        platform.gameplay(!dialog.open && occupied(board()) > 0);
+        platformPaused = false;
+        syncPauseState();
       },
     );
   } catch {
     warning = "Сервис площадки недоступен. Можно играть без него.";
   }
-  await initializeMonetization((active) => {
-    paused = active || !appForeground || document.hidden;
-    blockSound(active);
-    $("app").inert = active;
-    if (active) {
-      flights.clear();
-      cancelHint();
-      suspendSound();
-    }
-    if (!busy) render();
-    platform.gameplay(!paused && !dialog.open && occupied(board()) > 0);
-    updateBanner();
-  }, receiveReward);
-  $("app").inert = false;
+  await initializeMonetization(() => syncPauseState(), receiveReward);
+  syncPauseState();
   track("game_open", { mode: gameMode(), reason: "resume" });
   void platform
     .listenAppState((active) => {
       appForeground = active;
-      paused = !active || adActive || document.hidden;
-      cancelHint();
-      if (!busy) render();
-      platform.gameplay(active && !dialog.open && occupied(board()) > 0);
-      if (!active) {
-        if (!busy) save();
-        suspendSound();
-      }
+      syncPauseState();
+      if (!active && !busy) save();
     })
     .catch(() => {});
   void platform.listenBack(() => navigateBack(true)).catch(() => {});
   if (!settings.tutorialDone) startLesson(true);
   else openMenu();
   platform.ready();
-  platform.gameplay(!dialog.open);
+  platform.gameplay(!paused && !dialog.open);
   if (warning) message(warning);
   showSaveState();
 }

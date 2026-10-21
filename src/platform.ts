@@ -1,4 +1,4 @@
-import { Capacitor } from "@capacitor/core";
+import { Capacitor, registerPlugin } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 export const isYandex = import.meta.env.MODE === "yandex";
 type YandexSDK = {
@@ -88,6 +88,14 @@ export async function listenBack(onBack: () => boolean): Promise<void> {
   });
 }
 
+const durableStorage = registerPlugin<{
+  persistState(options: {
+    key: string;
+    value: string;
+    settingsKey: string;
+    settings: string;
+  }): Promise<void>;
+}>("SeedsMonetization");
 export const native = Capacitor.isNativePlatform();
 export class SaveConflict extends Error {}
 /** Serialize cooperating tabs and reject stale snapshots before touching either key. */
@@ -120,7 +128,14 @@ export async function saveState(
         merged[field] = latest[field];
       if (Object.hasOwn(patch, field)) merged[field] = patch[field];
     }
-    if (native) {
+    if (Capacitor.getPlatform() === "android") {
+      await durableStorage.persistState({
+        key,
+        value,
+        settingsKey,
+        settings: JSON.stringify(merged),
+      });
+    } else if (native) {
       await write(settingsKey, JSON.stringify(merged));
       await write(key, value);
     } else {

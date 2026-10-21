@@ -1,7 +1,10 @@
+import { compactHintKey } from "./hint-key";
 import { metadata, type Progress, type Attempt } from "./progress";
 import type { RewardReceipt } from "./monetization";
 export function hintKey(board: number[], a: number, b: number) {
-  return `${board.join("")}:${Math.min(a, b)}:${Math.max(a, b)}`;
+  return compactHintKey(
+    `${board.join("")}:${Math.min(a, b)}:${Math.max(a, b)}`,
+  );
 }
 export function hintAttempt(p: Progress): Attempt {
   const m = metadata(p);

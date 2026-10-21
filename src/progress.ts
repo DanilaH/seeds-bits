@@ -1,3 +1,4 @@
+import { compactHintKey } from "./hint-key";
 import { packSession, unpackSession } from "./history-codec";
 import { jars, type Jars } from "./jars";
 import { decode, newSession, occupied, type Session } from "./core";
@@ -94,6 +95,7 @@ export function readProgress(
         Array.isArray(m.attempts)
       )
         throw Error("Invalid statistics");
+      const attempts: Record<string, Attempt> = {};
       for (const [id, value] of Object.entries(m.attempts)) {
         const a = value as Attempt;
         if (
@@ -101,28 +103,47 @@ export function readProgress(
           !a ||
           typeof a.id !== "string" ||
           typeof a.completed !== "boolean"
-        )
-          throw Error("Invalid attempt");
-        if (
-          a.hintBonus !== undefined &&
-          (!Number.isSafeInteger(a.hintBonus) || a.hintBonus < 0)
-        )
-          throw Error("Invalid hint bonus");
-        if (
-          a.hintKeys !== undefined &&
-          (!Array.isArray(a.hintKeys) ||
-            !a.hintKeys.every((k) => typeof k === "string" && k.length <= 4000))
-        )
-          throw Error("Invalid hint history");
+        ) {
+          onRecovery();
+          continue;
+        }
+        const safe: Attempt = { id: a.id, completed: a.completed };
+        if (typeof a.analyticsStarted === "boolean")
+          safe.analyticsStarted = a.analyticsStarted;
+        if (a.hintBonus !== undefined) {
+          if (Number.isSafeInteger(a.hintBonus) && a.hintBonus >= 0)
+            safe.hintBonus = a.hintBonus;
+          else onRecovery();
+        }
+        if (a.hintKeys !== undefined) {
+          if (Array.isArray(a.hintKeys)) {
+            safe.hintKeys = a.hintKeys.map((key, index) => {
+              if (typeof key === "string" && key.length <= 4000)
+                return compactHintKey(key);
+              // Keep the used credit while recovering the rest of this attempt.
+              onRecovery();
+              return `recovered:${index}`;
+            });
+          } else onRecovery();
+        }
+        attempts[id] = safe;
       }
-      if (
-        m.rewardReceipts !== undefined &&
-        (!Array.isArray(m.rewardReceipts) ||
-          !m.rewardReceipts.every(
-            (t: unknown) => typeof t === "string" && t.length <= 100,
-          ))
-      )
-        throw Error("Invalid rewards");
+      m.attempts = attempts;
+      if (m.rewardReceipts !== undefined) {
+        if (Array.isArray(m.rewardReceipts)) {
+          m.rewardReceipts = m.rewardReceipts.filter((token: unknown) => {
+            const valid =
+              typeof token === "string" &&
+              token.length > 0 &&
+              token.length <= 100;
+            if (!valid) onRecovery();
+            return valid;
+          });
+        } else {
+          delete m.rewardReceipts;
+          onRecovery();
+        }
+      }
       clean.meta = m;
     } catch {
       // Statistics are optional; keep valid boards, completion marks and trophies.
