@@ -1,0 +1,260 @@
+[
+  {
+    "w": 320,
+    "h": 568,
+    "overflow": 0,
+    "footer": {
+      "x": 22,
+      "y": 434,
+      "width": 276,
+      "height": 102,
+      "top": 434,
+      "right": 298,
+      "bottom": 536,
+      "left": 22
+    },
+    "board": {
+      "x": 22,
+      "y": 126,
+      "width": 276,
+      "height": 254,
+      "top": 126,
+      "right": 298,
+      "bottom": 380,
+      "left": 22
+    },
+    "ad": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 0
+    },
+    "banner": {
+      "visible": false,
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "viewportWidth": 320
+    }
+  },
+  {
+    "w": 360,
+    "h": 640,
+    "overflow": 0,
+    "footer": {
+      "x": 22,
+      "y": 375,
+      "width": 316,
+      "height": 113,
+      "top": 375,
+      "right": 338,
+      "bottom": 488,
+      "left": 22
+    },
+    "board": {
+      "x": 22,
+      "y": 126,
+      "width": 316,
+      "height": 165,
+      "top": 126,
+      "right": 338,
+      "bottom": 291,
+      "left": 22
+    },
+    "ad": {
+      "x": 20,
+      "y": 532,
+      "width": 320,
+      "height": 72,
+      "top": 532,
+      "right": 340,
+      "bottom": 604,
+      "left": 20
+    },
+    "banner": {
+      "visible": true,
+      "x": 20,
+      "y": 532,
+      "width": 320,
+      "height": 72,
+      "viewportWidth": 360
+    }
+  },
+  {
+    "w": 390,
+    "h": 844,
+    "overflow": 0,
+    "footer": {
+      "x": 22,
+      "y": 579,
+      "width": 346,
+      "height": 113,
+      "top": 579,
+      "right": 368,
+      "bottom": 692,
+      "left": 22
+    },
+    "board": {
+      "x": 22,
+      "y": 150,
+      "width": 346,
+      "height": 345,
+      "top": 150,
+      "right": 368,
+      "bottom": 495,
+      "left": 22
+    },
+    "ad": {
+      "x": 20,
+      "y": 736,
+      "width": 350,
+      "height": 72,
+      "top": 736,
+      "right": 370,
+      "bottom": 808,
+      "left": 20
+    },
+    "banner": {
+      "visible": true,
+      "x": 20,
+      "y": 736,
+      "width": 350,
+      "height": 72,
+      "viewportWidth": 390
+    }
+  },
+  {
+    "w": 568,
+    "h": 320,
+    "overflow": 0,
+    "footer": {
+      "x": 348,
+      "y": 218,
+      "width": 200,
+      "height": 70,
+      "top": 218,
+      "right": 548,
+      "bottom": 288,
+      "left": 348
+    },
+    "board": {
+      "x": 20,
+      "y": 28,
+      "width": 310,
+      "height": 260,
+      "top": 28,
+      "right": 330,
+      "bottom": 288,
+      "left": 20
+    },
+    "ad": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 0
+    },
+    "banner": {
+      "visible": false,
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "viewportWidth": 568
+    }
+  },
+  {
+    "w": 844,
+    "h": 390,
+    "overflow": 0,
+    "footer": {
+      "x": 623,
+      "y": 287,
+      "width": 200,
+      "height": 70,
+      "top": 287,
+      "right": 823,
+      "bottom": 357,
+      "left": 623
+    },
+    "board": {
+      "x": 21,
+      "y": 29,
+      "width": 584,
+      "height": 328,
+      "top": 29,
+      "right": 605,
+      "bottom": 357,
+      "left": 21
+    },
+    "ad": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 0
+    },
+    "banner": {
+      "visible": false,
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "viewportWidth": 844
+    }
+  },
+  {
+    "w": 768,
+    "h": 1024,
+    "overflow": 0,
+    "footer": {
+      "x": 137,
+      "y": 790,
+      "width": 494,
+      "height": 113,
+      "top": 790,
+      "right": 631,
+      "bottom": 903,
+      "left": 137
+    },
+    "board": {
+      "x": 137,
+      "y": 183,
+      "width": 494,
+      "height": 523,
+      "top": 183,
+      "right": 631,
+      "bottom": 706,
+      "left": 137
+    },
+    "ad": {
+      "x": 184,
+      "y": 916,
+      "width": 400,
+      "height": 72,
+      "top": 916,
+      "right": 584,
+      "bottom": 988,
+      "left": 184
+    },
+    "banner": {
+      "visible": true,
+      "x": 184,
+      "y": 916,
+      "width": 400,
+      "height": 72,
+      "viewportWidth": 768
+    }
+  }
+]

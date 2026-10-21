@@ -1,0 +1,31 @@
+
+> seeds-bits@0.6.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.4 [39m[90m/home/runner/work/seeds-bits/seeds-bits[39m
+
+ [32m✓[39m tests/meta.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/jars.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+ [32m✓[39m tests/history-codec.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 2728[2mms[22m[39m
+   [33m[2m✓[22m[39m legacy migration preserves every undo including additions, collapse and branches[33m 1545[2mms[22m[39m
+   [33m[2m✓[22m[39m all hundred unfinished notebooks fit comfortably and every snapshot survives[33m 1179[2mms[22m[39m
+ [32m✓[39m tests/expansion.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1284[2mms[22m[39m
+   [33m[2m✓[22m[39m all 2400 layouts differ even after renaming equal/complementary digits; original content remains exact[33m 471[2mms[22m[39m
+   [33m[2m✓[22m[39m every volume has a fully verified, zero-search hint path including the largest boards[33m 801[2mms[22m[39m
+ [32m✓[39m tests/hint-budget.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/core.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 4783[2mms[22m[39m
+   [33m[2m✓[22m[39m differentially checks 3000 seeded boards against independent coordinate validator[33m 337[2mms[22m[39m
+   [33m[2m✓[22m[39m 100 seeded classical simulations preserve counts, serialize, undo and never corrupt[33m 4433[2mms[22m[39m
+ [32m✓[39m tests/recovery.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/advice.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 469[2mms[22m[39m
+   [33m[2m✓[22m[39m known solution seeds solve all 730 daily puzzles without searching[33m 396[2mms[22m[39m
+ [32m✓[39m tests/puzzles.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 5991[2mms[22m[39m
+   [32m✓[39m verified content and calendar [2m(4)[22m
+     [33m[2m✓[22m[39m solves every notebook task with distinct arrangements[33m 5385[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m40 passed[39m[22m[90m (40)[39m
+[2m   Start at [22m 06:05:42
+[2m   Duration [22m 6.79s[2m (tests 96%, transform 2%, import 2%)[22m
+

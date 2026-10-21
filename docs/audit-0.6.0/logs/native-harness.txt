@@ -1,0 +1,62 @@
+[
+  {
+    "case": "N01_duplicate_reward_after_ack",
+    "passed": false,
+    "detail": "native receipts=2"
+  },
+  {
+    "case": "N02_delayed_sdk_banner",
+    "passed": false,
+    "detail": "banner requests after SDK ready=0"
+  },
+  {
+    "case": "N03_stale_banner_callback",
+    "passed": false,
+    "detail": "replacement destroyed=true"
+  },
+  {
+    "case": "N04_missing_preshow_callback",
+    "passed": true,
+    "detail": "deadline released call=true"
+  },
+  {
+    "case": "N05_no_immediate_retry",
+    "passed": true,
+    "detail": "requests=1"
+  },
+  {
+    "case": "N06_retry_after_interval",
+    "passed": true,
+    "detail": "requests=2"
+  },
+  {
+    "case": "N07_initial_grace",
+    "passed": true,
+    "detail": "shows=0"
+  },
+  {
+    "case": "N08_interval_eligible",
+    "passed": true,
+    "detail": "shows=1"
+  },
+  {
+    "case": "N09_interval_persisted",
+    "passed": true,
+    "detail": "shows=0"
+  },
+  {
+    "case": "N10_destroy_unblocks",
+    "passed": true,
+    "detail": "resolved=true"
+  },
+  {
+    "case": "N11_preferences_apply_failure",
+    "passed": false,
+    "detail": "volatileGame=true,durableGame=false,nativePending=false"
+  },
+  {
+    "case": "N12_reward_delays_interstitial",
+    "passed": true,
+    "detail": "shows=0"
+  }
+]

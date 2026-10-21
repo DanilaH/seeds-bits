@@ -1,0 +1,9 @@
+{
+  "sha256": "9005d9cd58916f642df583c20a28793987f2c972a93c65f7898b7012b58c007a",
+  "matchesSignedRelease": true,
+  "size": 10326914,
+  "pluginPackaged": true,
+  "appMetricaPackaged": true,
+  "yandexAdsPackaged": true,
+  "nativeHardwareTested": false
+}

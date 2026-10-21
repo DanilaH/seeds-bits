@@ -1,0 +1,45 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.4 [39m[90m/home/runner/work/seeds-bits/seeds-bits[39m
+
+ [31m❯[39m scripts/audit-0.6.0/model.audit.ts [2m([22m[2m2 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1103[2mms[22m[39m
+[31m   [31m×[31m M01 hundred unfinished notebooks with legitimately earned hints remain compact[39m[33m 1096[2mms[22m[39m
+[31m   [31m×[31m M02 malformed optional hint metadata should preserve unrelated completion statistics[39m[32m 5[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m scripts/audit-0.6.0/model.audit.ts[2m > [22mM01 hundred unfinished notebooks with legitimately earned hints remain compact
+[31m[1mAssertionError[22m: expected 2867159 to be less than 2500000[39m
+[36m [2m❯[22m scripts/audit-0.6.0/model.audit.ts:[2m17:24[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m scripts/audit-0.6.0/model.audit.ts[2m > [22mM02 malformed optional hint metadata should preserve unrelated completion statistics
+[31m[1mAssertionError[22m: expected +0 to be 120 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 120[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m scripts/audit-0.6.0/model.audit.ts:[2m22:178[22m[39m
+    [90m 20|[39m  const p=fresh();metadata(p).completed=120;metadata(p).unassisted=100;…
+    [90m 21|[39m  const q=readProgress(serializeProgress(p),()=>recovery++);
+    [90m 22|[39m  writeFileSync(`${out}/M02-corrupt-hint-metadata.json`,JSON.stringify(…
+    [90m   |[39m                                                                                                                                                                                  [31m^[39m
+    [90m 23|[39m });
+    [90m 24|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m   Start at [22m 06:06:16
+[2m   Duration [22m 1.33s[2m (tests 90%, transform 7%, import 2%)[22m
+
+
+::error file=/home/runner/work/seeds-bits/seeds-bits/scripts/audit-0.6.0/model.audit.ts,title=scripts/audit-0.6.0/model.audit.ts > M01 hundred unfinished notebooks with legitimately earned hints remain compact,line=17,column=24::AssertionError: expected 2867159 to be less than 2500000%0A ❯ scripts/audit-0.6.0/model.audit.ts:17:24%0A%0A
+
+::error file=/home/runner/work/seeds-bits/seeds-bits/scripts/audit-0.6.0/model.audit.ts,title=scripts/audit-0.6.0/model.audit.ts > M02 malformed optional hint metadata should preserve unrelated completion statistics,line=22,column=178::AssertionError: expected +0 to be 120 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 120%0A+ 0%0A%0A ❯ scripts/audit-0.6.0/model.audit.ts:22:178%0A%0A
