@@ -6,7 +6,7 @@ on:
     inputs:
       source_run_id:
         description: Build RuStore release run containing the unsigned APK
-        default: '39559136899'
+        default: '39560834202'
         required: true
 permissions:
   contents: read
@@ -25,7 +25,7 @@ jobs:
         with:
           name: seeds-rustore-release-unsigned
           path: release-smoke/
-          run-id: ${{ inputs.source_run_id || '39559136899' }}
+          run-id: ${{ inputs.source_run_id || '39560834202' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Prepare offline Android emulator and temporary test signature
         run: |

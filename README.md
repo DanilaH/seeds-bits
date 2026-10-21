@@ -48,3 +48,11 @@ On macOS with supported Xcode: `npm run setup:ios` once, then `npm run sync:ios`
 See `docs/SPEC.md` and `docs/STATUS.md`. Rule version 0.1. Classic deterministic 1–19 start (zero omitted). Adding is free but only allowed when there are no pairs. No loss on repeated state/no pairs. Classic hints identify legal pairs. Notebook and daily hints use verified solution paths and bounded search, with explicit recovery when a path cannot be verified. Version 0.5.0 includes 100 notebooks / 2400 verified tasks, the daily archive and monthly trophies from January 2025, and persistent classic seed jars. The first 24 puzzles keep their original IDs and layouts. Large late notebooks scroll vertically without shrinking digits. Expanded content loads separately. Save format 3 migrates format 2 and protects the new data from older app versions. No advertisements, coins or leaderboards.
 
 Provisional field guard: 1,800 logical cells. This is a protective implementation limit, **not** a measured mobile performance claim. At the limit, undo/new game remain available; no defeat is declared. Undo history has no artificial gameplay cap, but device storage is finite; failed saves are explicitly surfaced with a retry action.
+
+## RuStore 1.0.0
+
+Production Android package: `com.seedsbits.game`, name «Семечки». The separate `Build RuStore release` workflow builds `assembleRelease` with checked live ad configuration and the final branding. Its unsigned CI artifact is an intermediate; store submission uses the locally signed APK and permanent release identity, not the preview/debug certificate.
+
+Release verification and limits: [1.0.0](docs/releases/1.0.0.md). Store listing, data disclosures, privacy policy, public signing certificate and upload instructions: [store/](store/). Private signing material is kept outside git. The existing-preview package remains `com.seedsbits.game.preview`.
+
+The Android acceptance follow-up can test an existing release artifact by workflow run ID without rebuilding its payload. It stays offline, temporarily uses a CI-only smoke certificate and exercises native/WebView startup, moves, undo, process-stop persistence, rotation and privacy. Live ad fill and analytics dashboard delivery require a connected physical device. Yandex output remains a draft; iOS is not a signed store release.

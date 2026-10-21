@@ -1,0 +1,23 @@
+{
+  "runtime": "0fd14a8e109d1f2352f37cb3d92e8c098f846966",
+  "acceptanceHarness": "627f8af50150bc8e2b1d642b58dba52f28dd21db",
+  "standardCi": "https://github.com/DanilaH/seeds-bits/actions/runs/39560834207",
+  "releaseBuildCi": "https://github.com/DanilaH/seeds-bits/actions/runs/39560834202",
+  "androidAcceptanceCi": "https://github.com/DanilaH/seeds-bits/actions/runs/39560834202",
+  "unitTests": 45,
+  "modelTests": 2,
+  "standardBrowserTests": 94,
+  "adversarialBrowserTests": 15,
+  "nativeBridgeDoubleScenarios": 16,
+  "emulatorOfflineScenarios": 7,
+  "storeImages": 8,
+  "storeRenderErrors": 0,
+  "releaseBuild": "passed",
+  "signatureAndPackagedResources": "passed",
+  "physicalLiveAdsAndDashboard": "not verified",
+  "storeSubmission": "not performed",
+  "storeMediaCi": "https://github.com/DanilaH/seeds-bits/actions/runs/39561349862",
+  "storeMediaSource": "e52ba519e56ef7cac2f4252ad354e859df50ab0c",
+  "privacyAt320px": "passed",
+  "allReleaseJobs": "success"
+}

@@ -1,0 +1,70 @@
+{
+  "method": "production web UI, achievable demonstration saves; not a native SDK/device test",
+  "captures": [
+    {
+      "name": "phone-01-pairs",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-02-books",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-03-calendar",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-04-jars",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-05-dark",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": true
+    },
+    {
+      "name": "tablet-01-pairs",
+      "viewport": {
+        "width": 960,
+        "height": 440
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-02-books",
+      "viewport": {
+        "width": 960,
+        "height": 440
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-03-dark",
+      "viewport": {
+        "width": 960,
+        "height": 440
+      },
+      "dark": true
+    }
+  ],
+  "errors": []
+}

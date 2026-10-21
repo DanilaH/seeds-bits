@@ -1,0 +1,66 @@
+[
+  {
+    "file": "phone-01-pairs.jpg",
+    "size": [
+      1080,
+      1920
+    ],
+    "bytes": 172501
+  },
+  {
+    "file": "phone-02-books.jpg",
+    "size": [
+      1080,
+      1920
+    ],
+    "bytes": 215795
+  },
+  {
+    "file": "phone-03-calendar.jpg",
+    "size": [
+      1080,
+      1920
+    ],
+    "bytes": 209276
+  },
+  {
+    "file": "phone-04-jars.jpg",
+    "size": [
+      1080,
+      1920
+    ],
+    "bytes": 278310
+  },
+  {
+    "file": "phone-05-dark.jpg",
+    "size": [
+      1080,
+      1920
+    ],
+    "bytes": 176486
+  },
+  {
+    "file": "tablet-01-pairs.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "bytes": 171009
+  },
+  {
+    "file": "tablet-02-books.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "bytes": 177694
+  },
+  {
+    "file": "tablet-03-dark.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "bytes": 151703
+  }
+]
