@@ -156,7 +156,7 @@ document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
-syncPauseState();
+$("app").inert = true;
 function board() {
   return lesson >= 0 ? lessonBoard : session.current.board;
 }
