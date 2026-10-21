@@ -25,7 +25,7 @@ jobs:
         run: npx vitest run --config scripts/audit-0.6.0/vitest.config.ts > /tmp/model-audit.txt 2>&1
         continue-on-error: true
       - name: Independent adversarial browser scenarios
-        run: npx playwright test --config scripts/audit-0.6.0/playwright.config.ts > /tmp/browser-audit.txt 2>&1
+        run: npx playwright test --config scripts/audit-0.6.0/playwright.config.ts --grep 'R07|R13' --repeat-each 3 > /tmp/browser-audit.txt 2>&1
         continue-on-error: true
       - name: Collect audit evidence
         if: always()

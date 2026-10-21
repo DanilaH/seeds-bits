@@ -58,7 +58,9 @@ test('R07 hint repeats cost no credits across undo and reload',async({page})=>{
  await boot(page,false);await page.locator('#hint').click();await expect(page.locator('#hint-label')).toContainText('2');
  const ids=await page.locator('.hinted').evaluateAll(es=>es.map(e=>Number((e as HTMLElement).dataset.index)));
  await page.locator(`[data-index="${ids[0]}"]`).click();await page.locator(`[data-index="${ids[1]}"]`).click();await expect(page.locator('#undo')).toBeEnabled();await page.locator('#undo').click();
- await page.reload();await page.locator('#resume').click();await page.locator('#hint').click();await expect(page.locator('#hint-label')).toContainText('2');
+ const beforeReload=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!),key);const uiBefore=await page.locator('#remaining').textContent();
+ await page.reload();await page.locator('#resume').click();const restored=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!),key);await page.locator('#hint').click();
+ const after=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!),key);report('R07-immediate-undo-reload',{uiBefore,storedMovesBefore:beforeReload.sessions.classic.current.moves,restoredMoves:restored.sessions.classic.current.moves,storedBoardBefore:beforeReload.sessions.classic.current.board,restoredBoard:restored.sessions.classic.current.board,keysBefore:beforeReload.meta.attempts.classic.hintKeys,keysAfter:after.meta.attempts.classic.hintKeys});await expect(page.locator('#hint-label')).toContainText('2');
 });
 test('R08 actual browser quota accepts the legitimate heavy-hint save',async({page})=>{
  const {readFileSync}=await import('node:fs');let data:string;try{data=readFileSync('/tmp/audit060-heavy-hints.json','utf8')}catch{test.skip(true,'Generate with model.audit.ts first');return;}
@@ -81,4 +83,10 @@ test('R11 ad dismissal during native background does not re-enable gameplay',asy
 });
 test('R12 enlarged hint offer remains dismissible in short landscape',async({page})=>{
  await boot(page);await page.setViewportSize({width:568,height:320});await page.addStyleTag({content:'body{font-size:200%}'});await reveal(page);await page.locator('#cancel-hints').click();await expect(page.locator('#hint-offer')).toBeHidden();await page.screenshot({path:'test-results/audit060/enlarged-landscape.png'});
+});
+
+test('R13 repeat hint is free after confirmed undo persistence',async({page})=>{
+ await boot(page,false);await page.locator('#hint').click();const ids=await page.locator('.hinted').evaluateAll(es=>es.map(e=>Number((e as HTMLElement).dataset.index)));
+ await page.locator(`[data-index="${ids[0]}"]`).click();await page.locator(`[data-index="${ids[1]}"]`).click();await expect(page.locator('#undo')).toBeEnabled();await page.locator('#undo').click();await expect.poll(()=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).sessions.classic.current.moves,key)).toBe(0);
+ await page.reload();await page.locator('#resume').click();await page.locator('#hint').click();await expect(page.locator('#hint-label')).toContainText('2');
 });
