@@ -78,7 +78,7 @@ jobs:
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
           echo no | avdmanager create avd --force --name seeds_release --package 'system-images;android-35;google_apis;x86_64'
           sudo chmod 666 /dev/kvm
-          "$ANDROID_HOME/emulator/emulator" -avd seeds_release -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect > /tmp/seeds-emulator.log 2>&1 &
+          "$ANDROID_HOME/emulator/emulator" -avd seeds_release -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 3072 -cores 2 > /tmp/seeds-emulator.log 2>&1 &
           adb wait-for-device
           for attempt in $(seq 1 90); do
             if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1 ]; then break; fi
