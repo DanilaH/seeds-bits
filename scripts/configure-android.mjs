@@ -92,7 +92,8 @@ if (storeRelease && !manifest.includes("android:usesCleartextTraffic="))
     '<application android:usesCleartextTraffic="false"',
   );
 writeFileSync(manifestPath, manifest);
-// Native vectors and legacy PNGs use the same seed mark as the game.
+// Store, legacy launcher and splash share the selected 3 + 7 artwork.
+// Adaptive artwork includes extra gradient margin for Android masks.
 const res = "android/app/src/main/res";
 for (const [density, size] of Object.entries({
   mdpi: 48,
@@ -119,6 +120,11 @@ copyFileSync(
   "native/android/branding/seed-mark.xml",
   `${res}/drawable/seed_mark.xml`,
 );
+for (const name of ["launcher-art", "adaptive-art"])
+  copyFileSync(
+    `native/android/branding/${name}.png`,
+    `${res}/drawable/${name.replaceAll("-", "_")}.png`,
+  );
 writeFileSync(
   `${res}/values/seeds-brand.xml`,
   '<resources><color name="seed_paper">#f6f7f4</color></resources>',

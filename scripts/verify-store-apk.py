@@ -48,7 +48,12 @@ with zipfile.ZipFile(file) as z:
    icons.append({'name':key,'resource':name,'size':size})
  assert len(icons)==10,icons
  mark=res.get_resolved_res_configs(res.get_res_id_by_key(pkg,'drawable','seed_mark'))[0][1]
- assert AXMLPrinter(z.read(str(mark))).get_xml_obj().tag=='vector'
+ assert AXMLPrinter(z.read(str(mark))).get_xml_obj().tag=='bitmap'
+ for key,filename in [('launcher_art','launcher-art.png'),('adaptive_art','adaptive-art.png')]:
+  resource=res.get_resolved_res_configs(res.get_res_id_by_key(pkg,'drawable',key))[0][1]
+  actual=Image.open(io.BytesIO(z.read(str(resource)))).convert('RGB')
+  expected=Image.open('native/android/branding/'+filename).convert('RGB')
+  assert actual.size==expected.size and ImageChops.difference(actual,expected).getbbox() is None,key
  dex=b''.join(a.get_all_dex());classes={name:needle in dex for name,needle in {'bridge':b'Lcom/seedsbits/game/SeedsMonetizationPlugin;','application':b'Lcom/seedsbits/game/SeedsApplication;','yandex':b'Lcom/yandex/mobile/ads/banner/BannerAdView;','appmetrica':b'Lio/appmetrica/analytics/AppMetrica;'}.items()};assert all(classes.values())
-r={'file':file.name,'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'bytes':file.stat().st_size,'package':pkg,'name':a.get_app_name(),'versionName':a.get_androidversion_name(),'versionCode':a.get_androidversion_code(),'minSdk':a.get_min_sdk_version(),'targetSdk':a.get_target_sdk_version(),'debuggable':False,'testOnly':False,'allowBackup':False,'usesCleartextTraffic':False,'adsTestMode':False,'distinctLiveAdUnits':True,'configuredClientFields':{key:bool(value) for key,value in values.items()},'certificateSha256':cert,'signatureVerified':{'v2':True,'v3':True},'permissions':a.get_permissions(),'cleanWebAssets':assets,'extraStaleAssets':False,'launcherIcons':icons,'seedVector':True,'packagedClasses':classes}
+r={'file':file.name,'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'bytes':file.stat().st_size,'package':pkg,'name':a.get_app_name(),'versionName':a.get_androidversion_name(),'versionCode':a.get_androidversion_code(),'minSdk':a.get_min_sdk_version(),'targetSdk':a.get_target_sdk_version(),'debuggable':False,'testOnly':False,'allowBackup':False,'usesCleartextTraffic':False,'adsTestMode':False,'distinctLiveAdUnits':True,'configuredClientFields':{key:bool(value) for key,value in values.items()},'certificateSha256':cert,'signatureVerified':{'v2':True,'v3':True},'permissions':a.get_permissions(),'cleanWebAssets':assets,'extraStaleAssets':False,'launcherIcons':icons,'launcherArtworkVerified':True,'packagedClasses':classes}
 path=pathlib.Path(args.report);path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\n');print(json.dumps(r,ensure_ascii=False,indent=2))
