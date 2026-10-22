@@ -8,7 +8,7 @@ from androguard.core.dex import DEX
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from PIL import Image,ImageChops
-p=argparse.ArgumentParser();p.add_argument('--apk',required=True);p.add_argument('--apksigner',required=True);p.add_argument('--report',default='docs/releases/1.0.0-apk.json');args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--apk',required=True);p.add_argument('--apksigner',required=True);p.add_argument('--mapping');p.add_argument('--report',default='docs/releases/1.0.0-apk.json');args=p.parse_args()
 file=pathlib.Path(args.apk);a=APK(str(file));ns='{http://schemas.android.com/apk/res/android}'
 pkg=a.get_package();app=a.get_android_manifest_xml().find('application');res=a.get_android_resources()
 assert pkg=='com.seedsbits.game' and a.get_app_name()=='Семечки'
@@ -59,6 +59,14 @@ with zipfile.ZipFile(file) as z:
  plugin=next(c for payload in a.get_all_dex() for c in DEX(payload).get_classes() if c.get_name()=='Lcom/seedsbits/game/SeedsMonetizationPlugin;')
  methods={m.get_name() for m in plugin.get_methods()}
  assert {'initialize','pending','acknowledge','persistState','preload','show','banner','report'}<=methods,methods
- assert b'Lcom/getcapacitor/PluginMethod;' in dex and b'Lcom/getcapacitor/annotation/CapacitorPlugin;' in dex
-r={'file':file.name,'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'bytes':file.stat().st_size,'package':pkg,'name':a.get_app_name(),'versionName':a.get_androidversion_name(),'versionCode':a.get_androidversion_code(),'minSdk':a.get_min_sdk_version(),'targetSdk':a.get_target_sdk_version(),'debuggable':False,'testOnly':False,'allowBackup':False,'usesCleartextTraffic':False,'adsTestMode':False,'distinctLiveAdUnits':True,'configuredClientFields':{key:bool(value) for key,value in values.items()},'certificateSha256':cert,'signatureVerified':{'v2':True,'v3':True},'permissions':a.get_permissions(),'cleanWebAssets':assets,'extraStaleAssets':False,'launcherIcons':icons,'launcherArtworkVerified':True,'packagedClasses':classes}
+ mapping={}
+ if args.mapping:
+  for line in pathlib.Path(args.mapping).read_text().splitlines():
+   if line and not line[0].isspace() and not line.startswith('#') and ' -> ' in line:
+    original,renamed=line.rstrip(':').split(' -> ',1);mapping[original]=renamed
+ def descriptor(name):return 'L'+mapping.get(name,name).replace('.','/')+';'
+ for annotation in ['com.getcapacitor.PluginMethod','com.getcapacitor.annotation.CapacitorPlugin']:
+  assert descriptor(annotation).encode() in dex,annotation
+ assert descriptor('com.getcapacitor.annotation.CapacitorPlugin') in plugin.get_annotations()
+r={'file':file.name,'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'bytes':file.stat().st_size,'package':pkg,'name':a.get_app_name(),'versionName':a.get_androidversion_name(),'versionCode':a.get_androidversion_code(),'minSdk':a.get_min_sdk_version(),'targetSdk':a.get_target_sdk_version(),'debuggable':False,'testOnly':False,'allowBackup':False,'usesCleartextTraffic':False,'adsTestMode':False,'distinctLiveAdUnits':True,'configuredClientFields':{key:bool(value) for key,value in values.items()},'certificateSha256':cert,'signatureVerified':{'v2':True,'v3':True},'permissions':a.get_permissions(),'cleanWebAssets':assets,'extraStaleAssets':False,'launcherIcons':icons,'launcherArtworkVerified':True,'packagedClasses':classes,'bridgeMethodsAndAnnotationsVerified':True}
 path=pathlib.Path(args.report);path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\n');print(json.dumps(r,ensure_ascii=False,indent=2))

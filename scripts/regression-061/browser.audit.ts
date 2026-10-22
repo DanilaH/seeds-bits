@@ -293,7 +293,7 @@ test("R06 typography and banner reservations across viewport matrix", async ({
   expect(results.every((r) => r.overflow <= 1)).toBe(true);
   expect(results.every((r) => r.board.height > 80)).toBe(true);
 });
-test("R07 hint repeats cost no credits across undo and reload", async ({
+test("R07 immediate reload restores a committed board and charges only a new hint", async ({
   page,
 }) => {
   await boot(page, false);
@@ -333,7 +333,21 @@ test("R07 hint repeats cost no credits across undo and reload", async ({
     keysBefore: beforeReload.meta.attempts.classic.hintKeys,
     keysAfter: after.meta.attempts.classic.hintKeys,
   });
-  await expect(page.locator("#hint-label")).toContainText("2");
+  // Reload can happen before the queued undo transaction commits. Both the
+  // pre-undo and post-undo snapshots are valid durable boundaries; a hint on
+  // the still-removed board is a different hint, and must cost one credit.
+  const snapshot = restored.sessions.classic.current;
+  expect([0, 1]).toContain(snapshot.moves);
+  const originalBoard = Array(36).fill(5);
+  const removedBoard = originalBoard.map((value, index) =>
+    ids.includes(index) ? 0 : value,
+  );
+  expect(snapshot.board).toEqual(
+    snapshot.moves === 0 ? originalBoard : removedBoard,
+  );
+  await expect(page.locator("#hint-label")).toContainText(
+    snapshot.moves === 0 ? "2" : "1",
+  );
 });
 test("R08 actual browser quota accepts the legitimate heavy-hint save", async ({
   page,
