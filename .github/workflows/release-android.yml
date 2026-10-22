@@ -40,6 +40,11 @@ jobs:
         with:
           name: seeds-rustore-release-unsigned
           path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-rustore-r8-reports
+          path: android/app/build/outputs/mapping/release/
   store-media:
     runs-on: ubuntu-latest
     steps:

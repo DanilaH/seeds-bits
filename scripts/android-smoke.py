@@ -59,6 +59,12 @@ def pair(found):
    dr=abs(a//9-b//9);dc=abs(a%9-b%9)
    if b-a==1 or (dr<=1 and dc<=1):return an,bn
  raise AssertionError('No adjacent starting pair')
+def hint_button(count):
+ for _ in range(10):
+  for node in snapshot().iter('node'):
+   if re.fullmatch(r'Подсказка\s*·\s*'+str(count),label(node)):return node
+  time.sleep(1)
+ raise AssertionError('Native monetization hint count missing: '+str(count))
 def launch():
  adb('shell','am','start','-n',package+'/.MainActivity')
  time.sleep(3)
@@ -77,8 +83,17 @@ try:
  a,b=pair(found);tap(a);tap(b);wait_cells(26);checks['removePair']=True
  tap(wait_label(['Отмена']));found=wait_cells(28);checks['undo']=True
  a,b=pair(found);tap(a);tap(b);wait_cells(26);time.sleep(1)
+ # The counter exists only after native initialize() resolves successfully.
+ hint_button(3);checks['nativeMonetizationBridgeInitialized']=True
+ for remaining in (2,1,0):
+  tap(hint_button(remaining+1));hint_button(remaining)
+ checks['freeHintAccounting']=True
+ tap(hint_button(0));tap(wait_label(['Смотреть рекламу · +3 подсказки']))
+ wait_label(['Реклама сейчас недоступна. Попробуйте позже.']);hint_button(0)
+ checks['offlineRewardedReturnsWithoutGrant']=True
  screenshot('portrait.png')
  adb('shell','am','force-stop',package);launch();tap(wait_label(['Продолжить игру','Играть']));wait_cells(26);checks['saveSurvivesProcessStop']=True
+ hint_button(0);checks['hintBalanceSurvivesProcessStop']=True
  adb('shell','settings','put','system','accelerometer_rotation','0')
  adb('shell','settings','put','system','user_rotation','1');time.sleep(2);wait_cells(26);screenshot('landscape.png');checks['rotationPreservesBoard']=True
  adb('shell','settings','put','system','user_rotation','0');time.sleep(2)

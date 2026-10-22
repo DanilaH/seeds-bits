@@ -45,6 +45,23 @@ if (storeRelease && (test || process.env.REQUIRE_MOBILE_CONFIG !== "true"))
 let gradle = readFileSync(path, "utf8")
   .replace(/versionCode \d+/, `versionCode ${versionCode}`)
   .replace(/versionName "[^"]+"/, `versionName "${version}"`);
+gradle = gradle
+  .replace("minifyEnabled false", "minifyEnabled true")
+  .replace("proguard-android.txt", "proguard-android-optimize.txt");
+if (!gradle.includes("shrinkResources true"))
+  gradle = gradle.replace(
+    "minifyEnabled true",
+    "minifyEnabled true\n            shrinkResources true",
+  );
+if (
+  !gradle.includes("minifyEnabled true") ||
+  !gradle.includes("shrinkResources true")
+)
+  throw Error("Release optimization configuration missing");
+copyFileSync(
+  "native/android/proguard-rules.pro",
+  "android/app/proguard-rules.pro",
+);
 if (!gradle.includes("// seeds SDKs"))
   gradle += `\n// seeds SDKs\ndependencies {\n  implementation 'com.yandex.android:mobileads:8.5.0'\n  implementation 'io.appmetrica.analytics:analytics:8.6.0'\n}\n`;
 writeFileSync(path, gradle);
@@ -120,11 +137,15 @@ copyFileSync(
   "native/android/branding/seed-mark.xml",
   `${res}/drawable/seed_mark.xml`,
 );
-for (const name of ["launcher-art", "adaptive-art"])
+for (const name of ["launcher-art", "adaptive-art"]) {
+  const old = `${res}/drawable/${name.replaceAll("-", "_")}.png`;
+  if (readdirSync(`${res}/drawable`).includes(old.split("/").at(-1)))
+    unlinkSync(old);
   copyFileSync(
-    `native/android/branding/${name}.png`,
-    `${res}/drawable/${name.replaceAll("-", "_")}.png`,
+    `native/android/branding/${name}.webp`,
+    `${res}/drawable/${name.replaceAll("-", "_")}.webp`,
   );
+}
 writeFileSync(
   `${res}/values/seeds-brand.xml`,
   '<resources><color name="seed_paper">#f6f7f4</color></resources>',

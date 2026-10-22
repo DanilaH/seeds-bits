@@ -56,6 +56,13 @@ test("store configuration keeps live IDs, correct namespace and branding and is 
     }
     const read = (p: string) => readFileSync(join(root, p), "utf8");
     expect(read("android/app/build.gradle")).toContain("versionCode 1000007");
+    const gradle = read("android/app/build.gradle");
+    expect(gradle).toContain("minifyEnabled true");
+    expect(gradle).toContain("shrinkResources true");
+    expect(gradle).toContain("proguard-android-optimize.txt");
+    expect(read("android/app/proguard-rules.pro")).toContain(
+      "SeedsMonetizationPlugin",
+    );
     expect(
       read(
         "android/app/src/main/java/com/seedsbits/game/SeedsMonetizationPlugin.java",
