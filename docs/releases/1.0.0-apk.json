@@ -1,11 +1,11 @@
 {
   "file": "seeds-1.0.0-rustore.apk",
-  "sha256": "80751efdc8c39652b36df5f5c37574f0f1a3da0e99a3a1aed9b646c5cda30d22",
-  "bytes": 8296035,
+  "sha256": "052bc00e374e799b08f56a0056f7cbd5be8eb2d7e4f3653b55150d8db2e0b020",
+  "bytes": 8926931,
   "package": "com.seedsbits.game",
   "name": "Семечки",
   "versionName": "1.0.0",
-  "versionCode": "1000004",
+  "versionCode": "1000005",
   "minSdk": "24",
   "targetSdk": "36",
   "debuggable": false,
@@ -26,24 +26,24 @@
     "v3": true
   },
   "permissions": [
-    "com.seedsbits.game.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+    "android.permission.VIBRATE",
     "com.google.android.gms.permission.AD_ID",
-    "android.permission.INTERNET",
     "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.INTERNET",
     "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
-    "android.permission.VIBRATE"
+    "com.seedsbits.game.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
   ],
   "cleanWebAssets": {
     "index.html": true,
-    "assets/index-KuoM8BUL.js": true,
-    "assets/web-DIL_LeWn.js": true,
+    "assets/advice-worker-6LRsD5M8.js": true,
     "assets/web-DE0Czfs8.js": true,
     "assets/index-CzM9KfeM.css": true,
-    "assets/web-Bdx_bs5x.js": true,
     "assets/esm-BCOjGgNN.js": true,
-    "assets/advice-worker-6LRsD5M8.js": true,
+    "assets/esm-B6Dhgbi6.js": true,
     "assets/notebook-extra-B_1ZZVK0.js": true,
-    "assets/esm-B6Dhgbi6.js": true
+    "assets/index-KuoM8BUL.js": true,
+    "assets/web-DIL_LeWn.js": true,
+    "assets/web-Bdx_bs5x.js": true
   },
   "extraStaleAssets": false,
   "launcherIcons": [
@@ -98,7 +98,7 @@
       "size": 192
     }
   ],
-  "seedVector": true,
+  "launcherArtworkVerified": true,
   "packagedClasses": {
     "bridge": true,
     "application": true,
