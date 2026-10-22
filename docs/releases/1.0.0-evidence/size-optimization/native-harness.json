@@ -1,0 +1,85 @@
+{
+  "method": "unmodified production Java source compiled with deterministic SDK/Android doubles",
+  "results": [
+    {
+      "case": "N01_duplicate_reward_after_ack",
+      "passed": true,
+      "detail": "native receipts=1"
+    },
+    {
+      "case": "N02_delayed_sdk_banner",
+      "passed": true,
+      "detail": "banner requests after SDK ready=1"
+    },
+    {
+      "case": "N03_stale_banner_callback",
+      "passed": true,
+      "detail": "replacement destroyed=false"
+    },
+    {
+      "case": "N04_missing_preshow_callback",
+      "passed": true,
+      "detail": "deadline released call=true"
+    },
+    {
+      "case": "N05_no_immediate_retry",
+      "passed": true,
+      "detail": "requests=1"
+    },
+    {
+      "case": "N06_retry_after_interval",
+      "passed": true,
+      "detail": "requests=2"
+    },
+    {
+      "case": "N07_initial_grace",
+      "passed": true,
+      "detail": "shows=0"
+    },
+    {
+      "case": "N08_interval_eligible",
+      "passed": true,
+      "detail": "shows=1"
+    },
+    {
+      "case": "N09_interval_persisted",
+      "passed": true,
+      "detail": "shows=0"
+    },
+    {
+      "case": "N10_destroy_unblocks",
+      "passed": true,
+      "detail": "resolved=true"
+    },
+    {
+      "case": "N11_durable_save_failure",
+      "passed": true,
+      "detail": "volatileGame=false,durableGame=false,nativePending=true"
+    },
+    {
+      "case": "N12_reward_delays_interstitial",
+      "passed": true,
+      "detail": "shows=0"
+    },
+    {
+      "case": "N13_durable_both_keys",
+      "passed": true,
+      "detail": "both keys committed"
+    },
+    {
+      "case": "N14_ack_failure_reported",
+      "passed": true,
+      "detail": "ack rejected=true"
+    },
+    {
+      "case": "N15_stale_fullscreen_callback",
+      "passed": true,
+      "detail": "replacement open, receipts=1"
+    },
+    {
+      "case": "N16_sdk_ready_respects_hidden",
+      "passed": true,
+      "detail": "banners=0"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "environment": "Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised",
+  "checks": {
+    "launchOffline": true,
+    "tutorialSkipAndClassic": true,
+    "removePair": true,
+    "undo": true,
+    "nativeMonetizationBridgeInitialized": true,
+    "freeHintAccounting": true,
+    "offlineRewardedReturnsWithoutGrant": true,
+    "saveSurvivesProcessStop": true,
+    "hintBalanceSurvivesProcessStop": true,
+    "rotationPreservesBoard": true,
+    "privacyAccessibleOffline": true
+  },
+  "accessibilityAcquisitionRetries": []
+}

@@ -1,0 +1,26 @@
+{
+  "source": "bfadc2b636fcb13ae046516186042eefc21408b8",
+  "baselineBytes": 8926931,
+  "optimizedBytes": 5451728,
+  "savedBytes": 3475203,
+  "savedPercent": 38.93,
+  "apkSha256": "0394a9f9c95ce5fba93b6893b600a490becd18a226c959d1817657579232d19d",
+  "losslessNativeArtwork": true,
+  "webPayloadUnchanged": true,
+  "sdkVersionsUnchanged": true,
+  "productionCertificateUnchanged": true,
+  "groups": {
+    "before": {
+      "other": 134363,
+      "dex": 6254559,
+      "game": 967188,
+      "resources": 1486032
+    },
+    "after": {
+      "other": 132284,
+      "dex": 2996595,
+      "game": 967188,
+      "resources": 1276845
+    }
+  }
+}
