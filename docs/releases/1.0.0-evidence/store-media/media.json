@@ -1,0 +1,155 @@
+{
+  "method": "CSS gradient framing, no slogans; unchanged complete production UI captures",
+  "screenshots": [
+    {
+      "file": "phone-01-pairs.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 398762,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 96,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      }
+    },
+    {
+      "file": "phone-02-books.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 451027,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 96,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      }
+    },
+    {
+      "file": "phone-03-calendar.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 463233,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 96,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      }
+    },
+    {
+      "file": "phone-04-jars.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 480444,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 96,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      }
+    },
+    {
+      "file": "phone-05-dark.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 446581,
+      "dark": true,
+      "geometry": {
+        "x": 36,
+        "y": 96,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      }
+    },
+    {
+      "file": "tablet-01-pairs.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 267629,
+      "dark": false,
+      "geometry": {
+        "x": 48,
+        "y": 27,
+        "width": 864,
+        "height": 486,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      }
+    },
+    {
+      "file": "tablet-02-books.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 284986,
+      "dark": false,
+      "geometry": {
+        "x": 48,
+        "y": 27,
+        "width": 864,
+        "height": 486,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      }
+    },
+    {
+      "file": "tablet-03-dark.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 288260,
+      "dark": true,
+      "geometry": {
+        "x": 48,
+        "y": 27,
+        "width": 864,
+        "height": 486,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      }
+    },
+    {
+      "file": "tablet-04-library.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 300271,
+      "dark": false,
+      "geometry": {
+        "x": 48,
+        "y": 27,
+        "width": 864,
+        "height": 486,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      }
+    },
+    {
+      "file": "tablet-05-progress.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 316665,
+      "dark": false,
+      "geometry": {
+        "x": 48,
+        "y": 27,
+        "width": 864,
+        "height": 486,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      }
+    }
+  ]
+}
