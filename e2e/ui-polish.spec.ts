@@ -57,19 +57,19 @@ test("compact calendar picker retains focus and dates, with usable day targets a
   await expect(page.locator("#today-task")).toBeInViewport();
   await expect(page.locator("#calendar-month")).toBeHidden();
   await page.locator("#calendar-picker summary").click();
+  await page.locator("#calendar-year").focus();
   await page.locator("#calendar-year").selectOption("2025");
+  await page.locator("#calendar-month").focus();
   await page.locator("#calendar-month").selectOption("01");
   await expect(page.locator("#calendar-month")).toBeFocused();
   await page.locator("#calendar-picker summary").click();
   await expect(page.locator('[data-game="daily-v1-2025-01-01"]')).toBeEnabled();
-  const targets = await page
-    .locator(".calendar .task")
-    .evaluateAll((es) =>
-      es.map((e) => ({
-        w: e.getBoundingClientRect().width,
-        h: e.getBoundingClientRect().height,
-      })),
-    );
+  const targets = await page.locator(".calendar .task").evaluateAll((es) =>
+    es.map((e) => ({
+      w: e.getBoundingClientRect().width,
+      h: e.getBoundingClientRect().height,
+    })),
+  );
   expect(targets.every((r) => r.w >= 44 && r.h >= 44)).toBe(true);
 });
 test("light and dark UI fits phones, landscape and large tablets", async ({
@@ -147,6 +147,24 @@ test("collection tabs and settings remain readable with enlarged text and reduce
         .locator("#dialog")
         .evaluate((e) => e.scrollWidth <= e.clientWidth + 1),
     ).toBe(true);
+    const header = await page.evaluate(() => {
+      const title = document.querySelector("#collection h2")!;
+      const range = document.createRange();
+      range.selectNodeContents(title);
+      return {
+        text: range.getBoundingClientRect().toJSON(),
+        back: document
+          .querySelector("#collection-back")!
+          .getBoundingClientRect()
+          .toJSON(),
+        close: document
+          .querySelector("#close")!
+          .getBoundingClientRect()
+          .toJSON(),
+      };
+    });
+    expect(header.text.left).toBeGreaterThanOrEqual(header.back.right);
+    expect(header.text.right).toBeLessThanOrEqual(header.close.left);
     await page.screenshot({
       path: `test-results/ui-polish/${id}-large-text.png`,
       animations: "disabled",

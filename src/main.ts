@@ -147,6 +147,7 @@ const lessons = [
 const icons = {
   undo: '<path d="M8 5 3 10l5 5M3 10h10a7 7 0 1 1-6 11"/>',
   hint: '<path d="M9 20h6m-5 4h4M8 16a8 8 0 1 1 8 0c-1 1-1 3-1 4H9c0-1 0-3-1-4Z"/>',
+  back: '<path d="m17 6-8 8 8 8"/>',
   book: '<path d="M5 4h18v20H5zM9 4v20M13 9h6M13 14h6"/>',
   arrow: '<path d="m11 6 8 8-8 8"/>',
   add: '<path d="M14 3v22M3 14h22"/>',
@@ -154,7 +155,7 @@ const icons = {
 const icon = (name: keyof typeof icons) =>
   `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span id="jar-percent"></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label">Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><button id="settings-back" class="text-button">← Назад</button><h2>Настройки</h2><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span id="jar-percent"></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label">Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
@@ -1289,17 +1290,19 @@ $("menu").onclick = openMenu;
 $("close").onclick = closeMenu;
 $("resume").onclick = closeMenu;
 $("book-top").onclick = () => openCollection("book");
-$("new").onclick = () => {
+function requestRestart() {
   if (!session.history.length || !occupied(session.current.board)) {
     reset();
     return;
   }
   rememberNavigation("confirm");
+  openMenu(true);
   dialog.dataset.screen = "confirm";
   $("menu-content").hidden = true;
   $("settings-panel").hidden = true;
   $("confirm-content").hidden = false;
-};
+}
+$("new").onclick = requestRestart;
 $("cancel-new").onclick = returnToPrevious;
 function openSettings(restoring = false) {
   if (!restoring) rememberNavigation("settings");
@@ -1317,16 +1320,13 @@ $("privacy-open").onclick = () => {
   $("collection").hidden = false;
   dialog.dataset.screen = "privacy";
   $("collection").innerHTML =
-    `<button id="privacy-back" class="text-button">← Назад</button><h2>О данных</h2><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p>`;
+    `<div class="screen-heading"><button id="privacy-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>О данных</h2></div><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p>`;
   $("privacy-back").onclick = returnToPrevious;
   $("privacy-back").focus({ preventScroll: true });
 };
 
 $("confirm-new").onclick = reset;
-$("restart-task").onclick = () => {
-  openMenu();
-  $("new").click();
-};
+$("restart-task").onclick = requestRestart;
 $("play-again").onclick = async () => {
   if (busy || adActive || rewardRequest) return;
   busy = true;
@@ -1641,8 +1641,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   $("menu-content").hidden = true;
   const panel = $("collection");
   panel.hidden = false;
-  let html =
-    '<button class="text-button screen-back" id="collection-back" aria-label="Назад">← Назад</button>';
+  let html = `<button class="text-button screen-back" id="collection-back" aria-label="Назад">${icon("back")}</button>`;
   if (kind === "progress") {
     const m = metadata(progress);
     const completedBook = notebook.filter((p) =>
@@ -1765,6 +1764,10 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   }
   if (kind === "trophies") html += "</section>";
   panel.innerHTML = html;
+  const screenHeading = document.createElement("div");
+  screenHeading.className = "screen-heading";
+  screenHeading.append($("collection-back"), panel.querySelector("h2")!);
+  panel.prepend(screenHeading);
   if (kind === "progress")
     $("progress-trophies").onclick = () => openCollection("trophies");
   $("collection-back").onclick = returnToPrevious;
