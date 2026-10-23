@@ -25,6 +25,15 @@ jobs:
       - run: npx vitest run --config scripts/regression-061/vitest.config.ts
       - run: python3 scripts/regression-061/native-harness.py
       - run: npx playwright test --config scripts/regression-061/playwright.config.ts
+      - name: Verify new composition and capture screens
+        run: npx playwright test e2e/composition.spec.ts --workers=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: composition-first-review
+          path: |
+            test-results/composition/
+            test-results/main/
       - run: npm run test:e2e
         if: ${{ !cancelled() }}
       - run: npm run build && npm run build:yandex

@@ -1359,3 +1359,52 @@ progress::-moz-progress-bar {
     font-size: 13px;
   }
 }
+@media (max-height: 650px) {
+  .home-title h1 {
+    font-size: 32px;
+  }
+  .home-layout {
+    gap: 10px;
+    padding-block: 8px;
+  }
+  .home-current {
+    padding: 10px;
+  }
+  #home-game-title {
+    font-size: 24px;
+  }
+  #resume-context {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 2px;
+  }
+  #resume {
+    min-height: 44px;
+    margin-top: 8px;
+  }
+  .mode-nav .mode-link {
+    min-height: 50px;
+    padding: 6px 2px;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+  .mode-link small {
+    font-size: 12px;
+    line-height: 1.25;
+    margin-top: 2px;
+  }
+}
+@media (max-height: 420px) and (orientation: landscape) {
+  #dialog[data-entry="pause"] .home-title {
+    display: none;
+  }
+  .home-title h1 {
+    font-size: 26px;
+  }
+  .home-layout {
+    padding-block: 6px;
+  }
+  .home-links {
+    padding-top: 0;
+  }
+}

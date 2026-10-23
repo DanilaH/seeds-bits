@@ -1783,7 +1783,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     );
     const shelfEnd = j.index - jarShelfPage * 12,
       shelfStart = Math.max(0, shelfEnd - 12);
-    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}><h3>Баночки классики</h3><p>${j.index} собрано · ${jars(progress).seeds} семечек</p><div class="progress-next"><span>Следующая: ${j.name}</span><strong>${j.percent}% · ${j.filled}/${j.capacity}</strong><progress max="100" value="${j.percent}" aria-label="Следующая баночка"></progress></div><div class="jar-shelf">${Array.from(
+    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}><h3>Баночки классики</h3><p>${j.index} собрано · ${jars(progress).seeds} семечек</p>${jarHero(j)}<div class="jar-shelf">${Array.from(
       { length: shelfEnd - shelfStart },
       (_, n) => {
         const i = shelfStart + n;
@@ -1791,7 +1791,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       },
     ).join(
       "",
-    )}</div><div class="month-nav"><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>Раньше</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : "Пока пусто"}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>Новее</button></div><details class="explanation"><summary>Как заполняются баночки</summary><p>Две семечки за продвижение. После отмены начисление возобновится, когда вы пройдёте дальше прежнего хода. Подсчёт ведётся с начала коллекции.</p></details><p>Полностью очищено полей: ${jars(progress).wins}</p><p class="fine">${jars(progress).wins >= 100 ? "Мастер · 100 полей" : jars(progress).wins >= 25 ? "Знаток · 25 полей" : jars(progress).wins >= 5 ? "Уверенный старт · 5 полей" : "Первая отметка мастерства — за 5 очищенных полей"}</p></section>`;
+    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>Раньше</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : "Пока пусто"}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>Новее</button></div>${j.index ? "" : '<button id="jar-play" class="primary">Играть в классику</button>'}<details class="explanation"><summary>Как заполняются баночки</summary><p>Две семечки за продвижение. После отмены начисление возобновится, когда вы пройдёте дальше прежнего хода. Подсчёт ведётся с начала коллекции.</p></details><p>Полностью очищено полей: ${jars(progress).wins}</p><p class="fine">${jars(progress).wins >= 100 ? "Мастер · 100 полей" : jars(progress).wins >= 25 ? "Знаток · 25 полей" : jars(progress).wins >= 5 ? "Уверенный старт · 5 полей" : "Первая отметка мастерства — за 5 очищенных полей"}</p></section>`;
     html += `<section class="monthly-collection" ${collectionTab !== "months" ? "hidden" : ""}><p class="fine">Бронза — 7 задач · серебро — 14 · золото — весь месяц</p><label class="year-picker">Год трофеев<select id="trophy-year">${years()
       .map((y) => `<option ${y === trophyYear ? "selected" : ""}>${y}</option>`)
       .join("")}</select></label>`;
@@ -1882,6 +1882,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     );
   }
   if (kind === "trophies") {
+    if ($("jar-play")) $("jar-play").onclick = () => switchGame("classic");
     $("jars-tab").onclick = () => {
       collectionTab = "jars";
       openCollection("trophies");
@@ -1970,6 +1971,16 @@ function jarHero(j: ReturnType<typeof jarState>) {
 function renderHomeCurrent() {
   const count = occupied(board()),
     classicMode = progress.active === "classic";
+  homeGoal.hidden = lesson >= 0;
+  if (lesson >= 0) {
+    $("classic-mode").hidden = false;
+    $("home-eyebrow").textContent = "Как играть";
+    $("home-game-title").textContent = "Обучение";
+    $("resume-context").textContent =
+      `Шаг ${lesson + 1} из ${shortLesson ? 2 : lessons.length}`;
+    $("resume").textContent = "Продолжить обучение";
+    return;
+  }
   $("classic-mode").hidden = classicMode;
   $("home-eyebrow").textContent = session.history.length
     ? "Текущая партия"
