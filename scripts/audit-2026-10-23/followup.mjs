@@ -6,7 +6,8 @@ const out='test-results/audit-2026-10-23';mkdirSync(out,{recursive:true});
 const servers=[];
 async function server(port,dir){
  const s=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port',String(port),'--outDir',dir],{stdio:['ignore','pipe','pipe']});servers.push(s);
- await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('preview startup')),15000);s.stdout.on('data',d=>{if(String(d).includes('Local:')){clearTimeout(timer);resolve();}});s.on('error',reject);});
+ let output='';s.stdout.on('data',d=>output+=String(d));s.stderr.on('data',d=>output+=String(d));
+ const until=Date.now()+15000;while(Date.now()<until){try{const r=await fetch('http://127.0.0.1:'+port+'/');if(r.ok)return;}catch{}if(s.exitCode!==null)throw Error('preview exited: '+output);await new Promise(r=>setTimeout(r,150));}throw Error('preview startup: '+output);
 }
 let browser;
 try{

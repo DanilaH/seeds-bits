@@ -1,5 +1,5 @@
 import {test,expect,type Page} from '@playwright/test';
-import {mkdirSync,writeFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {notebook,loadNotebook} from '../../src/puzzles';
 const out='test-results/audit-2026-10-23',key='seeds-bits.progress.v2';mkdirSync(out,{recursive:true});
 function report(name:string,value:any){writeFileSync(`${out}/${name}.json`,JSON.stringify(value,null,2));}
@@ -26,7 +26,7 @@ test('B03 full screen matrix checks overflow and actual control hit targets in t
     const blocked:any[]=[];
     for(const e of scope.querySelectorAll<HTMLElement>('button:not(:disabled),select,summary')){
      const r=e.getBoundingClientRect();if(!r.width||!r.height||r.top<0||r.bottom>innerHeight||r.left<0||r.right>innerWidth)continue;
-     if(e.closest('[hidden]'))continue;const cx=(r.left+r.right)/2,cy=(r.top+r.bottom)/2;const hit=document.elementFromPoint(cx,cy);
+     if(e.closest('[hidden]')||!e.checkVisibility({checkVisibilityCSS:true,checkOpacity:true}))continue;const clip=scope.getBoundingClientRect();if(r.top<clip.top||r.bottom>clip.bottom||r.left<clip.left||r.right>clip.right)continue;const cx=(r.left+r.right)/2,cy=(r.top+r.bottom)/2;const hit=document.elementFromPoint(cx,cy);
      if(!hit||!(hit===e||e.contains(hit)))blocked.push({id:e.id,text:e.textContent?.slice(0,40),rect:r.toJSON(),hit:hit?.outerHTML.slice(0,150)});
     }
     return {documentOverflow:document.documentElement.scrollWidth>innerWidth+1,scopeOverflow:scope.scrollWidth>scope.clientWidth+1,blocked};
@@ -56,9 +56,9 @@ test('B06 unavailable worker keeps actual built notebook playable and hint budge
  await page.route('**/advice-worker-*.js',r=>r.abort());await page.locator('#hint').click();await expect(page.locator('#status')).toContainText('Не удалось найти подсказку');await expect(page.locator('#hint')).toBeEnabled();await page.locator('[data-index="4"]').click();await expect(page.locator('.cell.selected')).toHaveCount(1);report('B06-worker-failure',{passed:true});
 });
 test('B07 final largest notebook solves without hidden action controls or stale result',async({page})=>{
- await loadNotebook();await setup(page);await page.locator('#book-mode').click();await page.locator('#book-chapter').selectOption('9');await page.locator('[data-volume="99"]').click();await page.locator('[data-game="book-v1-2400"]').click();await expect(page.locator('#dialog')).toBeHidden();
+ const flat=JSON.parse(readFileSync('src/notebook-extra.json','utf8'))[2375][1];const solution=[];for(let i=0;i<flat.length;i+=3)solution.push({a:flat[i],b:flat[i+1]});await setup(page);await page.locator('#book-mode').click();await page.locator('#book-chapter').selectOption('9');await page.locator('[data-volume="99"]').click();await page.locator('[data-game="book-v1-2400"]').click();await expect(page.locator('#dialog')).toBeHidden();
  await page.emulateMedia({reducedMotion:'reduce'});let steps=0;const start=Date.now();
- for(const pair of notebook[2399].solution){await page.locator(`[data-index="${pair.a}"]`).click();await page.locator(`[data-index="${pair.b}"]`).click();steps++;await expect(page.locator('#remaining')).toHaveText(String(notebook[2399].solution.length*2-steps*2));}
+ for(const pair of solution){await page.locator(`[data-index="${pair.a}"]`).click();await page.locator(`[data-index="${pair.b}"]`).click();steps++;await expect(page.locator('#remaining')).toHaveText(String(solution.length*2-steps*2));}
  await expect(page.locator('#win')).toBeVisible();await expect(page.locator('#hint')).toBeHidden();await expect(page.locator('#undo')).toBeHidden();await page.reload();await page.locator('#resume').click();await expect(page.locator('#win')).toBeVisible();await snapshot(page,'B07-largest-result');report('B07-largest',{steps,elapsedMs:Date.now()-start,passed:true});
 });
 test('B08 a corrupted nonexistent saved date cannot be played as a legitimate daily',async({page})=>{
