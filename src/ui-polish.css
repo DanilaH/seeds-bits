@@ -1435,7 +1435,11 @@ progress::-moz-progress-bar {
     grid-template-columns: 44px minmax(0, 1fr) 44px !important;
     gap: 0 4px;
   }
-  .has-mobile-ads .game-top header .jar-meter {
+  .has-mobile-ads
+    .game:not(:has(#lesson:not([hidden])))
+    .game-top
+    header
+    .jar-meter {
     grid-column: 2;
     grid-row: 1;
     width: auto;
