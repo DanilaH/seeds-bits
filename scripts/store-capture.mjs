@@ -142,7 +142,8 @@ try {
     await p.locator(".calendar").waitFor();
   };
   const jars = async (p) => {
-    await p.locator("#trophies-mode").click();
+    await p.locator("#progress-open").click();
+    await p.locator("#progress-trophies").click();
     await p.locator(".jar-shelf").waitFor();
     await p.locator(".jar-collection").scrollIntoViewIfNeeded();
   };

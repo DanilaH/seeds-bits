@@ -130,6 +130,12 @@ test("F04 calendar 2028 leap-day and 2125 trophies", async ({ page }) => {
   await seed(page);
   await page.goto("/");
   await page.locator("#calendar-open").click();
+  if (
+    !(await page
+      .locator("#calendar-picker")
+      .evaluate((e: HTMLDetailsElement) => e.open))
+  )
+    await page.locator("#calendar-picker summary").click();
   await page.locator("#calendar-month").selectOption("02");
   await expect(page.locator('[data-game="daily-v1-2028-02-29"]')).toBeEnabled();
   await expect(page.locator('[data-game="daily-v1-2028-02-30"]')).toHaveCount(
@@ -137,6 +143,8 @@ test("F04 calendar 2028 leap-day and 2125 trophies", async ({ page }) => {
   );
   await page.clock.setFixedTime(new Date("2125-06-20T12:00:00"));
   await page.locator("#collection-back").click();
+  await page.locator("#progress-open").click();
+  await page.locator("#progress-trophies").click();
   await page.locator("#trophies-mode").click();
   await page.locator("#trophy-year").selectOption("2125");
   const n = await page.locator("[data-month]").count();
@@ -152,7 +160,11 @@ test("F05 rotation during flights settles rewards and leaves no particles", asyn
   await page.setViewportSize({ width: 844, height: 390 });
   await page.waitForTimeout(1200);
   await expect(page.locator(".flying-seed")).toHaveCount(0);
-  await expect(page.locator("#jar-percent")).toContainText("0/60");
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-filled", "0");
+  await expect(page.locator("#jar-meter")).toHaveAttribute(
+    "data-capacity",
+    "60",
+  );
   const p = await page.evaluate(
     (k) => JSON.parse(localStorage.getItem(k)!),
     key,
@@ -167,7 +179,8 @@ test("F06 collection pagination retains all jars across pages", async ({
 }) => {
   await seed(page, "classic", [5, 5], [], 100000);
   await page.goto("/");
-  await page.locator("#trophies-mode").click();
+  await page.locator("#progress-open").click();
+  await page.locator("#progress-trophies").click();
   const seen: string[] = [];
   for (let i = 0; i < 20; i++) {
     seen.push(...(await page.locator(".jar-keepsake small").allTextContents()));

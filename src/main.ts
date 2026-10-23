@@ -23,6 +23,7 @@ import { BoardView } from "./board-view";
 import { requestAdvice } from "./advice-client";
 import { emblem } from "./trophies";
 import "./style.css";
+import "./ui-polish.css";
 import {
   WIDTH,
   MAX_CELLS,
@@ -146,12 +147,14 @@ const lessons = [
 const icons = {
   undo: '<path d="M8 5 3 10l5 5M3 10h10a7 7 0 1 1-6 11"/>',
   hint: '<path d="M9 20h6m-5 4h4M8 16a8 8 0 1 1 8 0c-1 1-1 3-1 4H9c0-1 0-3-1-4Z"/>',
+  book: '<path d="M5 4h18v20H5zM9 4v20M13 9h6M13 14h6"/>',
+  arrow: '<path d="m11 6 8 8-8 8"/>',
   add: '<path d="M14 3v22M3 14h22"/>',
 };
 const icon = (name: keyof typeof icons) =>
   `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">▦</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span id="jar-percent"></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label">Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">↗</span></button><button id="book-mode" class="mode-link"><span>Тетрадь<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">↗</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small></span><span aria-hidden="true">↗</span></button></nav><button id="calendar-open" class="secondary">▦ Календарь</button><div class="home-links"><button id="progress-open" class="text-button">Мой прогресс</button><button id="trophies-mode" class="text-button">Коллекция</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><button id="settings-back" class="text-button">← Меню</button><h2>Настройки</h2><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span id="jar-percent"></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label">Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><button id="settings-back" class="text-button">← Назад</button><h2>Настройки</h2><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
@@ -601,13 +604,19 @@ function render() {
       lesson < 0 && progress.active !== "classic",
     );
   $("add").hidden = lesson < 0 && progress.active !== "classic";
+  document
+    .querySelector(".game")!
+    .classList.toggle(
+      "short-board",
+      values.length <= 54 && count > 0 && lesson < 0,
+    );
   renderJar();
   const taskIndex = notebook.findIndex((p) => p.id === progress.active);
   const marks = $("page-progress");
   marks.hidden = lesson >= 0 || taskIndex < 0;
   if (taskIndex >= 0) {
     const pageIndex = Math.floor(taskIndex / 6);
-    marks.innerHTML = `<span>Тетрадь ${Math.floor(taskIndex / 24) + 1} · стр. ${(pageIndex % 4) + 1}</span><div>${notebook
+    marks.innerHTML = `<span>Страница ${(pageIndex % 4) + 1}</span><div>${notebook
       .slice(pageIndex * 6, pageIndex * 6 + 6)
       .map(
         (p) =>
@@ -687,7 +696,9 @@ function render() {
           : available.length
             ? highlight
               ? "Соедините две отмеченные цифры"
-              : "Одинаковые цифры или сумма 10"
+              : session.current.moves < 3
+                ? "Одинаковые цифры или сумма 10"
+                : ""
             : progress.active === "classic"
               ? "Пар нет. Добавьте оставшиеся цифры."
               : "Пар нет. Отмените ход или начните задачу заново.",
@@ -1140,7 +1151,50 @@ async function hint() {
       : "Допустимая пара — соедините выделенные цифры",
   );
 }
+type CollectionScreen = "book" | "calendar" | "trophies" | "progress";
+const navigationTrail: { screen: string; scroll: number; focus: string }[] = [];
+let collectionTab: "jars" | "months" = "jars";
+function rememberNavigation(target: string) {
+  const screen = dialog.open ? dialog.dataset.screen || "home" : "game";
+  if (screen === target) return;
+  const element = document.activeElement as HTMLElement | null;
+  navigationTrail.push({
+    screen,
+    scroll: dialog.scrollTop,
+    focus:
+      element?.id ||
+      (element?.dataset.month
+        ? `month:${element.dataset.month}`
+        : element?.dataset.volume
+          ? `volume:${element.dataset.volume}`
+          : ""),
+  });
+}
+function returnToPrevious() {
+  const previous = navigationTrail.pop();
+  if (previous?.screen === "game") {
+    closeMenu();
+    return;
+  }
+  if (!previous || previous.screen === "home") openMenu(true);
+  else if (previous.screen === "settings") openSettings(true);
+  else openCollection(previous.screen as CollectionScreen, true);
+  if (previous) {
+    dialog.scrollTop = previous.scroll;
+    const target = previous.focus.startsWith("month:")
+      ? dialog.querySelector<HTMLElement>(
+          `[data-month="${previous.focus.slice(6)}"]`,
+        )
+      : previous.focus.startsWith("volume:")
+        ? dialog.querySelector<HTMLElement>(
+            `[data-volume="${previous.focus.slice(7)}"]`,
+          )
+        : document.getElementById(previous.focus);
+    target?.focus({ preventScroll: true });
+  }
+}
 function closeMenu() {
+  navigationTrail.length = 0;
   dialog.close();
   render();
   showSaveState();
@@ -1155,15 +1209,16 @@ function navigateBack(native = false): boolean {
   }
   if (busy) return true;
   if (dialog.open) {
-    if ($("menu-content").hidden) openMenu();
+    if ($("menu-content").hidden) returnToPrevious();
     else if (native) return false;
     else closeMenu();
   } else if (lesson >= 0) finishLesson();
   else openMenu();
   return true;
 }
-function openMenu() {
+function openMenu(preserve: unknown = false) {
   if (busy || adActive || rewardRequest) return;
+  if (preserve !== true) navigationTrail.length = 0;
   flights.clear();
   updateHome();
   cancelHint();
@@ -1171,7 +1226,8 @@ function openMenu() {
   document.body.classList.add("navigation-open");
   dialog.dataset.screen = "home";
   $("settings-panel").hidden = true;
-  $("resume-context").textContent = $("mode").textContent;
+  $("resume-context").textContent =
+    `${$("mode").textContent} · ${occupied(board())} ${digitWord(occupied(board()))}`;
   $("resume").textContent = occupied(board())
     ? session.history.length
       ? "Продолжить игру"
@@ -1238,28 +1294,31 @@ $("new").onclick = () => {
     reset();
     return;
   }
+  rememberNavigation("confirm");
+  dialog.dataset.screen = "confirm";
   $("menu-content").hidden = true;
   $("settings-panel").hidden = true;
   $("confirm-content").hidden = false;
 };
-$("cancel-new").onclick = openMenu;
-$("settings-open").onclick = () => {
+$("cancel-new").onclick = returnToPrevious;
+function openSettings(restoring = false) {
+  if (!restoring) rememberNavigation("settings");
+  openMenu(true);
   $("menu-content").hidden = true;
   $("settings-panel").hidden = false;
   dialog.dataset.screen = "settings";
-  $("settings-back").focus();
-};
-$("settings-back").onclick = openMenu;
+  $("settings-back").focus({ preventScroll: true });
+}
+$("settings-open").onclick = () => openSettings();
+$("settings-back").onclick = returnToPrevious;
 $("privacy-open").onclick = () => {
+  rememberNavigation("privacy");
   $("settings-panel").hidden = true;
   $("collection").hidden = false;
   dialog.dataset.screen = "privacy";
   $("collection").innerHTML =
-    `<h2>О данных</h2><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p><button id="privacy-back" class="secondary">Назад</button>`;
-  $("privacy-back").onclick = () => {
-    $("collection").hidden = true;
-    $("settings-open").click();
-  };
+    `<button id="privacy-back" class="text-button">← Назад</button><h2>О данных</h2><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p>`;
+  $("privacy-back").onclick = returnToPrevious;
   $("privacy-back").focus({ preventScroll: true });
 };
 
@@ -1566,14 +1625,24 @@ const monthName = (m: string) =>
     "ru",
     { month: "long", year: "numeric" },
   );
-function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
+function openCollection(kind: CollectionScreen, restoring = false) {
   if (busy) return;
-  openMenu();
+  const sameScreen = dialog.open && dialog.dataset.screen === kind;
+  const oldScroll = dialog.scrollTop;
+  const focused = document.activeElement as HTMLElement | null;
+  const focusId = focused?.id;
+  const focusVolume = focused?.dataset.volume;
+  const pickerOpen = (
+    document.getElementById("calendar-picker") as HTMLDetailsElement | null
+  )?.open;
+  if (!restoring) rememberNavigation(kind);
+  openMenu(true);
   dialog.dataset.screen = kind;
   $("menu-content").hidden = true;
   const panel = $("collection");
   panel.hidden = false;
-  let html = '<button class="text-button" id="collection-back">← Меню</button>';
+  let html =
+    '<button class="text-button screen-back" id="collection-back" aria-label="Назад">← Назад</button>';
   if (kind === "progress") {
     const m = metadata(progress);
     const completedBook = notebook.filter((p) =>
@@ -1583,7 +1652,7 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
       (id) =>
         id.startsWith("daily-v1-") && availableDay(id.slice(9), "9999-12-31"),
     ).length;
-    html += `<h2>Мой прогресс</h2><dl class="progress-stats"><div><dt>Тетрадь</dt><dd>${completedBook} из ${notebook.length}</dd></div><div><dt>Решено дейликов</dt><dd>${completedDaily}</dd></div><div><dt>Завершено партий</dt><dd>${m.completed}</dd></div><div><dt>Без подсказок</dt><dd>${m.unassisted}</dd></div></dl><p class="fine">Партии и прохождения без подсказок считаются с ${new Date(m.since).toLocaleDateString("ru")}. Старые отметки задач сохранены.</p><button id="progress-trophies" class="secondary">Коллекция</button><p class="fine">Прогресс сохраняется на этом устройстве.</p>`;
+    html += `<h2>Прогресс</h2><dl class="progress-stats"><div><dt>Задачи в тетрадях</dt><dd>${completedBook} из ${notebook.length}</dd></div><div><dt>Задачи дня</dt><dd>${completedDaily}</dd></div><div><dt>Завершено партий</dt><dd>${m.completed}</dd></div><div><dt>Без подсказок</dt><dd>${m.unassisted}</dd></div></dl><div class="progress-next"><span>Следующая баночка</span><strong>${jarState(jars(progress).seeds).name} · ${jarState(jars(progress).seeds).percent}%</strong><progress max="100" value="${jarState(jars(progress).seeds).percent}" aria-label="Заполнение следующей баночки"></progress></div><button id="progress-trophies" class="secondary">Баночки и трофеи ${icon("arrow")}</button><details class="explanation"><summary>Как считается прогресс</summary><p>Партии и прохождения без подсказок считаются с ${new Date(m.since).toLocaleDateString("ru")}. Старые отметки задач сохранены.</p></details><p class="fine">Прогресс сохраняется на этом устройстве.</p>`;
   } else if (kind === "book") {
     const finished = new Set(progress.done);
     const status = (v: number) => {
@@ -1610,7 +1679,7 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
     if (!chapterCandidates.includes(selectedVolume) && chapterCandidates.length)
       selectedVolume = chapterCandidates[0];
     const stats = status(selectedVolume);
-    html += `<h2>Тетради</h2><p class="intro">100 тетрадей · 2400 задач</p><div class="archive-controls"><label>Раздел<select id="book-chapter">${chapterNames.map((n, i) => `<option value="${i}" ${i === chapter ? "selected" : ""}>${i + 1}. ${n}</option>`).join("")}</select></label><label>Показать<select id="book-filter">${[
+    html += `<h2>Тетради</h2><p class="intro book-total">100 тетрадей · 2400 задач</p><div class="archive-controls"><label>Раздел<select id="book-chapter">${chapterNames.map((n, i) => `<option value="${i}" ${i === chapter ? "selected" : ""}>${i + 1}. ${n}</option>`).join("")}</select></label><label>Показать<select id="book-filter">${[
       ["all", "Все"],
       ["new", "Не начаты"],
       ["active", "В процессе"],
@@ -1624,7 +1693,7 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
       .filter((v) => Math.floor(v / 10) === chapter)
       .map(
         (v) =>
-          `<button class="volume-cover ${v === selectedVolume ? "current" : ""}" data-volume="${v}" style="--cover-hue:${(v * 37) % 360}" aria-label="Тетрадь ${v + 1}, ${status(v).n} из 24"><strong>${v + 1}</strong><small>${status(v).n}/24</small></button>`,
+          `<button class="volume-cover ${v === selectedVolume ? "current" : ""}" data-volume="${v}" aria-pressed="${v === selectedVolume}" aria-label="Тетрадь ${v + 1}, ${status(v).n} из 24"><strong>${v + 1}${status(v).n === 24 ? '<span class="volume-done">✓</span>' : ""}</strong><small>${status(v).n}/24</small><progress max="24" value="${status(v).n}" aria-hidden="true"></progress></button>`,
       )
       .join("")}</div>`;
     if (chapterCandidates.length) {
@@ -1635,13 +1704,15 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
         ) ??
         tasks.find((p) => !finished.has(p.id)) ??
         tasks[0];
-      html += `<div class="volume-heading"><h3>Тетрадь ${selectedVolume + 1}</h3><span>${stats.n}/24</span></div><button class="secondary" id="continue-book" data-continue="${continuing.id}">${stats.n === 24 ? "Повторить" : "Продолжить тетрадь"}</button>`;
+      html += `<div class="volume-heading"><h3>Тетрадь ${selectedVolume + 1}</h3><span>${stats.n}/24</span></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${stats.n === 24 ? "Повторить" : "Продолжить тетрадь"}</button>`;
       for (let page = 0; page < 4; page++) {
         const group = tasks.slice(page * 6, page * 6 + 6),
           n = group.filter((p) => finished.has(p.id)).length;
         html += `<section class="book-page ${n === 6 ? "page-done" : ""}"><div class="page-heading"><h3>Страница ${page + 1}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((p, i) => `<button class="task ${finished.has(p.id) ? "done" : ""}" data-game="${p.id}" ${p.id === progress.active ? 'aria-current="true"' : ""} aria-label="Задача ${selectedVolume * 24 + page * 6 + i + 1}${finished.has(p.id) ? ", решена" : ""}">${page * 6 + i + 1}${finished.has(p.id) ? "<small>✓</small>" : ""}</button>`).join("")}</div>${n === 6 ? '<p class="stamp">Завершено ✓</p>' : ""}</section>`;
       }
-    } else html += "<p>Пока нет тетрадей с таким статусом.</p>";
+    } else
+      html +=
+        '<div class="empty-state"><p>В этом разделе нет тетрадей с таким статусом.</p><button id="book-filter-reset" class="secondary">Показать все в разделе</button></div>';
   } else if (kind === "calendar") {
     if (calendarMonth > today().slice(0, 7))
       calendarMonth = today().slice(0, 7);
@@ -1654,7 +1725,7 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
         ).getDay() +
           6) %
         7;
-    html += `<h2>Задача дня</h2>${calendarControls()}<div class="month-nav"><button id="prev-month" aria-label="Предыдущий месяц" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>‹</button><h3>${monthName(calendarMonth)}</h3><button id="next-month" aria-label="Следующий месяц" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>›</button></div><div class="calendar">${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
+    html += `<h2>Задача дня</h2><button class="primary calendar-today" id="today-task">${progress.done.includes("daily-v1-" + today()) ? "Повторить сегодняшнюю" : "Играть сегодня"}</button><div class="month-nav calendar-nav"><button id="prev-month" aria-label="Предыдущий месяц" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>‹</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="Выбрать месяц">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="Следующий месяц" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>›</button></div><div class="calendar">${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
       calendarMonth,
     )
       .map(
@@ -1663,10 +1734,9 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
       )
       .join(
         "",
-      )}</div><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="intro">Любой прошедший день можно решить позже. Здесь не нужно успевать.</p><button class="primary" id="today-task">${progress.done.includes("daily-v1-" + today()) ? "Повторить сегодняшнюю" : "Играть сегодня"}</button><p class="fine">Трофеи: 7 задач · 14 задач · весь месяц</p>`;
+      )}</div><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="fine">Прошедшие дни доступны в любое время.</p><details class="explanation"><summary>Трофеи месяца</summary><p>Бронза — 7 задач, серебро — 14, золото — весь месяц.</p></details>`;
   } else {
-    html +=
-      '<h2>Мои трофеи</h2><p class="intro">Один трофей месяца: бронза за 7 задач, серебро за 14, золото за весь месяц.</p>';
+    html += `<h2>Коллекция</h2><div class="collection-tabs" role="group" aria-label="Раздел коллекции"><button id="jars-tab" aria-pressed="${collectionTab === "jars"}">Баночки</button><button id="trophies-mode" aria-pressed="${collectionTab === "months"}">Трофеи месяца</button></div>`;
     const j = jarState(jars(progress).seeds);
     jarShelfPage = Math.min(
       jarShelfPage,
@@ -1674,7 +1744,7 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
     );
     const shelfEnd = j.index - jarShelfPage * 12,
       shelfStart = Math.max(0, shelfEnd - 12);
-    html += `<section class="jar-collection"><h3>Баночки классики</h3><p>${j.index} собрано · ${jars(progress).seeds} семечек</p><p class="fine">Следующая: ${j.name} · ${j.filled}/${j.capacity}. Две семечки за продвижение. После отмены начисление возобновится, когда вы пройдёте дальше прежнего хода.</p><div class="jar-shelf">${Array.from(
+    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}><h3>Баночки классики</h3><p>${j.index} собрано · ${jars(progress).seeds} семечек</p><div class="progress-next"><span>Следующая: ${j.name}</span><strong>${j.percent}% · ${j.filled}/${j.capacity}</strong><progress max="100" value="${j.percent}" aria-label="Следующая баночка"></progress></div><div class="jar-shelf">${Array.from(
       { length: shelfEnd - shelfStart },
       (_, n) => {
         const i = shelfStart + n;
@@ -1682,8 +1752,8 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
       },
     ).join(
       "",
-    )}</div><div class="month-nav"><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>Раньше</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : "Пока пусто"}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>Новее</button></div><p class="fine">Семечки и очищенные поля считаются с начала коллекции.</p><p>Полностью очищено полей: ${jars(progress).wins}</p><p class="fine">${jars(progress).wins >= 100 ? "Мастер · 100 полей" : jars(progress).wins >= 25 ? "Знаток · 25 полей" : jars(progress).wins >= 5 ? "Уверенный старт · 5 полей" : "Первая отметка мастерства — за 5 очищенных полей"}</p></section>`;
-    html += `<label class="year-picker">Год трофеев<select id="trophy-year">${years()
+    )}</div><div class="month-nav"><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>Раньше</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : "Пока пусто"}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>Новее</button></div><details class="explanation"><summary>Как заполняются баночки</summary><p>Две семечки за продвижение. После отмены начисление возобновится, когда вы пройдёте дальше прежнего хода. Подсчёт ведётся с начала коллекции.</p></details><p>Полностью очищено полей: ${jars(progress).wins}</p><p class="fine">${jars(progress).wins >= 100 ? "Мастер · 100 полей" : jars(progress).wins >= 25 ? "Знаток · 25 полей" : jars(progress).wins >= 5 ? "Уверенный старт · 5 полей" : "Первая отметка мастерства — за 5 очищенных полей"}</p></section>`;
+    html += `<section class="monthly-collection" ${collectionTab !== "months" ? "hidden" : ""}><p class="fine">Бронза — 7 задач · серебро — 14 · золото — весь месяц</p><label class="year-picker">Год трофеев<select id="trophy-year">${years()
       .map((y) => `<option ${y === trophyYear ? "selected" : ""}>${y}</option>`)
       .join("")}</select></label>`;
     for (const m of months()
@@ -1693,10 +1763,11 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
       html += `<button class="trophy tier-${t.tier}" data-month="${m}"><span class="medal">${emblem(m)}</span><span><strong>${monthName(m)}</strong><small>${["Пока не получен", "Бронза", "Серебро", "Золото"][t.tier]} · ${t.count}/${days(m).length}</small></span></button>`;
     }
   }
+  if (kind === "trophies") html += "</section>";
   panel.innerHTML = html;
   if (kind === "progress")
     $("progress-trophies").onclick = () => openCollection("trophies");
-  $("collection-back").onclick = openMenu;
+  $("collection-back").onclick = returnToPrevious;
   $("collection-back").focus({ preventScroll: true });
   panel.querySelectorAll<HTMLElement>("[data-game]").forEach(
     (b) =>
@@ -1713,6 +1784,11 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
       }),
   );
   if (kind === "book") {
+    if ($("book-filter-reset"))
+      $("book-filter-reset").onclick = () => {
+        bookFilter = "all";
+        openCollection("book");
+      };
     if ($("continue-book"))
       $("continue-book").onclick = () =>
         switchGame($("continue-book").dataset.continue!);
@@ -1733,6 +1809,14 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
     );
   }
   if (kind === "trophies") {
+    $("jars-tab").onclick = () => {
+      collectionTab = "jars";
+      openCollection("trophies");
+    };
+    $("trophies-mode").onclick = () => {
+      collectionTab = "months";
+      openCollection("trophies");
+    };
     $("older-jars").onclick = () => {
       jarShelfPage++;
       openCollection("trophies");
@@ -1776,10 +1860,20 @@ function openCollection(kind: "book" | "calendar" | "trophies" | "progress") {
       switchGame(daily(today()).id);
     };
   }
-  motion(panel, [
-    { opacity: 0, transform: "translateY(6px)" },
-    { opacity: 1, transform: "translateY(0)" },
-  ]);
+  if (sameScreen) {
+    dialog.scrollTop = oldScroll;
+    if (focusId)
+      document.getElementById(focusId)?.focus({ preventScroll: true });
+    else if (focusVolume)
+      panel
+        .querySelector<HTMLElement>(`[data-volume="${focusVolume}"]`)
+        ?.focus({ preventScroll: true });
+  } else if (!restoring) dialog.scrollTop = 0;
+  if (!sameScreen)
+    motion(panel, [
+      { opacity: 0, transform: "translateY(6px)" },
+      { opacity: 1, transform: "translateY(0)" },
+    ]);
 }
 $("classic-mode").onclick = () => switchGame("classic");
 $("book-mode").onclick = () => openCollection("book");
@@ -1825,7 +1919,7 @@ function refreshDate() {
 setInterval(refreshDate, 1000);
 window.addEventListener("focus", refreshDate);
 document.addEventListener("visibilitychange", refreshDate);
-$("trophies-mode").onclick = () => openCollection("trophies");
+
 void boot();
 
 function renderJar() {
@@ -1845,16 +1939,21 @@ function renderJar() {
   }
   meter.style.setProperty("--jar-color", j.color);
   meter.style.setProperty("--fill", `${j.percent}%`);
-  $("jar-name").textContent = `${j.name} · ${j.index + 1}`;
+  $("jar-name").textContent = `Баночка ${j.index + 1}`;
   $("jar-percent").textContent = celebrating
     ? "100% · собрана ✓"
-    : `${j.percent}% · ${j.filled}/${j.capacity}`;
+    : `${j.percent}%`;
+  meter.dataset.filled = String(j.filled);
+  meter.dataset.capacity = String(j.capacity);
   meter.setAttribute(
     "aria-label",
-    `Баночка ${j.index + 1}, заполнено ${j.percent} процентов. Открыть коллекцию`,
+    `Баночка ${j.index + 1}, заполнено ${j.percent} процентов, ${j.filled} из ${j.capacity}. Открыть коллекцию`,
   );
 }
-$("jar-meter").onclick = () => openCollection("trophies");
+$("jar-meter").onclick = () => {
+  collectionTab = "jars";
+  openCollection("trophies");
+};
 
 function years() {
   return Array.from(

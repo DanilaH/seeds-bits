@@ -140,7 +140,10 @@ test("all 24 notebook games finish by following reliable hints", async ({
         (document.querySelector(`[data-index="${b}"]`) as HTMLElement).click();
       }, ids);
       await expect(page.locator("#skip")).toBeEnabled();
-      await expect(page.locator("#remaining"), `task ${n} move ${move}, ids ${ids}`).toHaveText(String(before - 2));
+      await expect(
+        page.locator("#remaining"),
+        `task ${n} move ${move}, ids ${ids}`,
+      ).toHaveText(String(before - 2));
     }
     await expect(page.locator("#remaining")).toHaveText("0");
   }

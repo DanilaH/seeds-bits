@@ -81,7 +81,7 @@ test("small screens and enlarged text keep menu and progress reachable", async (
   await page.addStyleTag({ content: "html {font-size: 150% !important}" });
   await page.locator("#progress-open").click();
   await page.locator("#progress-trophies").click();
-  await expect(page.locator("#collection h2")).toHaveText("Мои трофеи");
+  await expect(page.locator("#collection h2")).toHaveText("Коллекция");
   await page.locator("#collection-back").click();
   await page.screenshot({
     animations: "disabled",

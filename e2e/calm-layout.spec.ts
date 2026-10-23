@@ -33,7 +33,7 @@ test("home hides board, layouts fit and modes survive settings and restart", asy
   await page.locator("#menu").click();
   for (const width of [320, 360, 390, 430, 768, 1366]) {
     await page.setViewportSize({ width, height: 740 });
-    for (const id of ["book-mode", "calendar-open", "trophies-mode"]) {
+    for (const id of ["book-mode", "calendar-open", "progress-open"]) {
       await page.locator("#" + id).click();
       expect(
         await page

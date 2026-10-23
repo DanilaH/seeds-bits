@@ -60,7 +60,11 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
   await pair(page);
   await pair(page);
   await expect(page.locator("#win")).toBeVisible();
-  await expect(page.locator("#jar-percent")).toContainText("2/60");
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-filled", "2");
+  await expect(page.locator("#jar-meter")).toHaveAttribute(
+    "data-capacity",
+    "60",
+  );
   await expect(page.locator("footer")).toBeHidden();
   await page.reload();
   await page.locator("#resume").click();
@@ -71,7 +75,11 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
   expect(p.jars.seeds).toBe(26);
   expect(p.jars.wins).toBe(1);
   expect(p.version).toBe(4);
-  await expect(page.locator("#jar-percent")).toContainText("2/60");
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-filled", "2");
+  await expect(page.locator("#jar-meter")).toHaveAttribute(
+    "data-capacity",
+    "60",
+  );
   await page.locator("#jar-meter").click();
   await expect(page.locator(".jar-keepsake")).toHaveCount(1);
 });
@@ -81,7 +89,19 @@ test("archive exposes January 2025 and keeps future dates closed in 2028", async
   await page.clock.setFixedTime(new Date("2028-06-20T12:00:00"));
   await start(page);
   await page.locator("#calendar-open").click();
+  if (
+    !(await page
+      .locator("#calendar-picker")
+      .evaluate((e: HTMLDetailsElement) => e.open))
+  )
+    await page.locator("#calendar-picker summary").click();
   await page.locator("#calendar-year").selectOption("2025");
+  if (
+    !(await page
+      .locator("#calendar-picker")
+      .evaluate((e: HTMLDetailsElement) => e.open))
+  )
+    await page.locator("#calendar-picker summary").click();
   await page.locator("#calendar-month").selectOption("01");
   await expect(page.locator('[data-game="daily-v1-2025-01-01"]')).toBeEnabled();
   await page.locator('[data-game="daily-v1-2025-01-01"]').click();
@@ -92,6 +112,8 @@ test("archive exposes January 2025 and keeps future dates closed in 2028", async
     page.locator('[data-game="daily-v1-2028-06-21"]'),
   ).toBeDisabled();
   await page.locator("#collection-back").click();
+  await page.locator("#progress-open").click();
+  await page.locator("#progress-trophies").click();
   await page.locator("#trophies-mode").click();
   await page.locator("#trophy-year").selectOption("2025");
   await expect(page.locator("[data-month]")).toHaveCount(12);
@@ -156,7 +178,11 @@ test("reduced motion suppresses flight frames and small classic layout stays usa
   await start(page, 12);
   await page.locator("#resume").click();
   await pair(page);
-  await expect(page.locator("#jar-percent")).toContainText("14/24");
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-filled", "14");
+  await expect(page.locator("#jar-meter")).toHaveAttribute(
+    "data-capacity",
+    "24",
+  );
   expect(
     await page.evaluate(
       () =>
@@ -187,7 +213,11 @@ test("decorative seed flights stay bounded and clear on background without losin
     document.dispatchEvent(new Event("visibilitychange"));
   });
   await expect(page.locator(".flying-seed")).toHaveCount(0);
-  await expect(page.locator("#jar-percent")).toContainText("2/24");
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-filled", "2");
+  await expect(page.locator("#jar-meter")).toHaveAttribute(
+    "data-capacity",
+    "24",
+  );
   await expect
     .poll(() =>
       page.evaluate(

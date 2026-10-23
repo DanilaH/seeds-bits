@@ -39,6 +39,8 @@ test("notebook solution, page stamp, replay and classic restore", async ({
     path: "test-results/notebook.png",
   });
   await page.locator("#collection-back").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  await page.locator("#menu").click();
   await page.locator("#classic-mode").click();
   await expect(page.locator("#remaining")).toHaveText("26");
   await page.reload();
@@ -185,6 +187,8 @@ test("bronze trophy survives replay, widths and dark calendar", async ({
   if (await page.locator("#resume").isVisible())
     await page.locator("#resume").click();
   await page.locator("#menu").click();
+  await page.locator("#progress-open").click();
+  await page.locator("#progress-trophies").click();
   await page.locator("#trophies-mode").click();
   await expect(page.locator(".tier-1")).toContainText("Бронза");
   await page.screenshot({
