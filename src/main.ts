@@ -156,7 +156,45 @@ const icon = (name: keyof typeof icons) =>
   `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
   `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span id="jar-percent"></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label">Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+// Home has its own composition; the same controls keep their navigation handlers.
+const homeLayout = document.createElement("div");
+homeLayout.className = "home-layout";
+const homeCurrent = document.createElement("section");
+homeCurrent.className = "home-current";
+homeCurrent.setAttribute("aria-labelledby", "home-game-title");
+homeCurrent.innerHTML =
+  '<p class="home-eyebrow" id="home-eyebrow"></p><h2 id="home-game-title"></h2>';
+const homeGoal = document.createElement("div");
+homeGoal.id = "home-goal";
+homeCurrent.append($("resume-context"), homeGoal, $("resume"));
+const homeModes = document.createElement("section");
+homeModes.className = "home-modes";
+homeModes.setAttribute("aria-label", "Режимы игры");
+homeModes.append(document.querySelector(".mode-nav")!, $("calendar-open"));
+homeLayout.append(homeCurrent, homeModes);
+$("menu-content").insertBefore(
+  homeLayout,
+  document.querySelector(".home-links"),
+);
+for (const id of ["dark", "sound", "vibration"])
+  $(id).setAttribute("role", "switch");
+let enteredGame = false;
 document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
+const gameTop = document.createElement("div");
+gameTop.className = "game-top";
+gameTop.append(
+  document.querySelector("header")!,
+  document.querySelector(".game-meta")!,
+  $("page-progress"),
+);
+document.querySelector(".game")!.insertBefore(gameTop, $("lesson"));
+const gameActions = document.createElement("div");
+gameActions.className = "game-actions";
+gameActions.append(
+  document.querySelector(".status-wrap")!,
+  document.querySelector("footer")!,
+);
+document.querySelector(".game")!.append(gameActions);
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
@@ -754,6 +792,7 @@ function loadLesson() {
 function finishLesson() {
   if (busy) return;
   lesson = -1;
+  enteredGame = true;
   settings.tutorialDone = true;
   settingsDirty.tutorialDone = true;
   $("lesson").hidden = true;
@@ -1195,6 +1234,7 @@ function returnToPrevious() {
   }
 }
 function closeMenu() {
+  if (lesson < 0) enteredGame = true;
   navigationTrail.length = 0;
   dialog.close();
   render();
@@ -1212,13 +1252,14 @@ function navigateBack(native = false): boolean {
   if (dialog.open) {
     if ($("menu-content").hidden) returnToPrevious();
     else if (native) return false;
-    else closeMenu();
+    else if (dialog.dataset.entry === "pause") closeMenu();
   } else if (lesson >= 0) finishLesson();
   else openMenu();
   return true;
 }
 function openMenu(preserve: unknown = false) {
   if (busy || adActive || rewardRequest) return;
+  if (!dialog.open) dialog.dataset.entry = enteredGame ? "pause" : "root";
   if (preserve !== true) navigationTrail.length = 0;
   flights.clear();
   updateHome();
@@ -1227,13 +1268,7 @@ function openMenu(preserve: unknown = false) {
   document.body.classList.add("navigation-open");
   dialog.dataset.screen = "home";
   $("settings-panel").hidden = true;
-  $("resume-context").textContent =
-    `${$("mode").textContent} · ${occupied(board())} ${digitWord(occupied(board()))}`;
-  $("resume").textContent = occupied(board())
-    ? session.history.length
-      ? "Продолжить игру"
-      : "Играть"
-    : "Посмотреть результат";
+  renderHomeCurrent();
   $("collection").hidden = true;
   $("menu-content").hidden = false;
   $("confirm-content").hidden = true;
@@ -1651,7 +1686,12 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       (id) =>
         id.startsWith("daily-v1-") && availableDay(id.slice(9), "9999-12-31"),
     ).length;
-    html += `<h2>Прогресс</h2><dl class="progress-stats"><div><dt>Задачи в тетрадях</dt><dd>${completedBook} из ${notebook.length}</dd></div><div><dt>Задачи дня</dt><dd>${completedDaily}</dd></div><div><dt>Завершено партий</dt><dd>${m.completed}</dd></div><div><dt>Без подсказок</dt><dd>${m.unassisted}</dd></div></dl><div class="progress-next"><span>Следующая баночка</span><strong>${jarState(jars(progress).seeds).name} · ${jarState(jars(progress).seeds).percent}%</strong><progress max="100" value="${jarState(jars(progress).seeds).percent}" aria-label="Заполнение следующей баночки"></progress></div><button id="progress-trophies" class="secondary">Баночки и трофеи ${icon("arrow")}</button><details class="explanation"><summary>Как считается прогресс</summary><p>Партии и прохождения без подсказок считаются с ${new Date(m.since).toLocaleDateString("ru")}. Старые отметки задач сохранены.</p></details><p class="fine">Прогресс сохраняется на этом устройстве.</p>`;
+    const j = jarState(jars(progress).seeds);
+    const nextVolume = nextBookVolume();
+    const nextDone = volumeTasks(nextVolume).filter((p) =>
+      progress.done.includes(p.id),
+    ).length;
+    html += `<h2>Прогресс</h2>${jarHero(j)}<button id="progress-trophies" class="secondary">Баночки и трофеи ${icon("arrow")}</button><button id="progress-book" class="progress-book"><span><strong>Тетрадь ${nextVolume + 1}</strong><small>${nextDone} из 24 задач</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="Тетрадь ${nextVolume + 1}"></progress></button><dl class="progress-stats"><div><dt>Задачи в тетрадях</dt><dd>${completedBook} из ${notebook.length}</dd></div><div><dt>Задачи дня</dt><dd>${completedDaily}</dd></div><div><dt>Завершено партий</dt><dd>${m.completed}</dd></div><div><dt>Без подсказок</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>Как считается прогресс</summary><p>Партии и прохождения без подсказок считаются с ${new Date(m.since).toLocaleDateString("ru")}. Старые отметки задач сохранены.</p></details><p class="fine">Прогресс сохраняется на этом устройстве.</p>`;
   } else if (kind === "book") {
     const finished = new Set(progress.done);
     const status = (v: number) => {
@@ -1703,7 +1743,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ) ??
         tasks.find((p) => !finished.has(p.id)) ??
         tasks[0];
-      html += `<div class="volume-heading"><h3>Тетрадь ${selectedVolume + 1}</h3><span>${stats.n}/24</span></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${stats.n === 24 ? "Повторить" : "Продолжить тетрадь"}</button>`;
+      html += `<div class="volume-heading"><h3>Тетрадь ${selectedVolume + 1}</h3><span>${stats.n}/24</span></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${stats.n === 24 ? "Повторить" : stats.started ? "Продолжить" : "Начать"} · задача ${Number(continuing.id.slice(8)) - selectedVolume * 24}</button>`;
       for (let page = 0; page < 4; page++) {
         const group = tasks.slice(page * 6, page * 6 + 6),
           n = group.filter((p) => finished.has(p.id)).length;
@@ -1764,12 +1804,42 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   }
   if (kind === "trophies") html += "</section>";
   panel.innerHTML = html;
+  if (kind === "book") {
+    const resume = document.createElement("section");
+    resume.className = "book-resume";
+    const heading = panel.querySelector(".volume-heading"),
+      button = document.getElementById("continue-book");
+    if (heading && button) {
+      resume.append(heading, button);
+      panel.append(resume);
+    }
+    const browser = document.createElement("section");
+    browser.className = "book-browser";
+    browser.setAttribute("aria-label", "Выбор тетради");
+    for (const selector of [
+      ".book-total",
+      ".archive-controls",
+      ".volume-shelf",
+    ])
+      if (panel.querySelector(selector))
+        browser.append(panel.querySelector(selector)!);
+    panel.append(browser);
+    const pages = document.createElement("div");
+    pages.className = "book-pages";
+    pages.append(...panel.querySelectorAll(".book-page"));
+    panel.append(pages);
+  }
   const screenHeading = document.createElement("div");
   screenHeading.className = "screen-heading";
   screenHeading.append($("collection-back"), panel.querySelector("h2")!);
   panel.prepend(screenHeading);
-  if (kind === "progress")
+  if (kind === "progress") {
     $("progress-trophies").onclick = () => openCollection("trophies");
+    $("progress-book").onclick = () => {
+      selectedVolume = nextBookVolume();
+      openCollection("book");
+    };
+  }
   $("collection-back").onclick = returnToPrevious;
   $("collection-back").focus({ preventScroll: true });
   panel.querySelectorAll<HTMLElement>("[data-game]").forEach(
@@ -1886,6 +1956,58 @@ $("calendar-open").onclick = () => {
   openCollection("calendar");
 };
 $("progress-open").onclick = () => openCollection("progress");
+function nextBookVolume() {
+  if (progress.active.startsWith("book")) return volumeOf(progress.active);
+  const first = notebook.findIndex((p) => !progress.done.includes(p.id));
+  return Math.max(0, Math.floor(first / 24));
+}
+function jarPicture(j: ReturnType<typeof jarState>) {
+  return `<span class="jar-picture" style="--fill:${j.percent}%;--jar-color:${j.color}" aria-hidden="true"><span class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span></span>`;
+}
+function jarHero(j: ReturnType<typeof jarState>) {
+  return `<section class="progress-hero" aria-label="Следующая баночка">${jarPicture(j)}<div><span class="hero-kicker">Баночка ${j.index + 1} · ${j.name}</span><p class="hero-value">${j.percent}<span>%</span></p><p class="hero-count">${j.filled} из ${j.capacity} семечек</p><progress max="${j.capacity}" value="${j.filled}" aria-label="Заполнение баночки"></progress><p class="fine">До следующей — ${j.capacity - j.filled}</p></div></section>`;
+}
+function renderHomeCurrent() {
+  const count = occupied(board()),
+    classicMode = progress.active === "classic";
+  $("classic-mode").hidden = classicMode;
+  $("home-eyebrow").textContent = session.history.length
+    ? "Текущая партия"
+    : count
+      ? "Игра"
+      : "Партия завершена";
+  $("home-game-title").textContent = classicMode
+    ? "Классика"
+    : progress.active.startsWith("book")
+      ? `Тетрадь ${volumeOf(progress.active) + 1}`
+      : "Задача дня";
+  $("resume-context").textContent = classicMode
+    ? `${count} ${digitWord(count)} на поле`
+    : progress.active.startsWith("book")
+      ? `Задача ${((Number(progress.active.slice(8)) - 1) % 24) + 1} · ${count} ${digitWord(count)}`
+      : `${progress.active.slice(9).split("-").reverse().join(".")} · ${count} ${digitWord(count)}`;
+  $("resume").textContent = !count
+    ? "Посмотреть результат"
+    : session.history.length
+      ? "Продолжить"
+      : classicMode
+        ? "Начать классику"
+        : "Играть";
+  if (classicMode) {
+    const j = jarState(jars(progress).seeds);
+    homeGoal.innerHTML = `${jarPicture(j)}<div><strong>Баночка ${j.index + 1} · ${j.percent}%</strong><span>${j.filled} из ${j.capacity} семечек</span><progress max="${j.capacity}" value="${j.filled}" aria-label="Заполнение баночки"></progress></div>`;
+  } else {
+    const done = progress.active.startsWith("book")
+      ? volumeTasks(volumeOf(progress.active)).filter((p) =>
+          progress.done.includes(p.id),
+        ).length
+      : trophy(progress.active.slice(9, 16), progress.done).count;
+    const total = progress.active.startsWith("book")
+      ? 24
+      : days(progress.active.slice(9, 16)).length;
+    homeGoal.innerHTML = `<div><strong>${done} из ${total} задач</strong><progress max="${total}" value="${done}" aria-label="Пройденные задачи"></progress></div>`;
+  }
+}
 function updateHome() {
   const finished = new Set(progress.done);
   $("book-count").textContent =

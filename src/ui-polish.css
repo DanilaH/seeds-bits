@@ -692,3 +692,670 @@ progress::-moz-progress-bar {
     min-height: 44px;
   }
 }
+
+/* Composition: a real home screen and grouped play controls at every size. */
+.game-top,
+.game-actions {
+  display: contents;
+}
+.game-top > header {
+  min-height: 64px;
+}
+.game.short-board footer {
+  margin-top: auto;
+}
+.compact-game #board-wrap {
+  margin-top: 0;
+}
+.game.short-board #board-wrap {
+  padding-block: 12px;
+}
+.game.short-board .status-wrap {
+  min-height: 44px;
+  padding-top: 6px;
+}
+#dialog[data-screen="home"] {
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: max(24px, var(--safe-area-inset-top, env(safe-area-inset-top, 0px)))
+    max(24px, var(--safe-area-inset-right, env(safe-area-inset-right, 0px)))
+    max(20px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)))
+    max(24px, var(--safe-area-inset-left, env(safe-area-inset-left, 0px)));
+}
+#dialog[data-screen="home"][data-entry="root"] .dialog-head {
+  display: none;
+}
+#dialog[data-screen="home"][data-entry="pause"] .dialog-head {
+  max-width: 1040px;
+  height: 36px;
+  margin: 0 auto 4px;
+}
+#menu-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1040px;
+  height: 100%;
+  min-height: min-content;
+  margin: 0 auto;
+}
+#dialog[data-entry="pause"] #menu-content {
+  height: calc(100% - 40px);
+}
+.home-title {
+  flex-shrink: 0;
+  padding: 0;
+  text-align: left;
+}
+.home-title h1 {
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+.home-layout {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  padding-block: 24px;
+}
+.home-current {
+  padding: 22px;
+  background: var(--button);
+  border-radius: 16px;
+}
+.home-eyebrow {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+#home-game-title {
+  padding: 0;
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.6px;
+}
+#resume-context {
+  min-height: 0;
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+}
+#resume {
+  min-height: 52px;
+  margin: 20px 0 0;
+  font-size: 17px;
+  border-radius: 9px;
+}
+#home-goal {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-top: 22px;
+  padding-block: 4px;
+}
+#home-goal > div {
+  flex: 1;
+  min-width: 0;
+}
+#home-goal strong,
+#home-goal span:not(.jar-picture, .jar-glass, .jar-fill, .jar-lid) {
+  display: block;
+}
+#home-goal strong {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+#home-goal > div > span {
+  color: var(--muted);
+  font-size: 13px;
+}
+#home-goal progress {
+  margin-top: 10px;
+}
+.jar-picture {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 5px;
+}
+.jar-picture .jar-glass {
+  width: 42px;
+  height: 56px;
+}
+.home-modes {
+  min-width: 0;
+}
+.mode-nav {
+  margin: 0;
+  padding: 0;
+  border-top: 0;
+}
+.mode-nav .mode-link {
+  min-height: 76px;
+  padding: 15px 2px;
+  font-size: 20px;
+}
+.mode-link small {
+  margin-top: 5px;
+  font-size: 14px;
+}
+.archive-link {
+  min-height: 48px;
+  font-size: 14px;
+}
+.home-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  flex-shrink: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.home-links .text-button {
+  min-height: 48px;
+  padding: 8px 0;
+  font-size: 15px;
+}
+.settings input {
+  appearance: none;
+  width: 46px;
+  height: 28px;
+  border: 1px solid var(--muted);
+  border-radius: 20px;
+  background: var(--line);
+  position: relative;
+  flex-shrink: 0;
+}
+.settings input::after {
+  width: 20px;
+  height: 20px;
+  top: 3px;
+  left: 3px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 1px 3px #0002;
+}
+.settings input:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.settings input:checked::after {
+  transform: translateX(18px);
+}
+#collection a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+#collection .fine,
+#settings-panel .fine {
+  font-size: 13px;
+}
+.book-resume {
+  background: var(--button);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+.book-resume .volume-heading {
+  margin: 0 0 12px;
+}
+.book-resume .volume-heading h3 {
+  font-size: 20px !important;
+}
+.book-resume #continue-book {
+  font-size: 16px;
+  min-height: 48px;
+}
+.book-browser {
+  padding-bottom: 12px;
+}
+.book-browser .book-total {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.archive-controls label {
+  font-size: 13px;
+}
+.volume-cover small {
+  font-size: 12px;
+}
+.book-pages .book-page {
+  margin-top: 0;
+  padding-block: 14px;
+}
+#collection .book-pages h3 {
+  font-size: 16px !important;
+}
+.progress-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+  padding: 28px 20px;
+  margin: 0 0 18px;
+  background: var(--button);
+  border-radius: 16px;
+}
+.progress-hero .jar-glass {
+  width: 78px;
+  height: 112px;
+  border-radius: 12px 12px 20px 20px;
+}
+.progress-hero .jar-lid {
+  height: 9px;
+  top: -6px;
+}
+.hero-kicker {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+}
+#collection .hero-value {
+  margin: 8px 0 0;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  font-variant-numeric: tabular-nums;
+}
+.hero-value > span {
+  font-size: 24px;
+  margin-left: 3px;
+}
+#collection .hero-count {
+  margin: 8px 0 14px;
+  font-size: 14px;
+}
+.progress-hero .fine {
+  margin: 10px 0 0;
+}
+.progress-book {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: none;
+  padding: 16px;
+  margin: 20px 0;
+  text-align: left;
+}
+.progress-book small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.progress-book progress {
+  grid-column: 1 / -1;
+}
+.progress-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.progress-stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+}
+.progress-stats dt {
+  color: var(--muted);
+  font-size: 13px;
+}
+.progress-stats dd {
+  font-size: 22px;
+  font-weight: 500;
+}
+@media (min-width: 760px), (orientation: landscape) and (min-width: 540px) {
+  #dialog[data-screen="home"] .home-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-content: center;
+    align-items: stretch;
+    gap: clamp(24px, 5vw, 64px);
+  }
+  .home-current {
+    display: flex;
+    flex-direction: column;
+    min-height: clamp(300px, 48dvh, 500px);
+    padding: 32px;
+  }
+  #home-game-title {
+    font-size: 40px;
+  }
+  #resume-context {
+    font-size: 16px;
+  }
+  #home-goal {
+    flex: 1;
+  }
+  #home-goal .jar-glass {
+    width: 58px;
+    height: 78px;
+  }
+  #resume {
+    margin-top: 24px;
+  }
+  .home-modes,
+  .mode-nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .mode-nav {
+    flex: 1;
+  }
+  .mode-nav .mode-link {
+    flex: 1;
+    min-height: 80px;
+  }
+  .archive-link {
+    margin-top: 8px;
+  }
+}
+@media (min-width: 760px) {
+  #dialog[data-screen="book"],
+  #dialog[data-screen="progress"] {
+    width: min(960px, calc(100% - 48px));
+    padding-inline: 28px;
+  }
+  #dialog[data-screen="book"] #collection,
+  #dialog[data-screen="progress"] #collection {
+    max-width: none;
+  }
+  .book-resume {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    justify-content: space-between;
+  }
+  .book-resume .volume-heading {
+    flex: 1;
+    margin: 0;
+    gap: 20px;
+  }
+  .book-resume #continue-book {
+    width: min(300px, 50%);
+  }
+  .archive-controls {
+    max-width: 520px;
+  }
+  .volume-shelf {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+  .book-pages {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 28px;
+  }
+  .progress-hero {
+    padding: 36px;
+    gap: 40px;
+  }
+  .progress-hero .jar-glass {
+    width: 108px;
+    height: 148px;
+  }
+  #dialog[data-screen="progress"] #collection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 28px;
+  }
+  #dialog[data-screen="progress"] .screen-heading,
+  #dialog[data-screen="progress"] .explanation,
+  #dialog[data-screen="progress"] #collection > .fine {
+    grid-column: 1 / -1;
+  }
+  .progress-hero {
+    grid-column: 1;
+    grid-row: 2 / 4;
+    margin: 0;
+  }
+  #progress-trophies {
+    grid-column: 1;
+    margin-top: 16px;
+  }
+  .progress-book {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0 0 8px;
+  }
+  .progress-stats {
+    grid-column: 2;
+    grid-row: 3 / 5;
+    margin-top: 0;
+    align-content: start;
+  }
+}
+@media (max-height: 700px) {
+  #dialog[data-screen="home"] {
+    padding-block: max(
+        12px,
+        var(--safe-area-inset-top, env(safe-area-inset-top, 0px))
+      )
+      max(12px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+    padding-inline: 18px;
+  }
+  .home-title h1 {
+    font-size: 34px;
+  }
+  .home-layout {
+    gap: 12px;
+    padding-block: 12px;
+  }
+  .home-current {
+    padding: 14px;
+    min-height: 0;
+  }
+  .home-eyebrow {
+    display: none;
+  }
+  #home-game-title {
+    font-size: 26px;
+  }
+  #resume-context {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  #home-goal {
+    display: none;
+  }
+  #resume {
+    min-height: 46px;
+    margin-top: 12px;
+    font-size: 16px;
+  }
+  .mode-nav .mode-link {
+    min-height: 56px;
+    padding: 8px 2px;
+    font-size: 17px;
+  }
+  .mode-link small {
+    font-size: 13px;
+    margin-top: 3px;
+  }
+  .archive-link {
+    min-height: 44px;
+    margin: 0;
+    padding-block: 0;
+    font-size: 13px;
+  }
+  .home-links {
+    padding-top: 4px;
+  }
+  .home-links .text-button {
+    min-height: 44px;
+    font-size: 14px;
+  }
+}
+@media (orientation: landscape) and (min-width: 540px) {
+  .game:not(:has(#lesson:not([hidden]))) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    gap: 0 24px;
+  }
+  .game:not(:has(#lesson:not([hidden]))) > .game-top {
+    display: block;
+    grid-column: 2;
+    grid-row: 3;
+    min-width: 0;
+    align-self: start;
+  }
+  .game:not(:has(#lesson:not([hidden]))) > .game-actions {
+    display: flex;
+    flex-direction: column;
+    grid-column: 2;
+    grid-row: 4;
+    min-width: 0;
+    min-height: 0;
+  }
+  .game:not(:has(#lesson:not([hidden]))) > #viewport {
+    grid-column: 1;
+    grid-row: 3 / 5;
+    min-height: 0;
+    max-height: none;
+  }
+  .game:not(:has(#lesson:not([hidden]))) > #read-notice {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .game:not(:has(#lesson:not([hidden]))) > #save-notice {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .game:not(:has(#lesson:not([hidden]))) .game-top > header {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    min-height: 48px;
+  }
+  .game-top header #menu {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .game-top header #book-top {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .game-top header .brand {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 20px;
+  }
+  .game-top header .jar-meter {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+  }
+  .game-top .game-meta,
+  .game-top #page-progress {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .game-actions .status-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    max-height: 100%;
+    align-self: stretch;
+    padding-top: 4px;
+  }
+  .game-actions footer {
+    margin-top: 0;
+    padding-top: 8px;
+  }
+  .game.short-board:not(:has(#lesson:not([hidden]))) {
+    grid-template-rows: auto auto minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .game.short-board:not(:has(#lesson:not([hidden]))) > .game-top {
+    align-self: end;
+  }
+  .game.short-board:not(:has(#lesson:not([hidden]))) > .game-actions {
+    align-self: start;
+  }
+  .game.short-board .game-actions .status-wrap {
+    flex: 0 1 auto;
+  }
+  .game.short-board:not(:has(#lesson:not([hidden]))) #viewport {
+    display: flex;
+    align-items: center;
+  }
+  .game.short-board #board-wrap {
+    width: 100%;
+    flex-shrink: 0;
+  }
+  .game-actions #hint-jump {
+    position: static;
+    transform: none;
+    white-space: normal;
+    width: 100%;
+  }
+}
+@media (orientation: landscape) and (min-width: 540px) and (max-height: 600px) {
+  .game:not(:has(#lesson:not([hidden]))) {
+    grid-template-columns: minmax(0, 1fr) 190px;
+    column-gap: 18px;
+  }
+  .game-top header .brand {
+    font-size: 18px;
+  }
+  .game:not(:has(#lesson:not([hidden]))) .game-top > header {
+    min-height: 44px;
+  }
+  .game-top .game-meta {
+    font-size: 12px;
+    padding-block: 6px;
+  }
+  .game-actions footer .action {
+    min-height: 48px;
+    font-size: 12px;
+  }
+  .game-top .jar-meter {
+    min-height: 54px;
+  }
+  .game-top #page-progress {
+    padding-bottom: 6px;
+  }
+}
+@media (max-height: 420px) and (orientation: landscape) {
+  #dialog[data-screen="home"] {
+    padding-block: 8px;
+    padding-inline: 20px;
+  }
+  .home-title h1 {
+    font-size: 26px;
+  }
+  #dialog[data-screen="home"][data-entry="pause"] .dialog-head {
+    height: 24px;
+    margin: 0;
+  }
+  #dialog[data-entry="pause"] #menu-content {
+    height: calc(100% - 24px);
+  }
+  .home-layout {
+    padding-block: 8px;
+  }
+  .home-current {
+    padding: 12px;
+  }
+  .home-links .text-button {
+    font-size: 13px;
+  }
+}
