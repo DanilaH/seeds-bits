@@ -128,7 +128,7 @@ async function capture(name, viewport, action, dark = false) {
 }
 try {
   const phone = { width: 390, height: 640 },
-    tablet = { width: 960, height: 440 };
+    tablet = { width: 960, height: 540 };
   const game = async (p) => {
     await p.locator("#resume").click();
     await p.locator("#hint").click();
@@ -148,7 +148,9 @@ try {
     await p.locator("#progress-open").click();
     await p.locator("#progress-trophies").click();
     await p.locator(".jar-shelf").waitFor();
-    await p.locator(".jar-collection").scrollIntoViewIfNeeded();
+    await p.locator("#dialog").evaluate((dialog) => {
+      dialog.scrollTop = 0;
+    });
   };
   await capture("phone-01-pairs", phone, game);
   await capture("phone-02-books", phone, book);
