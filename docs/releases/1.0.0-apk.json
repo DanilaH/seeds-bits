@@ -1,11 +1,11 @@
 {
   "file": "seeds-1.0.0-rustore.apk",
-  "sha256": "ed4c09f79d050ddb850b5e85180cc7f36b1f39f309b46b5eed868f85c7c1c974",
+  "sha256": "34366e2970a12f2d2e3e33cb0347bd2f149af133ce6c1c254f515c2e539cd907",
   "bytes": 5455824,
   "package": "com.seedsbits.game",
   "name": "Семечки",
   "versionName": "1.0.0",
-  "versionCode": "1000007",
+  "versionCode": "1000009",
   "minSdk": "24",
   "targetSdk": "36",
   "debuggable": false,
@@ -26,23 +26,23 @@
     "v3": true
   },
   "permissions": [
-    "android.permission.INTERNET",
     "com.seedsbits.game.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
     "android.permission.ACCESS_NETWORK_STATE",
-    "com.google.android.gms.permission.AD_ID",
+    "android.permission.INTERNET",
     "android.permission.VIBRATE",
-    "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
+    "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+    "com.google.android.gms.permission.AD_ID"
   ],
   "cleanWebAssets": {
     "index.html": true,
-    "assets/web-hqxJHVVC.js": true,
-    "assets/index-kSQTal5q.css": true,
-    "assets/esm-DnCFk_ou.js": true,
-    "assets/web-DIDRIZuG.js": true,
-    "assets/index-GjQBytqB.js": true,
-    "assets/web-C2Hl6zeT.js": true,
+    "assets/index-Bt4TMsPC.js": true,
+    "assets/esm-DtPuWuIg.js": true,
+    "assets/esm-BT_gKf8U.js": true,
+    "assets/web-CNQOgyC1.js": true,
+    "assets/web-D-WIwiP6.js": true,
+    "assets/index-D2K0mLfC.css": true,
+    "assets/web-B-xplOeI.js": true,
     "assets/notebook-extra-B_1ZZVK0.js": true,
-    "assets/esm-Bbkgp8nK.js": true,
     "assets/advice-worker-6LRsD5M8.js": true
   },
   "extraStaleAssets": false,
