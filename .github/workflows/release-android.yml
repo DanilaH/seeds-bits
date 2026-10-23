@@ -58,8 +58,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: node scripts/store-capture.mjs
-      - run: python3 -m pip install pillow
-      - run: python3 scripts/store-media.py
+      - run: node scripts/store-frames.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

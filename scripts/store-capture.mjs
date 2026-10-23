@@ -33,7 +33,10 @@ const server = createServer((req, res) => {
   }
 });
 await new Promise((r) => server.listen(5197, "127.0.0.1", r));
-const browser = await chromium.launch({ executablePath: process.env.SEEDS_CHROMIUM || undefined, args: ["--no-sandbox"] });
+const browser = await chromium.launch({
+  executablePath: process.env.SEEDS_CHROMIUM || undefined,
+  args: ["--no-sandbox"],
+});
 const errors = [];
 const captures = [];
 async function capture(name, viewport, action, dark = false) {
@@ -161,6 +164,11 @@ try {
     await p.waitForFunction(() => !document.querySelector("#dialog").open);
   });
   await capture("tablet-03-dark", tablet, game, true);
+  await capture("tablet-04-library", tablet, book);
+  await capture("tablet-05-progress", tablet, async (p) => {
+    await p.locator("#progress-open").click();
+    await p.locator(".progress-hero").waitFor();
+  });
   writeFileSync(
     out + "/capture.json",
     JSON.stringify(

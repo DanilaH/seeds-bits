@@ -1,0 +1,27 @@
+name: Store screenshots without slogans
+on:
+  push:
+    branches: [qa/store-media-20261023]
+permissions:
+  contents: read
+jobs:
+  media:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/store-capture.mjs
+      - run: node scripts/store-frames.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-store-screenshots
+          path: test-results/store/
