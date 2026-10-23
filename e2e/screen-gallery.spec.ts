@@ -6,6 +6,7 @@ test("capture every application screen", async ({ browser }) => {
   const out="test-results/screen-gallery";
   mkdirSync(out,{recursive:true});
   const shot=async(page:Page,name:string)=>{
+    await page.waitForTimeout(350);
     await page.screenshot({path:out+"/"+name+".png",animations:"disabled"});
   };
   const cases: [string,string[]][]=[
@@ -20,7 +21,7 @@ test("capture every application screen", async ({ browser }) => {
     ["09-month-trophies",["#progress-open","#progress-trophies","#trophies-mode"]],
     ["10-settings",["#settings-open"]],
     ["11-privacy",["#settings-open","#privacy-open"]],
-    ["12-confirm-restart",["#settings-open","#new"]],
+    ["12-confirm-restart",["#resume",'[data-index="0"]','[data-index="9"]',"#menu","#settings-open","#new"]],
     ["13-tutorial",["#learn"]],
   ];
   for(const [name,actions] of cases){
@@ -74,6 +75,7 @@ test("capture every application screen", async ({ browser }) => {
     await p.locator("#book-mode").click();
     await shot(p,label+"-notebooks");
     await p.locator("[data-game]").first().click();
+    await expect(p.locator("#dialog")).toBeHidden();
     await shot(p,label+"-game");
     await p.locator("#menu").click();
     await p.locator("#progress-open").click();
