@@ -183,7 +183,7 @@ test("failed reward save retains native receipt until retry and recovery", async
   await expect(page.locator("#save-notice")).toBeVisible();
   expect(await page.evaluate(() => (window as any).adsAcks.length)).toBe(0);
 });
-test("banner reserves space, never overlaps controls, hides in menu, landscape and tutorial", async ({
+test("banner reserves space in both orientations and hides in menus and tutorial", async ({
   page,
 }) => {
   await install(page);
@@ -209,8 +209,8 @@ test("banner reserves space, never overlaps controls, hides in menu, landscape a
     .poll(() =>
       page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
     )
-    .toBe(false);
-  await expect(page.locator("#ad-space")).toBeHidden();
+    .toBe(true);
+  await expect(page.locator("#ad-space")).toBeVisible();
   await page.locator("#menu").click();
   await page.locator("#learn").click();
   await expect(page.locator("#ad-space")).toBeHidden();
@@ -250,6 +250,92 @@ test("native safe-area changes reposition the banner and preserve the control ga
   expect(g.ad.bottom).toBeLessThanOrEqual(844 - 36);
   expect(g.footer.bottom).toBeLessThanOrEqual(g.ad.y - 8);
   await page.screenshot({ path: "test-results/ads-safe-area-portrait.png" });
+});
+test("banner shelf fits short phones and landscape with safe insets, in both themes", async ({
+  page,
+}) => {
+  await install(page);
+  await page.addStyleTag({
+    content:
+      '#ad-space::after { content: "Баннер · проверка размещения"; display: grid; place-items: center; height: 100%; background: #dfe7e3; color: #293c37; font: 14px sans-serif; }',
+  });
+  for (const [width, height] of [
+    [320, 568],
+    [390, 844],
+    [568, 320],
+    [640, 360],
+    [844, 390],
+    [768, 1024],
+    [1280, 800],
+  ]) {
+    await page.setViewportSize({ width, height });
+    for (const dark of [false, true]) {
+      await page.evaluate((dark) => {
+        const root = document.documentElement;
+        root.dataset.theme = dark ? "dark" : "light";
+        for (const [side, value] of Object.entries({
+          top: 28,
+          bottom: 32,
+          left: 24,
+          right: 20,
+        }))
+          root.style.setProperty(`--safe-area-inset-${side}`, `${value}px`);
+      }, dark);
+      await expect
+        .poll(() =>
+          page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
+        )
+        .toBe(true);
+      const g = await page.evaluate(() => {
+        const rect = (s: string) =>
+          document.querySelector(s)!.getBoundingClientRect().toJSON();
+        return {
+          ad: rect("#ad-space"),
+          footer: rect("footer"),
+          game: rect(".game"),
+          paper: getComputedStyle(document.documentElement)
+            .getPropertyValue("--paper")
+            .trim(),
+          background: getComputedStyle(document.querySelector("#app")!)
+            .backgroundColor,
+          overflow: document.documentElement.scrollWidth - innerWidth,
+        };
+      });
+      expect(g.overflow).toBeLessThanOrEqual(1);
+      expect(g.ad.width).toBeGreaterThanOrEqual(250);
+      expect(g.ad.height).toBeGreaterThanOrEqual(50);
+      expect(g.ad.bottom).toBeLessThanOrEqual(height - 32);
+      expect(g.ad.x).toBeGreaterThanOrEqual(24);
+      expect(g.ad.right).toBeLessThanOrEqual(width - 20);
+      expect(g.footer.bottom).toBeLessThanOrEqual(g.ad.y - 8);
+      await expect(page.locator("#hint")).toBeInViewport({ ratio: 1 });
+      await expect(page.locator("#undo")).toBeInViewport({ ratio: 1 });
+      expect(
+        await page.evaluate(
+          () =>
+            getComputedStyle(document.querySelector("#app")!)
+              .backgroundColor ===
+            getComputedStyle(document.querySelector(".game")!).backgroundColor,
+        ),
+      ).toBe(true);
+      await page.screenshot({
+        path: `test-results/banner-shelf/${width}-${height}-${dark ? "dark" : "light"}.png`,
+        animations: "disabled",
+      });
+    }
+  }
+  await page.locator("#menu").click();
+  await expect
+    .poll(() =>
+      page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
+    )
+    .toBe(false);
+  await page.locator("#resume").click();
+  await expect
+    .poll(() =>
+      page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
+    )
+    .toBe(true);
 });
 test("analytics starts once on gameplay, not on opening home or returning to a saved attempt", async ({
   page,

@@ -1833,10 +1833,12 @@ header .jar-glass {
   margin-top: 10px;
   min-height: 48px;
 }
-@media (orientation: portrait) and (min-height: 600px) {
+/* Reserve the same stable slot even when an ad cannot be filled. */
+@media (min-width: 280px) {
   :root.has-mobile-ads:not(:has(#lesson:not([hidden]))) {
     --ad-reserve: calc(
-      88px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))
+      var(--banner-height, 72px) + 16px +
+        var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))
     );
   }
   .has-mobile-ads .game {
@@ -1856,7 +1858,7 @@ header .jar-glass {
     bottom: calc(
       4px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))
     );
-    height: 72px;
+    height: var(--banner-height, 72px);
     max-width: 400px;
     margin: auto;
     pointer-events: none;

@@ -26,13 +26,14 @@ jobs:
       - run: python3 scripts/regression-061/native-harness.py
       - run: npx playwright test --config scripts/regression-061/playwright.config.ts
       - name: Verify new composition and capture screens
-        run: npx playwright test e2e/composition.spec.ts --workers=1
+        run: npx playwright test e2e/monetization060.spec.ts e2e/composition.spec.ts --workers=1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: composition-first-review
           path: |
             test-results/composition/
+            test-results/banner-shelf/
             test-results/main/
       - run: npm run test:e2e
         if: ${{ !cancelled() }}
