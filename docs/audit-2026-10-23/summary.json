@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-23",
+  "production_commit": "47c36d9e58e84743cbb60cd5d2747a4939268bfa",
+  "apk_sha256": "ed4c09f79d050ddb850b5e85180cc7f36b1f39f309b46b5eed868f85c7c1c974",
+  "runs": [
+    39943467315,
+    39944334660,
+    39944970825,
+    39945506801
+  ],
+  "baseline": {
+    "unit": {
+      "passed": 45,
+      "total": 45
+    },
+    "model_regression": {
+      "passed": 2,
+      "total": 2
+    },
+    "browser_ads_lifecycle": {
+      "passed": 15,
+      "total": 15
+    },
+    "browser_main": {
+      "passed": 98,
+      "total": 99,
+      "failure": "cross-tab settings merge"
+    },
+    "native_bridge_doubles": {
+      "passed": 16,
+      "total": 16
+    },
+    "android35_offline_release": {
+      "passed": 11,
+      "total": 11
+    }
+  },
+  "independent": {
+    "notebooks": 2400,
+    "notebook_solution_moves": 246605,
+    "daily_tasks": 2006,
+    "daily_solution_moves": 24183,
+    "random_fields": 5000,
+    "pair_comparisons": 2466945,
+    "state_actions": 20000,
+    "serialization_round_trips": 2000,
+    "layout_screen_combinations": 162,
+    "layout_problems": 0,
+    "final_task_id": "book-v1-2400",
+    "final_task_ui_pairs": 268,
+    "largest_saved_board_cells": 1800,
+    "concurrent_move_cases_passed": 12,
+    "concurrent_move_cases_total": 12,
+    "settings_background_failures": 3,
+    "settings_background_total": 12,
+    "settings_foreground_failures": 0,
+    "settings_foreground_total": 12,
+    "yandex_sdk_scenarios_passed": 6,
+    "real_ui_audio_pause_cycles": 50
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "P2",
+      "scope": "browser multiple documents",
+      "confirmed": true,
+      "issue": "lost cross-tab preference field update"
+    },
+    {
+      "id": "F02",
+      "severity": "P2",
+      "scope": "malformed saved daily task",
+      "confirmed": true,
+      "issue": "nonexistent calendar month accepted"
+    },
+    {
+      "id": "F03",
+      "severity": "P3",
+      "scope": "sound module saturation stress only",
+      "confirmed": true,
+      "ordinary_ui_reproduced": false,
+      "issue": "saturated suspended context cannot resume"
+    }
+  ],
+  "live_ad_fill_verified": false,
+  "appmetrica_dashboard_delivery_verified": false,
+  "hardware_frame_pacing_verified": false,
+  "note": "Diagnostic workflow conclusions may be successful while opt-in probes expose expected unfixed defects. Use this summary and per-case evidence."
+}

@@ -1,0 +1,8 @@
+{
+  "started": 6,
+  "suspends": 1,
+  "resumesBefore": 6,
+  "resumesAfter": 6,
+  "expectedResume": true,
+  "scope": "module stress; natural UI reachability assessed separately"
+}

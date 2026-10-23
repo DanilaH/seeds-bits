@@ -1,4 +1,4 @@
-name: Production SDK and audio audit followup
+name: Independent production audit followup
 on:
   push:
     branches: [qa/audit-followup-20261023]

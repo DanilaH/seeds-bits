@@ -1,0 +1,52 @@
+[
+  {
+    "kind": "resolved",
+    "elapsedMs": 1039,
+    "errors": [],
+    "calls": [
+      "start",
+      "stop",
+      "ready",
+      "stop",
+      "start"
+    ],
+    "passed": true
+  },
+  {
+    "kind": "rejected",
+    "elapsedMs": 886,
+    "errors": [],
+    "calls": [],
+    "passed": true
+  },
+  {
+    "kind": "pending",
+    "elapsedMs": 9383,
+    "errors": [],
+    "calls": [],
+    "passed": true
+  },
+  {
+    "kind": "script-unavailable",
+    "elapsedMs": 855,
+    "errors": [],
+    "calls": [],
+    "passed": true
+  },
+  {
+    "kind": "late",
+    "elapsedMs": 9376,
+    "errors": [],
+    "calls": [],
+    "passed": true
+  },
+  {
+    "kind": "no-gameplay",
+    "elapsedMs": 884,
+    "errors": [],
+    "calls": [
+      "ready"
+    ],
+    "passed": true
+  }
+]

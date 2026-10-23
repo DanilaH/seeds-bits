@@ -1,0 +1,6 @@
+{
+  "traces": 200,
+  "actions": 20000,
+  "roundTrips": 2000,
+  "passed": true
+}

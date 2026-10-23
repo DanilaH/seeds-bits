@@ -1,0 +1,50 @@
+[
+  {
+    "id": "d3e36692-7eb4-45bf-afd1-c027f26d86a2",
+    "kind": "write",
+    "at": 1792754019588,
+    "value": "{\"tutorialDone\":true}"
+  },
+  {
+    "id": "d3e36692-7eb4-45bf-afd1-c027f26d86a2",
+    "kind": "write",
+    "at": 1792754019998,
+    "value": "{\"theme\":\"light\",\"sound\":false,\"vibration\":false,\"tutorialDone\":true}"
+  },
+  {
+    "id": "d3e36692-7eb4-45bf-afd1-c027f26d86a2",
+    "kind": "change",
+    "at": 1792754024850,
+    "target": "dark"
+  },
+  {
+    "id": "6aca9d83-25d0-4e5d-a781-720ba30e9a5d",
+    "kind": "change",
+    "at": 1792754024883,
+    "target": "sound"
+  },
+  {
+    "id": "d3e36692-7eb4-45bf-afd1-c027f26d86a2",
+    "kind": "write",
+    "at": 1792754024903,
+    "value": "{\"theme\":\"dark\",\"sound\":false,\"vibration\":false,\"tutorialDone\":true}"
+  },
+  {
+    "id": "6aca9d83-25d0-4e5d-a781-720ba30e9a5d",
+    "kind": "storage",
+    "at": 1792754024903,
+    "value": "{\"theme\":\"dark\",\"sound\":false,\"vibration\":false,\"tutorialDone\":true}"
+  },
+  {
+    "id": "6aca9d83-25d0-4e5d-a781-720ba30e9a5d",
+    "kind": "write",
+    "at": 1792754024904,
+    "value": "{\"theme\":\"dark\",\"sound\":true,\"vibration\":false,\"tutorialDone\":true}"
+  },
+  {
+    "id": "d3e36692-7eb4-45bf-afd1-c027f26d86a2",
+    "kind": "storage",
+    "at": 1792754024905,
+    "value": "{\"theme\":\"dark\",\"sound\":true,\"vibration\":false,\"tutorialDone\":true}"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "pairs": 50,
+  "backgroundResumeCycles": 50,
+  "starts": 100,
+  "active": 0,
+  "maxActive": 1,
+  "resumes": 100,
+  "suspends": 100,
+  "contexts": [
+    {
+      "state": "suspended",
+      "currentTime": 8.391111111111112
+    }
+  ],
+  "scope": "real Chromium AudioContext; actual UI moves, simulated document visibility"
+}

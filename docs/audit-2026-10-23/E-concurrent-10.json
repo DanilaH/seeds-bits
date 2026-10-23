@@ -1,0 +1,344 @@
+{
+  "n": 10,
+  "writes": [
+    {
+      "id": "a27e8326-50f3-43db-8551-ea2f884db721",
+      "at": 1792754535031,
+      "kind": "write",
+      "value": {
+        "version": 3,
+        "active": "classic",
+        "sessions": {
+          "classic": {
+            "rules": 1,
+            "current": {
+              "board": [
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5
+              ],
+              "moves": 0,
+              "additions": 0,
+              "scroll": 0
+            },
+            "history": []
+          }
+        },
+        "done": [],
+        "seen": [],
+        "hints": {}
+      }
+    },
+    {
+      "id": "a27e8326-50f3-43db-8551-ea2f884db721",
+      "at": 1792754535411,
+      "kind": "write",
+      "value": {
+        "version": 4,
+        "active": "classic",
+        "sessions": {
+          "classic": {
+            "rules": 1,
+            "current": {
+              "board": [
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5
+              ],
+              "moves": 0,
+              "additions": 0,
+              "scroll": 0
+            },
+            "packedHistory": []
+          }
+        },
+        "hints": {
+          "classic": 1
+        },
+        "done": [],
+        "seen": [],
+        "meta": {
+          "version": 1,
+          "since": "2026-10-23T11:22:15.061Z",
+          "attempts": {
+            "classic": {
+              "id": "b48d94d5-5ca6-4360-a101-26bce239727d",
+              "completed": false
+            }
+          },
+          "completed": 0,
+          "unassisted": 0
+        },
+        "jars": {
+          "version": 1,
+          "seeds": 0,
+          "wins": 0,
+          "attempt": "b48d94d5-5ca6-4360-a101-26bce239727d",
+          "highWater": 0
+        }
+      }
+    },
+    {
+      "id": "a27e8326-50f3-43db-8551-ea2f884db721",
+      "at": 1792754535907,
+      "kind": "write",
+      "value": {
+        "version": 4,
+        "active": "classic",
+        "sessions": {
+          "classic": {
+            "rules": 1,
+            "current": {
+              "board": [
+                0,
+                0,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5,
+                5
+              ],
+              "scroll": 0,
+              "additions": 0,
+              "moves": 1
+            },
+            "packedHistory": [
+              [
+                0,
+                0,
+                0,
+                [
+                  [
+                    9,
+                    9
+                  ],
+                  [
+                    9,
+                    27
+                  ]
+                ]
+              ]
+            ]
+          }
+        },
+        "hints": {
+          "classic": 1
+        },
+        "done": [],
+        "seen": [],
+        "meta": {
+          "version": 1,
+          "since": "2026-10-23T11:22:15.061Z",
+          "attempts": {
+            "classic": {
+              "id": "b48d94d5-5ca6-4360-a101-26bce239727d",
+              "completed": false
+            }
+          },
+          "completed": 0,
+          "unassisted": 0
+        },
+        "jars": {
+          "version": 1,
+          "seeds": 2,
+          "wins": 0,
+          "attempt": "b48d94d5-5ca6-4360-a101-26bce239727d",
+          "highWater": 1
+        }
+      }
+    }
+  ],
+  "firstWarning": "Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.",
+  "secondWarning": "В другой вкладке есть более новое сохранение. Оно защищено от перезаписи.",
+  "firstNotice": false,
+  "secondNotice": true,
+  "stored": {
+    "version": 4,
+    "active": "classic",
+    "sessions": {
+      "classic": {
+        "rules": 1,
+        "current": {
+          "board": [
+            0,
+            0,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "scroll": 0,
+          "additions": 0,
+          "moves": 1
+        },
+        "packedHistory": [
+          [
+            0,
+            0,
+            0,
+            [
+              [
+                9,
+                9
+              ],
+              [
+                9,
+                27
+              ]
+            ]
+          ]
+        ]
+      }
+    },
+    "hints": {
+      "classic": 1
+    },
+    "done": [],
+    "seen": [],
+    "meta": {
+      "version": 1,
+      "since": "2026-10-23T11:22:15.061Z",
+      "attempts": {
+        "classic": {
+          "id": "b48d94d5-5ca6-4360-a101-26bce239727d",
+          "completed": false
+        }
+      },
+      "completed": 0,
+      "unassisted": 0
+    },
+    "jars": {
+      "version": 1,
+      "seeds": 2,
+      "wins": 0,
+      "attempt": "b48d94d5-5ca6-4360-a101-26bce239727d",
+      "highWater": 1
+    }
+  },
+  "scope": "two visible documents; simultaneous real DOM click handlers"
+}

@@ -1,0 +1,13 @@
+{
+  "dates": 2006,
+  "steps": 24183,
+  "generatedTasksSolvable": true,
+  "invalidDates": {
+    "2024-12-31": false,
+    "2100-02-29": false,
+    "2200-02-29": false,
+    "2026-13-01": true,
+    "2026-00-01": true,
+    "2026-02-30": false
+  }
+}

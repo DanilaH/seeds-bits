@@ -1,7 +1,11 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: ".",
-  testMatch: ["browser.audit.ts", "settings.browser.audit.ts", "concurrent.browser.audit.ts"],
+  testMatch: [
+    "browser.audit.ts",
+    "settings.browser.audit.ts",
+    "concurrent.browser.audit.ts",
+  ],
   timeout: 180000,
   workers: 1,
   reporter: "list",

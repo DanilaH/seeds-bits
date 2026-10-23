@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "name": "seeds-bits",
+  "dependencies": {
+    "@capacitor/cli": {
+      "version": "8.5.3",
+      "resolved": "https://registry.npmjs.org/@capacitor/cli/-/cli-8.5.3.tgz",
+      "overridden": false,
+      "dependencies": {
+        "xcode": {
+          "version": "3.0.1",
+          "resolved": "https://registry.npmjs.org/xcode/-/xcode-3.0.1.tgz",
+          "overridden": false,
+          "dependencies": {
+            "uuid": {
+              "version": "7.0.3",
+              "resolved": "https://registry.npmjs.org/uuid/-/uuid-7.0.3.tgz",
+              "overridden": false
+            }
+          }
+        }
+      }
+    }
+  }
+}
