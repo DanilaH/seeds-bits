@@ -1467,7 +1467,12 @@ progress::-moz-progress-bar {
   .has-mobile-ads .game-actions footer {
     padding-block: 4px;
   }
-  .has-mobile-ads .game.short-board > .game-actions {
+  .has-mobile-ads .game.short-board:not(:has(#lesson:not([hidden]))) {
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+  }
+  .has-mobile-ads
+    .game.short-board:not(:has(#lesson:not([hidden])))
+    > .game-actions {
     align-self: stretch;
   }
 }

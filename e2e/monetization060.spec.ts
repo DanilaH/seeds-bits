@@ -302,6 +302,11 @@ test("banner shelf fits short phones and landscape with safe insets, in both the
           overflow: document.documentElement.scrollWidth - innerWidth,
         };
       });
+      await page.screenshot({
+        path: `test-results/banner-shelf/${width}-${height}-${dark ? "dark" : "light"}.png`,
+        animations: "disabled",
+      });
+      console.log("BANNER_GEOMETRY", width, height, dark, JSON.stringify(g));
       expect(g.overflow).toBeLessThanOrEqual(1);
       expect(g.ad.width).toBeGreaterThanOrEqual(250);
       expect(g.ad.height).toBeGreaterThanOrEqual(50);
@@ -319,10 +324,6 @@ test("banner shelf fits short phones and landscape with safe insets, in both the
             getComputedStyle(document.querySelector(".game")!).backgroundColor,
         ),
       ).toBe(true);
-      await page.screenshot({
-        path: `test-results/banner-shelf/${width}-${height}-${dark ? "dark" : "light"}.png`,
-        animations: "disabled",
-      });
     }
   }
   // The native SDK may need more height than the initial CSS estimate.
