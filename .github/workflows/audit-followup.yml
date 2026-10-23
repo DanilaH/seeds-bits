@@ -20,7 +20,7 @@ jobs:
       - run: npm run build && npm run build:yandex
       - name: Production UI recheck and settings race
         continue-on-error: true
-        run: npx playwright test --config scripts/audit-2026-10-23/playwright.config.ts
+        run: npx playwright test --config scripts/audit-2026-10-23/playwright.config.ts settings.browser.audit.ts
       - run: node scripts/audit-2026-10-23/followup.mjs
         if: ${{ !cancelled() }}
       - uses: actions/upload-artifact@v4

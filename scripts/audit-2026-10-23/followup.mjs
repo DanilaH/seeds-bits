@@ -22,7 +22,7 @@ try{
   const start=Date.now();await p.goto('http://127.0.0.1:5199/');await p.locator('#resume').click({timeout:10000});await p.locator('[data-index="0"]').click();await p.locator('[data-index="9"]').click();await p.waitForFunction(()=>document.querySelector('#remaining').textContent==='26');
   if(['resolved','no-gameplay'].includes(kind)){
    await p.evaluate(()=>window.sdkEvents.game_api_pause?.());
-   await p.locator('[data-index="1"]').dispatchEvent('click');await p.locator('[data-index="10"]').dispatchEvent('click');
+   await p.locator('[data-index="10"]').dispatchEvent('click');await p.locator('[data-index="11"]').dispatchEvent('click');
    assert.equal(await p.locator('#remaining').textContent(),'26');await p.evaluate(()=>window.sdkEvents.game_api_resume?.());
   }
   await p.reload();await p.locator('#resume').click({timeout:10000});assert.equal(await p.locator('#remaining').textContent(),'26');

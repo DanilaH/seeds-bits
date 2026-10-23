@@ -6,6 +6,8 @@ for(const front of [false,true])for(let n=0;n<6;n++)test(`settings merge ${front
  const capture=(p:any)=>p.on('console',(m:any)=>{if(m.text().startsWith('AUDIT_SETTINGS '))trace.push(JSON.parse(m.text().slice(15)));});capture(page);context.on('page',capture);
  await context.addInitScript(()=>{
   const id=crypto.randomUUID(),set=Storage.prototype.setItem;
+  const get=Storage.prototype.getItem;console.log('AUDIT_SETTINGS '+JSON.stringify({id,kind:'environment',locks:typeof navigator.locks?.request}));
+  Storage.prototype.getItem=function(k){const v=get.call(this,k);if(k==='seeds-bits.settings.v1')console.log('AUDIT_SETTINGS '+JSON.stringify({id,kind:'read',at:Date.now(),value:v}));return v;};
   Storage.prototype.setItem=function(k,v){if(k==='seeds-bits.settings.v1')console.log('AUDIT_SETTINGS '+JSON.stringify({id,kind:'write',at:Date.now(),value:v}));return set.call(this,k,v);};
   document.addEventListener('change',e=>console.log('AUDIT_SETTINGS '+JSON.stringify({id,kind:'change',at:Date.now(),target:(e.target as HTMLElement).id})),true);
   window.addEventListener('storage',e=>{if(e.key==='seeds-bits.settings.v1')console.log('AUDIT_SETTINGS '+JSON.stringify({id,kind:'storage',at:Date.now(),value:e.newValue}));});
