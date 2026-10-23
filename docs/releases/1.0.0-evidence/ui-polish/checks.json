@@ -1,0 +1,339 @@
+[
+  {
+    "run": 39934341324,
+    "jobs": [
+      {
+        "id": 120350073285,
+        "name": "android-release",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-java@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run android-actions/setup-android@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm ci",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run setup:android",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run node scripts/configure-android.mjs",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run sync:android",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run chmod +x android/gradlew && cd android && ./gradlew assembleRelease",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-java@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 120350073639,
+        "name": "store-media",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm ci",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npx playwright install --with-deps chromium",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run build",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run node scripts/store-capture.mjs",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run python3 -m pip install pillow",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run python3 scripts/store-media.py",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 120351131588,
+        "name": "android-smoke",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-java@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run android-actions/setup-android@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/download-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Prepare offline Android emulator and temporary test signature",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run python3 scripts/android-smoke.py",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-java@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": 39934909292,
+    "jobs": [
+      {
+        "id": 120352182153,
+        "name": "web",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm ci",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm test",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npx vitest run --config scripts/regression-061/vitest.config.ts",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npx playwright install --with-deps chromium",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npx playwright test --config scripts/regression-061/playwright.config.ts",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:e2e",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run build && npm run build:yandex",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 120352182414,
+        "name": "android",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-java@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run android-actions/setup-android@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm ci",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run python3 scripts/regression-061/native-harness.py",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run setup:android",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run node scripts/configure-android.mjs",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run sync:android",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run chmod +x android/gradlew && cd android && ./gradlew assembleDebug",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-java@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  }
+]
