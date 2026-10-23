@@ -12,7 +12,7 @@ test("capture every application screen", async ({ browser }) => {
     ["01-home",[]],
     ["02-classic",["#resume"]],
     ["03-notebooks",["#book-mode"]],
-    ["04-notebook-game",["#book-mode","[data-game]:first"]],
+    ["04-notebook-game",["#book-mode","[data-game]"]],
     ["05-daily-game",["#daily-mode"]],
     ["06-calendar",["#calendar-open"]],
     ["07-progress",["#progress-open"]],
@@ -29,7 +29,7 @@ test("capture every application screen", async ({ browser }) => {
     await page.addInitScript(()=>localStorage.setItem("seeds-bits.settings.v1",JSON.stringify({tutorialDone:true})));
     await page.goto("/");
     await expect(page.locator("#app")).not.toHaveAttribute("inert","");
-    for(const action of actions) await page.locator(action).click();
+    for(const action of actions) await page.locator(action).first().click();
     await shot(page,name);
     if(["03-notebooks","09-month-trophies","11-privacy"].includes(name)){
       await page.locator("#dialog").evaluate(e=>e.scrollTop=e.scrollHeight);
