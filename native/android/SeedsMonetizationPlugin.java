@@ -38,6 +38,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private BannerAdView banner;
   private FrameLayout bannerHost;
   private int bannerWidth;
+  private int bannerCssHeight;
   private PluginCall showing;
   private String showingKind, showingAttempt;
   private boolean shown, rewardIssued;
@@ -235,6 +236,11 @@ public class SeedsMonetizationPlugin extends Plugin {
       if (lastBannerRequest != 0 && now - lastBannerRequest < RETRY) { return; }
       int dp = Math.round(width / getContext().getResources().getDisplayMetrics().density);
       BannerAdSize size = BannerAdSize.sticky(getContext(), dp);
+      int requiredCssHeight = (int) Math.ceil(size.getHeightInPixels(getContext()) / scale);
+      if (requiredCssHeight != bannerCssHeight) {
+        bannerCssHeight = requiredCssHeight;
+        notifyListeners("bannerSize", new JSObject().put("height", requiredCssHeight), true);
+      }
       if (size.getHeightInPixels(getContext()) > height) { return; }
       bannerWidth = width; lastBannerRequest = now;
       bannerHost = new FrameLayout(getContext()); root.addView(bannerHost);
@@ -253,7 +259,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, height); layout.leftMargin = left; layout.topMargin = top;
     bannerHost.setLayoutParams(layout); bannerHost.setVisibility(View.VISIBLE);
   }
-  @Override protected void handleOnConfigurationChanged(Configuration config) { bannerPlacement = null; clearBanner(); lastBannerRequest = 0; }
+  @Override protected void handleOnConfigurationChanged(Configuration config) { bannerPlacement = null; clearBanner(); bannerCssHeight = 0; lastBannerRequest = 0; }
   @Override protected void handleOnPause() { resumed = false; if (bannerHost != null) bannerHost.setVisibility(View.GONE); }
   @Override protected void handleOnResume() { resumed = true; preloadAds(); }
   @Override protected void handleOnDestroy() {

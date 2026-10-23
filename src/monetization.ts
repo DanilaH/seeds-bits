@@ -32,6 +32,10 @@ export interface MonetizationBridge {
     name: "reward",
     listener: (r: RewardReceipt) => void,
   ): Promise<PluginListenerHandle>;
+  addListener(
+    name: "bannerSize",
+    listener: (r: { height: number }) => void,
+  ): Promise<PluginListenerHandle>;
 }
 declare global {
   interface Window {
@@ -72,6 +76,13 @@ export async function initializeMonetization(
   try {
     await bridge.addListener("reward", (r) => {
       void reward(r);
+    });
+    await bridge.addListener("bannerSize", ({ height }) => {
+      if (Number.isFinite(height) && height >= 1 && height < innerHeight)
+        document.documentElement.style.setProperty(
+          "--banner-height",
+          `${Math.ceil(height)}px`,
+        );
     });
     const config = await bridge.initialize();
     monetized = config.enabled;

@@ -67,8 +67,9 @@ async function install(
           test: true,
           reward: opts.pending && !localStorage.ack060 ? receipt : undefined,
         }),
-        addListener: async (_: any, f: any) => {
-          w.adsListeners.push(f);
+        addListener: async (name: any, f: any) => {
+          if (name === "bannerSize") w.bannerSizeListener = f;
+          else w.adsListeners.push(f);
           return { remove: async () => {} };
         },
         banner: async (o: any) => {
@@ -324,6 +325,18 @@ test("banner shelf fits short phones and landscape with safe insets, in both the
       });
     }
   }
+  // The native SDK may need more height than the initial CSS estimate.
+  await page.evaluate(() => (window as any).bannerSizeListener({ height: 96 }));
+  await expect(page.locator("#ad-space")).toHaveCSS("height", "96px");
+  const grown = await page.evaluate(() => ({
+    ad: document.querySelector("#ad-space")!.getBoundingClientRect().y,
+    controls: document.querySelector("footer")!.getBoundingClientRect().bottom,
+  }));
+  expect(grown.controls).toBeLessThanOrEqual(grown.ad - 8);
+  await page.setViewportSize({ width: 568, height: 320 });
+  await page.evaluate(() => (window as any).bannerSizeListener({ height: 50 }));
+  await expect(page.locator("#ad-space")).toHaveCSS("height", "50px");
+  await expect(page.locator("#hint")).toBeInViewport({ ratio: 1 });
   await page.locator("#menu").click();
   await expect
     .poll(() =>
