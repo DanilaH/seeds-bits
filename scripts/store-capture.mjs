@@ -33,7 +33,7 @@ const server = createServer((req, res) => {
   }
 });
 await new Promise((r) => server.listen(5197, "127.0.0.1", r));
-const browser = await chromium.launch({ args: ["--no-sandbox"] });
+const browser = await chromium.launch({ executablePath: process.env.SEEDS_CHROMIUM || undefined, args: ["--no-sandbox"] });
 const errors = [];
 const captures = [];
 async function capture(name, viewport, action, dark = false) {

@@ -47,6 +47,8 @@ jobs:
           path: android/app/build/outputs/mapping/release/
   store-media:
     runs-on: ubuntu-latest
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -54,7 +56,6 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
       - run: npm run build
       - run: node scripts/store-capture.mjs
       - run: python3 -m pip install pillow

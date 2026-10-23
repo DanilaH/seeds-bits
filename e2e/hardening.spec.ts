@@ -53,6 +53,14 @@ test("escape steps back from collections and settings without discarding game", 
   await page.keyboard.press("Escape");
   await expect(page.locator("#resume")).toBeVisible();
   await page.keyboard.press("Escape");
+  // The startup home is a destination; only a pause menu dismisses to play.
+  await expect(page.locator("#resume")).toBeVisible();
+  await page.locator("#resume").click();
+  await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#resume")).toBeVisible();
+  await page.keyboard.press("Escape");
   await expect(page.locator("#board")).toBeVisible();
 });
 test("dead end restart can be cancelled and undo recovers the board", async ({
