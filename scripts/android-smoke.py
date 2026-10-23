@@ -92,7 +92,7 @@ try:
  wait_label(['Реклама сейчас недоступна. Попробуйте позже.']);hint_button(0)
  checks['offlineRewardedReturnsWithoutGrant']=True
  screenshot('portrait.png')
- adb('shell','am','force-stop',package);launch();tap(wait_label(['Продолжить игру','Играть']));wait_cells(26);checks['saveSurvivesProcessStop']=True
+ adb('shell','am','force-stop',package);launch();tap(wait_label(['Продолжить','Продолжить игру','Играть']));wait_cells(26);checks['saveSurvivesProcessStop']=True
  hint_button(0);checks['hintBalanceSurvivesProcessStop']=True
  adb('shell','settings','put','system','accelerometer_rotation','0')
  adb('shell','settings','put','system','user_rotation','1');time.sleep(2);wait_cells(26);screenshot('landscape.png');checks['rotationPreservesBoard']=True
