@@ -84,7 +84,7 @@ test("dead end restart can be cancelled and undo recovers the board", async ({
   await expect(page.locator("#restart-task")).toBeVisible();
   await page.locator("#restart-task").click();
   await page.locator("#cancel-new").click();
-  await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await expect(page.locator("#remaining")).toHaveText("2");
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("4");
