@@ -1,0 +1,82 @@
+name: Independent project audit 2026-10-23
+on:
+  push:
+    branches: [qa/audit-20261023]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  web:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm test
+      - run: npx vitest run --config scripts/regression-061/vitest.config.ts
+      - name: Independent model stress and defect probes
+        continue-on-error: true
+        run: npx vitest run --config scripts/audit-2026-10-23/vitest.config.ts
+      - run: python3 scripts/regression-061/native-harness.py
+      - run: npx playwright test --config scripts/regression-061/playwright.config.ts
+      - run: npm run test:e2e
+        if: ${{ !cancelled() }}
+      - run: npm run build && npm run build:yandex
+        if: ${{ !cancelled() }}
+      - name: Independent acceptance against built production assets
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: npx playwright test --config scripts/audit-2026-10-23/playwright.config.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-audit-browser
+          path: test-results/
+  android-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: seeds-rustore-release-unsigned
+          path: release-smoke/
+          run-id: 39934341324
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare offline Android emulator and temporary test signature
+        run: |
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
+          echo no | avdmanager create avd --force --name seeds_release --package 'system-images;android-35;google_apis;x86_64'
+          sudo chmod 666 /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -avd seeds_release -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 3072 -cores 2 > /tmp/seeds-emulator.log 2>&1 &
+          adb wait-for-device
+          for attempt in $(seq 1 90); do
+            if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1 ]; then break; fi
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          adb shell input keyevent 82
+          keytool -genkeypair -keystore /tmp/smoke.p12 -storetype PKCS12 -storepass android -keypass android -alias smoke -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI Offline Smoke' -noprompt
+          SEEDS_SMOKE_APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -n 1)
+          "$SEEDS_SMOKE_APKSIGNER" sign --ks /tmp/smoke.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-smoke.apk release-smoke/app-release-unsigned.apk
+          adb install /tmp/seeds-smoke.apk
+      - run: python3 scripts/android-smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-release-emulator-acceptance
+          path: test-results/emulator/
