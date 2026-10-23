@@ -245,6 +245,17 @@ test("F08 navigation stress and tab conflict never silently overwrite", async ({
   await pair(other);
   await expect(other.locator("#save-notice")).toContainText("другой вкладке");
   await expect(page.locator("#undo")).toBeEnabled();
+  // The navigation sequence represents a user returning from the conflicting
+  // tab. Chrome may suspend animation/actionability in a background tab.
+  const visibilityBefore = await page.evaluate(() => document.visibilityState);
+  await page.bringToFront();
+  await expect
+    .poll(() => page.evaluate(() => document.visibilityState))
+    .toBe("visible");
+  save("navigation-visibility", {
+    visibilityBefore,
+    visibilityAfter: await page.evaluate(() => document.visibilityState),
+  });
   for (let i = 0; i < 15; i++) {
     await page.locator("#menu").click();
     await page.locator("#book-mode").click();
