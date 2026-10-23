@@ -1,0 +1,25 @@
+name: Capture application screens
+on:
+  push:
+    branches: [qa/screen-gallery-20261023]
+permissions:
+  contents: read
+jobs:
+  screens:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright test e2e/screen-gallery.spec.ts --workers=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screen-gallery
+          path: test-results/
