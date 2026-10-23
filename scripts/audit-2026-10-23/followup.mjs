@@ -42,6 +42,7 @@ try{
  await p.goto('http://127.0.0.1:5198/');await p.locator('#resume').click();
  for(let i=0;i<50;i++){
   await p.locator('#board button').nth(0).click();await p.locator('#board button').nth(1).click();await p.waitForFunction(n=>document.querySelector('#remaining').textContent===String(n),120-2*(i+1));
+  await p.waitForFunction(()=>!document.querySelector('#undo').disabled);
   await p.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
   await p.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});
  }
