@@ -1,4 +1,14 @@
-# Status — 0.2, 15 October 2026
+# Status — 8 November 2026
+
+По сообщению владельца, игра 1.0.0 опубликована в RuStore. Подготовка следующего обновления была приостановлена для обсуждения дополнений; актуальный согласованный объём находится в [плане обновления 1.1.0](UPDATE_PLAN_2026-11-08.md).
+
+Весь прежний пакет остаётся в плане: надёжность сохранений и другие технические находки, подсказки и постоянный общий запас, общий прогресс и графика баночек, UI/UX/feel, аналитика и подготовка VK Рекламы, магазинные материалы и проверка обновления APK. Дополнительно включены штатный запрос оценки RuStore без награды, добровольное локальное напоминание о дейлике с разными текстами и серии дней с наградами в тот же общий запас подсказок. Награда за серию: +1 на третьем дне, +3 на седьмом и далее на каждом кратном семи дне.
+
+Изменения игры по этому плану ещё не реализованы и не проверены; новый APK не собран. Последняя правка фиксирует план и приёмку, а не готовность обновления. Запуск платной рекламы и публикация обновления в магазин не выполнялись.
+
+## Historical status — 0.2, 15 October 2026
+
+The following is a historical record for version 0.2; its dependency, release and verification statements do not describe the current published app.
 
 Implemented all three agreed work packages: core interaction/UI polish, 24 notebook tasks in four pages, and daily calendar with monthly bronze/silver/gold trophies. See VERSION_02.md for scope, calendar semantics and limitations.
 
