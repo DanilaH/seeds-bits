@@ -75,6 +75,7 @@ for (const name of [
   "SeedsMonetizationPlugin",
   "SeedsEngagementPlugin",
   "SeedsDailyReminder",
+  "SeedsAdRevenue",
 ]) {
   const source = readFileSync(`native/android/${name}.java`, "utf8").replace(
     "package com.seedsbits.game.preview;",

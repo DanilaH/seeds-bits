@@ -1,7 +1,40 @@
+import {
+  newSession,
+  commit,
+  pairs,
+  removePair,
+  addNumbers,
+  occupied,
+} from "../src/core.ts";
 import { chromium } from "@playwright/test";
 import { createServer } from "node:http";
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve, extname, sep } from "node:path";
+// Reach this board with the production rules; keep the complete legal move history.
+function demonstration() {
+  let state = newSession(),
+    seed = 1;
+  for (let i = 0; i < 300; i++) {
+    if (occupied(state.current.board) >= 46) return state;
+    if (!occupied(state.current.board)) {
+      state = newSession();
+      continue;
+    }
+    const available = pairs(state.current.board);
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    if (available.length) {
+      const p = available[seed % available.length];
+      state = commit(
+        state,
+        removePair(state.current.board, p.a, p.b),
+        "pair",
+        0,
+      );
+    } else state = commit(state, addNumbers(state.current.board), "add", 0);
+  }
+  throw Error("Could not reach a dense demonstration board");
+}
+const demo = demonstration();
 const out = "test-results/store";
 mkdirSync(out + "/raw", { recursive: true });
 const root = resolve("dist");
@@ -48,7 +81,7 @@ async function capture(name, viewport, action, dark = false) {
   const page = await context.newPage();
   page.on("pageerror", (e) => errors.push(e.message));
   await page.addInitScript(
-    ({ dark }) => {
+    ({ dark, demo }) => {
       localStorage.setItem(
         "seeds-bits.settings.v1",
         JSON.stringify({
@@ -64,20 +97,7 @@ async function capture(name, viewport, action, dark = false) {
           version: 3,
           active: "classic",
           sessions: {
-            classic: {
-              rules: 1,
-              current: {
-                board: Array.from({ length: 19 }, (_, i) => String(i + 1))
-                  .join("")
-                  .replaceAll("0", "")
-                  .split("")
-                  .map(Number),
-                moves: 0,
-                additions: 0,
-                scroll: 0,
-              },
-              history: [],
-            },
+            classic: demo,
           },
           done: [
             "book-v1-1",
@@ -91,7 +111,9 @@ async function capture(name, viewport, action, dark = false) {
           hints: {},
           seen: [],
           meta: {
-            version: 1,
+            version: 2,
+            wallet: 4,
+            daily: { lastDay: "2026-11-07", count: 6, best: 12, reward: 0 },
             since: "2026-10-01",
             completed: 12,
             unassisted: 8,
@@ -107,8 +129,9 @@ async function capture(name, viewport, action, dark = false) {
         }),
       );
     },
-    { dark },
+    { dark, demo },
   );
+  await page.clock.setFixedTime(new Date("2026-11-08T12:00:00"));
   await page.goto("http://127.0.0.1:5197");
   await page.locator("#resume").waitFor({ state: "visible" });
   if (
@@ -153,10 +176,28 @@ try {
     });
   };
   await capture("phone-01-pairs", phone, game);
-  await capture("phone-02-books", phone, book);
-  await capture("phone-03-calendar", phone, calendar);
-  await capture("phone-04-jars", phone, jars);
-  await capture("phone-05-dark", phone, game, true);
+  await capture("phone-02-play", phone, async (p) => {
+    await game(p);
+    const original = await p
+      .locator("#board")
+      .evaluate((n) => n.children.length);
+    for (let step = 0; step < 8; step++) {
+      await p.locator(".hinted").first().click();
+      await p.locator(".hinted").last().click();
+      await p.waitForFunction(() => !document.querySelector("#hint").disabled);
+      if (
+        (await p.locator("#board").evaluate((n) => n.children.length)) <
+        original
+      )
+        break;
+      await p.locator("#hint").click();
+    }
+    await p.locator("#hint").click();
+  });
+  await capture("phone-03-books", phone, book);
+  await capture("phone-04-calendar", phone, calendar);
+  await capture("phone-05-jars", phone, jars);
+  await capture("phone-06-dark", phone, game, true);
   await capture("tablet-01-pairs", tablet, game);
   await capture("tablet-02-books", tablet, async (p) => {
     await p.locator("#book-mode").click();

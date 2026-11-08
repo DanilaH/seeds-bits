@@ -1496,7 +1496,7 @@ progress::-moz-progress-bar {
 .daily-run {
   margin: 12px 0 18px;
   padding: 14px;
-  background: var(--soft);
+  background: var(--button);
   border-radius: 12px;
 }
 .run-heading {
@@ -1534,9 +1534,6 @@ progress::-moz-progress-bar {
 .daily-run p {
   margin: 8px 0 0;
 }
-.daily-run .explanation {
-  margin-top: 8px;
-}
 #daily-series {
   white-space: normal;
 }
@@ -1564,4 +1561,9 @@ progress::-moz-progress-bar {
 
 #daily-series[hidden] {
   display: none;
+}
+
+#reminder-settings label {
+  min-height: 44px;
+  margin: 4px 0;
 }

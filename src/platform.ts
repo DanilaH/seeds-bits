@@ -117,7 +117,7 @@ export async function listenBack(onBack: () => boolean): Promise<void> {
 
 export const native = Capacitor.isNativePlatform();
 export class SaveConflict extends Error {}
-/** Serialize cooperating tabs and reject stale snapshots before touching either key. */
+/** Serialize game writes. Independent preference patches remain valid in a stale game tab. */
 export async function saveState(
   key: string,
   value: string,
@@ -152,7 +152,7 @@ export async function saveState(
       await write(settingsKey, JSON.stringify(merged));
       await write(key, value);
     } else {
-      // Keep the read/merge/write section synchronous while holding the lock.
+      // The Web Lock spans the merge and write; each preference has its own canonical key.
       for (const field of Object.keys(patch)) {
         if (
           Object.hasOwn(defaults, field) &&

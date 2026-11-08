@@ -85,17 +85,20 @@ try:
  a,b=pair(found);tap(a);tap(b);wait_cells(26);time.sleep(1)
  # The counter exists only after native initialize() resolves successfully.
  hint_button(3);checks['nativeMonetizationBridgeInitialized']=True
+ remaining_cells=26
  for remaining in (2,1,0):
   tap(hint_button(remaining+1));hint_button(remaining)
- checks['freeHintAccounting']=True
+  tap(hint_button(remaining));hint_button(remaining)
+  a,b=pair(cells());tap(a);tap(b);remaining_cells-=2;wait_cells(remaining_cells)
+ checks['freeHintAccountingAndStickyRepeat']=True
  tap(hint_button(0));tap(wait_label(['Смотреть рекламу · +3 подсказки']))
  wait_label(['Реклама сейчас недоступна. Попробуйте позже.']);hint_button(0)
  checks['offlineRewardedReturnsWithoutGrant']=True
  screenshot('portrait.png')
- adb('shell','am','force-stop',package);launch();tap(wait_label(['Продолжить','Продолжить игру','Играть']));wait_cells(26);checks['saveSurvivesProcessStop']=True
+ adb('shell','am','force-stop',package);launch();tap(wait_label(['Продолжить','Продолжить игру','Играть']));wait_cells(remaining_cells);checks['saveSurvivesProcessStop']=True
  hint_button(0);checks['hintBalanceSurvivesProcessStop']=True
  adb('shell','settings','put','system','accelerometer_rotation','0')
- adb('shell','settings','put','system','user_rotation','1');time.sleep(2);wait_cells(26);screenshot('landscape.png');checks['rotationPreservesBoard']=True
+ adb('shell','settings','put','system','user_rotation','1');time.sleep(2);wait_cells(remaining_cells);screenshot('landscape.png');checks['rotationPreservesBoard']=True
  adb('shell','settings','put','system','user_rotation','0');time.sleep(2)
  tap(wait_label(['Открыть меню']));tap(wait_label(['Настройки']));tap(wait_label(['Конфиденциальность']));wait_label(['Назад','← Назад']);checks['privacyAccessibleOffline']=True
  screenshot('privacy.png')

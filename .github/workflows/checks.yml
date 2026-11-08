@@ -1,7 +1,7 @@
 name: Check and build
 on:
   push:
-    branches-ignore: ['qa/**']
+    branches-ignore: ['qa/**', 'release/**']
   pull_request:
   workflow_dispatch:
     inputs:

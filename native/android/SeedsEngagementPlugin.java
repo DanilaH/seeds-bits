@@ -11,14 +11,18 @@ import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
 import ru.rustore.sdk.review.RuStoreReviewManager;
 import ru.rustore.sdk.review.RuStoreReviewManagerFactory;
+import ru.rustore.sdk.review.model.ReviewInfo;
 
 @CapacitorPlugin(name="SeedsEngagement",permissions={@Permission(alias="notifications",strings={Manifest.permission.POST_NOTIFICATIONS})})
 public class SeedsEngagementPlugin extends Plugin {
   static volatile boolean foreground;
-  private boolean reviewing;
+  private volatile boolean reviewing;
   private final Handler handler=new Handler(Looper.getMainLooper());
   private PluginCall reviewCall;
-  private int reviewGeneration;
+  private volatile int reviewGeneration;
+  private RuStoreReviewManager manager;
+  private volatile ReviewInfo prepared;
+  private long preparedAt;
   @Override public void load() {foreground=true;SeedsDailyReminder.sync(getContext());}
   private boolean consumeEntry(Intent intent) {
     boolean entry=intent!=null && intent.getBooleanExtra("seeds_daily_notification",false);
@@ -27,6 +31,16 @@ public class SeedsEngagementPlugin extends Plugin {
   }
   @PluginMethod public void configuration(PluginCall call) {
     call.resolve(new JSObject().put("available",true).put("granted",SeedsDailyReminder.allowed(getContext())).put("entry",consumeEntry(getActivity().getIntent())));
+  }
+  @PluginMethod public void openNotificationSettings(PluginCall call) {
+    getActivity().runOnUiThread(()->{
+      try {
+        Intent intent;
+        if(Build.VERSION.SDK_INT>=26)intent=new Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(android.provider.Settings.EXTRA_APP_PACKAGE,getContext().getPackageName());
+        else intent=new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,android.net.Uri.parse("package:"+getContext().getPackageName()));
+        getActivity().startActivity(intent);call.resolve();
+      }catch(Exception error){call.reject("Notification settings unavailable");}
+    });
   }
   @PluginMethod public void requestNotifications(PluginCall call) {
     if(Build.VERSION.SDK_INT>=33 && getPermissionState("notifications")!=PermissionState.GRANTED) requestPermissionForAlias("notifications",call,"notificationPermission");
@@ -44,24 +58,27 @@ public class SeedsEngagementPlugin extends Plugin {
     foreground=false;
     finishReview("destroyed");handler.removeCallbacksAndMessages(null);
   }
-  @PluginMethod public void review(PluginCall call) {
+  @PluginMethod public void prepareReview(PluginCall call) {
     getActivity().runOnUiThread(()->{
       if(reviewing || !foreground || getActivity().isFinishing()){call.resolve(new JSObject().put("status","unavailable"));return;}
       reviewing=true;reviewCall=call;final int generation=++reviewGeneration;
-      final boolean[] launched={false};
-      handler.postDelayed(()->{if(generation==reviewGeneration && reviewing && !launched[0])finishReview("prepare_timeout");},10000);
+      handler.postDelayed(()->{if(generation==reviewGeneration && reviewing)finishReview("prepare_timeout");},10000);
       try {
-        RuStoreReviewManager manager=RuStoreReviewManagerFactory.INSTANCE.create(getContext());
-        manager.requestReviewFlow().addOnSuccessListener(info->getActivity().runOnUiThread(()->{
+        manager=RuStoreReviewManagerFactory.INSTANCE.create(getContext());
+        manager.requestReviewFlow().addOnSuccessListener(info->{
           if(generation!=reviewGeneration || !reviewing)return;
           if(!foreground){finishReview("backgrounded");return;}
-          launched[0]=true;
-          try {
-            manager.launchReviewFlow(info)
-              .addOnSuccessListener(unit->finishReview("finished"))
-              .addOnFailureListener(error->finishReview(reviewError(error)));
-          }catch(Exception error){finishReview(reviewError(error));}
-        })).addOnFailureListener(error->{if(generation==reviewGeneration)finishReview(reviewError(error));});
+          preparedAt=android.os.SystemClock.elapsedRealtime();prepared=info;finishReview("ready");
+        }).addOnFailureListener(error->{if(generation==reviewGeneration)finishReview(reviewError(error));});
+      }catch(Exception error){finishReview(reviewError(error));}
+    });
+  }
+  @PluginMethod public void review(PluginCall call) {
+    getActivity().runOnUiThread(()->{
+      if(reviewing || !foreground || prepared==null || android.os.SystemClock.elapsedRealtime()-preparedAt>=300000 || getActivity().isFinishing()){call.resolve(new JSObject().put("status","unavailable"));return;}
+      reviewing=true;reviewCall=call;ReviewInfo info=prepared;prepared=null;
+      try {
+        manager.launchReviewFlow(info).addOnSuccessListener(unit->finishReview("finished")).addOnFailureListener(error->finishReview(reviewError(error)));
       }catch(Exception error){finishReview(reviewError(error));}
     });
   }

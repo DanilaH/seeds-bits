@@ -36,6 +36,23 @@ jobs:
           REQUIRE_MOBILE_CONFIG: true
       - run: npm run sync:android
       - run: chmod +x android/gradlew && cd android && ./gradlew assembleRelease
+      - name: Collect public APK inspection and signing tools
+        run: |
+          mkdir -p release-tools
+          python3 - <<'PYTOOLS'
+          import os,shutil
+          from pathlib import Path
+          sdk=Path(os.environ['ANDROID_HOME'])/'build-tools'
+          tools=max(sdk.iterdir(),key=lambda p:[int(v) if v.isdigit() else 0 for v in p.name.split('.')])
+          for name in ['zipalign','aapt2']:
+              shutil.copy2(tools/name,Path('release-tools')/name)
+          shutil.copy2(tools/'lib/apksigner.jar','release-tools/apksigner.jar')
+          if (tools/'lib64').exists():shutil.copytree(tools/'lib64','release-tools/lib64',dirs_exist_ok=True)
+          PYTOOLS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seeds-android-release-tools
+          path: release-tools/
       - uses: actions/upload-artifact@v4
         with:
           name: seeds-rustore-release-unsigned
@@ -45,6 +62,39 @@ jobs:
         with:
           name: seeds-rustore-r8-reports
           path: android/app/build/outputs/mapping/release/
+  upgrade-baseline:
+    runs-on: ubuntu-latest
+    env:
+      SEEDS_BUILD_FLAVOR: release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 86d950b970a69e5dec3ebc269075143a1c28f94a
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+      - run: npm ci
+      - run: npm run setup:android
+      - run: GITHUB_RUN_NUMBER=10 node scripts/configure-android.mjs
+        env:
+          APPMETRICA_API_KEY: ${{ secrets.APPMETRICA_API_KEY || vars.APPMETRICA_API_KEY }}
+          YANDEX_BANNER_AD_UNIT_ID: ${{ secrets.YANDEX_BANNER_AD_UNIT_ID || vars.YANDEX_BANNER_AD_UNIT_ID }}
+          YANDEX_INTERSTITIAL_AD_UNIT_ID: ${{ secrets.YANDEX_INTERSTITIAL_AD_UNIT_ID || vars.YANDEX_INTERSTITIAL_AD_UNIT_ID }}
+          YANDEX_REWARDED_AD_UNIT_ID: ${{ secrets.YANDEX_REWARDED_AD_UNIT_ID || vars.YANDEX_REWARDED_AD_UNIT_ID }}
+          ADS_MODE: live
+          REQUIRE_MOBILE_CONFIG: true
+      - run: npm run sync:android
+      - run: chmod +x android/gradlew && cd android && ./gradlew assembleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seeds-rustore-upgrade-baseline-unsigned
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
   store-media:
     runs-on: ubuntu-latest
     env:
@@ -65,7 +115,7 @@ jobs:
           name: seeds-rustore-store-media
           path: test-results/store/
   android-smoke:
-    needs: android-release
+    needs: [android-release, upgrade-baseline]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,6 +128,10 @@ jobs:
         with:
           name: seeds-rustore-release-unsigned
           path: release-smoke/
+      - uses: actions/download-artifact@v4
+        with:
+          name: seeds-rustore-upgrade-baseline-unsigned
+          path: upgrade-baseline/
       - name: Prepare offline Android emulator and temporary test signature
         run: |
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
@@ -94,10 +148,24 @@ jobs:
           keytool -genkeypair -keystore /tmp/smoke.p12 -storetype PKCS12 -storepass android -keypass android -alias smoke -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI Offline Smoke' -noprompt
           SEEDS_SMOKE_APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -n 1)
           "$SEEDS_SMOKE_APKSIGNER" sign --ks /tmp/smoke.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-smoke.apk release-smoke/app-release-unsigned.apk
+          "$SEEDS_SMOKE_APKSIGNER" sign --ks /tmp/smoke.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-baseline.apk upgrade-baseline/app-release-unsigned.apk
+          adb install /tmp/seeds-baseline.apk
+      - run: python3 -m pip install --user pillow
+      - name: Prepare old native progress
+        run: python3 scripts/android-upgrade.py before
+      - name: Install update retaining app data
+        run: adb install -r /tmp/seeds-smoke.apk
+      - name: Verify native progress after update
+        run: python3 scripts/android-upgrade.py after
+      - name: Prepare fresh install
+        run: |
+          adb uninstall com.seedsbits.game
           adb install /tmp/seeds-smoke.apk
       - run: python3 scripts/android-smoke.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: seeds-release-emulator-acceptance
-          path: test-results/emulator/
+          path: |
+            test-results/emulator/
+            test-results/emulator-upgrade/

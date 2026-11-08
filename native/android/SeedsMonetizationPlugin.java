@@ -171,7 +171,7 @@ public class SeedsMonetizationPlugin extends Plugin {
           @Override public void onAdDismissed() { if (showing == call) finish("closed"); }
           @Override public void onAdFailedToShow(@NonNull AdError e) { if (showing == call) finish("error"); }
           @Override public void onAdClicked() { event("ad_clicked", "interstitial"); }
-          @Override public void onAdImpression(@Nullable ImpressionData data) { event("ad_impression", "interstitial"); }
+          @Override public void onAdImpression(@Nullable ImpressionData data) { event("ad_impression", "interstitial"); SeedsAdRevenue.report(getContext(),"interstitial",data); }
         });
         interstitial.show(getActivity());
       } else {
@@ -180,7 +180,7 @@ public class SeedsMonetizationPlugin extends Plugin {
           @Override public void onAdDismissed() { if (showing == call) finish("closed"); }
           @Override public void onAdFailedToShow(@NonNull AdError e) { if (showing == call) finish("error"); }
           @Override public void onAdClicked() { event("ad_clicked", "rewarded"); }
-          @Override public void onAdImpression(@Nullable ImpressionData data) { event("ad_impression", "rewarded"); }
+          @Override public void onAdImpression(@Nullable ImpressionData data) { event("ad_impression", "rewarded"); SeedsAdRevenue.report(getContext(),"rewarded",data); }
           @Override public void onRewarded(@NonNull Reward reward) {
             if (showing != call || rewardIssued || !prefs.getString("reward_token", "").isEmpty()) return;
             String token = UUID.randomUUID().toString();
@@ -255,7 +255,7 @@ public class SeedsMonetizationPlugin extends Plugin {
         @Override public void onAdLoaded() { if (banner != currentBanner) return; if (destroyed) clearBanner(); else event("ad_loaded", "banner"); }
         @Override public void onAdFailedToLoad(@NonNull AdRequestError e) { if (banner != currentBanner) return; event("ad_load_error", "banner"); clearBanner(); /* Retry only on a later action after RETRY. */ }
         @Override public void onAdClicked() { if (banner != currentBanner) return; event("ad_clicked", "banner"); }
-        @Override public void onImpression(@Nullable ImpressionData data) { if (banner != currentBanner) return; event("ad_impression", "banner"); }
+        @Override public void onImpression(@Nullable ImpressionData data) { if (banner != currentBanner) return; event("ad_impression", "banner"); SeedsAdRevenue.report(getContext(),"banner",data); }
       });
       event("ad_request", "banner"); banner.loadAd(new AdRequest.Builder(unit("banner")).build());
     }

@@ -13,6 +13,8 @@ export interface EngagementBridge {
   configuration(): Promise<NotificationState>;
   requestNotifications(): Promise<NotificationState>;
   review(): Promise<{ status: string }>;
+  prepareReview?(): Promise<{ status: string }>;
+  openNotificationSettings?(): Promise<void>;
   addListener(
     name: "dailyOpen",
     listener: () => void,

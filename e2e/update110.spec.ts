@@ -8,6 +8,7 @@ async function seed(
     review?: boolean;
     entry?: boolean;
     large?: boolean;
+    denied?: boolean;
   } = {},
 ) {
   await page.clock.setFixedTime(new Date("2026-11-08T12:00:00"));
@@ -95,8 +96,11 @@ async function seed(
         }),
         requestNotifications: async () => {
           w.engagementCalls.push({ name: "permission_request" });
-          w.permission = true;
-          return { available: true, granted: true };
+          w.permission = !options.denied;
+          return { available: true, granted: w.permission };
+        },
+        openNotificationSettings: async () => {
+          w.engagementCalls.push({ name: "system_notification_settings" });
         },
         review: async () => {
           w.engagementCalls.push({ name: "native_review" });
@@ -345,4 +349,61 @@ test("saturated optional audio recovers after suspend even if ended callbacks ar
     return made;
   });
   expect(count).toBe(7);
+});
+
+test("denied notifications leave reminders off and provide a system settings route", async ({
+  page,
+}) => {
+  await seed(page, { denied: true });
+  await page.locator("#settings-open").click();
+  await page.locator("#reminders").check();
+  await expect(page.locator("#reminders")).not.toBeChecked();
+  await expect(page.locator("#reminder-permission")).toContainText(
+    "отключены в Android",
+  );
+  await page.locator("#notification-system-settings").click();
+  expect(
+    await page.evaluate(() =>
+      (window as any).engagementCalls.some(
+        (o: any) => o.name === "system_notification_settings",
+      ),
+    ),
+  ).toBe(true);
+  expect(
+    await page.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem("seeds-bits.settings.v1")!).reminders,
+    ),
+  ).toBe(false);
+});
+
+test("slow review preparation keeps input usable and cannot interrupt a new party", async ({
+  page,
+}) => {
+  await seed(page, { review: true });
+  await page.evaluate(() => {
+    (window as any).prepared = false;
+    (window as any).__SEEDS_ENGAGEMENT_TEST__.prepareReview = async () => {
+      (window as any).prepared = true;
+      await new Promise((r) => setTimeout(r, 1200));
+      return { status: "ready" };
+    };
+  });
+  await page.locator("#resume").click();
+  await remove(page);
+  await expect
+    .poll(() => page.evaluate(() => (window as any).prepared))
+    .toBe(true);
+  expect(await page.locator("#app").evaluate((n) => n.inert)).toBe(false);
+  await page.locator("#play-again").click();
+  await expect(page.locator("#remaining")).toHaveText("28");
+  await page.waitForTimeout(1400);
+  expect(
+    await page.evaluate(
+      () =>
+        (window as any).engagementCalls.filter(
+          (o: any) => o.name === "native_review",
+        ).length,
+    ),
+  ).toBe(0);
 });
