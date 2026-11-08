@@ -132,6 +132,47 @@ async function remove(page: Page) {
   await expect(page.locator("#remaining")).toHaveText("0");
 }
 
+test("daily completion, streak and wallet stay atomic across a failed save and retry", async ({
+  page,
+}) => {
+  await seed(page, { daily: true, run: 6 });
+  await page.locator("#resume").click();
+  await page.evaluate(() => {
+    const original = Storage.prototype.setItem;
+    (window as any).failDailySave = true;
+    Storage.prototype.setItem = function (name, value) {
+      if (name === "seeds-bits.progress.v2" && (window as any).failDailySave)
+        throw new DOMException("Storage full", "QuotaExceededError");
+      return original.call(this, name, value);
+    };
+  });
+  await remove(page);
+  await expect(page.locator("#save-notice")).toBeVisible();
+  await expect(page.locator("#result-gains")).toHaveText(
+    "Награда ожидает сохранения",
+  );
+  const before = await stored(page);
+  expect(before.done).not.toContain("daily-v1-2026-11-08");
+  expect(before.meta.daily.count).toBe(6);
+  expect(before.meta.wallet).toBe(4);
+  await page.evaluate(() => {
+    (window as any).failDailySave = false;
+  });
+  await page.locator("#retry-save").click();
+  await expect(page.locator("#save-notice")).toBeHidden();
+  await expect(page.locator("#result-gains")).toContainText("+3 подсказки");
+  await expect.poll(async () => (await stored(page)).meta.wallet).toBe(7);
+  const after = await stored(page);
+  expect(after.done).toContain("daily-v1-2026-11-08");
+  expect(after.meta.daily.count).toBe(7);
+  expect(after.jars.seeds).toBe(4);
+  await page.reload();
+  await page.locator("#resume").click();
+  expect((await stored(page)).meta.wallet).toBe(7);
+  expect((await stored(page)).meta.daily.count).toBe(7);
+  expect((await stored(page)).jars.seeds).toBe(4);
+});
+
 test("sticky classic hint is free after deselection, reload and undo", async ({
   page,
 }) => {

@@ -337,6 +337,7 @@ function save(state = progress, game = session) {
         const recovered = saveFailed;
         saveFailed = false;
         showSaveState();
+        if (lesson < 0 && !occupied(board())) renderWin();
         if (recovered) {
           saveRecovered = true;
           message("Партия сохранена");
@@ -351,6 +352,7 @@ function save(state = progress, game = session) {
           });
         saveFailed = true;
         showSaveState();
+        if (lesson < 0 && !occupied(board())) renderWin();
         message($("save-warning").textContent!);
       }
     });

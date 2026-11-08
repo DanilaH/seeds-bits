@@ -35,7 +35,11 @@ jobs:
           ADS_MODE: live
           REQUIRE_MOBILE_CONFIG: true
       - run: npm run sync:android
-      - run: chmod +x android/gradlew && cd android && ./gradlew assembleRelease
+      - name: Build release with a reasonable download timeout
+        run: |
+          sed -i 's/networkTimeout=10000/networkTimeout=60000/' android/gradle/wrapper/gradle-wrapper.properties
+          chmod +x android/gradlew
+          cd android && ./gradlew assembleRelease
       - name: Collect public APK inspection and signing tools
         run: |
           mkdir -p release-tools
@@ -90,7 +94,11 @@ jobs:
           ADS_MODE: live
           REQUIRE_MOBILE_CONFIG: true
       - run: npm run sync:android
-      - run: chmod +x android/gradlew && cd android && ./gradlew assembleRelease
+      - name: Build baseline with a reasonable download timeout
+        run: |
+          sed -i 's/networkTimeout=10000/networkTimeout=60000/' android/gradle/wrapper/gradle-wrapper.properties
+          chmod +x android/gradlew
+          cd android && ./gradlew assembleRelease
       - uses: actions/upload-artifact@v4
         with:
           name: seeds-rustore-upgrade-baseline-unsigned
