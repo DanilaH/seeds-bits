@@ -6,7 +6,6 @@ import android.os.Build;
 import org.json.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import io.appmetrica.analytics.AppMetrica;
 
 /** Local, inexact, opt-in reminder. No service, network request, or exact-alarm permission. */
 public class SeedsDailyReminder extends BroadcastReceiver {
@@ -103,7 +102,6 @@ public class SeedsDailyReminder extends BroadcastReceiver {
       builder.setSmallIcon(R.drawable.ic_seed_notification).setContentTitle(chosen[1]).setContentText(chosen[2]).setStyle(new Notification.BigTextStyle().bigText(chosen[2])).setContentIntent(tap).setAutoCancel(true).setOnlyAlertOnce(true);
       if(Build.VERSION.SDK_INT>=26){Calendar expiry=Calendar.getInstance();expiry.add(Calendar.DAY_OF_YEAR,1);expiry.set(Calendar.HOUR_OF_DAY,0);expiry.set(Calendar.MINUTE,0);expiry.set(Calendar.SECOND,0);builder.setTimeoutAfter(Math.max(1,expiry.getTimeInMillis()-now));}
       manager(c).notify(ID,builder.build());
-      if(!c.getString(R.string.appmetrica_api_key).isEmpty())AppMetrica.reportEvent("reminder_posted",new JSONObject().put("template",chosen[0]).put("test",c.getResources().getBoolean(R.bool.ads_test_mode)).toString());
     }catch(Exception ignored){}
   }
 }
