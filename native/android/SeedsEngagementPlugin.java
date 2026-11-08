@@ -15,7 +15,7 @@ import ru.rustore.sdk.review.model.ReviewInfo;
 
 @CapacitorPlugin(name="SeedsEngagement",permissions={@Permission(alias="notifications",strings={Manifest.permission.POST_NOTIFICATIONS})})
 public class SeedsEngagementPlugin extends Plugin {
-  static volatile boolean foreground;
+  static volatile boolean foreground, externalWindow;
   private volatile boolean reviewing;
   private final Handler handler=new Handler(Looper.getMainLooper());
   private PluginCall reviewCall;
@@ -76,7 +76,7 @@ public class SeedsEngagementPlugin extends Plugin {
   @PluginMethod public void review(PluginCall call) {
     getActivity().runOnUiThread(()->{
       if(reviewing || !foreground || prepared==null || android.os.SystemClock.elapsedRealtime()-preparedAt>=300000 || getActivity().isFinishing()){call.resolve(new JSObject().put("status","unavailable"));return;}
-      reviewing=true;reviewCall=call;ReviewInfo info=prepared;prepared=null;
+      reviewing=true;externalWindow=true;reviewCall=call;ReviewInfo info=prepared;prepared=null;
       try {
         manager.launchReviewFlow(info).addOnSuccessListener(unit->finishReview("finished")).addOnFailureListener(error->finishReview(reviewError(error)));
       }catch(Exception error){finishReview(reviewError(error));}
@@ -93,7 +93,7 @@ public class SeedsEngagementPlugin extends Plugin {
   }
   private synchronized void finishReview(String status) {
     if(!reviewing)return;
-    reviewing=false;reviewGeneration++;
+    reviewing=false;externalWindow=false;reviewGeneration++;
     PluginCall call=reviewCall;reviewCall=null;
     if(call!=null)call.resolve(new JSObject().put("status",status));
   }

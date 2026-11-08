@@ -67,7 +67,7 @@ public class SeedsDailyReminder extends BroadcastReceiver {
     try {
       JSONObject s=settings(c),p=progress(c);long now=System.currentTimeMillis();String today=day(now);
       SharedPreferences preferences=prefs(c);
-      if(!s.optBoolean("reminders",false)||!allowed(c)||SeedsEngagementPlugin.foreground||done(p,today)||today.equals(preferences.getString("last_day","")))return;
+      if(!s.optBoolean("reminders",false)||!allowed(c)||SeedsEngagementPlugin.foreground||SeedsEngagementPlugin.externalWindow||SeedsMonetizationPlugin.fullscreenActive||done(p,today)||today.equals(preferences.getString("last_day","")))return;
       String configured=s.optString("reminderTime","12:30");if(!configured.matches("([01]\\d|2[0-3]):[0-5]\\d"))configured="12:30";
       Calendar clock=Calendar.getInstance();int hour=clock.get(Calendar.HOUR_OF_DAY);
       Calendar due=(Calendar)clock.clone();String[] at=configured.split(":");due.set(Calendar.HOUR_OF_DAY,Integer.parseInt(at[0]));due.set(Calendar.MINUTE,Integer.parseInt(at[1]));due.set(Calendar.SECOND,0);due.set(Calendar.MILLISECOND,0);

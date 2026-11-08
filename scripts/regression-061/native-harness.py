@@ -75,7 +75,7 @@ public class AuditHarness {
   p=fresh(false);p.banner(box());PluginCall hidden=box();hidden.args.put("visible",false);p.banner(hidden);YandexAds.ready();check("N16_sdk_ready_respects_hidden",BannerAdView.all.isEmpty(),"banners="+BannerAdView.all.size());
   p=fresh(true);BannerAdSize.testHeight=90;p.banner(box());check("N17_sdk_height_before_request",BannerAdView.all.isEmpty() && Integer.valueOf(90).equals(p.events.get(0).get("height")),"no request until 90px reserved");PluginCall taller=box();taller.args.put("height",90);p.banner(taller);check("N18_reserved_sdk_height_loads",BannerAdView.all.size()==1 && BannerAdView.all.get(0).requests==1,"banner loaded into resized shelf");BannerAdSize.testHeight=50;p.handleOnConfigurationChanged(new Configuration());p.banner(box());check("N19_rotation_recalculates_height",Integer.valueOf(50).equals(p.events.get(p.events.size()-1).get("height")),"new orientation reports its own size");
 
-
+  p=fresh(true);a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);p.show(request("rewarded"));check("N20_fullscreen_suppresses_reminder",SeedsMonetizationPlugin.fullscreenActive,"fullscreen flag set before SDK callbacks");a.listener.onAdShown();a.listener.onAdDismissed();check("N21_dismiss_releases_reminder",!SeedsMonetizationPlugin.fullscreenActive,"fullscreen flag released after dismissal");
 
  }
 }''')

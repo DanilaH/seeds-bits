@@ -26,6 +26,7 @@ import java.util.UUID;
 
 @CapacitorPlugin(name = "SeedsMonetization")
 public class SeedsMonetizationPlugin extends Plugin {
+  static volatile boolean fullscreenActive;
   private static final long INTERVAL = 180000L, RETRY = 60000L;
   private final Handler handler = new Handler(Looper.getMainLooper());
   private SharedPreferences prefs;
@@ -56,6 +57,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private Runnable showDeadline;
 
   @Override public void load() {
+    fullscreenActive=false;
     prefs = getContext().getSharedPreferences("seeds-monetization", 0);
     if (!prefs.contains("last_fullscreen")) prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
     getActivity().runOnUiThread(() -> {
@@ -159,6 +161,7 @@ public class SeedsMonetizationPlugin extends Plugin {
       JSObject result = new JSObject().put("status", "unavailable"); if (receipt() != null) result.put("reward", receipt());
       call.resolve(result); preloadAds(); return;
     }
+    fullscreenActive=true;
     showing = call; showingKind = kind; showingAttempt = call.getString("attempt", ""); shown = false; rewardIssued = false;
     if (bannerHost != null) bannerHost.setVisibility(View.GONE);
     // A missing pre-show callback must not leave the game blocked indefinitely.
@@ -209,7 +212,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (shown) prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
     if (showingKind.equals("rewarded")) { if (rewarded != null) rewarded.setAdEventListener(null); rewarded = null; lastRewardedRequest = 0; }
     else { if (interstitial != null) interstitial.setAdEventListener(null); interstitial = null; lastInterstitialRequest = 0; }
-    PluginCall call = showing; showing = null; showingAttempt = null; call.resolve(result);
+    PluginCall call = showing; showing = null; showingAttempt = null; fullscreenActive=false; call.resolve(result);
     preloadAds();
   }
   private void clearBanner() {
@@ -267,7 +270,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   @Override protected void handleOnPause() { resumed = false; if (bannerHost != null) bannerHost.setVisibility(View.GONE); }
   @Override protected void handleOnResume() { resumed = true; preloadAds(); }
   @Override protected void handleOnDestroy() {
-    destroyed = true; handler.removeCallbacksAndMessages(null); clearBanner();
+    destroyed = true; fullscreenActive=false; handler.removeCallbacksAndMessages(null); clearBanner();
     if (interstitial != null) interstitial.setAdEventListener(null);
     if (rewarded != null) rewarded.setAdEventListener(null);
     if (showing != null) { showing.resolve(new JSObject().put("status", "interrupted")); showing = null; }
