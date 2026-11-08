@@ -140,14 +140,13 @@ test("R02 duplicate native callback after acknowledgment must not grant another 
   await expect
     .poll(() =>
       page.evaluate(
-        (k) =>
-          JSON.parse(localStorage.getItem(k)!).meta.attempts.classic.hintBonus,
+        (k) => JSON.parse(localStorage.getItem(k)!).meta.wallet,
         key,
       ),
     )
     .toBe(3);
   const bonus = await page.evaluate(
-    (k) => JSON.parse(localStorage.getItem(k)!).meta.attempts.classic.hintBonus,
+    (k) => JSON.parse(localStorage.getItem(k)!).meta.wallet,
     key,
   );
   report("R02-reward-after-ack", {
@@ -507,7 +506,7 @@ test("R14 reward save failure keeps receipt until a successful retry", async ({
     (k) => JSON.parse(localStorage.getItem(k)!),
     key,
   );
-  expect(saved.meta.attempts.classic.hintBonus).toBe(3);
+  expect(saved.meta.wallet).toBe(3);
   expect(saved.meta.rewardReceipts).toContain("earned-before-disk-failure");
 });
 

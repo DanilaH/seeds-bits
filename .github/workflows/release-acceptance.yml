@@ -1,12 +1,12 @@
 name: Verify existing RuStore release on Android
 on:
-  push:
-    branches: [qa/rustore-1.0.0]
   workflow_dispatch:
     inputs:
       source_run_id:
         description: Build RuStore release run containing the unsigned APK
-        default: '39560834202'
+        required: true
+      source_sha256:
+        description: Expected SHA-256 of the unsigned APK from that exact run
         required: true
 permissions:
   contents: read
@@ -25,8 +25,14 @@ jobs:
         with:
           name: seeds-rustore-release-unsigned
           path: release-smoke/
-          run-id: ${{ inputs.source_run_id || '39560834202' }}
+          run-id: ${{ inputs.source_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify selected payload hash
+        env:
+          EXPECTED_SHA256: ${{ inputs.source_sha256 }}
+        run: |
+          [[ "$EXPECTED_SHA256" =~ ^[0-9a-fA-F]{64}$ ]]
+          echo "$EXPECTED_SHA256  release-smoke/app-release-unsigned.apk" | sha256sum --check --strict
       - name: Prepare offline Android emulator and temporary test signature
         run: |
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'

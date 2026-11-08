@@ -133,7 +133,7 @@ test("reward is explicit, pauses input, granted once, persists and is acknowledg
     (k) => JSON.parse(localStorage.getItem(k)!),
     key,
   );
-  expect(p.meta.attempts.classic.hintBonus).toBe(3);
+  expect(p.meta.wallet).toBe(3);
   expect(p.meta.rewardReceipts).toEqual(["native-reward-060"]);
   await page.reload();
   await page.locator("#resume").click();

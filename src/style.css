@@ -1496,17 +1496,26 @@ dialog[data-screen="home"] .dialog-head h2 {
   bottom: 1px;
   left: 1px;
   right: 1px;
-  height: calc(100% - 5px);
-  clip-path: inset(calc(100% - var(--fill, 0%)) 0 0 0);
-  border-radius: 3px 3px 9px 9px;
-  background-color: var(--jar-color, #b58b51);
-  background-image:
-    radial-gradient(ellipse at 30% 45%, #ffffff70 0 1px, transparent 2px),
-    radial-gradient(ellipse at 70% 80%, #00000026 0 1px, transparent 2px);
-  background-size:
-    9px 12px,
-    11px 9px;
-  transition: clip-path 0.18s ease-out;
+  height: clamp(0%, var(--fill, 0%), calc(100% - 5px));
+  clip-path: polygon(
+    0 17%,
+    12% 12%,
+    27% 5%,
+    43% 1%,
+    56% 0,
+    73% 4%,
+    88% 10%,
+    100% 16%,
+    100% 100%,
+    0 100%
+  );
+  border-radius: 2px 2px 9px 9px;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--jar-color, #b58b51) 78%, #18231e),
+    color-mix(in srgb, var(--jar-color, #b58b51) 80%, #ffffff)
+  );
+  transition: height 0.18s ease-out;
 }
 .jar-caption {
   display: flex;

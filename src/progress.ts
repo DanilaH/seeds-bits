@@ -1,6 +1,8 @@
 import { compactHintKey } from "./hint-key";
 import { packSession, unpackSession } from "./history-codec";
-import { jars, type Jars } from "./jars";
+import { jars, addSeeds, taskSeeds, migrateJars, type Jars } from "./jars";
+import { validDay } from "./calendar";
+import { recordDaily, type DailyRun } from "./daily-run";
 import { decode, newSession, occupied, type Session } from "./core";
 export type Progress = {
   version: 3;
@@ -24,17 +26,22 @@ const validId = (id: string) =>
   typeof id === "string" &&
   (id === "classic" ||
     (/^book-v1-[1-9]\d*$/.test(id) && Number(id.slice(8)) <= 2400) ||
-    /^daily-v1-\d{4}-\d{2}-\d{2}$/.test(id));
+    (id.startsWith("daily-v1-") &&
+      validDay(id.slice(9)) &&
+      id.slice(9, 16) >= "2025-01"));
 export class FutureProgress extends Error {}
 export function readProgress(
   raw: string,
   onRecovery: () => void = () => {},
 ): Progress {
   const p = JSON.parse(raw);
-  if (p?.version > 4 || p?.meta?.version > 1 || p?.jars?.version > 1)
+  if (p?.version > 5 || p?.meta?.version > 2 || p?.jars?.version > 2)
     throw new FutureProgress("Newer save format");
   if (
-    (p?.version !== 2 && p?.version !== 3 && p?.version !== 4) ||
+    (p?.version !== 2 &&
+      p?.version !== 3 &&
+      p?.version !== 4 &&
+      p?.version !== 5) ||
     !validId(p.active) ||
     !p.sessions ||
     !Array.isArray(p.done) ||
@@ -45,7 +52,7 @@ export function readProgress(
   for (const [id, s] of Object.entries(p.sessions))
     if (validId(id)) {
       try {
-        if (p.version === 4) {
+        if (p.version >= 4) {
           try {
             clean.sessions[id] = unpackSession(s);
           } catch {
@@ -82,7 +89,7 @@ export function readProgress(
     const m = p.meta;
     try {
       if (
-        m?.version !== 1 ||
+        (m?.version !== 1 && m?.version !== 2) ||
         typeof m.since !== "string" ||
         !Number.isFinite(Date.parse(m.since)) ||
         !Number.isSafeInteger(m.completed) ||
@@ -126,8 +133,69 @@ export function readProgress(
             });
           } else onRecovery();
         }
+        if (
+          a.hintChoices &&
+          typeof a.hintChoices === "object" &&
+          !Array.isArray(a.hintChoices)
+        ) {
+          safe.hintChoices = Object.fromEntries(
+            Object.entries(a.hintChoices).filter(
+              ([k, v]) =>
+                /^h1:[a-f0-9]{64}$/.test(k) &&
+                Array.isArray(v) &&
+                v.length === 2 &&
+                v.every((n) => Number.isSafeInteger(n) && n >= 0 && n < 1800),
+            ),
+          );
+        }
         attempts[id] = safe;
       }
+      if (m.version === 1) {
+        m.wallet = Object.values(attempts).reduce(
+          (n, a) =>
+            n +
+            Math.max(
+              0,
+              (a.hintBonus ?? 0) - Math.max(0, (a.hintKeys?.length ?? 0) - 3),
+            ),
+          0,
+        );
+        m.version = 2;
+      }
+      if (!Number.isSafeInteger(m.wallet) || m.wallet < 0)
+        throw Error("Invalid hint wallet");
+      for (const a of Object.values(attempts)) delete a.hintBonus;
+      if (
+        m.daily !== undefined &&
+        !(
+          validDay(m.daily?.lastDay) &&
+          Number.isSafeInteger(m.daily.count) &&
+          m.daily.count > 0 &&
+          Number.isSafeInteger(m.daily.best) &&
+          m.daily.best >= m.daily.count &&
+          [0, 1, 3].includes(m.daily.reward)
+        )
+      ) {
+        delete m.daily;
+        onRecovery();
+      }
+      if (m.engagement !== undefined) {
+        const e = m.engagement;
+        if (
+          ![e?.activeMs, e?.sessions, e?.reviewAttempts].every(
+            (n) => Number.isSafeInteger(n) && n >= 0,
+          ) ||
+          (e.lastReviewAt !== undefined &&
+            (!Number.isFinite(e.lastReviewAt) || e.lastReviewAt < 0))
+        ) {
+          delete m.engagement;
+          onRecovery();
+        }
+      }
+      if (m.flags !== undefined)
+        m.flags = Array.isArray(m.flags)
+          ? m.flags.filter((v: unknown) => typeof v === "string").slice(0, 30)
+          : [];
       m.attempts = attempts;
       if (m.rewardReceipts !== undefined) {
         if (Array.isArray(m.rewardReceipts)) {
@@ -154,13 +222,14 @@ export function readProgress(
   if (p.jars !== undefined) {
     const j = p.jars;
     if (
-      j?.version === 1 &&
+      (j?.version === 1 ||
+        (j?.version === 2 && Number.isSafeInteger(j.meter) && j.meter >= 0)) &&
       [j.seeds, j.wins, j.highWater].every(
         (n) => Number.isSafeInteger(n) && n >= 0,
       ) &&
       typeof j.attempt === "string"
     )
-      clean.jars = j;
+      clean.jars = j.version === 1 ? migrateJars(j) : j;
     else onRecovery();
   }
   const jar = jars(clean),
@@ -181,9 +250,20 @@ export type Attempt = {
   analyticsStarted?: boolean;
   hintBonus?: number;
   hintKeys?: string[];
+  hintChoices?: Record<string, [number, number]>;
 };
 export type Meta = {
-  version: 1;
+  version: 2;
+  wallet: number;
+  daily?: DailyRun;
+  flags?: string[];
+  engagement?: {
+    activeMs: number;
+    sessions: number;
+    reviewAttempts: number;
+    lastReviewAt?: number;
+    reviewDone?: boolean;
+  };
   since: string;
   attempts: Record<string, Attempt>;
   completed: number;
@@ -193,7 +273,8 @@ export type Meta = {
 export function metadata(p: Progress): Meta {
   if (!p.meta) {
     p.meta = {
-      version: 1,
+      version: 2,
+      wallet: 0,
       since: new Date().toISOString(),
       attempts: {},
       completed: 0,
@@ -216,24 +297,32 @@ export function startAttempt(p: Progress, task: string) {
     j.highWater = 0;
   }
 }
-export function recordCompletion(p: Progress, task: string) {
+export function recordCompletion(p: Progress, task: string, now?: string) {
   const m = metadata(p);
   const a =
     m.attempts[task] ??
     (m.attempts[task] = { id: crypto.randomUUID(), completed: false });
-  if (a.completed) return;
+  if (a.completed) return { seeds: 0, hints: 0 };
   a.completed = true;
   m.completed++;
   if (!(p.hints[task] ?? 0)) m.unassisted++;
   if (task === "classic") jars(p).wins++;
-  if (task !== "classic" && !p.done.includes(task)) p.done.push(task);
+  let seeds = 0;
+  if (task !== "classic" && !p.done.includes(task)) {
+    const game = p.sessions[task];
+    const first = game?.history[0]?.board ?? game?.current.board ?? [];
+    seeds = taskSeeds(occupied(first) / 2);
+    addSeeds(p, seeds);
+    p.done.push(task);
+  }
+  return { seeds, hints: recordDaily(p, task, now) };
 }
 
-/** Wire v4 prevents older builds from silently dropping compact undo history. */
+/** Wire v5 prevents older builds from dropping wallet, daily series and the migrated jar curve. */
 export function serializeProgress(p: Progress): string {
   return JSON.stringify({
     ...p,
-    version: 4,
+    version: 5,
     sessions: Object.fromEntries(
       Object.entries(p.sessions).map(([id, s]) => [id, packSession(s)]),
     ),

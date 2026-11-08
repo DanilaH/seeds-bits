@@ -46,7 +46,7 @@ test("every jar threshold is exact, increasing then bounded, with unlimited prog
   }
   expect(jarState(total).index).toBe(1000);
   expect(jarCapacity(0)).toBe(24);
-  expect(jarCapacity(99)).toBe(2000);
+  expect(jarCapacity(99)).toBe(480);
 });
 test("corrupt jars recover without deleting notebook 2400; future jars are protected", () => {
   const p = fresh();
@@ -57,7 +57,7 @@ test("corrupt jars recover without deleting notebook 2400; future jars are prote
   expect(r.done).toEqual(p.done);
   expect(jars(r).seeds).toBe(0);
   expect(() =>
-    readProgress(JSON.stringify({ ...p, jars: { version: 2 } })),
+    readProgress(JSON.stringify({ ...p, jars: { version: 3 } })),
   ).toThrow();
 });
 test("restart saved before the first move still earns, while metadata repair cannot reset credited depth", () => {

@@ -1,3 +1,5 @@
+import { dailyRun, streakReward } from "./daily-run";
+import { engagementBridge, experience, reviewEligible } from "./engagement";
 import {
   initializeMonetization,
   monetized,
@@ -84,6 +86,8 @@ let settings = {
   sound: false,
   vibration: false,
   tutorialDone: false,
+  reminders: false,
+  reminderTime: "12:30",
 };
 let lastStored: string | null = null,
   storageConflict = false,
@@ -103,6 +107,15 @@ let jarShelfPage = 0;
 let selectedVolume = 0,
   bookFilter = "all",
   trophyYear = today().slice(0, 4);
+let engagementAvailable = false,
+  engagementActive = false,
+  notificationGranted = false,
+  pendingDailyOpen = false,
+  skipNextInterstitial = false;
+let lastExternalAt = -Infinity,
+  lastInputAt = 0,
+  activeTick = performance.now(),
+  activeSinceSave = 0;
 let visualSeeds: number | undefined;
 let completedJar: { index: number; until: number } | undefined;
 const flights = new SeedFlight();
@@ -155,7 +168,7 @@ const icons = {
 const icon = (name: keyof typeof icons) =>
   `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span id="jar-percent"></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label">Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span id="jar-percent"></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>Напоминать о задаче дня</button><button id="try-notebook" class="secondary" hidden>Короткая задача</button><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label">Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">Задача дня<input id="reminders" type="checkbox"></label><label class="reminder-time">Напоминать около<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine"></p><p class="fine">По местному времени, если задача ещё не решена.</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 // Home has its own composition; the same controls keep their navigation handlers.
 const homeLayout = document.createElement("div");
 homeLayout.className = "home-layout";
@@ -283,19 +296,30 @@ function showSaveState() {
   $("retry-save").hidden = !saveFailed || storageConflict;
 }
 function save(state = progress, game = session) {
+  if (storageConflict && !futureSave && Object.keys(settingsDirty).length) {
+    const patch = { ...settingsDirty };
+    return platform
+      .writeSettingsPatch(SETTINGS, JSON.stringify(settings), patch)
+      .then((merged) => {
+        if (merged) applySettings(merged);
+        for (const key of Object.keys(patch))
+          if (settingsDirty[key] === patch[key]) delete settingsDirty[key];
+      })
+      .catch(() => {});
+  }
   if (storageConflict || futureSave || (switching && state === progress))
     return;
   metadata(state);
   if (lesson < 0 && !busy) game.current.scroll = viewport.scrollTop;
   state.sessions[state.active] = game;
   const bundle = serializeProgress(state),
-    prefs = JSON.stringify(settings);
+    prefs = JSON.stringify(settings),
+    patch = { ...settingsDirty };
   saveQueue = saveQueue
     .catch(() => {})
     .then(async () => {
       if (storageConflict || futureSave) return;
       try {
-        const patch = { ...settingsDirty };
         const merged = await platform.saveState(
           PROGRESS,
           bundle,
@@ -317,7 +341,12 @@ function save(state = progress, game = session) {
         }
       } catch (error) {
         storageConflict = error instanceof platform.SaveConflict;
-        if (!saveFailed) track("save_error", { conflict: storageConflict });
+        if (!saveFailed)
+          track("save_error", {
+            conflict: storageConflict,
+            stage: "persist",
+            reason: platform.saveErrorReason(error),
+          });
         saveFailed = true;
         showSaveState();
         message($("save-warning").textContent!);
@@ -326,20 +355,44 @@ function save(state = progress, game = session) {
   return saveQueue;
 }
 function applySettings(incoming: Record<string, unknown>) {
-  for (const key of ["theme", "sound", "vibration", "tutorialDone"] as const) {
-    if (Object.hasOwn(settingsDirty, key)) continue;
+  for (const key of [
+    "theme",
+    "sound",
+    "vibration",
+    "tutorialDone",
+    "reminders",
+    "reminderTime",
+  ] as const) {
+    if (!Object.hasOwn(incoming, key) || Object.hasOwn(settingsDirty, key))
+      continue;
     if (key === "theme")
       settings.theme = incoming.theme === "dark" ? "dark" : "light";
-    else settings[key] = incoming[key] === true;
+    else if (key === "reminderTime") {
+      if (
+        typeof incoming[key] === "string" &&
+        /^([01]\d|2[0-3]):[0-5]\d$/.test(incoming[key])
+      )
+        settings[key] = incoming[key];
+    } else settings[key] = incoming[key] === true;
   }
   applyTheme();
   $<HTMLInputElement>("sound").checked = settings.sound;
   $<HTMLInputElement>("vibration").checked = settings.vibration;
 }
 window.addEventListener("storage", (event) => {
-  if (event.key !== SETTINGS || !event.newValue) return;
+  if (!event.newValue || !event.key?.startsWith(SETTINGS)) return;
   try {
-    applySettings(JSON.parse(event.newValue));
+    if (event.key.startsWith(SETTINGS + "."))
+      applySettings({
+        [event.key.slice(SETTINGS.length + 1)]: JSON.parse(event.newValue),
+      });
+    else if (event.key === SETTINGS)
+      void platform
+        .readSettings(SETTINGS)
+        .then((raw) => {
+          if (raw) applySettings(JSON.parse(raw));
+        })
+        .catch(() => {});
   } catch {
     /* Preserve the current valid settings. */
   }
@@ -428,8 +481,9 @@ function syncPauseState() {
     platformPaused ||
     document.hidden ||
     adActive ||
-    rewardRequest;
-  $("app").inert = adActive || rewardRequest;
+    rewardRequest ||
+    engagementActive;
+  $("app").inert = adActive || rewardRequest || engagementActive;
   blockSound(paused);
   if (paused) {
     flights.clear();
@@ -445,7 +499,7 @@ let rewardRequest = false;
 let bannerFrame = 0;
 $("app").insertAdjacentHTML(
   "beforeend",
-  `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><h2 id="hint-offer-title">Ещё подсказки</h2><p>Бесплатные подсказки в этой партии закончились. Посмотрите рекламное видео и получите ещё 3.</p><button id="watch-hints" class="primary">Смотреть рекламу · +3 подсказки</button><button id="cancel-hints" class="secondary">Продолжить без подсказки</button></dialog>`,
+  `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><h2 id="hint-offer-title">Ещё подсказки</h2><p>Бесплатные подсказки и общий запас закончились. За рекламное видео — 3 подсказки в общий запас. Их можно использовать в любом режиме.</p><button id="watch-hints" class="primary">Смотреть рекламу · +3 подсказки</button><button id="cancel-hints" class="secondary">Продолжить без подсказки</button></dialog>`,
 );
 const hintOffer = $<HTMLDialogElement>("hint-offer");
 function gameMode() {
@@ -456,6 +510,7 @@ function gameMode() {
       : "daily";
 }
 function markGameStarted() {
+  lastInputAt = performance.now();
   if (lesson >= 0 || !adsBridge) return;
   const attempt = hintAttempt(progress);
   if (attempt.analyticsStarted) return;
@@ -539,12 +594,13 @@ $("watch-hints").onclick = async () => {
     const attempt = hintAttempt(progress).id;
     await save();
     if (saveFailed || storageConflict || futureSave) return;
+    lastExternalAt = performance.now();
     const result = await showAd("rewarded", attempt);
     syncPauseState();
     if (result.reward) await receiveReward(result.reward);
     await rewardQueue;
     outcomeMessage =
-      hintsLeft(hintAttempt(progress)) > 0
+      hintsLeft(progress) > 0
         ? "Добавлено 3 подсказки"
         : result.status === "closed"
           ? "Видео закрыто. Подсказки не начислены."
@@ -556,7 +612,9 @@ $("watch-hints").onclick = async () => {
     updateBanner();
   }
 };
-let earnedAward = "";
+let earnedAward = "",
+  earnedSeeds = 0,
+  earnedHints = 0;
 function complete() {
   const alreadyCompleted =
     metadata(progress).attempts[progress.active]?.completed;
@@ -565,7 +623,15 @@ function complete() {
   const before = id.startsWith("daily-v1-")
     ? trophy(month, progress.done).tier
     : 0;
-  recordCompletion(progress, id);
+  const gains = recordCompletion(progress, id);
+  if (gains.seeds) visualSeeds = jars(progress).meter;
+  if (gains.hints)
+    track("daily_reward", {
+      days: metadata(progress).daily!.count,
+      count: gains.hints,
+    });
+  earnedSeeds = gains.seeds;
+  earnedHints = gains.hints;
   if (!alreadyCompleted)
     track("game_complete", {
       mode: gameMode(),
@@ -606,6 +672,25 @@ function renderWin() {
           : id.startsWith("daily")
             ? "Все доступные дни решены"
             : "";
+  $("result-reminder").hidden =
+    !engagementAvailable ||
+    settings.reminders ||
+    !id.startsWith("daily") ||
+    Boolean(
+      metadata(progress).flags?.includes("reminder_permission_requested"),
+    );
+  $("result-gains").textContent = saveFailed
+    ? "Награда ожидает сохранения"
+    : [
+        earnedSeeds ? `В баночку: +${earnedSeeds} семечек` : "",
+        earnedHints
+          ? `За серию дней: +${earnedHints} ${hintWord(earnedHints)}`
+          : "",
+      ]
+        .filter(Boolean)
+        .join(" · ");
+  $("try-notebook").hidden =
+    id !== "classic" || !notebook.some((p) => !progress.done.includes(p.id));
   const award = $("award");
   award.hidden = true;
   if (i >= 0) {
@@ -701,7 +786,7 @@ function render() {
     !count ||
     (progress.active === "classic" && !available.length);
   $("hint-label").textContent = monetized
-    ? `Подсказка · ${hintsLeft(hintAttempt(progress))}`
+    ? `Подсказка · ${hintsLeft(progress)}`
     : "Подсказка";
   updateBanner();
   $("add").setAttribute(
@@ -766,6 +851,8 @@ function clearSelection() {
 function startLesson(short = false) {
   shortLesson = short;
   if (busy) return;
+  if (!metadata(progress).flags?.includes("tutorial_end"))
+    firstEvent("tutorial_start", { short });
   session.current.scroll = viewport.scrollTop;
   lesson = 0;
   loadLesson();
@@ -789,8 +876,10 @@ function loadLesson() {
   render();
   message("Попробуйте на маленьком поле");
 }
-function finishLesson() {
+function finishLesson(outcome: "complete" | "skip" = "skip") {
   if (busy) return;
+  if (lesson >= 0 && !metadata(progress).flags?.includes("tutorial_end"))
+    firstEvent("tutorial_end", { outcome, step: lesson + 1 });
   lesson = -1;
   enteredGame = true;
   settings.tutorialDone = true;
@@ -849,6 +938,7 @@ async function choose(i: number) {
     message("Сначала попробуйте «Добавить», затем «Отмена»");
     return;
   }
+  if (lesson < 0) firstEvent("first_pair", { mode: gameMode() });
   const flightRects = [cell(a), cell(i)]
     .filter(Boolean)
     .map((n) => n!.getBoundingClientRect());
@@ -868,7 +958,7 @@ async function choose(i: number) {
       if (gain)
         flights.fly(flightRects, $("jar-glass"), () => {
           const before = jarState(visualSeeds ?? 0);
-          visualSeeds = Math.min(jars(progress).seeds, (visualSeeds ?? 0) + 1);
+          visualSeeds = Math.min(jars(progress).meter, (visualSeeds ?? 0) + 1);
           const after = jarState(visualSeeds);
           if (after.index > before.index) {
             completedJar = {
@@ -957,6 +1047,12 @@ async function choose(i: number) {
       $("board").querySelector<HTMLElement>("button") ??
       (lesson >= 0 ? $("lesson-next") : $("play-again"))
     ).focus({ preventScroll: true });
+  if (lesson < 0 && !occupied(next))
+    setTimeout(() => {
+      void tryReview();
+    }, 750);
+  if (lesson < 0 && occupied(next) && !availablePairs(next).length)
+    firstEvent("first_no_moves", { mode: gameMode() });
   if (next.length < oldLength && !reduced()) {
     // Read every destination before starting animations; interleaving them forces
     // layout once per cell on long boards.
@@ -1076,7 +1172,15 @@ async function hint() {
   if (busy || paused || lesson >= 0 || hintPending) return;
   markGameStarted();
   const available = availablePairs(board());
-  if (progress.active !== "classic") {
+  const attempt = hintAttempt(progress);
+  const choice = attempt.hintChoices?.[hintKey(board(), 0, 0)];
+  const remembered =
+    choice && available.find((p) => p.a === choice[0] && p.b === choice[1]);
+  const paid = available.find((p) =>
+    attempt.hintKeys?.includes(hintKey(board(), p.a, p.b)),
+  );
+  if (remembered || paid) highlight = remembered || paid || null;
+  else if (progress.active !== "classic") {
     const generation = ++hintGeneration,
       originalBoard = board(),
       originalSession = session;
@@ -1139,21 +1243,25 @@ async function hint() {
     highlight = advice.pair;
   } else {
     if (!available.length) return;
-    highlight = available[hintIndex++ % available.length];
+    highlight = available[0];
   }
+  if (!highlight) return;
   const key = hintKey(board(), highlight.a, highlight.b);
-  const attempt = hintAttempt(progress);
-  const repeated = attempt.hintKeys?.includes(key);
-  if (monetized && !spendHint(attempt, key)) {
+  const repeated = attempt.hintKeys?.includes(key) || Boolean(remembered);
+  if (monetized && !spendHint(progress, key)) {
     highlight = null;
     render();
     offerHints();
     return;
   }
+  (attempt.hintChoices ??= {})[hintKey(board(), 0, 0)] = [
+    highlight.a,
+    highlight.b,
+  ];
   if (!repeated) {
     progress.hints[progress.active] =
       (progress.hints[progress.active] ?? 0) + 1;
-    track("hint_used", { mode: gameMode(), remaining: hintsLeft(attempt) });
+    track("hint_used", { mode: gameMode(), remaining: hintsLeft(progress) });
   }
   save();
   selected = -1;
@@ -1243,7 +1351,7 @@ function closeMenu() {
   platform.gameplay(!paused && occupied(board()) > 0);
 }
 function navigateBack(native = false): boolean {
-  if (adActive || rewardRequest) return true;
+  if (adActive || rewardRequest || engagementActive) return true;
   if (hintOffer.open) {
     hintOffer.close();
     return true;
@@ -1258,7 +1366,7 @@ function navigateBack(native = false): boolean {
   return true;
 }
 function openMenu(preserve: unknown = false) {
-  if (busy || adActive || rewardRequest) return;
+  if (busy || adActive || rewardRequest || engagementActive) return;
   if (!dialog.open) dialog.dataset.entry = enteredGame ? "pause" : "root";
   if (preserve !== true) navigationTrail.length = 0;
   flights.clear();
@@ -1345,6 +1453,7 @@ function openSettings(restoring = false) {
   $("menu-content").hidden = true;
   $("settings-panel").hidden = false;
   dialog.dataset.screen = "settings";
+  updateReminderSettings();
   $("settings-back").focus({ preventScroll: true });
 }
 $("settings-open").onclick = () => openSettings();
@@ -1363,12 +1472,21 @@ $("privacy-open").onclick = () => {
 $("confirm-new").onclick = reset;
 $("restart-task").onclick = requestRestart;
 $("play-again").onclick = async () => {
-  if (busy || adActive || rewardRequest) return;
+  if (busy || adActive || rewardRequest || engagementActive) return;
   busy = true;
   $<HTMLButtonElement>("play-again").disabled = true;
   await save();
-  if (!saveFailed && !storageConflict && !futureSave)
+  if (
+    !saveFailed &&
+    !storageConflict &&
+    !futureSave &&
+    !skipNextInterstitial &&
+    performance.now() - lastExternalAt > 30000
+  ) {
+    lastExternalAt = performance.now();
     await showAd("interstitial");
+  }
+  skipNextInterstitial = false;
   busy = false;
   $<HTMLButtonElement>("play-again").disabled = false;
   if (saveFailed || storageConflict || futureSave) return;
@@ -1378,10 +1496,26 @@ $("play-again").onclick = async () => {
   else if (progress.active.startsWith("daily")) openCollection("calendar");
   else reset();
 };
+$("try-notebook").onclick = () => {
+  const next =
+    notebook.slice(0, 24).find((p) => !progress.done.includes(p.id)) ??
+    notebook.find((p) => !progress.done.includes(p.id));
+  if (next) void switchGame(next.id);
+};
+function hintWord(n: number) {
+  const x = n % 100;
+  return x >= 11 && x <= 14
+    ? "подсказок"
+    : n % 10 === 1
+      ? "подсказка"
+      : n % 10 >= 2 && n % 10 <= 4
+        ? "подсказки"
+        : "подсказок";
+}
 $("learn").onclick = () => startLesson();
-$("skip").onclick = finishLesson;
+$("skip").onclick = () => finishLesson("skip");
 $("lesson-next").onclick = () => {
-  if (lesson === 5 || (shortLesson && lesson === 1)) finishLesson();
+  if (lesson === 5 || (shortLesson && lesson === 1)) finishLesson("complete");
   else {
     lesson++;
     loadLesson();
@@ -1475,7 +1609,7 @@ async function boot() {
     readWarning = warning;
   }
   try {
-    const raw = await platform.read(SETTINGS);
+    const raw = await platform.readSettings(SETTINGS);
     if (raw) {
       const s = JSON.parse(raw);
       settings = {
@@ -1483,6 +1617,12 @@ async function boot() {
         sound: s.sound === true,
         vibration: s.vibration === true,
         tutorialDone: s.tutorialDone === true,
+        reminders: s.reminders === true,
+        reminderTime:
+          typeof s.reminderTime === "string" &&
+          /^([01]\d|2[0-3]):[0-5]\d$/.test(s.reminderTime)
+            ? s.reminderTime
+            : "12:30",
       };
     }
   } catch {
@@ -1504,7 +1644,7 @@ async function boot() {
   }
   metadata(progress);
   jars(progress);
-  visualSeeds = jars(progress).seeds;
+  visualSeeds = jars(progress).meter;
   selectedVolume = progress.active.startsWith("book")
     ? volumeOf(progress.active)
     : 0;
@@ -1528,7 +1668,19 @@ async function boot() {
   } catch {
     warning = "Сервис площадки недоступен. Можно играть без него.";
   }
+  experience(progress).sessions++;
   await initializeMonetization(() => syncPauseState(), receiveReward);
+  if (engagementBridge)
+    try {
+      await engagementBridge.addListener("dailyOpen", () => {
+        pendingDailyOpen = true;
+        void openDailyNotification();
+      });
+      const config = await engagementBridge.configuration();
+      engagementAvailable = config.available;
+      notificationGranted = config.granted;
+      pendingDailyOpen = Boolean(config.entry);
+    } catch {}
   syncPauseState();
   track("game_open", { mode: gameMode(), reason: "resume" });
   void platform
@@ -1541,6 +1693,7 @@ async function boot() {
   void platform.listenBack(() => navigateBack(true)).catch(() => {});
   if (!settings.tutorialDone) startLesson(true);
   else openMenu();
+  await openDailyNotification();
   platform.ready();
   platform.gameplay(!paused && !dialog.open);
   if (warning) message(warning);
@@ -1554,6 +1707,8 @@ function teach(id: string, text: string) {
 }
 async function switchGame(id: string) {
   earnedAward = "";
+  earnedSeeds = 0;
+  earnedHints = 0;
   saveRecovered = false;
   if (busy || futureSave || storageConflict) return;
   if (id.startsWith("daily") && !availableDay(id.slice(9))) return;
@@ -1686,7 +1841,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       (id) =>
         id.startsWith("daily-v1-") && availableDay(id.slice(9), "9999-12-31"),
     ).length;
-    const j = jarState(jars(progress).seeds);
+    const j = jarState(jars(progress).meter);
     const nextVolume = nextBookVolume();
     const nextDone = volumeTasks(nextVolume).filter((p) =>
       progress.done.includes(p.id),
@@ -1764,7 +1919,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ).getDay() +
           6) %
         7;
-    html += `<h2>Задача дня</h2><button class="primary calendar-today" id="today-task">${progress.done.includes("daily-v1-" + today()) ? "Повторить сегодняшнюю" : "Играть сегодня"}</button><div class="month-nav calendar-nav"><button id="prev-month" aria-label="Предыдущий месяц" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>‹</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="Выбрать месяц">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="Следующий месяц" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>›</button></div><div class="calendar">${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
+    html += `<h2>Задача дня</h2>${streakPanel()}<button class="primary calendar-today" id="today-task">${progress.done.includes("daily-v1-" + today()) ? "Повторить сегодняшнюю" : "Играть сегодня"}</button><div class="month-nav calendar-nav"><button id="prev-month" aria-label="Предыдущий месяц" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>‹</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="Выбрать месяц">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="Следующий месяц" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>›</button></div><div class="calendar">${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
       calendarMonth,
     )
       .map(
@@ -1776,14 +1931,14 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       )}</div><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="fine">Прошедшие дни доступны в любое время.</p><details class="explanation"><summary>Трофеи месяца</summary><p>Бронза — 7 задач, серебро — 14, золото — весь месяц.</p></details>`;
   } else {
     html += `<h2>Коллекция</h2><div class="collection-tabs" role="group" aria-label="Раздел коллекции"><button id="jars-tab" aria-pressed="${collectionTab === "jars"}">Баночки</button><button id="trophies-mode" aria-pressed="${collectionTab === "months"}">Трофеи месяца</button></div>`;
-    const j = jarState(jars(progress).seeds);
+    const j = jarState(jars(progress).meter);
     jarShelfPage = Math.min(
       jarShelfPage,
       Math.max(0, Math.ceil(j.index / 12) - 1),
     );
     const shelfEnd = j.index - jarShelfPage * 12,
       shelfStart = Math.max(0, shelfEnd - 12);
-    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}><h3>Баночки классики</h3><p>${j.index} собрано · ${jars(progress).seeds} семечек</p>${jarHero(j)}<div class="jar-shelf">${Array.from(
+    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}><h3>Баночки</h3><p>${j.index} собрано · ${jars(progress).seeds} семечек</p>${jarHero(j)}<div class="jar-shelf">${Array.from(
       { length: shelfEnd - shelfStart },
       (_, n) => {
         const i = shelfStart + n;
@@ -1791,7 +1946,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       },
     ).join(
       "",
-    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>Раньше</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : "Пока пусто"}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>Новее</button></div>${j.index ? "" : '<button id="jar-play" class="primary">Играть в классику</button>'}<details class="explanation"><summary>Как заполняются баночки</summary><p>Две семечки за продвижение. После отмены начисление возобновится, когда вы пройдёте дальше прежнего хода. Подсчёт ведётся с начала коллекции.</p></details><p>Полностью очищено полей: ${jars(progress).wins}</p><p class="fine">${jars(progress).wins >= 100 ? "Мастер · 100 полей" : jars(progress).wins >= 25 ? "Знаток · 25 полей" : jars(progress).wins >= 5 ? "Уверенный старт · 5 полей" : "Первая отметка мастерства — за 5 очищенных полей"}</p></section>`;
+    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>Раньше</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : "Пока пусто"}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>Новее</button></div>${j.index ? "" : '<button id="jar-play" class="primary">Играть в классику</button>'}<details class="explanation"><summary>Как заполняются баночки</summary><p>В классике — две семечки за новый ход. Первая победа в задаче тетради или календаря тоже пополняет банку: от 4 до 24 семечек в зависимости от размера поля. Повторы не начисляются. После отмены в классике нужно пройти дальше прежнего хода.</p></details><p>Полностью очищено полей: ${jars(progress).wins}</p><p class="fine">${jars(progress).wins >= 100 ? "Мастер · 100 полей" : jars(progress).wins >= 25 ? "Знаток · 25 полей" : jars(progress).wins >= 5 ? "Уверенный старт · 5 полей" : "Первая отметка мастерства — за 5 очищенных полей"}</p></section>`;
     html += `<section class="monthly-collection" ${collectionTab !== "months" ? "hidden" : ""}><p class="fine">Бронза — 7 задач · серебро — 14 · золото — весь месяц</p><label class="year-picker">Год трофеев<select id="trophy-year">${years()
       .map((y) => `<option ${y === trophyYear ? "selected" : ""}>${y}</option>`)
       .join("")}</select></label>`;
@@ -2005,7 +2160,7 @@ function renderHomeCurrent() {
         ? "Начать классику"
         : "Играть";
   if (classicMode) {
-    const j = jarState(jars(progress).seeds);
+    const j = jarState(jars(progress).meter);
     homeGoal.innerHTML = `${jarPicture(j)}<div><strong>Баночка ${j.index + 1} · ${j.percent}%</strong><span>${j.filled} из ${j.capacity} семечек</span><progress max="${j.capacity}" value="${j.filled}" aria-label="Заполнение баночки"></progress></div>`;
   } else {
     const done = progress.active.startsWith("book")
@@ -2024,6 +2179,10 @@ function updateHome() {
   $("book-count").textContent =
     `${notebook.filter((p) => finished.has(p.id)).length} из ${notebook.length} решено`;
   const id = `daily-v1-${today()}`;
+  const run = dailyRun(progress);
+  $("daily-series").hidden = run.count === 0;
+  $("daily-series").textContent =
+    `${run.count} ${dayWord(run.count)} подряд${run.solvedToday ? "" : ` · до награды ${run.until} ${dayWord(run.until)}`}`;
   $("daily-state").textContent = progress.done.includes(id)
     ? "Решено · повторить"
     : progress.sessions[id]?.history.length
@@ -2060,11 +2219,11 @@ void boot();
 
 function renderJar() {
   const meter = $("jar-meter");
-  meter.hidden = lesson >= 0 || progress.active !== "classic";
+  meter.hidden = lesson >= 0;
   (document.querySelector("header .brand") as HTMLElement).hidden =
     !meter.hidden;
   if (meter.hidden) return;
-  visualSeeds ??= jars(progress).seeds;
+  visualSeeds ??= jars(progress).meter;
   const j = jarState(visualSeeds);
   const celebrating = completedJar && performance.now() < completedJar.until;
   if (celebrating) {
@@ -2116,3 +2275,187 @@ function calendarControls() {
     )
     .join("")}</select></label></div>`;
 }
+
+function dayWord(n: number) {
+  const x = n % 100;
+  return x >= 11 && x <= 14
+    ? "дней"
+    : n % 10 === 1
+      ? "день"
+      : n % 10 >= 2 && n % 10 <= 4
+        ? "дня"
+        : "дней";
+}
+function streakPanel() {
+  const r = dailyRun(progress),
+    base = Math.floor(Math.max(0, r.nextCount - 1) / 7) * 7;
+  return `<section class="daily-run" aria-label="Серия дней"><div class="run-heading"><strong>${r.count ? `${r.count} ${dayWord(r.count)} подряд` : "Новая серия"}</strong><span>Рекорд · ${r.best}</span></div><div class="run-days">${Array.from(
+    { length: 7 },
+    (_, i) => {
+      const n = base + i + 1;
+      return `<span class="${n <= r.count ? "done" : n === r.nextCount ? "next" : ""}" aria-label="${n}-й день${n <= r.count ? ", засчитан" : ""}">${n <= r.count ? "✓" : n}</span>`;
+    },
+  ).join(
+    "",
+  )}</div><p>До награды: ${r.until} ${dayWord(r.until)} · +${streakReward(r.nextMilestone)} ${hintWord(streakReward(r.nextMilestone))}</p><details class="explanation"><summary>Как считается серия</summary><p>Решайте сегодняшнюю задачу в её день. Архив идёт в трофеи месяца. За третий день серии — 1 подсказка, за каждые семь дней подряд — 3. Награды поступают в общий запас автоматически. После пропуска сохраняются рекорд и награды. Задача, законченная после полуночи, остаётся в архиве, но уже не увеличивает серию за вчера.</p></details></section>`;
+}
+function firstEvent(
+  name: string,
+  data: Record<string, string | number | boolean> = {},
+) {
+  const m = metadata(progress);
+  if (m.flags?.includes(name)) return;
+  (m.flags ??= []).push(name);
+  track(name, data);
+}
+function updateReminderSettings() {
+  $("reminder-settings").hidden = !engagementAvailable;
+  $<HTMLInputElement>("reminders").checked =
+    settings.reminders && notificationGranted;
+  $<HTMLInputElement>("reminder-time").value = settings.reminderTime;
+  $("reminder-permission").textContent =
+    settings.reminders && !notificationGranted
+      ? "Уведомления отключены в настройках Android."
+      : "";
+  const wallet = metadata(progress).wallet;
+  $("hint-wallet").textContent =
+    `Общий запас: ${wallet} ${hintWord(wallet)}. Сначала расходуются три бесплатные подсказки текущей партии.`;
+}
+async function enableReminder(enabled: boolean) {
+  if (
+    !engagementBridge ||
+    engagementActive ||
+    busy ||
+    adActive ||
+    rewardRequest
+  )
+    return;
+  if (enabled && !notificationGranted) {
+    engagementActive = true;
+    lastExternalAt = performance.now();
+    syncPauseState();
+    firstEvent("reminder_permission_requested");
+    try {
+      const state = await engagementBridge.requestNotifications();
+      notificationGranted = state.granted;
+      track("reminder_permission", { granted: state.granted });
+    } catch {
+      notificationGranted = false;
+    } finally {
+      engagementActive = false;
+      lastExternalAt = performance.now();
+      syncPauseState();
+    }
+  }
+  settings.reminders = enabled && notificationGranted;
+  settingsDirty.reminders = settings.reminders;
+  await save();
+  track("reminder_toggle", { enabled: settings.reminders });
+  updateReminderSettings();
+}
+$("reminders").onchange = () => {
+  void enableReminder($<HTMLInputElement>("reminders").checked);
+};
+$("result-reminder").onclick = () => {
+  void enableReminder(true);
+};
+$("reminder-time").onchange = () => {
+  const time = $<HTMLInputElement>("reminder-time").value;
+  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return;
+  settings.reminderTime = time;
+  settingsDirty.reminderTime = time;
+  void save();
+};
+async function openDailyNotification() {
+  if (
+    !pendingDailyOpen ||
+    busy ||
+    adActive ||
+    rewardRequest ||
+    engagementActive ||
+    futureSave ||
+    storageConflict
+  )
+    return;
+  pendingDailyOpen = false;
+  skipNextInterstitial = true;
+  track("reminder_open");
+  await switchGame(daily(today()).id);
+}
+async function tryReview() {
+  if (
+    !engagementAvailable ||
+    !engagementBridge ||
+    busy ||
+    paused ||
+    dialog.open ||
+    hintOffer.open ||
+    occupied(board()) ||
+    lesson >= 0 ||
+    saveFailed ||
+    storageConflict ||
+    futureSave ||
+    performance.now() - lastExternalAt < 30000 ||
+    !reviewEligible(progress)
+  )
+    return;
+  // Leave the first daily result free for its optional reminder action.
+  if (
+    progress.active.startsWith("daily") &&
+    !metadata(progress).flags?.includes("reminder_permission_requested") &&
+    !settings.reminders
+  )
+    return;
+  const e = experience(progress);
+  e.reviewAttempts++;
+  e.lastReviewAt = Date.now();
+  const completedSession = session;
+  await save();
+  if (
+    saveFailed ||
+    storageConflict ||
+    futureSave ||
+    session !== completedSession ||
+    dialog.open ||
+    occupied(board()) ||
+    paused
+  )
+    return;
+  engagementActive = true;
+  skipNextInterstitial = true;
+  lastExternalAt = performance.now();
+  syncPauseState();
+  track("review_request");
+  try {
+    const result = await engagementBridge.review();
+    if (result.status === "exists") experience(progress).reviewDone = true;
+    track("review_flow", { status: result.status });
+    await save();
+  } catch {
+    track("review_flow", { status: "bridge_error" });
+  } finally {
+    engagementActive = false;
+    lastExternalAt = performance.now();
+    syncPauseState();
+  }
+}
+setInterval(() => {
+  const now = performance.now(),
+    delta = Math.min(5000, Math.max(0, now - activeTick));
+  activeTick = now;
+  if (
+    !paused &&
+    !dialog.open &&
+    lesson < 0 &&
+    occupied(board()) > 0 &&
+    now - lastInputAt < 30000
+  ) {
+    experience(progress).activeMs += Math.round(delta);
+    activeSinceSave += delta;
+    if (activeSinceSave >= 30000) {
+      activeSinceSave = 0;
+      void save();
+    }
+  }
+  if (pendingDailyOpen) void openDailyNotification();
+}, 5000);

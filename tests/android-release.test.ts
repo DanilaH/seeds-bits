@@ -55,9 +55,13 @@ test("store configuration keeps live IDs, correct namespace and branding and is 
       expect(r.status, r.stderr).toBe(0);
     }
     const read = (p: string) => readFileSync(join(root, p), "utf8");
-    expect(read("android/app/build.gradle")).toContain("versionCode 1000007");
+    expect(read("android/app/build.gradle")).toContain("versionCode 1100007");
     const gradle = read("android/app/build.gradle");
     expect(gradle).toContain("minifyEnabled true");
+    expect(gradle).toContain("ru.rustore.sdk:review:10.5.2");
+    expect(
+      read("android/build.gradle").match(/maven-rustore-exposed/g),
+    ).toHaveLength(2);
     expect(gradle).toContain("shrinkResources true");
     expect(gradle).toContain("proguard-android-optimize.txt");
     expect(read("android/app/proguard-rules.pro")).toContain(
@@ -70,6 +74,9 @@ test("store configuration keeps live IDs, correct namespace and branding and is 
     ).toContain("package com.seedsbits.game;");
     const manifest = read("android/app/src/main/AndroidManifest.xml");
     expect(manifest).toContain('android:allowBackup="false"');
+    expect(manifest).toContain("POST_NOTIFICATIONS");
+    expect(manifest).toContain("SeedsDailyReminder");
+    expect(manifest).not.toContain("SCHEDULE_EXACT_ALARM");
     expect(manifest.match(/android:usesCleartextTraffic=/g)).toHaveLength(1);
     const xml = read("android/app/src/main/res/values/seeds-services.xml");
     expect(xml).toContain('name="ads_test_mode">false');

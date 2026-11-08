@@ -104,15 +104,19 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (!key.equals("seeds-bits.progress.v2") || !settingsKey.equals("seeds-bits.settings.v1")) {
       call.reject("Invalid storage keys"); return;
     }
-    boolean saved = getContext().getSharedPreferences("CapacitorStorage", 0).edit()
-      .putString(key, call.getString("value", ""))
-      .putString(settingsKey, call.getString("settings", "")).commit();
-    if (!saved) { call.reject("Progress could not be saved"); return; }
-    call.resolve();
+    try {
+      boolean saved = getContext().getSharedPreferences("CapacitorStorage", 0).edit()
+        .putString(key, call.getString("value", ""))
+        .putString(settingsKey, call.getString("settings", "")).commit();
+      if (!saved) { call.reject("Progress could not be saved", "DISK_COMMIT"); return; }
+      SeedsDailyReminder.sync(getContext());
+      call.resolve();
+    } catch (Exception error) {call.reject("Progress could not be saved", "PERSIST_EXCEPTION");}
   }
+
   @PluginMethod public void report(PluginCall call) {
     String name = call.getString("name", "");
-    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_error")) {
+    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_error|tutorial_(start|end)|first_(pair|no_moves)|reminder_(permission_requested|permission|toggle|open)|review_(request|flow)|daily_reward")) {
       JSObject data = call.getObject("data", new JSObject());
       data.put("test", getContext().getResources().getBoolean(R.bool.ads_test_mode));
       if (!getContext().getString(R.string.appmetrica_api_key).isEmpty()) AppMetrica.reportEvent(name, data.toString());

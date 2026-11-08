@@ -5,7 +5,23 @@ export class BoardView {
   private values: number[] = [];
   private marked = new Set<number>();
   private remapped = false;
-  constructor(private root: HTMLElement) {}
+  private focusIndex = 0;
+  constructor(private root: HTMLElement) {
+    root.addEventListener("focusin", (event) => {
+      const target = event.target as HTMLElement;
+      if (target.matches("button.cell")) {
+        this.focusIndex = Number(target.dataset.index);
+        this.tabStops();
+      }
+    });
+  }
+  private tabStops() {
+    if (!this.values[this.focusIndex])
+      this.focusIndex = this.values.findIndex(Boolean);
+    this.nodes.forEach((n, i) => {
+      if (n.tagName === "BUTTON") n.tabIndex = i === this.focusIndex ? 0 : -1;
+    });
+  }
   cell(index: number) {
     return this.nodes[index] ?? null;
   }
@@ -90,5 +106,6 @@ export class BoardView {
         n.setAttribute("aria-pressed", String(i === selected));
     }
     this.marked = marked;
+    this.tabStops();
   }
 }

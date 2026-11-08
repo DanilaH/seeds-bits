@@ -1,3 +1,4 @@
+import { validDay } from "./calendar";
 import notebookData from "./notebook.json" with { type: "json" };
 import { checkPair, removePair, type Connection, type Session } from "./core";
 let extra: (string | number[])[][] | undefined;
@@ -133,6 +134,7 @@ export function today(d = new Date()) {
 }
 export function monthDays(month: string) {
   const [y, m] = month.split("-").map(Number);
+  if (!validDay(`${month}-01`)) return 0;
   return new Date(y, m, 0).getDate();
 }
 export function days(month: string) {
@@ -143,7 +145,8 @@ export function days(month: string) {
 }
 export function availableDay(day: string, now = today()) {
   return (
-    /^\d{4}-\d{2}-\d{2}$/.test(day) &&
+    validDay(day) &&
+    validDay(now) &&
     day.slice(0, 7) >= FIRST_MONTH &&
     day <= now &&
     days(day.slice(0, 7)).includes(day)

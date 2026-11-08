@@ -70,7 +70,7 @@ test("unknown metadata cannot silently erase statistics", () => {
   const p = fresh();
   metadata(p);
   const raw = JSON.stringify(p).replace(
-    '"meta":{"version":1',
+    '"meta":{"version":2',
     '"meta":{"version":99',
   );
   expect(() => readProgress(raw)).toThrow();

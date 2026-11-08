@@ -12,7 +12,7 @@ const appId = storeRelease
   ? "com.seedsbits.game"
   : "com.seedsbits.game.preview";
 const versionCode =
-  (storeRelease ? 1000000 : 1000) + Number(process.env.GITHUB_RUN_NUMBER || 1);
+  (storeRelease ? 1100000 : 11000) + Number(process.env.GITHUB_RUN_NUMBER || 1);
 if (!Number.isSafeInteger(versionCode) || versionCode < 1001)
   throw Error("Invalid version");
 const version = JSON.parse(readFileSync("package.json", "utf8")).version;
@@ -63,7 +63,7 @@ copyFileSync(
   "android/app/proguard-rules.pro",
 );
 if (!gradle.includes("// seeds SDKs"))
-  gradle += `\n// seeds SDKs\ndependencies {\n  implementation 'com.yandex.android:mobileads:8.5.0'\n  implementation 'io.appmetrica.analytics:analytics:8.6.0'\n}\n`;
+  gradle += `\n// seeds SDKs\ndependencies {\n  implementation 'com.yandex.android:mobileads:8.5.0'\n  implementation 'io.appmetrica.analytics:analytics:8.6.0'\n  implementation 'ru.rustore.sdk:review:10.5.2'\n}\n`;
 writeFileSync(path, gradle);
 if (!gradle.includes(`applicationId "${appId}"`))
   throw Error("Generated Android package does not match build flavor");
@@ -73,6 +73,8 @@ for (const name of [
   "MainActivity",
   "SeedsApplication",
   "SeedsMonetizationPlugin",
+  "SeedsEngagementPlugin",
+  "SeedsDailyReminder",
 ]) {
   const source = readFileSync(`native/android/${name}.java`, "utf8").replace(
     "package com.seedsbits.game.preview;",
@@ -80,6 +82,18 @@ for (const name of [
   );
   writeFileSync(`${java}/${name}.java`, source);
 }
+const rootGradle = "android/build.gradle";
+let rootScript = readFileSync(rootGradle, "utf8");
+if (!rootScript.includes("maven-rustore-exposed"))
+  rootScript = rootScript.replace(
+    /repositories \{/g,
+    'repositories {\n        maven { url "https://nexus-external.rustore.ru/repository/maven-rustore-exposed" }',
+  );
+writeFileSync(rootGradle, rootScript);
+copyFileSync(
+  "native/android/notification-icon.xml",
+  "android/app/src/main/res/drawable/ic_seed_notification.xml",
+);
 const xmlPath = "android/app/src/main/res/values/seeds-services.xml";
 const escape = (s) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll('"', "&quot;");
@@ -107,6 +121,16 @@ if (storeRelease && !manifest.includes("android:usesCleartextTraffic="))
   manifest = manifest.replace(
     "<application",
     '<application android:usesCleartextTraffic="false"',
+  );
+if (!manifest.includes("android.permission.POST_NOTIFICATIONS"))
+  manifest = manifest.replace(
+    "<application",
+    '<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/><uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/><application',
+  );
+if (!manifest.includes('android:name=".SeedsDailyReminder"'))
+  manifest = manifest.replace(
+    "</application>",
+    '<receiver android:name=".SeedsDailyReminder" android:exported="false"><intent-filter><action android:name="android.intent.action.BOOT_COMPLETED"/><action android:name="android.intent.action.TIME_SET"/><action android:name="android.intent.action.TIMEZONE_CHANGED"/><action android:name="android.intent.action.MY_PACKAGE_REPLACED"/></intent-filter></receiver></application>',
   );
 writeFileSync(manifestPath, manifest);
 // Store, legacy launcher and splash share the selected 3 + 7 artwork.

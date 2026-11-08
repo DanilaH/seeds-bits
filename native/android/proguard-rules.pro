@@ -3,6 +3,7 @@
 # JavaScript invokes these methods by name and reads plugin annotations.
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
 -keep class **.SeedsMonetizationPlugin { *; }
+-keep class **.SeedsEngagementPlugin { *; }
 # Preserve the names of two SDK entry points for APK diagnostics; optimizations
 # and removal of unreachable members remain allowed.
 -keepnames class com.yandex.mobile.ads.banner.BannerAdView

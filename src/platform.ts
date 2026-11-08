@@ -59,6 +59,32 @@ export async function read(key: string): Promise<string | null> {
     ? (await Preferences.get({ key })).value
     : localStorage.getItem(key);
 }
+/** Per-field browser keys prevent unrelated preferences from overwriting each other across tabs. */
+export async function readSettings(key: string): Promise<string | null> {
+  const raw = await read(key);
+  if (native) return raw;
+  let result: Record<string, unknown> = {};
+  try {
+    const parsed = JSON.parse(raw ?? "{}");
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed))
+      result = parsed;
+  } catch {}
+  for (const field of [
+    "theme",
+    "sound",
+    "vibration",
+    "tutorialDone",
+    "reminders",
+    "reminderTime",
+  ]) {
+    const item = localStorage.getItem(`${key}.${field}`);
+    if (item !== null)
+      try {
+        result[field] = JSON.parse(item);
+      } catch {}
+  }
+  return Object.keys(result).length ? JSON.stringify(result) : null;
+}
 export async function write(key: string, value: string): Promise<void> {
   if (Capacitor.isNativePlatform()) await Preferences.set({ key, value });
   else localStorage.setItem(key, value);
@@ -101,17 +127,11 @@ export async function saveState(
   patch: Record<string, unknown> = {},
 ) {
   const persist = async () => {
-    if (!native && localStorage.getItem(key) !== expected)
-      throw new SaveConflict();
+    const conflict = !native && localStorage.getItem(key) !== expected;
     const defaults = JSON.parse(settings);
     let latest: Record<string, unknown> = {};
     try {
-      latest =
-        JSON.parse(
-          (native
-            ? await read(settingsKey)
-            : localStorage.getItem(settingsKey)) ?? "{}",
-        ) ?? {};
+      latest = JSON.parse((await readSettings(settingsKey)) ?? "{}") ?? {};
     } catch {
       /* Keep valid defaults. */
     }
@@ -133,7 +153,18 @@ export async function saveState(
       await write(key, value);
     } else {
       // Keep the read/merge/write section synchronous while holding the lock.
+      for (const field of Object.keys(patch)) {
+        if (
+          Object.hasOwn(defaults, field) &&
+          typeof patch[field] === typeof defaults[field]
+        )
+          localStorage.setItem(
+            `${settingsKey}.${field}`,
+            JSON.stringify(patch[field]),
+          );
+      }
       localStorage.setItem(settingsKey, JSON.stringify(merged));
+      if (conflict) throw new SaveConflict();
       localStorage.setItem(key, value);
     }
     return merged;
@@ -141,4 +172,38 @@ export async function saveState(
   if (!native && navigator.locks)
     return await navigator.locks.request("seeds-save", persist);
   else return await persist();
+}
+
+/** Safe bounded diagnostics: never expose native messages or saved content. */
+export function saveErrorReason(error: unknown) {
+  if (error instanceof SaveConflict) return "conflict";
+  const e = error as { name?: string; code?: string };
+  if (e?.name === "QuotaExceededError") return "quota";
+  if (e?.name === "SecurityError") return "blocked";
+  if (["DISK_COMMIT", "PERSIST_EXCEPTION"].includes(e?.code ?? ""))
+    return e.code!;
+  return native ? "native_write" : "storage_write";
+}
+
+/** Settings remain editable when another tab owns the newer game snapshot. */
+export async function writeSettingsPatch(
+  key: string,
+  defaults: string,
+  patch: Record<string, unknown>,
+) {
+  if (native) return;
+  const update = async () => {
+    const merged = {
+      ...JSON.parse(defaults),
+      ...JSON.parse((await readSettings(key)) ?? "{}"),
+      ...patch,
+    };
+    for (const [field, value] of Object.entries(patch))
+      localStorage.setItem(`${key}.${field}`, JSON.stringify(value));
+    localStorage.setItem(key, JSON.stringify(merged));
+    return merged;
+  };
+  return navigator.locks
+    ? await navigator.locks.request("seeds-save", update)
+    : await update();
 }

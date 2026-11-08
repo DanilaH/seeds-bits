@@ -7,29 +7,33 @@ export function hintKey(board: number[], a: number, b: number) {
   );
 }
 export function hintAttempt(p: Progress): Attempt {
-  const m = metadata(p);
-  return (m.attempts[p.active] ??= {
+  return (metadata(p).attempts[p.active] ??= {
     id: crypto.randomUUID(),
     completed: false,
   });
 }
-export function hintsLeft(a: Attempt) {
-  return Math.max(0, 3 + (a.hintBonus ?? 0) - (a.hintKeys?.length ?? 0));
+export function hintsLeft(p: Progress) {
+  return (
+    Math.max(0, 3 - (hintAttempt(p).hintKeys?.length ?? 0)) + metadata(p).wallet
+  );
 }
-export function spendHint(a: Attempt, key: string): boolean {
+export function spendHint(p: Progress, key: string): boolean {
+  const a = hintAttempt(p);
   if (a.hintKeys?.includes(key)) return true;
-  if (!hintsLeft(a)) return false;
+  if (!hintsLeft(p)) return false;
+  if ((a.hintKeys?.length ?? 0) >= 3) metadata(p).wallet--;
   (a.hintKeys ??= []).push(key);
   return true;
 }
 export function grantReward(p: Progress, r: RewardReceipt): boolean {
   const m = metadata(p);
+  if (typeof r.token !== "string" || !r.token || r.token.length > 100)
+    return false;
   if (m.rewardReceipts?.includes(r.token)) return true;
-  const a = Object.values(m.attempts).find((a) => a.id === r.attempt);
-  if (!a || !r.token || r.token.length > 100) return false;
-  a.hintBonus = (a.hintBonus ?? 0) + 3;
+  // A pending native receipt remains earned even when its old attempt was replaced.
+  m.wallet += 3;
   (m.rewardReceipts ??= []).push(r.token);
-  // Native holds one unacknowledged receipt; acknowledged receipts cannot be replayed.
+  // Native has only one unacknowledged receipt; acknowledgement is after durable save.
   if (m.rewardReceipts.length > 500)
     m.rewardReceipts.splice(0, m.rewardReceipts.length - 500);
   return true;

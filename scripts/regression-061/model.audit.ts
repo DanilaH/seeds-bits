@@ -8,6 +8,7 @@ import {
 } from "../../src/progress";
 import { loadNotebook, notebook, puzzleSession } from "../../src/puzzles";
 import {
+  hintsLeft,
   hintKey,
   hintAttempt,
   spendHint,
@@ -30,14 +31,12 @@ test("M01 hundred unfinished notebooks with legitimately earned hints remain com
       0,
       Math.min(100, task.solution.length - 1),
     )) {
-      if (!(3 + (attempt.hintBonus ?? 0) - (attempt.hintKeys?.length ?? 0)))
+      if (!hintsLeft(p))
         grantReward(p, {
           token: `reward-${volume}-${s.current.moves}`,
           attempt: attempt.id,
         });
-      expect(spendHint(attempt, hintKey(s.current.board, pair.a, pair.b))).toBe(
-        true,
-      );
+      expect(spendHint(p, hintKey(s.current.board, pair.a, pair.b))).toBe(true);
       hintCount++;
       s = commit(s, removePair(s.current.board, pair.a, pair.b), "pair", 0);
     }
