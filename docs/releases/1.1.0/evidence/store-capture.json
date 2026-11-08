@@ -1,0 +1,94 @@
+{
+  "method": "production web UI, achievable demonstration saves; not a native SDK/device test",
+  "captures": [
+    {
+      "name": "phone-01-pairs",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-02-play",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-03-books",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-04-calendar",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-05-jars",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-06-dark",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": true
+    },
+    {
+      "name": "tablet-01-pairs",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-02-books",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-03-dark",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": true
+    },
+    {
+      "name": "tablet-04-library",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-05-progress",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    }
+  ],
+  "errors": []
+}

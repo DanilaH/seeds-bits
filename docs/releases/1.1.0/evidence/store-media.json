@@ -1,0 +1,258 @@
+{
+  "method": "CSS gradient framing with short factual captions below unchanged complete production UI captures",
+  "screenshots": [
+    {
+      "file": "phone-01-pairs.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 461584,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Соединяйте одинаковые цифры или пары с суммой 10",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-02-play.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 436624,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Убирайте пары и освобождайте строки",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-03-books.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 465808,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 69.359375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "2 400 задач в 100 тетрадях",
+      "captionGeometry": {
+        "x": 105.78125,
+        "y": 857.359375,
+        "width": 328.4375,
+        "height": 33.265625,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-04-calendar.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 468644,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Задача дня, серии и архив с января 2025",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-05-jars.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 468826,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Все режимы пополняют коллекцию баночек",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-06-dark.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 491987,
+      "dark": true,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Тёмная тема для игрового поля и меню",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-01-pairs.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 439205,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Убирайте одинаковые числа и пары с суммой 10",
+      "captionGeometry": {
+        "x": 207.59375,
+        "y": 478.640625,
+        "width": 544.8125,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-02-books.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 440411,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "В больших задачах поле прокручивается",
+      "captionGeometry": {
+        "x": 251.046875,
+        "y": 478.640625,
+        "width": 457.890625,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-03-dark.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 469820,
+      "dark": true,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Тёмная тема для игрового поля и меню",
+      "captionGeometry": {
+        "x": 258.6875,
+        "y": 478.640625,
+        "width": 442.625,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-04-library.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 442572,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "2 400 задач в 100 тетрадях",
+      "captionGeometry": {
+        "x": 328.40625,
+        "y": 478.640625,
+        "width": 303.171875,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-05-progress.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 450642,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Прогресс всех режимов — в коллекции баночек",
+      "captionGeometry": {
+        "x": 213.53125,
+        "y": 478.640625,
+        "width": 532.921875,
+        "height": 30.71875,
+        "fits": true
+      }
+    }
+  ]
+}

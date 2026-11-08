@@ -1,0 +1,18 @@
+{
+  "runtimeSource": "96fa9f024e4aeb3a35377af64cd212bc0769c471",
+  "checkRun": 42476783425,
+  "releaseRun": 42476785180,
+  "unit": 52,
+  "regressionUnit": 2,
+  "browser": 117,
+  "regressionBrowser": 15,
+  "nativeHarness": 21,
+  "webBuild": true,
+  "yandexDraftBuild": true,
+  "androidDebugBuild": true,
+  "androidReleaseR8Build": true,
+  "storeMedia": true,
+  "emulator": "passed: fresh install and rebuilt 1.0.0 upgrade, Android 35, offline, temporary CI certificate",
+  "physicalDeviceLiveSdk": "not verified",
+  "vkCabinet": "not configured"
+}
