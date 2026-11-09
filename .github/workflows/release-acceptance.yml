@@ -1,5 +1,7 @@
 name: Verify existing RuStore release on Android
 on:
+  push:
+    branches: [qa/rustore-1100019]
   workflow_dispatch:
     inputs:
       source_run_id:
@@ -25,11 +27,17 @@ jobs:
         with:
           name: seeds-rustore-release-unsigned
           path: release-smoke/
-          run-id: ${{ inputs.source_run_id }}
+          run-id: ${{ inputs.source_run_id || '42609790875' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: seeds-rustore-upgrade-baseline-unsigned
+          path: upgrade-baseline/
+          run-id: ${{ inputs.source_run_id || '42609790875' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Verify selected payload hash
         env:
-          EXPECTED_SHA256: ${{ inputs.source_sha256 }}
+          EXPECTED_SHA256: ${{ inputs.source_sha256 || '0ebbac8f15ef6c24ecc5fe14d5b99d90290355d1f2481f9f22f8e29eca3bc5bb' }}
         run: |
           [[ "$EXPECTED_SHA256" =~ ^[0-9a-fA-F]{64}$ ]]
           echo "$EXPECTED_SHA256  release-smoke/app-release-unsigned.apk" | sha256sum --check --strict
@@ -49,10 +57,24 @@ jobs:
           keytool -genkeypair -keystore /tmp/smoke.p12 -storetype PKCS12 -storepass android -keypass android -alias smoke -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI Offline Smoke' -noprompt
           SEEDS_SMOKE_APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -n 1)
           "$SEEDS_SMOKE_APKSIGNER" sign --ks /tmp/smoke.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-smoke.apk release-smoke/app-release-unsigned.apk
+          "$SEEDS_SMOKE_APKSIGNER" sign --ks /tmp/smoke.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-baseline.apk upgrade-baseline/app-release-unsigned.apk
+          adb install /tmp/seeds-baseline.apk
+      - run: python3 -m pip install --user pillow
+      - name: Prepare old native progress
+        run: python3 scripts/android-upgrade.py before
+      - name: Install exact selected update retaining data
+        run: adb install -r /tmp/seeds-smoke.apk
+      - name: Verify native progress after update
+        run: python3 scripts/android-upgrade.py after
+      - name: Prepare fresh install
+        run: |
+          adb uninstall com.seedsbits.game
           adb install /tmp/seeds-smoke.apk
       - run: python3 scripts/android-smoke.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: seeds-release-emulator-acceptance
-          path: test-results/emulator/
+          path: |
+            test-results/emulator/
+            test-results/emulator-upgrade/

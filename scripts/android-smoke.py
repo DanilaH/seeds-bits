@@ -62,7 +62,7 @@ def pair(found):
 def hint_button(count):
  for _ in range(10):
   for node in snapshot().iter('node'):
-   if re.fullmatch(r'Подсказка\s*·\s*'+str(count),label(node)):return node
+   if label(node) in {f'Подсказка · {count}',f'Подсказка, осталось {count}'}:return node
   time.sleep(1)
  raise AssertionError('Native monetization hint count missing: '+str(count))
 def launch():

@@ -22,6 +22,14 @@ def button(part,exact=False):
    if (name==part if exact else part in name) and (n.get('clickable')=='true' or name==part):return n
   time.sleep(1)
  raise AssertionError('Control missing: '+part)
+def hint_count(expected):
+ # Both released UIs expose the exact balance; never match a numeric substring.
+ choices={f'Подсказка · {expected}',f'Подсказка, осталось {expected}'}
+ for _ in range(10):
+  for node in ui().iter('node'):
+   if label(node) in choices:return node
+  time.sleep(1)
+ raise AssertionError('Exact hint balance missing: '+str(expected))
 def tap(n):
  b=list(map(int,re.findall(r'\d+',n.get('bounds',''))));assert len(b)==4
  adb('shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2));time.sleep(.3)
@@ -61,7 +69,7 @@ adb('shell','am','start','-n',pkg+'/.MainActivity');time.sleep(3)
 try:
  if phase=='before':
   tap(button('Пропустить',True));pair(count(28));count(26)
-  tap(button('Подсказка · 3',True));button('Подсказка · 2',True)
+  tap(hint_count(3));hint_count(2)
   book();initial=len(cells());pair(cells());count(initial-2)
   classic();count(26)
   tap(button('Открыть меню',True));tap(button('Настройки',True));tap(button('Тёмная тема',True));tap(button('Закрыть меню',True));count(26)
@@ -69,7 +77,7 @@ try:
   (out/'baseline.json').write_text(json.dumps({'classicDigits':26,'classicHintBudget':2,'bookDigits':initial-2,'baselineSource':'86d950b970a69e5dec3ebc269075143a1c28f94a','baselineVersion':'1.0.0 (1000010)','signature':'same temporary CI-only key for both APKs'}))
   adb('shell','am','force-stop',pkg)
  else:
-  before=json.loads((out/'baseline.json').read_text());resume();count(before['classicDigits']);button('Подсказка · 2',True)
+  before=json.loads((out/'baseline.json').read_text());resume();count(before['classicDigits']);hint_count(2)
   screenshot('after.png')
   from PIL import Image
   old=Image.open(out/'before.png').convert('RGB');new=Image.open(out/'after.png').convert('RGB')
