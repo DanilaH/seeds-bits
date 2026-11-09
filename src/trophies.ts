@@ -104,7 +104,7 @@ export function celebrateTrophy(
           { opacity: 1, transform: "scale(1.15) rotate(-4deg)", offset: 0.6 },
           { opacity: 1, transform: "scale(1) rotate(-8deg)" },
         ],
-        { duration: 430, delay: 120, easing: "ease-out" },
+        { duration: 430, delay: 120, easing: "ease-out", fill: "backwards" },
       ),
     );
   const layer = document.createElement("span");
