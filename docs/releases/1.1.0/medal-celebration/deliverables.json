@@ -1,0 +1,23 @@
+{
+  "runtimeSource": "cb95493f79bcc4a035bf75c99f98873f13e3fa83",
+  "checkRun": 42620792784,
+  "releaseRun": 42620795561,
+  "files": [
+    {
+      "file": "seeds-1.1.0-rustore.apk",
+      "versionCode": "1100023",
+      "bytes": 5501048,
+      "sha256": "5f49584cff774250144e7fcab05f0c269ee523e71fca3b522675e6d928ad65f8"
+    },
+    {
+      "file": "gifs/seeds-01-medal-celebration.gif",
+      "bytes": 5488247,
+      "sha256": "ac0277bdb8d8846488afa5e919d9e1d0648d57054f517c4c8994e4b6c185ca61"
+    },
+    {
+      "file": "videos/seeds-01-medal-celebration.mp4",
+      "bytes": 267624,
+      "sha256": "eb09cf66304e0b1cad75ca087cb6de964a3dd1c50689a48acb884ed357aa9612"
+    }
+  ]
+}

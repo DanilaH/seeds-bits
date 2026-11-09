@@ -50,3 +50,8 @@ Separated hint/add counters, fixed jar-caption geometry through 100%, notebook l
 ## 9 November 2026 — one large medal, build 1100020
 
 One filling medal replaces the triplet in results, calendar and each collection month. Boundaries retain the earned tier, next completion shows the following target, captions preserve previous tiers. The daily result drops its redundant green success circle to keep the primary action visible. Runtime 05d642c: 52+2 model, 145+15 browser, 21+16 native harness; all four release-20 jobs including fresh/upgrade Android acceptance passed. Signed APK remains 5 501 048 bytes. One actual-UI GIF/MP4 delivered. See [single medal report](single-medal/REPORT.md).
+
+
+## 9 November 2026 — colourful celebration and explicit next medal, build 1100023
+
+A stronger local pop/sheen with 32 white, gold, coral, blue and lilac rectangular/diamond/strip pieces replaces the quiet monochrome burst. An external navy receipt keeps the check readable; a small next-goal card shows the following metal and remaining tasks, with a stacked layout on narrow screens. Final gold declares the monthly collection complete. The badge entrance has no pre-animation flash; small light-theme captions meet 4.64:1 contrast. Runtime cb95493: 52+2 model, 145+15 browser, 21+16 native harness; all four release-23 jobs and fresh/upgrade Android acceptance passed. Signed APK remains 5 501 048 bytes with the existing certificate. One new actual-UI GIF/MP4 delivered. See [celebration report](medal-celebration/REPORT.md).

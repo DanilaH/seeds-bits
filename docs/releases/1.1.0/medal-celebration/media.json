@@ -1,0 +1,22 @@
+{
+  "runtimeSource": "cb95493f79bcc4a035bf75c99f98873f13e3fa83",
+  "method": "Actual UI/rules in Chromium with prepared legal progress and development ad/engagement bridges; silent GIF/MP4.",
+  "scenarios": 1,
+  "pageErrors": 0,
+  "allFramesDecoded": true,
+  "visuallyInspected": true,
+  "primaryActionFullyVisible": true,
+  "nextGoalVisibleAfterBurst": true,
+  "files": [
+    {
+      "file": "gifs/seeds-01-medal-celebration.gif",
+      "bytes": 5488247,
+      "sha256": "ac0277bdb8d8846488afa5e919d9e1d0648d57054f517c4c8994e4b6c185ca61"
+    },
+    {
+      "file": "videos/seeds-01-medal-celebration.mp4",
+      "bytes": 267624,
+      "sha256": "eb09cf66304e0b1cad75ca087cb6de964a3dd1c50689a48acb884ed357aa9612"
+    }
+  ]
+}

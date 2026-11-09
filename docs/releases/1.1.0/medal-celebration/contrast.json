@@ -1,0 +1,18 @@
+{
+  "scope": "New next-medal caption and external receipt only; theme colours in committed CSS.",
+  "lightCaption": {
+    "foreground": "#61736c",
+    "background": "#f3f6fb",
+    "contrast": 4.64106474025902
+  },
+  "darkCaption": {
+    "foreground": "#a6b8ae",
+    "background": "#273442",
+    "contrast": 6.09
+  },
+  "receipt": {
+    "foreground": "#ffffff",
+    "background": "#29465f",
+    "contrast": 9.83
+  }
+}
