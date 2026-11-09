@@ -38,19 +38,28 @@ export function trophyMark(
       : metal.name;
   const note = pending
     ? "Ожидает сохранения"
-    : complete
-      ? i === 0
-        ? "До серебра — 7 дней"
-        : i === 1
-          ? `До золота — ${total - 14} дней`
-          : "Месяц пройден"
-      : i === 1
+    : complete && i === 2
+      ? "Все медали месяца собраны"
+      : !complete && i === 1
         ? "Бронза получена"
-        : i === 2
+        : !complete && i === 2
           ? "Бронза и серебро получены"
           : "";
+  const next = i < 2 ? metals[i + 1] : undefined;
+  const left = [14, total][i] - count;
+  const taskWord =
+    left % 10 === 1 && left % 100 !== 11
+      ? "задача"
+      : left % 10 >= 2 &&
+          left % 10 <= 4 &&
+          !(left % 100 >= 12 && left % 100 <= 14)
+        ? "задачи"
+        : "задач";
+  const preview = next
+    ? `<span class="next-medal" style="--preview-metal:${next.color}" aria-label="Следующая медаль: ${next.name}, ещё ${left} ${taskWord}"><span class="next-eyebrow">${complete && !pending ? "Следующая" : "Следом"}</span><svg class="next-medal-art" viewBox="0 0 64 76" aria-hidden="true"><path d="M15 2h13l7 24-13 6ZM36 2h13l-7 30-13-6Z"/><circle cx="32" cy="44" r="24"/><circle cx="32" cy="44" r="18"/></svg><strong>${next.name}</strong><span class="next-count">Ещё ${left} ${taskWord}</span></span>`
+    : "";
   const id = `medal-${++artworkId}`;
-  return `<span class="trophy-display"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light}"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs><path class="medal-ribbon" d="M15 2h13l7 24-13 6ZM36 2h13l-7 30-13-6Z"/><circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${68 - (48 * filled) / target}" width="48" height="${(48 * filled) / target}" fill="url(#${id}-metal)"/></g><circle class="medal-ring" cx="32" cy="44" r="24"/><circle class="medal-inner" cx="32" cy="44" r="19"/><g class="medal-emblem" transform="translate(18 30) scale(.58)"><path d="${paths[Number(month.slice(5)) - 1]}"/></g>${complete ? '<path class="medal-check" d="m43 61 3 3 6-7"/>' : ""}</svg><span class="metal-name">${title}</span><span class="metal-count">${filled} из ${target} дней</span><span class="medal-note">${note}</span></span></span>`;
+  return `<span class="trophy-display${next ? " has-next" : ""}"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light}"><span class="medal-figure"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs><path class="medal-ribbon" d="M15 2h13l7 24-13 6ZM36 2h13l-7 30-13-6Z"/><circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${68 - (48 * filled) / target}" width="48" height="${(48 * filled) / target}" fill="url(#${id}-metal)"/><path class="medal-sheen" d="M-36 10h12l78 78H42Z" fill="#fff" opacity="0"/></g><circle class="medal-ring" cx="32" cy="44" r="24"/><circle class="medal-inner" cx="32" cy="44" r="19"/><g class="medal-emblem" transform="translate(18 30) scale(.58)"><path d="${paths[Number(month.slice(5)) - 1]}"/></g></svg><span class="medal-receipt" aria-hidden="true" ${complete && !pending ? "" : "hidden"}><svg viewBox="0 0 20 20"><path d="m4 10 4 4 8-9"/></svg></span></span><span class="metal-name">${title}</span><span class="metal-count">${filled} из ${target} дней</span><span class="medal-note">${note}</span></span>${preview}</span>`;
 }
 
 /** A bounded, local burst. It owns no rewards, timers or input and cancels on navigation. */
@@ -66,42 +75,88 @@ export function celebrateTrophy(
   const animations: Animation[] = [
     mark.animate(
       [
-        { transform: "scale(.86) rotate(-5deg)" },
-        { transform: "scale(1.12) rotate(3deg)", offset: 0.5 },
+        { transform: "scale(.8) rotate(-7deg)" },
+        { transform: "scale(1.2) rotate(4deg)", offset: 0.46 },
+        { transform: "scale(.98) rotate(-1deg)", offset: 0.8 },
         { transform: "scale(1) rotate(0)" },
       ],
-      { duration: 440, easing: "ease-out" },
+      { duration: 560, easing: "ease-out" },
     ),
   ];
+  const sheen = mark.querySelector(".medal-sheen");
+  if (sheen)
+    animations.push(
+      sheen.animate(
+        [
+          { opacity: 0, transform: "translateX(-40px)" },
+          { opacity: 0.7, transform: "translateX(18px)", offset: 0.5 },
+          { opacity: 0, transform: "translateX(80px)" },
+        ],
+        { duration: 650, delay: 100, easing: "ease-in-out" },
+      ),
+    );
+  const receipt = mark.parentElement?.querySelector(".medal-receipt");
+  if (receipt)
+    animations.push(
+      receipt.animate(
+        [
+          { opacity: 0, transform: "scale(.5) rotate(-20deg)" },
+          { opacity: 1, transform: "scale(1.15) rotate(-4deg)", offset: 0.6 },
+          { opacity: 1, transform: "scale(1) rotate(-8deg)" },
+        ],
+        { duration: 430, delay: 120, easing: "ease-out" },
+      ),
+    );
   const layer = document.createElement("span");
   layer.className = "trophy-confetti";
   layer.setAttribute("aria-hidden", "true");
   const box = mark.getBoundingClientRect(),
     parent = host.getBoundingClientRect();
   const x = box.x + box.width / 2 - parent.x,
-    y = box.y + box.height / 2 - parent.y;
-  for (let i = 0; i < 16; i++) {
+    y = box.y + (box.height * 44) / 76 - parent.y;
+  const palette = [
+    "#ffffff",
+    "#f3c86b",
+    "#e58b74",
+    "#80b4db",
+    "#c3ade3",
+    "#fff2cb",
+  ];
+  const spread = Math.min(116, Math.max(55, parent.width / 2 - 10));
+  for (let i = 0; i < 32; i++) {
     const piece = document.createElement("i");
-    const angle = (i / 16) * Math.PI * 2;
-    const dx = Math.cos(angle) * (40 + (i % 3) * 15),
-      dy = Math.sin(angle) * 38 - 30;
-    piece.style.cssText = `left:${x}px;top:${y}px;background:${["#c58b4c", "#e8c46d", "#a2b3c6", "#d3b792"][i % 4]}`;
+    const angle = (i / 32) * Math.PI * 2;
+    const dx = Math.cos(angle) * spread * (0.72 + (i % 4) * 0.08),
+      dy = Math.sin(angle) * (62 + (i % 3) * 11) - 22;
+    piece.dataset.shape = ["rect", "diamond", "strip"][i % 3];
+    piece.dataset.white = String(i % palette.length === 0);
+    piece.style.cssText = `left:${x}px;top:${y}px;background:${palette[i % palette.length]}`;
     layer.append(piece);
+    const tilt = i * 23,
+      spin = 100 + i * 19;
     animations.push(
       piece.animate(
         [
-          { opacity: 0, transform: "translate(0,0) scale(.5)" },
+          {
+            opacity: 0,
+            transform: `translate(0,0) rotate(${tilt}deg) scale(.5)`,
+          },
           {
             opacity: 1,
-            transform: `translate(${dx * 0.65}px,${dy}px) rotate(${i * 27}deg)`,
+            transform: `translate(${dx * 0.7}px,${dy}px) rotate(${tilt + spin * 0.4}deg) rotateY(${i % 2 ? 45 : -40}deg)`,
             offset: 0.35,
           },
           {
+            opacity: 0.9,
+            transform: `translate(${dx * 0.9}px,${dy + 26}px) rotate(${tilt + spin * 0.7}deg) rotateY(${i % 2 ? 100 : -90}deg)`,
+            offset: 0.7,
+          },
+          {
             opacity: 0,
-            transform: `translate(${dx}px,${dy + 45}px) rotate(${i * 50}deg)`,
+            transform: `translate(${dx}px,${dy + 88}px) rotate(${tilt + spin}deg) rotateY(${i % 2 ? 160 : -160}deg)`,
           },
         ],
-        { duration: 650 + (i % 3) * 60, easing: "ease-out", fill: "both" },
+        { duration: 1000 + (i % 4) * 70, easing: "ease-out", fill: "both" },
       ),
     );
   }

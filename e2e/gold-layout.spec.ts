@@ -222,6 +222,34 @@ for (const [completed, tier] of [
     await expect(page.locator(`#award [data-tier="${tier}"]`)).toHaveClass(
       /earned/,
     );
+    const burst = page.locator("#award .trophy-confetti");
+    await expect(burst.locator("i")).toHaveCount(32);
+    expect(await burst.locator('[data-white="true"]').count()).toBeGreaterThan(
+      0,
+    );
+    for (const shape of ["rect", "diamond", "strip"])
+      expect(
+        await burst.locator(`[data-shape="${shape}"]`).count(),
+      ).toBeGreaterThan(0);
+    const receipt = page.locator("#award .medal-receipt");
+    await expect(receipt).toBeVisible();
+    expect(await receipt.evaluate((el) => el.closest(".medal-art"))).toBeNull();
+    if (tier < 3) {
+      await expect(page.locator("#award .next-medal strong")).toHaveText(
+        tier === 1 ? "Серебро" : "Золото",
+      );
+      await expect(page.locator("#award .next-eyebrow")).toHaveText(
+        "Следующая",
+      );
+      await expect(page.locator("#award .next-count")).toHaveText(
+        tier === 1 ? "Ещё 7 задач" : "Ещё 17 задач",
+      );
+    } else {
+      await expect(page.locator("#award .next-medal")).toHaveCount(0);
+      await expect(page.locator("#award .medal-note")).toHaveText(
+        "Все медали месяца собраны",
+      );
+    }
     await page.waitForTimeout(240); // Finish the result-sheet entrance; medal pop uses transforms only.
     const layout = () =>
       page
@@ -269,9 +297,12 @@ test("reduced motion keeps medals, no burst; failed save celebrates only after r
   await pair(page);
   await expect(page.locator("#save-notice")).toBeVisible();
   await expect(page.locator(".trophy-confetti")).toHaveCount(0);
+  await expect(page.locator("#award .medal-receipt")).toBeHidden();
+  await expect(page.locator("#award .next-eyebrow")).toHaveText("Следом");
   await page.evaluate(() => ((window as any).failGold = false));
   await page.locator("#retry-save").click();
   await expect(page.locator(".trophy-confetti")).toHaveCount(1);
+  await expect(page.locator("#award .medal-receipt")).toBeVisible();
   await page.locator("#menu").click();
   await expect(page.locator(".trophy-confetti")).toHaveCount(0);
 });

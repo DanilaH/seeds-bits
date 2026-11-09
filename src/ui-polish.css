@@ -1936,3 +1936,125 @@ header .jar-caption strong {
 #result-reminder {
   margin-top: 8px;
 }
+
+/* A distinct receipt and an explicit next goal keep the medal readable. */
+.trophy-display.has-next {
+  grid-template-columns: minmax(0, 1fr) 100px;
+  gap: 12px;
+  align-items: center;
+}
+.medal-figure {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.medal-receipt {
+  position: absolute;
+  right: -8px;
+  bottom: 10px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #f6f8fc;
+  border-radius: 9px;
+  color: #fff;
+  background: #29465f;
+  box-shadow: 0 3px 8px #152c4530;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+.medal-receipt svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  transform: rotate(8deg);
+}
+.next-medal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px 7px;
+  border: 1px solid #d0dbe7;
+  border-radius: 12px;
+  background: #eef2f8;
+  text-align: center;
+}
+.next-eyebrow {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.next-medal strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+}
+.next-count {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.next-medal .next-medal-art {
+  width: 32px;
+  height: 38px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--preview-metal);
+  stroke-width: 1.8;
+}
+:root[data-theme="dark"] .next-medal {
+  background: #273442;
+  border-color: #4b6074;
+}
+.trophy-confetti {
+  overflow: clip;
+}
+.trophy-confetti i {
+  border-radius: 1px;
+  box-shadow: 0 1px 2px #233d5b30;
+}
+.trophy-confetti [data-shape="rect"] {
+  width: 9px;
+  height: 5px;
+}
+.trophy-confetti [data-shape="diamond"] {
+  width: 8px;
+  height: 12px;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+.trophy-confetti [data-shape="strip"] {
+  width: 4px;
+  height: 11px;
+}
+.trophy-confetti [data-white="true"] {
+  border: 1px solid #7890ab75;
+}
+@media (max-width: 350px) {
+  .trophy-display.has-next {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .next-medal {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 3px 12px;
+    text-align: left;
+    justify-items: start;
+  }
+  .next-medal-art {
+    grid-column: 1;
+    grid-row: 1 / 4;
+  }
+  .next-eyebrow,
+  .next-medal strong,
+  .next-count {
+    grid-column: 2;
+  }
+}
