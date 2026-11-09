@@ -5,6 +5,8 @@ import {
   copyFileSync,
   writeFileSync,
   statSync,
+  readdirSync,
+  unlinkSync,
 } from "node:fs";
 
 // Frame exact production captures in CSS, keeping every UI pixel in view.
@@ -12,6 +14,9 @@ import {
 const root = "test-results/store";
 const out = `${root}/ready`;
 mkdirSync(out, { recursive: true });
+for (const name of readdirSync(out))
+  if (/^(phone-|tablet-).*\.(png|jpg)$/.test(name))
+    unlinkSync(`${out}/${name}`);
 const captures = JSON.parse(readFileSync(`${root}/capture.json`, "utf8"));
 if (captures.errors.length) throw Error("Source capture has page errors");
 const browser = await chromium.launch({
@@ -24,12 +29,17 @@ const captions = {
   "phone-03-books": "2 400 задач в 100 тетрадях",
   "phone-04-calendar": "Задача дня, серии и архив с января 2025",
   "phone-05-jars": "Все режимы пополняют коллекцию баночек",
-  "phone-06-dark": "Тёмная тема для игрового поля и меню",
+  "phone-06-medal": "Медаль за месяц и следующая цель",
+  "phone-07-trophies": "Бронза за 7 задач, серебро за 14, золото за весь месяц",
+  "phone-08-dark": "Тёмная тема для игрового поля и меню",
   "tablet-01-pairs": "Убирайте одинаковые числа и пары с суммой 10",
   "tablet-02-books": "В больших задачах поле прокручивается",
   "tablet-03-dark": "Тёмная тема для игрового поля и меню",
   "tablet-04-library": "2 400 задач в 100 тетрадях",
   "tablet-05-progress": "Прогресс всех режимов — в коллекции баночек",
+  "tablet-06-jars": "Баночки заполняются по мере прохождения",
+  "tablet-07-trophies": "Медали за задачи из месячного календаря",
+  "tablet-08-medal": "Награда за серию дней и следующая медаль",
 };
 const manifest = [];
 try {
@@ -56,7 +66,7 @@ try {
       body { display: grid; place-items: center; background: ${background}; }
       figure { margin: 0; display: flex; flex-direction: column; align-items: center;
         gap: ${tablet ? 16 : 20}px; width: ${tablet ? 880 : 504}px; }
-      img { display: block; width: ${tablet ? 768 : 468}px; height: auto;
+      img { display: block; max-width: ${tablet ? 768 : 468}px; max-height: ${tablet ? 432 : 820}px; width: auto; height: auto;
         border-radius: 14px; box-shadow: 0 16px 45px #183c3829; }
       figcaption { font: 400 ${tablet ? 24 : 26}px/1.28 Arial, sans-serif;
         color: ${capture.dark ? "#e1eee7" : "#304e44"}; text-align: center; max-width: ${tablet ? 840 : 468}px; }
@@ -111,7 +121,7 @@ try {
     const file = `${out}/${capture.name}.png`;
     await page.screenshot({ path: file });
     const bytes = statSync(file).size;
-    if (bytes > 5_000_000)
+    if (bytes > (tablet ? 5_000_000 : 3_000_000))
       throw Error(`Image exceeds store upload limit: ${file}`);
     manifest.push({
       file: `${capture.name}.png`,

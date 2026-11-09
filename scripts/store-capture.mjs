@@ -7,8 +7,11 @@ import {
   occupied,
 } from "../src/core.ts";
 import { chromium } from "@playwright/test";
+import { createServer as createViteServer } from "vite";
 import { createServer } from "node:http";
-import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { readFileSync, mkdirSync, writeFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { resolve, extname, sep } from "node:path";
 // Reach this board with the production rules; keep the complete legal move history.
 function demonstration() {
@@ -35,9 +38,42 @@ function demonstration() {
   throw Error("Could not reach a dense demonstration board");
 }
 const demo = demonstration();
+const day = "2026-11-09";
+// Resolve the game's extensionless TypeScript imports only to prepare the save.
+// Every screenshot below is still served from the exact production dist assets.
+const fixtureServer = await createViteServer({
+  server: { middlewareMode: true },
+});
+const { daily, puzzleSession } =
+  await fixtureServer.ssrLoadModule("/src/puzzles.ts");
+const today = daily(day);
+let dailyTail = puzzleSession(today);
+for (const p of today.solution.slice(0, -2))
+  dailyTail = commit(
+    dailyTail,
+    removePair(dailyTail.current.board, p.a, p.b),
+    "pair",
+    0,
+  );
+await fixtureServer.close();
+const sourceHead = execFileSync("git", ["rev-parse", "HEAD"], {
+  encoding: "utf8",
+}).trim();
 const out = "test-results/store";
 mkdirSync(out + "/raw", { recursive: true });
 const root = resolve("dist");
+const productionAssets = readdirSync(root, {
+  recursive: true,
+  withFileTypes: true,
+})
+  .filter((entry) => entry.isFile())
+  .map((entry) => {
+    const path = resolve(entry.parentPath, entry.name);
+    return {
+      path: path.slice(root.length + 1),
+      sha256: createHash("sha256").update(readFileSync(path)).digest("hex"),
+    };
+  });
 const server = createServer((req, res) => {
   const path = resolve(
     root,
@@ -77,11 +113,12 @@ async function capture(name, viewport, action, dark = false) {
     viewport,
     deviceScaleFactor: 2,
     reducedMotion: "reduce",
+    timezoneId: "Asia/Yekaterinburg",
   });
   const page = await context.newPage();
   page.on("pageerror", (e) => errors.push(e.message));
   await page.addInitScript(
-    ({ dark, demo }) => {
+    ({ dark, demo, dailyTail, todayId }) => {
       localStorage.setItem(
         "seeds-bits.settings.v1",
         JSON.stringify({
@@ -89,6 +126,8 @@ async function capture(name, viewport, action, dark = false) {
           sound: false,
           vibration: false,
           theme: dark ? "dark" : "light",
+          reminders: true,
+          reminderTime: "12:30",
         }),
       );
       localStorage.setItem(
@@ -98,6 +137,7 @@ async function capture(name, viewport, action, dark = false) {
           active: "classic",
           sessions: {
             classic: demo,
+            [todayId]: dailyTail,
           },
           done: [
             "book-v1-1",
@@ -109,7 +149,7 @@ async function capture(name, viewport, action, dark = false) {
             ),
             ...Array.from(
               { length: 6 },
-              (_, i) => `daily-v1-2026-11-0${i + 2}`,
+              (_, i) => `daily-v1-2026-11-0${i + 3}`,
             ),
           ],
           hints: {},
@@ -117,15 +157,19 @@ async function capture(name, viewport, action, dark = false) {
           meta: {
             version: 2,
             wallet: 4,
-            daily: { lastDay: "2026-11-07", count: 6, best: 6, reward: 0 },
+            daily: { lastDay: "2026-11-08", count: 6, best: 6, reward: 0 },
             since: "2026-10-01",
             completed: 18,
             unassisted: 8,
-            attempts: { classic: { id: "store-demo", completed: false } },
+            attempts: {
+              classic: { id: "store-demo", completed: false },
+              [todayId]: { id: "store-daily", completed: false },
+            },
           },
           jars: {
-            version: 1,
+            version: 2,
             seeds: 340,
+            meter: 320,
             wins: 3,
             attempt: "store-demo",
             highWater: demo.current.moves,
@@ -133,9 +177,9 @@ async function capture(name, viewport, action, dark = false) {
         }),
       );
     },
-    { dark, demo },
+    { dark, demo, dailyTail, todayId: today.id },
   );
-  await page.clock.setFixedTime(new Date("2026-11-08T12:00:00"));
+  await page.clock.setFixedTime(new Date("2026-11-09T07:00:00Z"));
   await page.goto("http://127.0.0.1:5197");
   await page.locator("#resume").waitFor({ state: "visible" });
   if (
@@ -179,6 +223,28 @@ try {
       dialog.scrollTop = 0;
     });
   };
+  const medals = async (p) => {
+    await p.locator("#progress-open").click();
+    await p.locator("#progress-trophies").click();
+    await p.locator("#trophies-mode").click();
+    await p.locator(".next-medal").first().waitFor();
+  };
+  const reward = async (p) => {
+    await p.locator("#daily-mode").click();
+    for (const move of today.solution.slice(-2)) {
+      await p.locator(`[data-index="${move.a}"]`).click();
+      await p.locator(`[data-index="${move.b}"]`).click();
+      await p.waitForFunction(() => !document.querySelector("#skip").disabled);
+    }
+    await p.locator("#win").waitFor();
+    await p.waitForFunction(() =>
+      document
+        .querySelector("#result-gains")
+        .textContent.includes("+3 подсказки"),
+    );
+    await p.locator("#play-again").scrollIntoViewIfNeeded();
+    await p.waitForTimeout(1400);
+  };
   await capture("phone-01-pairs", phone, game);
   await capture("phone-02-play", phone, async (p) => {
     await game(p);
@@ -200,8 +266,10 @@ try {
   });
   await capture("phone-03-books", phone, book);
   await capture("phone-04-calendar", phone, calendar);
-  await capture("phone-05-jars", phone, jars);
-  await capture("phone-06-dark", phone, game, true);
+  await capture("phone-05-jars", { width: 390, height: 700 }, jars);
+  await capture("phone-06-medal", { width: 390, height: 780 }, reward);
+  await capture("phone-07-trophies", phone, medals);
+  await capture("phone-08-dark", phone, game, true);
   await capture("tablet-01-pairs", tablet, game);
   await capture("tablet-02-books", tablet, async (p) => {
     await p.locator("#book-mode").click();
@@ -216,12 +284,18 @@ try {
     await p.locator("#progress-open").click();
     await p.locator(".progress-hero").waitFor();
   });
+  await capture("tablet-06-jars", tablet, jars);
+  await capture("tablet-07-trophies", tablet, medals);
+  await capture("tablet-08-medal", tablet, reward);
   writeFileSync(
     out + "/capture.json",
     JSON.stringify(
       {
         method:
           "production web UI, achievable demonstration saves; not a native SDK/device test",
+        sourceHead,
+        productionAssets,
+        date: day,
         captures,
         errors,
       },

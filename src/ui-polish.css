@@ -1549,6 +1549,9 @@ progress::-moz-progress-bar {
   gap: 12px;
   margin: 12px 0;
 }
+.reminder-time {
+  flex-wrap: wrap;
+}
 #reminder-time {
   font: inherit;
   color: var(--ink);
@@ -1556,7 +1559,10 @@ progress::-moz-progress-bar {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 8px;
-  min-width: 100px;
+  width: max(136px, 8.5em);
+  height: auto;
+  min-height: 44px;
+  flex-shrink: 0;
 }
 
 #daily-series[hidden] {
