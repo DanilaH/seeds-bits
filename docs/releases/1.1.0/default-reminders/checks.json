@@ -1,0 +1,43 @@
+{
+  "runtimeSource": "9e77388de83af3965385867250cc014d4f2b38f5",
+  "checkRun": 42594977634,
+  "releaseRun": 42594980301,
+  "checks": [
+    {
+      "name": "web",
+      "conclusion": "success"
+    },
+    {
+      "name": "android",
+      "conclusion": "success"
+    }
+  ],
+  "release": [
+    {
+      "name": "android-release",
+      "conclusion": "success"
+    },
+    {
+      "name": "upgrade-baseline",
+      "conclusion": "success"
+    },
+    {
+      "name": "store-media",
+      "conclusion": "success"
+    },
+    {
+      "name": "android-smoke",
+      "conclusion": "success"
+    }
+  ],
+  "local": {
+    "unit": 52,
+    "regressionModel": 2,
+    "browser": 123,
+    "regressionBrowser": 15,
+    "productionBuild": true,
+    "yandexBuild": true
+  },
+  "nativeHarness": 21,
+  "deviceLimit": "Offline Android 35 emulator acceptance does not verify live ads, a real RuStore account or OEM notification delivery."
+}

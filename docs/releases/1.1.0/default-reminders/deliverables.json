@@ -1,0 +1,13 @@
+{
+  "runtimeSource": "9e77388de83af3965385867250cc014d4f2b38f5",
+  "releaseRun": 42594980301,
+  "checkRun": 42594977634,
+  "files": [
+    {
+      "file": "seeds-1.1.0-rustore.apk",
+      "versionCode": "1100016",
+      "bytes": 5492856,
+      "sha256": "9acd67c56775a755ca38ffe888bfe13fc4925adb4882162b3b51d8bc8a73d732"
+    }
+  ]
+}
