@@ -1,0 +1,23 @@
+{
+  "runtimeSource": "05d642c7c907987c6a2a6966649a8388d39aeb91",
+  "checkRun": 42613821706,
+  "releaseRun": 42613825876,
+  "files": [
+    {
+      "file": "seeds-1.1.0-rustore.apk",
+      "versionCode": "1100020",
+      "bytes": 5501048,
+      "sha256": "74ab8033e33ce993183980c18827aaeed11c3b44faac7e2f67f940250e456d97"
+    },
+    {
+      "file": "gifs/seeds-single-01-large-medal.gif",
+      "bytes": 3738526,
+      "sha256": "9c74c8ef1ee994c5a1798bd51eefdb403dff88df6273d0e1559191801b48fff8"
+    },
+    {
+      "file": "videos/seeds-single-01-large-medal.mp4",
+      "bytes": 244443,
+      "sha256": "787e7b3d1e96855ad60c48f3257f56440439271e0005e66ac38ebf2135e24ce3"
+    }
+  ]
+}

@@ -46,3 +46,7 @@ Native haptics adapted from Road Lines, pointer feedback with stable hit areas, 
 ## 9 November 2026 — stable layout and metal medals, build 1100019
 
 Separated hint/add counters, fixed jar-caption geometry through 100%, notebook landscape columns and classic labels, enlarged-text home/progress, result reward rows and primary-action visibility. Three independently filling monthly medals share presentation across results/calendar/collection; a new saved tier gets a bounded local pop/confetti, without replay on restore. Runtime fcad2f0 passed 52+2 model, 144+15 browser and 21+16 native harness checks; 184 extra layout states passed. APK signed with the existing production certificate, 5 501 048 bytes. Native acceptance selectors updated to recognize exact old/new hint labels and verify the already-built payload hash, without another app build. Final native evidence and deliverables: [gold report](gold/REPORT.md).
+
+## 9 November 2026 — one large medal, build 1100020
+
+One filling medal replaces the triplet in results, calendar and each collection month. Boundaries retain the earned tier, next completion shows the following target, captions preserve previous tiers. The daily result drops its redundant green success circle to keep the primary action visible. Runtime 05d642c: 52+2 model, 145+15 browser, 21+16 native harness; all four release-20 jobs including fresh/upgrade Android acceptance passed. Signed APK remains 5 501 048 bytes. One actual-UI GIF/MP4 delivered. See [single medal report](single-medal/REPORT.md).

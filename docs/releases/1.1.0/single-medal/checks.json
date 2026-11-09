@@ -1,0 +1,58 @@
+{
+  "runtimeSource": "05d642c7c907987c6a2a6966649a8388d39aeb91",
+  "checkRun": 42613821706,
+  "releaseRun": 42613825876,
+  "checks": [
+    {
+      "id": 129148639801,
+      "name": "web",
+      "conclusion": "success"
+    },
+    {
+      "id": 129148639965,
+      "name": "android",
+      "conclusion": "success"
+    }
+  ],
+  "release": [
+    {
+      "id": 129148653129,
+      "name": "store-media",
+      "conclusion": "success"
+    },
+    {
+      "id": 129148653144,
+      "name": "upgrade-baseline",
+      "conclusion": "success"
+    },
+    {
+      "id": 129148653241,
+      "name": "android-release",
+      "conclusion": "success"
+    },
+    {
+      "id": 129150772050,
+      "name": "android-smoke",
+      "conclusion": "success"
+    }
+  ],
+  "verified": {
+    "unit": 52,
+    "regressionModel": 2,
+    "browser": 145,
+    "regressionBrowser": 15,
+    "nativeRegressionHarness": 21,
+    "nativeFeedbackHarness": 16,
+    "targetedSingleMedal": 11,
+    "layoutStates": 156,
+    "largeTextStates": 12,
+    "otherUiStates": 16,
+    "productionBuild": true,
+    "yandexBuild": true,
+    "androidDebug": true,
+    "androidReleaseR8": true,
+    "offlineAndroid35FreshAndUpgrade": true,
+    "exactSignedApkInspection": true
+  },
+  "limits": "Native tests use offline Android 35 with a temporary CI signature. Production certificate verified separately on delivered bytes. No physical motor or live SDK inventory/delivery validation."
+}
