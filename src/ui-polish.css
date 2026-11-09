@@ -1922,3 +1922,11 @@ header .jar-caption strong {
     gap: 2px;
   }
 }
+@media (orientation: portrait) {
+  #win {
+    padding-top: clamp(16px, 4dvh, 32px);
+  }
+}
+#result-reminder {
+  margin-top: 8px;
+}

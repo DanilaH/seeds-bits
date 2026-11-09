@@ -485,6 +485,14 @@ test("two reward lines keep their space while a failed save is retried", async (
   await page.evaluate(() => {
     const key = "seeds-bits.progress.v2",
       p = JSON.parse(localStorage.getItem(key)!);
+    const prefs = "seeds-bits.settings.v1";
+    localStorage.setItem(
+      prefs,
+      JSON.stringify({
+        ...JSON.parse(localStorage.getItem(prefs)!),
+        reminders: false,
+      }),
+    );
     p.meta.daily = { lastDay: "2026-11-08", count: 6, best: 6, reward: 0 };
     p.done = Array.from({ length: 6 }, (_, i) => `daily-v1-2026-11-0${i + 3}`);
     localStorage.setItem(key, JSON.stringify(p));
@@ -514,5 +522,6 @@ test("two reward lines keep their space while a failed save is retried", async (
   await page.evaluate(() => ((window as any).failGold = false));
   await page.locator("#retry-save").click();
   await expect(page.locator("#result-gains")).toContainText("+3 подсказки");
+  await expect(page.locator("#play-again")).toBeInViewport({ ratio: 1 });
   expect(Math.abs((await position()) - before)).toBeLessThan(1);
 });
