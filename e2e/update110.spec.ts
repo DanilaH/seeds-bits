@@ -9,6 +9,10 @@ async function seed(
     entry?: boolean;
     large?: boolean;
     denied?: boolean;
+    granted?: boolean;
+    reminders?: boolean;
+    archive?: boolean;
+    freshSettings?: boolean;
   } = {},
 ) {
   await page.clock.setFixedTime(new Date("2026-11-08T12:00:00"));
@@ -17,7 +21,7 @@ async function seed(
       const w = window as any;
       w.engagementCalls = [];
       w.adShows = [];
-      w.permission = false;
+      w.permission = options.granted || sessionStorage.permission110 === "true";
       if (!sessionStorage.seed110) {
         sessionStorage.seed110 = "1";
         const snap = (board: number[]) => ({
@@ -25,11 +29,19 @@ async function seed(
           current: { board, moves: 0, additions: 0, scroll: 0 },
           history: [],
         });
-        const active = options.daily ? "daily-v1-2026-11-08" : "classic";
-        localStorage.setItem(
-          "seeds-bits.settings.v1",
-          JSON.stringify({ tutorialDone: true }),
-        );
+        const active = options.archive
+          ? "daily-v1-2026-11-07"
+          : options.daily
+            ? "daily-v1-2026-11-08"
+            : "classic";
+        if (!options.freshSettings)
+          localStorage.setItem(
+            "seeds-bits.settings.v1",
+            JSON.stringify({
+              tutorialDone: true,
+              reminders: options.reminders,
+            }),
+          );
         localStorage.setItem(
           key,
           JSON.stringify({
@@ -44,6 +56,9 @@ async function seed(
                     : [5, 5, 5, 5, 5, 5],
               ),
               "daily-v1-2026-11-08": snap([5, 5]),
+              ...(options.archive
+                ? { "daily-v1-2026-11-07": snap([5, 5]) }
+                : {}),
             },
             hints: {},
             done: [],
@@ -97,6 +112,7 @@ async function seed(
         requestNotifications: async () => {
           w.engagementCalls.push({ name: "permission_request" });
           w.permission = !options.denied;
+          sessionStorage.permission110 = String(w.permission);
           return { available: true, granted: w.permission };
         },
         openNotificationSettings: async () => {
@@ -151,6 +167,8 @@ test("daily completion, streak and wallet stay atomic across a failed save and r
   await expect(page.locator("#result-gains")).toHaveText(
     "Награда ожидает сохранения",
   );
+  await page.waitForTimeout(850);
+  expect(await permissionRequests(page)).toBe(0);
   const before = await stored(page);
   expect(before.done).not.toContain("daily-v1-2026-11-08");
   expect(before.meta.daily.count).toBe(6);
@@ -166,6 +184,7 @@ test("daily completion, streak and wallet stay atomic across a failed save and r
   expect(after.done).toContain("daily-v1-2026-11-08");
   expect(after.meta.daily.count).toBe(7);
   expect(after.jars.seeds).toBe(4);
+  await expect.poll(() => permissionRequests(page)).toBe(1);
   await page.reload();
   await page.locator("#resume").click();
   expect((await stored(page)).meta.wallet).toBe(7);
@@ -239,20 +258,41 @@ for (const [run, reward] of [
     expect((await stored(page)).meta.wallet).toBe(4 + reward);
     expect((await stored(page)).jars.seeds).toBe(4);
   });
-test("notification permission is voluntary and persists only after explicit opt-in", async ({
+async function permissionRequests(page: Page) {
+  return page.evaluate(
+    () =>
+      (window as any).engagementCalls.filter(
+        (o: any) => o.name === "permission_request",
+      ).length,
+  );
+}
+test("a fresh install enables reminders without interrupting onboarding for permission", async ({
+  page,
+}) => {
+  await seed(page, { freshSettings: true, granted: true });
+  await expect(page.locator("#lesson")).toBeVisible();
+  expect(await permissionRequests(page)).toBe(0);
+  await page.locator("#skip").click();
+  await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#reminders")).toBeChecked();
+  await expect(page.locator("#reminder-time")).toHaveValue("12:30");
+});
+test("reminders default on for old settings and request Android permission after today's saved win", async ({
   page,
 }) => {
   await seed(page, { daily: true });
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#reminders")).toBeChecked();
+  await expect(page.locator("#reminder-time")).toHaveValue("12:30");
+  await expect(page.locator("#reminder-permission")).toContainText(
+    "Нужно разрешение Android",
+  );
+  expect(await permissionRequests(page)).toBe(0);
+  await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await remove(page);
-  expect(
-    await page.evaluate(() =>
-      (window as any).engagementCalls.some(
-        (o: any) => o.name === "permission_request",
-      ),
-    ),
-  ).toBe(false);
-  await page.locator("#result-reminder").click();
+  await expect.poll(() => permissionRequests(page)).toBe(1);
   await expect
     .poll(() =>
       page.evaluate(
@@ -270,6 +310,108 @@ test("notification permission is voluntary and persists only after explicit opt-
     ),
   ).toBe(1);
   await expect(page.locator("#result-reminder")).toBeHidden();
+  expect((await stored(page)).meta.flags).toContain(
+    "reminder_permission_requested",
+  );
+  expect(await page.evaluate(() => (window as any).adShows)).toEqual([]);
+  await page.reload();
+  await page.locator("#resume").click();
+  await page.waitForTimeout(850);
+  expect(await permissionRequests(page)).toBe(0);
+});
+
+test("already granted Android permission needs no dialog and defaults to enabled", async ({
+  page,
+}) => {
+  await seed(page, { daily: true, granted: true });
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#reminders")).toBeChecked();
+  await expect(page.locator("#notification-permission-request")).toBeHidden();
+  await expect(page.locator("#reminder-permission")).toHaveText("");
+  await page.locator("#settings-back").click();
+  await page.locator("#resume").click();
+  await remove(page);
+  await page.waitForTimeout(850);
+  expect(await permissionRequests(page)).toBe(0);
+  expect(
+    await page.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem("seeds-bits.settings.v1")!).reminders,
+    ),
+  ).toBe(true);
+});
+
+test("an explicit saved opt-out stays off across load and a daily win", async ({
+  page,
+}) => {
+  await seed(page, { daily: true, reminders: false, granted: true });
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#reminders")).not.toBeChecked();
+  await page.locator("#settings-back").click();
+  await page.locator("#resume").click();
+  await remove(page);
+  await page.waitForTimeout(850);
+  expect(await permissionRequests(page)).toBe(0);
+  expect(
+    await page.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem("seeds-bits.settings.v1")!).reminders,
+    ),
+  ).toBe(false);
+  await page.reload();
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#reminders")).not.toBeChecked();
+});
+
+test("turning the default reminder off prevents an automatic permission request", async ({
+  page,
+}) => {
+  await seed(page, { daily: true });
+  await page.locator("#settings-open").click();
+  await page.locator("#reminders").uncheck();
+  await page.locator("#settings-back").click();
+  await page.locator("#resume").click();
+  await remove(page);
+  await page.waitForTimeout(850);
+  expect(await permissionRequests(page)).toBe(0);
+  await page.reload();
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#reminders")).not.toBeChecked();
+});
+
+test("the Android refusal disables reminders without asking again after reload", async ({
+  page,
+}) => {
+  await seed(page, { daily: true, denied: true });
+  await page.locator("#resume").click();
+  await remove(page);
+  await expect.poll(() => permissionRequests(page)).toBe(1);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          JSON.parse(localStorage.getItem("seeds-bits.settings.v1")!).reminders,
+      ),
+    )
+    .toBe(false);
+  await page.reload();
+  await page.locator("#resume").click();
+  await page.waitForTimeout(850);
+  expect(await permissionRequests(page)).toBe(0);
+  await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#reminders")).not.toBeChecked();
+  await expect(page.locator("#notification-system-settings")).toBeVisible();
+});
+
+test("an archive win does not trigger the daily permission request", async ({
+  page,
+}) => {
+  await seed(page, { archive: true });
+  await page.locator("#resume").click();
+  await remove(page);
+  await page.waitForTimeout(850);
+  expect(await permissionRequests(page)).toBe(0);
 });
 test("cold reminder opens today's task and preserves another mode without an ad", async ({
   page,
@@ -397,7 +539,7 @@ test("denied notifications leave reminders off and provide a system settings rou
 }) => {
   await seed(page, { denied: true });
   await page.locator("#settings-open").click();
-  await page.locator("#reminders").check();
+  await page.locator("#notification-permission-request").click();
   await expect(page.locator("#reminders")).not.toBeChecked();
   await expect(page.locator("#reminder-permission")).toContainText(
     "отключены в Android",

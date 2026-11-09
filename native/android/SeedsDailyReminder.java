@@ -7,7 +7,7 @@ import org.json.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/** Local, inexact, opt-in reminder. No service, network request, or exact-alarm permission. */
+/** Local, inexact reminder, enabled by default; explicit opt-out and Android permission apply. No service, network request, or exact-alarm permission. */
 public class SeedsDailyReminder extends BroadcastReceiver {
   private static final String CHANNEL="daily-task",ACTION="seeds.DAILY_REMINDER";
   private static final int ID=701;
@@ -26,7 +26,7 @@ public class SeedsDailyReminder extends BroadcastReceiver {
   private static void channel(Context c){
     if(Build.VERSION.SDK_INT>=26){
       NotificationChannel channel=new NotificationChannel(CHANNEL,"Задача дня",NotificationManager.IMPORTANCE_LOW);
-      channel.setDescription("Добровольное напоминание о сегодняшней головоломке");channel.enableVibration(false);channel.setSound(null,null);
+      channel.setDescription("Напоминание о сегодняшней головоломке");channel.enableVibration(false);channel.setSound(null,null);
       manager(c).createNotificationChannel(channel);
     }
   }
@@ -47,7 +47,7 @@ public class SeedsDailyReminder extends BroadcastReceiver {
     try {
       channel(c);JSONObject s=settings(c);
       AlarmManager alarms=(AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
-      if(!s.optBoolean("reminders",false) || !allowed(c)){alarms.cancel(alarmIntent(c));manager(c).cancel(ID);return;}
+      if(!s.optBoolean("reminders",true) || !allowed(c)){alarms.cancel(alarmIntent(c));manager(c).cancel(ID);return;}
       long now=System.currentTimeMillis();String today=day(now);
       if(done(progress(c),today))manager(c).cancel(ID);
       String time=s.optString("reminderTime","12:30");if(!time.matches("([01]\\d|2[0-3]):[0-5]\\d"))time="12:30";
@@ -66,7 +66,7 @@ public class SeedsDailyReminder extends BroadcastReceiver {
     try {
       JSONObject s=settings(c),p=progress(c);long now=System.currentTimeMillis();String today=day(now);
       SharedPreferences preferences=prefs(c);
-      if(!s.optBoolean("reminders",false)||!allowed(c)||SeedsEngagementPlugin.foreground||SeedsEngagementPlugin.externalWindow||SeedsMonetizationPlugin.fullscreenActive||done(p,today)||today.compareTo(preferences.getString("last_day",""))<=0)return;
+      if(!s.optBoolean("reminders",true)||!allowed(c)||SeedsEngagementPlugin.foreground||SeedsEngagementPlugin.externalWindow||SeedsMonetizationPlugin.fullscreenActive||done(p,today)||today.compareTo(preferences.getString("last_day",""))<=0)return;
       String configured=s.optString("reminderTime","12:30");if(!configured.matches("([01]\\d|2[0-3]):[0-5]\\d"))configured="12:30";
       Calendar clock=Calendar.getInstance();int hour=clock.get(Calendar.HOUR_OF_DAY);
       Calendar due=(Calendar)clock.clone();String[] at=configured.split(":");due.set(Calendar.HOUR_OF_DAY,Integer.parseInt(at[0]));due.set(Calendar.MINUTE,Integer.parseInt(at[1]));due.set(Calendar.SECOND,0);due.set(Calendar.MILLISECOND,0);
