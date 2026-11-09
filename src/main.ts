@@ -29,7 +29,7 @@ import {
 } from "./vendor/mini-games-kit/value-transfer";
 import { BoardView } from "./board-view";
 import { requestAdvice } from "./advice-client";
-import { emblem } from "./trophies";
+import { trophyMarks, celebrateTrophy } from "./trophies";
 import "./style.css";
 import "./ui-polish.css";
 import {
@@ -128,6 +128,7 @@ let visualSeeds: number | undefined;
 let completedJar:
   { index: number; capacity: number; until: number } | undefined;
 let clearContact = () => {};
+let clearTrophyCelebration = () => {};
 let fullJarTimer: ReturnType<typeof setTimeout> | undefined;
 let boardRevealTimer: ReturnType<typeof setTimeout> | undefined;
 let boardRevealCancel: (() => void) | undefined;
@@ -184,7 +185,7 @@ const icons = {
 const icon = (name: keyof typeof icons) =>
   `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span id="jar-percent"></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>Напоминать о задаче дня</button><button id="try-notebook" class="secondary" hidden>Короткая задача</button><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label">Подсказка</span></button><button id="add" class="action">${icon("add")}<span id="add-label">Добавить</span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">Напоминать о задаче дня<input id="reminders" type="checkbox"></label><label class="reminder-time">Напоминать около<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>Разрешить уведомления</button><button id="notification-system-settings" class="text-button" hidden>Настройки уведомлений Android</button><p class="fine">По местному времени, если задача ещё не решена.</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">✓</span></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>Напоминать о задаче дня</button><button id="try-notebook" class="secondary" hidden>Короткая задача</button><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">Подсказка</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">Добавить</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">×</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">Напоминать о задаче дня<input id="reminders" type="checkbox"></label><label class="reminder-time">Напоминать около<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>Разрешить уведомления</button><button id="notification-system-settings" class="text-button" hidden>Настройки уведомлений Android</button><p class="fine">По местному времени, если задача ещё не решена.</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 // Home has its own composition; the same controls keep their navigation handlers.
 const homeLayout = document.createElement("div");
 homeLayout.className = "home-layout";
@@ -493,6 +494,7 @@ function revealAddedCells(start: number, end: number) {
 }
 function settlePresentation() {
   clearContact();
+  clearTrophyCelebration();
   clearBoardReveal();
   clearTimeout(fullJarTimer);
   completedJar = undefined;
@@ -591,15 +593,30 @@ function maybeCelebrateResult() {
       ],
       200,
     );
-  if (earnedAward)
-    motion(
-      $("award"),
-      [
-        { opacity: 0, transform: "scale(.94) rotate(-2deg)" },
-        { opacity: 1, transform: "scale(1) rotate(-2deg)" },
-      ],
-      220,
-    );
+  if (progress.active.startsWith("daily") && earnedSeeds) {
+    const month = progress.active.slice(9, 16);
+    const t = trophy(month, progress.done);
+    for (const fill of $("award").querySelectorAll<SVGElement>(
+      ".medal-liquid",
+    )) {
+      const target = Number(fill.dataset.target);
+      const after = Math.min(t.count, target);
+      motion(
+        fill,
+        [
+          {
+            transform: `scaleY(${after ? Math.min(Math.max(0, t.count - 1), target) / after : 1})`,
+          },
+          { transform: "scaleY(1)" },
+        ],
+        420,
+      );
+    }
+    if (earnedAward) {
+      clearTrophyCelebration();
+      clearTrophyCelebration = celebrateTrophy($("award"), t.tier, reduced());
+    }
+  }
 }
 function drawPath(path: Connection | null) {
   $("paths").innerHTML = "";
@@ -834,8 +851,8 @@ function complete(rects: DOMRect[]) {
 }
 function renderWin() {
   const id = progress.active;
-  $("win-stats").textContent =
-    `Пар убрано: ${session.current.moves} · Добавлений: ${session.current.additions} · Подсказок: ${progress.hints[id] ?? 0}`;
+  $("win-stats").innerHTML =
+    `<span>Пар убрано: ${session.current.moves}</span><span>Добавлений: ${session.current.additions}</span><span>Подсказок: ${progress.hints[id] ?? 0}</span>`;
   const i = notebook.findIndex((p) => p.id === id);
   const next = nextTask(id, progress.done);
   $("play-again").textContent = next
@@ -865,7 +882,11 @@ function renderWin() {
     Boolean(
       metadata(progress).flags?.includes("reminder_permission_requested"),
     );
-  $("result-gains").textContent = saveFailed
+  $("result-gains").style.minHeight =
+    earnedSeeds || earnedHints
+      ? `${((earnedSeeds ? 1 : 0) + (earnedHints ? 1 : 0)) * 1.5}em`
+      : "";
+  $("result-gains").innerHTML = saveFailed
     ? "Награда ожидает сохранения"
     : [
         earnedSeeds ? `В баночку: +${earnedSeeds} семечек` : "",
@@ -874,7 +895,8 @@ function renderWin() {
           : "",
       ]
         .filter(Boolean)
-        .join(" · ");
+        .map((text) => `<span>${text}</span>`)
+        .join("");
   $("try-notebook").textContent = notebook
     .slice(0, 24)
     .some((p) => !progress.done.includes(p.id))
@@ -899,8 +921,11 @@ function renderWin() {
     const m = id.slice(9, 16),
       t = trophy(m, progress.done);
     award.hidden = false;
-    award.textContent = `${earnedAward ? earnedAward + " · " : ""}${t.count} из ${days(m).length} дней · ${["Первый трофей — за 7 задач", "Бронзовый трофей", "Серебряный трофей", "Золотой трофей"][t.tier]}`;
+    award.innerHTML = `<div class="trophy-heading"><strong>${monthName(m)}</strong><span>${t.count} из ${days(m).length} дней</span></div>${trophyMarks(m, t.count, days(m).length)}<p class="trophy-earned">${earnedAward && !saveFailed ? ["", "Бронза получена", "Серебро получено", "Золото получено"][t.tier] : ""}</p>`;
   }
+}
+function compactCount(n: number) {
+  return n > 999 ? "999+" : String(n);
 }
 function render() {
   $("recover-task").hidden = true;
@@ -976,9 +1001,12 @@ function render() {
     hintPending ||
     !count ||
     (progress.active === "classic" && !available.length);
-  $("hint-label").textContent = monetized
-    ? `Подсказка · ${hintsLeft(progress)}`
-    : "Подсказка";
+  const hintCount = monetized ? hintsLeft(progress) : 0;
+  $("hint-count").textContent = monetized ? compactCount(hintCount) : "";
+  $("hint").setAttribute(
+    "aria-label",
+    monetized ? `Подсказка, осталось ${hintCount}` : "Подсказка",
+  );
   updateBanner();
   $("add").setAttribute(
     "aria-disabled",
@@ -990,12 +1018,15 @@ function render() {
         (lesson < 0 && progress.active !== "classic"),
     ),
   );
-  $("add-label").textContent =
-    progress.active !== "classic" && lesson < 0
-      ? "Добавить"
-      : available.length || !count
-        ? "Добавить"
-        : `Добавить ${count}`;
+  const addCount =
+    (progress.active === "classic" || lesson >= 0) && !available.length && count
+      ? count
+      : 0;
+  $("add-count").textContent = addCount ? compactCount(addCount) : "";
+  $("add").setAttribute(
+    "aria-label",
+    addCount ? `Добавить ${addCount} цифр` : "Добавить",
+  );
   $("add").classList.toggle(
     "ready",
     !available.length &&
@@ -2139,7 +2170,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       )
       .join(
         "",
-      )}</div><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="fine">Прошедшие дни доступны в любое время.</p><details class="explanation"><summary>Как считается серия</summary><p>Решайте сегодняшнюю задачу в её день. Архив идёт в трофеи месяца. За третий день серии — 1 подсказка, за каждые семь дней подряд — 3. Награды поступают в общий запас автоматически. После пропуска сохраняются рекорд и награды. Задача, законченная после полуночи, остаётся в архиве, но уже не увеличивает серию за вчера.</p></details><details class="explanation"><summary>Трофеи месяца</summary><p>Бронза — 7 задач, серебро — 14, золото — весь месяц.</p></details>`;
+      )}</div><section class="calendar-trophies" aria-label="Трофеи месяца">${trophyMarks(calendarMonth, t.count, days(calendarMonth).length)}</section><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="fine">Прошедшие дни доступны в любое время.</p><details class="explanation"><summary>Как считается серия</summary><p>Решайте сегодняшнюю задачу в её день. Архив идёт в трофеи месяца. За третий день серии — 1 подсказка, за каждые семь дней подряд — 3. Награды поступают в общий запас автоматически. После пропуска сохраняются рекорд и награды. Задача, законченная после полуночи, остаётся в архиве, но уже не увеличивает серию за вчера.</p></details><details class="explanation"><summary>Трофеи месяца</summary><p>Бронза — 7 задач, серебро — 14, золото — весь месяц.</p></details>`;
   } else {
     html += `<h2>Коллекция</h2><div class="collection-tabs" role="group" aria-label="Раздел коллекции"><button id="jars-tab" aria-pressed="${collectionTab === "jars"}">Баночки</button><button id="trophies-mode" aria-pressed="${collectionTab === "months"}">Трофеи месяца</button></div>`;
     const j = jarState(jars(progress).meter);
@@ -2165,7 +2196,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       .filter((m) => m.startsWith(trophyYear))
       .reverse()) {
       const t = trophy(m, progress.done);
-      html += `<button class="trophy tier-${t.tier}" data-month="${m}"><span class="medal">${emblem(m)}</span><span><strong>${monthName(m)}</strong><small>${["Пока не получен", "Бронза", "Серебро", "Золото"][t.tier]} · ${t.count}/${days(m).length}</small></span></button>`;
+      html += `<button class="trophy tier-${t.tier}" data-month="${m}"><span class="trophy-heading"><strong>${monthName(m)}</strong><small>${t.count}/${days(m).length} дней</small></span>${trophyMarks(m, t.count, days(m).length)}</button>`;
     }
   }
   if (kind === "trophies") html += "</section>";
@@ -2446,14 +2477,14 @@ function renderJar() {
   meter.style.setProperty("--jar-color", j.color);
   meter.style.setProperty("--fill", `${j.percent}%`);
   $("jar-name").textContent = `Баночка ${j.index + 1}`;
-  $("jar-percent").textContent = celebrating
-    ? "100% · собрана ✓"
-    : `${j.percent}%`;
+  $("jar-percent").textContent = `${j.percent}%`;
+  meter.dataset.full = String(Boolean(celebrating));
+  $("jar-collected").title = celebrating ? "Баночка собрана" : "";
   meter.dataset.filled = String(j.filled);
   meter.dataset.capacity = String(j.capacity);
   meter.setAttribute(
     "aria-label",
-    `Баночка ${j.index + 1}, заполнено ${j.percent} процентов, ${j.filled} из ${j.capacity}. Открыть коллекцию`,
+    `Баночка ${j.index + 1}${celebrating ? ", собрана" : ""}, заполнено ${j.percent} процентов, ${j.filled} из ${j.capacity}. Открыть коллекцию`,
   );
 }
 $("jar-meter").onclick = () => {

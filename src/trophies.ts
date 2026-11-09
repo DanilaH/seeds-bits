@@ -13,6 +13,84 @@ const paths = [
   "M24 43V8M24 31L7 25l5-5-6-9 12 3 6-10 6 10 12-3-6 9 5 5-17 6M24 31l-9 6 2-10M24 31l9 6-2-10",
   "M24 4L11 19h7L7 31h12v10h10V31h12L30 19h7ZM17 42h14",
 ];
-export function emblem(month: string) {
-  return `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="${paths[Number(month.slice(5)) - 1]}"/></svg>`;
+
+let artworkId = 0;
+const metals = [
+  { name: "Бронза", color: "#b77946", light: "#f2d0a1" },
+  { name: "Серебро", color: "#8c9eb3", light: "#e6edf6" },
+  { name: "Золото", color: "#d0a037", light: "#ffeb9e" },
+];
+/** Three independent targets: filling an unfinished medal never replaces an earned one. */
+export function trophyMarks(month: string, count: number, total: number) {
+  return `<span class="trophy-marks">${metals
+    .map((metal, i) => {
+      const target = [7, 14, total][i],
+        filled = Math.min(count, target);
+      const id = `medal-${++artworkId}`;
+      return `<span class="trophy-mark${filled === target ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light}"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs><path class="medal-ribbon" d="M15 2h13l7 24-13 6ZM36 2h13l-7 30-13-6Z"/><circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${68 - (48 * filled) / target}" width="48" height="${(48 * filled) / target}" fill="url(#${id}-metal)"/></g><circle class="medal-ring" cx="32" cy="44" r="24"/><circle class="medal-inner" cx="32" cy="44" r="19"/><g class="medal-emblem" transform="translate(18 30) scale(.58)"><path d="${paths[Number(month.slice(5)) - 1]}"/></g>${filled === target ? '<path class="medal-check" d="m43 61 3 3 6-7"/>' : ""}</svg><span class="metal-name">${metal.name}</span><span class="metal-count">${filled} / ${target}</span></span>`;
+    })
+    .join("")}</span>`;
+}
+
+/** A bounded, local burst. It owns no rewards, timers or input and cancels on navigation. */
+export function celebrateTrophy(
+  host: HTMLElement,
+  tier: number,
+  reduced: boolean,
+) {
+  const mark = host.querySelector<HTMLElement>(
+    `[data-tier="${tier}"] .medal-art`,
+  );
+  if (!mark || reduced) return () => {};
+  const animations: Animation[] = [
+    mark.animate(
+      [
+        { transform: "scale(.86) rotate(-5deg)" },
+        { transform: "scale(1.12) rotate(3deg)", offset: 0.5 },
+        { transform: "scale(1) rotate(0)" },
+      ],
+      { duration: 440, easing: "ease-out" },
+    ),
+  ];
+  const layer = document.createElement("span");
+  layer.className = "trophy-confetti";
+  layer.setAttribute("aria-hidden", "true");
+  const box = mark.getBoundingClientRect(),
+    parent = host.getBoundingClientRect();
+  const x = box.x + box.width / 2 - parent.x,
+    y = box.y + box.height / 2 - parent.y;
+  for (let i = 0; i < 16; i++) {
+    const piece = document.createElement("i");
+    const angle = (i / 16) * Math.PI * 2;
+    const dx = Math.cos(angle) * (40 + (i % 3) * 15),
+      dy = Math.sin(angle) * 38 - 30;
+    piece.style.cssText = `left:${x}px;top:${y}px;background:${["#c58b4c", "#e8c46d", "#a2b3c6", "#d3b792"][i % 4]}`;
+    layer.append(piece);
+    animations.push(
+      piece.animate(
+        [
+          { opacity: 0, transform: "translate(0,0) scale(.5)" },
+          {
+            opacity: 1,
+            transform: `translate(${dx * 0.65}px,${dy}px) rotate(${i * 27}deg)`,
+            offset: 0.35,
+          },
+          {
+            opacity: 0,
+            transform: `translate(${dx}px,${dy + 45}px) rotate(${i * 50}deg)`,
+          },
+        ],
+        { duration: 650 + (i % 3) * 60, easing: "ease-out", fill: "both" },
+      ),
+    );
+  }
+  host.append(layer);
+  const clear = () => {
+    animations.forEach((a) => a.cancel());
+    layer.remove();
+  };
+  void Promise.all(animations.map((a) => a.finished.catch(() => {}))).then(() =>
+    layer.remove(),
+  );
+  return clear;
 }

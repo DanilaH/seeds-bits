@@ -175,7 +175,7 @@ for (const mode of ["book-v1-1", "daily-v1-2026-11-09"])
     await resetEvents(page);
     await removePair(page);
     await expect(page.locator("#result-gains")).toContainText("В баночку:");
-    await expect(page.locator("#jar-percent")).toHaveText("100% · собрана ✓");
+    await expect(page.locator("#jar-percent")).toHaveText("100%");
     await expect(page.locator("#jar-meter")).toHaveAttribute(
       "aria-label",
       /140 из 140/,
