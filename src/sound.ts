@@ -11,7 +11,17 @@ export function suspendSound() {
   void context?.suspend().catch(() => {});
 }
 export function playSound(
-  kind: "select" | "pair" | "land" | "milestone" | "full",
+  kind:
+    | "select"
+    | "button"
+    | "pair"
+    | "land"
+    | "milestone"
+    | "full"
+    | "undo"
+    | "hint"
+    | "add"
+    | "win",
   enabled: boolean,
 ) {
   if (blocked || !enabled || document.hidden) return;
@@ -36,11 +46,25 @@ export function playSound(
     void context.resume().catch(() => {});
     if (active.size >= 6) return;
     const now = context.currentTime,
-      base = { select: 420, pair: 260, land: 570, milestone: 680, full: 820 }[
-        kind
-      ];
+      base = {
+        select: 420,
+        button: 360,
+        pair: 260,
+        land: 570,
+        milestone: 680,
+        full: 820,
+        undo: 330,
+        hint: 520,
+        add: 390,
+        win: 440,
+      }[kind];
     const duration = {
       select: 0.035,
+      button: 0.028,
+      undo: 0.065,
+      hint: 0.09,
+      add: 0.08,
+      win: 0.24,
       pair: 0.1,
       land: 0.055,
       milestone: 0.15,
@@ -48,16 +72,21 @@ export function playSound(
     }[kind];
     tone = context.createOscillator();
     gain = context.createGain();
-    tone.type = kind === "land" ? "triangle" : "sine";
+    tone.type = kind === "land" || kind === "win" ? "triangle" : "sine";
     const pitch = base * (0.94 + Math.random() * 0.12);
     tone.frequency.setValueAtTime(pitch, now);
     tone.frequency.exponentialRampToValueAtTime(
       pitch * (kind === "full" ? 1.5 : 0.68),
       now + duration,
     );
+    if (kind === "win") {
+      tone.frequency.setValueAtTime(440, now);
+      tone.frequency.setValueAtTime(554.37, now + 0.075);
+      tone.frequency.setValueAtTime(659.25, now + 0.15);
+    }
     gain.gain.setValueAtTime(0.001, now);
     gain.gain.linearRampToValueAtTime(
-      kind === "select" ? 0.012 : 0.025,
+      kind === "select" || kind === "button" ? 0.012 : 0.025,
       now + 0.006,
     );
     gain.gain.exponentialRampToValueAtTime(0.001, now + duration);

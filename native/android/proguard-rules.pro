@@ -8,3 +8,5 @@
 # and removal of unreachable members remain allowed.
 -keepnames class com.yandex.mobile.ads.banner.BannerAdView
 -keepnames class io.appmetrica.analytics.AppMetrica
+
+-keep class **.SeedsFeedbackPlugin { *; }

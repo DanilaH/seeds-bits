@@ -21,6 +21,12 @@ import { jars, collectPair, jarState, jarNames, jarColors } from "./jars";
 import { volumeOf, volumeTasks, chapterNames } from "./notebooks";
 import { playSound, suspendSound, blockSound } from "./sound";
 import { SeedFlight } from "./seed-flight";
+import { installInterfaceMotion } from "./ui-motion";
+import type { HapticCue } from "./haptics";
+import {
+  createValueTransferPlan,
+  valueAfterVisualArrival,
+} from "./vendor/mini-games-kit/value-transfer";
 import { BoardView } from "./board-view";
 import { requestAdvice } from "./advice-client";
 import { emblem } from "./trophies";
@@ -84,7 +90,7 @@ let session: Session = newSession(),
 let settings = {
   theme: "light",
   sound: false,
-  vibration: false,
+  vibration: true,
   tutorialDone: false,
   reminders: true,
   reminderTime: "12:30",
@@ -119,7 +125,15 @@ let lastExternalAt = -Infinity,
   activeTick = performance.now(),
   activeSinceSave = 0;
 let visualSeeds: number | undefined;
-let completedJar: { index: number; until: number } | undefined;
+let completedJar:
+  { index: number; capacity: number; until: number } | undefined;
+let clearContact = () => {};
+let fullJarTimer: ReturnType<typeof setTimeout> | undefined;
+let boardRevealTimer: ReturnType<typeof setTimeout> | undefined;
+let boardRevealCancel: (() => void) | undefined;
+let pendingResult:
+  { session: Session; rects: DOMRect[]; saved: boolean } | undefined;
+const removedPairs = new WeakMap<number[], readonly [number, number]>();
 const flights = new SeedFlight();
 const lessons = [
   {
@@ -333,13 +347,15 @@ function save(state = progress, game = session) {
         for (const key of Object.keys(patch))
           if (settingsDirty[key] === patch[key]) delete settingsDirty[key];
         applySettings(merged);
+        if (pendingResult?.session === game) pendingResult.saved = true;
         lastStored = bundle;
         const recovered = saveFailed;
         saveFailed = false;
         showSaveState();
         if (lesson < 0 && !occupied(board())) {
           renderWin();
-          if (recovered) setTimeout(() => void tryResultEngagement(), 750);
+          maybeCelebrateResult();
+          if (recovered) setTimeout(() => void tryResultEngagement(), 1500);
         }
         if (recovered) {
           saveRecovered = true;
@@ -385,6 +401,7 @@ function applySettings(incoming: Record<string, unknown>) {
   applyTheme();
   $<HTMLInputElement>("sound").checked = settings.sound;
   $<HTMLInputElement>("vibration").checked = settings.vibration;
+  platform.setHapticState(settings.vibration, paused);
   updateReminderSettings();
 }
 window.addEventListener("storage", (event) => {
@@ -420,11 +437,169 @@ function setTheme(dark: boolean) {
   settings.theme = dark ? "dark" : "light";
   settingsDirty.theme = settings.theme;
   applyTheme();
+  feedback("button");
   save();
 }
-function feedback() {
-  if (settings.vibration) void platform.haptic().catch(() => {});
-  playSound("pair", settings.sound);
+function feedback(kind: HapticCue | "add" = "pair", tactile = true) {
+  if (paused || document.hidden) return;
+  if (settings.vibration && tactile)
+    void platform.haptic(kind === "add" ? "button" : kind).catch(() => {});
+  if (kind !== "reject") playSound(kind, settings.sound);
+}
+function visibleCellEffects(
+  indices: readonly number[],
+  frames: Keyframe[],
+  duration: number,
+) {
+  if (reduced() || document.hidden) return 0;
+  const view = viewport.getBoundingClientRect(),
+    box = $("board").getBoundingClientRect();
+  const row = box.width / WIDTH;
+  if (!row) return 0;
+  const first = Math.max(0, Math.floor((view.top - box.top) / row)) * WIDTH;
+  const last = Math.ceil((view.bottom - box.top) / row) * WIDTH;
+  const visible = indices.filter((i) => i >= first && i < last).slice(0, 54);
+  for (const index of visible) motion(cell(index), frames, duration);
+  return visible.length;
+}
+function clearBoardReveal() {
+  clearTimeout(boardRevealTimer);
+  boardRevealCancel?.();
+  boardRevealCancel = undefined;
+}
+function revealAddedCells(start: number, end: number) {
+  clearBoardReveal();
+  const current = session.current.board;
+  const reveal = (final = false) => {
+    if (session.current.board !== current || dialog.open || paused) {
+      clearBoardReveal();
+      return;
+    }
+    const count = visibleCellEffects(
+      Array.from({ length: end - start }, (_, i) => start + i),
+      [
+        { background: "var(--selected)", opacity: 0.45 },
+        { background: "transparent", opacity: 1 },
+      ],
+      220,
+    );
+    if (count || final) clearBoardReveal();
+  };
+  const arrived = () => reveal();
+  // Ignore a queued scrollend from the activating button's own scroll. The target must be visible.
+  viewport.addEventListener("scrollend", arrived);
+  boardRevealCancel = () => viewport.removeEventListener("scrollend", arrived);
+  boardRevealTimer = setTimeout(() => reveal(true), 1000);
+}
+function settlePresentation() {
+  clearContact();
+  clearBoardReveal();
+  clearTimeout(fullJarTimer);
+  completedJar = undefined;
+  pendingResult = undefined;
+  flights.clear();
+  visualSeeds = jars(progress).meter;
+  renderJar();
+}
+function animateSeeds(rects: DOMRect[], amount: number, result = false) {
+  if (!amount || !rects.length) return;
+  const plan = createValueTransferPlan(amount, {
+    minDurationMs: 420,
+    maxDurationMs: 720,
+    maxVisualTokens: 2,
+    maxAudioEvents: 2,
+  });
+  const tokens = Array.from(
+    { length: plan.visualTokenCount },
+    (_, i) => rects[i % rects.length],
+  );
+  flights.fly(tokens, $("jar-glass"), (index, silent) => {
+    const quantity =
+      valueAfterVisualArrival(plan, index) -
+      (index ? valueAfterVisualArrival(plan, index - 1) : 0);
+    const before = jarState(visualSeeds ?? 0);
+    visualSeeds = Math.min(jars(progress).meter, (visualSeeds ?? 0) + quantity);
+    const after = jarState(visualSeeds);
+    const full = after.index > before.index;
+    if (full && !silent) {
+      clearTimeout(fullJarTimer);
+      completedJar = {
+        index: before.index,
+        capacity: before.capacity,
+        until: performance.now() + 650,
+      };
+      fullJarTimer = setTimeout(() => {
+        completedJar = undefined;
+        renderJar();
+        if (!dialog.open && !paused)
+          motion(
+            $("jar-glass"),
+            [
+              { opacity: 0.5, transform: "scale(.92)" },
+              { opacity: 1, transform: "scale(1)" },
+            ],
+            160,
+          );
+      }, 660);
+    }
+    renderJar();
+    if (silent || dialog.open || paused) return;
+    feedback(full ? "full" : "land", !result);
+    motion(
+      $("jar-glass"),
+      [
+        { transform: "rotate(-3deg) scale(1.05)" },
+        { transform: "rotate(2deg)" },
+        { transform: "none" },
+      ],
+      full ? 420 : 180,
+    );
+  });
+}
+function maybeCelebrateResult() {
+  const pending = pendingResult;
+  if (
+    !pending ||
+    pending.session !== session ||
+    !pending.saved ||
+    busy ||
+    paused ||
+    dialog.open ||
+    occupied(board()) ||
+    saveFailed ||
+    storageConflict ||
+    futureSave
+  )
+    return;
+  pendingResult = undefined;
+  feedback("win");
+  motion(
+    document.querySelector(".win-symbol"),
+    [
+      { opacity: 0, transform: "scale(.8) rotate(-8deg)" },
+      { opacity: 1, transform: "scale(1) rotate(-8deg)" },
+    ],
+    220,
+  );
+  if (earnedSeeds) animateSeeds(pending.rects, earnedSeeds, true);
+  if (earnedSeeds || earnedHints)
+    motion(
+      $("result-gains"),
+      [
+        { opacity: 0.1, transform: "translateY(5px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      200,
+    );
+  if (earnedAward)
+    motion(
+      $("award"),
+      [
+        { opacity: 0, transform: "scale(.94) rotate(-2deg)" },
+        { opacity: 1, transform: "scale(1) rotate(-2deg)" },
+      ],
+      220,
+    );
 }
 function drawPath(path: Connection | null) {
   $("paths").innerHTML = "";
@@ -494,8 +669,9 @@ function syncPauseState() {
     engagementActive;
   $("app").inert = adActive || rewardRequest || engagementActive;
   blockSound(paused);
+  platform.setHapticState(settings.vibration, paused, !paused);
   if (paused) {
-    flights.clear();
+    settlePresentation();
     cancelHint();
     suspendSound();
   }
@@ -625,7 +801,7 @@ $("watch-hints").onclick = async () => {
 let earnedAward = "",
   earnedSeeds = 0,
   earnedHints = 0;
-function complete() {
+function complete(rects: DOMRect[]) {
   const alreadyCompleted =
     metadata(progress).attempts[progress.active]?.completed;
   const id = progress.active,
@@ -634,7 +810,7 @@ function complete() {
     ? trophy(month, progress.done).tier
     : 0;
   const gains = recordCompletion(progress, id);
-  if (gains.seeds) visualSeeds = jars(progress).meter;
+  pendingResult = { session, rects, saved: false };
   if (gains.hints)
     track("daily_reward", {
       days: metadata(progress).daily!.count,
@@ -910,6 +1086,7 @@ async function choose(i: number) {
   cancelHint();
   saveRecovered = false;
   if (busy || paused || dialog.open) return;
+  clearBoardReveal();
   const values = board();
   if (!values[i] || selected === i) {
     clearSelection();
@@ -920,10 +1097,14 @@ async function choose(i: number) {
   markGameStarted();
   if (selected < 0) {
     selected = i;
-    playSound("select", settings.sound);
+    feedback("select");
     if (highlight && i !== highlight.a && i !== highlight.b) highlight = null;
     render();
-    motion(cell(i), [{ transform: "scale(.92)" }, { transform: "scale(1)" }]);
+    motion(
+      cell(i)?.querySelector(".digit") ?? null,
+      [{ transform: "scale(.88)" }, { transform: "scale(1)" }],
+      120,
+    );
     return;
   }
   const a = selected,
@@ -932,8 +1113,12 @@ async function choose(i: number) {
     selected = i;
     highlight = null;
     render();
-    motion(cell(a), [{ background: "#dba5a5" }, { background: "transparent" }]);
-    motion(cell(i), [
+    feedback("reject");
+    motion(cell(a), [
+      { background: "var(--reject)" },
+      { background: "transparent" },
+    ]);
+    motion(cell(i)?.querySelector(".digit") ?? null, [
       { transform: "translateX(-3px)" },
       { transform: "translateX(3px)" },
       { transform: "translateX(0)" },
@@ -960,52 +1145,21 @@ async function choose(i: number) {
   busy = true;
   highlight = result.path;
   render();
-  feedback();
   for (const n of [a, i]) cell(n)?.classList.add("erasing");
   const oldLength = values.length,
     next = removePair(values, a, i);
+  const ending = lesson < 0 && !occupied(next);
+  if (!ending) feedback("pair");
   // Commit the accepted move before awaiting a decorative animation.
   if (lesson < 0) {
     session = commit(session, next, "pair", viewport.scrollTop);
+    removedPairs.set(session.current.board, [a, i]);
     hintIndex = 0;
     if (progress.active === "classic") {
       const gain = collectPair(progress, session.current.moves);
-      if (gain)
-        flights.fly(flightRects, $("jar-glass"), () => {
-          const before = jarState(visualSeeds ?? 0);
-          visualSeeds = Math.min(jars(progress).meter, (visualSeeds ?? 0) + 1);
-          const after = jarState(visualSeeds);
-          if (after.index > before.index) {
-            completedJar = {
-              index: before.index,
-              until: performance.now() + 650,
-            };
-            setTimeout(() => renderJar(), 660);
-          }
-          renderJar();
-          if (!dialog.open && !paused) {
-            playSound(
-              after.index > before.index
-                ? "full"
-                : Math.floor(after.percent / 25) >
-                    Math.floor(before.percent / 25)
-                  ? "milestone"
-                  : "land",
-              settings.sound,
-            );
-            motion(
-              $("jar-glass"),
-              [
-                { transform: "rotate(-3deg) scale(1.05)" },
-                { transform: "rotate(2deg)" },
-                { transform: "none" },
-              ],
-              after.index > before.index ? 420 : 180,
-            );
-          }
-        });
+      if (gain) animateSeeds(flightRects, gain, ending);
     }
-    if (!occupied(next)) complete();
+    if (!occupied(next)) complete(flightRects);
     save();
   }
   await new Promise((r) => setTimeout(r, reduced() ? 0 : 100));
@@ -1065,10 +1219,10 @@ async function choose(i: number) {
   if (lesson < 0 && !occupied(next))
     setTimeout(() => {
       void tryResultEngagement();
-    }, 750);
+    }, 1500);
   if (lesson < 0 && occupied(next) && !availablePairs(next).length)
     firstEvent("first_no_moves", { mode: gameMode() });
-  if (next.length < oldLength && !reduced()) {
+  if (occupied(next) && next.length < oldLength && !reduced()) {
     // Read every destination before starting animations; interleaving them forces
     // layout once per cell on long boards.
     const movements = [...oldRects]
@@ -1088,6 +1242,7 @@ async function choose(i: number) {
       170,
     );
   }
+  maybeCelebrateResult();
   if (lesson >= 0) message("Получилось!");
   else if (occupied(next) && result.path.kind === "reading")
     teach(
@@ -1137,15 +1292,8 @@ function add() {
       block: "center",
       behavior: reduced() ? "instant" : "smooth",
     });
-    for (let j = values.length; j < next.length; j++)
-      motion(
-        cell(j),
-        [
-          { background: "var(--selected)", opacity: 0.3 },
-          { background: "transparent", opacity: 1 },
-        ],
-        240,
-      );
+    feedback("add");
+    revealAddedCells(values.length, next.length);
     if (lesson === 5) message("Теперь нажмите «Отмена»");
   } catch {
     message(
@@ -1166,19 +1314,25 @@ function undoAction() {
     return;
   }
   if (lesson >= 0) return;
-  const before = [...session.current.board];
+  if (!session.history.length) return;
+  clearBoardReveal();
+  const restored = removedPairs.get(session.current.board);
   session = undo(session);
   clearSelection();
   render();
   viewport.scrollTop = session.current.scroll;
-  session.current.board.forEach((v, i) => {
-    if (v && v !== before[i])
-      motion(
-        cell(i),
-        [{ background: "var(--selected)" }, { background: "transparent" }],
-        220,
-      );
-  });
+  feedback("undo");
+  if (restored)
+    visibleCellEffects(
+      restored,
+      [{ background: "var(--selected)" }, { background: "transparent" }],
+      220,
+    );
+  motion(
+    $("undo").querySelector("svg"),
+    [{ transform: "rotate(-18deg)" }, { transform: "rotate(0)" }],
+    160,
+  );
   save();
   platform.gameplay(occupied(board()) > 0);
 }
@@ -1281,6 +1435,12 @@ async function hint() {
   save();
   selected = -1;
   render();
+  feedback("hint");
+  visibleCellEffects(
+    [highlight.a, highlight.b],
+    [{ background: "var(--selected)" }, { background: "var(--highlight)" }],
+    200,
+  );
   const top = Math.min(highlight.a, highlight.b);
   $("board")
     .querySelector(`[data-index="${top}"]`)
@@ -1384,7 +1544,7 @@ function openMenu(preserve: unknown = false) {
   if (busy || adActive || rewardRequest || engagementActive) return;
   if (!dialog.open) dialog.dataset.entry = enteredGame ? "pause" : "root";
   if (preserve !== true) navigationTrail.length = 0;
-  flights.clear();
+  settlePresentation();
   updateHome();
   cancelHint();
   if (!busy) render();
@@ -1402,6 +1562,7 @@ function openMenu(preserve: unknown = false) {
 }
 function reset() {
   if (busy || saveFailed || adActive || rewardRequest) return;
+  settlePresentation();
   earnedAward = "";
   startAttempt(progress, progress.active);
   saveRecovered = false;
@@ -1479,7 +1640,7 @@ $("privacy-open").onclick = () => {
   $("collection").hidden = false;
   dialog.dataset.screen = "privacy";
   $("collection").innerHTML =
-    `<div class="screen-heading"><button id="privacy-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>О данных</h2></div><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Напоминание о задаче дня включается добровольно и работает по местному времени на устройстве. Разрешение Android можно отключить в системных настройках.</p><p>Окно оценки обслуживает RuStore. Игра не получает текст отзыва и звёзды и не выдаёт за них награду.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p>`;
+    `<div class="screen-heading"><button id="privacy-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>О данных</h2></div><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Напоминание о задаче дня включено по умолчанию и работает по местному времени на устройстве. Его можно выключить в настройках игры. Разрешение Android можно отключить в системных настройках.</p><p>Окно оценки обслуживает RuStore. Игра не получает текст отзыва и звёзды и не выдаёт за них награду.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p>`;
   $("privacy-back").onclick = returnToPrevious;
   $("privacy-back").focus({ preventScroll: true });
 };
@@ -1541,6 +1702,9 @@ for (const key of ["sound", "vibration"] as const)
   $(key).onchange = () => {
     settings[key] = $<HTMLInputElement>(key).checked;
     settingsDirty[key] = settings[key];
+    platform.setHapticState(settings.vibration, paused);
+    if (settings[key] || key === "sound") feedback("button");
+    if (key === "sound" && !settings.sound) suspendSound();
     save();
   };
 $("retry-save").onclick = async () => {
@@ -1573,7 +1737,7 @@ viewport.addEventListener("scroll", () => {
   }, 200);
 });
 window.addEventListener("resize", () => {
-  flights.clear();
+  settlePresentation();
   drawPath(highlight);
 });
 document.addEventListener("visibilitychange", () => {
@@ -1630,7 +1794,7 @@ async function boot() {
       settings = {
         theme: s.theme === "dark" ? "dark" : "light",
         sound: s.sound === true,
-        vibration: s.vibration === true,
+        vibration: s.vibration !== false,
         tutorialDone: s.tutorialDone === true,
         reminders: s.reminders !== false,
         reminderTime:
@@ -1664,6 +1828,7 @@ async function boot() {
     ? volumeOf(progress.active)
     : 0;
   applyTheme();
+  platform.setHapticState(settings.vibration, paused);
   $<HTMLInputElement>("sound").checked = settings.sound;
   $<HTMLInputElement>("vibration").checked = settings.vibration;
   render();
@@ -1789,7 +1954,7 @@ async function switchGame(id: string) {
 
   if (lesson < 0 && !busy) session.current.scroll = viewport.scrollTop;
   progress.sessions[progress.active] = session;
-  flights.clear();
+  settlePresentation();
   // Sessions are replaced on moves; retain their immutable histories and caches.
   const candidate: Progress = {
     ...progress,
@@ -2144,11 +2309,6 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         .querySelector<HTMLElement>(`[data-volume="${focusVolume}"]`)
         ?.focus({ preventScroll: true });
   } else if (!restoring) dialog.scrollTop = 0;
-  if (!sameScreen)
-    motion(panel, [
-      { opacity: 0, transform: "translateY(6px)" },
-      { opacity: 1, transform: "translateY(0)" },
-    ]);
 }
 $("classic-mode").onclick = () => switchGame("classic");
 $("book-mode").onclick = () => openCollection("book");
@@ -2261,6 +2421,10 @@ setInterval(refreshDate, 1000);
 window.addEventListener("focus", refreshDate);
 document.addEventListener("visibilitychange", refreshDate);
 
+clearContact = installInterfaceMotion(
+  () => feedback("button"),
+  () => paused || document.hidden,
+);
 void boot();
 
 function renderJar() {
@@ -2275,6 +2439,7 @@ function renderJar() {
   if (celebrating) {
     j.index = completedJar!.index;
     j.percent = 100;
+    j.filled = j.capacity = completedJar!.capacity;
     j.name = jarNames[j.index % 6];
     j.color = jarColors[j.index % 6];
   }

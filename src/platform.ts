@@ -89,12 +89,7 @@ export async function write(key: string, value: string): Promise<void> {
   if (Capacitor.isNativePlatform()) await Preferences.set({ key, value });
   else localStorage.setItem(key, value);
 }
-export async function haptic(): Promise<void> {
-  if (Capacitor.isNativePlatform()) {
-    const { Haptics, ImpactStyle } = await import("@capacitor/haptics");
-    await Haptics.impact({ style: ImpactStyle.Light });
-  } else navigator.vibrate?.(12);
-}
+export { haptic, setHapticState } from "./haptics";
 export async function listenAppState(
   onChange: (active: boolean) => void,
 ): Promise<void> {

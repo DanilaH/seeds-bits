@@ -6,6 +6,7 @@ public class MainActivity extends BridgeActivity {
     SeedsApplication.initializeAnalytics(getApplication());
     registerPlugin(SeedsMonetizationPlugin.class);
     registerPlugin(SeedsEngagementPlugin.class);
+    registerPlugin(SeedsFeedbackPlugin.class);
     super.onCreate(savedInstanceState);
   }
 }

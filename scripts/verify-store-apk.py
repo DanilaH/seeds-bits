@@ -39,7 +39,7 @@ with zipfile.ZipFile(file) as z:
  local=[p for p in pathlib.Path('dist').rglob('*') if p.is_file()]
  for f in local:
   path=f.relative_to('dist').as_posix();assets[path]=f.read_bytes()==z.read('assets/public/'+path)
- assert all(assets.values()) and len(assets)==10
+ assert all(assets.values()) and len(assets)==len(local)
  assert {n.removeprefix('assets/public/') for n in z.namelist() if n.startswith('assets/public/assets/') and not n.endswith('/')}=={p for p in assets if p.startswith('assets/')}
  assert all(b'__SEEDS_ADS_TEST__' not in z.read('assets/public/'+p) for p in assets if p.endswith('.js'))
  assert all(b'__SEEDS_ENGAGEMENT_TEST__' not in z.read('assets/public/'+p) for p in assets if p.endswith('.js'))
@@ -76,8 +76,11 @@ with zipfile.ZipFile(file) as z:
  engagement=next(c for payload in a.get_all_dex() for c in DEX(payload).get_classes() if c.get_name()=='Lcom/seedsbits/game/SeedsEngagementPlugin;')
  assert {'configuration','requestNotifications','openNotificationSettings','prepareReview','review'}<={m.get_name() for m in engagement.get_methods()}
  assert descriptor('com.getcapacitor.annotation.CapacitorPlugin') in engagement.get_annotations()
+ feedback=next(c for payload in a.get_all_dex() for c in DEX(payload).get_classes() if c.get_name()=='Lcom/seedsbits/game/SeedsFeedbackPlugin;')
+ assert {'configure','pulse'}<={m.get_name() for m in feedback.get_methods()}
+ assert descriptor('com.getcapacitor.annotation.CapacitorPlugin') in feedback.get_annotations()
  assert descriptor('ru.rustore.sdk.review.RuStoreReviewManager').encode() in dex
  assert descriptor('com.seedsbits.game.SeedsDailyReminder').encode() in dex
 r={'file':file.name,'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'bytes':file.stat().st_size,'package':pkg,'name':a.get_app_name(),'versionName':a.get_androidversion_name(),'versionCode':a.get_androidversion_code(),'minSdk':a.get_min_sdk_version(),'targetSdk':a.get_target_sdk_version(),'debuggable':False,'testOnly':False,'allowBackup':False,'usesCleartextTraffic':False,'adsTestMode':False,'distinctLiveAdUnits':True,'configuredClientFields':{key:bool(value) for key,value in values.items()},'certificateSha256':cert,'signatureVerified':{'v2':True,'v3':True},'permissions':a.get_permissions(),'cleanWebAssets':assets,'extraStaleAssets':False,'launcherIcons':icons,'launcherArtworkVerified':True,'packagedClasses':classes,'bridgeMethodsAndAnnotationsVerified':True}
-r.update({'engagementBridgeVerified':True,'ruStoreReviewSdkRetained':True,'reminderReceiverNotExported':True,'exactAlarmPermission':False,'engagementTestHooksAbsent':True})
+r.update({'engagementBridgeVerified':True,'ruStoreReviewSdkRetained':True,'reminderReceiverNotExported':True,'exactAlarmPermission':False,'engagementTestHooksAbsent':True,'nativeFeedbackBridgeVerified':True})
 path=pathlib.Path(args.report);path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\n');print(json.dumps(r,ensure_ascii=False,indent=2))

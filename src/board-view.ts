@@ -67,8 +67,15 @@ export class BoardView {
         }
         if (node.dataset.index !== String(i)) node.dataset.index = String(i);
         if (value) {
-          if (node.textContent !== String(value))
-            node.textContent = String(value);
+          let digit = node.querySelector<HTMLElement>(".digit");
+          if (!digit) {
+            digit = document.createElement("span");
+            digit.className = "digit";
+            digit.setAttribute("aria-hidden", "true");
+            node.replaceChildren(digit);
+          }
+          if (digit.textContent !== String(value))
+            digit.textContent = String(value);
           const label = `${value}, строка ${Math.floor(i / WIDTH) + 1}, столбец ${(i % WIDTH) + 1}`;
           if (node.getAttribute("aria-label") !== label)
             node.setAttribute("aria-label", label);

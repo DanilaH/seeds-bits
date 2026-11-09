@@ -1,18 +1,22 @@
 /** Bounded transform animations: no full-screen canvas, per-frame JS or layout reads. */
 export class SeedFlight {
   private layer = document.createElement("div");
-  private active = new Map<HTMLElement, () => void>();
+  private active = new Map<HTMLElement, (silent?: boolean) => void>();
   constructor() {
     this.layer.id = "seed-flights";
     this.layer.setAttribute("aria-hidden", "true");
     document.body.append(this.layer);
   }
-  fly(rects: DOMRect[], target: HTMLElement, land: () => void) {
+  fly(
+    rects: DOMRect[],
+    target: HTMLElement,
+    land: (index: number, silent: boolean) => void,
+  ) {
     if (
       matchMedia("(prefers-reduced-motion: reduce)").matches ||
       document.hidden
     ) {
-      rects.forEach(land);
+      rects.forEach((_, i) => land(i, document.hidden));
       return;
     }
     const box = target.getBoundingClientRect(),
@@ -20,7 +24,7 @@ export class SeedFlight {
       ty = box.top + box.height * 0.55;
     for (const [i, r] of rects.entries()) {
       if (this.active.size >= 12) {
-        land();
+        land(i, true);
         continue;
       }
       const x = Math.max(8, Math.min(innerWidth - 8, r.left + r.width / 2));
@@ -63,17 +67,17 @@ export class SeedFlight {
         easing: "cubic-bezier(.3,.05,.65,1)",
         fill: "both",
       });
-      const finish = () => {
+      const finish = (silent = false) => {
         if (!this.active.delete(seed)) return;
         animation.cancel();
         seed.remove();
-        land();
+        land(i, silent);
       };
       this.active.set(seed, finish);
-      animation.onfinish = finish;
+      animation.onfinish = () => finish();
     }
   }
   clear() {
-    for (const finish of [...this.active.values()]) finish();
+    for (const finish of [...this.active.values()]) finish(true);
   }
 }
