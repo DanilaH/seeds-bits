@@ -1,0 +1,43 @@
+{
+  "runtimeSource": "192cf9dcf0772d8d7342c974c73a17d15ae9d233",
+  "releaseRun": 42601494687,
+  "checkRun": 42601492201,
+  "files": [
+    {
+      "file": "seeds-1.1.0-rustore.apk",
+      "bytes": 5501048,
+      "sha256": "82f1808a3dd29b90fc77f342fa576347bf0b30ce5b77e677abb68a19df9d9f2c",
+      "versionCode": "1100017"
+    },
+    {
+      "file": "gifs/seeds-feel-01-notebook-jar.gif",
+      "bytes": 1740395,
+      "sha256": "380b4c931d0b57f00dc092e723c69565667adcb8490a988b05234d5bb19553be"
+    },
+    {
+      "file": "gifs/seeds-feel-02-press-hint-undo.gif",
+      "bytes": 4027691,
+      "sha256": "0582ff8d8861b949406fe6fe0d08cfc600310aea965ef7e1a328e747a1c0553c"
+    },
+    {
+      "file": "gifs/seeds-feel-03-daily-reward.gif",
+      "bytes": 3362167,
+      "sha256": "9a5ee24898a6f1f9b3e25383db23e8184e5122e5df349d3cfeb403c0c91230ba"
+    },
+    {
+      "file": "videos/seeds-feel-01-notebook-jar.mp4",
+      "bytes": 89009,
+      "sha256": "8c805347d535402fdcff5a427720f4eef8802c14806cd2fb2b07f438cdefebe2"
+    },
+    {
+      "file": "videos/seeds-feel-02-press-hint-undo.mp4",
+      "bytes": 178939,
+      "sha256": "5dfbc50533891a01fafcb73dea9830f991032fed7ffc423d487ad8c4ecd96ff1"
+    },
+    {
+      "file": "videos/seeds-feel-03-daily-reward.mp4",
+      "bytes": 189744,
+      "sha256": "c296828fc8ec4191a38984d614b7d1830f9ca764760b103e65ccd4af4e01cfa7"
+    }
+  ]
+}

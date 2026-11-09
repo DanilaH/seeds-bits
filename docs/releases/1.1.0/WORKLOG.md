@@ -38,3 +38,7 @@
 Прежние `apk.json` / `deliverables.json` описывают 1100015 со старым default. Доказательства пересборки этой правки фиксируются отдельно.
 
 Пересборка уточнения завершена: runtime 9e77388, APK 1100016 с прежним сертификатом; проверена точность assets и live-конфигурации. CI 42594977634 и все четыре задания release 42594980301 прошли, включая обновление и чистую установку Android 35. См. `default-reminders/REPORT.md`, `apk.json`, `checks.json`, `deliverables.json` в том каталоге.
+
+## 9 November 2026 — feel build 1100017
+
+Native haptics adapted from Road Lines, pointer feedback with stable hit areas, shared saved-reward flights and full-jar presentation, once-only victory after persistence, precise undo and bounded large-field animation. Runtime `192cf9dcf0772d8d7342c974c73a17d15ae9d233`; both check jobs and all four release jobs passed. Signed APK 5 501 048 bytes; three GIF/MP4 examples delivered. See [feel report](feel/REPORT.md). Physical motor intensity remains unmeasured.

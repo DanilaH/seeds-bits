@@ -1,0 +1,60 @@
+{
+  "runtimeSource": "192cf9dcf0772d8d7342c974c73a17d15ae9d233",
+  "checkRun": 42601492201,
+  "releaseRun": 42601494687,
+  "checks": [
+    {
+      "id": 129106796371,
+      "name": "android",
+      "conclusion": "success"
+    },
+    {
+      "id": 129106796744,
+      "name": "web",
+      "conclusion": "success"
+    }
+  ],
+  "release": [
+    {
+      "id": 129106804940,
+      "name": "android-release",
+      "conclusion": "success"
+    },
+    {
+      "id": 129106805459,
+      "name": "store-media",
+      "conclusion": "success"
+    },
+    {
+      "id": 129106805469,
+      "name": "upgrade-baseline",
+      "conclusion": "success"
+    },
+    {
+      "id": 129108268169,
+      "name": "android-smoke",
+      "conclusion": "success"
+    }
+  ],
+  "ci": {
+    "unit": 52,
+    "regressionModel": 2,
+    "browser": 134,
+    "regressionBrowser": 15,
+    "nativeRegressionHarness": 21,
+    "nativeFeedbackHarness": 16,
+    "productionBuild": true,
+    "yandexBuild": true,
+    "androidDebugBuild": true,
+    "androidReleaseR8": true,
+    "offlineAndroid35FreshAndUpgrade": true
+  },
+  "signedApkInspection": true,
+  "media": {
+    "scenarios": 3,
+    "pageErrors": 0,
+    "allGifsAndMp4Decode": true,
+    "visualContactSheetsInspected": true
+  },
+  "deviceLimit": "Android 35 emulator and native bridge doubles do not verify physical motor feel, speaker output, live ads, real RuStore review or OEM notification delivery. Media uses prepared reachable progress and development bridges; GIF/MP4 are silent."
+}
