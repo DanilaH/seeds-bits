@@ -60,3 +60,8 @@ A stronger local pop/sheen with 32 white, gold, coral, blue and lilac rectangula
 ## 9 November 2026 — final update materials and native time editor, build 1100024
 
 The materials review exposed hours clipped by the native time editor in 12-hour mode. Restored font-aware width, normal height and a 44px touch area; large text wraps the control row. A new test inspects native shadow segments for 32 combinations across locales, values, screen sizes and font sizes. Runtime e92bd49 passed 52+2 model, 146+15 browser and 21+16 native checks; all four release-24 jobs including fresh/upgrade Android acceptance passed. APK retains the certificate and size. Delivered 16 fresh production store images, listing/upload notes, 6 re-recorded GIF/MP4 examples and a crosswalk to the original feedback. See [final materials report](update-materials/REPORT.md).
+
+
+## 9 November 2026 — store preview readability
+
+Shortened factual captions and increased them from 26/24 to 36 CSS px. Main gameplay images are about 6% larger; original UI aspect and content are retained. Simulated 180/220px phone and 240/300px tablet previews inspected, with explicit limits for secondary text. Store pack and previews refreshed; APK 1100024 and interaction media bytes unchanged. See update-materials/readability-check.json.

@@ -10,8 +10,8 @@
     },
     {
       "file": "seeds-rustore-materials-1.1.0.zip",
-      "bytes": 7778610,
-      "sha256": "09295a4ab990b3e6f58f2471553d9cda6747f4736351f9cfcb5497dff596bfa5"
+      "bytes": 6949045,
+      "sha256": "223d4023bb014a25a68fd4e383f23c8ad4a39b346ce9278e02498bfe5e382b76"
     },
     {
       "file": "seeds-1.1.0-update-media.zip",
@@ -20,13 +20,18 @@
     },
     {
       "file": "seeds-store-phone-preview.jpg",
-      "bytes": 236763,
-      "sha256": "447373564c53ce67629b163265e7939d75ab71e790d9ccbf52033a03334d3118"
+      "bytes": 247328,
+      "sha256": "c4012de2559f0ab9a6baa6577ddbc94b2717e94aca69d3970900fc17fdb2dd53"
     },
     {
       "file": "seeds-store-tablet-preview.jpg",
-      "bytes": 189644,
-      "sha256": "4ce8598c6d025da34f2080442567e500d47f9f12e2c1e984549054c80789054b"
+      "bytes": 201590,
+      "sha256": "d657fb8d45234390d2f7eb4c73ae0b4fa1b533d1d34f05ffca24072dddb09452"
+    },
+    {
+      "file": "seeds-store-readability-180px.png",
+      "bytes": 149056,
+      "sha256": "19fee47c4319b47a7a22fba0427cef7b00a84534c92bcdb3fbae5e81732743ec"
     }
   ]
 }

@@ -13,5 +13,36 @@
   "phone": 8,
   "tablet": 8,
   "sourceCapture": "Production build; reachable prepared progress; no OS UI or third-party advertisements",
-  "documentation": "https://www.rustore.ru/help/developers/publishing-and-verifying-apps/app-publication"
+  "documentation": "https://www.rustore.ru/help/developers/publishing-and-verifying-apps/app-publication",
+  "storeFramingRevision": 2,
+  "previewReadability": {
+    "scope": "Simulated image previews; not a measurement inside the native RuStore application",
+    "phone": {
+      "widths": [
+        180,
+        220
+      ],
+      "previousCaptionCssPx": 26,
+      "currentCaptionCssPx": 36,
+      "effectiveCaptionPx": [
+        12,
+        14.6667
+      ]
+    },
+    "tablet": {
+      "widths": [
+        240,
+        300
+      ],
+      "previousCaptionCssPx": 24,
+      "currentCaptionCssPx": 36,
+      "effectiveCaptionPx": [
+        9,
+        11.25
+      ]
+    },
+    "secondaryUiText": "Small in previews; requires opening the screenshot",
+    "fullUiRetained": true,
+    "frames": 16
+  }
 }

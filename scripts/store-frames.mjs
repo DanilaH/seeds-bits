@@ -24,22 +24,22 @@ const browser = await chromium.launch({
   args: ["--no-sandbox"],
 });
 const captions = {
-  "phone-01-pairs": "Соединяйте одинаковые цифры или пары с суммой 10",
-  "phone-02-play": "Убирайте пары и освобождайте строки",
+  "phone-01-pairs": "Одинаковые цифры или сумма 10",
+  "phone-02-play": "Убирайте пары с поля",
   "phone-03-books": "2 400 задач в 100 тетрадях",
-  "phone-04-calendar": "Задача дня, серии и архив с января 2025",
-  "phone-05-jars": "Все режимы пополняют коллекцию баночек",
-  "phone-06-medal": "Медаль за месяц и следующая цель",
-  "phone-07-trophies": "Бронза за 7 задач, серебро за 14, золото за весь месяц",
-  "phone-08-dark": "Тёмная тема для игрового поля и меню",
-  "tablet-01-pairs": "Убирайте одинаковые числа и пары с суммой 10",
-  "tablet-02-books": "В больших задачах поле прокручивается",
-  "tablet-03-dark": "Тёмная тема для игрового поля и меню",
+  "phone-04-calendar": "Задача дня и архив",
+  "phone-05-jars": "Коллекция баночек",
+  "phone-06-medal": "Медаль и следующая цель",
+  "phone-07-trophies": "Бронза, серебро и золото",
+  "phone-08-dark": "Светлая и тёмная темы",
+  "tablet-01-pairs": "Одинаковые числа или сумма 10",
+  "tablet-02-books": "Большие поля с прокруткой",
+  "tablet-03-dark": "Светлая и тёмная темы",
   "tablet-04-library": "2 400 задач в 100 тетрадях",
-  "tablet-05-progress": "Прогресс всех режимов — в коллекции баночек",
-  "tablet-06-jars": "Баночки заполняются по мере прохождения",
-  "tablet-07-trophies": "Медали за задачи из месячного календаря",
-  "tablet-08-medal": "Награда за серию дней и следующая медаль",
+  "tablet-05-progress": "Общий прогресс всех режимов",
+  "tablet-06-jars": "Коллекция баночек",
+  "tablet-07-trophies": "Бронза, серебро и золото",
+  "tablet-08-medal": "Медаль и награда за серию",
 };
 const manifest = [];
 try {
@@ -65,11 +65,12 @@ try {
       html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
       body { display: grid; place-items: center; background: ${background}; }
       figure { margin: 0; display: flex; flex-direction: column; align-items: center;
-        gap: ${tablet ? 16 : 20}px; width: ${tablet ? 880 : 504}px; }
-      img { display: block; max-width: ${tablet ? 768 : 468}px; max-height: ${tablet ? 432 : 820}px; width: auto; height: auto;
+        gap: ${tablet ? 12 : 16}px; width: ${tablet ? 880 : 504}px; }
+      img { display: block; max-width: ${tablet ? 820 : 494}px; max-height: ${tablet ? 456 : 820}px; width: auto; height: auto;
         border-radius: 14px; box-shadow: 0 16px 45px #183c3829; }
-      figcaption { font: 400 ${tablet ? 24 : 26}px/1.28 Arial, sans-serif;
-        color: ${capture.dark ? "#e1eee7" : "#304e44"}; text-align: center; max-width: ${tablet ? 840 : 468}px; }
+      figcaption { display: flex; align-items: center; justify-content: center;
+        font: 500 36px/1.2 Arial, sans-serif; min-height: ${tablet ? 43.2 : 86.4}px;
+        color: ${capture.dark ? "#e1eee7" : "#304e44"}; text-align: center; max-width: ${tablet ? 880 : 494}px; }
       </style><figure><img alt="Интерфейс игры Семечки" src="data:image/png;base64,${data}"><figcaption>${caption}</figcaption></figure></html>`);
     await page.locator("img").evaluate((img) => img.decode());
     const geometry = await page.locator("img").evaluate((img) => {
@@ -110,7 +111,7 @@ try {
         };
       });
     if (
-      captionGeometry.height > (tablet ? 24 : 26) * 1.28 * 2 + 1 ||
+      captionGeometry.height > 36 * 1.2 * 2 + 1 ||
       !captionGeometry.fits ||
       captionGeometry.x < 0 ||
       captionGeometry.y < geometry.y + geometry.height ||
@@ -132,6 +133,10 @@ try {
       geometry,
       caption,
       captionGeometry,
+      captionFontPx: 36,
+      previewCaptionPx: tablet
+        ? { at240: 9, at300: 11.25 }
+        : { at180: 12, at220: 14.67 },
     });
     await context.close();
   }

@@ -5,368 +5,448 @@
       "file": "phone-01-pairs.png",
       "width": 1080,
       "height": 1920,
-      "bytes": 460430,
+      "bytes": 397076,
       "dark": false,
       "geometry": {
-        "x": 36,
-        "y": 52.734375,
-        "width": 468,
-        "height": 768,
+        "x": 23,
+        "y": 23.46875,
+        "width": 493.984375,
+        "height": 810.65625,
         "naturalWidth": 780,
         "naturalHeight": 1280
       },
-      "caption": "Соединяйте одинаковые цифры или пары с суммой 10",
+      "caption": "Одинаковые цифры или сумма 10",
       "captionGeometry": {
-        "x": 36,
-        "y": 840.734375,
-        "width": 468,
-        "height": 66.53125,
+        "x": 23,
+        "y": 850.125,
+        "width": 494,
+        "height": 86.390625,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at180": 12,
+        "at220": 14.67
       }
     },
     {
       "file": "phone-02-play.png",
       "width": 1080,
       "height": 1920,
-      "bytes": 436462,
+      "bytes": 366471,
       "dark": false,
       "geometry": {
-        "x": 36,
-        "y": 52.734375,
-        "width": 468,
-        "height": 768,
+        "x": 23,
+        "y": 23.46875,
+        "width": 493.984375,
+        "height": 810.65625,
         "naturalWidth": 780,
         "naturalHeight": 1280
       },
-      "caption": "Убирайте пары и освобождайте строки",
+      "caption": "Убирайте пары с поля",
       "captionGeometry": {
-        "x": 36,
-        "y": 840.734375,
-        "width": 468,
-        "height": 66.53125,
+        "x": 59.90625,
+        "y": 850.125,
+        "width": 420.1875,
+        "height": 86.390625,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at180": 12,
+        "at220": 14.67
       }
     },
     {
       "file": "phone-03-books.png",
       "width": 1080,
       "height": 1920,
-      "bytes": 469150,
+      "bytes": 414687,
       "dark": false,
       "geometry": {
-        "x": 36,
-        "y": 69.359375,
-        "width": 468,
-        "height": 768,
+        "x": 23,
+        "y": 23.46875,
+        "width": 493.984375,
+        "height": 810.65625,
         "naturalWidth": 780,
         "naturalHeight": 1280
       },
       "caption": "2 400 задач в 100 тетрадях",
       "captionGeometry": {
-        "x": 80.390625,
-        "y": 857.359375,
-        "width": 379.203125,
-        "height": 33.265625,
+        "x": 23,
+        "y": 850.125,
+        "width": 494,
+        "height": 86.390625,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at180": 12,
+        "at220": 14.67
       }
     },
     {
       "file": "phone-04-calendar.png",
       "width": 1080,
       "height": 1920,
-      "bytes": 470732,
+      "bytes": 407453,
       "dark": false,
       "geometry": {
-        "x": 36,
-        "y": 52.734375,
-        "width": 468,
-        "height": 768,
+        "x": 23,
+        "y": 23.46875,
+        "width": 493.984375,
+        "height": 810.65625,
         "naturalWidth": 780,
         "naturalHeight": 1280
       },
-      "caption": "Задача дня, серии и архив с января 2025",
+      "caption": "Задача дня и архив",
       "captionGeometry": {
-        "x": 36,
-        "y": 840.734375,
-        "width": 468,
-        "height": 66.53125,
+        "x": 82.96875,
+        "y": 850.125,
+        "width": 374.0625,
+        "height": 86.390625,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at180": 12,
+        "at220": 14.67
       }
     },
     {
       "file": "phone-05-jars.png",
       "width": 1080,
       "height": 1920,
-      "bytes": 572933,
+      "bytes": 563250,
       "dark": false,
       "geometry": {
         "x": 80.546875,
-        "y": 26.734375,
+        "y": 18.796875,
         "width": 378.90625,
         "height": 820,
         "naturalWidth": 780,
         "naturalHeight": 1688
       },
-      "caption": "Все режимы пополняют коллекцию баночек",
+      "caption": "Коллекция баночек",
       "captionGeometry": {
-        "x": 36,
-        "y": 866.734375,
-        "width": 468,
-        "height": 66.53125,
+        "x": 83.25,
+        "y": 854.796875,
+        "width": 373.484375,
+        "height": 86.390625,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at180": 12,
+        "at220": 14.67
       }
     },
     {
       "file": "phone-06-medal.png",
       "width": 1080,
       "height": 1920,
-      "bytes": 574089,
+      "bytes": 573654,
       "dark": false,
       "geometry": {
         "x": 65,
-        "y": 26.734375,
+        "y": 18.796875,
         "width": 410,
         "height": 820,
         "naturalWidth": 780,
         "naturalHeight": 1560
       },
-      "caption": "Медаль за месяц и следующая цель",
+      "caption": "Медаль и следующая цель",
       "captionGeometry": {
-        "x": 36,
-        "y": 866.734375,
-        "width": 468,
-        "height": 66.53125,
+        "x": 23,
+        "y": 854.796875,
+        "width": 494,
+        "height": 86.390625,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at180": 12,
+        "at220": 14.67
       }
     },
     {
       "file": "phone-07-trophies.png",
       "width": 1080,
       "height": 1920,
-      "bytes": 520265,
+      "bytes": 453473,
       "dark": false,
       "geometry": {
-        "x": 36,
-        "y": 52.734375,
-        "width": 468,
-        "height": 768,
+        "x": 23,
+        "y": 23.46875,
+        "width": 493.984375,
+        "height": 810.65625,
         "naturalWidth": 780,
         "naturalHeight": 1280
       },
-      "caption": "Бронза за 7 задач, серебро за 14, золото за весь месяц",
+      "caption": "Бронза, серебро и золото",
       "captionGeometry": {
-        "x": 36,
-        "y": 840.734375,
-        "width": 468,
-        "height": 66.53125,
+        "x": 26.640625,
+        "y": 850.125,
+        "width": 486.703125,
+        "height": 86.390625,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at180": 12,
+        "at220": 14.67
       }
     },
     {
       "file": "phone-08-dark.png",
       "width": 1080,
       "height": 1920,
-      "bytes": 490341,
+      "bytes": 410828,
       "dark": true,
       "geometry": {
-        "x": 36,
-        "y": 52.734375,
-        "width": 468,
-        "height": 768,
+        "x": 23,
+        "y": 23.46875,
+        "width": 493.984375,
+        "height": 810.65625,
         "naturalWidth": 780,
         "naturalHeight": 1280
       },
-      "caption": "Тёмная тема для игрового поля и меню",
+      "caption": "Светлая и тёмная темы",
       "captionGeometry": {
-        "x": 36,
-        "y": 840.734375,
-        "width": 468,
-        "height": 66.53125,
+        "x": 44.90625,
+        "y": 850.125,
+        "width": 450.171875,
+        "height": 86.390625,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at180": 12,
+        "at220": 14.67
       }
     },
     {
       "file": "tablet-01-pairs.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 436812,
+      "bytes": 386709,
       "dark": false,
       "geometry": {
-        "x": 96,
-        "y": 30.640625,
-        "width": 768,
-        "height": 432,
+        "x": 74.671875,
+        "y": 14.40625,
+        "width": 810.65625,
+        "height": 456,
         "naturalWidth": 1920,
         "naturalHeight": 1080
       },
-      "caption": "Убирайте одинаковые числа и пары с суммой 10",
+      "caption": "Одинаковые числа или сумма 10",
       "captionGeometry": {
-        "x": 171.0625,
-        "y": 478.640625,
-        "width": 617.859375,
-        "height": 30.71875,
+        "x": 166.90625,
+        "y": 482.40625,
+        "width": 626.171875,
+        "height": 43.1875,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at240": 9,
+        "at300": 11.25
       }
     },
     {
       "file": "tablet-02-books.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 439558,
+      "bytes": 389861,
       "dark": false,
       "geometry": {
-        "x": 96,
-        "y": 30.640625,
-        "width": 768,
-        "height": 432,
+        "x": 74.671875,
+        "y": 14.40625,
+        "width": 810.65625,
+        "height": 456,
         "naturalWidth": 1920,
         "naturalHeight": 1080
       },
-      "caption": "В больших задачах поле прокручивается",
+      "caption": "Большие поля с прокруткой",
       "captionGeometry": {
-        "x": 217.6875,
-        "y": 478.640625,
-        "width": 524.609375,
-        "height": 30.71875,
+        "x": 211.875,
+        "y": 482.40625,
+        "width": 536.25,
+        "height": 43.1875,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at240": 9,
+        "at300": 11.25
       }
     },
     {
       "file": "tablet-03-dark.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 468057,
+      "bytes": 404587,
       "dark": true,
       "geometry": {
-        "x": 96,
-        "y": 30.640625,
-        "width": 768,
-        "height": 432,
+        "x": 74.671875,
+        "y": 14.40625,
+        "width": 810.65625,
+        "height": 456,
         "naturalWidth": 1920,
         "naturalHeight": 1080
       },
-      "caption": "Тёмная тема для игрового поля и меню",
+      "caption": "Светлая и тёмная темы",
       "captionGeometry": {
-        "x": 227.578125,
-        "y": 478.640625,
-        "width": 504.84375,
-        "height": 30.71875,
+        "x": 254.90625,
+        "y": 482.40625,
+        "width": 450.171875,
+        "height": 43.1875,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at240": 9,
+        "at300": 11.25
       }
     },
     {
       "file": "tablet-04-library.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 444931,
+      "bytes": 404740,
       "dark": false,
       "geometry": {
-        "x": 96,
-        "y": 30.640625,
-        "width": 768,
-        "height": 432,
+        "x": 74.671875,
+        "y": 14.40625,
+        "width": 810.65625,
+        "height": 456,
         "naturalWidth": 1920,
         "naturalHeight": 1080
       },
       "caption": "2 400 задач в 100 тетрадях",
       "captionGeometry": {
-        "x": 304.984375,
-        "y": 478.640625,
-        "width": 350.03125,
-        "height": 30.71875,
+        "x": 217.46875,
+        "y": 482.40625,
+        "width": 525.046875,
+        "height": 43.1875,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at240": 9,
+        "at300": 11.25
       }
     },
     {
       "file": "tablet-05-progress.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 453888,
+      "bytes": 403667,
       "dark": false,
       "geometry": {
-        "x": 96,
-        "y": 30.640625,
-        "width": 768,
-        "height": 432,
+        "x": 74.671875,
+        "y": 14.40625,
+        "width": 810.65625,
+        "height": 456,
         "naturalWidth": 1920,
         "naturalHeight": 1080
       },
-      "caption": "Прогресс всех режимов — в коллекции баночек",
+      "caption": "Общий прогресс всех режимов",
       "captionGeometry": {
-        "x": 174.328125,
-        "y": 478.640625,
-        "width": 611.328125,
-        "height": 30.71875,
+        "x": 183.40625,
+        "y": 482.40625,
+        "width": 593.1875,
+        "height": 43.1875,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at240": 9,
+        "at300": 11.25
       }
     },
     {
       "file": "tablet-06-jars.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 424240,
+      "bytes": 363660,
       "dark": false,
       "geometry": {
-        "x": 96,
-        "y": 30.640625,
-        "width": 768,
-        "height": 432,
+        "x": 74.671875,
+        "y": 14.40625,
+        "width": 810.65625,
+        "height": 456,
         "naturalWidth": 1920,
         "naturalHeight": 1080
       },
-      "caption": "Баночки заполняются по мере прохождения",
+      "caption": "Коллекция баночек",
       "captionGeometry": {
-        "x": 196.03125,
-        "y": 478.640625,
-        "width": 567.921875,
-        "height": 30.71875,
+        "x": 293.25,
+        "y": 482.40625,
+        "width": 373.484375,
+        "height": 43.1875,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at240": 9,
+        "at300": 11.25
       }
     },
     {
       "file": "tablet-07-trophies.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 449793,
+      "bytes": 395334,
       "dark": false,
       "geometry": {
-        "x": 96,
-        "y": 30.640625,
-        "width": 768,
-        "height": 432,
+        "x": 74.671875,
+        "y": 14.40625,
+        "width": 810.65625,
+        "height": 456,
         "naturalWidth": 1920,
         "naturalHeight": 1080
       },
-      "caption": "Медали за задачи из месячного календаря",
+      "caption": "Бронза, серебро и золото",
       "captionGeometry": {
-        "x": 205.71875,
-        "y": 478.640625,
-        "width": 548.5625,
-        "height": 30.71875,
+        "x": 236.640625,
+        "y": 482.40625,
+        "width": 486.703125,
+        "height": 43.1875,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at240": 9,
+        "at300": 11.25
       }
     },
     {
       "file": "tablet-08-medal.png",
       "width": 1920,
       "height": 1080,
-      "bytes": 485441,
+      "bytes": 435145,
       "dark": false,
       "geometry": {
-        "x": 96,
-        "y": 30.640625,
-        "width": 768,
-        "height": 432,
+        "x": 74.671875,
+        "y": 14.40625,
+        "width": 810.65625,
+        "height": 456,
         "naturalWidth": 1920,
         "naturalHeight": 1080
       },
-      "caption": "Награда за серию дней и следующая медаль",
+      "caption": "Медаль и награда за серию",
       "captionGeometry": {
-        "x": 191.59375,
-        "y": 478.640625,
-        "width": 576.796875,
-        "height": 30.71875,
+        "x": 215.171875,
+        "y": 482.40625,
+        "width": 529.640625,
+        "height": 43.1875,
         "fits": true
+      },
+      "captionFontPx": 36,
+      "previewCaptionPx": {
+        "at240": 9,
+        "at300": 11.25
       }
     }
   ]
