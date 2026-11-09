@@ -1711,10 +1711,9 @@ header .jar-level {
 }
 
 /* Original small medal silhouettes: warm metal adds colour without another panel. */
-.trophy-marks {
+.trophy-display {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
   width: 100%;
 }
 .trophy-mark {
@@ -1726,8 +1725,8 @@ header .jar-level {
 }
 .trophy-mark .medal-art {
   display: block;
-  width: 64px;
-  height: 76px;
+  width: 128px;
+  height: 152px;
   max-width: 100%;
   flex-shrink: 0;
   stroke: none;
@@ -1767,12 +1766,12 @@ header .jar-level {
   stroke-linejoin: round;
 }
 .metal-name {
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 500;
   color: var(--ink);
 }
 .metal-count {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
@@ -1802,17 +1801,24 @@ header .jar-level {
   color: var(--ink);
   font-weight: 400;
 }
-#award .trophy-marks {
+#award .trophy-display {
   margin-top: 12px;
 }
-#award .trophy-earned {
+#win.daily-result .win-symbol {
+  display: none;
+}
+#win.daily-result h1 {
+  margin-top: 0;
+}
+.medal-note {
   min-height: 1.5em;
-  margin: 8px 0 0;
+  margin-top: 4px;
+  font-size: 12px;
   line-height: 1.5;
   color: var(--muted);
-  font-size: 12px;
-  font-weight: 500;
+  text-align: center;
 }
+
 .trophy-confetti {
   position: absolute;
   inset: 0;
@@ -1840,8 +1846,8 @@ header .jar-level {
   margin: 0;
 }
 .trophy .trophy-mark .medal-art {
-  width: 52px;
-  height: 62px;
+  width: 96px;
+  height: 114px;
 }
 @media (orientation: landscape) and (min-width: 540px) and (max-height: 600px) {
   .game-actions footer {
@@ -1853,10 +1859,10 @@ header .jar-level {
     font-size: 11px;
   }
   #award .medal-art {
-    width: 46px;
-    height: 55px;
+    width: 88px;
+    height: 105px;
   }
-  #award .trophy-marks {
+  #award .trophy-display {
     gap: 5px;
   }
 }

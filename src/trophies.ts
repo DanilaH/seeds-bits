@@ -20,16 +20,37 @@ const metals = [
   { name: "Серебро", color: "#8c9eb3", light: "#e6edf6" },
   { name: "Золото", color: "#d0a037", light: "#ffeb9e" },
 ];
-/** Three independent targets: filling an unfinished medal never replaces an earned one. */
-export function trophyMarks(month: string, count: number, total: number) {
-  return `<span class="trophy-marks">${metals
-    .map((metal, i) => {
-      const target = [7, 14, total][i],
-        filled = Math.min(count, target);
-      const id = `medal-${++artworkId}`;
-      return `<span class="trophy-mark${filled === target ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light}"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs><path class="medal-ribbon" d="M15 2h13l7 24-13 6ZM36 2h13l-7 30-13-6Z"/><circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${68 - (48 * filled) / target}" width="48" height="${(48 * filled) / target}" fill="url(#${id}-metal)"/></g><circle class="medal-ring" cx="32" cy="44" r="24"/><circle class="medal-inner" cx="32" cy="44" r="19"/><g class="medal-emblem" transform="translate(18 30) scale(.58)"><path d="${paths[Number(month.slice(5)) - 1]}"/></g>${filled === target ? '<path class="medal-check" d="m43 61 3 3 6-7"/>' : ""}</svg><span class="metal-name">${metal.name}</span><span class="metal-count">${filled} / ${target}</span></span>`;
-    })
-    .join("")}</span>`;
+/** Show a reached milestone at its boundary; otherwise fill the next one. */
+export function trophyMark(
+  month: string,
+  count: number,
+  total: number,
+  pending = false,
+) {
+  const i = count <= 7 ? 0 : count <= 14 ? 1 : 2;
+  const metal = metals[i],
+    target = [7, 14, total][i],
+    filled = Math.min(count, target);
+  const complete = filled === target;
+  const title =
+    complete && !pending
+      ? ["Бронза получена", "Серебро получено", "Золото получено"][i]
+      : metal.name;
+  const note = pending
+    ? "Ожидает сохранения"
+    : complete
+      ? i === 0
+        ? "До серебра — 7 дней"
+        : i === 1
+          ? `До золота — ${total - 14} дней`
+          : "Месяц пройден"
+      : i === 1
+        ? "Бронза получена"
+        : i === 2
+          ? "Бронза и серебро получены"
+          : "";
+  const id = `medal-${++artworkId}`;
+  return `<span class="trophy-display"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light}"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs><path class="medal-ribbon" d="M15 2h13l7 24-13 6ZM36 2h13l-7 30-13-6Z"/><circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${68 - (48 * filled) / target}" width="48" height="${(48 * filled) / target}" fill="url(#${id}-metal)"/></g><circle class="medal-ring" cx="32" cy="44" r="24"/><circle class="medal-inner" cx="32" cy="44" r="19"/><g class="medal-emblem" transform="translate(18 30) scale(.58)"><path d="${paths[Number(month.slice(5)) - 1]}"/></g>${complete ? '<path class="medal-check" d="m43 61 3 3 6-7"/>' : ""}</svg><span class="metal-name">${title}</span><span class="metal-count">${filled} из ${target} дней</span><span class="medal-note">${note}</span></span></span>`;
 }
 
 /** A bounded, local burst. It owns no rewards, timers or input and cancels on navigation. */

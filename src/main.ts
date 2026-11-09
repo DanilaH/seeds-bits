@@ -29,7 +29,7 @@ import {
 } from "./vendor/mini-games-kit/value-transfer";
 import { BoardView } from "./board-view";
 import { requestAdvice } from "./advice-client";
-import { trophyMarks, celebrateTrophy } from "./trophies";
+import { trophyMark, celebrateTrophy } from "./trophies";
 import "./style.css";
 import "./ui-polish.css";
 import {
@@ -853,6 +853,7 @@ function complete(rects: DOMRect[]) {
 }
 function renderWin() {
   const id = progress.active;
+  $("win").classList.toggle("daily-result", id.startsWith("daily"));
   $("win-stats").innerHTML =
     `<span>Пар убрано: ${session.current.moves}</span><span>Добавлений: ${session.current.additions}</span><span>Подсказок: ${progress.hints[id] ?? 0}</span>`;
   const i = notebook.findIndex((p) => p.id === id);
@@ -923,7 +924,7 @@ function renderWin() {
     const m = id.slice(9, 16),
       t = trophy(m, progress.done);
     award.hidden = false;
-    award.innerHTML = `<div class="trophy-heading"><strong>${monthName(m)}</strong><span>${t.count} из ${days(m).length} дней</span></div>${trophyMarks(m, t.count, days(m).length)}<p class="trophy-earned">${earnedAward && !saveFailed ? ["", "Бронза получена", "Серебро получено", "Золото получено"][t.tier] : ""}</p>`;
+    award.innerHTML = `<div class="trophy-heading"><strong>${monthName(m)}</strong><span>${t.count} из ${days(m).length} дней</span></div>${trophyMark(m, t.count, days(m).length, saveFailed)}`;
   }
 }
 function compactCount(n: number) {
@@ -2172,7 +2173,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       )
       .join(
         "",
-      )}</div><section class="calendar-trophies" aria-label="Трофеи месяца">${trophyMarks(calendarMonth, t.count, days(calendarMonth).length)}</section><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="fine">Прошедшие дни доступны в любое время.</p><details class="explanation"><summary>Как считается серия</summary><p>Решайте сегодняшнюю задачу в её день. Архив идёт в трофеи месяца. За третий день серии — 1 подсказка, за каждые семь дней подряд — 3. Награды поступают в общий запас автоматически. После пропуска сохраняются рекорд и награды. Задача, законченная после полуночи, остаётся в архиве, но уже не увеличивает серию за вчера.</p></details><details class="explanation"><summary>Трофеи месяца</summary><p>Бронза — 7 задач, серебро — 14, золото — весь месяц.</p></details>`;
+      )}</div><section class="calendar-trophies" aria-label="Трофеи месяца">${trophyMark(calendarMonth, t.count, days(calendarMonth).length)}</section><p>${t.count} из ${days(calendarMonth).length} задач решено</p><p class="fine">Прошедшие дни доступны в любое время.</p><details class="explanation"><summary>Как считается серия</summary><p>Решайте сегодняшнюю задачу в её день. Архив идёт в трофеи месяца. За третий день серии — 1 подсказка, за каждые семь дней подряд — 3. Награды поступают в общий запас автоматически. После пропуска сохраняются рекорд и награды. Задача, законченная после полуночи, остаётся в архиве, но уже не увеличивает серию за вчера.</p></details><details class="explanation"><summary>Трофеи месяца</summary><p>Бронза — 7 задач, серебро — 14, золото — весь месяц.</p></details>`;
   } else {
     html += `<h2>Коллекция</h2><div class="collection-tabs" role="group" aria-label="Раздел коллекции"><button id="jars-tab" aria-pressed="${collectionTab === "jars"}">Баночки</button><button id="trophies-mode" aria-pressed="${collectionTab === "months"}">Трофеи месяца</button></div>`;
     const j = jarState(jars(progress).meter);
@@ -2198,7 +2199,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       .filter((m) => m.startsWith(trophyYear))
       .reverse()) {
       const t = trophy(m, progress.done);
-      html += `<button class="trophy tier-${t.tier}" data-month="${m}"><span class="trophy-heading"><strong>${monthName(m)}</strong><small>${t.count}/${days(m).length} дней</small></span>${trophyMarks(m, t.count, days(m).length)}</button>`;
+      html += `<button class="trophy tier-${t.tier}" data-month="${m}"><span class="trophy-heading"><strong>${monthName(m)}</strong><small>${t.count}/${days(m).length} дней</small></span>${trophyMark(m, t.count, days(m).length)}</button>`;
     }
   }
   if (kind === "trophies") html += "</section>";

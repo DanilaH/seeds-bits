@@ -218,15 +218,22 @@ for (const [completed, tier] of [
     await pair(page);
     await pair(page);
     await expect(page.locator(".trophy-confetti")).toHaveCount(1);
+    await expect(page.locator("#award .medal-art")).toHaveCount(1);
     await expect(page.locator(`#award [data-tier="${tier}"]`)).toHaveClass(
       /earned/,
     );
     await page.waitForTimeout(240); // Finish the result-sheet entrance; medal pop uses transforms only.
-    const geometry = await page.locator("#award .trophy-marks").boundingBox();
+    const layout = () =>
+      page
+        .locator("#award .trophy-display")
+        .evaluate((el: HTMLElement) => [
+          el.offsetTop,
+          el.offsetWidth,
+          el.offsetHeight,
+        ]);
+    const geometry = await layout();
     await expect(page.locator(".trophy-confetti")).toHaveCount(0);
-    expect(await page.locator("#award .trophy-marks").boundingBox()).toEqual(
-      geometry,
-    );
+    expect(await layout()).toEqual(geometry);
     const ids = await page
       .locator("#award [id]")
       .evaluateAll((es) => es.map((e) => e.id));
@@ -292,6 +299,14 @@ test("all screens contain their text with ads, themes, narrow landscape and tabl
       const check = async (name: string) => {
         await page.waitForTimeout(60);
         const failures = await textOverflow(page);
+        if (name === "trophies")
+          expect(await page.locator(".trophy .medal-art").count()).toBe(
+            await page.locator(".trophy").count(),
+          );
+        if (name === "calendar")
+          await expect(
+            page.locator(".calendar-trophies .medal-art"),
+          ).toHaveCount(1);
         report.push({ width, height, dark, screen: name, failures });
         await page.screenshot({
           path: `${out}/${name}-${width}-${height}-${dark ? "dark" : "light"}.png`,
@@ -524,4 +539,32 @@ test("two reward lines keep their space while a failed save is retried", async (
   await expect(page.locator("#result-gains")).toContainText("+3 подсказки");
   await expect(page.locator("#play-again")).toBeInViewport({ ratio: 1 });
   expect(Math.abs((await position()) - before)).toBeLessThan(1);
+});
+
+test("one medal fills the next stage and keeps already earned stages in its caption", async ({
+  browser,
+}) => {
+  for (const [completed, tier, count, target, caption] of [
+    [5, 1, 6, 7, ""],
+    [7, 2, 8, 14, "Бронза получена"],
+    [14, 3, 15, 31, "Бронза и серебро получены"],
+  ] as const) {
+    const context = await browser.newContext({ reducedMotion: "reduce" });
+    const page = await context.newPage();
+    await seed(page, { active: "daily-v1-2026-10-31", completed });
+    await page.locator("#resume").click();
+    await pair(page);
+    await pair(page);
+    await expect(page.locator("#award .medal-art")).toHaveCount(1);
+    await expect(page.locator(`#award [data-tier="${tier}"]`)).not.toHaveClass(
+      /earned/,
+    );
+    await expect(page.locator("#award .metal-count")).toHaveText(
+      `${count} из ${target} дней`,
+    );
+    await expect(page.locator("#award .medal-note")).toHaveText(caption);
+    await expect(page.locator(".trophy-confetti")).toHaveCount(0);
+    await expect(page.locator("#win .win-symbol")).toBeHidden();
+    await context.close();
+  }
 });
