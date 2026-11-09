@@ -1,0 +1,58 @@
+{
+  "runtimeSource": "e92bd4915d677caf47f74944402c82d48b483d9c",
+  "checkRun": 42626756560,
+  "releaseRun": 42626758548,
+  "checks": [
+    {
+      "id": 129192406439,
+      "name": "web",
+      "conclusion": "success"
+    },
+    {
+      "id": 129192407136,
+      "name": "android",
+      "conclusion": "success"
+    }
+  ],
+  "release": [
+    {
+      "id": 129192406947,
+      "name": "store-media",
+      "conclusion": "success"
+    },
+    {
+      "id": 129192407568,
+      "name": "upgrade-baseline",
+      "conclusion": "success"
+    },
+    {
+      "id": 129192407819,
+      "name": "android-release",
+      "conclusion": "success"
+    },
+    {
+      "id": 129194548289,
+      "name": "android-smoke",
+      "conclusion": "success"
+    }
+  ],
+  "verified": {
+    "unit": 52,
+    "regressionModel": 2,
+    "browser": 146,
+    "regressionBrowser": 15,
+    "nativeRegression": 21,
+    "nativeFeedback": 16,
+    "targetedLayout": 12,
+    "layoutStates": 156,
+    "enlargedTextStates": 12,
+    "otherUiStates": 16,
+    "nativeTimeEditorCases": 32,
+    "productionAssetsEqualApk": true,
+    "freshAndroid": true,
+    "upgradePreservedProgress": true,
+    "screenCount": 16,
+    "refreshedGifCount": 6,
+    "refreshedMp4Count": 6
+  }
+}

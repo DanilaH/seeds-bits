@@ -1,0 +1,56 @@
+{
+  "runtimeSource": "e92bd4915d677caf47f74944402c82d48b483d9c",
+  "method": "Unmodified application in Chromium; real DOM, styles, rules and animations. Seeded demonstration saves; test Android/ad bridges; no real ad, review window or OS notification delivery.",
+  "checks": [
+    "Classic 3 accepted pairs: +6 seeds; jar crosses 97% \u2192 next jar.",
+    "Repeated hinted pair, deselection and undo: one hint key, budget remains 2.",
+    "Actual daily puzzle solution: day 6 \u2192 7, wallet 4 \u2192 7, completion persisted.",
+    "Three free hints keep wallet=4; next hint spends wallet to3; notebook has its3 free + same shared3.",
+    "Actual notebook solution: first unique completion grants seeds to the shared jar.",
+    "Reminder enabled initially; time change and off/on persisted. Native grant is simulated; OS delivery is not captured."
+  ],
+  "validation": [
+    {
+      "name": "seeds-01-jar-fill",
+      "gifBytes": 6799126,
+      "gifFrames": 118,
+      "mp4Bytes": 191196,
+      "valid": true
+    },
+    {
+      "name": "seeds-02-sticky-hint",
+      "gifBytes": 6369862,
+      "gifFrames": 108,
+      "mp4Bytes": 109089,
+      "valid": true
+    },
+    {
+      "name": "seeds-03-daily-seven-days",
+      "gifBytes": 5299346,
+      "gifFrames": 131,
+      "mp4Bytes": 222267,
+      "valid": true
+    },
+    {
+      "name": "seeds-04-shared-hint-wallet",
+      "gifBytes": 3562154,
+      "gifFrames": 86,
+      "mp4Bytes": 217309,
+      "valid": true
+    },
+    {
+      "name": "seeds-05-notebook-to-jar",
+      "gifBytes": 2911524,
+      "gifFrames": 97,
+      "mp4Bytes": 139548,
+      "valid": true
+    },
+    {
+      "name": "seeds-06-reminder-settings",
+      "gifBytes": 3432047,
+      "gifFrames": 79,
+      "mp4Bytes": 100397,
+      "valid": true
+    }
+  ]
+}

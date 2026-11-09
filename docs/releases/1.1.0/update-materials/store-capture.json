@@ -1,0 +1,178 @@
+{
+  "method": "production web UI, achievable demonstration saves; not a native SDK/device test",
+  "sourceHead": "e92bd4915d677caf47f74944402c82d48b483d9c",
+  "productionAssets": [
+    {
+      "path": "index.html",
+      "sha256": "1b42f13ea3cf8204dfd943dca3f27cb155265aac47fc9e0232af4624161b550c"
+    },
+    {
+      "path": "assets/advice-worker-6LRsD5M8.js",
+      "sha256": "905dba070aae2ff31c8448b332dcdaf4cd150a93750ad4e4aa5cbc317ab11b48"
+    },
+    {
+      "path": "assets/esm-BqqO3TMS.js",
+      "sha256": "a4a73b6007903ef571a08175e0246b97e66c2fcb59f24074159958be99c58aae"
+    },
+    {
+      "path": "assets/esm-_iyjuugf.js",
+      "sha256": "654f173cd224488079f5a5557772c7f0a1daee4d636b1a1e874cfca40eb0645d"
+    },
+    {
+      "path": "assets/index-Cih_Mv1e.js",
+      "sha256": "bdeac60d81cb6393ab8ad80bebe250a9f7951d04363322b9f014c6c064886ca2"
+    },
+    {
+      "path": "assets/index-DJNCFrBh.css",
+      "sha256": "688d61eeec5ce9419300875dff098d943faded53d858c7c3535f77569f01e78c"
+    },
+    {
+      "path": "assets/notebook-extra-B_1ZZVK0.js",
+      "sha256": "a104ed723c0e875dd09a9f85f0dbecaee42e8dd80c364187b53c0271c1cac432"
+    },
+    {
+      "path": "assets/web-Bit3TtMm.js",
+      "sha256": "8d9af09c18a73f38aabc46c49a98b5c6d9e6bc22504a4186ba2b35e4c50f414c"
+    },
+    {
+      "path": "assets/web-CnhYsgNp.js",
+      "sha256": "732cda210d31bd7e16ad2bf8b9794d1d1e1398889644efeee44f06345970c59e"
+    },
+    {
+      "path": "assets/web-CxPrlBg1.js",
+      "sha256": "15724be1e40c01caf5db618be2359830e642e27466b188352f143dc6f13d5e07"
+    }
+  ],
+  "date": "2026-11-09",
+  "captures": [
+    {
+      "name": "phone-01-pairs",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-02-play",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-03-books",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-04-calendar",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-05-jars",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-06-medal",
+      "viewport": {
+        "width": 390,
+        "height": 780
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-07-trophies",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": false
+    },
+    {
+      "name": "phone-08-dark",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "dark": true
+    },
+    {
+      "name": "tablet-01-pairs",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-02-books",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-03-dark",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": true
+    },
+    {
+      "name": "tablet-04-library",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-05-progress",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-06-jars",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-07-trophies",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    },
+    {
+      "name": "tablet-08-medal",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "dark": false
+    }
+  ],
+  "errors": []
+}

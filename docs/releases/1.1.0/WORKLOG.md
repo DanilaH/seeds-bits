@@ -55,3 +55,8 @@ One filling medal replaces the triplet in results, calendar and each collection 
 ## 9 November 2026 — colourful celebration and explicit next medal, build 1100023
 
 A stronger local pop/sheen with 32 white, gold, coral, blue and lilac rectangular/diamond/strip pieces replaces the quiet monochrome burst. An external navy receipt keeps the check readable; a small next-goal card shows the following metal and remaining tasks, with a stacked layout on narrow screens. Final gold declares the monthly collection complete. The badge entrance has no pre-animation flash; small light-theme captions meet 4.64:1 contrast. Runtime cb95493: 52+2 model, 145+15 browser, 21+16 native harness; all four release-23 jobs and fresh/upgrade Android acceptance passed. Signed APK remains 5 501 048 bytes with the existing certificate. One new actual-UI GIF/MP4 delivered. See [celebration report](medal-celebration/REPORT.md).
+
+
+## 9 November 2026 — final update materials and native time editor, build 1100024
+
+The materials review exposed hours clipped by the native time editor in 12-hour mode. Restored font-aware width, normal height and a 44px touch area; large text wraps the control row. A new test inspects native shadow segments for 32 combinations across locales, values, screen sizes and font sizes. Runtime e92bd49 passed 52+2 model, 146+15 browser and 21+16 native checks; all four release-24 jobs including fresh/upgrade Android acceptance passed. APK retains the certificate and size. Delivered 16 fresh production store images, listing/upload notes, 6 re-recorded GIF/MP4 examples and a crosswalk to the original feedback. See [final materials report](update-materials/REPORT.md).

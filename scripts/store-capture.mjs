@@ -266,7 +266,7 @@ try {
   });
   await capture("phone-03-books", phone, book);
   await capture("phone-04-calendar", phone, calendar);
-  await capture("phone-05-jars", { width: 390, height: 700 }, jars);
+  await capture("phone-05-jars", { width: 390, height: 844 }, jars);
   await capture("phone-06-medal", { width: 390, height: 780 }, reward);
   await capture("phone-07-trophies", phone, medals);
   await capture("phone-08-dark", phone, game, true);

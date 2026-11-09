@@ -1,0 +1,17 @@
+{
+  "runtimeSource": "e92bd4915d677caf47f74944402c82d48b483d9c",
+  "versionName": "1.1.0",
+  "versionCode": "1100024",
+  "apk": {
+    "file": "seeds-1.1.0-rustore.apk",
+    "bytes": 5501048,
+    "sha256": "0eee185c8cb21b8a6413997fcc085ad3a80ce344d9b991f2bf6d926273974b8e",
+    "packagedSeparately": true
+  },
+  "productionAssetsMatchSignedApk": true,
+  "screenshots": 16,
+  "phone": 8,
+  "tablet": 8,
+  "sourceCapture": "Production build; reachable prepared progress; no OS UI or third-party advertisements",
+  "documentation": "https://www.rustore.ru/help/developers/publishing-and-verifying-apps/app-publication"
+}

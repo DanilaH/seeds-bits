@@ -1,0 +1,373 @@
+{
+  "method": "CSS gradient framing with short factual captions below unchanged complete production UI captures",
+  "screenshots": [
+    {
+      "file": "phone-01-pairs.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 460430,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Соединяйте одинаковые цифры или пары с суммой 10",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-02-play.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 436462,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Убирайте пары и освобождайте строки",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-03-books.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 469150,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 69.359375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "2 400 задач в 100 тетрадях",
+      "captionGeometry": {
+        "x": 80.390625,
+        "y": 857.359375,
+        "width": 379.203125,
+        "height": 33.265625,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-04-calendar.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 470732,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Задача дня, серии и архив с января 2025",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-05-jars.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 572933,
+      "dark": false,
+      "geometry": {
+        "x": 80.546875,
+        "y": 26.734375,
+        "width": 378.90625,
+        "height": 820,
+        "naturalWidth": 780,
+        "naturalHeight": 1688
+      },
+      "caption": "Все режимы пополняют коллекцию баночек",
+      "captionGeometry": {
+        "x": 36,
+        "y": 866.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-06-medal.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 574089,
+      "dark": false,
+      "geometry": {
+        "x": 65,
+        "y": 26.734375,
+        "width": 410,
+        "height": 820,
+        "naturalWidth": 780,
+        "naturalHeight": 1560
+      },
+      "caption": "Медаль за месяц и следующая цель",
+      "captionGeometry": {
+        "x": 36,
+        "y": 866.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-07-trophies.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 520265,
+      "dark": false,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Бронза за 7 задач, серебро за 14, золото за весь месяц",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "phone-08-dark.png",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 490341,
+      "dark": true,
+      "geometry": {
+        "x": 36,
+        "y": 52.734375,
+        "width": 468,
+        "height": 768,
+        "naturalWidth": 780,
+        "naturalHeight": 1280
+      },
+      "caption": "Тёмная тема для игрового поля и меню",
+      "captionGeometry": {
+        "x": 36,
+        "y": 840.734375,
+        "width": 468,
+        "height": 66.53125,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-01-pairs.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 436812,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Убирайте одинаковые числа и пары с суммой 10",
+      "captionGeometry": {
+        "x": 171.0625,
+        "y": 478.640625,
+        "width": 617.859375,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-02-books.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 439558,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "В больших задачах поле прокручивается",
+      "captionGeometry": {
+        "x": 217.6875,
+        "y": 478.640625,
+        "width": 524.609375,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-03-dark.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 468057,
+      "dark": true,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Тёмная тема для игрового поля и меню",
+      "captionGeometry": {
+        "x": 227.578125,
+        "y": 478.640625,
+        "width": 504.84375,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-04-library.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 444931,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "2 400 задач в 100 тетрадях",
+      "captionGeometry": {
+        "x": 304.984375,
+        "y": 478.640625,
+        "width": 350.03125,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-05-progress.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 453888,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Прогресс всех режимов — в коллекции баночек",
+      "captionGeometry": {
+        "x": 174.328125,
+        "y": 478.640625,
+        "width": 611.328125,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-06-jars.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 424240,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Баночки заполняются по мере прохождения",
+      "captionGeometry": {
+        "x": 196.03125,
+        "y": 478.640625,
+        "width": 567.921875,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-07-trophies.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 449793,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Медали за задачи из месячного календаря",
+      "captionGeometry": {
+        "x": 205.71875,
+        "y": 478.640625,
+        "width": 548.5625,
+        "height": 30.71875,
+        "fits": true
+      }
+    },
+    {
+      "file": "tablet-08-medal.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 485441,
+      "dark": false,
+      "geometry": {
+        "x": 96,
+        "y": 30.640625,
+        "width": 768,
+        "height": 432,
+        "naturalWidth": 1920,
+        "naturalHeight": 1080
+      },
+      "caption": "Награда за серию дней и следующая медаль",
+      "captionGeometry": {
+        "x": 191.59375,
+        "y": 478.640625,
+        "width": 576.796875,
+        "height": 30.71875,
+        "fits": true
+      }
+    }
+  ]
+}

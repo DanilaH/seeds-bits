@@ -1,0 +1,32 @@
+{
+  "runtimeSource": "e92bd4915d677caf47f74944402c82d48b483d9c",
+  "checkRun": 42626756560,
+  "releaseRun": 42626758548,
+  "files": [
+    {
+      "file": "seeds-1.1.0-rustore.apk",
+      "bytes": 5501048,
+      "sha256": "0eee185c8cb21b8a6413997fcc085ad3a80ce344d9b991f2bf6d926273974b8e"
+    },
+    {
+      "file": "seeds-rustore-materials-1.1.0.zip",
+      "bytes": 7778610,
+      "sha256": "09295a4ab990b3e6f58f2471553d9cda6747f4736351f9cfcb5497dff596bfa5"
+    },
+    {
+      "file": "seeds-1.1.0-update-media.zip",
+      "bytes": 30433566,
+      "sha256": "f61de804e984018baa7723908f4f4548e73b637da649d3349e7720ac1df597e7"
+    },
+    {
+      "file": "seeds-store-phone-preview.jpg",
+      "bytes": 236763,
+      "sha256": "447373564c53ce67629b163265e7939d75ab71e790d9ccbf52033a03334d3118"
+    },
+    {
+      "file": "seeds-store-tablet-preview.jpg",
+      "bytes": 189644,
+      "sha256": "4ce8598c6d025da34f2080442567e500d47f9f12e2c1e984549054c80789054b"
+    }
+  ]
+}
