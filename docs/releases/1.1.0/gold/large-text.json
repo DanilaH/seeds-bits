@@ -1,0 +1,74 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "game",
+    "failures": []
+  }
+]

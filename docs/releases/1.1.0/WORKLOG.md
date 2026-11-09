@@ -42,3 +42,7 @@
 ## 9 November 2026 — feel build 1100017
 
 Native haptics adapted from Road Lines, pointer feedback with stable hit areas, shared saved-reward flights and full-jar presentation, once-only victory after persistence, precise undo and bounded large-field animation. Runtime `192cf9dcf0772d8d7342c974c73a17d15ae9d233`; both check jobs and all four release jobs passed. Signed APK 5 501 048 bytes; three GIF/MP4 examples delivered. See [feel report](feel/REPORT.md). Physical motor intensity remains unmeasured.
+
+## 9 November 2026 — stable layout and metal medals, build 1100019
+
+Separated hint/add counters, fixed jar-caption geometry through 100%, notebook landscape columns and classic labels, enlarged-text home/progress, result reward rows and primary-action visibility. Three independently filling monthly medals share presentation across results/calendar/collection; a new saved tier gets a bounded local pop/confetti, without replay on restore. Runtime fcad2f0 passed 52+2 model, 144+15 browser and 21+16 native harness checks; 184 extra layout states passed. APK signed with the existing production certificate, 5 501 048 bytes. Native acceptance selectors updated to recognize exact old/new hint labels and verify the already-built payload hash, without another app build. Final native evidence and deliverables: [gold report](gold/REPORT.md).

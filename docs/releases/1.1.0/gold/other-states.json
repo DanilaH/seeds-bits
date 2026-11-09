@@ -1,0 +1,98 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "hint-offer",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "restart-confirm",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "lesson-1",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "lesson-2",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "lesson-3",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "lesson-4",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "lesson-5",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "screen": "lesson-6",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "hint-offer",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "restart-confirm",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "lesson-1",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "lesson-2",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "lesson-3",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "lesson-4",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "lesson-5",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "screen": "lesson-6",
+    "failures": []
+  }
+]

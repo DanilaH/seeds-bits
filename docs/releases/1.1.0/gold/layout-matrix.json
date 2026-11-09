@@ -1,0 +1,1094 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": false,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "dark": true,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": false,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "dark": true,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": false,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "dark": true,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": false,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "dark": true,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": false,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "dark": true,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": false,
+    "screen": "classic",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "home",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "settings",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "privacy",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "progress",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "jars",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "trophies",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "calendar",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "month-picker",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "books",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "book-empty",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "game",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "result",
+    "failures": []
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "dark": true,
+    "screen": "classic",
+    "failures": []
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "runtimeSource": "fcad2f05917db7114ba72e9edc0cfb13791ee3e7",
+  "checkRun": 42609787768,
+  "releaseRun": 42609790875,
+  "acceptanceRun": 42611295852,
+  "acceptanceSource": "1d7d48773cb1d802607c889cdc14872081717371",
+  "unsignedPayloadSha256": "0ebbac8f15ef6c24ecc5fe14d5b99d90290355d1f2481f9f22f8e29eca3bc5bb",
+  "checks": [
+    {
+      "id": 129135086564,
+      "name": "web",
+      "conclusion": "success"
+    },
+    {
+      "id": 129135086749,
+      "name": "android",
+      "conclusion": "success"
+    }
+  ],
+  "release": [
+    {
+      "id": 129135111117,
+      "name": "android-release",
+      "conclusion": "success"
+    },
+    {
+      "id": 129135111424,
+      "name": "store-media",
+      "conclusion": "success"
+    },
+    {
+      "id": 129135111437,
+      "name": "upgrade-baseline",
+      "conclusion": "success"
+    },
+    {
+      "id": 129136996908,
+      "name": "android-smoke",
+      "conclusion": "failure"
+    }
+  ],
+  "acceptance": [
+    {
+      "id": 129140098110,
+      "name": "android-smoke",
+      "conclusion": "success"
+    }
+  ],
+  "initialNativeFailure": "Exact hint label changed; original release acceptance expected 'Подсказка · 2'. Corrected test-only selectors accept exact old/new labels and reject 20/12 for expected2. The same hash-pinned APK passed separate fresh+upgrade acceptance; app binaries were not rebuilt.",
+  "verified": {
+    "unit": 52,
+    "regressionModel": 2,
+    "browser": 144,
+    "regressionBrowser": 15,
+    "nativeRegressionHarness": 21,
+    "nativeFeedbackHarness": 16,
+    "layoutStates": 156,
+    "largeTextStates": 12,
+    "otherUiStates": 16,
+    "productionBuild": true,
+    "yandexBuild": true,
+    "androidDebug": true,
+    "androidReleaseR8": true,
+    "exactSignedApkInspection": true,
+    "offlineAndroid35FreshAndUpgrade": true,
+    "gifMp4Decode": true
+  },
+  "limits": "Native acceptance uses offline Android 35 with a temporary CI-only certificate; delivered APK production signature is verified separately. Physical haptic feel, live ads/review and OEM notification delivery are not measured."
+}

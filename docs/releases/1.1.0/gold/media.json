@@ -1,0 +1,31 @@
+{
+  "runtimeSource": "fcad2f05917db7114ba72e9edc0cfb13791ee3e7",
+  "method": "Actual UI and rules in Chromium, prepared legal demonstration progress, development ad/engagement bridges, silent GIF/MP4; not physical device capture.",
+  "captureScenarios": 2,
+  "pageErrors": 0,
+  "gifsAndMp4Decoded": true,
+  "visuallyInspected": true,
+  "primaryDailyActionFullyVisible": true,
+  "files": [
+    {
+      "file": "gifs/seeds-gold-01-stable-ui.gif",
+      "bytes": 2149104,
+      "sha256": "03281e6cf712d06ce97c89dba8f708f8c759476e96ea5859fa5970674c81cd64"
+    },
+    {
+      "file": "gifs/seeds-gold-02-medals.gif",
+      "bytes": 4040865,
+      "sha256": "e7cde931455a961b981f95a23f6a3b831c0887a0cea3d1a8884c13d575bfc112"
+    },
+    {
+      "file": "videos/seeds-gold-01-stable-ui.mp4",
+      "bytes": 88090,
+      "sha256": "bb689d9779b7ae732b720dc5c7510bd83eda3149d315b6a1bec660349a3256ca"
+    },
+    {
+      "file": "videos/seeds-gold-02-medals.mp4",
+      "bytes": 267295,
+      "sha256": "3da87f56d84cb5bae78361499a7c467c39421002957a65d8086e0046941360f4"
+    }
+  ]
+}
