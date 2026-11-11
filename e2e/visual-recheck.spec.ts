@@ -77,7 +77,12 @@ for (const [width, height, scale] of [
             const rail = e.closest(".dialog-scroll")!.getBoundingClientRect();
             return [...e.children].every((c) => {
               const r = c.getBoundingClientRect();
-              return r.left >= rail.left - 1 && r.right <= rail.right + 1;
+              return (
+                r.left >= rail.left - 1 &&
+                r.right <= rail.right + 1 &&
+                (!(c instanceof HTMLButtonElement) ||
+                  (r.width >= 44 && r.height >= 44))
+              );
             });
           }),
         ).toBe(true);
