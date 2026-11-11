@@ -1,7 +1,7 @@
 name: Build RuStore release
 on:
   push:
-    branches: [release/rustore-1.0.0, release/rustore-1.1.0]
+    branches: [release/rustore-1.0.0, release/rustore-1.1.0, release/rustore-1.1.1]
   workflow_dispatch:
 concurrency:
   group: rustore-${{ github.ref }}

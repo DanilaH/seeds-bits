@@ -1,8 +1,8 @@
-"""Upgrade the published 1.0.0 source payload to 1.1.0 with one CI-only certificate.
+"""Upgrade the a known published payload to the current release with one CI-only certificate.
 Both APKs are release/non-debuggable. Persistence is exercised through the UI.
 Production APK certificate identity is verified separately on the delivered bytes.
 """
-import json,pathlib,re,subprocess,sys,time,xml.etree.ElementTree as ET
+import json,os,pathlib,re,subprocess,sys,time,xml.etree.ElementTree as ET
 out=pathlib.Path('test-results/emulator-upgrade');out.mkdir(parents=True,exist_ok=True)
 pkg='com.seedsbits.game';phase=sys.argv[1]
 def adb(*args):return subprocess.run(['adb',*args],check=True,capture_output=True,text=True).stdout
@@ -74,7 +74,7 @@ try:
   classic();count(26)
   tap(button('Открыть меню',True));tap(button('Настройки',True));tap(button('Тёмная тема',True));tap(button('Закрыть меню',True));count(26)
   screenshot('before.png')
-  (out/'baseline.json').write_text(json.dumps({'classicDigits':26,'classicHintBudget':2,'bookDigits':initial-2,'baselineSource':'86d950b970a69e5dec3ebc269075143a1c28f94a','baselineVersion':'1.0.0 (1000010)','signature':'same temporary CI-only key for both APKs'}))
+  (out/'baseline.json').write_text(json.dumps({'classicDigits':26,'classicHintBudget':2,'bookDigits':initial-2,'baselineSource':os.environ.get('SEEDS_UPGRADE_BASELINE_SOURCE','86d950b970a69e5dec3ebc269075143a1c28f94a'),'baselineVersion':os.environ.get('SEEDS_UPGRADE_BASELINE_VERSION','1.0.0 (1000010)'),'signature':'same temporary CI-only key for both APKs'}))
   adb('shell','am','force-stop',pkg)
  else:
   before=json.loads((out/'baseline.json').read_text());resume();count(before['classicDigits']);hint_count(2)
@@ -85,6 +85,6 @@ try:
   assert sum(new.getpixel((new.width//2,new.height//2)))<420,'Dark theme not retained'
   tap(button('Отмена',True));count(28)
   book();count(before['bookDigits']);classic();count(28)
-  (out/'acceptance.json').write_text(json.dumps({'passed':True,'classicBoard':True,'classicUndoHistory':True,'hintBudget':True,'notebookBoard':True,'darkTheme':True,'scope':'rebuilt published source → new release payload, offline Android 35, same temporary CI certificate; not a physical-device production-certificate install'},indent=2))
+  (out/'acceptance.json').write_text(json.dumps({'passed':True,'classicBoard':True,'classicUndoHistory':True,'hintBudget':True,'notebookBoard':True,'darkTheme':True,'scope':os.environ.get('SEEDS_UPGRADE_BASELINE_KIND','rebuilt published source')+' → new release payload, offline Android 35, same temporary CI certificate; not a physical-device production-certificate install'},indent=2))
 finally:
  (out/f'{phase}-logcat.txt').write_text(adb('logcat','-d','-t','300'))

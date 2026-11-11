@@ -19,7 +19,7 @@ test("privacy is readable offline and returns to settings without overlapping sc
   await expect(page.locator("#settings-panel")).toBeHidden();
   expect(
     await page
-      .locator("#collection h2")
+      .locator(".dialog-head .screen-heading h2")
       .evaluate((e) => e.scrollWidth <= e.clientWidth + 1),
   ).toBe(true);
   await expect(page.locator("#collection a").first()).toHaveAttribute(

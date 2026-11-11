@@ -1,0 +1,117 @@
+{
+  "file": "seeds-1.1.1.apk",
+  "sha256": "5a9a4b1d72e9c63de31e2809f95a05dba438b96115db6b6521ee629283d03ecd",
+  "bytes": 5505144,
+  "package": "com.seedsbits.game",
+  "name": "Семечки",
+  "versionName": "1.1.1",
+  "versionCode": "1101007",
+  "minSdk": "24",
+  "targetSdk": "36",
+  "debuggable": false,
+  "testOnly": false,
+  "allowBackup": false,
+  "usesCleartextTraffic": false,
+  "adsTestMode": false,
+  "distinctLiveAdUnits": true,
+  "configuredClientFields": {
+    "appmetrica_api_key": true,
+    "yandex_banner_id": true,
+    "yandex_interstitial_id": true,
+    "yandex_rewarded_id": true
+  },
+  "certificateSha256": "ca2f9ae57a84bba5cc5b844aee65515a88bfde83fe3b5a85ae4d189b6cf8bfe1",
+  "signatureVerified": {
+    "v2": true,
+    "v3": true
+  },
+  "permissions": [
+    "android.permission.ACCESS_NETWORK_STATE",
+    "com.seedsbits.game.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+    "android.permission.VIBRATE",
+    "com.google.android.gms.permission.AD_ID",
+    "android.permission.INTERNET",
+    "android.permission.POST_NOTIFICATIONS",
+    "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+    "android.permission.RECEIVE_BOOT_COMPLETED"
+  ],
+  "cleanWebAssets": {
+    "index.html": true,
+    "assets/esm-BtFrOR1Q.js": true,
+    "assets/index-Cac7ZN4V.js": true,
+    "assets/index-nQpAcn_e.css": true,
+    "assets/web-C199lyI9.js": true,
+    "assets/notebook-extra-B_1ZZVK0.js": true,
+    "assets/advice-worker-6LRsD5M8.js": true,
+    "assets/web-D4ekdQjt.js": true,
+    "assets/esm-CNMjlR-O.js": true,
+    "assets/web-CKs4R7Gp.js": true
+  },
+  "extraStaleAssets": false,
+  "launcherIcons": [
+    {
+      "name": "ic_launcher",
+      "resource": "res/9w.png",
+      "size": 48
+    },
+    {
+      "name": "ic_launcher",
+      "resource": "res/yn.png",
+      "size": 72
+    },
+    {
+      "name": "ic_launcher",
+      "resource": "res/FS.png",
+      "size": 96
+    },
+    {
+      "name": "ic_launcher",
+      "resource": "res/RJ.png",
+      "size": 144
+    },
+    {
+      "name": "ic_launcher",
+      "resource": "res/o-.png",
+      "size": 192
+    },
+    {
+      "name": "ic_launcher_round",
+      "resource": "res/zR.png",
+      "size": 48
+    },
+    {
+      "name": "ic_launcher_round",
+      "resource": "res/8c.png",
+      "size": 72
+    },
+    {
+      "name": "ic_launcher_round",
+      "resource": "res/wb.png",
+      "size": 96
+    },
+    {
+      "name": "ic_launcher_round",
+      "resource": "res/fO.png",
+      "size": 144
+    },
+    {
+      "name": "ic_launcher_round",
+      "resource": "res/Gc.png",
+      "size": 192
+    }
+  ],
+  "launcherArtworkVerified": true,
+  "packagedClasses": {
+    "bridge": true,
+    "application": true,
+    "yandex": true,
+    "appmetrica": true
+  },
+  "bridgeMethodsAndAnnotationsVerified": true,
+  "engagementBridgeVerified": true,
+  "ruStoreReviewSdkRetained": true,
+  "reminderReceiverNotExported": true,
+  "exactAlarmPermission": false,
+  "engagementTestHooksAbsent": true,
+  "nativeFeedbackBridgeVerified": true
+}

@@ -495,11 +495,9 @@ test("hint offer, restart confirmation and every lesson contain their text", asy
     await page.locator("#cancel-hints").click();
     await pair(page); // Restart confirmation belongs to a game with actual progress.
     await page.locator("#menu").click();
-    await page.locator("#settings-open").click();
     await page.locator("#new").click();
     await check("restart-confirm");
     await page.locator("#cancel-new").click();
-    await page.locator("#settings-back").click();
     await page.locator("#learn").click();
     let n = 0;
     for (const [a, b] of [

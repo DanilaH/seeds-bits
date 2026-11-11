@@ -327,7 +327,9 @@ test("already granted Android permission needs no dialog and defaults to enabled
   await page.locator("#settings-open").click();
   await expect(page.locator("#reminders")).toBeChecked();
   await expect(page.locator("#notification-permission-request")).toBeHidden();
-  await expect(page.locator("#reminder-permission")).toHaveText("");
+  await expect(page.locator("#reminder-permission")).toHaveText(
+    "Напоминание включено.",
+  );
   await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await remove(page);

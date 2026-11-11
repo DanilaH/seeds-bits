@@ -1,0 +1,96 @@
+name: Verify exact UX 1.1.1 payload on Android
+on:
+  workflow_dispatch:
+    inputs:
+      release_run_id:
+        description: Workflow run containing the exact 1.1.1 release payload
+        type: string
+        required: true
+        default: '42999286153'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: ux111-exact-native
+  cancel-in-progress: true
+jobs:
+  native:
+    env:
+      SEEDS_UPGRADE_BASELINE_KIND: published release payload
+      SEEDS_UPGRADE_BASELINE_SOURCE: e92bd4915d677caf47f74944402c82d48b483d9c
+      SEEDS_UPGRADE_BASELINE_VERSION: '1.1.0 (1100024)'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: sudo apt-get update && sudo apt-get install -y tesseract-ocr-rus
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: seeds-111-release-unsigned
+          path: new-release/
+          run-id: ${{ inputs.release_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: seeds-rustore-release-unsigned
+          path: baseline/
+          run-id: 42626758548
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: python3 scripts/regression-061/native-harness.py && python3 scripts/feedback-native-harness.py
+      - name: Start disposable offline Android 35
+        run: |
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64' 'build-tools;35.0.0'
+          echo no | avdmanager create avd --force --name seeds_111 --package 'system-images;android-35;google_apis;x86_64'
+          sudo chmod 666 /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -avd seeds_111 -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 3072 -cores 2 > /tmp/seeds-111-emulator.log 2>&1 &
+          adb wait-for-device
+          for attempt in $(seq 1 90); do
+            if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1 ]; then break; fi
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          adb shell input keyevent 82
+          adb shell wm size 780x1688
+          adb shell wm density 320
+          adb shell svc wifi disable
+          adb shell svc data disable
+          adb shell settings put global http_proxy 127.0.0.1:9
+          keytool -genkeypair -keystore /tmp/ux111.p12 -storetype PKCS12 -storepass android -keypass android -alias ux -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI UX Acceptance' -noprompt
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-old.apk baseline/app-release-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-new.apk new-release/app-release-unsigned.apk
+          adb install /tmp/seeds-new.apk
+      - id: ux
+        run: python3 scripts/android-ux111.py
+        continue-on-error: true
+      - run: |
+          adb uninstall com.seedsbits.game
+          adb install /tmp/seeds-old.apk
+      - run: python3 -m pip install --user pillow
+      - run: python3 scripts/android-upgrade.py before
+      - run: adb install -r /tmp/seeds-new.apk
+      - run: python3 scripts/android-upgrade.py after
+      - run: |
+          adb uninstall com.seedsbits.game
+          adb install /tmp/seeds-new.apk
+      - run: python3 scripts/android-smoke.py
+      - name: Require native UX acceptance
+        if: ${{ always() && steps.ux.outcome == 'failure' }}
+        run: exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-111-native-acceptance
+          path: |
+            test-results/emulator/
+            test-results/emulator-upgrade/
+            test-results/ux111-native/

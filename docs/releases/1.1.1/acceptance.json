@@ -1,0 +1,56 @@
+{
+  "ux": {
+    "checks": {
+      "denySystemPermissionAndBack": true,
+      "grantSystemPermissionAndBack": true,
+      "grantedPreferenceSurvivesRelaunch": true,
+      "largeTextSettingsAndBack": true,
+      "largeTextLandscapeActions": true,
+      "largeTextLandscapeActionsScroll": true,
+      "nativeTimePickerAndCancel": true
+    },
+    "errors": {},
+    "scope": "Android 35, actual release, offline, disposable signer"
+  },
+  "upgrade": {
+    "passed": true,
+    "classicBoard": true,
+    "classicUndoHistory": true,
+    "hintBudget": true,
+    "notebookBoard": true,
+    "darkTheme": true,
+    "scope": "published release payload → new release payload, offline Android 35, same temporary CI certificate; not a physical-device production-certificate install"
+  },
+  "baseline": {
+    "classicDigits": 26,
+    "classicHintBudget": 2,
+    "bookDigits": 6,
+    "baselineSource": "e92bd4915d677caf47f74944402c82d48b483d9c",
+    "baselineVersion": "1.1.0 (1100024)",
+    "signature": "same temporary CI-only key for both APKs"
+  },
+  "smoke": {
+    "environment": "Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised",
+    "checks": {
+      "launchOffline": true,
+      "tutorialSkipAndClassic": true,
+      "removePair": true,
+      "undo": true,
+      "nativeMonetizationBridgeInitialized": true,
+      "freeHintAccountingAndStickyRepeat": true,
+      "offlineRewardedReturnsWithoutGrant": true,
+      "saveSurvivesProcessStop": true,
+      "hintBalanceSurvivesProcessStop": true,
+      "rotationPreservesBoard": true,
+      "privacyAccessibleOffline": true
+    },
+    "accessibilityAcquisitionRetries": []
+  },
+  "applicationSource": "56d0c7763816bf9ee783535f446f411ea50dc2c1",
+  "nativeTestSource": "1594215b758b6b0694471a785693c7ebfee93d17",
+  "nativeRun": 43001140499,
+  "webRun": 42999461571,
+  "browserRun": 42999286153,
+  "crossTabRepeatRun": 43001696034,
+  "crossTabRepeats": 20
+}

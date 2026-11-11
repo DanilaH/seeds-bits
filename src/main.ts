@@ -1,5 +1,10 @@
 import { dailyRun, streakReward } from "./daily-run";
-import { engagementBridge, experience, reviewEligible } from "./engagement";
+import {
+  engagementBridge,
+  experience,
+  reviewEligible,
+  requestNotificationPermission,
+} from "./engagement";
 import {
   initializeMonetization,
   monetized,
@@ -118,6 +123,8 @@ let bootComplete = false,
 let engagementAvailable = false,
   engagementActive = false,
   notificationGranted = false,
+  notificationRequestPending = false,
+  notificationSaving = false,
   pendingDailyOpen = false,
   skipNextInterstitial = false;
 let lastExternalAt = -Infinity,
@@ -198,7 +205,8 @@ homeCurrent.innerHTML =
   '<p class="home-eyebrow" id="home-eyebrow"></p><h2 id="home-game-title"></h2>';
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
-homeCurrent.append($("resume-context"), homeGoal, $("resume"));
+$("new").className = "text-button restart-action";
+homeCurrent.append($("resume-context"), homeGoal, $("resume"), $("new"));
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
 homeModes.setAttribute("aria-label", "Режимы игры");
@@ -208,7 +216,7 @@ $("menu-content").insertBefore(
   homeLayout,
   document.querySelector(".home-links"),
 );
-for (const id of ["dark", "sound", "vibration"])
+for (const id of ["dark", "sound", "vibration", "reminders"])
   $(id).setAttribute("role", "switch");
 let enteredGame = false;
 document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
@@ -230,6 +238,74 @@ document.querySelector(".game")!.append(gameActions);
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
+const dialogHeader = dialog.querySelector<HTMLElement>(".dialog-head")!;
+const settingsHeading =
+  $("settings-panel").querySelector<HTMLElement>(".screen-heading")!;
+const confirmHeading = document.createElement("div");
+confirmHeading.className = "screen-heading";
+confirmHeading.innerHTML = `<button id="confirm-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Начать заново?</h2>`;
+$("confirm-content").prepend(confirmHeading);
+$("confirm-back").onclick = returnToPrevious;
+function dialogScroller(): HTMLElement {
+  return (
+    dialog.querySelector<HTMLElement>(".dialog-scroll:not([hidden])") ?? dialog
+  );
+}
+for (const id of ["settings-panel", "collection", "confirm-content"])
+  $(id).classList.add("dialog-scroll");
+function releaseDialogHeading() {
+  const current = dialogHeader.querySelector<HTMLElement>(".screen-heading");
+  if (current === settingsHeading) $("settings-panel").prepend(current);
+  else if (current === confirmHeading) $("confirm-content").prepend(current);
+  else current?.remove();
+}
+function pinDialogHeading(panel: HTMLElement) {
+  releaseDialogHeading();
+  const heading = panel.querySelector<HTMLElement>(".screen-heading");
+  if (heading) dialogHeader.prepend(heading);
+  dialog.scrollTop = 0;
+  showSaveState();
+}
+// Use measured text, including Android's text zoom, to choose an action layout.
+let actionsFrame = 0;
+function scheduleActionLayout() {
+  cancelAnimationFrame(actionsFrame);
+  actionsFrame = requestAnimationFrame(() => {
+    const footer = document.querySelector<HTMLElement>("footer")!;
+    const actions = [...footer.querySelectorAll<HTMLElement>(".action")].filter(
+      (b) => getComputedStyle(b).display !== "none" && !b.hidden,
+    );
+    let widest = 44;
+    const required = actions.reduce(
+      (width, button) => {
+        const label =
+          button.querySelector<HTMLElement>(".action-label") ??
+          button.querySelector<HTMLElement>("span")!;
+        const range = document.createRange();
+        range.selectNodeContents(label);
+        const needed = Math.max(44, range.getBoundingClientRect().width + 6);
+        widest = Math.max(widest, needed);
+        return width + needed;
+      },
+      Math.max(0, actions.length - 1) * 2,
+    );
+    document
+      .querySelector(".game")!
+      .classList.toggle(
+        "stacked-actions",
+        matchMedia("(orientation: landscape) and (min-width: 540px)").matches &&
+          (required > footer.clientWidth ||
+            (actions.length === 2 && widest > (footer.clientWidth - 2) / 2)),
+      );
+  });
+}
+const actionObserver = new ResizeObserver(scheduleActionLayout);
+actionObserver.observe(document.querySelector("footer")!);
+document
+  .querySelectorAll("footer .action span")
+  .forEach((label) => actionObserver.observe(label));
+window.addEventListener("resize", scheduleActionLayout);
+void document.fonts.ready.then(scheduleActionLayout);
 $("app").inert = true;
 function board() {
   return lesson >= 0 ? lessonBoard : session.current.board;
@@ -269,14 +345,32 @@ const restoreRead = document.createElement("button");
 restoreRead.id = "restore-backup";
 restoreRead.className = "text-button";
 restoreRead.textContent = "Восстановить резервную копию";
+function restorable(raw: string | null): boolean {
+  if (!raw) return false;
+  try {
+    readProgress(raw);
+    return true;
+  } catch {
+    return false;
+  }
+}
+async function preserveUnreadSave(raw: string) {
+  const previous = await platform.read(PROGRESS + ".recovery");
+  await platform.write(
+    PROGRESS + (restorable(previous) ? ".damaged" : ".recovery"),
+    raw,
+  );
+}
 restoreRead.onclick = async () => {
   if (busy || futureSave) return;
   busy = true;
   restoreRead.disabled = true;
+  let validCopy = false;
   try {
     const raw = await platform.read(PROGRESS + ".recovery");
     if (!raw) throw Error("Missing backup");
     const restored = readProgress(raw);
+    validCopy = true;
     // Compare-and-swap protects newer data written by another tab.
     await platform.saveState(
       PROGRESS,
@@ -288,8 +382,10 @@ restoreRead.onclick = async () => {
     );
     location.reload();
   } catch {
-    readWarning =
-      "Не удалось восстановить копию. Текущая партия сохранена без изменений.";
+    if (!validCopy) recoveryAvailable = false;
+    readWarning = validCopy
+      ? "Не удалось сохранить восстановленную партию. Текущая партия не изменена. Попробуйте ещё раз."
+      : "Копия повреждена и не подходит для восстановления. Текущая партия не изменена.";
     showSaveState();
   } finally {
     busy = false;
@@ -300,7 +396,9 @@ readNotice.append(readText, restoreRead, dismissRead);
 document.querySelector(".game")!.prepend(notice);
 $("load-latest").onclick = () => location.reload();
 function showSaveState() {
-  const parent = dialog.open ? dialog : document.querySelector(".game")!;
+  const parent = dialog.open
+    ? dialogScroller()
+    : document.querySelector(".game")!;
   if (notice.parentElement !== parent) parent.prepend(notice);
   if (readNotice.parentElement !== parent) parent.prepend(readNotice);
   readNotice.hidden = !readWarning;
@@ -858,15 +956,20 @@ function renderWin() {
     `<span>Пар убрано: ${session.current.moves}</span><span>Добавлений: ${session.current.additions}</span><span>Подсказок: ${progress.hints[id] ?? 0}</span>`;
   const i = notebook.findIndex((p) => p.id === id);
   const next = nextTask(id, progress.done);
-  $("play-again").textContent = next
-    ? i >= 0 && volumeOf(next) !== volumeOf(id)
-      ? "Следующая тетрадь"
-      : "Следующая задача"
-    : i >= 0
-      ? "К тетради"
-      : id.startsWith("daily")
-        ? "К календарю"
-        : "Ещё партия";
+  const archiveNext = id.startsWith("daily") && next?.startsWith("daily");
+  $("play-again").textContent = archiveNext
+    ? next!.slice(9) === today()
+      ? "Сегодняшняя задача"
+      : `Задача из архива · ${next!.slice(9).split("-").reverse().join(".")}`
+    : next
+      ? i >= 0 && volumeOf(next) !== volumeOf(id)
+        ? "Следующая тетрадь"
+        : "Следующая задача"
+      : i >= 0
+        ? "К тетради"
+        : id.startsWith("daily")
+          ? "К календарю"
+          : "Ещё партия";
   $("completion-status").textContent =
     i >= 0 &&
     volumeTasks(volumeOf(id)).every((p) => progress.done.includes(p.id))
@@ -892,7 +995,9 @@ function renderWin() {
   $("result-gains").innerHTML = saveFailed
     ? "Награда ожидает сохранения"
     : [
-        earnedSeeds ? `В баночку: +${earnedSeeds} семечек` : "",
+        earnedSeeds
+          ? `В баночку: +${earnedSeeds} ${seedWord(earnedSeeds)}`
+          : "",
         earnedHints
           ? `За серию дней: +${earnedHints} ${hintWord(earnedHints)}`
           : "",
@@ -1517,7 +1622,7 @@ function rememberNavigation(target: string) {
   const element = document.activeElement as HTMLElement | null;
   navigationTrail.push({
     screen,
-    scroll: dialog.scrollTop,
+    scroll: dialogScroller().scrollTop,
     focus:
       element?.id ||
       (element?.dataset.month
@@ -1537,7 +1642,7 @@ function returnToPrevious() {
   else if (previous.screen === "settings") openSettings(true);
   else openCollection(previous.screen as CollectionScreen, true);
   if (previous) {
-    dialog.scrollTop = previous.scroll;
+    dialogScroller().scrollTop = previous.scroll;
     const target = previous.focus.startsWith("month:")
       ? dialog.querySelector<HTMLElement>(
           `[data-month="${previous.focus.slice(6)}"]`,
@@ -1579,6 +1684,7 @@ function openMenu(preserve: unknown = false) {
   if (!dialog.open) dialog.dataset.entry = enteredGame ? "pause" : "root";
   if (preserve !== true) navigationTrail.length = 0;
   settlePresentation();
+  releaseDialogHeading();
   updateHome();
   cancelHint();
   if (!busy) render();
@@ -1589,7 +1695,10 @@ function openMenu(preserve: unknown = false) {
   $("collection").hidden = true;
   $("menu-content").hidden = false;
   $("confirm-content").hidden = true;
-  if (!dialog.open) dialog.showModal();
+  if (!dialog.open) {
+    dialog.showModal();
+    dialogScroller().scrollTop = 0;
+  }
   showSaveState();
   $("resume").focus({ preventScroll: true });
   platform.gameplay(false);
@@ -1654,6 +1763,8 @@ function requestRestart() {
   $("menu-content").hidden = true;
   $("settings-panel").hidden = true;
   $("confirm-content").hidden = false;
+  pinDialogHeading($("confirm-content"));
+  $("confirm-back").focus({ preventScroll: true });
 }
 $("new").onclick = requestRestart;
 $("cancel-new").onclick = returnToPrevious;
@@ -1664,6 +1775,8 @@ function openSettings(restoring = false) {
   $("settings-panel").hidden = false;
   dialog.dataset.screen = "settings";
   updateReminderSettings();
+  pinDialogHeading($("settings-panel"));
+  if (!restoring) dialogScroller().scrollTop = 0;
   $("settings-back").focus({ preventScroll: true });
 }
 $("settings-open").onclick = () => openSettings();
@@ -1675,6 +1788,8 @@ $("privacy-open").onclick = () => {
   dialog.dataset.screen = "privacy";
   $("collection").innerHTML =
     `<div class="screen-heading"><button id="privacy-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>О данных</h2></div><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Напоминание о задаче дня включено по умолчанию и работает по местному времени на устройстве. Его можно выключить в настройках игры. Разрешение Android можно отключить в системных настройках.</p><p>Окно оценки обслуживает RuStore. Игра не получает текст отзыва и звёзды и не выдаёт за них награду.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p>`;
+  pinDialogHeading($("collection"));
+  dialogScroller().scrollTop = 0;
   $("privacy-back").onclick = returnToPrevious;
   $("privacy-back").focus({ preventScroll: true });
 };
@@ -1712,6 +1827,16 @@ $("try-notebook").onclick = () => {
     notebook.find((p) => !progress.done.includes(p.id));
   if (next) void switchGame(next.id);
 };
+function seedWord(n: number) {
+  const x = n % 100;
+  return x >= 11 && x <= 14
+    ? "семечек"
+    : n % 10 === 1
+      ? "семечко"
+      : n % 10 >= 2 && n % 10 <= 4
+        ? "семечки"
+        : "семечек";
+}
 function hintWord(n: number) {
   const x = n % 100;
   return x >= 11 && x <= 14
@@ -1795,7 +1920,7 @@ async function boot() {
         });
       } catch (error) {
         try {
-          await platform.write(PROGRESS + ".recovery", bundle);
+          await preserveUnreadSave(bundle);
         } catch {
           /* Warning remains visible even when backup storage is unavailable. */
         }
@@ -1803,7 +1928,7 @@ async function boot() {
       }
       if (readWarning) {
         try {
-          await platform.write(PROGRESS + ".recovery", bundle);
+          await preserveUnreadSave(bundle);
         } catch {
           /* Keep the recovery notice. */
         }
@@ -1842,7 +1967,7 @@ async function boot() {
     /* Defaults remain usable. */
   }
   try {
-    recoveryAvailable = Boolean(await platform.read(PROGRESS + ".recovery"));
+    recoveryAvailable = restorable(await platform.read(PROGRESS + ".recovery"));
   } catch {}
   if (recoveryAvailable && !readWarning)
     readWarning =
@@ -1987,6 +2112,12 @@ async function switchGame(id: string) {
   }
 
   if (lesson < 0 && !busy) session.current.scroll = viewport.scrollTop;
+  if (lesson >= 0) {
+    if (!metadata(progress).flags?.includes("tutorial_end"))
+      firstEvent("tutorial_end", { outcome: "skip", step: lesson + 1 });
+    settings.tutorialDone = true;
+    settingsDirty.tutorialDone = true;
+  }
   progress.sessions[progress.active] = session;
   settlePresentation();
   // Sessions are replaced on moves; retain their immutable histories and caches.
@@ -2063,7 +2194,7 @@ const monthName = (m: string) =>
 function openCollection(kind: CollectionScreen, restoring = false) {
   if (busy) return;
   const sameScreen = dialog.open && dialog.dataset.screen === kind;
-  const oldScroll = dialog.scrollTop;
+  const oldScroll = dialogScroller().scrollTop;
   const focused = document.activeElement as HTMLElement | null;
   const focusId = focused?.id;
   const focusVolume = focused?.dataset.volume;
@@ -2138,6 +2269,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     if (chapterCandidates.length) {
       const tasks = volumeTasks(selectedVolume);
       const continuing =
+        tasks.find((p) => p.id === progress.active && !finished.has(p.id)) ??
         tasks.find(
           (p) => progress.sessions[p.id]?.history.length && !finished.has(p.id),
         ) ??
@@ -2233,6 +2365,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   screenHeading.className = "screen-heading";
   screenHeading.append($("collection-back"), panel.querySelector("h2")!);
   panel.prepend(screenHeading);
+  pinDialogHeading(panel);
   if (kind === "progress") {
     $("progress-trophies").onclick = () => openCollection("trophies");
     $("progress-book").onclick = () => {
@@ -2335,14 +2468,14 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     };
   }
   if (sameScreen) {
-    dialog.scrollTop = oldScroll;
+    dialogScroller().scrollTop = oldScroll;
     if (focusId)
       document.getElementById(focusId)?.focus({ preventScroll: true });
     else if (focusVolume)
       panel
         .querySelector<HTMLElement>(`[data-volume="${focusVolume}"]`)
         ?.focus({ preventScroll: true });
-  } else if (!restoring) dialog.scrollTop = 0;
+  } else if (!restoring) dialogScroller().scrollTop = 0;
 }
 $("classic-mode").onclick = () => switchGame("classic");
 $("book-mode").onclick = () => openCollection("book");
@@ -2367,6 +2500,16 @@ function renderHomeCurrent() {
   const count = occupied(board()),
     classicMode = progress.active === "classic";
   homeGoal.hidden = lesson >= 0;
+  $("new").hidden =
+    lesson >= 0 ||
+    (dialog.dataset.entry !== "pause" && count > 0 && !session.history.length);
+  $("new").textContent = classicMode
+    ? count
+      ? "Начать заново"
+      : "Новая партия"
+    : count
+      ? "Начать задачу заново"
+      : "Повторить задачу";
   if (lesson >= 0) {
     $("classic-mode").hidden = false;
     $("home-eyebrow").textContent = "Как играть";
@@ -2377,11 +2520,11 @@ function renderHomeCurrent() {
     return;
   }
   $("classic-mode").hidden = classicMode;
-  $("home-eyebrow").textContent = session.history.length
-    ? "Текущая партия"
-    : count
-      ? "Игра"
-      : "Партия завершена";
+  $("home-eyebrow").textContent = !count
+    ? "Партия завершена"
+    : session.history.length
+      ? "Текущая партия"
+      : "Игра";
   $("home-game-title").textContent = classicMode
     ? "Классика"
     : progress.active.startsWith("book")
@@ -2438,7 +2581,7 @@ function refreshDate() {
     const focused = document.activeElement as HTMLElement | null;
     const game = focused?.dataset.game,
       id = focused?.id;
-    const scroll = dialog.scrollTop;
+    const scroll = dialogScroller().scrollTop;
     openCollection("calendar");
     const target = game
       ? dialog.querySelector<HTMLElement>(`[data-game="${game}"]`)
@@ -2447,7 +2590,7 @@ function refreshDate() {
         : null;
     if (target && !(target as HTMLButtonElement).disabled)
       target.focus({ preventScroll: true });
-    dialog.scrollTop = scroll;
+    dialogScroller().scrollTop = scroll;
   }
   if (!occupied(board())) renderWin();
 }
@@ -2560,15 +2703,37 @@ function updateReminderSettings() {
   const requested = Boolean(
     metadata(progress).flags?.includes("reminder_permission_requested"),
   );
-  const denied = !notificationGranted && requested;
-  const pending = settings.reminders && !notificationGranted && !requested;
-  $("reminder-permission").textContent = denied
-    ? "Уведомления отключены в Android. Разрешите их в системных настройках, затем включите напоминание."
-    : pending
-      ? "Нужно разрешение Android. Запросим его после первой пройденной задачи дня. Можно разрешить сейчас."
-      : "";
-  $("notification-permission-request").hidden = !pending;
-  $("notification-system-settings").hidden = !denied;
+  const failed = metadata(progress).flags?.includes(
+    "reminder_permission_error",
+  );
+  const denied = !notificationGranted && requested && !failed;
+  const pending =
+    !notificationGranted && ((settings.reminders && !requested) || failed);
+  $<HTMLInputElement>("reminders").disabled = notificationRequestPending;
+  $<HTMLButtonElement>("notification-permission-request").disabled =
+    notificationRequestPending;
+  $("reminder-permission").textContent = notificationRequestPending
+    ? notificationSaving
+      ? "Сохраняем настройки…"
+      : "Ожидаем ответ Android…"
+    : notificationGranted
+      ? settings.reminders
+        ? "Напоминание включено."
+        : "Напоминание выключено."
+      : failed
+        ? "Не удалось открыть запрос Android. Можно повторить или разрешить уведомления в системных настройках."
+        : denied
+          ? "Уведомления отключены в Android. Разрешите их в системных настройках, затем включите напоминание."
+          : pending
+            ? "Нужно разрешение Android. Запросим его после первой пройденной задачи дня. Можно разрешить сейчас."
+            : "";
+  $("notification-permission-request").hidden =
+    !pending || notificationRequestPending;
+  $("notification-permission-request").textContent = failed
+    ? "Повторить запрос"
+    : "Разрешить уведомления";
+  $("notification-system-settings").hidden =
+    notificationRequestPending || notificationGranted || (!denied && !failed);
   const wallet = metadata(progress).wallet;
   $("hint-wallet").textContent =
     `Общий запас: ${wallet} ${hintWord(wallet)}. Сначала расходуются три бесплатные подсказки текущей партии.`;
@@ -2582,8 +2747,15 @@ async function enableReminder(enabled: boolean) {
     rewardRequest
   )
     return;
+  if (!enabled) {
+    const flags = metadata(progress).flags;
+    const errorIndex = flags?.indexOf("reminder_permission_error") ?? -1;
+    if (errorIndex >= 0) flags!.splice(errorIndex, 1);
+  }
   if (enabled && !notificationGranted) {
     engagementActive = true;
+    notificationRequestPending = true;
+    notificationSaving = true;
     skipNextInterstitial = true;
     lastExternalAt = performance.now();
     syncPauseState();
@@ -2599,15 +2771,28 @@ async function enableReminder(enabled: boolean) {
         return;
       }
       if (firstRequest) track("reminder_permission_requested");
-      const state = await engagementBridge.requestNotifications();
+      notificationSaving = false;
+      updateReminderSettings();
+      const state = await requestNotificationPermission(engagementBridge);
+      if (!state.available) throw new Error("notification_unavailable");
       notificationGranted = state.granted;
+      const errorIndex = flags.indexOf("reminder_permission_error");
+      if (errorIndex >= 0) flags.splice(errorIndex, 1);
       track("reminder_permission", { granted: state.granted });
     } catch {
-      notificationGranted = false;
+      if (!flags.includes("reminder_permission_error"))
+        flags.push("reminder_permission_error");
+      // Preserve the reminder preference on a bridge failure; this is not a
+      // user's denial. Keep the failed request retryable across process restarts.
+      await save();
+      return;
     } finally {
       engagementActive = false;
+      notificationRequestPending = false;
+      notificationSaving = false;
       lastExternalAt = performance.now();
       syncPauseState();
+      updateReminderSettings();
     }
   }
   settings.reminders = enabled && notificationGranted;
