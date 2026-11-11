@@ -150,6 +150,10 @@ for (const state of ["grant", "deny", "error", "hang"] as const)
       await expect(
         page.locator("#notification-permission-request"),
       ).toBeEnabled();
+      await page.locator("#reminders").uncheck();
+      await expect(
+        page.locator("#notification-permission-request"),
+      ).toBeHidden();
     } else if (state === "deny")
       await expect(page.locator("#reminders")).not.toBeChecked();
     else

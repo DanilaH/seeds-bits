@@ -8,12 +8,12 @@ from androguard.core.dex import DEX
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from PIL import Image,ImageChops
-p=argparse.ArgumentParser();p.add_argument('--apk',required=True);p.add_argument('--apksigner',required=True);p.add_argument('--mapping');p.add_argument('--report',default='docs/releases/1.1.0/apk.json');args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--apk',required=True);p.add_argument('--apksigner',required=True);p.add_argument('--mapping');p.add_argument('--report',default='docs/releases/1.1.1/apk.json');args=p.parse_args()
 file=pathlib.Path(args.apk);a=APK(str(file));ns='{http://schemas.android.com/apk/res/android}'
 pkg=a.get_package();app=a.get_android_manifest_xml().find('application');res=a.get_android_resources()
 assert pkg=='com.seedsbits.game' and a.get_app_name()=='Семечки'
 assert a.get_androidversion_name()==json.loads(pathlib.Path('package.json').read_text())['version']
-assert int(a.get_androidversion_code())>1000010
+assert int(a.get_androidversion_code())>1100024
 assert app.get(ns+'debuggable') in [None,'false'] and app.get(ns+'testOnly') in [None,'false']
 assert app.get(ns+'allowBackup')=='false' and app.get(ns+'usesCleartextTraffic')=='false'
 assert app.get(ns+'name')=='com.seedsbits.game.SeedsApplication'
@@ -70,12 +70,21 @@ with zipfile.ZipFile(file) as z:
    if line and not line[0].isspace() and not line.startswith('#') and ' -> ' in line:
     original,renamed=line.rstrip(':').split(' -> ',1);mapping[original]=renamed
  def descriptor(name):return 'L'+mapping.get(name,name).replace('.','/')+';'
- for annotation in ['com.getcapacitor.PluginMethod','com.getcapacitor.annotation.CapacitorPlugin']:
+ for annotation in ['com.getcapacitor.PluginMethod','com.getcapacitor.annotation.CapacitorPlugin','com.getcapacitor.annotation.Permission','com.getcapacitor.annotation.PermissionCallback']:
   assert descriptor(annotation).encode() in dex,annotation
  assert descriptor('com.getcapacitor.annotation.CapacitorPlugin') in plugin.get_annotations()
  engagement=next(c for payload in a.get_all_dex() for c in DEX(payload).get_classes() if c.get_name()=='Lcom/seedsbits/game/SeedsEngagementPlugin;')
  assert {'configuration','requestNotifications','openNotificationSettings','prepareReview','review'}<={m.get_name() for m in engagement.get_methods()}
  assert descriptor('com.getcapacitor.annotation.CapacitorPlugin') in engagement.get_annotations()
+ # Checking only annotation bytes is insufficient: broken R8 builds retained
+ # them but constant-folded PluginHandle's cached annotation to null.
+ classes_by_name={c.get_name():c for payload in a.get_all_dex() for c in DEX(payload).get_classes()}
+ handle=classes_by_name[descriptor('com.getcapacitor.PluginHandle')]
+ assert any(f.get_descriptor()==descriptor('com.getcapacitor.annotation.CapacitorPlugin') for f in handle.get_fields()),'R8 removed the runtime plugin annotation cache'
+ for annotation in ['com.getcapacitor.annotation.CapacitorPlugin','com.getcapacitor.annotation.Permission','com.getcapacitor.annotation.PermissionCallback','com.getcapacitor.PluginMethod']:
+  assert descriptor(annotation)=='L'+annotation.replace('.','/')+';', 'Runtime annotation type must be kept: '+annotation
+ callbacks={engagement.CM.get_method_ref(item.method_idx).get_name():[engagement.CM.get_type(off.get_annotation_item().annotation.get_type_idx()) for off in engagement.CM.get_annotation_set_item(item.annotations_off).get_annotation_off_item()] for item in engagement.annotations_directory_item.method_annotations}
+ assert descriptor('com.getcapacitor.annotation.PermissionCallback') in callbacks.get('notificationPermission',[]),'Permission callback annotation missing'
  feedback=next(c for payload in a.get_all_dex() for c in DEX(payload).get_classes() if c.get_name()=='Lcom/seedsbits/game/SeedsFeedbackPlugin;')
  assert {'configure','pulse'}<={m.get_name() for m in feedback.get_methods()}
  assert descriptor('com.getcapacitor.annotation.CapacitorPlugin') in feedback.get_annotations()

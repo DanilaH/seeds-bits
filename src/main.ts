@@ -2736,6 +2736,11 @@ async function enableReminder(enabled: boolean) {
     rewardRequest
   )
     return;
+  if (!enabled) {
+    const flags = metadata(progress).flags;
+    const errorIndex = flags?.indexOf("reminder_permission_error") ?? -1;
+    if (errorIndex >= 0) flags!.splice(errorIndex, 1);
+  }
   if (enabled && !notificationGranted) {
     engagementActive = true;
     notificationRequestPending = true;

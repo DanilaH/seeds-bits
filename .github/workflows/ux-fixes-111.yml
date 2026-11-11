@@ -89,6 +89,9 @@ jobs:
           name: seeds-111-release-tools
           path: release-tools/
   native:
+    env:
+      SEEDS_UPGRADE_BASELINE_SOURCE: e92bd4915d677caf47f74944402c82d48b483d9c
+      SEEDS_UPGRADE_BASELINE_VERSION: '1.1.0 (1100024)'
     needs: release
     runs-on: ubuntu-24.04
     timeout-minutes: 25
