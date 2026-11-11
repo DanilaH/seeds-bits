@@ -428,6 +428,8 @@ progress::-moz-progress-bar {
   margin: 12px 0;
 }
 .calendar .task {
+  aspect-ratio: auto;
+  min-width: 0;
   min-height: 44px;
   font-size: 15px;
 }
@@ -1699,7 +1701,7 @@ header .jar-level {
   display: flex;
   gap: 4px;
   align-items: center;
-  line-height: 18px;
+  line-height: 1.25;
 }
 #jar-percent {
   min-width: 0;

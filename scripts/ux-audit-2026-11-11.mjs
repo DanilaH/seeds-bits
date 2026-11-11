@@ -57,10 +57,15 @@ async function capture(page,scenario,label){
   const scale=window.auditTextScale;if(!scale)return;
   const saved=window.auditFontOverrides??=new WeakMap();
   const nodes=[...document.querySelectorAll('body *')];
+  const scrolls=nodes.filter(e=>e.scrollTop||e.scrollLeft).map(e=>({e,top:e.scrollTop,left:e.scrollLeft,bottom:e.scrollTop>0&&e.scrollHeight-e.scrollTop<=e.clientHeight+1}));
   // Restore earlier overrides before measuring a new route; never compound zoom.
   for(const e of nodes)if(saved.has(e))e.style.fontSize=saved.get(e);
   const sizes=nodes.map(e=>parseFloat(getComputedStyle(e).fontSize));
   nodes.forEach((e,i)=>{if(!saved.has(e))saved.set(e,e.style.fontSize);e.style.fontSize=(sizes[i]*scale)+'px';});
+  // Intermediate font restoration can clamp a scroller. Preserve the requested
+  // view, including an explicit bottom capture, after the final layout.
+  void document.body.offsetHeight;
+  for(const {e,top,left,bottom} of scrolls){e.scrollTop=bottom?e.scrollHeight:top;e.scrollLeft=left;}
  });
  await page.waitForTimeout(180); // Let saved-state and transient board feedback settle before visual inspection.
  const file=scenario+'--'+label+'.png';

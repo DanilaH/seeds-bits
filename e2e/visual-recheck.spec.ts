@@ -159,7 +159,11 @@ test("large-text hint offer keeps both whole buttons reachable by scrolling", as
   for (const id of ["watch-hints", "cancel-hints"]) {
     const button = page.locator("#" + id);
     await button.scrollIntoViewIfNeeded();
-    await expect(button).toBeInViewport({ ratio: 1 });
+    // Scroll offsets are rounded to device pixels; test whole bounds with a
+    // one CSS-pixel tolerance, then test the actual rendered text separately.
+    const box = (await button.boundingBox())!;
+    expect(box.y).toBeGreaterThanOrEqual(-1);
+    expect(box.y + box.height).toBeLessThanOrEqual(569);
     expect(
       await button.evaluate((e) => {
         const r = document.createRange();
