@@ -162,6 +162,48 @@ test("glyph-only text zoom fits the board and survives a removed first pair", as
   await expect.poll(fits).toBe(true);
 });
 
+test("oversized status text scrolls inside its region and leaves the board and actions usable", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await install(page);
+  await page.locator("#resume").click();
+  await page.locator("#status").evaluate((e) => {
+    e.style.fontSize = "36px";
+    e.textContent =
+      "Не удалось сохранить партию. Повторите сохранение, чтобы не потерять найденные пары и полученные награды.";
+  });
+  const region = page.locator(".status-wrap");
+  await expect
+    .poll(() => region.evaluate((e) => e.scrollHeight > e.clientHeight))
+    .toBe(true);
+  expect(
+    await region.evaluate((e) => {
+      const box = e.getBoundingClientRect(),
+        text = e.querySelector("#status")!;
+      return [box.top - 2, box.bottom + 2].every(
+        (y) =>
+          !text.contains(document.elementFromPoint(box.x + box.width / 2, y)),
+      );
+    }),
+  ).toBe(true);
+  await region.evaluate((e) => (e.scrollTop = e.scrollHeight));
+  expect(
+    await region.evaluate((e) => {
+      const text = e.querySelector("#status")!.firstChild!;
+      const range = document.createRange();
+      range.setStart(text, text.textContent!.length - 3);
+      range.setEnd(text, text.textContent!.length);
+      return (
+        range.getBoundingClientRect().bottom <=
+        e.getBoundingClientRect().bottom + 1
+      );
+    }),
+  ).toBe(true);
+  await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
+});
+
 test("short landscape menu grows with its enlarged labels", async ({
   page,
 }) => {
