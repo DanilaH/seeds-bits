@@ -33,12 +33,18 @@ def launch():
  adb('shell','am','force-stop',pkg);adb('shell','am','start','-n',pkg+'/.MainActivity');time.sleep(2)
 def back():adb('shell','input','keyevent','4');time.sleep(.5)
 def settings():
- # WebView can expose pre-reflow bounds just after Android font-scale changes.
- # Scroll the menu footer into view before using its current accessibility bounds.
- adb('shell','input','swipe','600','1400','600','480','450');time.sleep(1)
- capture('menu-before-settings-tap')
- n=find(['Настройки']);print('Settings tap bounds:',n.get('bounds'),flush=True)
- tap(['Настройки']);find(['Тёмная тема'])
+ # Off-screen WebView virtual nodes may report a nonempty ancestor rectangle.
+ # Require the three actual footer cells to be visible in their shared row.
+ for attempt in range(8):
+  _,root=ui();cells={label(n):rect(n) for n in root.iter('node') if label(n) in ['Прогресс','Как играть','Настройки']}
+  row=[cells.get(name,[]) for name in ['Прогресс','Как играть','Настройки']]
+  valid=all(len(b)==4 and b[2]>b[0] and b[3]>b[1] for b in row)
+  if valid and row[0][2]<=row[1][0] and row[1][2]<=row[2][0] and max(b[1] for b in row)-min(b[1] for b in row)<8:
+   capture('menu-settings-visible-'+str(serial));tap(['Настройки']);find(['Тёмная тема']);return
+  print('Footer visibility attempt',attempt,cells,flush=True)
+  capture('menu-settings-scroll-'+str(serial))
+  adb('shell','input','swipe','600','1400','600','480','450');time.sleep(1)
+ raise AssertionError('Menu footer not visibly reached')
 def fresh():
  adb('shell','pm','clear',pkg);adb('shell','pm','clear-permission-flags',pkg,'android.permission.POST_NOTIFICATIONS','user-set','user-fixed',check=False)
  launch();tap(['Пропустить']);tap(['Открыть меню']);settings()
@@ -66,7 +72,7 @@ def permission(choice):
 def large_text():
  adb('shell','settings','put','system','font_scale','1.5');launch();tap(['Начать классику','Продолжить','Играть']);capture('font150-portrait-game');back();capture('font150-menu-before-scroll');settings();capture('font150-portrait-settings')
  adb('shell','input','swipe','650','1400','650','420','400');capture('font150-settings-scroll')
- tap(['Назад']);find(['семечки']);checks['largeTextSettingsAndBack']=True
+ tap(['Назад']);find(['Настройки']);checks['largeTextSettingsAndBack']=True
  adb('shell','settings','put','system','accelerometer_rotation','0');adb('shell','settings','put','system','user_rotation','1');time.sleep(1)
  launch();tap(['Начать классику','Продолжить','Играть']);capture('font150-landscape-game')
  hint=find(['Подсказка'],prefix=True);b=rect(hint)
