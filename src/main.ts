@@ -204,8 +204,8 @@ homeCurrent.innerHTML =
   '<p class="home-eyebrow" id="home-eyebrow"></p><h2 id="home-game-title"></h2>';
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
-homeCurrent.append($("resume-context"), homeGoal, $("resume"), $("new"));
 $("new").className = "text-button restart-action";
+homeCurrent.append($("resume-context"), homeGoal, $("resume"), $("new"));
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
 homeModes.setAttribute("aria-label", "Режимы игры");

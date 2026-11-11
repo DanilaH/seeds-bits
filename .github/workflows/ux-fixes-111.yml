@@ -68,6 +68,10 @@ jobs:
         with:
           name: seeds-111-release-unsigned
           path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seeds-111-r8-reports
+          path: android/app/build/outputs/mapping/release/
       - name: Collect public signing tools
         run: |
           mkdir -p release-tools
