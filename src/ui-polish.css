@@ -2242,3 +2242,14 @@ header .jar-caption strong {
     display: none;
   }
 }
+
+@media (orientation: portrait) {
+  .game-actions .status-wrap {
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+  .game-actions #status {
+    flex-shrink: 0;
+    margin-block: 0;
+  }
+}

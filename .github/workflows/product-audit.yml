@@ -121,7 +121,9 @@ jobs:
           repository: tesseract-ocr/tessdata_fast
           ref: 87416418657359cb625c412a48b6e1d6d41c29bd
           path: .ci-ocr/tessdata
-          sparse-checkout: rus.traineddata
+          sparse-checkout: |
+            rus.traineddata
+            eng.traineddata
           sparse-checkout-cone-mode: false
           persist-credentials: false
       - run: python3 -m pip install --user pillow

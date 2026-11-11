@@ -113,10 +113,20 @@ def narrow_text():
     if count>width*.6 and (not lines or y>lines[-1]+3):lines.append(y)
   assert len(lines)>=2,'No complete grid row visible with narrow Android text zoom'
   top,bottom=lines[:2]
-  glyphs=[r for r in words('font200-narrow-game') if re.fullmatch(r'[1-9]+',r['text']) and top<=int(r['top'])<bottom]
-  assert sum(len(r['text']) for r in glyphs)>=5,'Too few first-row digits recognized to assess bounds'
-  assert all(int(r['top'])+int(r['height'])<=bottom+1 for r in glyphs),'Rendered digits cross the first grid row'
-  (out/'font200-narrow-geometry.json').write_text(json.dumps({'rowTop':top,'rowBottom':bottom,'glyphs':glyphs},ensure_ascii=False,indent=2))
+  # Read a single numeric line, with a margin beyond both grid boundaries.
+  # The full PNG stays unchanged; map OCR boxes back into its coordinates.
+  crop_top=max(0,top-12);crop_bottom=min(height,bottom+12)
+  with tempfile.TemporaryDirectory(prefix='seeds-digit-ocr-') as folder:
+   strip=pathlib.Path(folder)/'row.ppm'
+   with Image.open(out/'font200-narrow-game.png') as image:
+    image.convert('RGB').crop((20,crop_top,width-20,crop_bottom)).save(strip,format='PPM')
+   result=subprocess.run(['tesseract',str(strip),'stdout','-l','eng','--psm','7','-c','tessedit_char_whitelist=123456789','tsv'],capture_output=True,text=True,check=True)
+  (out/'font200-narrow-row-ocr.tsv').write_text(result.stdout)
+  glyphs=[r for r in csv.DictReader(io.StringIO(result.stdout),delimiter='\t') if r['text'].strip() and float(r['conf'])>=50]
+  assert ''.join(r['text'] for r in glyphs)=='123456789','First-row digits were not all recognized'
+  for r in glyphs:r['top']=int(r['top'])+crop_top;r['left']=int(r['left'])+20
+  assert all(int(r['top'])>=top-1 and int(r['top'])+int(r['height'])<=bottom+1 for r in glyphs),'Rendered digits cross the first grid row'
+  (out/'font200-narrow-geometry.json').write_text(json.dumps({'rowTop':top,'rowBottom':bottom,'cropTop':crop_top,'cropBottom':crop_bottom,'glyphs':glyphs},ensure_ascii=False,indent=2))
   checks['narrowAndroidTextZoomStaysInsideRows']=True
  finally:
   adb('shell','wm','size','780x1688');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
