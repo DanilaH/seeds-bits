@@ -1,0 +1,35 @@
+name: Visual sweep
+on:
+  push:
+    branches: [qa/visual-sweep-20261111]
+permissions:
+  contents: read
+jobs:
+  visual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+      SEEDS_VISUAL_SWEEP: '1'
+      SEEDS_UX_OUTPUT: test-results/visual-sweep
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install ffmpeg
+      - run: npm test
+        if: contains(github.event.head_commit.message, '[verify]')
+      - run: npm run build
+      - run: npm run test:e2e
+        if: contains(github.event.head_commit.message, '[verify]')
+      - run: node scripts/ux-audit-2026-11-11.mjs
+        if: ${{ !cancelled() }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-sweep
+          path: test-results/
+          retention-days: 30

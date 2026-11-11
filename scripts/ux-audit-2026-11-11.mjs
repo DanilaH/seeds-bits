@@ -3,7 +3,8 @@ import fs from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 
-const output=path.resolve('test-results/ux-20261111');
+const sweep=process.env.SEEDS_VISUAL_SWEEP==='1';
+const output=path.resolve(process.env.SEEDS_UX_OUTPUT||'test-results/ux-20261111');
 await fs.mkdir(output,{recursive:true});
 const dev='http://127.0.0.1:5173', production='http://127.0.0.1:5174';
 const servers=[
@@ -23,7 +24,7 @@ function fixture(o={}){
  const done=o.done??['book-v1-1','book-v1-2','book-v1-3',...Array.from({length:6},(_,i)=>isoDay(Number(today.slice(-2))-6+i)).map(d=>'daily-v1-'+d)];
  const sessions={classic:snap(o.board??classic)};
  if(active!=='classic')sessions[active]=snap(o.board??[5,5]);
- return {version:3,active,sessions,hints:{},done,seen:[],jars:{version:2,seeds:o.meter??340,meter:o.meter??340,wins:3,attempt:'ux-classic',highWater:0},meta:{version:2,wallet:o.wallet??4,since:'2026-11-01',completed:18,unassisted:8,attempts:{classic:{id:'ux-classic',completed:false},...(active!=='classic'?{[active]:{id:'ux-task',completed:false}}:{})},...(o.streak?{daily:{lastDay:o.lastDay??isoDay(Number(today.slice(-2))-1),count:o.streak,best:o.streak,reward:0}}:{}),...(o.flags?{flags:o.flags}:{})}};
+ return {version:3,active,sessions,hints:{},done,seen:[],jars:{version:2,seeds:o.meter??340,meter:o.meter??340,wins:o.wins??3,attempt:'ux-classic',highWater:0},meta:{version:2,wallet:o.wallet??4,since:'2026-11-01',completed:o.completed??18,unassisted:o.unassisted??8,attempts:{classic:{id:'ux-classic',completed:false},...(active!=='classic'?{[active]:{id:'ux-task',completed:false}}:{})},...(o.streak?{daily:{lastDay:o.lastDay??isoDay(Number(today.slice(-2))-1),count:o.streak,best:o.streak,reward:0}}:{}),...(o.flags?{flags:o.flags}:{})}};
 }
 async function open(o={}){
  const context=await browser.newContext({viewport:o.viewport??{width:390,height:844},isMobile:o.mobile!==false,hasTouch:true,locale:'ru-RU',timezoneId:'Asia/Yekaterinburg',reducedMotion:o.motion?'no-preference':'reduce'});
@@ -47,9 +48,20 @@ async function open(o={}){
  await page.goto(o.production?production:dev);
  await page.waitForFunction(()=>document.querySelector('#app')&&!document.querySelector('#app').inert&&document.querySelector('#board button'));
  if(o.font)await page.addStyleTag({content:`html{font-size:${o.font} !important}`});
+ if(o.textScale)await page.evaluate(scale=>window.auditTextScale=scale,o.textScale);
+ if(o.safeArea)await page.addStyleTag({content:':root{--safe-area-inset-top:32px;--safe-area-inset-bottom:24px;--safe-area-inset-left:24px;--safe-area-inset-right:24px}'});
  return {page,context,errors};
 }
 async function capture(page,scenario,label){
+ if(sweep)await page.evaluate(()=>{
+  const scale=window.auditTextScale;if(!scale)return;
+  const saved=window.auditFontOverrides??=new WeakMap();
+  const nodes=[...document.querySelectorAll('body *')];
+  // Restore earlier overrides before measuring a new route; never compound zoom.
+  for(const e of nodes)if(saved.has(e))e.style.fontSize=saved.get(e);
+  const sizes=nodes.map(e=>parseFloat(getComputedStyle(e).fontSize));
+  nodes.forEach((e,i)=>{if(!saved.has(e))saved.set(e,e.style.fontSize);e.style.fontSize=(sizes[i]*scale)+'px';});
+ });
  await page.waitForTimeout(180); // Let saved-state and transient board feedback settle before visual inspection.
  const file=scenario+'--'+label+'.png';
  await page.screenshot({path:path.join(output,file),animations:'disabled'});
@@ -60,7 +72,21 @@ async function capture(page,scenario,label){
   const controls=nodes.map(e=>{const r=e.getBoundingClientRect();const x=r.x+r.width/2,y=r.y+r.height/2;const hit=x>=0&&x<innerWidth&&y>=0&&y<innerHeight?document.elementFromPoint(x,y):null;return{id:e.id,tag:e.tagName,label:e.getAttribute('aria-label')||e.getAttribute('title')||e.innerText||e.closest('label')?.innerText||'',disabled:Boolean(e.disabled),rect:{x:r.x,y:r.y,width:r.width,height:r.height},hit:hit?e===hit||e.contains(hit):false,inViewport:r.x>=0&&r.y>=0&&r.right<=innerWidth&&r.bottom<=innerHeight};});
   const overflow=[...document.querySelectorAll('h1,h2,h3,p,label,.fine,.action-label,.action-count,.hero-kicker,.hero-count,.metal-name,.metal-count,.next-count')].filter(visible).filter(e=>!modal||modal.contains(e)).filter(e=>e.scrollWidth>e.clientWidth+2&&getComputedStyle(e).overflowX!=='auto').map(e=>({tag:e.tagName,id:e.id,class:e.className,text:e.innerText,scrollWidth:e.scrollWidth,clientWidth:e.clientWidth}));
   const containers=['#dialog','.dialog-scroll:not([hidden])','#viewport','#hint-offer'].map(s=>{const e=document.querySelector(s);return e&&visible(e)?{selector:s,clientHeight:e.clientHeight,scrollHeight:e.scrollHeight,scrollTop:e.scrollTop}:null}).filter(Boolean);
-  return{viewport:{width:innerWidth,height:innerHeight},screen:document.querySelector('#dialog')?.open?document.querySelector('#dialog').dataset.screen:'game',text:(modal??document.body).innerText,activeElement:{id:document.activeElement?.id,text:document.activeElement?.innerText?.slice(0,80)},horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,controls,overflow,containers,banner:window.auditBanner??null,calls:window.auditCalls??[]};
+  const back=controls.find(c=>['collection-back','settings-back','privacy-back'].includes(c.id));
+  const close=controls.find(c=>c.id==='close');
+  const headerAlignment=back&&close?{deltaY:(close.rect.y+close.rect.height/2)-(back.rect.y+back.rect.height/2),back:back.rect,close:close.rect}:null;
+  const icons=[...document.querySelectorAll('.action > svg,.plain > svg,.screen-heading button > svg')].filter(visible).filter(e=>!modal||modal.contains(e)).map(e=>{const b=e.getBBox(),v=e.viewBox.baseVal;return{button:e.closest('button')?.id,bounds:{x:b.x,y:b.y,width:b.width,height:b.height},viewBox:{x:v.x,y:v.y,width:v.width,height:v.height},centerX:b.x+b.width/2-(v.x+v.width/2),centerY:b.y+b.height/2-(v.y+v.height/2),stroke:getComputedStyle(e).strokeWidth};});
+  const clippedButtonText=[];
+  for(const e of nodes.filter(e=>e.tagName==='BUTTON')){
+   const box=e.getBoundingClientRect();if(box.top<0||box.bottom>innerHeight||box.left<0||box.right>innerWidth)continue;
+   const walker=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);let node;
+   while(node=walker.nextNode()){
+    if(!node.textContent.trim())continue;
+    const range=document.createRange();range.selectNodeContents(node);
+    for(const r of range.getClientRects())if(r.width&&r.height&&(r.left<box.left-2||r.right>box.right+2||r.top<box.top-2||r.bottom>box.bottom+2))clippedButtonText.push({button:e.id,text:node.textContent.trim().slice(0,100),box:{x:box.x,y:box.y,width:box.width,height:box.height},textRect:{x:r.x,y:r.y,width:r.width,height:r.height}});
+   }
+  }
+  return{viewport:{width:innerWidth,height:innerHeight},screen:document.querySelector('#dialog')?.open?document.querySelector('#dialog').dataset.screen:'game',text:(modal??document.body).innerText,activeElement:{id:document.activeElement?.id,text:document.activeElement?.innerText?.slice(0,80)},horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,controls,overflow,containers,headerAlignment,icons,clippedButtonText,banner:window.auditBanner??null,calls:window.auditCalls??[]};
  });
  report.frames.push({scenario,label,file,...state});
  return state;
@@ -108,12 +134,26 @@ try{
   ['largeTextPortrait',{width:360,height:640},'150%'],['largeTextLandscape',{width:844,height:390},'150%'],
   ['darkPhone',{width:390,height:844},null],
  ];
- for(const [name,viewport,font] of profiles)await run(name,{viewport,font,dark:name.startsWith('dark'),streak:6},async(p,n)=>{
+ if(sweep)profiles.push(
+  ['text150Phone320',{width:320,height:568},null,{textScale:1.5}],
+  ['text150Phone390',{width:390,height:844},null,{textScale:1.5}],
+  ['text150Landscape568',{width:568,height:320},null,{textScale:1.5}],
+  ['text150Landscape844',{width:844,height:390},null,{textScale:1.5}],
+  ['text200Phone360',{width:360,height:640},null,{textScale:2}],
+  ['darkPhone320',{width:320,height:568},null],
+  ['darkLandscape568',{width:568,height:320},null],
+  ['cutoutPortrait',{width:390,height:844},null,{safeArea:true}],
+  ['cutoutLandscape',{width:844,height:390},null,{safeArea:true}],
+ );
+ for(const [name,viewport,font,extra={}] of profiles)await run(name,{viewport,font,dark:name.startsWith('dark'),streak:6,...extra},async(p,n)=>{
   await capture(p,n,'home');
   await board(p);await capture(p,n,'classic');await click(p,'#menu');
   await click(p,'#book-mode');await capture(p,n,'books');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'books-bottom');await click(p,'#collection-back');
   await click(p,'#calendar-open');await capture(p,n,'calendar');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'calendar-bottom');await click(p,'#collection-back');
-  await click(p,'#progress-open');await capture(p,n,'progress');await click(p,'#progress-trophies');await capture(p,n,'jars');
+  await click(p,'#progress-open');await capture(p,n,'progress');
+  if(sweep){await p.locator('.explanation summary').first().click();await capture(p,n,'progress-explanation');}
+  await click(p,'#progress-trophies');await capture(p,n,'jars');
+  if(sweep){await p.locator('.explanation summary').first().click();await capture(p,n,'jars-explanation');}
   await click(p,'#trophies-mode');await capture(p,n,'medals');await click(p,'#collection-back');await click(p,'#collection-back');
   await click(p,'#settings-open');await capture(p,n,'settings');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'settings-bottom');
   await click(p,'#privacy-open');await capture(p,n,'privacy');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'privacy-bottom');await click(p,'#privacy-back');
@@ -203,6 +243,22 @@ try{
  });
  await run('corrupt-save',{corrupt:true},async(p,n)=>{await capture(p,n,'home-warning');await board(p);await capture(p,n,'game-warning');});
  await run('future-save',{future:true},async(p,n)=>{await capture(p,n,'home-protected');await board(p);await capture(p,n,'game-protected');});
+ if(sweep){
+  for(const [name,viewport] of [['portrait',{width:320,height:568}],['landscape',{width:568,height:320}]]){
+   await run('sweep-result-'+name,{viewport,textScale:1.5,active:'daily-v1-2026-11-30',today:'2026-11-30',board:[5,5],done:Array.from({length:29},(_,i)=>'daily-v1-'+isoDay(i+1)),streak:29,lastDay:'2026-11-29',granted:true},async(p,n)=>{
+    await board(p);await click(p,'[data-index="0"]');await click(p,'[data-index="1"]');await p.waitForFunction(()=>!document.querySelector('#win').hidden);await capture(p,n,'gold-and-rewards');await p.locator('#viewport').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'result-bottom');
+   });
+   await run('sweep-hint-'+name,{viewport,textScale:1.5,seed:false},async(p,n)=>{
+    await board(p);
+    for(let i=0;i<3;i++){await click(p,'#hint');const cells=await p.locator('.hinted').evaluateAll(es=>es.map(e=>e.dataset.index));for(const c of cells)await click(p,`[data-index="${c}"]`);}
+    await click(p,'#hint');await capture(p,n,'offer');await p.locator('#hint-offer button').filter({hasText:/видео|реклам|смотр/i}).first().click();await capture(p,n,'unavailable');
+   });
+  }
+  await run('sweep-empty',{viewport:{width:320,height:568},done:[],meter:0,wallet:0,completed:0,unassisted:0,wins:0},async(p,n)=>{
+   await capture(p,n,'home');await click(p,'#progress-open');await capture(p,n,'progress');await click(p,'#progress-trophies');await capture(p,n,'jars');await click(p,'#trophies-mode');await capture(p,n,'medals');await click(p,'#collection-back');await click(p,'#collection-back');await click(p,'#book-mode');await p.locator('#book-filter').selectOption('done');await capture(p,n,'empty-notebooks');
+  });
+  await run('sweep-large-counters',{viewport:{width:320,height:568},textScale:1.5,wallet:9999,meter:250000},async(p,n)=>{await board(p);await capture(p,n,'game');await click(p,'#menu');await capture(p,n,'home');await click(p,'#progress-open');await capture(p,n,'progress');});
+ }
  await run('rotation-and-banner',{viewport:{width:390,height:844}},async(p,n)=>{
   await board(p);await capture(p,n,'portrait');
   for(const [label,size] of [['landscape',{width:844,height:390}],['short',{width:568,height:320}],['back',{width:390,height:844}]]){
@@ -216,6 +272,8 @@ try{
 }finally{
  await fs.writeFile(path.join(output,'audit.json'),JSON.stringify(report,null,2));
  await fs.writeFile(path.join(output,'summary.json'),JSON.stringify({source:report.source,scenarios:report.scenarios.length,completed:report.scenarios.filter(s=>s.status==='completed').length,blocked:report.scenarios.filter(s=>s.status!=='completed'),frames:report.frames.length,horizontalOverflow:report.frames.filter(f=>f.horizontalOverflow).map(f=>f.file),pageErrors:report.scenarios.filter(s=>s.errors?.length)},null,2));
+ if(sweep)await fs.writeFile(path.join(output,'visual-flags.json'),JSON.stringify({source:report.source,method:'Rendered UI screenshots; text150/text200 explicitly scale every rendered font, not a physical OS zoom claim',headerMisalignment:report.frames.filter(f=>f.headerAlignment&&Math.abs(f.headerAlignment.deltaY)>2).map(f=>({file:f.file,...f.headerAlignment})),buttonTextOverflow:report.frames.filter(f=>f.clippedButtonText?.length).map(f=>({file:f.file,items:f.clippedButtonText})),textOverflow:report.frames.filter(f=>f.overflow.length).map(f=>({file:f.file,items:f.overflow})),iconGeometry:report.frames.filter(f=>f.icons.length).map(f=>({file:f.file,items:f.icons}))},null,2));
  await browser.close();servers.forEach(p=>p.kill('SIGTERM'));
  console.log(JSON.stringify({scenarios:report.scenarios.length,frames:report.frames.length,blocked:report.scenarios.filter(s=>s.status!=='completed').map(s=>({name:s.name,error:s.error}))}));
+ if(sweep&&report.scenarios.some(s=>s.status!=='completed'||s.errors?.length))process.exitCode=1;
 }
