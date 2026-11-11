@@ -2163,25 +2163,26 @@ header .jar-caption strong {
     max-height: none;
     overflow: visible;
   }
-  .game.stacked-actions .game-actions footer {
-    grid-template-columns: minmax(0, 1fr);
-    flex-shrink: 0;
-    gap: 2px;
-  }
-  .game.stacked-actions .game-actions footer .action {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    padding: 5px 8px;
-    min-height: 44px;
-    text-align: left;
-  }
-  .stacked-actions .action-count {
-    position: static;
-    margin-left: auto;
-  }
+}
+/* The same measured-label fallback applies to narrow portrait and text zoom. */
+.game.stacked-actions .game-actions footer {
+  grid-template-columns: minmax(0, 1fr);
+  flex-shrink: 0;
+  gap: 2px;
+}
+.game.stacked-actions .game-actions footer .action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 5px 8px;
+  min-height: 44px;
+  text-align: left;
+}
+.stacked-actions .action-count {
+  position: static;
+  margin-left: auto;
 }
 
 @media (min-width: 760px) {

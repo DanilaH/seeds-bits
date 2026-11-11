@@ -1,5 +1,33 @@
 import { test, expect, type Page } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
+test("narrow portrait text zoom keeps action labels and hit targets inside the screen", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await install(page);
+  await page.evaluate(() => {
+    const nodes = [...document.querySelectorAll<HTMLElement>("body *")];
+    const sizes = nodes.map((e) => parseFloat(getComputedStyle(e).fontSize));
+    nodes.forEach((e, i) => (e.style.fontSize = sizes[i] * 1.5 + "px"));
+  });
+  await expect(page.locator(".game")).toHaveClass(/stacked-actions/);
+  for (const id of ["undo", "hint", "add"]) {
+    const bounds = await page.locator("#" + id).boundingBox();
+    expect(bounds).toBeTruthy();
+    expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(641);
+    expect(
+      await page.locator("#" + id).evaluate((e) => {
+        const label =
+          e.querySelector(".action-label") ?? e.querySelector("span")!;
+        return label.scrollWidth <= label.clientWidth + 1;
+      }),
+    ).toBe(true);
+  }
+  await page.reload();
+  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
+  await page.locator("#resume").click();
+  await expect(page.locator(".game")).not.toHaveClass(/stacked-actions/);
+});
 async function install(page: Page) {
   await page.addInitScript(
     ({ key }) => {

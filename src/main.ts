@@ -298,9 +298,11 @@ function scheduleActionLayout() {
       .querySelector(".game")!
       .classList.toggle(
         "stacked-actions",
-        matchMedia("(orientation: landscape) and (min-width: 540px)").matches &&
+        actions.length > 0 &&
           (required > footer.clientWidth ||
-            (actions.length === 2 && widest > (footer.clientWidth - 2) / 2)),
+            widest >
+              (footer.clientWidth - Math.max(0, actions.length - 1) * 2) /
+                actions.length),
       );
   });
 }
