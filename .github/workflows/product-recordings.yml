@@ -1,0 +1,28 @@
+name: Product audit recordings
+on:
+  push:
+    branches: [qa/product-recordings-20261111]
+permissions:
+  contents: read
+jobs:
+  recordings:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install ffmpeg
+      - run: npm run build
+      - run: node scripts/product-journey.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: product-recordings
+          path: test-results/product-journey/
+          retention-days: 30
