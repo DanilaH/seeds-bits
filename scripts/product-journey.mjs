@@ -65,7 +65,8 @@ try {
       await click('#today-task'); await shot('daily');
       await click('#menu'); await click('#resume');
       const before=await page.locator('#mode').innerText();
-      await page.reload(); await page.waitForSelector('#board button');
+      await page.reload(); await page.waitForSelector('#board button', {state:'attached'});
+      await page.waitForFunction(()=>!document.querySelector('#app').inert);
       if(await page.locator('#dialog').evaluate(e=>e.open)) await click('#resume');
       if(await page.locator('#mode').innerText()!==before) throw Error('Mode not restored');
       await shot('restored-daily');
