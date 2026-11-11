@@ -72,6 +72,8 @@ for (const [width, height, scale] of [
           .evaluate((e) => e.scrollWidth <= e.clientWidth + 1),
       ).toBe(true);
       if (route === "calendar-open") {
+        const today = (await page.locator("#today-task").boundingBox())!;
+        expect(Math.abs(today.x - a.x)).toBeLessThan(1);
         expect(
           await page.locator(".calendar").evaluate((e) => {
             const rail = e.closest(".dialog-scroll")!.getBoundingClientRect();

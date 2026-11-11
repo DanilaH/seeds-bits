@@ -444,6 +444,9 @@ progress::-moz-progress-bar {
     width: calc(100% - 30px);
     margin-inline: auto;
   }
+  #dialog[data-screen="calendar"] .calendar-today {
+    display: block;
+  }
 }
 .calendar > span {
   padding: 4px 0;
