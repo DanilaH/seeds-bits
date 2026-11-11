@@ -186,7 +186,7 @@ dialog:not([data-screen="home"]) .dialog-head {
   width: 100%;
   max-width: 440px;
   z-index: 5;
-  align-items: start;
+  align-items: center;
   background: var(--paper);
   box-shadow: 0 -24px 0 var(--paper);
   pointer-events: auto;
@@ -220,9 +220,8 @@ dialog:not([data-screen="home"]) .dialog-head > h2 {
   display: none;
 }
 dialog:not([data-screen="home"]) #close {
-  position: absolute;
-  right: 0;
-  top: 0;
+  position: static;
+  flex: 0 0 44px;
   pointer-events: auto;
   background: var(--paper);
 }
@@ -429,6 +428,8 @@ progress::-moz-progress-bar {
   margin: 12px 0;
 }
 .calendar .task {
+  aspect-ratio: auto;
+  min-width: 0;
   min-height: 44px;
   font-size: 15px;
 }
@@ -565,9 +566,6 @@ progress::-moz-progress-bar {
 }
 @media (max-width: 350px) {
   .calendar {
-    width: calc(100% + 36px);
-    margin-left: -18px;
-    margin-right: -18px;
     gap: 1px;
   }
   .calendar .task {
@@ -1701,14 +1699,17 @@ header .jar-caption strong {
 }
 header .jar-level {
   display: flex;
-  gap: 7px;
+  gap: 4px;
   align-items: center;
-  line-height: 18px;
+  line-height: 1.25;
 }
 #jar-percent {
-  min-width: 4ch;
+  min-width: 0;
+  white-space: nowrap;
 }
 #jar-collected {
+  display: inline-flex;
+  flex: 0 0 14px;
   color: var(--accent);
   visibility: hidden;
 }
@@ -1978,7 +1979,7 @@ header .jar-caption strong {
 
 /* A distinct receipt and an explicit next goal keep the medal readable. */
 .trophy-display.has-next {
-  grid-template-columns: minmax(0, 1fr) 100px;
+  grid-template-columns: minmax(0, 1fr) minmax(100px, max-content);
   gap: 12px;
   align-items: center;
 }
@@ -2103,6 +2104,8 @@ header .jar-caption strong {
   flex: 1;
   min-width: 0;
   margin: 0;
+  padding-right: 0;
+  gap: 4px;
   align-items: center;
 }
 .dialog-head .screen-heading h2 {
@@ -2113,7 +2116,7 @@ header .jar-caption strong {
   line-height: 1.3;
   letter-spacing: -0.5px;
   font-weight: 600;
-  overflow-wrap: normal;
+  overflow-wrap: anywhere;
 }
 #confirm-content {
   padding-top: 0;
@@ -2189,5 +2192,38 @@ header .jar-caption strong {
   #dialog[data-screen="book"] .dialog-head,
   #dialog[data-screen="progress"] .dialog-head {
     max-width: none;
+  }
+}
+
+/* Text may grow without squeezing control labels or crossing the board rows. */
+#board {
+  font-size: clamp(22px, 5.8vw, 30px);
+  --board-row: max(calc(100cqw / 9), 1.25em);
+  grid-auto-rows: var(--board-row);
+  background-size: calc(100% / 9) var(--board-row);
+}
+.cell {
+  font-size: inherit;
+}
+#hint-offer > * {
+  flex-shrink: 0;
+}
+#hint-offer button {
+  height: auto;
+  line-height: 1.4;
+  white-space: normal;
+}
+.mode-nav .mode-link {
+  flex-basis: auto;
+  flex-shrink: 0;
+}
+#jar-collected svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+@media (orientation: landscape) and (max-height: 420px) {
+  .has-mobile-ads #jar-collected {
+    display: none;
   }
 }

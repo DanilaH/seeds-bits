@@ -10,6 +10,7 @@ jobs:
     timeout-minutes: 20
     env:
       SEEDS_CHROMIUM: /usr/bin/google-chrome
+      SEEDS_VISUAL_SWEEP: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
