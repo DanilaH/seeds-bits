@@ -277,6 +277,7 @@ test("short first task is optional, persists tutorial exit and explains a reveal
     await expect(page.locator("#lesson-next")).toBeVisible();
     if (step === 0) await page.locator("#lesson-next").click();
   }
+  await expect(page.locator("#lesson-text")).toContainText("через край строки");
   await page.locator("#lesson-quick").click();
   await expect
     .poll(() =>
