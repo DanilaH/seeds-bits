@@ -13,17 +13,29 @@ if sudo -u "$seeds_runner" -g seeds_offline curl --noproxy '*' --connect-timeout
   exit 1
 fi
 sudo chmod 666 /dev/kvm
-sudo -u "$seeds_runner" -g seeds_offline "$ANDROID_HOME/emulator/emulator" -avd "$seeds_avd" -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 3072 -cores 2 > /tmp/seeds-offline-emulator.log 2>&1 &
-adb wait-for-device
+seeds_android_env=ANDROID_HOME,ANDROID_SDK_ROOT,ANDROID_AVD_HOME,ANDROID_USER_HOME,ANDROID_EMULATOR_HOME
+sudo -u "$seeds_runner" -g seeds_offline --preserve-env="$seeds_android_env" "$ANDROID_HOME/emulator/emulator" -list-avds | tee test-results/offline-guard/avds.txt
+grep -Fx "$seeds_avd" test-results/offline-guard/avds.txt
+adb start-server
+sudo -u "$seeds_runner" -g seeds_offline --preserve-env="$seeds_android_env" "$ANDROID_HOME/emulator/emulator" -avd "$seeds_avd" -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 3072 -cores 2 > test-results/offline-guard/emulator.log 2>&1 &
+seeds_emulator_pid=$!
 seeds_ready=false
 for seeds_attempt in $(seq 1 120); do
-  if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1 ] && adb shell service check phone | grep -q ': found'; then
+  if ! kill -0 "$seeds_emulator_pid" 2>/dev/null; then
+    cat test-results/offline-guard/emulator.log
+    exit 1
+  fi
+  if [ "$(timeout 5 adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ] && timeout 5 adb shell service check phone | grep -q ': found'; then
     seeds_ready=true
     break
   fi
   sleep 2
 done
-test "$seeds_ready" = true
+if [ "$seeds_ready" != true ]; then
+  cat test-results/offline-guard/emulator.log
+  adb devices -l
+  exit 1
+fi
 # Keep the launcher cold-start ANR out of app UX acquisition; never dismiss an app ANR.
 adb shell am force-stop com.google.android.apps.nexuslauncher
 adb shell input keyevent 82
