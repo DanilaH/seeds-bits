@@ -2213,7 +2213,7 @@ header .jar-caption strong {
 /* Text may grow without squeezing control labels or crossing the board rows. */
 #board {
   font-size: clamp(22px, 5.8vw, 30px);
-  --board-row: max(calc(100cqw / 9), var(--board-digit-row, 1.25em));
+  --board-row: max(calc(100cqw / 9), 1.25em, var(--board-digit-row, 0px));
   grid-auto-rows: var(--board-row);
   background-size: calc(100% / 9) var(--board-row);
 }
