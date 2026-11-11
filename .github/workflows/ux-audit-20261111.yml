@@ -1,0 +1,31 @@
+name: Independent UX audit 2026-11-11
+on:
+  push:
+    branches: [qa/ux-20261111]
+permissions:
+  contents: read
+concurrency:
+  group: ux-audit-20261111
+  cancel-in-progress: true
+jobs:
+  ux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Independent fresh-player, navigation and responsive UX scenarios
+        run: node scripts/ux-audit-2026-11-11.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-ux-20261111
+          path: test-results/ux-20261111/
+          retention-days: 30
