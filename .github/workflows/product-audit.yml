@@ -123,20 +123,7 @@ jobs:
         run: |
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64' 'build-tools;35.0.0'
           echo no | avdmanager create avd --force --name seeds_111 --package 'system-images;android-35;google_apis;x86_64'
-          sudo chmod 666 /dev/kvm
-          "$ANDROID_HOME/emulator/emulator" -avd seeds_111 -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 3072 -cores 2 > /tmp/seeds-product-emulator.log 2>&1 &
-          adb wait-for-device
-          for attempt in $(seq 1 90); do
-            if [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1 ]; then break; fi
-            sleep 2
-          done
-          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
-          adb shell input keyevent 82
-          adb shell wm size 780x1688
-          adb shell wm density 320
-          adb shell svc wifi disable
-          adb shell svc data disable
-          adb shell settings put global http_proxy 127.0.0.1:9
+          bash scripts/ci-offline-emulator.sh seeds_111
           keytool -genkeypair -keystore /tmp/ux111.p12 -storetype PKCS12 -storepass android -keypass android -alias ux -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI UX Acceptance' -noprompt
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-old.apk baseline/app-release-unsigned.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-new.apk new-release/app-release-unsigned.apk
@@ -161,3 +148,4 @@ jobs:
             test-results/emulator/
             test-results/emulator-upgrade/
             test-results/ux111-native/
+            test-results/offline-guard/
