@@ -133,6 +133,35 @@ test("enlarged digits stay inside their own grid row", async ({ page }) => {
   ).toBe(true);
 });
 
+test("glyph-only text zoom fits the board and survives a removed first pair", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await install(page);
+  await page.locator("#resume").click();
+  await page.addStyleTag({ content: ".cell .digit { font-size: 36px }" });
+  const fits = () =>
+    page.locator("button.cell").evaluateAll((cells) =>
+      cells.every((cell) => {
+        const box = cell.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(cell.querySelector(".digit")!);
+        const text = range.getBoundingClientRect();
+        return text.top >= box.top - 1 && text.bottom <= box.bottom + 1;
+      }),
+    );
+  await expect.poll(fits).toBe(true);
+  await page.locator('[data-index="0"]').click();
+  await page.locator('[data-index="9"]').click();
+  await expect(page.locator("#remaining")).toHaveText("26");
+  await expect.poll(fits).toBe(true);
+  await page.setViewportSize({ width: 568, height: 320 });
+  await expect.poll(fits).toBe(true);
+  await page.locator("#undo").click();
+  await expect(page.locator("#remaining")).toHaveText("28");
+  await expect.poll(fits).toBe(true);
+});
+
 test("short landscape menu grows with its enlarged labels", async ({
   page,
 }) => {
