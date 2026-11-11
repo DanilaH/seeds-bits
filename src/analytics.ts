@@ -57,37 +57,55 @@ export function acknowledgeAnalytics(journal: AnalyticsJournal, id: string) {
 /** Only publish snapshots whose game write has succeeded. SDK acknowledgement is
  * local enqueue, NOT a server receipt. Stable IDs allow downstream deduplication. */
 export class CommittedAnalytics {
-  private queue = Promise.resolve();
+  private running?: Promise<void>;
+  private pending?: { events: AnalyticsEvent[]; ack: (id: string) => void };
   private accepted = new Set<string>();
   constructor(private report: (event: AnalyticsEvent) => Promise<boolean>) {}
   publish(events: AnalyticsEvent[], ack: (id: string) => void): Promise<void> {
-    const snapshot = events.map((e) => ({ ...e, data: { ...e.data } }));
-    this.queue = this.queue
-      .catch(() => {})
-      .then(async () => {
-        for (const event of snapshot) {
-          if (!this.accepted.has(event.id)) {
-            let timer: ReturnType<typeof setTimeout> | undefined;
-            try {
-              const accepted = await Promise.race([
-                this.report(event),
-                new Promise<false>((resolve) => {
-                  timer = setTimeout(() => resolve(false), 5000);
-                }),
-              ]);
-              if (!accepted) break; // Retry with the next successful game snapshot.
-              this.accepted.add(event.id);
-              if (this.accepted.size > 512)
-                this.accepted.delete(this.accepted.values().next().value!);
-            } catch {
-              break;
-            } finally {
-              clearTimeout(timer);
-            }
-          }
-          ack(event.id);
-        }
+    // Coalesce successful snapshots while the bridge is slow. The durable save
+    // already contains the bounded outstanding journal; never buffer every move.
+    this.pending = {
+      events: events.map((e) => ({ ...e, data: { ...e.data } })),
+      ack,
+    };
+    return this.start();
+  }
+  private start(): Promise<void> {
+    if (this.running) return this.running;
+    this.running = Promise.resolve()
+      .then(() => this.drain())
+      .finally(() => {
+        this.running = undefined;
+        if (this.pending) return this.start();
       });
-    return this.queue;
+    return this.running;
+  }
+  private async drain() {
+    while (this.pending) {
+      const { events, ack } = this.pending;
+      this.pending = undefined;
+      for (const event of events) {
+        if (!this.accepted.has(event.id)) {
+          let timer: ReturnType<typeof setTimeout> | undefined;
+          try {
+            const accepted = await Promise.race([
+              this.report(event),
+              new Promise<false>((resolve) => {
+                timer = setTimeout(() => resolve(false), 5000);
+              }),
+            ]);
+            if (!accepted) break;
+            this.accepted.add(event.id);
+            if (this.accepted.size > 512)
+              this.accepted.delete(this.accepted.values().next().value!);
+          } catch {
+            break;
+          } finally {
+            clearTimeout(timer);
+          }
+        }
+        ack(event.id);
+      }
+    }
   }
 }

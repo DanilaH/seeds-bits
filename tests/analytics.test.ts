@@ -14,6 +14,29 @@ import {
 } from "../src/progress";
 
 describe("durable analytics journal", () => {
+  it("coalesces saves during a slow failed bridge instead of retrying for every move", async () => {
+    const j: AnalyticsJournal = {};
+    const event = enqueueAnalytics(j, "game_start", { attempt: "slow" });
+    let release!: (accepted: boolean) => void;
+    let calls = 0;
+    const pump = new CommittedAnalytics(async () => {
+      calls++;
+      if (calls === 1)
+        return new Promise<boolean>((resolve) => {
+          release = resolve;
+        });
+      return false;
+    });
+    const initial = pump.publish([event], () => {});
+    await Promise.resolve();
+    const writes = Array.from({ length: 100 }, () =>
+      pump.publish([event], () => {}),
+    );
+    release(false);
+    await Promise.all([initial, ...writes]);
+    expect(calls).toBe(2);
+    expect(j.analytics).toEqual([event]);
+  });
   it("survives a restart with the same event and attempt identities", () => {
     const p = fresh();
     const e = enqueueAnalytics(metadata(p), "game_complete", {
