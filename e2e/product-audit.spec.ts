@@ -118,6 +118,7 @@ test("completion waits for durable state, retry and replay cannot grant twice", 
     .toBe(1);
   const [done] = await events(page, "game_complete");
   expect(done.data.attempt).toBe("product-attempt");
+  expect(done.data.task).toBe("classic");
   expect(done.data.event_id).toBeTruthy();
   expect(done.persisted.completed).toBe(1);
   expect((await events(page, "game_start"))[0].data.attempt).toBe(

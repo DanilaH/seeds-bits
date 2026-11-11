@@ -45,7 +45,6 @@ import "./style.css";
 import "./ui-polish.css";
 import {
   WIDTH,
-  MAX_CELLS,
   classic,
   occupied,
   pairs,
@@ -856,6 +855,7 @@ function durableEvent(
 function trackOpen(reason: "restart" | "resume" | "switch") {
   track("game_open", {
     mode: gameMode(),
+    task: progress.active,
     reason,
     attempt: hintAttempt(progress).id,
     in_progress:
@@ -868,7 +868,11 @@ function markGameStarted() {
   const attempt = hintAttempt(progress);
   if (attempt.analyticsStarted) return;
   attempt.analyticsStarted = true;
-  durableEvent("game_start", { mode: gameMode(), attempt: attempt.id });
+  durableEvent("game_start", {
+    mode: gameMode(),
+    task: progress.active,
+    attempt: attempt.id,
+  });
   void save();
 }
 function updateBanner() {
@@ -994,6 +998,7 @@ function complete(rects: DOMRect[]) {
   if (!alreadyCompleted)
     durableEvent("game_complete", {
       mode: gameMode(),
+      task: id,
       attempt: hintAttempt(progress).id,
       moves: session.current.moves,
       hints: progress.hints[id] ?? 0,
@@ -1424,7 +1429,11 @@ async function choose(i: number) {
     lessonPhase = 2;
     $("lesson-next").hidden = false;
     $("lesson-next").textContent =
-      lesson === 5 || (shortLesson && lesson === 1) ? "Начать игру" : "Дальше";
+      shortLesson && lesson === 1
+        ? "Играть в классику"
+        : lesson === 5
+          ? "Начать игру"
+          : "Дальше";
     lessonQuick.hidden = !(shortLesson && lesson === 1);
   }
   clearSelection();
