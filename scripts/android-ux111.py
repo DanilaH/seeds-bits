@@ -1,5 +1,5 @@
 """Actual release UI: permission grant/denial, native Back, font scale and time picker."""
-import json,pathlib,re,subprocess,time,xml.etree.ElementTree as ET
+import csv,io,json,pathlib,re,subprocess,time,xml.etree.ElementTree as ET
 out=pathlib.Path('test-results/ux111-native');out.mkdir(parents=True,exist_ok=True)
 pkg='com.seedsbits.game';checks={};serial=0
 def adb(*args,check=True):return subprocess.run(['adb',*args],check=check,capture_output=True,text=True).stdout
@@ -33,18 +33,22 @@ def launch():
  adb('shell','am','force-stop',pkg);adb('shell','am','start','-n',pkg+'/.MainActivity');time.sleep(2)
 def back():adb('shell','input','keyevent','4');time.sleep(.5)
 def settings():
- # Off-screen WebView virtual nodes may report a nonempty ancestor rectangle.
- # Require the three actual footer cells to be visible in their shared row.
- for attempt in range(8):
-  _,root=ui();cells={label(n):rect(n) for n in root.iter('node') if label(n) in ['Прогресс','Как играть','Настройки']}
-  row=[cells.get(name,[]) for name in ['Прогресс','Как играть','Настройки']]
-  valid=all(len(b)==4 and b[2]>b[0] and b[3]>b[1] for b in row)
-  if valid and row[0][2]<=row[1][0] and row[1][2]<=row[2][0] and max(b[1] for b in row)-min(b[1] for b in row)<8:
-   capture('menu-settings-visible-'+str(serial));tap(['Настройки']);find(['Тёмная тема']);return
-  print('Footer visibility attempt',attempt,cells,flush=True)
-  capture('menu-settings-scroll-'+str(serial))
-  adb('shell','input','swipe','600','1400','600','480','450');time.sleep(1)
- raise AssertionError('Menu footer not visibly reached')
+ if float(adb('shell','settings','get','system','font_scale').strip())>1:
+  # On this emulator WebView may expose stale virtual-node bounds after text
+  # zoom. Locate the visible word in an actual screenshot for a real touch.
+  for attempt in range(8):
+   name='font150-settings-visible-'+str(serial);capture(name)
+   result=subprocess.run(['tesseract',str(out/(name+'.png')),'stdout','-l','rus','tsv'],capture_output=True,text=True,check=True)
+   for row in csv.DictReader(io.StringIO(result.stdout),delimiter='\t'):
+    if row['text'].strip().lower()=='настройки' and float(row['conf'])>=50:
+     x=int(row['left'])+int(row['width'])//2;y=int(row['top'])+int(row['height'])//2
+     print('Visible settings text touch:',x,y,flush=True)
+     adb('shell','input','tap',str(x),str(y));time.sleep(.5);find(['Тёмная тема']);return
+   adb('shell','input','swipe','600','1400','600','480','450');time.sleep(1)
+  raise AssertionError('Settings not visible after menu scrolling')
+ try:find(['Настройки'],attempts=1)
+ except AssertionError:adb('shell','input','swipe','600','1400','600','480','450');time.sleep(1)
+ tap(['Настройки']);find(['Тёмная тема'])
 def fresh():
  adb('shell','pm','clear',pkg);adb('shell','pm','clear-permission-flags',pkg,'android.permission.POST_NOTIFICATIONS','user-set','user-fixed',check=False)
  launch();tap(['Пропустить']);tap(['Открыть меню']);settings()
