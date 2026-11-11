@@ -1,0 +1,68 @@
+name: Verify isolated product release on Android
+on:
+  push:
+    branches: [qa/product-native-close-20261111]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native:
+    env:
+      SEEDS_UPGRADE_BASELINE_KIND: previously built pre-release payload
+      SEEDS_UPGRADE_BASELINE_SOURCE: e92bd4915d677caf47f74944402c82d48b483d9c
+      SEEDS_UPGRADE_BASELINE_VERSION: '1.1.0 (1100024)'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/ci-install-ocr.sh
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: seeds-product-release-unsigned
+          path: new-release/
+          run-id: 43032671115
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: seeds-rustore-release-unsigned
+          path: baseline/
+          run-id: 42626758548
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify the exact candidate payload
+        run: echo '2fed06a41c7b2a3d120fc587c5a7e7985c023b9feadbd608684a0e108abac51a  new-release/app-release-unsigned.apk' | sha256sum -c -
+      - name: Start disposable offline Android 35
+        run: |
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64' 'build-tools;35.0.0'
+          echo no | avdmanager create avd --force --name seeds_111 --package 'system-images;android-35;google_apis;x86_64'
+          bash scripts/ci-offline-emulator.sh seeds_111
+          keytool -genkeypair -keystore /tmp/ux111.p12 -storetype PKCS12 -storepass android -keypass android -alias ux -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI UX Acceptance' -noprompt
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-old.apk baseline/app-release-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-new.apk new-release/app-release-unsigned.apk
+          adb install /tmp/seeds-new.apk
+      - run: python3 scripts/android-ux111.py
+      - run: |
+          adb uninstall com.seedsbits.game
+          adb install /tmp/seeds-old.apk
+      - run: python3 -m pip install --user pillow
+      - run: python3 scripts/android-upgrade.py before
+      - run: adb install -r /tmp/seeds-new.apk
+      - run: python3 scripts/android-upgrade.py after
+      - run: |
+          adb uninstall com.seedsbits.game
+          adb install /tmp/seeds-new.apk
+      - run: python3 scripts/android-smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-product-native-acceptance
+          path: |
+            test-results/emulator/
+            test-results/emulator-upgrade/
+            test-results/ux111-native/
+            test-results/offline-guard/
+            test-results/ci-packages/
