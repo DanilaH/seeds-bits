@@ -7,19 +7,19 @@
   },
   "isolatedNative": {
     "applicationSource": "160da8c79fd013f25a64607b7338ed6a65131942",
-    "run": 43032671115,
-    "attempts": [
-      1,
-      2
-    ],
-    "status": "blocked_before_app_install",
-    "failedJobs": [
-      130565134246,
-      130570723644
-    ],
-    "reason": "Ubuntu package DNS resolution failure during apt installation; no final APK launched in these attempts"
+    "commit": "b51a505fb5d74d93683877357d5a687678403446",
+    "run": 43042330546,
+    "artifact": 13866676858,
+    "status": "success",
+    "unsignedApkSha256": "2fed06a41c7b2a3d120fc587c5a7e7985c023b9feadbd608684a0e108abac51a",
+    "scope": "Same source APK as browser candidate; temporary CI signing only; host isolation verified before app install",
+    "differentRootEntries": [
+      ".github",
+      "docs",
+      "scripts"
+    ]
   },
-  "note": "Final browser captures and candidate APK are from the same application commit. Workflow-only repair 2434401 retains the same src/native trees. Earlier native success and final blocked attempts are distinguished below; early network-enabled evidence is retained only as a QA defect.",
+  "note": "Browser captures and candidate APK are from runtime 160da8c. The successful isolated native follow-up pins that exact unsigned APK hash. Follow-up changes are CI/test tooling, not application code. Early network-enabled evidence remains a QA defect, not an offline acceptance.",
   "srcTree": "6eeee77edf8f670d51dfb360bc814798a669a738",
   "nativeTree": "1409a980564d263f4e494b840e0ae6eb906c2190",
   "workflowRepair": "243440116e6d345cd23b43c04bda741da694c132",
@@ -31,5 +31,19 @@
     "srcTree": "74921422459c7852d4332ce3d3a73d1e1f680948",
     "nativeTree": "1409a980564d263f4e494b840e0ae6eb906c2190",
     "differenceFromFinalRuntime": "Native Java is identical. Final src/main.ts additionally gates restored analytics on a successful write; that branch is browser fault-tested. Previous native acceptance is not relabelled as a test of the final APK."
+  },
+  "priorFailedNative": {
+    "applicationSource": "160da8c79fd013f25a64607b7338ed6a65131942",
+    "run": 43032671115,
+    "attempts": [
+      1,
+      2
+    ],
+    "status": "blocked_before_app_install",
+    "failedJobs": [
+      130565134246,
+      130570723644
+    ],
+    "reason": "Ubuntu package DNS resolution failure during apt installation; no final APK launched in these attempts"
   }
 }

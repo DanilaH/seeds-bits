@@ -1,0 +1,10 @@
+{
+  "unsignedSourceSha256": "2fed06a41c7b2a3d120fc587c5a7e7985c023b9feadbd608684a0e108abac51a",
+  "signedSha256": "4ae691ac28f8e90587385766189a4e1f62f659dda68f2626056ce112752e377b",
+  "bytes": 5505144,
+  "originalZipEntriesUnchanged": 663,
+  "version": "1.1.2",
+  "versionCode": 1102015,
+  "purpose": "Physical-device acceptance, not a published store artifact",
+  "source": "160da8c79fd013f25a64607b7338ed6a65131942"
+}

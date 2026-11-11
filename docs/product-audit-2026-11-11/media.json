@@ -159,6 +159,67 @@
       "speed": 1,
       "sha256": "a78c81c87e4156ccef5c1610ae989d5876a2da05e23e4f6020db329d64fec535",
       "bytes": 825682
+    },
+    {
+      "file": "native-landscape-150-scroll.png",
+      "stage": "native-final-original",
+      "sha256": "bb8a1b3d6724e6b300ce69b6c3401638b62852735806ccc490f93640f1c5ad0a",
+      "bytes": 73653,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-notification-permission.png",
+      "stage": "native-final-original",
+      "sha256": "b4cdb7e56fb54bcc28fbadcf660a986686f849fe5be618bcd2b643953440427a",
+      "bytes": 71871,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-offline-rewarded.png",
+      "stage": "native-final-original",
+      "sha256": "d866a9318a5dfbc1103c84331dc59459fd469c27c0ef78edc4537837b6742b93",
+      "bytes": 60374,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-portrait-150.png",
+      "stage": "native-final-original",
+      "sha256": "5858c853cddefd996e93d8ae940faab12db19f299f8306a4ed764fd87bd99185",
+      "bytes": 82376,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-time-picker.png",
+      "stage": "native-final-original",
+      "sha256": "4d7ce119a06ed9541f55814fbd4b2b7cdc6b784f516f5ccce6df5f8a69e67157",
+      "bytes": 74800,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-upgrade.png",
+      "stage": "native-final-original",
+      "sha256": "bee880393c00bb271805a1854b1be0a9e1fb2d0fa2ae4621ef121897f0e56086",
+      "bytes": 60793,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
     }
-  ]
+  ],
+  "native_method": "Original Android 35 PNG captures of the exact candidate APK 1102015, temporary CI signer, host network isolation before boot; no physical-device or live-ad claim"
 }

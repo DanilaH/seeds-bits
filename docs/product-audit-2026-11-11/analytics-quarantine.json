@@ -82,5 +82,13 @@
     ],
     "retained_evidence": "evidence/early-native-network-enabled.png"
   },
-  "does_not_claim": "No claim that every listed build delivered AppMetrica data, or that historical supplied CSV users were these tests. No events were deleted from the console."
+  "does_not_claim": "No claim that every listed build delivered AppMetrica data, or that historical supplied CSV users were these tests. No events were deleted from the console.",
+  "manual_acceptance": {
+    "app_version": "1.1.2",
+    "app_build": 1102015,
+    "purpose": "Private physical-device acceptance APK delivered to owner; actual server events not yet verified",
+    "excludeFromPlayerCohorts": true,
+    "publicationRule": "Do not publish the same build number as the manual QA APK; keep future organic store cohorts distinguishable",
+    "doesNotClaim": "Offline emulator 1102015 did not receive external access. Manual phone traffic is intentional QA, not another observed isolation failure."
+  }
 }

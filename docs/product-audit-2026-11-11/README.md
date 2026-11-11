@@ -54,7 +54,7 @@
 
 ## Ошибка QA, которую нельзя скрывать
 
-[Ранний нативный кадр с настоящей рекламой](evidence/early-native-network-enabled.png) — **свидетельство ошибки изоляции, не магазинный скриншот и не офлайновая приёмка**. В раннем этапе UX была доступна сеть. Его данные нужно отделить от игроков: [номера сборок и точные оговорки](analytics-quarantine.json). Финальные native-попытки остановились до запуска APK из-за DNS Ubuntu. Предыдущая успешная приёмка с host firewall до boot и её точный исходник указаны в handoff; она не выдаётся за проверку последнего APK.
+[Ранний нативный кадр с настоящей рекламой](evidence/early-native-network-enabled.png) — **свидетельство ошибки изоляции, не магазинный скриншот и не офлайновая приёмка**. В раннем этапе UX была доступна сеть. Его данные нужно отделить от игроков: [номера сборок и точные оговорки](analytics-quarantine.json). Первоначальные native-попытки остановились на DNS Ubuntu до приложения. Финальная приёмка точного APK 1102015 затем прошла с автономно собранным OCR и host firewall до boot: run 43042330546. История ошибок сохранена в handoff.
 
 ## Воспроизведение
 
@@ -65,3 +65,18 @@
 Runtime `c3b4ebf`, изолированный прогон [43029903310](https://github.com/DanilaH/seeds-bits/actions/runs/43029903310), без live-рекламы. Это предыдущий кандидат, не финальная APK-приёмка `160da8c`.
 
 [Портрет, текст 150%](evidence/previous-native-portrait.png) · [Горизонтально, текст 150%](evidence/previous-native-landscape.png).
+
+## Финальный Android APK 1102015
+
+[Успешная приёмка 43042330546](https://github.com/DanilaH/seeds-bits/actions/runs/43042330546), test source `b51a505`, artifact `13866676858`. Игра — тот же runtime `160da8c`; PNG ниже сохранены непосредственно с Android. Release payload подписан временным CI-сертификатом, внешняя сеть заблокирована до boot. Физический телефон и live-реклама этим не проверены.
+
+| Кадр | Оригинал |
+|---|---|
+| Портрет, системный текст 150% | [PNG](media/native-portrait-150.png) |
+| Горизонтально, боковые действия после прокрутки | [PNG](media/native-landscape-150-scroll.png) |
+| Настоящий Android permission dialog | [PNG](media/native-notification-permission.png) |
+| Native time picker | [PNG](media/native-time-picker.png) |
+| Offline rewarded: отказ без выдачи подсказок | [PNG](media/native-offline-rewarded.png) |
+| Восстановление после обновления | [PNG](media/native-upgrade.png) |
+
+Владельцу выдан APK для телефона; [порядок приёмки](PHONE_CHECK.md), [проверка подписи/ресурсов](evidence/phone-apk.json). Наблюдения новых игроков и серверные события AppMetrica ещё не получены.

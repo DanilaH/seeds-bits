@@ -55,14 +55,24 @@
       "androidPreview": true
     },
     "finalAndroidEmulator": {
-      "status": "blocked-before-app-install",
-      "run": 43032671115,
-      "attempts": [
-        1,
-        2
-      ],
-      "reason": "Ubuntu package DNS failure while installing OCR",
-      "evidence": "evidence/ci-infrastructure.json"
+      "status": "success",
+      "applicationSource": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "testSource": "b51a505fb5d74d93683877357d5a687678403446",
+      "run": 43042330546,
+      "artifact": 13866676858,
+      "unsignedApkSha256": "2fed06a41c7b2a3d120fc587c5a7e7985c023b9feadbd608684a0e108abac51a",
+      "uxPassed": 7,
+      "smokePassed": 11,
+      "upgradePassed": true,
+      "scope": "Exact candidate 1102015 release payload, Android 35, host firewall before boot; both upgrade APKs signed temporarily with same CI certificate",
+      "evidence": [
+        "evidence/final-native-offline-guard.json",
+        "evidence/final-native-ux.json",
+        "evidence/final-native-smoke.json",
+        "evidence/final-native-upgrade.json",
+        "evidence/final-native-upgrade-baseline.json",
+        "evidence/final-native-ocr.json"
+      ]
     },
     "previousIsolatedAndroidEmulator": {
       "applicationSource": "c3b4ebf733079c119d57342b23ba38ea9985db7c",
@@ -82,6 +92,20 @@
         "evidence/previous-native-upgrade.json",
         "evidence/previous-native-upgrade-baseline.json"
       ]
+    },
+    "phoneApk": {
+      "status": "signed-and-statically-verified",
+      "physicalDeviceRun": false,
+      "versionCode": 1102015,
+      "certificateMatchesPrevious": true,
+      "signatureV2": true,
+      "signatureV3": true,
+      "unsignedZipPayloadUnchanged": true,
+      "evidence": [
+        "evidence/phone-apk.json",
+        "evidence/phone-apk-payload.json"
+      ],
+      "next": "PHONE_CHECK.md"
     }
   },
   "ci": {
@@ -111,6 +135,19 @@
       "run": 43036042686,
       "source": "243440116e6d345cd23b43c04bda741da694c132",
       "note": "Automatic rerun after workflow-only repair. Not used to claim additional acceptance; source src/native trees match the documented candidate."
+    },
+    "finalAndroid": {
+      "run": 43042330546,
+      "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43042330546",
+      "source": "b51a505fb5d74d93683877357d5a687678403446",
+      "status": "success",
+      "exactCandidatePayloadVerified": true
+    },
+    "latestDefaultChecks": {
+      "run": 43037299069,
+      "source": "4fd0c4969abc6376cbd09f4dc6d23e97503df787",
+      "status": "success",
+      "runtimeEquivalentToApplicationSource": true
     }
   },
   "evidence": {
@@ -120,18 +157,19 @@
     "mediaInventory": "media.json",
     "runtimeProvenance": "source-proof.json",
     "apk": "apk.json",
-    "analyticsQuarantine": "analytics-quarantine.json"
+    "analyticsQuarantine": "analytics-quarantine.json",
+    "phoneChecklist": "PHONE_CHECK.md"
   },
   "limitations": [
-    "Final APK emulator UI/upgrade did not run: Ubuntu OCR installation failed on both attempts. Previous isolated acceptance remains explicitly labelled as previous candidate.",
     "No observed 10–15 minute session with a new human player; no retention or comprehension claim.",
     "No physical motor/speaker assessment, real store review, live earned reward, AppMetrica server receipt or VK attribution acceptance.",
     "Historical save_error root cause is unproven; power-loss filesystem failure is not exhaustively simulated.",
     "Native tests use temporary CI signing, not the production certificate.",
     "SDK enqueue-to-native-receipt crash gap can duplicate an event_id; downstream deduplication is required.",
     "Optional journal is bounded; prolonged telemetry unavailability may discard oldest analytics, not gameplay progress.",
-    "Early native UX runs were not isolated: exclude QA app builds 1102004–1102014, without asserting that all sent server data."
+    "Early native UX runs were not isolated: exclude QA app builds 1102004–1102014, without asserting that all sent server data.",
+    "Acceptance build 1102015 is reserved for manual QA; use a distinct build number for store publication so excluding QA does not exclude future players."
   ],
-  "recordedAt": "2026-11-11T14:16:42.649581+00:00",
-  "status": "implemented; web, models and builds pass; final emulator UI/upgrade blocked by package DNS failure"
+  "recordedAt": "2026-11-11T15:05:18.057506+00:00",
+  "status": "automated application acceptance complete; physical-device, player and server analytics acceptance pending"
 }

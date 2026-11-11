@@ -1,0 +1,9 @@
+{
+  "hostOwnerFirewallIPv4": true,
+  "hostOwnerFirewallIPv6": true,
+  "outboundProbeRejected": true,
+  "emulatorProcessGroupVerified": true,
+  "androidWifiAndDataDisabled": true,
+  "androidProxyLoopbackClosedPort": true,
+  "scope": "No app has been installed or started yet"
+}
