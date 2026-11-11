@@ -173,14 +173,14 @@ test("oversized status text scrolls inside its region and leaves the board and a
     e.textContent =
       "Не удалось сохранить партию. Повторите сохранение, чтобы не потерять найденные пары и полученные награды.";
   });
-  const region = page.locator(".status-wrap");
+  const region = page.locator("#status");
   await expect
     .poll(() => region.evaluate((e) => e.scrollHeight > e.clientHeight))
     .toBe(true);
   expect(
     await region.evaluate((e) => {
       const box = e.getBoundingClientRect(),
-        text = e.querySelector("#status")!;
+        text = e;
       return [box.top - 2, box.bottom + 2].every(
         (y) =>
           !text.contains(document.elementFromPoint(box.x + box.width / 2, y)),
@@ -190,7 +190,7 @@ test("oversized status text scrolls inside its region and leaves the board and a
   await region.evaluate((e) => (e.scrollTop = e.scrollHeight));
   expect(
     await region.evaluate((e) => {
-      const text = e.querySelector("#status")!.firstChild!;
+      const text = e.firstChild!;
       const range = document.createRange();
       range.setStart(text, text.textContent!.length - 3);
       range.setEnd(text, text.textContent!.length);
@@ -200,6 +200,16 @@ test("oversized status text scrolls inside its region and leaves the board and a
       );
     }),
   ).toBe(true);
+  await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
+  await textScale(page, 2);
+  await expect(page.locator(".game")).toHaveClass(/stacked-actions/);
+  const actions = page.locator(".game-actions");
+  await expect
+    .poll(() => actions.evaluate((e) => e.scrollHeight > e.clientHeight))
+    .toBe(true);
+  await page.locator("#hint").scrollIntoViewIfNeeded();
+  await expect(page.locator("#hint")).toBeInViewport();
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
 });

@@ -2244,12 +2244,34 @@ header .jar-caption strong {
 }
 
 @media (orientation: portrait) {
-  .game-actions .status-wrap {
-    overflow-y: auto;
-    justify-content: flex-start;
-  }
   .game-actions #status {
-    flex-shrink: 0;
+    flex-shrink: 1;
+    min-height: 0;
+    overflow-y: auto;
     margin-block: 0;
+  }
+  /* Enlarged labels already select this measured fallback. Let its complete
+     status and controls scroll together, as in the landscape sidebar. */
+  .game.stacked-actions .game-actions {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: 50%;
+    overflow-y: auto;
+  }
+  .game.stacked-actions .status-wrap {
+    flex: 0 0 auto;
+  }
+  .game.stacked-actions .game-actions #status {
+    flex-shrink: 0;
+    overflow: visible;
+  }
+  .game.stacked-actions #hint-jump {
+    position: static;
+    transform: none;
+    white-space: normal;
+    width: 100%;
+    flex-shrink: 0;
   }
 }

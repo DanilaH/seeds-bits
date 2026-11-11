@@ -1,5 +1,5 @@
 {
-  "source": "2f2e13a89d898d0be481315f96e41cbaf4efa72b",
+  "source": "023f96c36ca39ebd5fa803bc641ab83fcdef72c7",
   "method": "Rendered UI screenshots; text150/text200 explicitly scale every rendered font, not a physical OS zoom claim",
   "headerMisalignment": [],
   "buttonTextOverflow": [],
@@ -363,6 +363,6 @@
     }
   ],
   "iconFrames": 363,
-  "rawArtifact": 13888321882,
+  "rawArtifact": 13889652301,
   "note": "Repeated identical icon geometry condensed; all defect arrays retained unchanged. Full raw JSON is in the Actions artifact."
 }

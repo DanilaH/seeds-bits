@@ -128,6 +128,10 @@ def narrow_text():
   assert all(int(r['top'])>=top-1 and int(r['top'])+int(r['height'])<=bottom+1 for r in glyphs),'Rendered digits cross the first grid row'
   (out/'font200-narrow-geometry.json').write_text(json.dumps({'rowTop':top,'rowBottom':bottom,'cropTop':crop_top,'cropBottom':crop_bottom,'glyphs':glyphs},ensure_ascii=False,indent=2))
   checks['narrowAndroidTextZoomStaysInsideRows']=True
+  reminder_words=words('font200-narrow-game')
+  (out/'font200-narrow-words.json').write_text(json.dumps(reminder_words,ensure_ascii=False,indent=2))
+  assert any(r['text']=='10' and int(r['top'])>bottom for r in reminder_words),'Rule reminder loses its target sum at narrow Android text zoom'
+  checks['narrowAndroidRuleReminderVisible']=True
  finally:
   adb('shell','wm','size','780x1688');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
 def picker():
