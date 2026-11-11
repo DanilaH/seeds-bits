@@ -202,6 +202,16 @@ test("oversized status text scrolls inside its region and leaves the board and a
   ).toBe(true);
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
+  await textScale(page, 2);
+  await expect(page.locator(".game")).toHaveClass(/stacked-actions/);
+  const actions = page.locator(".game-actions");
+  await expect
+    .poll(() => actions.evaluate((e) => e.scrollHeight > e.clientHeight))
+    .toBe(true);
+  await page.locator("#hint").scrollIntoViewIfNeeded();
+  await expect(page.locator("#hint")).toBeInViewport();
+  await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
 });
 
 test("short landscape menu grows with its enlarged labels", async ({
