@@ -53,7 +53,7 @@ async function open(o={}){
  return {page,context,errors};
 }
 async function capture(page,scenario,label){
- if(sweep)await page.evaluate(()=>{
+ await page.evaluate(()=>{
   const scale=window.auditTextScale;if(!scale)return;
   const saved=window.auditFontOverrides??=new WeakMap();
   const nodes=[...document.querySelectorAll('body *')];
@@ -91,7 +91,7 @@ async function capture(page,scenario,label){
     for(const r of range.getClientRects())if(r.width&&r.height&&(r.left<box.left-2||r.right>box.right+2||r.top<box.top-2||r.bottom>box.bottom+2))clippedButtonText.push({button:e.id,text:node.textContent.trim().slice(0,100),box:{x:box.x,y:box.y,width:box.width,height:box.height},textRect:{x:r.x,y:r.y,width:r.width,height:r.height}});
    }
   }
-  const nestedOverflow=[...document.querySelectorAll('.calendar,.task-grid,.volume-grid,.collection-tabs,.dialog-head')].filter(visible).filter(e=>!modal||modal.contains(e)).flatMap(e=>{const clip=e.closest('.dialog-scroll')??e.closest('dialog')??document.documentElement;const b=clip.getBoundingClientRect();return [...e.children].filter(visible).flatMap(c=>{const r=c.getBoundingClientRect();return r.left<b.left-1||r.right>b.right+1?[{container:e.className,child:c.id||c.innerText?.slice(0,40),left:r.left,right:r.right,clipLeft:b.left,clipRight:b.right}]:[];});});
+  const nestedOverflow=[...document.querySelectorAll('.calendar,.task-grid,.volume-grid,.collection-tabs,.dialog-head,.next-medal')].filter(visible).filter(e=>!modal||modal.contains(e)).flatMap(e=>{const clip=e.closest('.dialog-scroll')??e.closest('dialog')??document.documentElement;const b=clip.getBoundingClientRect();return [...e.children].filter(visible).flatMap(c=>{const r=c.getBoundingClientRect();return r.left<b.left-1||r.right>b.right+1?[{container:e.className,child:c.id||c.innerText?.slice(0,40),left:r.left,right:r.right,clipLeft:b.left,clipRight:b.right}]:[];});});
   return{viewport:{width:innerWidth,height:innerHeight},screen:document.querySelector('#dialog')?.open?document.querySelector('#dialog').dataset.screen:'game',text:(modal??document.body).innerText,activeElement:{id:document.activeElement?.id,text:document.activeElement?.innerText?.slice(0,80)},horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,controls,overflow,containers,headerAlignment,icons,clippedButtonText,nestedOverflow,banner:window.auditBanner??null,calls:window.auditCalls??[]};
  });
  report.frames.push({scenario,label,file,...state});
@@ -235,8 +235,8 @@ try{
   await click(p,'#recover-task');await p.waitForFunction(()=>document.querySelectorAll('.hinted').length===2);await capture(p,n,'recovered');
  });
  await run('true-text-enlargement-experiment',{viewport:{width:360,height:640}},async(p,n)=>{
-  await board(p);await p.evaluate(()=>{const nodes=[...document.querySelectorAll('body *')];const sizes=nodes.map(e=>parseFloat(getComputedStyle(e).fontSize));nodes.forEach((e,i)=>e.style.fontSize=(sizes[i]*1.5)+'px');});await capture(p,n,'classic-fonts-150');
-  await click(p,'#menu');await click(p,'#settings-open');await p.evaluate(()=>{const nodes=[...document.querySelectorAll('#settings-panel *')];const sizes=nodes.map(e=>parseFloat(getComputedStyle(e).fontSize));nodes.forEach((e,i)=>e.style.fontSize=(sizes[i]*1.5)+'px');});await capture(p,n,'settings-fonts-150');
+  await board(p);await p.evaluate(()=>window.auditTextScale=1.5);await capture(p,n,'classic-fonts-150');
+  await click(p,'#menu');await click(p,'#settings-open');await capture(p,n,'settings-fonts-150');
  });
  await run('restart-confirmation',{seed:false},async(p,n)=>{await board(p);await click(p,'[data-index="0"]');await click(p,'[data-index="9"]');await click(p,'#menu');await click(p,'#new');await capture(p,n,'confirm');await click(p,'#cancel-new');await capture(p,n,'cancel-return');});
  await run('notification-denied',{denied:true},async(p,n)=>{await click(p,'#settings-open');await capture(p,n,'pending');await click(p,'#notification-permission-request');await capture(p,n,'denied');await p.locator('#reminder-time').fill('13:45');await capture(p,n,'time-edit');});
@@ -278,7 +278,7 @@ try{
 }finally{
  await fs.writeFile(path.join(output,'audit.json'),JSON.stringify(report,null,2));
  await fs.writeFile(path.join(output,'summary.json'),JSON.stringify({source:report.source,scenarios:report.scenarios.length,completed:report.scenarios.filter(s=>s.status==='completed').length,blocked:report.scenarios.filter(s=>s.status!=='completed'),frames:report.frames.length,horizontalOverflow:report.frames.filter(f=>f.horizontalOverflow).map(f=>f.file),pageErrors:report.scenarios.filter(s=>s.errors?.length)},null,2));
- if(sweep)await fs.writeFile(path.join(output,'visual-flags.json'),JSON.stringify({source:report.source,method:'Rendered UI screenshots; text150/text200 explicitly scale every rendered font, not a physical OS zoom claim',headerMisalignment:report.frames.filter(f=>f.headerAlignment&&Math.abs(f.headerAlignment.deltaY)>2).map(f=>({file:f.file,...f.headerAlignment})),buttonTextOverflow:report.frames.filter(f=>f.clippedButtonText?.length).map(f=>({file:f.file,items:f.clippedButtonText})),nestedOverflow:report.frames.filter(f=>f.nestedOverflow?.length).map(f=>({file:f.file,items:f.nestedOverflow})),
+ if(sweep)await fs.writeFile(path.join(output,'visual-flags.json'),JSON.stringify({source:report.source,method:'Rendered UI screenshots; text150/text200 explicitly scale every rendered font, not a physical OS zoom claim',headerMisalignment:report.frames.filter(f=>f.headerAlignment&&Math.abs(f.headerAlignment.deltaY)>2).map(f=>({file:f.file,...f.headerAlignment})),buttonTextOverflow:report.frames.filter(f=>f.clippedButtonText?.length).map(f=>({file:f.file,items:f.clippedButtonText})),scrollerOverflow:report.frames.flatMap(f=>f.containers.filter(c=>c.scrollWidth>c.clientWidth+1).map(c=>({file:f.file,...c}))),nestedOverflow:report.frames.filter(f=>f.nestedOverflow?.length).map(f=>({file:f.file,items:f.nestedOverflow})),
   textOverflow:report.frames.filter(f=>f.overflow.length).map(f=>({file:f.file,items:f.overflow})),iconGeometry:report.frames.filter(f=>f.icons.length).map(f=>({file:f.file,items:f.icons}))},null,2));
  await browser.close();servers.forEach(p=>p.kill('SIGTERM'));
  console.log(JSON.stringify({scenarios:report.scenarios.length,frames:report.frames.length,blocked:report.scenarios.filter(s=>s.status!=='completed').map(s=>({name:s.name,error:s.error}))}));

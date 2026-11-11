@@ -1979,7 +1979,7 @@ header .jar-caption strong {
 
 /* A distinct receipt and an explicit next goal keep the medal readable. */
 .trophy-display.has-next {
-  grid-template-columns: minmax(0, 1fr) 100px;
+  grid-template-columns: minmax(0, 1fr) minmax(100px, max-content);
   gap: 12px;
   align-items: center;
 }

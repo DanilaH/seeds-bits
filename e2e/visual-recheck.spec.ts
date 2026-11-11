@@ -92,6 +92,17 @@ for (const [width, height, scale] of [
           .locator(".dialog-scroll:not([hidden])")
           .evaluate((e) => e.scrollWidth <= e.clientWidth + 1),
       ).toBe(true);
+      if (route === "progress-open") {
+        await page.locator("#progress-trophies").click();
+        await page.locator("#trophies-mode").click();
+        await textScale(page, scale);
+        expect(
+          await page
+            .locator(".dialog-scroll:not([hidden])")
+            .evaluate((e) => e.scrollWidth <= e.clientWidth + 1),
+        ).toBe(true);
+        await page.locator("#collection-back").click();
+      }
       await back.click();
     }
   });
