@@ -24,6 +24,9 @@ jobs:
       - run: npx playwright test --config scripts/regression-061/playwright.config.ts
       - run: npm run test:e2e
         if: ${{ !cancelled() }}
+      - name: Repeated cross-tab settings acceptance
+        if: ${{ !cancelled() }}
+        run: npx playwright test e2e/audit-fixes.spec.ts -g 'different settings fields' --repeat-each 30 --workers 1 --output test-results/preferences-repeat
       - run: node scripts/ux-audit-2026-11-11.mjs
         if: ${{ !cancelled() }}
       - run: node scripts/product-journey.mjs

@@ -534,11 +534,18 @@ window.addEventListener("storage", (event) => {
       applySettings({
         [event.key.slice(SETTINGS.length + 1)]: JSON.parse(event.newValue),
       });
-    else if (event.key === SETTINGS)
+    if (event.key === SETTINGS || event.key.startsWith(SETTINGS + "."))
       void platform
         .readSettings(SETTINGS)
         .then((raw) => {
           if (raw) applySettings(JSON.parse(raw));
+          // Per-field keys are authoritative. A late snapshot from another tab
+          // may update the compatibility JSON after those keys were committed.
+          // Repair only that projection under the settings lock; never the game.
+          if (raw && !futureSave && raw !== localStorage.getItem(SETTINGS))
+            void platform
+              .writeSettingsPatch(SETTINGS, JSON.stringify(settings), {})
+              .catch(() => {});
         })
         .catch(() => {});
   } catch {

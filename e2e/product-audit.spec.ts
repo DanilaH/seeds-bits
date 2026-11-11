@@ -1,5 +1,53 @@
 import { test, expect, type Page } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
+test("a late settings snapshot is repaired from canonical fields without overwriting the game", async ({
+  page,
+  context,
+}) => {
+  await install(page);
+  await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
+  await page.locator("#dark").check();
+  await page.locator("#sound").check();
+  await expect
+    .poll(() =>
+      page.evaluate(() => localStorage.getItem("seeds-bits.settings.v1.sound")),
+    )
+    .toBe("true");
+  const other = await context.newPage();
+  await other.goto("/");
+  await expect(other.locator("#app")).not.toHaveAttribute("inert", "");
+  const original = await other.evaluate(() => {
+    const k = "seeds-bits.settings.v1";
+    const game = localStorage.getItem("seeds-bits.progress.v2");
+    localStorage.setItem(
+      k,
+      JSON.stringify({
+        ...JSON.parse(localStorage.getItem(k)!),
+        theme: "light",
+        sound: false,
+      }),
+    );
+    return game;
+  });
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        JSON.parse(localStorage.getItem("seeds-bits.settings.v1")!),
+      ),
+    )
+    .toMatchObject({ theme: "dark", sound: true });
+  expect(await page.evaluate((key) => localStorage.getItem(key), key)).toBe(
+    original,
+  );
+  for (const tab of [page, other]) {
+    await tab.reload();
+    await expect(tab.locator("#app")).not.toHaveAttribute("inert", "");
+    await tab.locator("#settings-open").click();
+    await expect(tab.locator("#dark")).toBeChecked();
+    await expect(tab.locator("#sound")).toBeChecked();
+  }
+});
 test("narrow portrait text zoom keeps action labels and hit targets inside the screen", async ({
   page,
 }) => {
