@@ -1,5 +1,5 @@
 """Independent native UX observations on disposable offline Android 35; no production data."""
-import json,pathlib,re,subprocess,time,xml.etree.ElementTree as ET
+import json,os,pathlib,re,subprocess,time,xml.etree.ElementTree as ET
 out=pathlib.Path('test-results/android-ux-20261111');out.mkdir(parents=True,exist_ok=True)
 package='com.seedsbits.game'
 records=[]
@@ -67,27 +67,40 @@ def timepicker():
  if not matches:raise AssertionError('No native time input exposed')
  a,b,c,d=bounds(matches[0]);adb('shell','input','tap',str((a+c)//2),str((b+d)//2));time.sleep(.4);capture('13-system-time-picker');back()
 def landscape():
- adb('shell','settings','put','system','accelerometer_rotation','0');adb('shell','settings','put','system','user_rotation','1');time.sleep(1);launch();capture('14-home-landscape-font150');play();capture('15-game-landscape-font150');back();tap(['Настройки']);capture('16-settings-landscape-font150')
+ adb('shell','settings','put','system','font_scale','1.5');adb('shell','settings','put','system','accelerometer_rotation','0');adb('shell','settings','put','system','user_rotation','1');time.sleep(1);launch();capture('14-home-landscape-font150');play();capture('15-game-landscape-font150');back();tap(['Настройки']);capture('16-settings-landscape-font150')
 def permission():
  adb('shell','settings','put','system','user_rotation','0');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
  # Start an independent first-request case on this disposable emulator only.
  adb('shell','pm','clear',package)
  adb('shell','pm','clear-permission-flags',package,'android.permission.POST_NOTIFICATIONS','user-set','user-fixed',check=False)
  launch();tap(['Пропустить']);tap(['Открыть меню']);settings();capture('17a-before-permission-request')
- adb('logcat','-c');tap(['Разрешить уведомления'])
- with (out/'17-immediate-permission.png').open('wb') as f:subprocess.run(['adb','exec-out','screencap','-p'],stdout=f,check=True)
- capture('17-system-notification-permission')
+ adb('logcat','-c')
+ log=(out/'permission-full-logcat.txt').open('w')
+ logger=subprocess.Popen(['adb','logcat','-v','threadtime'],stdout=log,stderr=subprocess.STDOUT)
  try:
+  tap(['Разрешить уведомления'])
+  with (out/'17-immediate-permission.png').open('wb') as f:subprocess.run(['adb','exec-out','screencap','-p'],stdout=f,check=True)
+  capture('17-system-notification-permission')
   tap(["Don't allow",'Don’t allow','Не разрешать','Не разрешать уведомления'])
   capture('18-notification-denied')
+ except AssertionError:
+  # Observe recovery rather than assuming that a missing system dialog is a
+  # selector problem. Keep the full log from the actual first request.
+  back();capture('18a-native-back-after-missing-permission')
+  launch();capture('18b-relaunch-after-missing-permission')
+  raise
  finally:
+  logger.terminate();logger.wait(timeout=5);log.close()
   (out/'permission-logcat.txt').write_text(adb('logcat','-d','-t','400',check=False))
   (out/'permission-package.txt').write_text(adb('shell','dumpsys','package',package,check=False))
-run('normal-and-native-back',normal)
-run('book-scroll',books)
-run('calendar-and-back',calendar)
-run('system-font-scale-150',fontscale)
-run('native-time-picker',timepicker)
+if os.environ.get('SEEDS_UX_FOCUS')!='permission':
+ run('normal-and-native-back',normal)
+ run('book-scroll',books)
+ run('calendar-and-back',calendar)
+ run('system-font-scale-150',fontscale)
+ run('native-time-picker',timepicker)
+else:
+ launch();tap(['Пропустить'])
 run('landscape-with-large-font',landscape)
 run('notification-permission-denial',permission)
 print(json.dumps(records,ensure_ascii=False))

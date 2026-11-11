@@ -71,9 +71,12 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux-smoke.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-ux.apk ux-release/app-release-unsigned.apk
           adb install /tmp/seeds-ux.apk
       - name: Actual native baseline and offline rewarded-return acceptance
+        if: ${{ !contains(github.event.head_commit.message, '[permission-ux]') }}
         continue-on-error: true
         run: python3 scripts/android-smoke.py
       - name: Independent Android font, navigation and settings observations
+        env:
+          SEEDS_UX_FOCUS: ${{ contains(github.event.head_commit.message, '[permission-ux]') && 'permission' || 'all' }}
         run: python3 scripts/android-ux-2026-11-11.py
       - uses: actions/upload-artifact@v4
         if: always()
