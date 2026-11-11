@@ -62,7 +62,9 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-old.apk baseline/app-release-unsigned.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-new.apk new-release/app-release-unsigned.apk
           adb install /tmp/seeds-new.apk
-      - run: python3 scripts/android-ux111.py
+      - id: ux
+        run: python3 scripts/android-ux111.py
+        continue-on-error: true
       - run: |
           adb uninstall com.seedsbits.game
           adb install /tmp/seeds-old.apk
@@ -74,6 +76,9 @@ jobs:
           adb uninstall com.seedsbits.game
           adb install /tmp/seeds-new.apk
       - run: python3 scripts/android-smoke.py
+      - name: Require native UX acceptance
+        if: ${{ always() && steps.ux.outcome == 'failure' }}
+        run: exit 1
       - uses: actions/upload-artifact@v4
         if: always()
         with:

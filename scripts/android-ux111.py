@@ -36,6 +36,8 @@ def settings():
  # WebView can expose pre-reflow bounds just after Android font-scale changes.
  # Scroll the menu footer into view before using its current accessibility bounds.
  adb('shell','input','swipe','600','1400','600','480','450');time.sleep(1)
+ capture('menu-before-settings-tap')
+ n=find(['Настройки']);print('Settings tap bounds:',n.get('bounds'),flush=True)
  tap(['Настройки']);find(['Тёмная тема'])
 def fresh():
  adb('shell','pm','clear',pkg);adb('shell','pm','clear-permission-flags',pkg,'android.permission.POST_NOTIFICATIONS','user-set','user-fixed',check=False)
@@ -73,10 +75,16 @@ def large_text():
  adb('shell','settings','put','system','user_rotation','0');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
 def picker():
  launch();settings();tap(['12:30']);find(['SET','Set','ГОТОВО','Готово']);capture('native-time-picker');back();find(['Тёмная тема']);checks['nativeTimePickerAndCancel']=True
+errors={}
 try:
- permission('deny');permission('grant');large_text();picker()
+ for name,case in [('deny',lambda:permission('deny')),('grant',lambda:permission('grant')),('large-text',large_text),('picker',picker)]:
+  try:case()
+  except Exception as error:
+   errors[name]=str(error);capture(name+'-failure')
+   adb('shell','settings','put','system','user_rotation','0');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
 finally:
- (out/'summary.json').write_text(json.dumps({'checks':checks,'scope':'Android 35, actual release, offline, disposable signer'},ensure_ascii=False,indent=2))
+ (out/'summary.json').write_text(json.dumps({'checks':checks,'errors':errors,'scope':'Android 35, actual release, offline, disposable signer'},ensure_ascii=False,indent=2))
  (out/'logcat.txt').write_text(adb('logcat','-d','-t','600',check=False))
  try:capture('last-state')
  except Exception:pass
+if errors:raise AssertionError(json.dumps(errors,ensure_ascii=False))
