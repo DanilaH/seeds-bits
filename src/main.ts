@@ -285,9 +285,7 @@ function scheduleActionLayout() {
         "stacked-actions",
         matchMedia("(orientation: landscape) and (min-width: 540px)").matches &&
           (required > footer.clientWidth ||
-            widest >
-              (footer.clientWidth - Math.max(0, actions.length - 1) * 2) /
-                Math.max(1, actions.length)),
+            (actions.length === 2 && widest > (footer.clientWidth - 2) / 2)),
       );
   });
 }
@@ -948,7 +946,9 @@ function renderWin() {
   const next = nextTask(id, progress.done);
   const archiveNext = id.startsWith("daily") && next?.startsWith("daily");
   $("play-again").textContent = archiveNext
-    ? `Задача из архива · ${next!.slice(9).split("-").reverse().join(".")}`
+    ? next!.slice(9) === today()
+      ? "Сегодняшняя задача"
+      : `Задача из архива · ${next!.slice(9).split("-").reverse().join(".")}`
     : next
       ? i >= 0 && volumeOf(next) !== volumeOf(id)
         ? "Следующая тетрадь"
@@ -1683,7 +1683,10 @@ function openMenu(preserve: unknown = false) {
   $("collection").hidden = true;
   $("menu-content").hidden = false;
   $("confirm-content").hidden = true;
-  if (!dialog.open) dialog.showModal();
+  if (!dialog.open) {
+    dialog.showModal();
+    dialog.scrollTop = 0;
+  }
   showSaveState();
   $("resume").focus({ preventScroll: true });
   platform.gameplay(false);
@@ -1761,6 +1764,7 @@ function openSettings(restoring = false) {
   dialog.dataset.screen = "settings";
   updateReminderSettings();
   pinDialogHeading($("settings-panel"));
+  if (!restoring) dialog.scrollTop = 0;
   $("settings-back").focus({ preventScroll: true });
 }
 $("settings-open").onclick = () => openSettings();
@@ -1773,6 +1777,7 @@ $("privacy-open").onclick = () => {
   $("collection").innerHTML =
     `<div class="screen-heading"><button id="privacy-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>О данных</h2></div><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Напоминание о задаче дня включено по умолчанию и работает по местному времени на устройстве. Его можно выключить в настройках игры. Разрешение Android можно отключить в системных настройках.</p><p>Окно оценки обслуживает RuStore. Игра не получает текст отзыва и звёзды и не выдаёт за них награду.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p>`;
   pinDialogHeading($("collection"));
+  dialog.scrollTop = 0;
   $("privacy-back").onclick = returnToPrevious;
   $("privacy-back").focus({ preventScroll: true });
 };
@@ -2486,7 +2491,13 @@ function renderHomeCurrent() {
   $("new").hidden =
     lesson >= 0 ||
     (dialog.dataset.entry !== "pause" && count > 0 && !session.history.length);
-  $("new").textContent = classicMode ? "Начать заново" : "Повторить задачу";
+  $("new").textContent = classicMode
+    ? count
+      ? "Начать заново"
+      : "Новая партия"
+    : count
+      ? "Начать задачу заново"
+      : "Повторить задачу";
   if (lesson >= 0) {
     $("classic-mode").hidden = false;
     $("home-eyebrow").textContent = "Как играть";

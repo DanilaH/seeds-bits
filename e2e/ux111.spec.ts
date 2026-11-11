@@ -236,3 +236,26 @@ test("landscape enlarged action text gets whole words and reachable controls", a
     await expect(b).toBeInViewport();
   }
 });
+
+test("an archived result distinguishes the still-unplayed current day", async ({
+  page,
+}) => {
+  await seed(page);
+  await page.evaluate((k) => {
+    const p = JSON.parse(localStorage.getItem(k)!);
+    p.active = "daily-v1-2026-11-10";
+    p.sessions[p.active] = {
+      rules: 1,
+      current: { board: [5, 5], moves: 0, additions: 0, scroll: 0 },
+      history: [],
+    };
+    localStorage.setItem(k, JSON.stringify(p));
+  }, key);
+  await page.reload();
+  await page.locator("#resume").click();
+  await page.locator('[data-index="0"]').click();
+  await page.locator('[data-index="1"]').click();
+  await expect(page.locator("#play-again")).toHaveText("Сегодняшняя задача");
+  await page.locator("#play-again").click();
+  await expect(page.locator("#mode")).toContainText("11.11.2026");
+});

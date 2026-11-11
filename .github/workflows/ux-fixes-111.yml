@@ -109,7 +109,7 @@ jobs:
           path: baseline/
           run-id: 42626758548
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install old release on disposable offline Android 35
+      - name: Start disposable offline Android 35
         run: |
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64' 'build-tools;35.0.0'
           echo no | avdmanager create avd --force --name seeds_111 --package 'system-images;android-35;google_apis;x86_64'
@@ -130,6 +130,10 @@ jobs:
           keytool -genkeypair -keystore /tmp/ux111.p12 -storetype PKCS12 -storepass android -keypass android -alias ux -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI UX Acceptance' -noprompt
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-old.apk baseline/app-release-unsigned.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/ux111.p12 --ks-key-alias ux --ks-pass pass:android --out /tmp/seeds-new.apk new-release/app-release-unsigned.apk
+          adb install /tmp/seeds-new.apk
+      - run: python3 scripts/android-ux111.py
+      - run: |
+          adb uninstall com.seedsbits.game
           adb install /tmp/seeds-old.apk
       - run: python3 -m pip install --user pillow
       - run: python3 scripts/android-upgrade.py before
@@ -139,7 +143,6 @@ jobs:
           adb uninstall com.seedsbits.game
           adb install /tmp/seeds-new.apk
       - run: python3 scripts/android-smoke.py
-      - run: python3 scripts/android-ux111.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

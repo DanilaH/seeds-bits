@@ -182,7 +182,9 @@ dialog:not([data-screen="home"]) .dialog-head {
   top: 0;
   height: auto;
   min-height: 44px;
-  margin: 0 0 20px;
+  margin: 0 auto 20px;
+  width: 100%;
+  max-width: 440px;
   z-index: 5;
   align-items: start;
   background: var(--paper);
@@ -884,6 +886,7 @@ progress::-moz-progress-bar {
 }
 :is(.settings, .reminder-toggle) input::after {
   content: "";
+  position: absolute;
   width: 20px;
   height: 20px;
   top: 3px;
@@ -2103,6 +2106,8 @@ header .jar-caption strong {
   #dialog[data-screen="home"] .home-layout {
     display: flex;
     gap: 24px;
+    flex: 0 0 auto;
+    padding-block: 40px 28px;
   }
   .home-current {
     min-height: 0;
@@ -2117,6 +2122,9 @@ header .jar-caption strong {
   .home-modes .mode-link {
     flex: 0;
     min-height: 88px;
+  }
+  .home-links {
+    margin-top: auto;
   }
 }
 @media (orientation: landscape) and (min-width: 540px) {
@@ -2141,5 +2149,12 @@ header .jar-caption strong {
   .stacked-actions .action-count {
     position: static;
     margin-left: auto;
+  }
+}
+
+@media (min-width: 760px) {
+  #dialog[data-screen="book"] .dialog-head,
+  #dialog[data-screen="progress"] .dialog-head {
+    max-width: none;
   }
 }
