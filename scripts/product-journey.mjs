@@ -66,6 +66,7 @@ try {
         if(task===0) await shot('first-notebook');
         for(const solution of puzzles[task].solution) await pair([solution.a, solution.b]);
         await page.waitForSelector('#win:not([hidden])');
+        await page.waitForTimeout(1800); // Record the entire value transfer and jar milestone before leaving.
         await shot('complete-'+(task+1));
         if(task<5) await click('#play-again');
       }

@@ -76,9 +76,12 @@ test("narrow portrait text zoom keeps action labels and hit targets inside the s
   await page.locator("#resume").click();
   await expect(page.locator(".game")).not.toHaveClass(/stacked-actions/);
 });
-async function install(page: Page) {
+async function install(
+  page: Page,
+  opts: { pending?: boolean; blockBoot?: boolean } = {},
+) {
   await page.addInitScript(
-    ({ key }) => {
+    ({ key, opts }) => {
       const w = window as any;
       if (!localStorage.productSeed) {
         localStorage.productSeed = "1";
@@ -94,7 +97,12 @@ async function install(page: Page) {
             sessions: {
               classic: {
                 rules: 1,
-                current: { board: [5, 5], moves: 0, additions: 0, scroll: 0 },
+                current: {
+                  board: opts.pending ? [] : [5, 5],
+                  moves: opts.pending ? 1 : 0,
+                  additions: 0,
+                  scroll: 0,
+                },
                 history: [],
               },
             },
@@ -105,11 +113,27 @@ async function install(page: Page) {
               version: 2,
               wallet: 0,
               since: "2026-11-01",
-              completed: 0,
+              completed: opts.pending ? 1 : 0,
               unassisted: 0,
               attempts: {
-                classic: { id: "product-attempt", completed: false },
+                classic: { id: "product-attempt", completed: !!opts.pending },
               },
+              ...(opts.pending
+                ? {
+                    analytics: [
+                      {
+                        id: "restored-completion",
+                        name: "game_complete",
+                        data: {
+                          attempt: "product-attempt",
+                          mode: "classic",
+                          launch: "previous-process",
+                          occurred_at: 1,
+                        },
+                      },
+                    ],
+                  }
+                : {}),
             },
           }),
         );
@@ -117,7 +141,7 @@ async function install(page: Page) {
       w.productEvents = [];
       w.productAcks = [];
       w.failComplete = false;
-      w.failAll = false;
+      w.failAll = !!opts.blockBoot;
       const write = Storage.prototype.setItem;
       Storage.prototype.setItem = function (k, v) {
         if (
@@ -152,7 +176,7 @@ async function install(page: Page) {
         },
       };
     },
-    { key },
+    { key, opts },
   );
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
@@ -169,6 +193,24 @@ const events = (page: Page, name: string) =>
     name,
   );
 
+test("restored queued completion requires a successful write before SDK submission", async ({
+  page,
+}) => {
+  await install(page, { pending: true, blockBoot: true });
+  await expect(page.locator("#retry-save")).toBeVisible();
+  expect(await events(page, "game_complete")).toHaveLength(0);
+  await page.evaluate(() => {
+    (window as any).failAll = false;
+  });
+  await page.locator("#retry-save").click();
+  await expect
+    .poll(async () => (await events(page, "game_complete")).length)
+    .toBe(1);
+  const [done] = await events(page, "game_complete");
+  expect(done.data.event_id).toBe("restored-completion");
+  expect(done.data.launch).toBe("previous-process");
+  expect(done.persisted.completed).toBe(1);
+});
 test("completion waits for durable state, retry and replay cannot grant twice", async ({
   page,
 }) => {

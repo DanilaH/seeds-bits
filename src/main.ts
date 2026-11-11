@@ -2123,10 +2123,16 @@ async function boot() {
   }
   experience(progress).sessions++;
   await initializeMonetization(() => syncPauseState(), receiveReward);
-  if (!futureSave && !readWarning && lastStored && adsBridge)
-    void committedAnalytics.publish(metadata(progress).analytics ?? [], (id) =>
-      acknowledgeAnalytics(metadata(progress), id),
-    );
+  if (
+    !futureSave &&
+    !readWarning &&
+    lastStored &&
+    adsBridge &&
+    metadata(progress).analytics?.length
+  )
+    // A failed SharedPreferences commit can remain in process memory. A read on
+    // WebView recreation is not a disk acknowledgement: confirm it with a write.
+    await save();
   if (engagementBridge)
     try {
       await engagementBridge.addListener("dailyOpen", () => {
