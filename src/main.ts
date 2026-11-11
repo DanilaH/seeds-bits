@@ -124,6 +124,7 @@ let engagementAvailable = false,
   engagementActive = false,
   notificationGranted = false,
   notificationRequestPending = false,
+  notificationSaving = false,
   pendingDailyOpen = false,
   skipNextInterstitial = false;
 let lastExternalAt = -Infinity,
@@ -2701,7 +2702,9 @@ function updateReminderSettings() {
   $<HTMLButtonElement>("notification-permission-request").disabled =
     notificationRequestPending;
   $("reminder-permission").textContent = notificationRequestPending
-    ? "Ожидаем ответ Android…"
+    ? notificationSaving
+      ? "Сохраняем настройки…"
+      : "Ожидаем ответ Android…"
     : notificationGranted
       ? settings.reminders
         ? "Напоминание включено."
@@ -2736,6 +2739,7 @@ async function enableReminder(enabled: boolean) {
   if (enabled && !notificationGranted) {
     engagementActive = true;
     notificationRequestPending = true;
+    notificationSaving = true;
     skipNextInterstitial = true;
     lastExternalAt = performance.now();
     syncPauseState();
@@ -2751,6 +2755,8 @@ async function enableReminder(enabled: boolean) {
         return;
       }
       if (firstRequest) track("reminder_permission_requested");
+      notificationSaving = false;
+      updateReminderSettings();
       const state = await requestNotificationPermission(engagementBridge);
       if (!state.available) throw new Error("notification_unavailable");
       notificationGranted = state.granted;
@@ -2767,6 +2773,7 @@ async function enableReminder(enabled: boolean) {
     } finally {
       engagementActive = false;
       notificationRequestPending = false;
+      notificationSaving = false;
       lastExternalAt = performance.now();
       syncPauseState();
       updateReminderSettings();

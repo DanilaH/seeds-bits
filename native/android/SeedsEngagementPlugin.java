@@ -43,18 +43,24 @@ public class SeedsEngagementPlugin extends Plugin {
     });
   }
   @PluginMethod public void requestNotifications(PluginCall call) {
+    android.util.Log.i("SeedsNotifications", "request_entered");
     getActivity().runOnUiThread(()->{
       try {
+        android.util.Log.i("SeedsNotifications", "request_on_main: " + getPermissionState("notifications"));
+        if(getPermissionState("notifications")==null) {
+          call.reject("Notification permission alias unavailable", "NOTIFICATION_PERMISSION");return;
+        }
         if(getActivity().isFinishing() || getActivity().isDestroyed()) {
           call.reject("Activity unavailable", "NOTIFICATION_ACTIVITY");return;
         }
         if(Build.VERSION.SDK_INT>=33 && getPermissionState("notifications")!=PermissionState.GRANTED)
           requestPermissionForAlias("notifications",call,"notificationPermission");
         else notificationPermission(call);
-      }catch(Exception error){call.reject("Notification request unavailable", "NOTIFICATION_REQUEST", error);}
+      }catch(Exception error){android.util.Log.w("SeedsNotifications", "request_error: " + error.getClass().getSimpleName());call.reject("Notification request unavailable", "NOTIFICATION_REQUEST", error);}
     });
   }
   @PermissionCallback private void notificationPermission(PluginCall call) {
+    android.util.Log.i("SeedsNotifications", "permission_callback");
     call.resolve(new JSObject().put("available",true).put("granted",SeedsDailyReminder.allowed(getContext())));
   }
   @Override protected void handleOnNewIntent(Intent intent) {

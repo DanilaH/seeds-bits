@@ -40,9 +40,19 @@ def fresh():
  adb('shell','pm','clear',pkg);adb('shell','pm','clear-permission-flags',pkg,'android.permission.POST_NOTIFICATIONS','user-set','user-fixed',check=False)
  launch();tap(['Пропустить']);tap(['Открыть меню']);settings()
 def permission(choice):
- fresh();capture(choice+'-before');tap(['Разрешить уведомления'])
- # Capture the real system dialog before interacting with it.
- find(['Allow','Разрешить']);capture(choice+'-system-dialog')
+ fresh();capture(choice+'-before')
+ log=(out/(choice+'-permission-trace.txt')).open('w')
+ logger=subprocess.Popen(['adb','logcat','-v','threadtime','SeedsNotifications:V','AndroidRuntime:E','ActivityTaskManager:I','*:S'],stdout=log,stderr=subprocess.STDOUT)
+ try:
+  tap(['Разрешить уведомления'])
+  with (out/(choice+'-immediate.png')).open('wb') as f:subprocess.run(['adb','exec-out','screencap','-p'],stdout=f,check=True)
+  find(['Allow','Разрешить']);capture(choice+'-system-dialog')
+ except Exception:
+  time.sleep(22);capture(choice+'-timeout');back();capture(choice+'-back-after-timeout')
+  raise
+ finally:
+  logger.terminate();logger.wait(timeout=5);log.close()
+ # The successful branch now has direct system-dialog evidence.
  tap(['Allow','Разрешить'] if choice=='grant' else ["Don't allow",'Don’t allow','Не разрешать','Не разрешать уведомления'])
  if choice=='grant':find(['Напоминание включено.'])
  else:find(['Уведомления отключены в Android. Разрешите их в системных настройках, затем включите напоминание.'])
