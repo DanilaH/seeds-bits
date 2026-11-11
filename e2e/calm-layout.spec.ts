@@ -62,7 +62,6 @@ test("home hides board, layouts fit and modes survive settings and restart", asy
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
   await page.locator("#menu").click();
-  await page.locator("#settings-open").click();
   await page.locator("#new").click();
   await expect(page.locator("#remaining")).toHaveText("8");
 });

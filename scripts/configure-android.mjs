@@ -11,11 +11,21 @@ const storeRelease = process.env.SEEDS_BUILD_FLAVOR === "release";
 const appId = storeRelease
   ? "com.seedsbits.game"
   : "com.seedsbits.game.preview";
-const versionCode =
-  (storeRelease ? 1100000 : 11000) + Number(process.env.GITHUB_RUN_NUMBER || 1);
+const version = JSON.parse(readFileSync("package.json", "utf8")).version;
+const [major, minor, patch] = version.split(".").map(Number);
+const build = Number(process.env.GITHUB_RUN_NUMBER || 1);
+if (
+  ![major, minor, patch].every(Number.isSafeInteger) ||
+  minor > 9 ||
+  patch > 99 ||
+  build > 999
+)
+  throw Error("Version/build outside Android version-code range");
+const versionCode = storeRelease
+  ? major * 1000000 + minor * 100000 + patch * 1000 + build
+  : 11100 + build;
 if (!Number.isSafeInteger(versionCode) || versionCode < 1001)
   throw Error("Invalid version");
-const version = JSON.parse(readFileSync("package.json", "utf8")).version;
 const names = [
   "APPMETRICA_API_KEY",
   "YANDEX_BANNER_AD_UNIT_ID",

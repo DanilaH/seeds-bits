@@ -372,5 +372,5 @@ test("press feedback preserves a touch at the edge of a navigation button", asyn
     touchPoints: [],
   });
   await expect(page.locator("#collection")).toBeVisible();
-  await expect(page.locator("#collection h2")).toHaveText("Тетради");
+  await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText("Тетради");
 });

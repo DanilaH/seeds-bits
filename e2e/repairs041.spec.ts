@@ -313,7 +313,7 @@ test("A10 portrait, landscape, dark and enlarged type screens are reachable; cap
   });
   await page.locator("#progress-open").click();
   await page.locator("#progress-trophies").click();
-  await expect(page.locator("#collection h2")).toBeVisible();
+  await expect(page.locator(".dialog-head .screen-heading h2")).toBeVisible();
   console.log("LAYOUT_MEASUREMENTS", JSON.stringify(measurements));
 });
 test("A11 scrolling a long board during pair animations preserves nodes and undo", async ({

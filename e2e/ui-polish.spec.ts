@@ -148,7 +148,7 @@ test("collection tabs and settings remain readable with enlarged text and reduce
         .evaluate((e) => e.scrollWidth <= e.clientWidth + 1),
     ).toBe(true);
     const header = await page.evaluate(() => {
-      const title = document.querySelector("#collection h2")!;
+      const title = document.querySelector(".dialog-head .screen-heading h2")!;
       const range = document.createRange();
       range.selectNodeContents(title);
       return {

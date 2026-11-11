@@ -55,7 +55,7 @@ test("store configuration keeps live IDs, correct namespace and branding and is 
       expect(r.status, r.stderr).toBe(0);
     }
     const read = (p: string) => readFileSync(join(root, p), "utf8");
-    expect(read("android/app/build.gradle")).toContain("versionCode 1100007");
+    expect(read("android/app/build.gradle")).toContain("versionCode 1101007");
     const gradle = read("android/app/build.gradle");
     expect(gradle).toContain("minifyEnabled true");
     expect(gradle).toContain("ru.rustore.sdk:review:10.5.2");

@@ -43,8 +43,16 @@ public class SeedsEngagementPlugin extends Plugin {
     });
   }
   @PluginMethod public void requestNotifications(PluginCall call) {
-    if(Build.VERSION.SDK_INT>=33 && getPermissionState("notifications")!=PermissionState.GRANTED) requestPermissionForAlias("notifications",call,"notificationPermission");
-    else notificationPermission(call);
+    getActivity().runOnUiThread(()->{
+      try {
+        if(getActivity().isFinishing() || getActivity().isDestroyed()) {
+          call.reject("Activity unavailable", "NOTIFICATION_ACTIVITY");return;
+        }
+        if(Build.VERSION.SDK_INT>=33 && getPermissionState("notifications")!=PermissionState.GRANTED)
+          requestPermissionForAlias("notifications",call,"notificationPermission");
+        else notificationPermission(call);
+      }catch(Exception error){call.reject("Notification request unavailable", "NOTIFICATION_REQUEST", error);}
+    });
   }
   @PermissionCallback private void notificationPermission(PluginCall call) {
     call.resolve(new JSObject().put("available",true).put("granted",SeedsDailyReminder.allowed(getContext())));

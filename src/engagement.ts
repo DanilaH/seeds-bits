@@ -26,11 +26,33 @@ declare global {
   }
 }
 export const engagementBridge =
-  import.meta.env.DEV && window.__SEEDS_ENGAGEMENT_TEST__
+  import.meta.env.DEV &&
+  typeof window !== "undefined" &&
+  window.__SEEDS_ENGAGEMENT_TEST__
     ? window.__SEEDS_ENGAGEMENT_TEST__
     : Capacitor.getPlatform() === "android"
       ? registerPlugin<EngagementBridge>("SeedsEngagement")
       : undefined;
+/** A lost native callback must not leave the game paused indefinitely. */
+export async function requestNotificationPermission(
+  bridge: EngagementBridge,
+  timeoutMs = 20000,
+): Promise<NotificationState> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      bridge.requestNotifications(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(
+          () => reject(new Error("notification_timeout")),
+          timeoutMs,
+        );
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
 export function experience(p: Progress) {
   return (metadata(p).engagement ??= {
     activeMs: 0,

@@ -1,4 +1,4 @@
-"""Upgrade the published 1.0.0 source payload to 1.1.0 with one CI-only certificate.
+"""Upgrade the published 1.1.0 payload to 1.1.1 with one CI-only certificate.
 Both APKs are release/non-debuggable. Persistence is exercised through the UI.
 Production APK certificate identity is verified separately on the delivered bytes.
 """
@@ -74,7 +74,7 @@ try:
   classic();count(26)
   tap(button('Открыть меню',True));tap(button('Настройки',True));tap(button('Тёмная тема',True));tap(button('Закрыть меню',True));count(26)
   screenshot('before.png')
-  (out/'baseline.json').write_text(json.dumps({'classicDigits':26,'classicHintBudget':2,'bookDigits':initial-2,'baselineSource':'86d950b970a69e5dec3ebc269075143a1c28f94a','baselineVersion':'1.0.0 (1000010)','signature':'same temporary CI-only key for both APKs'}))
+  (out/'baseline.json').write_text(json.dumps({'classicDigits':26,'classicHintBudget':2,'bookDigits':initial-2,'baselineSource':'e92bd4915d677caf47f74944402c82d48b483d9c','baselineVersion':'1.1.0 (1100024)','signature':'same temporary CI-only key for both APKs'}))
   adb('shell','am','force-stop',pkg)
  else:
   before=json.loads((out/'baseline.json').read_text());resume();count(before['classicDigits']);hint_count(2)
