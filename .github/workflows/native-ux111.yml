@@ -1,7 +1,12 @@
 name: Verify exact UX 1.1.1 payload on Android
 on:
-  push:
-    branches: [qa/ux111-acceptance]
+  workflow_dispatch:
+    inputs:
+      release_run_id:
+        description: Workflow run containing the exact 1.1.1 release payload
+        type: string
+        required: true
+        default: '42999286153'
 permissions:
   contents: read
   actions: read
@@ -33,7 +38,7 @@ jobs:
         with:
           name: seeds-111-release-unsigned
           path: new-release/
-          run-id: 42992168789
+          run-id: ${{ inputs.release_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/download-artifact@v4
         with:
