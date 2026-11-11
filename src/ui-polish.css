@@ -1591,7 +1591,8 @@ progress::-moz-progress-bar {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 8px;
-  width: max(136px, 8.5em);
+  width: max(164px, 10.25em);
+  max-width: 100%;
   height: auto;
   min-height: 44px;
   flex-shrink: 0;
