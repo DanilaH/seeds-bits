@@ -17,7 +17,8 @@ permissions:
   contents: read
 jobs:
   web:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,7 +28,9 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npx vitest run --config scripts/regression-061/vitest.config.ts
-      - run: npx playwright install --with-deps chromium
+      # Hosted 24.04 already supplies Chrome's system libraries. Keep Playwright's
+      # matching Chromium and its startup validation; avoid an unrelated apt update.
+      - run: npx playwright install chromium
       - run: npx playwright test --config scripts/regression-061/playwright.config.ts
       - run: npm run test:e2e
         if: ${{ !cancelled() }}
