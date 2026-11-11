@@ -835,7 +835,8 @@ $("lesson-next").after(lessonQuick);
 lessonQuick.onclick = () => {
   const task = notebook.find((p) => !progress.done.includes(p.id));
   if (!task || busy) return;
-  finishLesson("complete");
+  // Keep the completed lesson visible until the chosen task is durable.
+  firstEvent("tutorial_end", { outcome: "complete", step: lesson + 1 });
   void switchGame(task.id);
 };
 function gameMode() {

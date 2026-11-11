@@ -278,6 +278,18 @@ test("short first task is optional, persists tutorial exit and explains a reveal
     if (step === 0) await page.locator("#lesson-next").click();
   }
   await expect(page.locator("#lesson-text")).toContainText("через край строки");
+  await page.evaluate(() => {
+    const w = window as any;
+    w.classicFlash = false;
+    new MutationObserver(() => {
+      if (document.querySelector("#mode")!.textContent!.includes("Классика"))
+        w.classicFlash = true;
+    }).observe(document.querySelector("#mode")!, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+  });
   await page.locator("#lesson-quick").click();
   await expect
     .poll(() =>
@@ -288,6 +300,7 @@ test("short first task is optional, persists tutorial exit and explains a reveal
     )
     .toBe("fresh-v2");
   await expect(page.locator("#mode")).toContainText("Тетрадь");
+  expect(await page.evaluate(() => (window as any).classicFlash)).toBe(false);
   await page.locator("#hint").click();
   await expect(page.locator("#status")).toContainText(/Одинаковые цифры|= 10/);
   await page.reload();
