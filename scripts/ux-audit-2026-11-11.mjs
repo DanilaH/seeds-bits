@@ -71,7 +71,7 @@ async function capture(page,scenario,label){
   const nodes=[...document.querySelectorAll('button,input,select,summary,a[href]')].filter(visible).filter(e=>!modal||modal.contains(e));
   const controls=nodes.map(e=>{const r=e.getBoundingClientRect();const x=r.x+r.width/2,y=r.y+r.height/2;const hit=x>=0&&x<innerWidth&&y>=0&&y<innerHeight?document.elementFromPoint(x,y):null;return{id:e.id,tag:e.tagName,label:e.getAttribute('aria-label')||e.getAttribute('title')||e.innerText||e.closest('label')?.innerText||'',disabled:Boolean(e.disabled),rect:{x:r.x,y:r.y,width:r.width,height:r.height},hit:hit?e===hit||e.contains(hit):false,inViewport:r.x>=0&&r.y>=0&&r.right<=innerWidth&&r.bottom<=innerHeight};});
   const overflow=[...document.querySelectorAll('h1,h2,h3,p,label,.fine,.action-label,.action-count,.hero-kicker,.hero-count,.metal-name,.metal-count,.next-count')].filter(visible).filter(e=>!modal||modal.contains(e)).filter(e=>e.scrollWidth>e.clientWidth+2&&getComputedStyle(e).overflowX!=='auto').map(e=>({tag:e.tagName,id:e.id,class:e.className,text:e.innerText,scrollWidth:e.scrollWidth,clientWidth:e.clientWidth}));
-  const containers=['#dialog','.dialog-scroll:not([hidden])','#viewport','#hint-offer'].map(s=>{const e=document.querySelector(s);return e&&visible(e)?{selector:s,clientHeight:e.clientHeight,scrollHeight:e.scrollHeight,scrollTop:e.scrollTop}:null}).filter(Boolean);
+  const containers=['#dialog','.dialog-scroll:not([hidden])','#viewport','#hint-offer'].map(s=>{const e=document.querySelector(s);return e&&visible(e)?{selector:s,clientWidth:e.clientWidth,scrollWidth:e.scrollWidth,clientHeight:e.clientHeight,scrollHeight:e.scrollHeight,scrollTop:e.scrollTop}:null}).filter(Boolean);
   const back=controls.find(c=>['collection-back','settings-back','privacy-back'].includes(c.id));
   const close=controls.find(c=>c.id==='close');
   const headerAlignment=back&&close?{deltaY:(close.rect.y+close.rect.height/2)-(back.rect.y+back.rect.height/2),back:back.rect,close:close.rect}:null;
@@ -81,12 +81,13 @@ async function capture(page,scenario,label){
    const box=e.getBoundingClientRect();if(box.top<0||box.bottom>innerHeight||box.left<0||box.right>innerWidth)continue;
    const walker=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);let node;
    while(node=walker.nextNode()){
-    if(!node.textContent.trim())continue;
+    if(!node.textContent.trim()||!visible(node.parentElement))continue;
     const range=document.createRange();range.selectNodeContents(node);
     for(const r of range.getClientRects())if(r.width&&r.height&&(r.left<box.left-2||r.right>box.right+2||r.top<box.top-2||r.bottom>box.bottom+2))clippedButtonText.push({button:e.id,text:node.textContent.trim().slice(0,100),box:{x:box.x,y:box.y,width:box.width,height:box.height},textRect:{x:r.x,y:r.y,width:r.width,height:r.height}});
    }
   }
-  return{viewport:{width:innerWidth,height:innerHeight},screen:document.querySelector('#dialog')?.open?document.querySelector('#dialog').dataset.screen:'game',text:(modal??document.body).innerText,activeElement:{id:document.activeElement?.id,text:document.activeElement?.innerText?.slice(0,80)},horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,controls,overflow,containers,headerAlignment,icons,clippedButtonText,banner:window.auditBanner??null,calls:window.auditCalls??[]};
+  const nestedOverflow=[...document.querySelectorAll('.calendar,.task-grid,.volume-grid,.collection-tabs,.dialog-head')].filter(visible).filter(e=>!modal||modal.contains(e)).flatMap(e=>{const clip=e.closest('.dialog-scroll')??e.closest('dialog')??document.documentElement;const b=clip.getBoundingClientRect();return [...e.children].filter(visible).flatMap(c=>{const r=c.getBoundingClientRect();return r.left<b.left-1||r.right>b.right+1?[{container:e.className,child:c.id||c.innerText?.slice(0,40),left:r.left,right:r.right,clipLeft:b.left,clipRight:b.right}]:[];});});
+  return{viewport:{width:innerWidth,height:innerHeight},screen:document.querySelector('#dialog')?.open?document.querySelector('#dialog').dataset.screen:'game',text:(modal??document.body).innerText,activeElement:{id:document.activeElement?.id,text:document.activeElement?.innerText?.slice(0,80)},horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,controls,overflow,containers,headerAlignment,icons,clippedButtonText,nestedOverflow,banner:window.auditBanner??null,calls:window.auditCalls??[]};
  });
  report.frames.push({scenario,label,file,...state});
  return state;
@@ -251,7 +252,7 @@ try{
    await run('sweep-hint-'+name,{viewport,textScale:1.5,seed:false},async(p,n)=>{
     await board(p);
     for(let i=0;i<3;i++){await click(p,'#hint');const cells=await p.locator('.hinted').evaluateAll(es=>es.map(e=>e.dataset.index));for(const c of cells)await click(p,`[data-index="${c}"]`);}
-    await click(p,'#hint');await capture(p,n,'offer');await p.locator('#hint-offer button').filter({hasText:/видео|реклам|смотр/i}).first().click();await capture(p,n,'unavailable');
+    await click(p,'#hint');await capture(p,n,'offer');await p.locator('#hint-offer').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'offer-bottom');await p.locator('#hint-offer button').filter({hasText:/видео|реклам|смотр/i}).first().click();await capture(p,n,'unavailable');
    });
   }
   await run('sweep-empty',{viewport:{width:320,height:568},done:[],meter:0,wallet:0,completed:0,unassisted:0,wins:0},async(p,n)=>{
@@ -272,7 +273,8 @@ try{
 }finally{
  await fs.writeFile(path.join(output,'audit.json'),JSON.stringify(report,null,2));
  await fs.writeFile(path.join(output,'summary.json'),JSON.stringify({source:report.source,scenarios:report.scenarios.length,completed:report.scenarios.filter(s=>s.status==='completed').length,blocked:report.scenarios.filter(s=>s.status!=='completed'),frames:report.frames.length,horizontalOverflow:report.frames.filter(f=>f.horizontalOverflow).map(f=>f.file),pageErrors:report.scenarios.filter(s=>s.errors?.length)},null,2));
- if(sweep)await fs.writeFile(path.join(output,'visual-flags.json'),JSON.stringify({source:report.source,method:'Rendered UI screenshots; text150/text200 explicitly scale every rendered font, not a physical OS zoom claim',headerMisalignment:report.frames.filter(f=>f.headerAlignment&&Math.abs(f.headerAlignment.deltaY)>2).map(f=>({file:f.file,...f.headerAlignment})),buttonTextOverflow:report.frames.filter(f=>f.clippedButtonText?.length).map(f=>({file:f.file,items:f.clippedButtonText})),textOverflow:report.frames.filter(f=>f.overflow.length).map(f=>({file:f.file,items:f.overflow})),iconGeometry:report.frames.filter(f=>f.icons.length).map(f=>({file:f.file,items:f.icons}))},null,2));
+ if(sweep)await fs.writeFile(path.join(output,'visual-flags.json'),JSON.stringify({source:report.source,method:'Rendered UI screenshots; text150/text200 explicitly scale every rendered font, not a physical OS zoom claim',headerMisalignment:report.frames.filter(f=>f.headerAlignment&&Math.abs(f.headerAlignment.deltaY)>2).map(f=>({file:f.file,...f.headerAlignment})),buttonTextOverflow:report.frames.filter(f=>f.clippedButtonText?.length).map(f=>({file:f.file,items:f.clippedButtonText})),nestedOverflow:report.frames.filter(f=>f.nestedOverflow?.length).map(f=>({file:f.file,items:f.nestedOverflow})),
+  textOverflow:report.frames.filter(f=>f.overflow.length).map(f=>({file:f.file,items:f.overflow})),iconGeometry:report.frames.filter(f=>f.icons.length).map(f=>({file:f.file,items:f.icons}))},null,2));
  await browser.close();servers.forEach(p=>p.kill('SIGTERM'));
  console.log(JSON.stringify({scenarios:report.scenarios.length,frames:report.frames.length,blocked:report.scenarios.filter(s=>s.status!=='completed').map(s=>({name:s.name,error:s.error}))}));
  if(sweep&&report.scenarios.some(s=>s.status!=='completed'||s.errors?.length))process.exitCode=1;
