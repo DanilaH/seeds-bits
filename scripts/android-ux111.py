@@ -33,8 +33,9 @@ def launch():
  adb('shell','am','force-stop',pkg);adb('shell','am','start','-n',pkg+'/.MainActivity');time.sleep(2)
 def back():adb('shell','input','keyevent','4');time.sleep(.5)
 def settings():
- try:find(['Настройки'],attempts=1)
- except AssertionError:adb('shell','input','swipe','600','1400','600','480','450');time.sleep(.5)
+ # WebView can expose pre-reflow bounds just after Android font-scale changes.
+ # Scroll the menu footer into view before using its current accessibility bounds.
+ adb('shell','input','swipe','600','1400','600','480','450');time.sleep(1)
  tap(['Настройки']);find(['Тёмная тема'])
 def fresh():
  adb('shell','pm','clear',pkg);adb('shell','pm','clear-permission-flags',pkg,'android.permission.POST_NOTIFICATIONS','user-set','user-fixed',check=False)
@@ -61,7 +62,7 @@ def permission(choice):
  if choice=='grant':
   launch();settings();find(['Напоминание включено.']);checks['grantedPreferenceSurvivesRelaunch']=True
 def large_text():
- adb('shell','settings','put','system','font_scale','1.5');launch();tap(['Начать классику','Продолжить','Играть']);capture('font150-portrait-game');back();settings();capture('font150-portrait-settings')
+ adb('shell','settings','put','system','font_scale','1.5');launch();tap(['Начать классику','Продолжить','Играть']);capture('font150-portrait-game');back();capture('font150-menu-before-scroll');settings();capture('font150-portrait-settings')
  adb('shell','input','swipe','650','1400','650','420','400');capture('font150-settings-scroll')
  tap(['Назад']);find(['семечки']);checks['largeTextSettingsAndBack']=True
  adb('shell','settings','put','system','accelerometer_rotation','0');adb('shell','settings','put','system','user_rotation','1');time.sleep(1)
