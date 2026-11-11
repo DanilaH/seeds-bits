@@ -121,6 +121,9 @@ test("completion waits for durable state, retry and replay cannot grant twice", 
   expect(done.data.task).toBe("classic");
   expect(done.data.event_id).toBeTruthy();
   expect(done.persisted.completed).toBe(1);
+  expect((await events(page, "game_start"))[0].data.launch).toBe(
+    done.data.launch,
+  );
   expect((await events(page, "game_start"))[0].data.attempt).toBe(
     done.data.attempt,
   );
@@ -173,6 +176,12 @@ test("queued completion survives bridge failure and restart with its original ID
     .toBe(1);
   expect((await events(page, "game_complete"))[0].data.event_id).toBe(
     pending.id,
+  );
+  expect((await events(page, "game_complete"))[0].data.launch).toBe(
+    pending.data.launch,
+  );
+  expect((await events(page, "game_complete"))[0].data.occurred_at).toBe(
+    pending.data.occurred_at,
   );
 });
 

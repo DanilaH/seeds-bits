@@ -78,7 +78,8 @@ public class SeedsMonetizationPlugin extends Plugin {
     return getContext().getString(kind.equals("banner") ? R.string.yandex_banner_id : kind.equals("rewarded") ? R.string.yandex_rewarded_id : R.string.yandex_interstitial_id);
   }
   private void event(String name, String kind) {
-    SeedsApplication.report(getContext(), name, new JSObject().put("format", kind));
+    try { SeedsApplication.report(getContext(), name, new JSObject().put("format", kind)); }
+    catch (Exception ignored) { /* Optional telemetry cannot interrupt an ad callback. */ }
   }
   private JSObject receipt() {
     String token = prefs.getString("reward_token", "");
@@ -124,7 +125,9 @@ public class SeedsMonetizationPlugin extends Plugin {
       if (id.length() > 100) { call.reject("Invalid event id"); return; }
       try {
         synchronized (prefs) {
-          JSONArray receipts = new JSONArray(prefs.getString("analytics_receipts", "[]"));
+          JSONArray receipts;
+          try { receipts = new JSONArray(prefs.getString("analytics_receipts", "[]")); }
+          catch (Exception ignored) { receipts = new JSONArray(); }
           for (int i=0; !id.isEmpty() && i<receipts.length(); i++) {
             if (id.equals(receipts.optString(i))) { call.resolve(new JSObject().put("accepted",true)); return; }
           }

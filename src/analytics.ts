@@ -2,6 +2,11 @@
 export type EventData = Record<string, string | number | boolean>;
 export type AnalyticsEvent = { name: string; data: EventData; id: string };
 export type AnalyticsJournal = { analytics?: AnalyticsEvent[] };
+// A WebView launch is not an SDK session or a persistent player ID.
+const launch = crypto.randomUUID();
+export function eventContext() {
+  return { launch, occurred_at: Date.now() };
+}
 const names =
   /^(game_start|game_complete|daily_reward|hint_reward_granted|tutorial_start|tutorial_end|first_pair|first_unassisted_pair|first_no_moves|first_hint|first_complete)$/;
 export function readAnalytics(raw: unknown): AnalyticsEvent[] {
@@ -36,7 +41,11 @@ export function enqueueAnalytics(
   data: EventData = {},
 ) {
   if (!names.test(name)) throw Error("Unsupported durable event");
-  const event = { name, data: { ...data }, id: crypto.randomUUID() };
+  const event = {
+    name,
+    data: { ...eventContext(), ...data },
+    id: crypto.randomUUID(),
+  };
   // Telemetry must never grow a save without limit or prevent playing offline.
   journal.analytics = [...(journal.analytics ?? []), event].slice(-128);
   return event;

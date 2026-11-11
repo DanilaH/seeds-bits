@@ -22,6 +22,8 @@ describe("durable analytics journal", () => {
     });
     const restored = readProgress(serializeProgress(p));
     expect(metadata(restored).analytics).toEqual([e]);
+    expect(e.data.launch).toBeTruthy();
+    expect(e.data.occurred_at).toBeTypeOf("number");
     acknowledgeAnalytics(metadata(restored), e.id);
     expect(metadata(restored).analytics).toEqual([]);
     expect(p.sessions).toEqual(restored.sessions);
