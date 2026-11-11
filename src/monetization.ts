@@ -27,7 +27,7 @@ export interface MonetizationBridge {
   report(options: {
     name: string;
     data: Record<string, string | number | boolean>;
-  }): Promise<void>;
+  }): Promise<{ accepted: boolean } | void>;
   addListener(
     name: "reward",
     listener: (r: RewardReceipt) => void,

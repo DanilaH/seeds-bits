@@ -49,6 +49,11 @@ for (const [name, value] of Object.entries(values)) {
   )
     throw Error("Invalid format: " + name);
 }
+// Preview builds never send QA traffic into the release counter implicitly.
+const qaKey = (process.env.APPMETRICA_QA_API_KEY || "").trim();
+if (qaKey && !/^[0-9a-f-]{36}$/i.test(qaKey))
+  throw Error("Invalid format: APPMETRICA_QA_API_KEY");
+if (!storeRelease) values.APPMETRICA_API_KEY = qaKey;
 const test = process.env.ADS_MODE !== "live";
 if (storeRelease && (test || process.env.REQUIRE_MOBILE_CONFIG !== "true"))
   throw Error("Store builds require checked live configuration");
@@ -111,7 +116,7 @@ const escape = (s) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll('"', "&quot;");
 writeFileSync(
   xmlPath,
-  `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n<string name="appmetrica_api_key" translatable="false">${escape(values.APPMETRICA_API_KEY)}</string>\n<string name="yandex_banner_id" translatable="false">${escape(values.YANDEX_BANNER_AD_UNIT_ID || (test ? "demo-banner-yandex" : ""))}</string>\n<string name="yandex_interstitial_id" translatable="false">${escape(values.YANDEX_INTERSTITIAL_AD_UNIT_ID)}</string>\n<string name="yandex_rewarded_id" translatable="false">${escape(values.YANDEX_REWARDED_AD_UNIT_ID)}</string>\n<bool name="ads_test_mode">${test}</bool>\n</resources>\n`,
+  `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n<string name="appmetrica_api_key" translatable="false">${escape(values.APPMETRICA_API_KEY)}</string>\n<string name="yandex_banner_id" translatable="false">${escape(values.YANDEX_BANNER_AD_UNIT_ID || (test ? "demo-banner-yandex" : ""))}</string>\n<string name="yandex_interstitial_id" translatable="false">${escape(values.YANDEX_INTERSTITIAL_AD_UNIT_ID)}</string>\n<string name="yandex_rewarded_id" translatable="false">${escape(values.YANDEX_REWARDED_AD_UNIT_ID)}</string>\n<string name="analytics_channel" translatable="false">${storeRelease ? "release" : "preview"}</string>\n<bool name="ads_test_mode">${test}</bool>\n</resources>\n`,
 );
 const manifestPath = "android/app/src/main/AndroidManifest.xml";
 let manifest = readFileSync(manifestPath, "utf8");

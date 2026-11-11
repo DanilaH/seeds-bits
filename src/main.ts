@@ -1,4 +1,10 @@
 import { dailyRun, streakReward } from "./daily-run";
+import { hintExplanation } from "./hint-explanation";
+import {
+  enqueueAnalytics,
+  acknowledgeAnalytics,
+  CommittedAnalytics,
+} from "./analytics";
 import {
   engagementBridge,
   experience,
@@ -429,6 +435,7 @@ function save(state = progress, game = session) {
   metadata(state);
   if (lesson < 0 && !busy) game.current.scroll = viewport.scrollTop;
   state.sessions[state.active] = game;
+  const committedEvents = [...(metadata(state).analytics ?? [])];
   const bundle = serializeProgress(state),
     prefs = JSON.stringify(settings),
     patch = { ...settingsDirty };
@@ -450,6 +457,14 @@ function save(state = progress, game = session) {
         applySettings(merged);
         if (pendingResult?.session === game) pendingResult.saved = true;
         lastStored = bundle;
+        // Dispatch only events contained in this successfully written snapshot.
+        // A crash before the next cleanup write can replay IDs; native deduplicates.
+        if (adsBridge)
+          void committedAnalytics.publish(committedEvents, (id) => {
+            acknowledgeAnalytics(metadata(state), id);
+            if (state !== progress)
+              acknowledgeAnalytics(metadata(progress), id);
+          });
         const recovered = saveFailed;
         saveFailed = false;
         showSaveState();
@@ -459,6 +474,7 @@ function save(state = progress, game = session) {
           if (recovered) setTimeout(() => void tryResultEngagement(), 1500);
         }
         if (recovered) {
+          track("save_recovered", { stage: "persist" });
           saveRecovered = true;
           message("Партия сохранена");
         }
@@ -804,6 +820,18 @@ $("app").insertAdjacentHTML(
   `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><h2 id="hint-offer-title">Ещё подсказки</h2><p>Бесплатные подсказки и общий запас закончились. За рекламное видео — 3 подсказки в общий запас. Их можно использовать в любом режиме.</p><button id="watch-hints" class="primary">Смотреть рекламу · +3 подсказки</button><button id="cancel-hints" class="secondary">Продолжить без подсказки</button></dialog>`,
 );
 const hintOffer = $<HTMLDialogElement>("hint-offer");
+const lessonQuick = document.createElement("button");
+lessonQuick.id = "lesson-quick";
+lessonQuick.className = "secondary";
+lessonQuick.textContent = "Начать с короткой задачи";
+lessonQuick.hidden = true;
+$("lesson-next").after(lessonQuick);
+lessonQuick.onclick = () => {
+  const task = notebook.find((p) => !progress.done.includes(p.id));
+  if (!task || busy) return;
+  finishLesson("complete");
+  void switchGame(task.id);
+};
 function gameMode() {
   return progress.active === "classic"
     ? "classic"
@@ -811,13 +839,27 @@ function gameMode() {
       ? "notebook"
       : "daily";
 }
+const committedAnalytics = new CommittedAnalytics(async (event) => {
+  if (!adsBridge) return false;
+  const result = await adsBridge.report({
+    name: event.name,
+    data: { ...event.data, event_id: event.id, schema: 2 },
+  });
+  return result?.accepted !== false;
+});
+function durableEvent(
+  name: string,
+  data: Record<string, string | number | boolean> = {},
+) {
+  if (adsBridge) enqueueAnalytics(metadata(progress), name, data);
+}
 function markGameStarted() {
   lastInputAt = performance.now();
   if (lesson >= 0 || !adsBridge) return;
   const attempt = hintAttempt(progress);
   if (attempt.analyticsStarted) return;
   attempt.analyticsStarted = true;
-  track("game_start", { mode: gameMode(), attempt: attempt.id });
+  durableEvent("game_start", { mode: gameMode(), attempt: attempt.id });
   void save();
 }
 function updateBanner() {
@@ -861,11 +903,15 @@ function receiveReward(r: RewardReceipt): Promise<void> {
         ? r
         : { ...r, attempt: hintAttempt(progress).id };
       if (!grantReward(progress, target)) return;
+      if (!already)
+        durableEvent("hint_reward_granted", {
+          count: 3,
+          mode: gameMode(),
+          attempt: target.attempt,
+        });
       await save();
       if (!saveFailed && !futureSave && !storageConflict) {
         await adsBridge?.acknowledge({ token: r.token }).catch(() => {});
-        if (!already)
-          track("hint_reward_granted", { count: 3, mode: gameMode() });
       }
       if (!busy) render();
     });
@@ -929,17 +975,24 @@ function complete(rects: DOMRect[]) {
   const gains = recordCompletion(progress, id);
   pendingResult = { session, rects, saved: false };
   if (gains.hints)
-    track("daily_reward", {
+    durableEvent("daily_reward", {
       days: metadata(progress).daily!.count,
       count: gains.hints,
+      attempt: hintAttempt(progress).id,
     });
   earnedSeeds = gains.seeds;
   earnedHints = gains.hints;
   if (!alreadyCompleted)
-    track("game_complete", {
+    durableEvent("game_complete", {
       mode: gameMode(),
+      attempt: hintAttempt(progress).id,
       moves: session.current.moves,
       hints: progress.hints[id] ?? 0,
+    });
+  if (!alreadyCompleted)
+    firstEvent("first_complete", {
+      mode: gameMode(),
+      attempt: hintAttempt(progress).id,
     });
   const after = id.startsWith("daily-v1-")
     ? trophy(month, progress.done).tier
@@ -964,7 +1017,11 @@ function renderWin() {
     : next
       ? i >= 0 && volumeOf(next) !== volumeOf(id)
         ? "Следующая тетрадь"
-        : "Следующая задача"
+        : i >= 0 &&
+            Math.floor(notebook.findIndex((p) => p.id === next) / 6) >
+              Math.floor(i / 6)
+          ? "Следующая страница"
+          : "Следующая задача"
       : i >= 0
         ? "К тетради"
         : id.startsWith("daily")
@@ -1187,8 +1244,10 @@ function startLesson(short = false) {
   lesson = 0;
   loadLesson();
   closeMenu();
+  void save();
 }
 function loadLesson() {
+  lessonQuick.hidden = true;
   lessonBoard = [...lessons[lesson].cells];
   lessonPhase = 0;
   clearSelection();
@@ -1211,6 +1270,7 @@ function finishLesson(outcome: "complete" | "skip" = "skip") {
   if (lesson >= 0 && !metadata(progress).flags?.includes("tutorial_end"))
     firstEvent("tutorial_end", { outcome, step: lesson + 1 });
   lesson = -1;
+  lessonQuick.hidden = true;
   enteredGame = true;
   settings.tutorialDone = true;
   settingsDirty.tutorialDone = true;
@@ -1277,7 +1337,17 @@ async function choose(i: number) {
     message("Сначала попробуйте «Добавить», затем «Отмена»");
     return;
   }
-  if (lesson < 0) firstEvent("first_pair", { mode: gameMode() });
+  if (lesson < 0) {
+    const shown = hintAttempt(progress).hintChoices?.[hintKey(values, 0, 0)];
+    const assisted = Boolean(shown && shown.includes(a) && shown.includes(i));
+    const data = {
+      mode: gameMode(),
+      attempt: hintAttempt(progress).id,
+      assisted,
+    };
+    firstEvent("first_pair", data);
+    if (!assisted) firstEvent("first_unassisted_pair", data);
+  }
   const flightRects = [cell(a), cell(i)]
     .filter(Boolean)
     .map((n) => n!.getBoundingClientRect());
@@ -1346,6 +1416,7 @@ async function choose(i: number) {
     $("lesson-next").hidden = false;
     $("lesson-next").textContent =
       lesson === 5 || (shortLesson && lesson === 1) ? "Начать игру" : "Дальше";
+    lessonQuick.hidden = !(shortLesson && lesson === 1);
   }
   clearSelection();
   busy = false;
@@ -1359,8 +1430,10 @@ async function choose(i: number) {
     setTimeout(() => {
       void tryResultEngagement();
     }, 1500);
-  if (lesson < 0 && occupied(next) && !availablePairs(next).length)
+  if (lesson < 0 && occupied(next) && !availablePairs(next).length) {
     firstEvent("first_no_moves", { mode: gameMode() });
+    void save();
+  }
   if (occupied(next) && next.length < oldLength && !reduced()) {
     // Read every destination before starting animations; interleaving them forces
     // layout once per cell on long boards.
@@ -1570,6 +1643,7 @@ async function hint() {
     progress.hints[progress.active] =
       (progress.hints[progress.active] ?? 0) + 1;
     track("hint_used", { mode: gameMode(), remaining: hintsLeft(progress) });
+    firstEvent("first_hint", { mode: gameMode(), attempt: attempt.id });
   }
   save();
   selected = -1;
@@ -1607,11 +1681,7 @@ async function hint() {
       behavior: reduced() ? "instant" : "smooth",
     });
   }
-  message(
-    highlight.kind === "reading"
-      ? "Допустимая пара: конец строки → начало следующей"
-      : "Допустимая пара — соедините выделенные цифры",
-  );
+  message(hintExplanation(board(), highlight));
 }
 type CollectionScreen = "book" | "calendar" | "trophies" | "progress";
 const navigationTrail: { screen: string; scroll: number; focus: string }[] = [];
@@ -2009,6 +2079,10 @@ async function boot() {
   }
   experience(progress).sessions++;
   await initializeMonetization(() => syncPauseState(), receiveReward);
+  if (!futureSave && !readWarning && lastStored && adsBridge)
+    void committedAnalytics.publish(metadata(progress).analytics ?? [], (id) =>
+      acknowledgeAnalytics(metadata(progress), id),
+    );
   if (engagementBridge)
     try {
       await engagementBridge.addListener("dailyOpen", () => {
@@ -2694,7 +2768,7 @@ function firstEvent(
   const m = metadata(progress);
   if (m.flags?.includes(name)) return;
   (m.flags ??= []).push(name);
-  track(name, data);
+  durableEvent(name, data);
 }
 function updateReminderSettings() {
   $("reminder-settings").hidden = !engagementAvailable;
