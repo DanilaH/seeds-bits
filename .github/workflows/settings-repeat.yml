@@ -1,0 +1,25 @@
+name: Repeat cross-tab settings regression
+on:
+  push:
+    branches: [qa/ux111-tabs-check]
+permissions:
+  contents: read
+jobs:
+  repeat:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright test e2e/settings-repeat.spec.ts --repeat-each 20 --workers 2 --trace retain-on-failure
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: settings-repeat
+          path: test-results/
