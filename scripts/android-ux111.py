@@ -1,5 +1,6 @@
 """Actual release UI: permission grant/denial, native Back, font scale and time picker."""
-import csv,io,json,pathlib,re,subprocess,time,xml.etree.ElementTree as ET
+import csv,io,json,pathlib,re,subprocess,tempfile,time,xml.etree.ElementTree as ET
+from PIL import Image
 out=pathlib.Path('test-results/ux111-native');out.mkdir(parents=True,exist_ok=True)
 pkg='com.seedsbits.game';checks={};serial=0
 def adb(*args,check=True):return subprocess.run(['adb',*args],check=check,capture_output=True,text=True).stdout
@@ -35,7 +36,12 @@ def launch():
  time.sleep(2);assert adb('shell','pidof',pkg,check=False).strip(),'App process absent after launch'
 def back():adb('shell','input','keyevent','4');time.sleep(.5)
 def words(name):
- result=subprocess.run(['tesseract',str(out/(name+'.png')),'stdout','-l','rus','tsv'],capture_output=True,text=True,check=True)
+ # Preserve the original PNG evidence and pass identical RGB pixels through a
+ # built-in OCR format, avoiding host libpng development dependencies.
+ with tempfile.TemporaryDirectory(prefix='seeds-ocr-') as folder:
+  source=pathlib.Path(folder)/'capture.ppm'
+  with Image.open(out/(name+'.png')) as image:image.convert('RGB').save(source,format='PPM')
+  result=subprocess.run(['tesseract',str(source),'stdout','-l','rus','tsv'],capture_output=True,text=True,check=True)
  return [row for row in csv.DictReader(io.StringIO(result.stdout),delimiter='\t') if row['text'].strip() and float(row['conf'])>=50]
 def settings():
  if float(adb('shell','settings','get','system','font_scale').strip())>1:

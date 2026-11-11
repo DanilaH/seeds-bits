@@ -9,8 +9,10 @@ mkdir -p "$seeds_prefix/share/tessdata" test-results/ci-packages
 test "$(git -C "$seeds_sources/tesseract" rev-parse HEAD)" = 7e548e6eff172f38f97664afe7f7ce40db36c8d6
 test "$(git -C "$seeds_sources/leptonica" rev-parse HEAD)" = 13275a278eb55b5746e33f95fbf5a2c8f604b3ab
 test "$(git -C "$seeds_sources/tessdata" rev-parse HEAD)" = 87416418657359cb625c412a48b6e1d6d41c29bd
-pkg-config --exists libpng
-cmake -S "$seeds_sources/leptonica" -B "$seeds_build/leptonica" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$seeds_prefix" -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=OFF -DBUILD_PROG=OFF -DENABLE_GIF=OFF -DENABLE_JPEG=OFF -DENABLE_TIFF=OFF -DENABLE_WEBP=OFF -DENABLE_OPENJPEG=OFF
+echo 'All three OCR source commits verified.'
+# Native screenshots stay PNG; the reader supplies lossless RGB PNM to OCR.
+# PNM is built into Leptonica, so no image codec development packages are needed.
+cmake -S "$seeds_sources/leptonica" -B "$seeds_build/leptonica" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$seeds_prefix" -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=OFF -DBUILD_PROG=OFF -DENABLE_PNG=OFF -DENABLE_ZLIB=OFF -DENABLE_GIF=OFF -DENABLE_JPEG=OFF -DENABLE_TIFF=OFF -DENABLE_WEBP=OFF -DENABLE_OPENJPEG=OFF
 cmake --build "$seeds_build/leptonica" --parallel 2
 cmake --install "$seeds_build/leptonica"
 cmake -S "$seeds_sources/tesseract" -B "$seeds_build/tesseract" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$seeds_prefix" -DCMAKE_INSTALL_LIBDIR=lib -DLeptonica_DIR="$seeds_prefix/lib/cmake/leptonica" -DBUILD_SHARED_LIBS=OFF -DBUILD_TRAINING_TOOLS=OFF -DBUILD_TESTS=OFF -DDISABLE_ARCHIVE=ON -DDISABLE_CURL=ON -DDISABLE_TIFF=ON -DGRAPHICS_DISABLED=ON -DOPENMP_BUILD=OFF

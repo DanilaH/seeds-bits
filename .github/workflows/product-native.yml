@@ -35,6 +35,7 @@ jobs:
           sparse-checkout: rus.traineddata
           sparse-checkout-cone-mode: false
           persist-credentials: false
+      - run: python3 -m pip install --user pillow
       - run: bash scripts/ci-install-ocr.sh
       - uses: actions/setup-java@v4
         with:
@@ -68,7 +69,6 @@ jobs:
       - run: |
           adb uninstall com.seedsbits.game
           adb install /tmp/seeds-old.apk
-      - run: python3 -m pip install --user pillow
       - run: python3 scripts/android-upgrade.py before
       - run: adb install -r /tmp/seeds-new.apk
       - run: python3 scripts/android-upgrade.py after
