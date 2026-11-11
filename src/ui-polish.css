@@ -178,8 +178,8 @@ dialog {
   padding: 8px 2px;
 }
 dialog:not([data-screen="home"]) .dialog-head {
-  position: sticky;
-  top: 0;
+  position: static;
+  flex-shrink: 0;
   height: auto;
   min-height: 44px;
   margin: 0 auto 20px;
@@ -190,6 +190,31 @@ dialog:not([data-screen="home"]) .dialog-head {
   background: var(--paper);
   box-shadow: 0 -24px 0 var(--paper);
   pointer-events: auto;
+}
+html:has(body.navigation-open),
+body.navigation-open {
+  overflow: hidden;
+}
+body.navigation-open {
+  height: 100dvh;
+}
+dialog {
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+dialog[open]:not([data-screen="home"]) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.dialog-scroll {
+  flex: 1 1 auto;
+  flex-shrink: 1;
+  min-height: 0;
+  width: 100%;
+  align-self: center;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 dialog:not([data-screen="home"]) .dialog-head > h2 {
   display: none;
@@ -2130,6 +2155,12 @@ header .jar-caption strong {
 @media (orientation: landscape) and (min-width: 540px) {
   .game.stacked-actions .game-actions {
     overflow-y: auto;
+  }
+  .game.stacked-actions .game-actions .status-wrap {
+    flex: 0 0 auto;
+    min-height: min-content;
+    max-height: none;
+    overflow: visible;
   }
   .game.stacked-actions .game-actions footer {
     grid-template-columns: minmax(0, 1fr);

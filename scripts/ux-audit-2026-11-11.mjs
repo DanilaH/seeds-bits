@@ -59,7 +59,7 @@ async function capture(page,scenario,label){
   const nodes=[...document.querySelectorAll('button,input,select,summary,a[href]')].filter(visible).filter(e=>!modal||modal.contains(e));
   const controls=nodes.map(e=>{const r=e.getBoundingClientRect();const x=r.x+r.width/2,y=r.y+r.height/2;const hit=x>=0&&x<innerWidth&&y>=0&&y<innerHeight?document.elementFromPoint(x,y):null;return{id:e.id,tag:e.tagName,label:e.getAttribute('aria-label')||e.getAttribute('title')||e.innerText||e.closest('label')?.innerText||'',disabled:Boolean(e.disabled),rect:{x:r.x,y:r.y,width:r.width,height:r.height},hit:hit?e===hit||e.contains(hit):false,inViewport:r.x>=0&&r.y>=0&&r.right<=innerWidth&&r.bottom<=innerHeight};});
   const overflow=[...document.querySelectorAll('h1,h2,h3,p,label,.fine,.action-label,.action-count,.hero-kicker,.hero-count,.metal-name,.metal-count,.next-count')].filter(visible).filter(e=>!modal||modal.contains(e)).filter(e=>e.scrollWidth>e.clientWidth+2&&getComputedStyle(e).overflowX!=='auto').map(e=>({tag:e.tagName,id:e.id,class:e.className,text:e.innerText,scrollWidth:e.scrollWidth,clientWidth:e.clientWidth}));
-  const containers=['#dialog','#viewport','#hint-offer'].map(s=>{const e=document.querySelector(s);return e&&visible(e)?{selector:s,clientHeight:e.clientHeight,scrollHeight:e.scrollHeight,scrollTop:e.scrollTop}:null}).filter(Boolean);
+  const containers=['#dialog','.dialog-scroll:not([hidden])','#viewport','#hint-offer'].map(s=>{const e=document.querySelector(s);return e&&visible(e)?{selector:s,clientHeight:e.clientHeight,scrollHeight:e.scrollHeight,scrollTop:e.scrollTop}:null}).filter(Boolean);
   return{viewport:{width:innerWidth,height:innerHeight},screen:document.querySelector('#dialog')?.open?document.querySelector('#dialog').dataset.screen:'game',text:(modal??document.body).innerText,activeElement:{id:document.activeElement?.id,text:document.activeElement?.innerText?.slice(0,80)},horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,controls,overflow,containers,banner:window.auditBanner??null,calls:window.auditCalls??[]};
  });
  report.frames.push({scenario,label,file,...state});
@@ -111,12 +111,12 @@ try{
  for(const [name,viewport,font] of profiles)await run(name,{viewport,font,dark:name.startsWith('dark'),streak:6},async(p,n)=>{
   await capture(p,n,'home');
   await board(p);await capture(p,n,'classic');await click(p,'#menu');
-  await click(p,'#book-mode');await capture(p,n,'books');await p.locator('#dialog').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'books-bottom');await click(p,'#collection-back');
-  await click(p,'#calendar-open');await capture(p,n,'calendar');await p.locator('#dialog').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'calendar-bottom');await click(p,'#collection-back');
+  await click(p,'#book-mode');await capture(p,n,'books');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'books-bottom');await click(p,'#collection-back');
+  await click(p,'#calendar-open');await capture(p,n,'calendar');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'calendar-bottom');await click(p,'#collection-back');
   await click(p,'#progress-open');await capture(p,n,'progress');await click(p,'#progress-trophies');await capture(p,n,'jars');
   await click(p,'#trophies-mode');await capture(p,n,'medals');await click(p,'#collection-back');await click(p,'#collection-back');
-  await click(p,'#settings-open');await capture(p,n,'settings');await p.locator('#dialog').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'settings-bottom');
-  await click(p,'#privacy-open');await capture(p,n,'privacy');await p.locator('#dialog').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'privacy-bottom');await click(p,'#privacy-back');
+  await click(p,'#settings-open');await capture(p,n,'settings');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'settings-bottom');
+  await click(p,'#privacy-open');await capture(p,n,'privacy');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);await capture(p,n,'privacy-bottom');await click(p,'#privacy-back');
  });
  await run('book-filters-and-large-field',{},async(p,n)=>{
   await click(p,'#book-mode');await p.locator('#book-filter').selectOption('done');await capture(p,n,'empty-filter');await click(p,'#book-filter-reset');
@@ -178,7 +178,7 @@ try{
   report.observations.push({id:'invalid-backup-action',warning:await p.locator('#read-notice').innerText(),buttonVisible:await p.locator('#restore-backup').isVisible()});
  });
  await run('deep-screen-header-reachability',{},async(p,n)=>{
-  await click(p,'#book-mode');await p.locator('#dialog').evaluate(e=>e.scrollTop=e.scrollHeight);const state=await capture(p,n,'book-bottom');
+  await click(p,'#book-mode');await p.locator('.dialog-scroll:not([hidden])').evaluate(e=>e.scrollTop=e.scrollHeight);const state=await capture(p,n,'book-bottom');
   report.observations.push({id:'deep-screen-header-reachability',controls:state.controls.filter(c=>['close','collection-back','continue-book','book-chapter'].includes(c.id))});
   await p.keyboard.press('Escape');await capture(p,n,'back-by-keyboard');
  });

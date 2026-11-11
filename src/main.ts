@@ -246,6 +246,13 @@ confirmHeading.className = "screen-heading";
 confirmHeading.innerHTML = `<button id="confirm-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Начать заново?</h2>`;
 $("confirm-content").prepend(confirmHeading);
 $("confirm-back").onclick = returnToPrevious;
+function dialogScroller(): HTMLElement {
+  return (
+    dialog.querySelector<HTMLElement>(".dialog-scroll:not([hidden])") ?? dialog
+  );
+}
+for (const id of ["settings-panel", "collection", "confirm-content"])
+  $(id).classList.add("dialog-scroll");
 function releaseDialogHeading() {
   const current = dialogHeader.querySelector<HTMLElement>(".screen-heading");
   if (current === settingsHeading) $("settings-panel").prepend(current);
@@ -256,6 +263,8 @@ function pinDialogHeading(panel: HTMLElement) {
   releaseDialogHeading();
   const heading = panel.querySelector<HTMLElement>(".screen-heading");
   if (heading) dialogHeader.prepend(heading);
+  dialog.scrollTop = 0;
+  showSaveState();
 }
 // Use measured text, including Android's text zoom, to choose an action layout.
 let actionsFrame = 0;
@@ -387,7 +396,9 @@ readNotice.append(readText, restoreRead, dismissRead);
 document.querySelector(".game")!.prepend(notice);
 $("load-latest").onclick = () => location.reload();
 function showSaveState() {
-  const parent = dialog.open ? dialog : document.querySelector(".game")!;
+  const parent = dialog.open
+    ? dialogScroller()
+    : document.querySelector(".game")!;
   if (notice.parentElement !== parent) parent.prepend(notice);
   if (readNotice.parentElement !== parent) parent.prepend(readNotice);
   readNotice.hidden = !readWarning;
@@ -1611,7 +1622,7 @@ function rememberNavigation(target: string) {
   const element = document.activeElement as HTMLElement | null;
   navigationTrail.push({
     screen,
-    scroll: dialog.scrollTop,
+    scroll: dialogScroller().scrollTop,
     focus:
       element?.id ||
       (element?.dataset.month
@@ -1631,7 +1642,7 @@ function returnToPrevious() {
   else if (previous.screen === "settings") openSettings(true);
   else openCollection(previous.screen as CollectionScreen, true);
   if (previous) {
-    dialog.scrollTop = previous.scroll;
+    dialogScroller().scrollTop = previous.scroll;
     const target = previous.focus.startsWith("month:")
       ? dialog.querySelector<HTMLElement>(
           `[data-month="${previous.focus.slice(6)}"]`,
@@ -1686,7 +1697,7 @@ function openMenu(preserve: unknown = false) {
   $("confirm-content").hidden = true;
   if (!dialog.open) {
     dialog.showModal();
-    dialog.scrollTop = 0;
+    dialogScroller().scrollTop = 0;
   }
   showSaveState();
   $("resume").focus({ preventScroll: true });
@@ -1765,7 +1776,7 @@ function openSettings(restoring = false) {
   dialog.dataset.screen = "settings";
   updateReminderSettings();
   pinDialogHeading($("settings-panel"));
-  if (!restoring) dialog.scrollTop = 0;
+  if (!restoring) dialogScroller().scrollTop = 0;
   $("settings-back").focus({ preventScroll: true });
 }
 $("settings-open").onclick = () => openSettings();
@@ -1778,7 +1789,7 @@ $("privacy-open").onclick = () => {
   $("collection").innerHTML =
     `<div class="screen-heading"><button id="privacy-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>О данных</h2></div><p>Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.</p><p>В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.</p><p>Напоминание о задаче дня включено по умолчанию и работает по местному времени на устройстве. Его можно выключить в настройках игры. Разрешение Android можно отключить в системных настройках.</p><p>Окно оценки обслуживает RuStore. Игра не получает текст отзыва и звёзды и не выдаёт за них награду.</p><p>Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.</p><p>Полная политика и обращение к разработчику:</p><p><a href="https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></p><p><a href="https://github.com/DanilaH/seeds-bits/issues" target="_blank" rel="noopener noreferrer">Связь с разработчиком</a></p>`;
   pinDialogHeading($("collection"));
-  dialog.scrollTop = 0;
+  dialogScroller().scrollTop = 0;
   $("privacy-back").onclick = returnToPrevious;
   $("privacy-back").focus({ preventScroll: true });
 };
@@ -2183,7 +2194,7 @@ const monthName = (m: string) =>
 function openCollection(kind: CollectionScreen, restoring = false) {
   if (busy) return;
   const sameScreen = dialog.open && dialog.dataset.screen === kind;
-  const oldScroll = dialog.scrollTop;
+  const oldScroll = dialogScroller().scrollTop;
   const focused = document.activeElement as HTMLElement | null;
   const focusId = focused?.id;
   const focusVolume = focused?.dataset.volume;
@@ -2457,14 +2468,14 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     };
   }
   if (sameScreen) {
-    dialog.scrollTop = oldScroll;
+    dialogScroller().scrollTop = oldScroll;
     if (focusId)
       document.getElementById(focusId)?.focus({ preventScroll: true });
     else if (focusVolume)
       panel
         .querySelector<HTMLElement>(`[data-volume="${focusVolume}"]`)
         ?.focus({ preventScroll: true });
-  } else if (!restoring) dialog.scrollTop = 0;
+  } else if (!restoring) dialogScroller().scrollTop = 0;
 }
 $("classic-mode").onclick = () => switchGame("classic");
 $("book-mode").onclick = () => openCollection("book");
@@ -2570,7 +2581,7 @@ function refreshDate() {
     const focused = document.activeElement as HTMLElement | null;
     const game = focused?.dataset.game,
       id = focused?.id;
-    const scroll = dialog.scrollTop;
+    const scroll = dialogScroller().scrollTop;
     openCollection("calendar");
     const target = game
       ? dialog.querySelector<HTMLElement>(`[data-game="${game}"]`)
@@ -2579,7 +2590,7 @@ function refreshDate() {
         : null;
     if (target && !(target as HTMLButtonElement).disabled)
       target.focus({ preventScroll: true });
-    dialog.scrollTop = scroll;
+    dialogScroller().scrollTop = scroll;
   }
   if (!occupied(board())) renderWin();
 }

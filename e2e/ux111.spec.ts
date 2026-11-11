@@ -108,7 +108,7 @@ test("Back and Close remain reachable after scrolling every long section", async
   ]) {
     await page.locator(`#${route}`).click();
     await page
-      .locator("#dialog")
+      .locator(".dialog-scroll:not([hidden])")
       .evaluate((e) => (e.scrollTop = e.scrollHeight));
     const heading = page.locator(".dialog-head .screen-heading");
     await expect(heading).toBeInViewport();
@@ -229,11 +229,16 @@ test("landscape enlarged action text gets whole words and reachable controls", a
   await seed(page);
   await page.locator("#resume").click();
   await page
-    .locator("footer .action-label, #undo span")
+    .locator("footer .action-label, #undo span, #status")
     .evaluateAll((ns) =>
       ns.forEach((n) => ((n as HTMLElement).style.fontSize = "20px")),
     );
   await expect(page.locator(".game")).toHaveClass(/stacked-actions/);
+  expect(
+    await page
+      .locator(".status-wrap")
+      .evaluate((e) => e.scrollHeight <= e.clientHeight + 1),
+  ).toBe(true);
   for (const id of ["hint", "undo", "add"]) {
     const b = page.locator(`#${id}`);
     await b.scrollIntoViewIfNeeded();

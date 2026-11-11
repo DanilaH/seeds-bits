@@ -32,15 +32,17 @@ def capture(name):
 def launch():
  adb('shell','am','force-stop',pkg);adb('shell','am','start','-n',pkg+'/.MainActivity');time.sleep(2)
 def back():adb('shell','input','keyevent','4');time.sleep(.5)
+def words(name):
+ result=subprocess.run(['tesseract',str(out/(name+'.png')),'stdout','-l','rus','tsv'],capture_output=True,text=True,check=True)
+ return [row for row in csv.DictReader(io.StringIO(result.stdout),delimiter='\t') if row['text'].strip() and float(row['conf'])>=50]
 def settings():
  if float(adb('shell','settings','get','system','font_scale').strip())>1:
   # On this emulator WebView may expose stale virtual-node bounds after text
   # zoom. Locate the visible word in an actual screenshot for a real touch.
   for attempt in range(8):
    name='font150-settings-visible-'+str(serial);capture(name)
-   result=subprocess.run(['tesseract',str(out/(name+'.png')),'stdout','-l','rus','tsv'],capture_output=True,text=True,check=True)
-   for row in csv.DictReader(io.StringIO(result.stdout),delimiter='\t'):
-    if row['text'].strip().lower()=='настройки' and float(row['conf'])>=50:
+   for row in words(name):
+    if row['text'].strip().lower()=='настройки':
      x=int(row['left'])+int(row['width'])//2;y=int(row['top'])+int(row['height'])//2
      print('Visible settings text touch:',x,y,flush=True)
      adb('shell','input','tap',str(x),str(y));time.sleep(.5);find(['Тёмная тема']);return
@@ -76,12 +78,15 @@ def permission(choice):
 def large_text():
  adb('shell','settings','put','system','font_scale','1.5');launch();tap(['Начать классику','Продолжить','Играть']);capture('font150-portrait-game');back();capture('font150-menu-before-scroll');settings();capture('font150-portrait-settings')
  adb('shell','input','swipe','650','1400','650','420','400');capture('font150-settings-scroll')
- tap(['Назад']);find(['Настройки']);checks['largeTextSettingsAndBack']=True
+ assert any(row['text'].lower()=='настройки' and int(row['top'])<260 for row in words('font150-settings-scroll')),'Settings heading disappeared visually after scrolling'
+ tap(['Назад']);find(['Прогресс']);capture('font150-back-menu');checks['largeTextSettingsAndBack']=True
  adb('shell','settings','put','system','accelerometer_rotation','0');adb('shell','settings','put','system','user_rotation','1');time.sleep(1)
  launch();tap(['Начать классику','Продолжить','Играть']);capture('font150-landscape-game')
  hint=find(['Подсказка'],prefix=True);b=rect(hint)
  assert b[2]-b[0]>240,'Large text actions did not switch to full sidebar width'
  checks['largeTextLandscapeActions']=True
+ adb('shell','input','swipe','1540','530','1540','300','400');capture('font150-landscape-actions-scroll')
+ find(['Добавить']);checks['largeTextLandscapeActionsScroll']=True
  adb('shell','settings','put','system','user_rotation','0');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
 def picker():
  launch();settings();tap(['12:30']);find(['SET','Set','ГОТОВО','Готово']);capture('native-time-picker');back();find(['Тёмная тема']);checks['nativeTimePickerAndCancel']=True
