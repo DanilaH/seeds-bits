@@ -853,6 +853,15 @@ function durableEvent(
 ) {
   if (adsBridge) enqueueAnalytics(metadata(progress), name, data);
 }
+function trackOpen(reason: "restart" | "resume" | "switch") {
+  track("game_open", {
+    mode: gameMode(),
+    reason,
+    attempt: hintAttempt(progress).id,
+    in_progress:
+      occupied(session.current.board) > 0 && session.history.length > 0,
+  });
+}
 function markGameStarted() {
   lastInputAt = performance.now();
   if (lesson >= 0 || !adsBridge) return;
@@ -1431,8 +1440,7 @@ async function choose(i: number) {
       void tryResultEngagement();
     }, 1500);
   if (lesson < 0 && occupied(next) && !availablePairs(next).length) {
-    firstEvent("first_no_moves", { mode: gameMode() });
-    void save();
+    if (firstEvent("first_no_moves", { mode: gameMode() })) void save();
   }
   if (occupied(next) && next.length < oldLength && !reduced()) {
     // Read every destination before starting animations; interleaving them forces
@@ -1509,7 +1517,7 @@ function add() {
     if (lesson === 5) message("Теперь нажмите «Отмена»");
   } catch {
     message(
-      `Поле достигло предела прототипа (${MAX_CELLS} клеток). Отмените ходы или начните новую партию. Это не поражение.`,
+      "Поле больше не расширяется. Отмените последний ход или начните новую партию.",
     );
   }
 }
@@ -1790,7 +1798,7 @@ function reset() {
   closeMenu();
   render();
   save();
-  track("game_open", { mode: gameMode(), reason: "restart" });
+  trackOpen("restart");
 }
 $("board").addEventListener("click", (e) => {
   const target = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
@@ -2095,7 +2103,7 @@ async function boot() {
       pendingDailyOpen = Boolean(config.entry);
     } catch {}
   syncPauseState();
-  track("game_open", { mode: gameMode(), reason: "resume" });
+  trackOpen("resume");
   void platform
     .listenAppState((active) => {
       appForeground = active;
@@ -2253,7 +2261,7 @@ async function switchGame(id: string) {
   closeMenu();
   render();
   viewport.scrollTop = session.current.scroll;
-  track("game_open", { mode: gameMode(), reason: "switch" });
+  trackOpen("switch");
 }
 const months = () =>
   Array.from(
@@ -2766,9 +2774,10 @@ function firstEvent(
   data: Record<string, string | number | boolean> = {},
 ) {
   const m = metadata(progress);
-  if (m.flags?.includes(name)) return;
+  if (m.flags?.includes(name)) return false;
   (m.flags ??= []).push(name);
   durableEvent(name, data);
+  return true;
 }
 function updateReminderSettings() {
   $("reminder-settings").hidden = !engagementAvailable;

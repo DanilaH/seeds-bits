@@ -1,5 +1,8 @@
 # Семечки / seeds-bits
 
+**Pre-release status (owner correction, 2026-11-11):** not published in RuStore and not submitted for moderation. Earlier publication claims were incorrect. Upgrade fixtures are previously built APKs, not store releases. Current audit: [product audit](docs/PRODUCT_AUDIT_2026-11-11.md).
+
+
 Small, offline-first Number Match game. TypeScript + Vite + HTML/CSS/SVG. No React, game engine, remote fonts, backend or accounts.
 
 ## Run
@@ -53,6 +56,6 @@ Provisional field guard: 1,800 logical cells. This is a protective implementatio
 
 Production Android package: `com.seedsbits.game`, name «Семечки». The separate `Build RuStore release` workflow builds `assembleRelease` with checked live ad configuration and the final branding. Its unsigned CI artifact is an intermediate; store submission uses the locally signed APK and permanent release identity, not the preview/debug certificate.
 
-Release verification and limits: [1.1.0](docs/releases/1.1.0/REPORT.md), [published 1.0.0](docs/releases/1.0.0.md). Store listing, data disclosures, privacy policy, public signing certificate and upload instructions: [store/](store/). Private signing material is kept outside git. The existing-preview package remains `com.seedsbits.game.preview`.
+Release verification and limits: [1.1.0](docs/releases/1.1.0/REPORT.md), [pre-release 1.0.0](docs/releases/1.0.0.md). Store listing, data disclosures, privacy policy, public signing certificate and upload instructions: [store/](store/). Private signing material is kept outside git. The existing-preview package remains `com.seedsbits.game.preview`.
 
 The Android acceptance follow-up can test an existing release artifact by workflow run ID without rebuilding its payload. It stays offline, temporarily uses a CI-only smoke certificate and exercises native/WebView startup, moves, undo, process-stop persistence, rotation and privacy. Live ad fill and analytics dashboard delivery require a connected physical device. Yandex output remains a draft; iOS is not a signed store release.

@@ -17,6 +17,7 @@ try {
   const puzzles = JSON.parse(await fs.readFile('src/notebook.json','utf8'));
   for (const [name, viewport, large, reduced] of [
     ['portrait',{width:390,height:844},false,false],
+    ['quick-start',{width:390,height:844},false,false],
     ['small',{width:320,height:568},false,false],
     ['landscape-large-reduced',{width:844,height:390},true,true],
   ]) {
@@ -44,16 +45,23 @@ try {
       await page.waitForSelector('#board button');
       if (large) await page.addStyleTag({content:'html{font-size:150% !important}'});
       await shot('first-launch');
-      for(let i=0;i<2;i++){ await pair([0,1]); await shot('lesson-'+(i+1)); await click('#lesson-next'); }
-      await shot('first-classic');
-      await pair([9,10]); await shot('first-independent-pair');
-      await click('#hint'); await shot('hint');
-      const hinted=await page.locator('.hinted').evaluateAll(es=>es.map(e=>e.dataset.index));
-      if(hinted.length!==2) throw Error('Expected two hinted cells');
-      await pair(hinted); await shot('hint-result');
-      await click('#menu'); await shot('home');
-      await click('#book-mode'); await shot('notebooks');
-      await click('#continue-book');
+      for(let i=0;i<2;i++){
+        await pair([0,1]); await shot('lesson-'+(i+1));
+        await click(i===1 && name==='quick-start' ? '#lesson-quick' : '#lesson-next');
+      }
+      if(name==='quick-start') {
+        await shot('quick-entry');await click('#hint');await shot('hint-explanation');
+      } else {
+        await shot('first-classic');
+        await pair([9,10]); await shot('first-independent-pair');
+        await click('#hint'); await shot('hint');
+        const hinted=await page.locator('.hinted').evaluateAll(es=>es.map(e=>e.dataset.index));
+        if(hinted.length!==2) throw Error('Expected two hinted cells');
+        await pair(hinted); await shot('hint-result');
+        await click('#menu'); await shot('home');
+        await click('#book-mode'); await shot('notebooks');
+        await click('#continue-book');
+      }
       for(let task=0;task<6;task++){
         if(task===0) await shot('first-notebook');
         for(const solution of puzzles[task].solution) await pair([solution.a, solution.b]);
