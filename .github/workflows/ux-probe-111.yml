@@ -1,0 +1,44 @@
+name: Focused UX startup diagnostics
+on:
+  push:
+    branches: [qa/ux-probe-111]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Inspect startup before long regressions
+        run: |
+          mkdir -p test-results/probe
+          node --input-type=module <<'JS'
+          import {chromium} from '@playwright/test';
+          import {spawn} from 'node:child_process';
+          import fs from 'node:fs/promises';
+          const server=spawn('node',['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','5173'],{stdio:'ignore'});
+          for(let i=0;i<50;i++){try{await fetch('http://127.0.0.1:5173');break;}catch{await new Promise(r=>setTimeout(r,100));}}
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',args:['--no-sandbox']});
+          const p=await browser.newPage({viewport:{width:390,height:844}});
+          const errors=[];p.on('pageerror',e=>errors.push(String(e)));
+          p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+          await p.goto('http://127.0.0.1:5173');await p.waitForTimeout(1000);
+          await p.screenshot({path:'test-results/probe/fresh.png'});
+          await fs.writeFile('test-results/probe/fresh.json',JSON.stringify({errors,text:await p.locator('body').innerText(),html:await p.content()},null,2));
+          await p.evaluate(()=>localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true})));
+          await p.reload();await p.waitForTimeout(1000);
+          await p.screenshot({path:'test-results/probe/home.png'});
+          await fs.writeFile('test-results/probe/home.json',JSON.stringify({errors,text:await p.locator('body').innerText(),html:await p.content()},null,2));
+          await browser.close();server.kill();
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ux111-startup-probe
+          path: test-results/probe/
