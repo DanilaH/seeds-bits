@@ -30,7 +30,9 @@ def capture(name):
  raw,_=ui();(out/(name+'.xml')).write_text(raw)
  with (out/(name+'.png')).open('wb') as f:subprocess.run(['adb','exec-out','screencap','-p'],stdout=f,check=True)
 def launch():
- adb('shell','am','force-stop',pkg);adb('shell','am','start','-n',pkg+'/.MainActivity');time.sleep(2)
+ adb('shell','am','force-stop',pkg)
+ result=adb('shell','am','start','-n',pkg+'/.MainActivity');assert 'Error' not in result,result
+ time.sleep(2);assert adb('shell','pidof',pkg,check=False).strip(),'App process absent after launch'
 def back():adb('shell','input','keyevent','4');time.sleep(.5)
 def words(name):
  result=subprocess.run(['tesseract',str(out/(name+'.png')),'stdout','-l','rus','tsv'],capture_output=True,text=True,check=True)
@@ -53,7 +55,8 @@ def settings():
  tap(['Настройки']);find(['Тёмная тема'])
 def fresh():
  adb('shell','pm','clear',pkg);adb('shell','pm','clear-permission-flags',pkg,'android.permission.POST_NOTIFICATIONS','user-set','user-fixed',check=False)
- launch();tap(['Пропустить']);tap(['Открыть меню']);settings()
+ # Wait for package-data clearing and the initial WebView render on a cold AVD.
+ time.sleep(.8);launch();find(['Пропустить'],attempts=10);tap(['Пропустить']);tap(['Открыть меню']);settings()
 def permission(choice):
  fresh();capture(choice+'-before')
  log=(out/(choice+'-permission-trace.txt')).open('w')
@@ -91,6 +94,8 @@ def large_text():
 def picker():
  launch();settings();tap(['12:30']);find(['SET','Set','ГОТОВО','Готово']);capture('native-time-picker');back();find(['Тёмная тема']);checks['nativeTimePickerAndCancel']=True
 errors={}
+startup_log=(out/'startup-and-lifecycle.txt').open('w')
+startup_logger=subprocess.Popen(['adb','logcat','-v','threadtime','*:W','AndroidRuntime:V','ActivityTaskManager:I','SeedsNotifications:V','lmkd:V'],stdout=startup_log,stderr=subprocess.STDOUT)
 try:
  for name,case in [('deny',lambda:permission('deny')),('grant',lambda:permission('grant')),('large-text',large_text),('picker',picker)]:
   try:case()
@@ -98,6 +103,7 @@ try:
    errors[name]=str(error);capture(name+'-failure')
    adb('shell','settings','put','system','user_rotation','0');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
 finally:
+ startup_logger.terminate();startup_logger.wait(timeout=5);startup_log.close()
  (out/'summary.json').write_text(json.dumps({'checks':checks,'errors':errors,'scope':'Android 35, actual release, offline, disposable signer'},ensure_ascii=False,indent=2))
  (out/'logcat.txt').write_text(adb('logcat','-d','-t','600',check=False))
  try:capture('last-state')
