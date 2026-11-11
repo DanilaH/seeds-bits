@@ -14,7 +14,7 @@ async function ready(url){for(let i=0;i<100;i++){try{if((await fetch(url)).ok)re
 await Promise.all([ready(dev),ready(production)]);
 const browser=await chromium.launch({...(process.env.SEEDS_CHROMIUM?{executablePath:process.env.SEEDS_CHROMIUM}:{}),args:['--no-sandbox','--disable-dev-shm-usage']});
 const classic=Array.from({length:19},(_,i)=>String(i+1)).join('').replaceAll('0','').split('').map(Number);
-const report={source:'3eb2b3cfd6c8aea3ca130f916290818fbf5ce7c5',date:'2026-11-11',scope:'Real browser UI; native ad/engagement replies are controlled test doubles, not live SDK/device evidence',scenarios:[],frames:[]};
+const report={source:'3eb2b3cfd6c8aea3ca130f916290818fbf5ce7c5',date:'2026-11-11',scope:'Real browser UI; native ad/engagement replies are controlled test doubles, not live SDK/device evidence',scenarios:[],frames:[],observations:[]};
 const snap=board=>({rules:1,current:{board,moves:0,additions:0,scroll:0},history:[]});
 const isoDay=n=>'2026-11-'+String(n).padStart(2,'0');
 function fixture(o={}){
@@ -50,6 +50,7 @@ async function open(o={}){
  return {page,context,errors};
 }
 async function capture(page,scenario,label){
+ await page.waitForTimeout(180); // Let saved-state and transient board feedback settle before visual inspection.
  const file=scenario+'--'+label+'.png';
  await page.screenshot({path:path.join(output,file),animations:'disabled'});
  const state=await page.evaluate(()=>{
@@ -158,6 +159,39 @@ try{
  }
  await run('classic-result-and-next',{board:[5,5],meter:23,wallet:0,done:[]},async(p,n)=>{await board(p);await capture(p,n,'before');await click(p,'[data-index="0"]');await click(p,'[data-index="1"]');await capture(p,n,'result');await click(p,'#play-again');await capture(p,n,'next-game');});
  await run('fresh-leave-tutorial-via-notebook',{fresh:true},async(p,n)=>{await click(p,'#book-top');await capture(p,n,'book-during-tutorial');await click(p,'#continue-book');await capture(p,n,'book-game');await p.reload();await p.waitForFunction(()=>document.querySelector('#board button'));await capture(p,n,'after-reload');});
+ await run('book-resume-two-unfinished',{},async(p,n)=>{
+  await click(p,'#book-mode');
+  for(const task of ['book-v1-4','book-v1-5']){
+   await click(p,`[data-game="${task}"]`);await click(p,'#hint');await p.waitForFunction(()=>document.querySelectorAll('.hinted').length===2);
+   const cells=await p.locator('.hinted').evaluateAll(es=>es.map(e=>e.dataset.index));for(const c of cells)await click(p,`[data-index="${c}"]`);
+   await click(p,'#book-top');
+  }
+  report.observations.push({id:'book-resume-two-unfinished',active:await p.evaluate(()=>JSON.parse(localStorage.getItem('seeds-bits.progress.v2')).active),button:await p.locator('#continue-book').innerText(),destination:await p.locator('#continue-book').getAttribute('data-continue')});
+  await capture(p,n,'resume-priority');await click(p,'#continue-book');await capture(p,n,'actual-resumed-game');
+ });
+ await run('daily-next-destination',{active:'daily-v1-2026-11-11',board:[5,5],granted:true,done:Array.from({length:6},(_,i)=>'daily-v1-'+isoDay(i+5)),streak:6},async(p,n)=>{
+  await board(p);await click(p,'[data-index="0"]');await click(p,'[data-index="1"]');await capture(p,n,'result');await click(p,'#play-again');await capture(p,n,'destination');
+  report.observations.push({id:'daily-next-destination',mode:await p.locator('#mode').innerText(),active:await p.evaluate(()=>JSON.parse(localStorage.getItem('seeds-bits.progress.v2')).active)});
+ });
+ await run('invalid-backup-action',{corrupt:true},async(p,n)=>{
+  await capture(p,n,'offered-backup');await click(p,'#restore-backup');await capture(p,n,'restore-failed');await click(p,'#restore-backup');await capture(p,n,'repeat-restore');
+  report.observations.push({id:'invalid-backup-action',warning:await p.locator('#read-notice').innerText(),buttonEnabled:await p.locator('#restore-backup').isEnabled()});
+ });
+ await run('deep-screen-header-reachability',{},async(p,n)=>{
+  await click(p,'#book-mode');await p.locator('#dialog').evaluate(e=>e.scrollTop=e.scrollHeight);const state=await capture(p,n,'book-bottom');
+  report.observations.push({id:'deep-screen-header-reachability',controls:state.controls.filter(c=>['close','collection-back','continue-book','book-chapter'].includes(c.id))});
+  await p.keyboard.press('Escape');await capture(p,n,'back-by-keyboard');
+ });
+ await run('legal-dead-end-recovery',{},async(p,n)=>{
+  await click(p,'#book-mode');await click(p,'[data-game="book-v1-7"]');
+  for(const [a,b] of [[2,22],[7,25],[9,10]]){await click(p,`[data-index="${a}"]`);await click(p,`[data-index="${b}"]`);}
+  await click(p,'#hint');await p.waitForFunction(()=>!document.querySelector('#recover-task').hidden);await capture(p,n,'recovery-offer');
+  await click(p,'#recover-task');await p.waitForFunction(()=>document.querySelectorAll('.hinted').length===2);await capture(p,n,'recovered');
+ });
+ await run('true-text-enlargement-experiment',{viewport:{width:360,height:640}},async(p,n)=>{
+  await board(p);await p.evaluate(()=>{const nodes=[...document.querySelectorAll('body *')];const sizes=nodes.map(e=>parseFloat(getComputedStyle(e).fontSize));nodes.forEach((e,i)=>e.style.fontSize=(sizes[i]*1.5)+'px');});await capture(p,n,'classic-fonts-150');
+  await click(p,'#menu');await click(p,'#settings-open');await p.evaluate(()=>{const nodes=[...document.querySelectorAll('#settings-panel *')];const sizes=nodes.map(e=>parseFloat(getComputedStyle(e).fontSize));nodes.forEach((e,i)=>e.style.fontSize=(sizes[i]*1.5)+'px');});await capture(p,n,'settings-fonts-150');
+ });
  await run('restart-confirmation',{seed:false},async(p,n)=>{await board(p);await click(p,'[data-index="0"]');await click(p,'[data-index="9"]');await click(p,'#menu');await click(p,'#settings-open');await click(p,'#new');await capture(p,n,'confirm');await click(p,'#cancel-new');await capture(p,n,'cancel-return');});
  await run('notification-denied',{denied:true},async(p,n)=>{await click(p,'#settings-open');await capture(p,n,'pending');await click(p,'#notification-permission-request');await capture(p,n,'denied');await p.locator('#reminder-time').fill('13:45');await capture(p,n,'time-edit');});
  await run('notification-granted',{granted:true},async(p,n)=>{await click(p,'#settings-open');await p.locator('#reminders').uncheck();await capture(p,n,'disabled');await p.locator('#reminders').check();await capture(p,n,'enabled');});
