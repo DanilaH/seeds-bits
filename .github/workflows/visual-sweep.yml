@@ -25,6 +25,8 @@ jobs:
       - run: npm run build
       - run: npm run test:e2e
         if: contains(github.event.head_commit.message, '[verify]')
+      - run: npx playwright test e2e/visual-recheck.spec.ts
+        if: contains(github.event.head_commit.message, '[focused]')
       - run: node scripts/ux-audit-2026-11-11.mjs
         if: ${{ !cancelled() }}
       - uses: actions/upload-artifact@v4

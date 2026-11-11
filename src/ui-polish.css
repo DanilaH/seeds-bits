@@ -2212,6 +2212,7 @@ header .jar-caption strong {
   white-space: normal;
 }
 .mode-nav .mode-link {
+  flex-basis: auto;
   flex-shrink: 0;
 }
 #jar-collected svg {
