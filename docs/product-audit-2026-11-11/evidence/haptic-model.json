@@ -1,0 +1,72 @@
+{
+  "source": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "run": 43032671115,
+  "job": 130563438331,
+  "method": "Production vibration bridge with Android/Capacitor doubles; no inference about physical motor feel",
+  "results": [
+    {
+      "case": "F01_off_before_configuration",
+      "passed": true
+    },
+    {
+      "case": "F02_api31_manager_contact",
+      "passed": true
+    },
+    {
+      "case": "F03_stale_pulse_dropped",
+      "passed": true
+    },
+    {
+      "case": "F04_cancel_reorder_cannot_restart_motor",
+      "passed": true
+    },
+    {
+      "case": "F05_explicit_new_epoch_works",
+      "passed": true
+    },
+    {
+      "case": "F06_pause_is_native_generation_barrier",
+      "passed": true
+    },
+    {
+      "case": "F07_win_protects_its_pattern",
+      "passed": true
+    },
+    {
+      "case": "F08_new_contact_after_win",
+      "passed": true
+    },
+    {
+      "case": "F09_pair_can_replace_selection",
+      "passed": true
+    },
+    {
+      "case": "F10_rapid_low_priority_has_no_queue",
+      "passed": true
+    },
+    {
+      "case": "F11_no_motor_is_optional",
+      "passed": true
+    },
+    {
+      "case": "F12_waveform_without_amplitude_control",
+      "passed": true
+    },
+    {
+      "case": "F13_one_shot_default_amplitude_fallback",
+      "passed": true
+    },
+    {
+      "case": "F14_api24_waveform",
+      "passed": true
+    },
+    {
+      "case": "F15_motor_failure_does_not_break_game",
+      "passed": true
+    },
+    {
+      "case": "F16_destroy_drops_late_callbacks",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "runtime": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "baseline": "54a18e0e79b501c5d23c520202881287469897ea",
+  "capture": {
+    "commit": "160da8c79fd013f25a64607b7338ed6a65131942",
+    "differentRootEntries": []
+  },
+  "isolatedNative": {
+    "applicationSource": "160da8c79fd013f25a64607b7338ed6a65131942",
+    "run": 43032671115,
+    "attempts": [
+      1,
+      2
+    ],
+    "status": "blocked_before_app_install",
+    "failedJobs": [
+      130565134246,
+      130570723644
+    ],
+    "reason": "Ubuntu package DNS resolution failure during apt installation; no final APK launched in these attempts"
+  },
+  "note": "Final browser captures and candidate APK are from the same application commit. Workflow-only repair 2434401 retains the same src/native trees. Earlier native success and final blocked attempts are distinguished below; early network-enabled evidence is retained only as a QA defect.",
+  "srcTree": "6eeee77edf8f670d51dfb360bc814798a669a738",
+  "nativeTree": "1409a980564d263f4e494b840e0ae6eb906c2190",
+  "workflowRepair": "243440116e6d345cd23b43c04bda741da694c132",
+  "previousIsolatedNative": {
+    "commit": "bfb578049293f68db055cc38b519d55e7950a1e0",
+    "applicationSource": "c3b4ebf733079c119d57342b23ba38ea9985db7c",
+    "run": 43029903310,
+    "artifact": 13861002960,
+    "srcTree": "74921422459c7852d4332ce3d3a73d1e1f680948",
+    "nativeTree": "1409a980564d263f4e494b840e0ae6eb906c2190",
+    "differenceFromFinalRuntime": "Native Java is identical. Final src/main.ts additionally gates restored analytics on a successful write; that branch is browser fault-tested. Previous native acceptance is not relabelled as a test of the final APK."
+  }
+}

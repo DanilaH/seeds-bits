@@ -1,0 +1,137 @@
+{
+  "applicationSource": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "baselineSource": "54a18e0e79b501c5d23c520202881287469897ea",
+  "version": "1.1.2",
+  "versionCode": 1102015,
+  "publication": {
+    "published": false,
+    "submittedForModeration": false,
+    "changedProductionAdConfiguration": false
+  },
+  "method": "Automated real UI with known solutions and controlled browser bridges; not human playtesting. Native emulator has host network isolation before boot.",
+  "checks": {
+    "unit": {
+      "passed": 61
+    },
+    "compactHistoryModel": {
+      "passed": 2
+    },
+    "browserLifecycleAdIntegration": {
+      "passed": 15
+    },
+    "browserE2E": {
+      "passed": 167
+    },
+    "originalStrictCrossTabRepeat": {
+      "passed": 30,
+      "workers": 1
+    },
+    "nativeProductionBridgeModel": {
+      "passed": 24,
+      "evidence": "evidence/native-bridge-model.json"
+    },
+    "nativeHapticModel": {
+      "passed": 16,
+      "evidence": "evidence/haptic-model.json"
+    },
+    "browserUxMatrix": {
+      "passedScenarios": 38,
+      "frames": 221,
+      "pageErrors": 0,
+      "measuredHorizontalOverflow": 0,
+      "measuredTextOverflow": 0,
+      "evidence": "evidence/browser-ux-summary.json"
+    },
+    "scriptedJourneys": {
+      "passedScenarios": 4,
+      "frames": 72,
+      "evidence": "evidence/recordings-summary.json",
+      "notHumanPlaytest": true
+    },
+    "builds": {
+      "web": true,
+      "yandex": true,
+      "androidRelease": true,
+      "androidPreview": true
+    },
+    "finalAndroidEmulator": {
+      "status": "blocked-before-app-install",
+      "run": 43032671115,
+      "attempts": [
+        1,
+        2
+      ],
+      "reason": "Ubuntu package DNS failure while installing OCR",
+      "evidence": "evidence/ci-infrastructure.json"
+    },
+    "previousIsolatedAndroidEmulator": {
+      "applicationSource": "c3b4ebf733079c119d57342b23ba38ea9985db7c",
+      "workflowSource": "bfb578049293f68db055cc38b519d55e7950a1e0",
+      "run": 43029903310,
+      "artifact": 13861002960,
+      "nativeJavaMatchesFinal": true,
+      "webRuntimeMatchesFinal": false,
+      "uxPassed": 7,
+      "smokePassed": 11,
+      "upgradePassed": true,
+      "scope": "Android 35; old 1.1.0/1100024 payload to previous 1.1.2 payload, same temporary CI certificate. Not acceptance of final APK.",
+      "evidence": [
+        "evidence/previous-native-offline-guard.json",
+        "evidence/previous-native-ux.json",
+        "evidence/previous-native-smoke.json",
+        "evidence/previous-native-upgrade.json",
+        "evidence/previous-native-upgrade-baseline.json"
+      ]
+    }
+  },
+  "ci": {
+    "productAudit": {
+      "run": 43032671115,
+      "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43032671115",
+      "source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "status": "browser/release success; native setup failed on both attempts"
+    },
+    "defaultPullRequestChecks": {
+      "run": 43036052046,
+      "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43036052046",
+      "source": "243440116e6d345cd23b43c04bda741da694c132",
+      "status": "success",
+      "jobs": {
+        "web": 130575028235,
+        "android": 130575028369
+      },
+      "runtimeEquivalentToApplicationSource": true
+    },
+    "originalDefaultFailure": {
+      "run": 43032679091,
+      "reason": "apt DNS failure prevented browser installation; subsequent E2E failed to launch, not an application acceptance result",
+      "evidence": "evidence/ci-infrastructure.json"
+    },
+    "additionalAuditRun": {
+      "run": 43036042686,
+      "source": "243440116e6d345cd23b43c04bda741da694c132",
+      "note": "Automatic rerun after workflow-only repair. Not used to claim additional acceptance; source src/native trees match the documented candidate."
+    }
+  },
+  "evidence": {
+    "gallery": "README.md",
+    "audit": "../PRODUCT_AUDIT_2026-11-11.md",
+    "handoff": "HANDOFF.md",
+    "mediaInventory": "media.json",
+    "runtimeProvenance": "source-proof.json",
+    "apk": "apk.json",
+    "analyticsQuarantine": "analytics-quarantine.json"
+  },
+  "limitations": [
+    "Final APK emulator UI/upgrade did not run: Ubuntu OCR installation failed on both attempts. Previous isolated acceptance remains explicitly labelled as previous candidate.",
+    "No observed 10–15 minute session with a new human player; no retention or comprehension claim.",
+    "No physical motor/speaker assessment, real store review, live earned reward, AppMetrica server receipt or VK attribution acceptance.",
+    "Historical save_error root cause is unproven; power-loss filesystem failure is not exhaustively simulated.",
+    "Native tests use temporary CI signing, not the production certificate.",
+    "SDK enqueue-to-native-receipt crash gap can duplicate an event_id; downstream deduplication is required.",
+    "Optional journal is bounded; prolonged telemetry unavailability may discard oldest analytics, not gameplay progress.",
+    "Early native UX runs were not isolated: exclude QA app builds 1102004–1102014, without asserting that all sent server data."
+  ],
+  "recordedAt": "2026-11-11T14:16:42.649581+00:00",
+  "status": "implemented; web, models and builds pass; final emulator UI/upgrade blocked by package DNS failure"
+}

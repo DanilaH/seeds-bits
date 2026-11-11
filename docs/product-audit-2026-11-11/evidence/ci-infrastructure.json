@@ -1,0 +1,33 @@
+{
+  "applicationSource": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "nativeFinalAttempts": {
+    "run": 43032671115,
+    "jobs": [
+      130565134246,
+      130570723644
+    ],
+    "outcome": "Both failed before APK installation/boot of test app",
+    "stage": "sudo apt-get update && sudo apt-get install -y tesseract-ocr-rus",
+    "error": "Temporary failure resolving azure.archive.ubuntu.com and security.ubuntu.com"
+  },
+  "originalDefaultWeb": {
+    "run": 43032679091,
+    "job": 130563467857,
+    "outcome": "Chromium installation failed on apt; subsequent E2E launch attempts could not find the browser. These are not successful application tests.",
+    "error": "browserType.launch: Executable does not exist"
+  },
+  "workflowRepair": {
+    "source": "243440116e6d345cd23b43c04bda741da694c132",
+    "run": 43036052046,
+    "change": "Pin web runner to ubuntu-24.04 and download matching Playwright Chromium without unrelated apt update. Browser startup validation, 15 integration and all 167 E2E assertions remain enabled.",
+    "runtimeChanged": false,
+    "result": "Check and build 43036052046 succeeded, both web and Android jobs"
+  },
+  "previousNativeSuccess": {
+    "run": 43029903310,
+    "artifact": 13861002960,
+    "applicationSource": "c3b4ebf733079c119d57342b23ba38ea9985db7c",
+    "workflowSource": "bfb578049293f68db055cc38b519d55e7950a1e0",
+    "guard": "previous-native-offline-guard.json"
+  }
+}
