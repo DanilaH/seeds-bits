@@ -433,6 +433,21 @@ progress::-moz-progress-bar {
   min-height: 44px;
   font-size: 15px;
 }
+/* Seven touch targets need the narrow screen's full rail. Keep the other
+   calendar content aligned with the usual 18px inset, without clipped bleed. */
+@media (max-width: 380px) {
+  #dialog[data-screen="calendar"] {
+    padding-inline: 3px;
+  }
+  #dialog[data-screen="calendar"] .dialog-head,
+  #dialog[data-screen="calendar"] #collection > :not(.calendar) {
+    width: calc(100% - 30px);
+    margin-inline: auto;
+  }
+  #dialog[data-screen="calendar"] .calendar-today {
+    display: block;
+  }
+}
 .calendar > span {
   padding: 4px 0;
   font-size: 11px;

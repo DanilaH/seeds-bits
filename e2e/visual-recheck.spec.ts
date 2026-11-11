@@ -72,12 +72,19 @@ for (const [width, height, scale] of [
           .evaluate((e) => e.scrollWidth <= e.clientWidth + 1),
       ).toBe(true);
       if (route === "calendar-open") {
+        const today = (await page.locator("#today-task").boundingBox())!;
+        expect(Math.abs(today.x - a.x)).toBeLessThan(1);
         expect(
           await page.locator(".calendar").evaluate((e) => {
             const rail = e.closest(".dialog-scroll")!.getBoundingClientRect();
             return [...e.children].every((c) => {
               const r = c.getBoundingClientRect();
-              return r.left >= rail.left - 1 && r.right <= rail.right + 1;
+              return (
+                r.left >= rail.left - 1 &&
+                r.right <= rail.right + 1 &&
+                (!(c instanceof HTMLButtonElement) ||
+                  (r.width >= 44 && r.height >= 44))
+              );
             });
           }),
         ).toBe(true);
