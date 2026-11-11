@@ -15,6 +15,26 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: DanBloomberg/leptonica
+          ref: 13275a278eb55b5746e33f95fbf5a2c8f604b3ab
+          path: .ci-ocr/leptonica
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: tesseract-ocr/tesseract
+          ref: 7e548e6eff172f38f97664afe7f7ce40db36c8d6
+          path: .ci-ocr/tesseract
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: tesseract-ocr/tessdata_fast
+          ref: 87416418657359cb625c412a48b6e1d6d41c29bd
+          path: .ci-ocr/tessdata
+          sparse-checkout: rus.traineddata
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
       - run: bash scripts/ci-install-ocr.sh
       - uses: actions/setup-java@v4
         with:
