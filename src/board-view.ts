@@ -6,7 +6,14 @@ export class BoardView {
   private marked = new Set<number>();
   private remapped = false;
   private focusIndex = 0;
+  private measuredDigit: HTMLElement | null = null;
+  private rowFrame = 0;
+  private rowObserver = new ResizeObserver(() => {
+    cancelAnimationFrame(this.rowFrame);
+    this.rowFrame = requestAnimationFrame(() => this.fitRow());
+  });
   constructor(private root: HTMLElement) {
+    this.rowObserver.observe(root);
     root.addEventListener("focusin", (event) => {
       const target = event.target as HTMLElement;
       if (target.matches("button.cell")) {
@@ -14,6 +21,22 @@ export class BoardView {
         this.tabStops();
       }
     });
+  }
+  private fitRow() {
+    if (!this.measuredDigit?.isConnected) return;
+    // Android text zoom can enlarge rendered glyphs without changing CSS em.
+    // Measure one digit, not the whole field, and share its row with the grid.
+    const range = document.createRange();
+    range.selectNodeContents(this.measuredDigit);
+    const transform = new DOMMatrixReadOnly(
+      getComputedStyle(this.measuredDigit).transform,
+    );
+    const scale = Math.hypot(transform.c, transform.d) || 1;
+    const height = range.getBoundingClientRect().height / scale;
+    if (!height) return;
+    const row = Math.ceil(height + 4 - 0.01) + "px";
+    if (this.root.style.getPropertyValue("--board-digit-row") !== row)
+      this.root.style.setProperty("--board-digit-row", row);
   }
   private tabStops() {
     if (!this.values[this.focusIndex])
@@ -97,6 +120,12 @@ export class BoardView {
       this.nodes = desired;
       this.values = [...values];
       this.remapped = false;
+      const digit = this.root.querySelector<HTMLElement>(".digit");
+      if (digit !== this.measuredDigit) {
+        if (this.measuredDigit) this.rowObserver.unobserve(this.measuredDigit);
+        this.measuredDigit = digit;
+        if (digit) this.rowObserver.observe(digit);
+      }
     }
     const marked = new Set(
       [selected, hint?.a ?? -1, hint?.b ?? -1].filter((i) => i >= 0),

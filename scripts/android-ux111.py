@@ -99,13 +99,34 @@ def large_text():
  adb('shell','input','swipe','1540','530','1540','300','400');capture('font150-landscape-actions-scroll')
  find(['Добавить']);checks['largeTextLandscapeActionsScroll']=True
  adb('shell','settings','put','system','user_rotation','0');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
+def narrow_text():
+ # Exercise actual WebView text zoom on a 320 CSS-pixel screen. Browser CSS
+ # font overrides alone do not reproduce Android's font scaling semantics.
+ try:
+  adb('shell','wm','size','640x1136');adb('shell','settings','put','system','font_scale','2.0');time.sleep(1)
+  launch();tap(['Начать классику','Продолжить','Играть']);capture('font200-narrow-game')
+  from PIL import Image
+  with Image.open(out/'font200-narrow-game.png') as source:
+   image=source.convert('RGB');width,height=image.size;pixels=image.load();lines=[]
+   for y in range(60,height-60):
+    count=sum(max(abs(c-t) for c,t in zip(pixels[x,y],(216,225,220)))<=6 for x in range(20,width-20))
+    if count>width*.6 and (not lines or y>lines[-1]+3):lines.append(y)
+  assert len(lines)>=2,'No complete grid row visible with narrow Android text zoom'
+  top,bottom=lines[:2]
+  glyphs=[r for r in words('font200-narrow-game') if re.fullmatch(r'[1-9]+',r['text']) and top<=int(r['top'])<bottom]
+  assert sum(len(r['text']) for r in glyphs)>=5,'Too few first-row digits recognized to assess bounds'
+  assert all(int(r['top'])+int(r['height'])<=bottom+1 for r in glyphs),'Rendered digits cross the first grid row'
+  (out/'font200-narrow-geometry.json').write_text(json.dumps({'rowTop':top,'rowBottom':bottom,'glyphs':glyphs},ensure_ascii=False,indent=2))
+  checks['narrowAndroidTextZoomStaysInsideRows']=True
+ finally:
+  adb('shell','wm','size','780x1688');adb('shell','settings','put','system','font_scale','1.0');time.sleep(1)
 def picker():
  launch();settings();tap(['12:30']);find(['SET','Set','ГОТОВО','Готово']);capture('native-time-picker');back();find(['Тёмная тема']);checks['nativeTimePickerAndCancel']=True
 errors={}
 startup_log=(out/'startup-and-lifecycle.txt').open('w')
 startup_logger=subprocess.Popen(['adb','logcat','-v','threadtime','*:W','AndroidRuntime:V','ActivityTaskManager:I','SeedsNotifications:V','lmkd:V'],stdout=startup_log,stderr=subprocess.STDOUT)
 try:
- for name,case in [('deny',lambda:permission('deny')),('grant',lambda:permission('grant')),('large-text',large_text),('picker',picker)]:
+ for name,case in [('deny',lambda:permission('deny')),('grant',lambda:permission('grant')),('large-text',large_text),('narrow-text',narrow_text),('picker',picker)]:
   try:case()
   except Exception as error:
    errors[name]=str(error);capture(name+'-failure')
