@@ -198,6 +198,8 @@ export function readProgress(
           ? m.flags.filter((v: unknown) => typeof v === "string").slice(0, 30)
           : [];
       m.attempts = attempts;
+      if (!["fresh-v2", "legacy"].includes(m.analyticsCohort))
+        delete m.analyticsCohort;
       if (m.analytics !== undefined) m.analytics = readAnalytics(m.analytics);
       if (m.rewardReceipts !== undefined) {
         if (Array.isArray(m.rewardReceipts)) {
@@ -255,6 +257,7 @@ export type Attempt = {
   hintChoices?: Record<string, [number, number]>;
 };
 export type Meta = AnalyticsJournal & {
+  analyticsCohort?: "fresh-v2" | "legacy";
   version: 2;
   wallet: number;
   daily?: DailyRun;

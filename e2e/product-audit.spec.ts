@@ -147,6 +147,7 @@ test("completion waits for durable state, retry and replay cannot grant twice", 
   const [done] = await events(page, "game_complete");
   expect(done.data.attempt).toBe("product-attempt");
   expect(done.data.task).toBe("classic");
+  expect(done.data.cohort).toBe("legacy");
   expect(done.data.event_id).toBeTruthy();
   expect(done.persisted.completed).toBe(1);
   expect((await events(page, "game_start"))[0].data.launch).toBe(
@@ -277,6 +278,14 @@ test("short first task is optional, persists tutorial exit and explains a reveal
     if (step === 0) await page.locator("#lesson-next").click();
   }
   await page.locator("#lesson-quick").click();
+  await expect
+    .poll(() =>
+      page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!).meta.analyticsCohort,
+        key,
+      ),
+    )
+    .toBe("fresh-v2");
   await expect(page.locator("#mode")).toContainText("Тетрадь");
   await page.locator("#hint").click();
   await expect(page.locator("#status")).toContainText(/Одинаковые цифры|= 10/);

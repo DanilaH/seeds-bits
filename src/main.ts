@@ -852,11 +852,16 @@ function durableEvent(
   name: string,
   data: Record<string, string | number | boolean> = {},
 ) {
-  if (adsBridge) enqueueAnalytics(metadata(progress), name, data);
+  if (adsBridge)
+    enqueueAnalytics(metadata(progress), name, {
+      cohort: metadata(progress).analyticsCohort ?? "legacy",
+      ...data,
+    });
 }
 function trackOpen(reason: "restart" | "resume" | "switch") {
   track("game_open", {
     mode: gameMode(),
+    cohort: metadata(progress).analyticsCohort ?? "legacy",
     task: progress.active,
     reason,
     attempt: hintAttempt(progress).id,
@@ -1997,8 +2002,10 @@ window.addEventListener("pagehide", () => {
 });
 async function boot() {
   let warning = "";
+  let hadStoredState = false;
   try {
     const bundle = await platform.read(PROGRESS);
+    hadStoredState = Boolean(bundle);
     lastStored = bundle;
     if (bundle) {
       try {
@@ -2025,6 +2032,7 @@ async function boot() {
       session = progress.sessions[progress.active];
     } else {
       const stored = await platform.read(KEY);
+      hadStoredState = Boolean(stored);
       if (stored) session = decode(stored);
       progress.sessions.classic = session;
     }
@@ -2070,6 +2078,10 @@ async function boot() {
     }
   }
   metadata(progress);
+  metadata(progress).analyticsCohort ??=
+    hadStoredState || settings.tutorialDone || readWarning
+      ? "legacy"
+      : "fresh-v2";
   jars(progress);
   visualSeeds = jars(progress).meter;
   selectedVolume = progress.active.startsWith("book")
