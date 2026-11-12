@@ -38,7 +38,16 @@ test("three bands generate new, playable fields; normal retains the original dig
         }
       }
       expect(occupied(board), `level ${level}, seed ${seed}`).toBe(0);
-      if (level === 0) expect(additions).toBe(0);
+      if (level === 0) {
+        expect(additions).toBe(0);
+        let simple = initial;
+        for (let move = 0; move < 9; move++) {
+          const pair = pairs(simple)[0];
+          expect(pair).toBeDefined();
+          simple = removePair(simple, pair.a, pair.b);
+        }
+        expect(occupied(simple)).toBe(0);
+      }
       if (level === 2) expect(additions).toBeGreaterThanOrEqual(1);
     }
     expect(fields.size).toBe(160);

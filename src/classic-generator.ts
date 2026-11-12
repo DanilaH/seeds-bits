@@ -150,7 +150,13 @@ export function generateClassic(state: ClassicRun, level: ClassicDifficulty) {
       (level === 2 && (opening < 6 || opening > 17))
     )
       continue;
-    const proof = solveClassic(board, level === 0 ? 0 : 2);
+    // On easy, the first available pair must keep working all the way to a
+    // clear. A hidden no-add solution alone would still demand foresight.
+    const proof = solveClassic(
+      board,
+      level === 0 ? 0 : 2,
+      level === 0 ? 10 : 600,
+    );
     if (proof) return { board, proof, fallback: false };
   }
   // Pair blocks are generated afresh, not drawn from a fixed catalog. Their
