@@ -1788,9 +1788,16 @@ header .jar-level {
   fill: none;
 }
 .medal-ribbon {
-  fill: #8b9eaf;
-  stroke: #687e90;
+  fill: #8fa4b2;
+  stroke: #607b8a;
   stroke-width: 1;
+  stroke-linejoin: round;
+}
+.medal-fold {
+  fill: none;
+  stroke: #e8f0f3;
+  stroke-width: 1;
+  opacity: 0.55;
 }
 .medal-base {
   fill: color-mix(in srgb, var(--metal) 10%, var(--paper));
@@ -1804,15 +1811,29 @@ header .jar-level {
   stroke-width: 1;
   opacity: 0.6;
 }
-.medal-liquid {
+.medal-liquid,
+.medal-ink-level {
   transform-box: fill-box;
   transform-origin: center bottom;
 }
 .medal-emblem {
-  stroke: color-mix(in srgb, var(--metal) 60%, var(--ink));
-  stroke-width: 1.8;
+  fill: none;
+  stroke: color-mix(in srgb, var(--metal) 42%, var(--ink));
+  stroke-width: 1.45;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+.medal-emblem.on-metal {
+  stroke: var(--metal-ink);
+}
+.win-symbol {
+  display: grid;
+  place-items: center;
+}
+.win-symbol .seed-icon {
+  width: 54%;
+  height: 54%;
+  stroke-width: 1.8;
 }
 .medal-check {
   stroke: var(--ink);
@@ -2062,8 +2083,22 @@ header .jar-caption strong {
   height: 38px;
   flex-shrink: 0;
   fill: none;
-  stroke: var(--preview-metal);
+  color: color-mix(in srgb, var(--preview-metal) 70%, var(--ink));
+  stroke: currentColor;
   stroke-width: 1.8;
+}
+.next-medal-art .medal-ribbon {
+  fill: color-mix(in srgb, var(--preview-metal) 9%, transparent);
+  stroke: currentColor;
+}
+.next-medal-art .medal-fold {
+  stroke: currentColor;
+  opacity: 0.25;
+}
+.next-medal-art .medal-ring,
+.next-medal-art .medal-inner,
+.next-medal-art .medal-emblem {
+  stroke: currentColor;
 }
 :root[data-theme="dark"] .next-medal {
   background: #273442;

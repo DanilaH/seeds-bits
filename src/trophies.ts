@@ -1,24 +1,15 @@
-/** Small original line emblems, one for each calendar month. */
-const paths = [
-  "M24 5v38M7 14l34 20M7 34l34-20M18 9l6 6 6-6M18 39l6-6 6 6M8 21l8-2-1-8M40 27l-8 2 1 8",
-  "M24 39S5 28 7 17c2-10 13-10 17-2 4-8 15-8 17 2 2 11-17 22-17 22Z",
-  "M24 42V24M24 30C7 30 8 10 8 10s17 1 16 20ZM24 23C24 7 40 6 40 6s1 17-16 17Z",
-  "M24 30v13M24 30C4 38 4 13 18 18 7 2 34 0 30 17 46 9 48 37 29 30ZM20 24h8",
-  "M11 38C0 10 26 3 40 6c2 25-12 39-29 32ZM11 38l24-25M19 30l-2-10M26 23l8 1",
-  "M24 4v5M24 39v5M4 24h5M39 24h5M9 9l4 4M35 35l4 4M9 39l4-4M35 13l4-4M24 14a10 10 0 1 0 0 20 10 10 0 1 0 0-20",
-  "M9 34C-3 10 49 1 40 34L24 42ZM24 42V10M24 42L12 18M24 42l12-24",
-  "M24 14a10 10 0 1 0 0 20 10 10 0 1 0 0-20M20 14L24 4l4 10M34 20l10 4-10 4M28 34l-4 10-4-10M14 28L4 24l10-4",
-  "M24 14C4 3 3 32 16 40c4 3 6-1 8-1s4 4 8 1c13-8 12-37-8-26ZM24 14c-2-8 3-10 6-11M25 9c7-6 12-2 12-2-3 6-8 5-12 2",
-  "M13 21c0 17 11 22 11 22s11-5 11-22ZM9 21c0-17 30-17 30 0ZM24 8l3-5M14 16l5 5M23 12l9 9M32 13l5 5",
-  "M24 43V8M24 31L7 25l5-5-6-9 12 3 6-10 6 10 12-3-6 9 5 5-17 6M24 31l-9 6 2-10M24 31l9 6-2-10",
-  "M24 4L11 19h7L7 31h12v10h10V31h12L30 19h7ZM17 42h14",
-];
+import { icon, monthEmblem } from "./icons";
 
+const ribbon =
+  '<path class="medal-ribbon" d="M16 3h12l9 25-12 5L16 3ZM36 3h12l-9 30-12-5L36 3Z"/><path class="medal-fold" d="m20 3 7 21M44 3l-7 21"/>';
+const rim =
+  '<circle class="medal-ring" cx="32" cy="44" r="24"/><circle class="medal-inner" cx="32" cy="44" r="19"/>';
+const emblemTransform = "translate(18 30) scale(1.166667)";
 let artworkId = 0;
 const metals = [
-  { name: "Бронза", color: "#b77946", light: "#f2d0a1" },
-  { name: "Серебро", color: "#8c9eb3", light: "#e6edf6" },
-  { name: "Золото", color: "#d0a037", light: "#ffeb9e" },
+  { name: "Бронза", color: "#b77946", light: "#f2d0a1", ink: "#58351b" },
+  { name: "Серебро", color: "#8c9eb3", light: "#e6edf6", ink: "#3a4e65" },
+  { name: "Золото", color: "#d0a037", light: "#ffeb9e", ink: "#60430b" },
 ];
 /** Show a reached milestone at its boundary; otherwise fill the next one. */
 export function trophyMark(
@@ -55,11 +46,14 @@ export function trophyMark(
           !(left % 100 >= 12 && left % 100 <= 14)
         ? "задачи"
         : "задач";
+  const emblem = monthEmblem(Number(month.slice(5)));
   const preview = next
-    ? `<span class="next-medal" style="--preview-metal:${next.color}" aria-label="Следующая медаль: ${next.name}, ещё ${left} ${taskWord}"><span class="next-eyebrow">${complete && !pending ? "Следующая" : "Следом"}</span><svg class="next-medal-art" viewBox="0 0 64 76" aria-hidden="true"><path d="M15 2h13l7 24-13 6ZM36 2h13l-7 30-13-6Z"/><circle cx="32" cy="44" r="24"/><circle cx="32" cy="44" r="18"/></svg><strong>${next.name}</strong><span class="next-count">Ещё ${left} ${taskWord}</span></span>`
+    ? `<span class="next-medal" style="--preview-metal:${next.color}" aria-label="Следующая медаль: ${next.name}, ещё ${left} ${taskWord}"><span class="next-eyebrow">${complete && !pending ? "Следующая" : "Следом"}</span><svg class="next-medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false">${ribbon}${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g></svg><strong>${next.name}</strong><span class="next-count">Ещё ${left} ${taskWord}</span></span>`
     : "";
   const id = `medal-${++artworkId}`;
-  return `<span class="trophy-display${next ? " has-next" : ""}"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light}"><span class="medal-figure"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs><path class="medal-ribbon" d="M15 2h13l7 24-13 6ZM36 2h13l-7 30-13-6Z"/><circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${68 - (48 * filled) / target}" width="48" height="${(48 * filled) / target}" fill="url(#${id}-metal)"/><path class="medal-sheen" d="M-36 10h12l78 78H42Z" fill="#fff" opacity="0"/></g><circle class="medal-ring" cx="32" cy="44" r="24"/><circle class="medal-inner" cx="32" cy="44" r="19"/><g class="medal-emblem" transform="translate(18 30) scale(.58)"><path d="${paths[Number(month.slice(5)) - 1]}"/></g></svg><span class="medal-receipt" aria-hidden="true" ${complete && !pending ? "" : "hidden"}><svg viewBox="0 0 20 20"><path d="m4 10 4 4 8-9"/></svg></span></span><span class="metal-name">${title}</span><span class="metal-count">${filled} из ${target} дней</span><span class="medal-note">${note}</span></span>${preview}</span>`;
+  const fillY = 68 - (48 * filled) / target;
+  const fillHeight = (48 * filled) / target;
+  return `<span class="trophy-display${next ? " has-next" : ""}"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light};--metal-ink:${metal.ink}"><span class="medal-figure"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><clipPath id="${id}-ink"><rect class="medal-ink-level" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs>${ribbon}<circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}" fill="url(#${id}-metal)"/><path class="medal-sheen" d="M-36 10h12l78 78H42Z" fill="#fff" opacity="0"/></g>${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g><g clip-path="url(#${id}-ink)"><g class="medal-emblem on-metal" transform="${emblemTransform}">${emblem}</g></g></svg><span class="medal-receipt" aria-hidden="true" ${complete && !pending ? "" : "hidden"}>${icon("check")}</span></span><span class="metal-name">${title}</span><span class="metal-count">${filled} из ${target} дней</span><span class="medal-note">${note}</span></span>${preview}</span>`;
 }
 
 /** A bounded, local burst. It owns no rewards, timers or input and cancels on navigation. */
