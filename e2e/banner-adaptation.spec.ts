@@ -35,13 +35,13 @@ for (const viewport of [
             overflow: document.documentElement.scrollWidth - innerWidth,
           };
         });
+        await page.screenshot({
+          path: `test-results/banner-adaptation/${viewport.width}-${viewport.height}-${dark ? "dark" : "light"}-${zoom ? "large" : "normal"}.png`,
+        });
         expect(g.ad.bottom).toBeLessThanOrEqual(viewport.height - 24);
         expect(g.footer.bottom).toBeLessThanOrEqual(g.ad.y - 7);
         expect(g.viewport.height).toBeGreaterThan(60);
         expect(g.overflow).toBeLessThanOrEqual(1);
-        await page.screenshot({
-          path: `test-results/banner-adaptation/${viewport.width}-${viewport.height}-${dark ? "dark" : "light"}-${zoom ? "large" : "normal"}.png`,
-        });
       }
     });
 

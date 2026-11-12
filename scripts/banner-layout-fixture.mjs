@@ -70,17 +70,21 @@ export async function openBannerFixture(page, options = {}) {
         acknowledge: async () => {},
         show: async () => ({ status: "unavailable" }),
       };
-      const style = document.documentElement.style;
-      for (const [side, value] of Object.entries({
-        top: 24,
-        bottom: 24,
-        left: 0,
-        right: 0,
-      }))
-        style.setProperty(`--safe-area-inset-${side}`, `${value}px`);
     },
     { board, previous, moves, dark, ads },
   );
   await page.goto(url);
   await page.locator("#resume").click();
+  // Match Android's post-bootstrap inset injection, after the real document
+  // replaces the temporary document that runs addInitScript.
+  await page.evaluate(() => {
+    const style = document.documentElement.style;
+    for (const [side, value] of Object.entries({
+      top: 24,
+      bottom: 24,
+      left: 0,
+      right: 0,
+    }))
+      style.setProperty(`--safe-area-inset-${side}`, `${value}px`);
+  });
 }

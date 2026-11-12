@@ -35,6 +35,7 @@ jobs:
       - run: npx playwright install ffmpeg
       - run: npx playwright test e2e/feel.spec.ts e2e/gold-layout.spec.ts e2e/icon-polish.spec.ts e2e/classic-variety.spec.ts e2e/monetization060.spec.ts e2e/banner-adaptation.spec.ts --workers 2
       - name: Compare banner layout against the previous tested source
+        if: ${{ !cancelled() }}
         run: |
           git fetch --no-tags origin e0483c8f70b54a91247fcf8f745dbdc6a5c923de --depth=1
           git worktree add --detach "$RUNNER_TEMP/seeds-banner-before" e0483c8f70b54a91247fcf8f745dbdc6a5c923de
