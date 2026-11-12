@@ -139,11 +139,11 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
   await page.locator("#close").click();
   await page.locator("#play-again").click();
   await expect
-    .poll(async () =>
-      [24, 28].includes(Number(await page.locator("#remaining").innerText())),
+    .poll(
+      async () => Number(await page.locator("#remaining").innerText()) === 28,
     )
     .toBe(true);
-  expect((await data(page)).meta.classicDeals.current).toBeDefined();
+  expect((await data(page)).meta.classicRun.current).toBeDefined();
   expect((await data(page)).meta.attempts.classic.completed).toBe(false);
   expect((await data(page)).meta.completed).toBe(6);
 });

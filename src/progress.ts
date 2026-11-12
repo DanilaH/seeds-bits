@@ -6,6 +6,7 @@ import { validDay } from "./calendar";
 import { recordDaily, type DailyRun } from "./daily-run";
 import { decode, newSession, occupied, type Session } from "./core";
 import { readClassicDeals, type ClassicDeals } from "./classic-deals";
+import { readClassicRun, type ClassicRun } from "./classic-generator";
 export type Progress = {
   version: 3;
   active: string;
@@ -225,6 +226,14 @@ export function readProgress(
           onRecovery();
         }
       }
+      if (m.classicRun !== undefined) {
+        const run = readClassicRun(m.classicRun);
+        if (run) m.classicRun = run;
+        else {
+          delete m.classicRun;
+          onRecovery();
+        }
+      }
       clean.meta = m;
     } catch {
       // Statistics are optional; keep valid boards, completion marks and trophies.
@@ -284,6 +293,7 @@ export type Meta = AnalyticsJournal & {
   unassisted: number;
   rewardReceipts?: string[];
   classicDeals?: ClassicDeals;
+  classicRun?: ClassicRun;
 };
 export function metadata(p: Progress): Meta {
   if (!p.meta) {

@@ -8,6 +8,12 @@
   --selected: #e1eee7;
   --highlight: #eef3ed;
   --button: #f0f4f0;
+  --easier-bg: #e4f0e9;
+  --easier-ink: #285d46;
+  --same-bg: #315f85;
+  --same-ink: #ffffff;
+  --harder-bg: #f9e9d6;
+  --harder-ink: #864810;
   background: #edf1ed;
 }
 :root[data-theme="dark"] {
@@ -19,6 +25,12 @@
   --selected: #304e43;
   --highlight: #283b33;
   --button: #26352e;
+  --easier-bg: #284637;
+  --easier-ink: #c4e4ca;
+  --same-bg: #bad2eb;
+  --same-ink: #1c3447;
+  --harder-bg: #4d3929;
+  --harder-ink: #efcb98;
   background: #141d19;
 }
 button,
@@ -2182,6 +2194,50 @@ header .jar-caption strong {
   margin: 4px 0 -8px;
   padding: 8px 0;
   font-size: 13px;
+}
+.result-next.is-classic {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+}
+.result-next.is-classic > button {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 10px 5px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.result-next.is-classic .difficulty-easier {
+  color: var(--easier-ink);
+  background: var(--easier-bg);
+}
+.result-next.is-classic #play-again {
+  color: var(--same-ink);
+  background: var(--same-bg);
+}
+.result-next.is-classic .difficulty-harder {
+  color: var(--harder-ink);
+  background: var(--harder-bg);
+}
+.result-next.is-classic > button:disabled {
+  color: var(--muted);
+  background: var(--button);
+  border-color: var(--line);
+  opacity: 1;
+  box-shadow: none;
+  transform: none;
+}
+#classic-difficulty {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0 0 10px;
 }
 @media (orientation: portrait) and (min-width: 760px) {
   #dialog[data-screen="home"] #menu-content {

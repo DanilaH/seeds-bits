@@ -1,9 +1,9 @@
 name: Classic variety preview
 on:
   push:
-    branches: [qa/jar-spill-20261112]
+    branches: [qa/jar-spill-20261112, qa/classic-difficulty-20261112]
   pull_request:
-    branches: [qa/product-audit-20261111]
+    branches: [qa/product-audit-20261111, qa/jar-spill-20261112]
 permissions:
   contents: read
 concurrency:

@@ -4,25 +4,45 @@ import {
   newClassicDeals,
   takeClassicDeal,
 } from "../src/classic-deals";
+import {
+  newClassicRun,
+  solveClassic,
+  takeGeneratedClassic,
+  type ClassicDifficulty,
+} from "../src/classic-generator";
+import { classic } from "../src/core";
 import { fresh, metadata, startAttempt } from "../src/progress";
-import proofs from "../scripts/classic-variety/proofs.json" with { type: "json" };
 const key = "seeds-bits.progress.v2";
-async function saved(page: Page) {
-  return page.evaluate(
-    (key) => JSON.parse(localStorage.getItem(key) || "{}"),
-    key,
-  );
-}
-async function boot(page: Page, family?: string) {
+const saved = (page: Page) =>
+  page.evaluate((key) => JSON.parse(localStorage.getItem(key) || "{}"), key);
+async function boot(
+  page: Page,
+  level: ClassicDifficulty = 1,
+  completed = false,
+  legacy = false,
+) {
   const p = fresh(),
     m = metadata(p);
-  if (family) {
-    startAttempt(p, "classic");
+  startAttempt(p, "classic");
+  if (legacy) {
     m.classicDeals = newClassicDeals(73);
     m.classicDeals.bag = [
-      classicCatalog.findIndex((entry) => entry.family === family),
+      classicCatalog.findIndex((entry) => entry.family === "bridges"),
     ];
     p.sessions.classic = takeClassicDeal(m.classicDeals, m.attempts.classic.id);
+  } else {
+    m.classicRun = newClassicRun(73);
+    p.sessions.classic = takeGeneratedClassic(
+      m.classicRun,
+      m.attempts.classic.id,
+      level,
+    );
+  }
+  if (completed) {
+    p.sessions.classic.current.board = [];
+    p.sessions.classic.current.moves = 14;
+    m.attempts.classic.completed = true;
+    m.completed = 1;
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(
@@ -38,61 +58,59 @@ async function boot(page: Page, family?: string) {
   );
   await page.goto("/");
   await expect(page.locator("#next-classic")).toBeVisible();
+  return p;
 }
 async function move(page: Page, pair: number[]) {
   await page.locator(`[data-index="${pair[0]}"]`).click();
   await page.locator(`[data-index="${pair[1]}"]`).click();
 }
-test("new fields rotate, while resume, mode changes and relaunch retain the deal", async ({
+
+test("legacy games remain intact; new games generate normal fields and retain them on resume", async ({
   page,
 }) => {
-  await boot(page);
-  const legacy = (await saved(page)).sessions.classic;
+  const initial = await boot(page, 1, false, true);
   await page.locator("#resume").click();
   await page.locator("#menu").click();
-  expect((await saved(page)).sessions.classic).toEqual(legacy);
-  const ids: number[] = [];
+  expect((await saved(page)).sessions.classic.current.board).toEqual(
+    initial.sessions.classic.current.board,
+  );
+  const fields = new Set<string>();
   for (let n = 0; n < 9; n++) {
     await page.locator("#next-classic").click();
     await expect(page.locator("#dialog")).not.toBeVisible();
-    const p = await saved(page);
-    ids.push(p.meta.classicDeals.current.id);
-    await expect(page.locator("#hint")).toBeEnabled();
+    const p = await saved(page),
+      board = p.sessions.classic.current.board;
+    expect([...board].sort()).toEqual(classic().sort());
+    expect(p.meta.classicRun.difficulty).toBe(1);
+    expect(p.meta.classicDeals).toBeUndefined();
+    fields.add(board.join(""));
     await page.reload();
-    expect((await saved(page)).sessions.classic.current.board).toEqual(
-      p.sessions.classic.current.board,
-    );
+    expect((await saved(page)).sessions.classic.current.board).toEqual(board);
     await page.locator("#book-mode").click();
     await page.locator('[data-game="book-v1-1"]').click();
     await page.locator("#menu").click();
     await page.locator("#classic-mode").click();
-    expect((await saved(page)).sessions.classic.current.board).toEqual(
-      p.sessions.classic.current.board,
-    );
+    expect((await saved(page)).sessions.classic.current.board).toEqual(board);
     await page.locator("#menu").click();
   }
-  expect(new Set(ids).size).toBe(ids.length);
-  expect(new Set(ids.map((id) => classicCatalog[id].family)).size).toBe(4);
+  expect(fields.size).toBe(9);
 });
-test("cancel is inert; restart repeats its layout without repaying seeds or consuming a deal", async ({
+
+test("cancel retains the band; restart repeats the generated field without repaying seeds", async ({
   page,
 }) => {
-  await boot(page, "bridges");
-  const initial = await saved(page);
-  const id = initial.meta.classicDeals.current.id;
-  const pair = proofs[id][0]!;
+  const initial = await boot(page, 2);
+  const proof = solveClassic(initial.sessions.classic.current.board, 2, 6000)!;
   await page.locator("#resume").click();
-  await move(page, pair);
+  await move(page, proof[0]!);
   await expect(page.locator("#undo")).toBeEnabled();
   await page.locator("#menu").click();
   const moved = await saved(page);
-  await page.locator("#next-classic").click();
-  await expect(page.locator("#confirm-new")).toHaveText("Открыть другое поле");
+  await page.locator("#menu-easier").click();
+  await expect(page.locator("#confirm-new")).toHaveText("Начать новую партию");
   await page.locator("#cancel-new").click();
   expect((await saved(page)).sessions).toEqual(moved.sessions);
-  expect((await saved(page)).meta.classicDeals).toEqual(
-    moved.meta.classicDeals,
-  );
+  expect((await saved(page)).meta.classicRun).toEqual(moved.meta.classicRun);
   await page.locator("#new").click();
   await expect(page.locator("#confirm-new")).toHaveText("Начать заново");
   await page.locator("#confirm-new").click();
@@ -101,21 +119,22 @@ test("cancel is inert; restart repeats its layout without repaying seeds or cons
   expect(restarted.sessions.classic.current.board).toEqual(
     initial.sessions.classic.current.board,
   );
-  expect(restarted.meta.classicDeals.bag).toEqual(moved.meta.classicDeals.bag);
-  expect(restarted.meta.classicDeals.recent).toEqual(
-    moved.meta.classicDeals.recent,
+  expect(restarted.meta.classicRun.recent).toEqual(
+    moved.meta.classicRun.recent,
   );
-  expect(restarted.meta.attempts.classic.id).not.toBe(
-    moved.meta.attempts.classic.id,
+  expect(restarted.meta.classicRun.difficulty).toBe(2);
+  expect(restarted.meta.classicRun.current.attempt).not.toBe(
+    moved.meta.classicRun.current.attempt,
   );
-  await move(page, pair);
+  await move(page, proof[0]!);
   await expect(page.locator("#undo")).toBeEnabled();
   expect((await saved(page)).jars.seeds).toBe(moved.jars.seeds);
 });
-test("failed replacement leaves the previous game and rotation intact, retry remains usable", async ({
+
+test("failed replacement leaves the game, generator and chosen band intact", async ({
   page,
 }) => {
-  await boot(page, "dense");
+  await boot(page, 2);
   const before = await saved(page);
   await page.evaluate((key) => {
     const original = Storage.prototype.setItem;
@@ -127,84 +146,121 @@ test("failed replacement leaves the previous game and rotation intact, retry rem
       original.call(this, k, v);
     };
   }, key);
-  await page.locator("#next-classic").click();
+  await page.locator("#menu-easier").click();
   await expect(page.locator("#retry-save")).toBeVisible();
   expect((await saved(page)).sessions.classic).toEqual(before.sessions.classic);
-  expect((await saved(page)).meta.classicDeals).toEqual(
-    before.meta.classicDeals,
-  );
+  expect((await saved(page)).meta.classicRun).toEqual(before.meta.classicRun);
   await page.evaluate(() => (window as any).restoreStorage());
   await page.locator("#retry-save").click();
   await expect(page.locator("#retry-save")).toBeHidden();
-  expect((await saved(page)).meta.classicDeals).toEqual(
-    before.meta.classicDeals,
-  );
-  await page.locator("#next-classic").click();
+  expect((await saved(page)).meta.classicRun).toEqual(before.meta.classicRun);
+  await page.locator("#menu-easier").click();
   await expect(page.locator("#dialog")).not.toBeVisible();
-  expect((await saved(page)).meta.classicDeals.recent).toHaveLength(2);
+  expect((await saved(page)).meta.classicRun.difficulty).toBe(1);
+  expect((await saved(page)).meta.classicRun.recent).toHaveLength(2);
 });
-test("a full addition game clears through the real UI, and the result opens the next field", async ({
+
+for (const level of [0, 1, 2] as ClassicDifficulty[])
+  test(`result choices enforce boundary ${level}`, async ({ page }) => {
+    await boot(page, level, true);
+    await page.locator("#resume").click();
+    await expect(page.locator("#win")).toBeVisible();
+    for (const [id, disabled] of [
+      ["classic-easier", level === 0],
+      ["classic-harder", level === 2],
+    ] as const) {
+      await expect(page.locator(`#${id}`)).toBeVisible();
+      if (disabled) {
+        await expect(page.locator(`#${id}`)).toBeDisabled();
+        const before = await saved(page);
+        await page
+          .locator(`#${id}`)
+          .evaluate((b) => (b as HTMLButtonElement).click());
+        expect((await saved(page)).meta.classicRun).toEqual(
+          before.meta.classicRun,
+        );
+      } else await expect(page.locator(`#${id}`)).toBeEnabled();
+    }
+    const action = level === 2 ? "classic-easier" : "classic-harder";
+    await page.locator(`#${action}`).click();
+    await expect(page.locator("#win")).toBeHidden();
+    const selected = (await saved(page)).meta.classicRun.difficulty;
+    expect(selected).toBe(level === 2 ? 1 : level + 1);
+    await page.reload();
+    expect((await saved(page)).meta.classicRun.difficulty).toBe(selected);
+  });
+
+test("generated hard game clears through the UI and same-band play stays hard", async ({
   page,
 }) => {
-  await boot(page, "addition");
-  const p = await saved(page),
-    id = p.meta.classicDeals.current.id;
+  const initial = await boot(page, 2);
+  const proof = solveClassic(initial.sessions.classic.current.board, 2, 6000)!;
   await page.locator("#resume").click();
-  for (const [n, action] of proofs[id].entries()) {
+  let additions = 0;
+  for (const [n, action] of proof.entries()) {
     if (action === null) {
       await expect(page.locator("#add")).toHaveAttribute(
         "aria-disabled",
         "false",
       );
       await page.locator("#add").click();
+      additions++;
     } else await move(page, action);
-    if (n < proofs[id].length - 1)
-      await expect(page.locator("#undo")).toBeEnabled();
+    if (n < proof.length - 1) await expect(page.locator("#undo")).toBeEnabled();
   }
+  expect(additions).toBeGreaterThan(0);
   await expect(page.locator("#win")).toBeVisible();
-  await expect
-    .poll(async () => (await saved(page)).meta.attempts.classic.completed)
-    .toBe(true);
-  await page.reload();
-  await page.locator("#resume").click();
+  await expect(page.locator("#classic-harder")).toBeDisabled();
   await page.locator("#play-again").click();
-  await expect(page.locator("#win")).not.toBeVisible();
-  const next = await saved(page);
-  expect(next.meta.classicDeals.current.id).not.toBe(id);
-  expect(next.meta.completed).toBe(1);
-  expect(next.sessions.classic.current.moves).toBe(0);
-  await expect(page.locator("#hint")).toBeEnabled();
+  await expect(page.locator("#win")).toBeHidden();
+  const p = await saved(page);
+  expect(p.meta.classicRun.difficulty).toBe(2);
+  expect(p.sessions.classic.current.board).not.toEqual(
+    initial.sessions.classic.current.board,
+  );
+  expect(p.meta.completed).toBe(1);
 });
+
 for (const viewport of [
   { width: 320, height: 568 },
   { width: 844, height: 390 },
 ])
-  test(`classic actions and confirmation fit ${viewport.width}x${viewport.height} with large text`, async ({
-    page,
-  }) => {
-    await page.setViewportSize(viewport);
-    await boot(page, "bridges");
-    await page.addStyleTag({ content: "body {font-size: 22px}" });
-    for (const selector of ["#resume", "#next-classic"]) {
-      await page.locator(selector).scrollIntoViewIfNeeded();
-      const rect = await page.locator(selector).boundingBox();
-      expect(rect!.width).toBeGreaterThan(100);
-      expect(rect!.height).toBeGreaterThanOrEqual(44);
-      expect(rect!.x).toBeGreaterThanOrEqual(0);
-      expect(rect!.x + rect!.width).toBeLessThanOrEqual(viewport.width);
-    }
-    await page.locator("#resume").click();
-    const p = await saved(page);
-    await move(page, proofs[p.meta.classicDeals.current.id][0]!);
-    await expect(page.locator("#undo")).toBeEnabled();
-    await page.locator("#menu").click();
-    await page.locator("#next-classic").click();
-    await expect(page.locator("#confirm-new")).toBeInViewport();
-    expect(
+  for (const theme of ["light", "dark"])
+    test(`result fits one row at ${viewport.width}x${viewport.height}, ${theme}, large text`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      await boot(page, 1, true);
+      await page.locator("#resume").click();
       await page.evaluate(
-        () => document.documentElement.scrollWidth <= innerWidth,
-      ),
-    ).toBe(true);
-    await page.locator("#cancel-new").click();
-    await expect(page.locator("#resume")).toBeVisible();
-  });
+        (theme) => (document.documentElement.dataset.theme = theme),
+        theme,
+      );
+      await page.addStyleTag({ content: "body {font-size:22px}" });
+      await page.locator("#result-next").scrollIntoViewIfNeeded();
+      const rects = await Promise.all(
+        ["classic-easier", "play-again", "classic-harder"].map((id) =>
+          page.locator(`#${id}`).boundingBox(),
+        ),
+      );
+      for (const rect of rects) {
+        expect(rect!.height).toBeGreaterThanOrEqual(44);
+        expect(Math.abs(rect!.y - rects[0]!.y)).toBeLessThan(1);
+        expect(rect!.x).toBeGreaterThanOrEqual(0);
+        expect(rect!.x + rect!.width).toBeLessThanOrEqual(viewport.width);
+      }
+      const colors = await page
+        .locator("#result-next > button")
+        .evaluateAll((buttons) =>
+          buttons.map((b) => getComputedStyle(b).backgroundColor),
+        );
+      expect(new Set(colors).size).toBe(3);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      await page.screenshot({
+        path: `test-results/classic-difficulty/${viewport.width}-${theme}.png`,
+      });
+    });
