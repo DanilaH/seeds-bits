@@ -1,6 +1,12 @@
 import { dailyRun, streakReward } from "./daily-run";
 import { hintExplanation } from "./hint-explanation";
 import {
+  newClassicDeals,
+  readClassicDeals,
+  takeClassicDeal,
+  restartClassic,
+} from "./classic-deals";
+import {
   enqueueAnalytics,
   acknowledgeAnalytics,
   CommittedAnalytics,
@@ -205,7 +211,12 @@ homeCurrent.innerHTML =
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
 $("new").className = "text-button restart-action";
-homeCurrent.append($("resume-context"), homeGoal, $("resume"), $("new"));
+const classicActions = document.createElement("div");
+classicActions.className = "classic-actions";
+classicActions.innerHTML =
+  '<button id="next-classic" class="text-button" hidden>Другое поле</button>';
+classicActions.prepend($("new"));
+homeCurrent.append($("resume-context"), homeGoal, $("resume"), classicActions);
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
 homeModes.setAttribute("aria-label", "Режимы игры");
@@ -1838,6 +1849,10 @@ function openMenu(preserve: unknown = false) {
 }
 function reset() {
   if (busy || saveFailed || adActive || rewardRequest) return;
+  if (progress.active === "classic") {
+    void beginClassic(occupied(session.current.board) ? "restart" : "next");
+    return;
+  }
   settlePresentation();
   earnedAward = "";
   startAttempt(progress, progress.active);
@@ -1854,6 +1869,75 @@ function reset() {
   render();
   save();
   trackOpen("restart");
+}
+async function beginClassic(action: "restart" | "next") {
+  if (
+    busy ||
+    saveFailed ||
+    futureSave ||
+    storageConflict ||
+    adActive ||
+    rewardRequest ||
+    engagementActive ||
+    lesson >= 0
+  )
+    return;
+  settlePresentation();
+  const candidate: Progress = {
+    ...progress,
+    sessions: { ...progress.sessions },
+    hints: { ...progress.hints },
+    done: [...progress.done],
+    seen: [...progress.seen],
+    meta: {
+      ...metadata(progress),
+      attempts: { ...metadata(progress).attempts },
+      classicDeals: readClassicDeals(metadata(progress).classicDeals),
+    },
+    jars: { ...jars(progress) },
+  };
+  const m = metadata(candidate);
+  const previousAttempt = m.attempts.classic?.id ?? "";
+  const next =
+    action === "restart"
+      ? restartClassic(session, m.classicDeals, previousAttempt)
+      : undefined;
+  const highWater = jars(candidate).highWater;
+  startAttempt(candidate, "classic");
+  const attempt = m.attempts.classic.id;
+  if (action === "next") m.classicDeals ??= newClassicDeals();
+  const nextSession = next ?? takeClassicDeal(m.classicDeals!, attempt);
+  if (action === "restart") {
+    // Replaying the same field cannot repay already collected pairs.
+    jars(candidate).highWater = highWater;
+    if (m.classicDeals?.current?.attempt === previousAttempt)
+      m.classicDeals.current.attempt = attempt;
+  }
+  candidate.hints.classic = 0;
+  candidate.active = "classic";
+  busy = true;
+  switching = true;
+  dialog.inert = true;
+  try {
+    await save(candidate, nextSession);
+    if (saveFailed || futureSave || storageConflict) return;
+    progress = candidate;
+    session = nextSession;
+    busy = switching = false;
+    dialog.inert = false;
+    earnedAward = "";
+    earnedSeeds = earnedHints = 0;
+    saveRecovered = false;
+    clearSelection();
+    closeMenu();
+    render();
+    viewport.scrollTop = 0;
+    trackOpen("restart");
+  } finally {
+    busy = switching = false;
+    dialog.inert = false;
+    showSaveState();
+  }
 }
 $("board").addEventListener("click", (e) => {
   const target = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
@@ -1885,11 +1969,36 @@ $("menu").onclick = openMenu;
 $("close").onclick = closeMenu;
 $("resume").onclick = closeMenu;
 $("book-top").onclick = () => openCollection("book");
-function requestRestart() {
-  if (!session.history.length || !occupied(session.current.board)) {
-    reset();
+let confirmAction: "restart" | "next" = "restart";
+function requestRestart(action: "restart" | "next" = "restart") {
+  if (
+    busy ||
+    saveFailed ||
+    futureSave ||
+    storageConflict ||
+    adActive ||
+    rewardRequest
+  )
+    return;
+  confirmAction = action;
+  if (
+    (!session.history.length &&
+      !session.current.moves &&
+      !session.current.additions) ||
+    !occupied(session.current.board)
+  ) {
+    if (action === "next") void beginClassic("next");
+    else reset();
     return;
   }
+  const next = action === "next";
+  confirmHeading.querySelector("h2")!.textContent = next
+    ? "Другое поле?"
+    : "Начать заново?";
+  $("confirm-content").querySelector("p")!.textContent = next
+    ? "Текущее поле и история отмены будут заменены. Собранные семечки и награды останутся."
+    : "Вернуться к началу этого поля? История отмены будет очищена. Собранные семечки и награды останутся.";
+  $("confirm-new").textContent = next ? "Открыть другое поле" : "Начать заново";
   rememberNavigation("confirm");
   openMenu(true);
   dialog.dataset.screen = "confirm";
@@ -1899,7 +2008,8 @@ function requestRestart() {
   pinDialogHeading($("confirm-content"));
   $("confirm-back").focus({ preventScroll: true });
 }
-$("new").onclick = requestRestart;
+$("new").onclick = () => requestRestart();
+$("next-classic").onclick = () => requestRestart("next");
 $("cancel-new").onclick = returnToPrevious;
 function openSettings(restoring = false) {
   if (!restoring) rememberNavigation("settings");
@@ -1927,8 +2037,11 @@ $("privacy-open").onclick = () => {
   $("privacy-back").focus({ preventScroll: true });
 };
 
-$("confirm-new").onclick = reset;
-$("restart-task").onclick = requestRestart;
+$("confirm-new").onclick = () => {
+  if (confirmAction === "next") void beginClassic("next");
+  else reset();
+};
+$("restart-task").onclick = () => requestRestart();
 $("play-again").onclick = async () => {
   if (busy || adActive || rewardRequest || engagementActive) return;
   busy = true;
@@ -1952,7 +2065,7 @@ $("play-again").onclick = async () => {
   if (next) await switchGame(next);
   else if (progress.active.startsWith("book")) openCollection("book");
   else if (progress.active.startsWith("daily")) openCollection("calendar");
-  else reset();
+  else await beginClassic("next");
 };
 $("try-notebook").onclick = () => {
   const next =
@@ -2650,8 +2763,11 @@ function renderHomeCurrent() {
   const count = occupied(board()),
     classicMode = progress.active === "classic";
   homeGoal.hidden = lesson >= 0;
+  $("next-classic").hidden = !classicMode || lesson >= 0;
+  $("next-classic").textContent = count ? "Другое поле" : "Новая партия";
   $("new").hidden =
     lesson >= 0 ||
+    (classicMode && !count) ||
     (dialog.dataset.entry !== "pause" && count > 0 && !session.history.length);
   $("new").textContent = classicMode
     ? count

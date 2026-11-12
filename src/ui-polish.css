@@ -2171,8 +2171,13 @@ header .jar-caption strong {
 #confirm-content {
   padding-top: 0;
 }
-.home-current .restart-action {
-  width: 100%;
+.classic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+}
+.home-current .classic-actions > button {
+  flex: 1 1 110px;
   min-height: 44px;
   margin: 4px 0 -8px;
   padding: 8px 0;
