@@ -259,7 +259,9 @@ for (const viewport of [
         expect(
           await page.locator(`#${id}`).evaluate((button) => {
             const text = document.createRange();
-            text.selectNodeContents(button);
+            text.selectNodeContents(
+              button.querySelector(".choice-label") ?? button,
+            );
             return (
               text.getClientRects().length === 1 &&
               button.scrollWidth <= button.clientWidth

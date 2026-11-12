@@ -239,7 +239,10 @@ resultDock.append(
 document.querySelector(".game")!.append(resultDock);
 const gameDifficulty = document.createElement("small");
 gameDifficulty.id = "game-difficulty";
-$("mode").after(gameDifficulty);
+const modeDescription = document.createElement("span");
+modeDescription.className = "mode-description";
+$("mode").before(modeDescription);
+modeDescription.append($("mode"), gameDifficulty);
 const resultTitle = document.querySelector<HTMLElement>("#win h1")!;
 const resultSubtitle = document.createElement("p");
 resultSubtitle.id = "result-subtitle";

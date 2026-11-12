@@ -47,9 +47,23 @@ jobs:
       - name: Initial action visibility without auto-scroll
         if: ${{ !cancelled() }}
         run: SEEDS_ASSERT_ACTIONS=1 SEEDS_INTERFACE_OUTPUT=test-results/interface-after node scripts/interface-audit-followup.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: interface-action-frames
+          path: |
+            test-results/interface-before/
+            test-results/interface-after/
+          retention-days: 30
       - name: Three result scenes and all classic boundaries
         if: ${{ !cancelled() }}
         run: node scripts/record-results.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: interface-result-frames
+          path: test-results/result-scenes/
+          retention-days: 30
       - name: All screens and adverse states
         if: ${{ !cancelled() }}
         run: node scripts/ux-audit-2026-11-11.mjs

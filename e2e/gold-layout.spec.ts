@@ -558,9 +558,8 @@ test("two reward lines keep their space while a failed save is retried", async (
   await page.waitForTimeout(250);
   const position = () =>
     page.evaluate(() => {
-      const b = document.querySelector("#play-again")!.getBoundingClientRect(),
-        w = document.querySelector("#win")!.getBoundingClientRect();
-      return b.top - w.top;
+      // The action now has its own dock; the details above can reflow.
+      return document.querySelector("#play-again")!.getBoundingClientRect().top;
     });
   const before = await position();
   await page.evaluate(() => ((window as any).failGold = false));

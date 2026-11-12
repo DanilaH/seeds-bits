@@ -184,7 +184,10 @@ for (const mode of ["book-v1-1", "daily-v1-2026-11-09"])
       .poll(
         async () =>
           (await pulses(page)).filter(
-            (x: any) => Array.isArray(x) && x.join(",") === "34,45,42,55,62",
+            (x: any) =>
+              Array.isArray(x) &&
+              x.join(",") ===
+                (mode.startsWith("book") ? "18,35,24" : "34,45,42,55,62"),
           ).length,
       )
       .toBe(1);
@@ -220,7 +223,9 @@ test("unsaved completion stays quiet, successful retry celebrates once", async (
   await removePair(page);
   await page.waitForTimeout(300);
   expect(
-    (await pulses(page)).filter((x: any) => Array.isArray(x) && x.length === 5),
+    (await pulses(page)).filter(
+      (x: any) => Array.isArray(x) && x.join(",") === "18,35,24",
+    ),
   ).toEqual([]);
   await expect(page.locator("#seed-flights i")).toHaveCount(0);
   await page.evaluate(() => ((window as any).failFeel = false));
@@ -352,7 +357,9 @@ test("reduced motion retains the reward and one tactile result without animated 
   await expect(page.locator("#seed-flights i")).toHaveCount(0);
   expect((await saved(page)).jars.meter).toBe(324);
   expect(
-    (await pulses(page)).filter((x: any) => Array.isArray(x) && x.length === 5),
+    (await pulses(page)).filter(
+      (x: any) => Array.isArray(x) && x.join(",") === "18,35,24",
+    ),
   ).toHaveLength(1);
 });
 

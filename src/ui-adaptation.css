@@ -18,6 +18,9 @@
 .game-meta > span:first-child {
   min-width: 0;
 }
+.mode-description > #mode {
+  display: block;
+}
 .game.stacked-actions .game-actions {
   flex: 0 0 auto;
   max-height: none;
@@ -281,6 +284,18 @@
 .jar-overview .progress-hero {
   margin-bottom: 18px;
 }
+@media (max-width: 380px) {
+  /* Preserve the calendar's full-width 44px touch rail through the new groups. */
+  #dialog[data-screen="calendar"] #collection > .calendar-layout {
+    width: 100%;
+    margin-inline: 0;
+  }
+  .calendar-activity,
+  .calendar-month > :not(.calendar) {
+    width: calc(100% - 30px);
+    margin-inline: auto;
+  }
+}
 #settings-panel .settings-basics .settings {
   margin-top: 0;
 }
@@ -288,6 +303,9 @@
 @media (orientation: landscape) and (min-width: 540px) {
   /* A short, widened toolbar frees the sidebar for the explanatory status. */
   .game.docked-actions:not(:has(#lesson:not([hidden]))) {
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+  }
+  .has-mobile-ads .game.docked-actions:not(:has(#lesson:not([hidden]))) {
     grid-template-rows: auto auto minmax(0, 1fr) auto;
   }
   .game.docked-actions:not(:has(#lesson:not([hidden]))) > .game-top {

@@ -142,7 +142,13 @@ try {
     ["small-large", { width: 320, height: 568 }, 1.5, false, 0],
     ["phone-text200", { width: 360, height: 640 }, 2, true, 24],
   ])
-    for (const kind of ["no-moves", "hint", "result", "book-result"]) {
+    for (const kind of [
+      "no-moves",
+      "classic-active",
+      "hint",
+      "result",
+      "book-result",
+    ]) {
       const context = await browser.newContext({
         viewport,
         locale: "ru-RU",
@@ -219,36 +225,53 @@ try {
           selector = "#play-again";
         } else selector = "#undo,#hint,#add";
         await scale(page, zoom);
+        entry.layout = await page.evaluate(() => {
+          const rect = (s) =>
+            document.querySelector(s).getBoundingClientRect().toJSON();
+          const game = document.querySelector(".game");
+          return {
+            className: game.className,
+            rows: getComputedStyle(game).gridTemplateRows,
+            top: rect(".game-top"),
+            viewport: rect("#viewport"),
+            footer: rect("footer"),
+            status: rect("#status"),
+          };
+        });
         entry.frames.push(await capture(page, entry.name, "initial", selector));
         const target =
           kind === "no-moves"
             ? page.locator("#add")
-            : kind === "hint"
-              ? page
-                  .locator("#hint-offer button")
-                  .filter({ hasText: "Продолжить без подсказки" })
-              : page.locator("#play-again");
+            : kind === "classic-active"
+              ? page.locator("#hint")
+              : kind === "hint"
+                ? page
+                    .locator("#hint-offer button")
+                    .filter({ hasText: "Продолжить без подсказки" })
+                : page.locator("#play-again");
         const required = entry.frames[0].geometry.filter((g) =>
           kind === "no-moves"
             ? g.id === "add"
-            : kind === "hint"
-              ? ["watch-hints", "cancel-hints"].includes(g.id)
-              : g.id === "play-again",
+            : kind === "classic-active"
+              ? ["undo", "hint", "add"].includes(g.id)
+              : kind === "hint"
+                ? ["watch-hints", "cancel-hints"].includes(g.id)
+                : g.id === "play-again",
         );
-        entry.visibleAtOpen = required.every(
-          (g) => g.centerHit && g.hitSamples && g.rect.height >= 44,
-        );
+        entry.visibleAtOpen =
+          required.length > 0 &&
+          required.every(
+            (g) => g.centerHit && g.hitSamples && g.rect.height >= 44,
+          );
         if (assertActions && !entry.visibleAtOpen)
           entry.visibilityFailure =
             "A required action needs scrolling before it can be reached";
         if (kind === "no-moves") {
-          entry.counter = await page
-            .locator("#add-count")
-            .evaluate((e) => ({
-              text: e.textContent,
-              color: getComputedStyle(e).color,
-              background: getComputedStyle(e).backgroundColor,
-            }));
+          entry.counter = await page.locator("#add-count").evaluate((e) => ({
+            text: e.textContent,
+            color: getComputedStyle(e).color,
+            background: getComputedStyle(e).backgroundColor,
+          }));
           if (assertActions && entry.counter.color === entry.counter.background)
             entry.visibilityFailure =
               "Add counter has the same foreground and background";
@@ -261,6 +284,9 @@ try {
           await expect(target).toHaveAttribute("aria-disabled", "false");
           await target.click();
           await expect(page.locator("#remaining")).toHaveText("4");
+        } else if (kind === "classic-active") {
+          await target.click();
+          await expect(page.locator(".hinted")).toHaveCount(2);
         } else if (kind === "hint") {
           await target.click();
           await expect(page.locator("#hint-offer")).not.toBeVisible();
