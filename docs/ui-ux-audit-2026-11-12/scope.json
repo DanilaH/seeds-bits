@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-12",
+  "app_source": "8046a7da31470d248a30ad467453b3745827178f",
+  "capture_source": "117d040b27c886328be68aa2ac956b4e7ebcd746",
+  "run_id": 43248096448,
+  "screens": [
+    "first-run tutorial",
+    "full tutorial",
+    "home and pause",
+    "classic game",
+    "notebook selector and task",
+    "daily game and calendar",
+    "results including monthly medal",
+    "classic difficulty limits",
+    "progress",
+    "jar collection",
+    "medal collection",
+    "settings and reminder permission states",
+    "privacy",
+    "restart confirmation",
+    "hint offer and unavailable ad",
+    "no moves",
+    "save failure",
+    "corrupt or future save"
+  ],
+  "device_evidence": "Browser viewports with controlled native ad and engagement bridges. No physical device, live ad, acoustic, or haptic claim.",
+  "fixtures": "Historical scenario harness pins 2026-11-11 and 2026-11-30 for calendar/streak coverage. Captures are fresh on 2026-11-12."
+}
