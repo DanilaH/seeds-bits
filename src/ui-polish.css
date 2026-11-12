@@ -2401,3 +2401,30 @@ header .jar-caption strong {
     flex-shrink: 0;
   }
 }
+
+/* Short landscape keeps the two notebook controls together at large text sizes.
+   The page and task are already named above; dots and their aria-label remain. */
+@media (orientation: landscape) and (min-width: 540px) and (max-height: 340px) {
+  .has-mobile-ads .game:not(:has(#lesson:not([hidden]))) .game-top .game-meta {
+    gap: 2px 4px;
+    padding-block: 0;
+  }
+  .has-mobile-ads
+    .game:not(:has(#lesson:not([hidden])))
+    .game-top
+    #page-progress {
+    padding-bottom: 2px;
+  }
+  .has-mobile-ads .game:not(:has(#lesson:not([hidden]))) #page-progress > span {
+    display: none;
+  }
+  .has-mobile-ads
+    .game:not(:has(#lesson:not([hidden])))
+    .game-actions
+    .status-wrap {
+    padding-block: 1px;
+  }
+  .has-mobile-ads .game:not(:has(#lesson:not([hidden]))) .game-actions footer {
+    padding-block: 2px;
+  }
+}

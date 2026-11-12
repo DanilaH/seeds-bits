@@ -25,6 +25,19 @@ for (const viewport of [
           await page.locator(`#${id}`).scrollIntoViewIfNeeded();
           await expect(page.locator(`#${id}`)).toBeInViewport({ ratio: 1 });
         }
+        // In this cramped case both controls must be visible together, rather
+        // than being reachable only one at a time through a scrolling sidebar.
+        if (viewport.height === 320 && zoom) {
+          await expect(page.locator("#undo")).toBeInViewport({ ratio: 1 });
+          await expect(page.locator("#hint")).toBeInViewport({ ratio: 1 });
+          expect(
+            await page
+              .locator(".game-actions")
+              .evaluate(
+                (panel) => panel.scrollHeight <= panel.clientHeight + 1,
+              ),
+          ).toBe(true);
+        }
         const g = await page.evaluate(() => {
           const rect = (s: string) =>
             document.querySelector(s)!.getBoundingClientRect().toJSON();
