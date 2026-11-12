@@ -1,0 +1,126 @@
+{
+  "source": "4ff9117279008e671155923413a47e7af29e0c23",
+  "method": "Real scripted UI, deterministic local shuffle seed; proof-guided moves, not human experience evidence",
+  "cases": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "errors": [],
+      "deals": [
+        {
+          "id": 26,
+          "attempt": "a0dee8e4-59d7-4eba-b936-7123dc3c9190",
+          "family": "compact"
+        },
+        {
+          "id": 116,
+          "attempt": "925ba536-9f4b-459f-8737-cfe96a9d8e37",
+          "family": "addition"
+        },
+        {
+          "id": 39,
+          "attempt": "4b935cdc-73f5-46a4-af03-a9ab51856b64",
+          "family": "dense"
+        },
+        {
+          "id": 72,
+          "attempt": "7b24c3bc-3546-4a2e-ba4b-351e9fcc48fa",
+          "family": "bridges"
+        }
+      ],
+      "frames": [
+        "phone-before.png",
+        "phone-menu.png",
+        "phone-compact.png",
+        "phone-addition.png",
+        "phone-dense.png",
+        "phone-bridges.png",
+        "phone-confirm.png"
+      ]
+    },
+    {
+      "name": "small-dark",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "theme": "dark",
+      "errors": [],
+      "deals": [
+        {
+          "id": 26,
+          "attempt": "b8360dae-88d3-4942-8117-b061fbb090b2",
+          "family": "compact"
+        },
+        {
+          "id": 116,
+          "attempt": "dff98391-1e82-4650-9cf1-991933a1688d",
+          "family": "addition"
+        },
+        {
+          "id": 39,
+          "attempt": "9adbeda6-fdb5-4d21-a712-13aca220b4b0",
+          "family": "dense"
+        },
+        {
+          "id": 72,
+          "attempt": "005c034b-8ef7-4640-864d-58fa13622d07",
+          "family": "bridges"
+        }
+      ],
+      "frames": [
+        "small-dark-before.png",
+        "small-dark-menu.png",
+        "small-dark-compact.png",
+        "small-dark-addition.png",
+        "small-dark-dense.png",
+        "small-dark-bridges.png",
+        "small-dark-confirm.png"
+      ]
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "light",
+      "errors": [],
+      "deals": [
+        {
+          "id": 26,
+          "attempt": "fedc9a5d-3914-457e-a29f-eefda5a172d3",
+          "family": "compact"
+        },
+        {
+          "id": 116,
+          "attempt": "7301cfcd-93b7-41de-895a-1ca0c6c84c67",
+          "family": "addition"
+        },
+        {
+          "id": 39,
+          "attempt": "fcc07d4a-efbc-4739-b6b6-351aa9e4e1dc",
+          "family": "dense"
+        },
+        {
+          "id": 72,
+          "attempt": "b7441ff8-2dab-4597-82ae-aa552ebef10b",
+          "family": "bridges"
+        }
+      ],
+      "frames": [
+        "landscape-before.png",
+        "landscape-menu.png",
+        "landscape-compact.png",
+        "landscape-addition.png",
+        "landscape-dense.png",
+        "landscape-bridges.png",
+        "landscape-confirm.png"
+      ]
+    }
+  ]
+}

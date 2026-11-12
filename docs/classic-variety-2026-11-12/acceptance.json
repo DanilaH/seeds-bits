@@ -1,0 +1,40 @@
+{
+  "runtimeSource": "4847aef3ac48eaa60e7f2db5cf461d6887c8425b",
+  "validatedSource": "55b0c11c03c61d418b232fada6f11a14410b8743",
+  "testedMergeSource": "4ff9117279008e671155923413a47e7af29e0c23",
+  "runtimeMatchesTestedMerge": true,
+  "mainCI": {
+    "run": 43196189228,
+    "conclusion": "success",
+    "unitTests": 65,
+    "regressionUnitTests": 2,
+    "integrationBrowserTests": 15,
+    "e2eTests": 192,
+    "webBuild": true,
+    "yandexBuild": true,
+    "androidDebugBuild": true
+  },
+  "previewCI": {
+    "run": 43196189229,
+    "conclusion": "success",
+    "targetedBrowserTests": 40,
+    "androidFeedbackCases": 19,
+    "optimizedAndroidPreviewBuild": true,
+    "unsignedArtifact": 13932868412,
+    "recordingArtifact": 13932363804,
+    "recordingCases": 3,
+    "screenshots": 21,
+    "videos": 3,
+    "pageErrors": 0
+  },
+  "classicCatalog": {
+    "fields": 128,
+    "families": 4,
+    "allCertificatesReplayed": true,
+    "catalogSha256": "186b6cc6f21b9f3e6441a36c6f4b75e06c150e68ee843106fe55adb8dca96c6a"
+  },
+  "staticUpgradeCompatibility": true,
+  "physicalInstallTested": false,
+  "humanEnjoymentTested": false,
+  "storePublished": false
+}
