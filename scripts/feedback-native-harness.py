@@ -43,6 +43,8 @@ public class FeedbackHarness {
   Build.VERSION.SDK_INT=24;config(p,11,true);pulse(p,11,"win");check("F14_api24_waveform",v.legacy!=null&&v.legacy.length>2);
   Build.VERSION.SDK_INT=35;config(p,12,true);v.fail=true;PluginCall c=pulse(p,12,"pair");config(p,13,false);check("F15_motor_failure_does_not_break_game",c.resolved);v.fail=false;
   config(p,14,true);p.handleOnDestroy();p.handleOnResume();n=v.pulses;SystemClock.now+=500;pulse(p,14,"win");check("F16_destroy_drops_late_callbacks",v.pulses==n);
+  p=new SeedsFeedbackPlugin();v=p.context.v;Build.VERSION.SDK_INT=35;config(p,15,true);pulse(p,15,"full");check("F17_full_jar_three_contacts",java.util.Arrays.equals(v.last.timing,new long[]{0,26,64,30,46,18})&&java.util.Arrays.equals(v.last.amp,new int[]{0,220,0,250,0,170}));
+  n=v.pulses;SystemClock.now+=100;pulse(p,15,"land");check("F18_full_jar_protects_spill_rhythm",v.pulses==n);config(p,16,false);check("F19_full_jar_opt_out_cancels",v.cancels>0);
  }
 }''')
  files=[str(p)for p in (root/'src').rglob('*.java')]

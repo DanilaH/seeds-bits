@@ -2232,6 +2232,36 @@ header .jar-caption strong {
   flex-basis: auto;
   flex-shrink: 0;
 }
+#jar-spill {
+  position: fixed;
+  inset: 0;
+  z-index: 21;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+.jar-spill-grain {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--grain-size);
+  height: calc(var(--grain-size) * 1.65);
+  border-radius: 2px 60% 2px 60%;
+  background: linear-gradient(
+    130deg,
+    color-mix(in srgb, var(--spill-color) 65%, #fff3cf),
+    var(--spill-color)
+  );
+  box-shadow: 0 1px 1px #1c292825;
+}
+.jar-spill-grain[data-shape="glint"] {
+  height: var(--grain-size);
+  border-radius: 1px;
+  background: #fff2d4;
+  box-shadow:
+    0 0 0 1px #a8906420,
+    0 1px 2px #1c292820;
+}
 #jar-collected svg {
   width: 14px;
   height: 14px;

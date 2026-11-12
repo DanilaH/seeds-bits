@@ -32,6 +32,7 @@ import { jars, collectPair, jarState, jarNames, jarColors } from "./jars";
 import { volumeOf, volumeTasks, chapterNames } from "./notebooks";
 import { playSound, suspendSound, blockSound } from "./sound";
 import { SeedFlight } from "./seed-flight";
+import { JarSpill } from "./jar-spill";
 import { installInterfaceMotion } from "./ui-motion";
 import type { HapticCue } from "./haptics";
 import {
@@ -148,6 +149,8 @@ let pendingResult:
   { session: Session; rects: DOMRect[]; saved: boolean } | undefined;
 const removedPairs = new WeakMap<number[], readonly [number, number]>();
 const flights = new SeedFlight();
+const jarSpill = new JarSpill();
+let presentationRevision = 0;
 const lessons = [
   {
     title: "Одинаковые цифры",
@@ -624,6 +627,8 @@ function revealAddedCells(start: number, end: number) {
   boardRevealTimer = setTimeout(() => reveal(true), 1000);
 }
 function settlePresentation() {
+  presentationRevision++;
+  jarSpill.clear();
   clearContact();
   clearTrophyCelebration();
   clearBoardReveal();
@@ -659,7 +664,7 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
       completedJar = {
         index: before.index,
         capacity: before.capacity,
-        until: performance.now() + 650,
+        until: performance.now() + 1100,
       };
       fullJarTimer = setTimeout(() => {
         completedJar = undefined;
@@ -673,11 +678,35 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
             ],
             160,
           );
-      }, 660);
+      }, 1110);
+      const completion = completedJar;
+      const revision = presentationRevision;
+      // A failed/delayed write must not emit a new milestone, nor may an old
+      // arrival restart it after navigation. This effect owns no saved reward.
+      void Promise.resolve()
+        .then(() => saveQueue)
+        .then(() => {
+          if (
+            revision !== presentationRevision ||
+            completedJar !== completion ||
+            performance.now() >= completion.until ||
+            saveFailed ||
+            storageConflict ||
+            futureSave ||
+            dialog.open ||
+            hintOffer.open ||
+            paused ||
+            document.hidden
+          )
+            return;
+          jarSpill.play($("jar-glass"));
+          feedback("full");
+        });
     }
     renderJar();
     if (silent || dialog.open || paused) return;
-    feedback(full ? "full" : "land", !result);
+    if (full || completedJar) return;
+    feedback("land", !result);
     motion(
       $("jar-glass"),
       [
@@ -685,7 +714,7 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
         { transform: "rotate(2deg)" },
         { transform: "none" },
       ],
-      full ? 420 : 180,
+      180,
     );
   });
 }
@@ -954,6 +983,7 @@ function receiveReward(r: RewardReceipt): Promise<void> {
 }
 function offerHints() {
   if (rewardRequest || hintOffer.open) return;
+  jarSpill.clear();
   track("hint_offer", { mode: gameMode() });
   hintOffer.showModal();
   updateBanner();
