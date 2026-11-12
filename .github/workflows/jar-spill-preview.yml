@@ -1,7 +1,9 @@
-name: Jar spill preview
+name: Classic variety preview
 on:
   push:
     branches: [qa/jar-spill-20261112]
+  pull_request:
+    branches: [qa/product-audit-20261111]
 permissions:
   contents: read
 concurrency:

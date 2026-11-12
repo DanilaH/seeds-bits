@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { classicCatalog } from "../src/classic-deals";
 const key = "seeds-bits.progress.v2";
 async function seed(
   page: Page,
@@ -581,7 +582,16 @@ test("slow review preparation keeps input usable and cannot interrupt a new part
     .toBe(true);
   expect(await page.locator("#app").evaluate((n) => n.inert)).toBe(false);
   await page.locator("#play-again").click();
-  await expect(page.locator("#remaining")).toHaveText("28");
+  await expect(page.locator("#win")).toBeHidden();
+  const next = await stored(page);
+  const deal = next.meta.classicDeals.current;
+  const board = classicCatalog[deal.id].board.split("").map(Number);
+  expect(deal.attempt).toBe(next.meta.attempts.classic.id);
+  expect(deal.attempt).not.toBe("classic110");
+  expect(next.sessions.classic.current.board).toEqual(board);
+  await expect(page.locator("#remaining")).toHaveText(
+    String(board.filter(Boolean).length),
+  );
   await page.waitForTimeout(1400);
   expect(
     await page.evaluate(
