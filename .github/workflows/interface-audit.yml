@@ -9,6 +9,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   browser:
+    if: ${{ !contains(github.event.head_commit.message, '[focused-audit]') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
@@ -43,4 +44,24 @@ jobs:
         with:
           name: independent-interface-audit
           path: test-results/
+          retention-days: 30
+  focused:
+    if: ${{ contains(github.event.head_commit.message, '[focused-audit]') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: node scripts/interface-audit-followup.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: focused-interface-audit
+          path: test-results/interface-followup/
           retention-days: 30
