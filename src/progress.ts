@@ -5,6 +5,7 @@ import { jars, addSeeds, taskSeeds, migrateJars, type Jars } from "./jars";
 import { validDay } from "./calendar";
 import { recordDaily, type DailyRun } from "./daily-run";
 import { decode, newSession, occupied, type Session } from "./core";
+import { readClassicDeals, type ClassicDeals } from "./classic-deals";
 export type Progress = {
   version: 3;
   active: string;
@@ -216,6 +217,14 @@ export function readProgress(
           onRecovery();
         }
       }
+      if (m.classicDeals !== undefined) {
+        const deals = readClassicDeals(m.classicDeals);
+        if (deals) m.classicDeals = deals;
+        else {
+          delete m.classicDeals;
+          onRecovery();
+        }
+      }
       clean.meta = m;
     } catch {
       // Statistics are optional; keep valid boards, completion marks and trophies.
@@ -274,6 +283,7 @@ export type Meta = AnalyticsJournal & {
   completed: number;
   unassisted: number;
   rewardReceipts?: string[];
+  classicDeals?: ClassicDeals;
 };
 export function metadata(p: Progress): Meta {
   if (!p.meta) {

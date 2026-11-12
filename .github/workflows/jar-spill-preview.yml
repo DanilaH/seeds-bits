@@ -1,0 +1,82 @@
+name: Classic variety preview
+on:
+  push:
+    branches: [qa/jar-spill-20261112]
+  pull_request:
+    branches: [qa/product-audit-20261111]
+permissions:
+  contents: read
+concurrency:
+  group: jar-spill-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install ffmpeg
+      - run: npx playwright test e2e/feel.spec.ts e2e/gold-layout.spec.ts e2e/icon-polish.spec.ts e2e/classic-variety.spec.ts --workers 2
+      - run: node scripts/record-classic-variety.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: classic-variety-recordings
+          path: test-results/classic-variety/
+      - run: node scripts/record-jar-spill.mjs
+      - name: Capture previous icons from the actual prior source
+        run: |
+          git fetch --no-tags origin 729b50ae641c1809fd299633c921bd0e7872d459 --depth=1
+          git worktree add --detach "$RUNNER_TEMP/seeds-icon-before" 729b50ae641c1809fd299633c921bd0e7872d459
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/seeds-icon-before/node_modules"
+          SEEDS_ICON_ROOT="$RUNNER_TEMP/seeds-icon-before" ICON_LABEL=before ICON_SOURCE=729b50ae641c1809fd299633c921bd0e7872d459 node scripts/record-icons.mjs
+      - run: node scripts/record-icons.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: icon-polish-recordings
+          path: test-results/icon-polish/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jar-spill-recordings
+          path: test-results/jar-spill/
+      - run: python3 scripts/feedback-native-harness.py
+      - run: npm run setup:android
+      - name: Configure analytics-free preview above the previous preview version
+        run: |
+          GITHUB_RUN_NUMBER=$((200 + GITHUB_RUN_NUMBER)) node scripts/configure-android.mjs
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          r=ET.parse('android/app/src/main/res/values/seeds-services.xml').getroot()
+          values={x.attrib['name']:x.text or '' for x in r}
+          assert values['appmetrica_api_key']==''
+          assert values['analytics_channel']=='preview'
+          assert values['ads_test_mode']=='true'
+          PY
+      - run: npm run sync:android
+      - run: |
+          sed -i 's/networkTimeout=10000/networkTimeout=60000/' android/gradle/wrapper/gradle-wrapper.properties
+          chmod +x android/gradlew
+          cd android && ./gradlew assembleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jar-spill-preview-unsigned
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk

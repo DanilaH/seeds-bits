@@ -1,6 +1,12 @@
 import { dailyRun, streakReward } from "./daily-run";
 import { hintExplanation } from "./hint-explanation";
 import {
+  newClassicDeals,
+  readClassicDeals,
+  takeClassicDeal,
+  restartClassic,
+} from "./classic-deals";
+import {
   enqueueAnalytics,
   acknowledgeAnalytics,
   CommittedAnalytics,
@@ -32,6 +38,8 @@ import { jars, collectPair, jarState, jarNames, jarColors } from "./jars";
 import { volumeOf, volumeTasks, chapterNames } from "./notebooks";
 import { playSound, suspendSound, blockSound } from "./sound";
 import { SeedFlight } from "./seed-flight";
+import { JarSpill } from "./jar-spill";
+import { icon } from "./icons";
 import { installInterfaceMotion } from "./ui-motion";
 import type { HapticCue } from "./haptics";
 import {
@@ -148,6 +156,8 @@ let pendingResult:
   { session: Session; rects: DOMRect[]; saved: boolean } | undefined;
 const removedPairs = new WeakMap<number[], readonly [number, number]>();
 const flights = new SeedFlight();
+const jarSpill = new JarSpill();
+let presentationRevision = 0;
 const lessons = [
   {
     title: "Одинаковые цифры",
@@ -186,20 +196,8 @@ const lessons = [
     pair: [],
   },
 ];
-const icons = {
-  undo: '<path transform="translate(2.5 0)" d="M8 5 3 10l5 5M3 10h10a7 7 0 1 1-6 11"/>',
-  hint: '<path d="M11 21h6m-5 4h4M10 17a8 8 0 1 1 8 0c-1 1-1 3-1 4h-6c0-1 0-3-1-4Z"/>',
-  back: '<path d="m18 6-8 8 8 8"/>',
-  close: '<path d="m7 7 14 14M21 7 7 21"/>',
-  check: '<path d="m6 14 5 5L22 8"/>',
-  book: '<path d="M5 4h18v20H5zM9 4v20M13 9h6M13 14h6"/>',
-  arrow: '<path d="m10 6 8 8-8 8"/>',
-  add: '<path d="M14 3v22M3 14h22"/>',
-};
-const icon = (name: keyof typeof icons) =>
-  `<svg viewBox="0 0 28 28" aria-hidden="true">${icons[name]}</svg>`;
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню"><span class="menu-lines"></span></button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol">✓</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>Напоминать о задаче дня</button><button id="try-notebook" class="secondary" hidden>Короткая задача</button><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">Подсказка</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">Добавить</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">Напоминать о задаче дня<input id="reminders" type="checkbox"></label><label class="reminder-time">Напоминать около<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>Разрешить уведомления</button><button id="notification-system-settings" class="text-button" hidden>Настройки уведомлений Android</button><p class="fine">По местному времени, если задача ещё не решена.</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню">${icon("menu")}</button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>Напоминать о задаче дня</button><button id="try-notebook" class="secondary" hidden>Короткая задача</button><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">Подсказка</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">Добавить</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">Напоминать о задаче дня<input id="reminders" type="checkbox"></label><label class="reminder-time">Напоминать около<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>Разрешить уведомления</button><button id="notification-system-settings" class="text-button" hidden>Настройки уведомлений Android</button><p class="fine">По местному времени, если задача ещё не решена.</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 // Keep the primary result action ahead of the optional reminder.
 $("play-again").after($("result-reminder"));
 // Home has its own composition; the same controls keep their navigation handlers.
@@ -213,7 +211,12 @@ homeCurrent.innerHTML =
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
 $("new").className = "text-button restart-action";
-homeCurrent.append($("resume-context"), homeGoal, $("resume"), $("new"));
+const classicActions = document.createElement("div");
+classicActions.className = "classic-actions";
+classicActions.innerHTML =
+  '<button id="next-classic" class="text-button" hidden>Другое поле</button>';
+classicActions.prepend($("new"));
+homeCurrent.append($("resume-context"), homeGoal, $("resume"), classicActions);
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
 homeModes.setAttribute("aria-label", "Режимы игры");
@@ -624,6 +627,8 @@ function revealAddedCells(start: number, end: number) {
   boardRevealTimer = setTimeout(() => reveal(true), 1000);
 }
 function settlePresentation() {
+  presentationRevision++;
+  jarSpill.clear();
   clearContact();
   clearTrophyCelebration();
   clearBoardReveal();
@@ -659,9 +664,9 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
       completedJar = {
         index: before.index,
         capacity: before.capacity,
-        until: performance.now() + 650,
+        until: performance.now() + 1100,
       };
-      fullJarTimer = setTimeout(() => {
+      const nextJar = () => {
         completedJar = undefined;
         renderJar();
         if (!dialog.open && !paused)
@@ -673,11 +678,40 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
             ],
             160,
           );
-      }, 660);
+      };
+      fullJarTimer = setTimeout(nextJar, 1110);
+      const completion = completedJar;
+      const revision = presentationRevision;
+      // A failed/delayed write must not emit a new milestone, nor may an old
+      // arrival restart it after navigation. This effect owns no saved reward.
+      void Promise.resolve()
+        .then(() => saveQueue)
+        .then(() => {
+          if (
+            revision !== presentationRevision ||
+            completedJar !== completion ||
+            performance.now() >= completion.until ||
+            saveFailed ||
+            storageConflict ||
+            futureSave ||
+            dialog.open ||
+            hintOffer.open ||
+            paused ||
+            document.hidden
+          )
+            return;
+          // Keep the old, full jar through the whole shake if persistence was slow.
+          completion.until = performance.now() + 1100;
+          clearTimeout(fullJarTimer);
+          fullJarTimer = setTimeout(nextJar, 1110);
+          jarSpill.play($("jar-glass"));
+          feedback("full");
+        });
     }
     renderJar();
     if (silent || dialog.open || paused) return;
-    feedback(full ? "full" : "land", !result);
+    if (full || completedJar) return;
+    feedback("land", !result);
     motion(
       $("jar-glass"),
       [
@@ -685,7 +719,7 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
         { transform: "rotate(2deg)" },
         { transform: "none" },
       ],
-      full ? 420 : 180,
+      180,
     );
   });
 }
@@ -728,7 +762,7 @@ function maybeCelebrateResult() {
     const month = progress.active.slice(9, 16);
     const t = trophy(month, progress.done);
     for (const fill of $("award").querySelectorAll<SVGElement>(
-      ".medal-liquid",
+      ".medal-liquid, .medal-ink-level",
     )) {
       const target = Number(fill.dataset.target);
       const after = Math.min(t.count, target);
@@ -954,6 +988,7 @@ function receiveReward(r: RewardReceipt): Promise<void> {
 }
 function offerHints() {
   if (rewardRequest || hintOffer.open) return;
+  jarSpill.clear();
   track("hint_offer", { mode: gameMode() });
   hintOffer.showModal();
   updateBanner();
@@ -1814,6 +1849,10 @@ function openMenu(preserve: unknown = false) {
 }
 function reset() {
   if (busy || saveFailed || adActive || rewardRequest) return;
+  if (progress.active === "classic") {
+    void beginClassic(occupied(session.current.board) ? "restart" : "next");
+    return;
+  }
   settlePresentation();
   earnedAward = "";
   startAttempt(progress, progress.active);
@@ -1830,6 +1869,75 @@ function reset() {
   render();
   save();
   trackOpen("restart");
+}
+async function beginClassic(action: "restart" | "next") {
+  if (
+    busy ||
+    saveFailed ||
+    futureSave ||
+    storageConflict ||
+    adActive ||
+    rewardRequest ||
+    engagementActive ||
+    lesson >= 0
+  )
+    return;
+  settlePresentation();
+  const candidate: Progress = {
+    ...progress,
+    sessions: { ...progress.sessions },
+    hints: { ...progress.hints },
+    done: [...progress.done],
+    seen: [...progress.seen],
+    meta: {
+      ...metadata(progress),
+      attempts: { ...metadata(progress).attempts },
+      classicDeals: readClassicDeals(metadata(progress).classicDeals),
+    },
+    jars: { ...jars(progress) },
+  };
+  const m = metadata(candidate);
+  const previousAttempt = m.attempts.classic?.id ?? "";
+  const next =
+    action === "restart"
+      ? restartClassic(session, m.classicDeals, previousAttempt)
+      : undefined;
+  const highWater = jars(candidate).highWater;
+  startAttempt(candidate, "classic");
+  const attempt = m.attempts.classic.id;
+  if (action === "next") m.classicDeals ??= newClassicDeals();
+  const nextSession = next ?? takeClassicDeal(m.classicDeals!, attempt);
+  if (action === "restart") {
+    // Replaying the same field cannot repay already collected pairs.
+    jars(candidate).highWater = highWater;
+    if (m.classicDeals?.current?.attempt === previousAttempt)
+      m.classicDeals.current.attempt = attempt;
+  }
+  candidate.hints.classic = 0;
+  candidate.active = "classic";
+  busy = true;
+  switching = true;
+  dialog.inert = true;
+  try {
+    await save(candidate, nextSession);
+    if (saveFailed || futureSave || storageConflict) return;
+    progress = candidate;
+    session = nextSession;
+    busy = switching = false;
+    dialog.inert = false;
+    earnedAward = "";
+    earnedSeeds = earnedHints = 0;
+    saveRecovered = false;
+    clearSelection();
+    closeMenu();
+    render();
+    viewport.scrollTop = 0;
+    trackOpen("restart");
+  } finally {
+    busy = switching = false;
+    dialog.inert = false;
+    showSaveState();
+  }
 }
 $("board").addEventListener("click", (e) => {
   const target = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
@@ -1861,11 +1969,36 @@ $("menu").onclick = openMenu;
 $("close").onclick = closeMenu;
 $("resume").onclick = closeMenu;
 $("book-top").onclick = () => openCollection("book");
-function requestRestart() {
-  if (!session.history.length || !occupied(session.current.board)) {
-    reset();
+let confirmAction: "restart" | "next" = "restart";
+function requestRestart(action: "restart" | "next" = "restart") {
+  if (
+    busy ||
+    saveFailed ||
+    futureSave ||
+    storageConflict ||
+    adActive ||
+    rewardRequest
+  )
+    return;
+  confirmAction = action;
+  if (
+    (!session.history.length &&
+      !session.current.moves &&
+      !session.current.additions) ||
+    !occupied(session.current.board)
+  ) {
+    if (action === "next") void beginClassic("next");
+    else reset();
     return;
   }
+  const next = action === "next";
+  confirmHeading.querySelector("h2")!.textContent = next
+    ? "Другое поле?"
+    : "Начать заново?";
+  $("confirm-content").querySelector("p")!.textContent = next
+    ? "Текущее поле и история отмены будут заменены. Собранные семечки и награды останутся."
+    : "Вернуться к началу этого поля? История отмены будет очищена. Собранные семечки и награды останутся.";
+  $("confirm-new").textContent = next ? "Открыть другое поле" : "Начать заново";
   rememberNavigation("confirm");
   openMenu(true);
   dialog.dataset.screen = "confirm";
@@ -1875,7 +2008,8 @@ function requestRestart() {
   pinDialogHeading($("confirm-content"));
   $("confirm-back").focus({ preventScroll: true });
 }
-$("new").onclick = requestRestart;
+$("new").onclick = () => requestRestart();
+$("next-classic").onclick = () => requestRestart("next");
 $("cancel-new").onclick = returnToPrevious;
 function openSettings(restoring = false) {
   if (!restoring) rememberNavigation("settings");
@@ -1903,8 +2037,11 @@ $("privacy-open").onclick = () => {
   $("privacy-back").focus({ preventScroll: true });
 };
 
-$("confirm-new").onclick = reset;
-$("restart-task").onclick = requestRestart;
+$("confirm-new").onclick = () => {
+  if (confirmAction === "next") void beginClassic("next");
+  else reset();
+};
+$("restart-task").onclick = () => requestRestart();
 $("play-again").onclick = async () => {
   if (busy || adActive || rewardRequest || engagementActive) return;
   busy = true;
@@ -1928,7 +2065,7 @@ $("play-again").onclick = async () => {
   if (next) await switchGame(next);
   else if (progress.active.startsWith("book")) openCollection("book");
   else if (progress.active.startsWith("daily")) openCollection("calendar");
-  else reset();
+  else await beginClassic("next");
 };
 $("try-notebook").onclick = () => {
   const next =
@@ -2626,8 +2763,11 @@ function renderHomeCurrent() {
   const count = occupied(board()),
     classicMode = progress.active === "classic";
   homeGoal.hidden = lesson >= 0;
+  $("next-classic").hidden = !classicMode || lesson >= 0;
+  $("next-classic").textContent = count ? "Другое поле" : "Новая партия";
   $("new").hidden =
     lesson >= 0 ||
+    (classicMode && !count) ||
     (dialog.dataset.entry !== "pause" && count > 0 && !session.history.length);
   $("new").textContent = classicMode
     ? count

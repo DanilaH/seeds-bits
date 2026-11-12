@@ -372,5 +372,175 @@ test("press feedback preserves a touch at the edge of a navigation button", asyn
     touchPoints: [],
   });
   await expect(page.locator("#collection")).toBeVisible();
-  await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText("Тетради");
+  await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText(
+    "Тетради",
+  );
+});
+
+const fullPattern = "26,64,30,46,18";
+test("slow save holds the full jar through its spill instead of shaking the next jar", async ({
+  page,
+}) => {
+  await seed(page, { meter: 22 });
+  await page.locator("#resume").click();
+  await page.evaluate(() => {
+    const state = window as any;
+    const request = navigator.locks.request.bind(navigator.locks) as any;
+    state.holdJarSave = true;
+    (navigator.locks as any).request = (...args: any[]) => {
+      if (args[0] === "seeds-save" && state.holdJarSave)
+        return new Promise((resolve) => {
+          state.releaseJarSave = () => {
+            state.holdJarSave = false;
+            resolve(request(...args));
+          };
+        });
+      return request(...args);
+    };
+  });
+  await removePair(page);
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-full", "true");
+  await page.waitForTimeout(600);
+  await expect(page.locator("#jar-spill")).toHaveCount(0);
+  await page.evaluate(() => (window as any).releaseJarSave());
+  await expect(page.locator("#jar-spill i")).toHaveCount(24);
+  await page.waitForTimeout(900);
+  await expect(page.locator("#jar-percent")).toHaveText("100%");
+  await expect(page.locator("#jar-name")).toHaveText("Баночка 1");
+  await expect(page.locator("#jar-name")).toHaveText("Баночка 2");
+});
+for (const viewport of [
+  { width: 320, height: 568 },
+  { width: 390, height: 844 },
+  { width: 844, height: 390 },
+])
+  test(`full jar spills once from its mouth and settles at ${viewport.width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await seed(page, { meter: 22 });
+    await page.locator("#resume").click();
+    await resetEvents(page);
+    const caption = await page.locator(".jar-caption").boundingBox();
+    await removePair(page);
+    await expect(page.locator("#jar-spill i")).toHaveCount(24);
+    await expect
+      .poll(
+        async () =>
+          (await pulses(page)).filter((p: any) => String(p) === fullPattern)
+            .length,
+      )
+      .toBe(1);
+    const geometry = await page.evaluate(() => {
+      const glass = document
+        .querySelector("#jar-glass")!
+        .getBoundingClientRect();
+      const layer = document.querySelector("#jar-spill")!;
+      const paths = [...layer.children].map((piece) => {
+        const frames = (
+          piece.getAnimations()[0].effect as KeyframeEffect
+        ).getKeyframes();
+        const first = new DOMMatrixReadOnly(frames[0].transform as string);
+        const last = new DOMMatrixReadOnly(frames.at(-1)!.transform as string);
+        return { x: first.m41, y: first.m42, endY: last.m42 };
+      });
+      return {
+        paths,
+        glass: { x: glass.x, top: glass.top, width: glass.width },
+        height: innerHeight,
+        pointerEvents: getComputedStyle(layer).pointerEvents,
+        overflow: document.documentElement.scrollWidth > innerWidth,
+      };
+    });
+    expect(geometry.pointerEvents).toBe("none");
+    expect(geometry.overflow).toBe(false);
+    expect(
+      geometry.paths.every(
+        (p) =>
+          Math.abs(p.x - (geometry.glass.x + geometry.glass.width / 2)) < 20 &&
+          Math.abs(p.y - geometry.glass.top) < 15 &&
+          p.endY > geometry.height,
+      ),
+    ).toBe(true);
+    expect(await page.locator(".jar-caption").boundingBox()).toEqual(caption);
+    await expect(page.locator("#jar-spill")).toHaveCount(0);
+    await expect(page.locator("#jar-name")).toHaveText("Баночка 2");
+    await page.reload();
+    await page.locator("#resume").click();
+    await resetEvents(page);
+    await page.waitForTimeout(1400);
+    await expect(page.locator("#jar-spill")).toHaveCount(0);
+    expect(
+      (await pulses(page)).filter((p: any) => String(p) === fullPattern),
+    ).toHaveLength(0);
+  });
+
+test("full jar cancellation removes its layer and cannot restart in the menu", async ({
+  page,
+}) => {
+  await seed(page, { meter: 22 });
+  await page.locator("#resume").click();
+  await removePair(page);
+  await expect(page.locator("#jar-spill i")).toHaveCount(24);
+  await page.locator("#menu").click();
+  await resetEvents(page);
+  await expect(page.locator("#jar-spill")).toHaveCount(0);
+  await page.waitForTimeout(1400);
+  expect(await pulses(page)).toEqual([]);
+  await page.locator("#resume").click();
+  await expect(page.locator("#jar-name")).toHaveText("Баночка 2");
+  await expect(page.locator("#jar-spill")).toHaveCount(0);
+});
+
+test("reduced motion and failed saves do not start a full jar spill", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await seed(page, { meter: 22 });
+  await page.locator("#resume").click();
+  await page.evaluate(() => {
+    const write = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) {
+      if (key === "seeds-bits.progress.v2")
+        throw new DOMException("Full", "QuotaExceededError");
+      return write.call(this, key, value);
+    };
+  });
+  await resetEvents(page);
+  await removePair(page);
+  await expect(page.locator("#save-notice")).toBeVisible();
+  await page.waitForTimeout(300);
+  await expect(page.locator("#jar-spill")).toHaveCount(0);
+  expect(
+    (await pulses(page)).filter((p: any) => String(p) === fullPattern),
+  ).toHaveLength(0);
+  expect(await page.evaluate(() => (window as any).effects)).toEqual([]);
+});
+
+test("a saved full jar respects reduced motion and explicit vibration opt-out", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await seed(page, { meter: 22, vibration: false });
+  await page.locator("#resume").click();
+  await resetEvents(page);
+  await removePair(page);
+  await page.waitForTimeout(300);
+  expect((await saved(page)).jars.meter).toBe(24);
+  await expect(page.locator("#jar-spill")).toHaveCount(0);
+  expect(await pulses(page)).toEqual([]);
+  expect(await page.evaluate(() => (window as any).effects)).toEqual([]);
+});
+
+test("rotation cancels the spill instead of leaving trajectories over a new layout", async ({
+  page,
+}) => {
+  await seed(page, { meter: 22 });
+  await page.locator("#resume").click();
+  await removePair(page);
+  await expect(page.locator("#jar-spill i")).toHaveCount(24);
+  await page.setViewportSize({ width: 844, height: 390 });
+  await expect(page.locator("#jar-spill")).toHaveCount(0);
+  await page.waitForTimeout(600);
+  await expect(page.locator("#jar-spill")).toHaveCount(0);
 });

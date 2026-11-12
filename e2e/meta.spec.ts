@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { classicCatalog } from "../src/classic-deals";
 const key = "seeds-bits.progress.v2";
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
@@ -81,7 +82,9 @@ test("small screens and enlarged text keep menu and progress reachable", async (
   await page.addStyleTag({ content: "html {font-size: 150% !important}" });
   await page.locator("#progress-open").click();
   await page.locator("#progress-trophies").click();
-  await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText("Коллекция");
+  await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText(
+    "Коллекция",
+  );
   await page.locator("#collection-back").click();
   await page.screenshot({
     animations: "disabled",
@@ -147,7 +150,20 @@ test("failed result save blocks next party; retry persists one result", async ({
     (button as HTMLButtonElement).click();
     (button as HTMLButtonElement).click();
   });
-  await expect(page.locator("#remaining")).toHaveText("28");
+  await expect(page.locator("#win")).toBeHidden();
+  const next = await page.evaluate(
+    (k) => JSON.parse(localStorage.getItem(k)!),
+    key,
+  );
+  const deal = next.meta.classicDeals;
+  const board = classicCatalog[deal.current.id].board.split("").map(Number);
+  expect(deal.recent).toEqual([deal.current.id]);
+  expect(deal.current.attempt).toBe(next.meta.attempts.classic.id);
+  expect(next.sessions.classic.current.board).toEqual(board);
+  expect(next.sessions.classic.current.moves).toBe(0);
+  await expect(page.locator("#remaining")).toHaveText(
+    String(board.filter(Boolean).length),
+  );
   await expect
     .poll(() =>
       page.evaluate(

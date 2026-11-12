@@ -41,7 +41,7 @@ public class SeedsFeedbackPlugin extends Plugin {
     try {
       long[] timings=null;int[] amplitudes=null;
       if("win".equals(cue)){timings=new long[]{0,34,45,42,55,62};amplitudes=new int[]{0,235,0,250,0,255};protectedUntil=now+300;}
-      else if("full".equals(cue)){timings=new long[]{0,26,32,36};amplitudes=new int[]{0,220,0,255};protectedUntil=now+160;}
+      else if("full".equals(cue)){timings=new long[]{0,26,64,30,46,18};amplitudes=new int[]{0,220,0,250,0,170};protectedUntil=now+240;}
       else if("undo".equals(cue)){timings=new long[]{0,14,22,20};amplitudes=new int[]{0,160,0,230};}
       else if("hint".equals(cue)){timings=new long[]{0,16,20,18};amplitudes=new int[]{0,180,0,220};}
       else if("reject".equals(cue)){timings=new long[]{0,18,24,18};amplitudes=new int[]{0,180,0,190};}

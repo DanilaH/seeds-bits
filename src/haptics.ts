@@ -39,7 +39,7 @@ const profiles: Record<
   hint: { pattern: [16, 20, 18], priority: 2 },
   reject: { pattern: [18, 24, 18], priority: 2 },
   land: { pattern: 10, priority: 0 },
-  full: { pattern: [26, 32, 36], priority: 3, hold: 160 },
+  full: { pattern: [26, 64, 30, 46, 18], priority: 3, hold: 240 },
   win: { pattern: [34, 45, 42, 55, 62], priority: 4, hold: 300 },
 };
 export function setHapticState(on: boolean, paused: boolean, refresh = false) {

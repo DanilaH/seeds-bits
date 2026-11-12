@@ -105,12 +105,6 @@ header {
 .plain:hover {
   background: var(--button);
 }
-.menu-lines {
-  width: 20px;
-  height: 12px;
-  border-top: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-}
 .game-meta {
   display: flex;
   justify-content: space-between;
