@@ -1,0 +1,61 @@
+{
+  "runtimeSource": "53bd826a12aa37c056e621e30715ce1ecc02a324",
+  "testedMergeSource": "f11b283a7e00948f4a3b1591bb91b8481092546b",
+  "runtimeMatchesTestedMerge": true,
+  "mainCI": {
+    "run": 43220961056,
+    "conclusion": "success",
+    "unitTests": 68,
+    "regressionUnitTests": 2,
+    "integrationBrowserTests": 15,
+    "e2eTests": 210,
+    "nativeBridgeCases": 30,
+    "webBuild": true,
+    "yandexBuild": true,
+    "androidDebugBuild": true
+  },
+  "previewCI": {
+    "run": 43220961261,
+    "conclusion": "success",
+    "targetedBrowserTests": 69,
+    "optimizedAndroidPreviewBuild": true,
+    "unsignedArtifact": 13946232187,
+    "recordingArtifact": 13945868146,
+    "recordingCases": 8,
+    "screenshots": 36,
+    "pageErrors": 0
+  },
+  "comparisons": [
+    {
+      "case": "phone",
+      "fieldGainCssPx": 54,
+      "beforeBannerCssHeight": 72,
+      "afterBannerCssHeight": 50,
+      "afterControlGapCssPx": 8
+    },
+    {
+      "case": "small-dark",
+      "fieldGainCssPx": 54,
+      "beforeBannerCssHeight": 72,
+      "afterBannerCssHeight": 50,
+      "afterControlGapCssPx": 8
+    },
+    {
+      "case": "landscape",
+      "fieldGainCssPx": 22,
+      "beforeBannerCssHeight": 60,
+      "afterBannerCssHeight": 50,
+      "afterControlGapCssPx": 9
+    },
+    {
+      "case": "short-large",
+      "fieldGainCssPx": 22,
+      "beforeBannerCssHeight": 60,
+      "afterBannerCssHeight": 50,
+      "afterControlGapCssPx": 8
+    }
+  ],
+  "physicalInstallTested": false,
+  "liveBannerRenderedOnDevice": false,
+  "storePublished": false
+}

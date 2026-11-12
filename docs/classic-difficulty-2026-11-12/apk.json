@@ -1,0 +1,44 @@
+{
+  "file": "seeds-1.1.2-difficulty-test-no-analytics.apk",
+  "bytes": 5513336,
+  "sha256": "bd949a324d0fafe6f64fc0b48bd9ad440084be31f75e5d32a44d1ffb7befa9e6",
+  "unsignedSha256": "db39c1e33e104bcfd240dfb95f9f3039ef95f47b7d61e2eea6728c2c851f0080",
+  "package": "com.seedsbits.game.preview",
+  "versionName": "1.1.2",
+  "versionCode": 11312,
+  "certificateSha256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+  "samePrivatePreviewSigningRecord": true,
+  "signatureVerified": {
+    "v2": true,
+    "v3": true
+  },
+  "appMetricaKeyEmpty": true,
+  "analyticsChannel": "preview",
+  "adsTestMode": true,
+  "debuggable": false,
+  "testOnly": false,
+  "allowBackup": false,
+  "allUnsignedEntriesUnchanged": 663,
+  "cleanWebAssets": {
+    "index.html": true,
+    "assets/advice-worker-6LRsD5M8.js": true,
+    "assets/web-CCmxwvJH.js": true,
+    "assets/esm-H0QowkRK.js": true,
+    "assets/web-CrSU--lx.js": true,
+    "assets/esm-DkVkAHPU.js": true,
+    "assets/web-BvTsv2il.js": true,
+    "assets/notebook-extra-B_1ZZVK0.js": true,
+    "assets/index-B8angc5b.js": true,
+    "assets/index-40Dt2cto.css": true
+  },
+  "staleAssetsAbsent": true,
+  "testHooksAbsent": true,
+  "nativeBridgeMethodsAndAnnotationsPresent": true,
+  "upgradeCompatibleWithPreviousPreview": {
+    "samePackage": true,
+    "sameCertificate": true,
+    "previousVersionCode": 11306,
+    "versionCodeIncreased": true
+  },
+  "deviceInstallTested": false
+}

@@ -1,0 +1,57 @@
+{
+  "source": "7dd9fcf6b4c7734afb449ed2cb9a01e43d9a35ef",
+  "method": "Completed-result fixtures followed by real next-game UI actions; no human difficulty claim",
+  "cases": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "errors": [],
+      "frames": [
+        "phone-result-0.png",
+        "phone-game-0.png",
+        "phone-result-1.png",
+        "phone-game-1.png",
+        "phone-result-2.png",
+        "phone-game-2.png"
+      ]
+    },
+    {
+      "name": "small-dark",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "theme": "dark",
+      "errors": [],
+      "frames": [
+        "small-dark-result-0.png",
+        "small-dark-game-0.png",
+        "small-dark-result-1.png",
+        "small-dark-game-1.png",
+        "small-dark-result-2.png",
+        "small-dark-game-2.png"
+      ]
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "theme": "light",
+      "errors": [],
+      "frames": [
+        "landscape-result-0.png",
+        "landscape-game-0.png",
+        "landscape-result-1.png",
+        "landscape-game-1.png",
+        "landscape-result-2.png",
+        "landscape-game-2.png"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { classicCatalog } from "../src/classic-deals";
 const key = "seeds-bits.progress.v2";
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
@@ -155,9 +154,9 @@ test("failed result save blocks next party; retry persists one result", async ({
     (k) => JSON.parse(localStorage.getItem(k)!),
     key,
   );
-  const deal = next.meta.classicDeals;
-  const board = classicCatalog[deal.current.id].board.split("").map(Number);
-  expect(deal.recent).toEqual([deal.current.id]);
+  const deal = next.meta.classicRun;
+  const board = deal.current.board;
+  expect(deal.recent).toEqual([board.join("")]);
   expect(deal.current.attempt).toBe(next.meta.attempts.classic.id);
   expect(next.sessions.classic.current.board).toEqual(board);
   expect(next.sessions.classic.current.moves).toBe(0);

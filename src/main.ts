@@ -1,11 +1,16 @@
 import { dailyRun, streakReward } from "./daily-run";
 import { hintExplanation } from "./hint-explanation";
+import { readClassicDeals, restartClassic } from "./classic-deals";
 import {
-  newClassicDeals,
-  readClassicDeals,
-  takeClassicDeal,
-  restartClassic,
-} from "./classic-deals";
+  CLASSIC_DEFAULT,
+  CLASSIC_MIN,
+  CLASSIC_MAX,
+  classicDifficultyNames,
+  newClassicRun,
+  readClassicRun,
+  takeGeneratedClassic,
+  type ClassicDifficulty,
+} from "./classic-generator";
 import {
   enqueueAnalytics,
   acknowledgeAnalytics,
@@ -200,6 +205,19 @@ $("app").innerHTML =
   `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню">${icon("menu")}</button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>Напоминать о задаче дня</button><button id="try-notebook" class="secondary" hidden>Короткая задача</button><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">Подсказка</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">Добавить</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Очистите поле от цифр</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">24 небольшие задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">Напоминать о задаче дня<input id="reminders" type="checkbox"></label><label class="reminder-time">Напоминать около<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>Разрешить уведомления</button><button id="notification-system-settings" class="text-button" hidden>Настройки уведомлений Android</button><p class="fine">По местному времени, если задача ещё не решена.</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 // Keep the primary result action ahead of the optional reminder.
 $("play-again").after($("result-reminder"));
+const resultNext = document.createElement("div");
+resultNext.id = "result-next";
+resultNext.className = "result-next";
+resultNext.setAttribute("role", "group");
+resultNext.setAttribute("aria-label", "Следующая партия");
+$("play-again").before(resultNext);
+resultNext.innerHTML =
+  '<button id="classic-easier" class="difficulty-easier" hidden>Легче</button><button id="classic-harder" class="difficulty-harder" hidden>Сложнее</button>';
+$("classic-harder").before($("play-again"));
+const difficultyCaption = document.createElement("p");
+difficultyCaption.id = "classic-difficulty";
+difficultyCaption.hidden = true;
+resultNext.before(difficultyCaption);
 // Home has its own composition; the same controls keep their navigation handlers.
 const homeLayout = document.createElement("div");
 homeLayout.className = "home-layout";
@@ -214,7 +232,7 @@ $("new").className = "text-button restart-action";
 const classicActions = document.createElement("div");
 classicActions.className = "classic-actions";
 classicActions.innerHTML =
-  '<button id="next-classic" class="text-button" hidden>Другое поле</button>';
+  '<button id="next-classic" class="text-button" hidden>Новая партия</button><button id="menu-easier" class="text-button" hidden>Новая партия полегче</button>';
 classicActions.prepend($("new"));
 homeCurrent.append($("resume-context"), homeGoal, $("resume"), classicActions);
 const homeModes = document.createElement("section");
@@ -1075,6 +1093,7 @@ function complete(rects: DOMRect[]) {
 }
 function renderWin() {
   const id = progress.active;
+  renderClassicChoices();
   $("win").classList.toggle("daily-result", id.startsWith("daily"));
   $("win-stats").innerHTML =
     `<span>Пар убрано: ${session.current.moves}</span><span>Добавлений: ${session.current.additions}</span><span>Подсказок: ${progress.hints[id] ?? 0}</span>`;
@@ -1159,6 +1178,32 @@ function renderWin() {
     award.hidden = false;
     award.innerHTML = `<div class="trophy-heading"><strong>${monthName(m)}</strong><span>${t.count} из ${days(m).length} дней</span></div>${trophyMark(m, t.count, days(m).length, saveFailed)}`;
   }
+}
+function classicDifficulty(): ClassicDifficulty {
+  return metadata(progress).classicRun?.difficulty ?? CLASSIC_DEFAULT;
+}
+function renderClassicChoices() {
+  const isClassic = progress.active === "classic";
+  const level = classicDifficulty();
+  resultNext.classList.toggle("is-classic", isClassic);
+  difficultyCaption.hidden = !isClassic;
+  difficultyCaption.textContent = `${classicDifficultyNames[level]} сложность`;
+  for (const [id, atLimit] of [
+    ["classic-easier", level === CLASSIC_MIN],
+    ["classic-harder", level === CLASSIC_MAX],
+  ] as const) {
+    const button = $<HTMLButtonElement>(id);
+    button.hidden = !isClassic;
+    button.disabled = busy || atLimit;
+    button.title = atLimit
+      ? level === CLASSIC_MIN
+        ? "Уже самая лёгкая сложность"
+        : "Уже самая высокая сложность"
+      : id === "classic-easier"
+        ? "Начать новую партию легче"
+        : "Начать новую партию сложнее";
+  }
+  $<HTMLButtonElement>("play-again").disabled = busy;
 }
 function compactCount(n: number) {
   return n > 999 ? "999+" : String(n);
@@ -1870,7 +1915,10 @@ function reset() {
   save();
   trackOpen("restart");
 }
-async function beginClassic(action: "restart" | "next") {
+async function beginClassic(
+  action: "restart" | "next",
+  level = classicDifficulty(),
+) {
   if (
     busy ||
     saveFailed ||
@@ -1893,25 +1941,37 @@ async function beginClassic(action: "restart" | "next") {
       ...metadata(progress),
       attempts: { ...metadata(progress).attempts },
       classicDeals: readClassicDeals(metadata(progress).classicDeals),
+      classicRun: readClassicRun(metadata(progress).classicRun),
     },
     jars: { ...jars(progress) },
   };
   const m = metadata(candidate);
   const previousAttempt = m.attempts.classic?.id ?? "";
-  const next =
-    action === "restart"
-      ? restartClassic(session, m.classicDeals, previousAttempt)
-      : undefined;
+  let next: Session | undefined;
+  if (action === "restart") {
+    next = restartClassic(session, m.classicDeals, previousAttempt);
+    if (m.classicRun?.current?.attempt === previousAttempt)
+      next.current.board = [...m.classicRun.current.board];
+  }
   const highWater = jars(candidate).highWater;
   startAttempt(candidate, "classic");
   const attempt = m.attempts.classic.id;
-  if (action === "next") m.classicDeals ??= newClassicDeals();
-  const nextSession = next ?? takeClassicDeal(m.classicDeals!, attempt);
+  if (action === "next") m.classicRun ??= newClassicRun();
+  let nextSession: Session;
+  try {
+    nextSession = next ?? takeGeneratedClassic(m.classicRun!, attempt, level);
+    if (action === "next") delete m.classicDeals;
+  } catch {
+    message("Не удалось подготовить новую партию. Попробуйте ещё раз.");
+    return;
+  }
   if (action === "restart") {
     // Replaying the same field cannot repay already collected pairs.
     jars(candidate).highWater = highWater;
     if (m.classicDeals?.current?.attempt === previousAttempt)
       m.classicDeals.current.attempt = attempt;
+    if (m.classicRun?.current?.attempt === previousAttempt)
+      m.classicRun.current.attempt = attempt;
   }
   candidate.hints.classic = 0;
   candidate.active = "classic";
@@ -1970,7 +2030,11 @@ $("close").onclick = closeMenu;
 $("resume").onclick = closeMenu;
 $("book-top").onclick = () => openCollection("book");
 let confirmAction: "restart" | "next" = "restart";
-function requestRestart(action: "restart" | "next" = "restart") {
+let confirmDifficulty: ClassicDifficulty = CLASSIC_DEFAULT;
+function requestRestart(
+  action: "restart" | "next" = "restart",
+  level = classicDifficulty(),
+) {
   if (
     busy ||
     saveFailed ||
@@ -1981,24 +2045,27 @@ function requestRestart(action: "restart" | "next" = "restart") {
   )
     return;
   confirmAction = action;
+  confirmDifficulty = level;
   if (
     (!session.history.length &&
       !session.current.moves &&
       !session.current.additions) ||
     !occupied(session.current.board)
   ) {
-    if (action === "next") void beginClassic("next");
+    if (action === "next") void beginClassic("next", level);
     else reset();
     return;
   }
   const next = action === "next";
   confirmHeading.querySelector("h2")!.textContent = next
-    ? "Другое поле?"
+    ? level < classicDifficulty()
+      ? "Партия полегче?"
+      : "Новая партия?"
     : "Начать заново?";
   $("confirm-content").querySelector("p")!.textContent = next
     ? "Текущее поле и история отмены будут заменены. Собранные семечки и награды останутся."
     : "Вернуться к началу этого поля? История отмены будет очищена. Собранные семечки и награды останутся.";
-  $("confirm-new").textContent = next ? "Открыть другое поле" : "Начать заново";
+  $("confirm-new").textContent = next ? "Начать новую партию" : "Начать заново";
   rememberNavigation("confirm");
   openMenu(true);
   dialog.dataset.screen = "confirm";
@@ -2010,6 +2077,11 @@ function requestRestart(action: "restart" | "next" = "restart") {
 }
 $("new").onclick = () => requestRestart();
 $("next-classic").onclick = () => requestRestart("next");
+$("menu-easier").onclick = () => {
+  const level = classicDifficulty();
+  if (level > CLASSIC_MIN)
+    requestRestart("next", (level - 1) as ClassicDifficulty);
+};
 $("cancel-new").onclick = returnToPrevious;
 function openSettings(restoring = false) {
   if (!restoring) rememberNavigation("settings");
@@ -2038,14 +2110,16 @@ $("privacy-open").onclick = () => {
 };
 
 $("confirm-new").onclick = () => {
-  if (confirmAction === "next") void beginClassic("next");
+  if (confirmAction === "next") void beginClassic("next", confirmDifficulty);
   else reset();
 };
 $("restart-task").onclick = () => requestRestart();
-$("play-again").onclick = async () => {
+async function playNextClassic(delta: -1 | 0 | 1 = 0) {
   if (busy || adActive || rewardRequest || engagementActive) return;
+  const level = classicDifficulty() + delta;
+  if (level < CLASSIC_MIN || level > CLASSIC_MAX) return;
   busy = true;
-  $<HTMLButtonElement>("play-again").disabled = true;
+  renderClassicChoices();
   await save();
   if (
     !saveFailed &&
@@ -2059,14 +2133,17 @@ $("play-again").onclick = async () => {
   }
   skipNextInterstitial = false;
   busy = false;
-  $<HTMLButtonElement>("play-again").disabled = false;
+  renderClassicChoices();
   if (saveFailed || storageConflict || futureSave) return;
   const next = nextTask(progress.active, progress.done);
   if (next) await switchGame(next);
   else if (progress.active.startsWith("book")) openCollection("book");
   else if (progress.active.startsWith("daily")) openCollection("calendar");
-  else await beginClassic("next");
-};
+  else await beginClassic("next", level as ClassicDifficulty);
+}
+$("play-again").onclick = () => void playNextClassic();
+$("classic-easier").onclick = () => void playNextClassic(-1);
+$("classic-harder").onclick = () => void playNextClassic(1);
 $("try-notebook").onclick = () => {
   const next =
     notebook.slice(0, 24).find((p) => !progress.done.includes(p.id)) ??
@@ -2764,7 +2841,9 @@ function renderHomeCurrent() {
     classicMode = progress.active === "classic";
   homeGoal.hidden = lesson >= 0;
   $("next-classic").hidden = !classicMode || lesson >= 0;
-  $("next-classic").textContent = count ? "Другое поле" : "Новая партия";
+  $("menu-easier").hidden = !classicMode || lesson >= 0 || !count;
+  $<HTMLButtonElement>("menu-easier").disabled =
+    classicDifficulty() === CLASSIC_MIN;
   $("new").hidden =
     lesson >= 0 ||
     (classicMode && !count) ||
