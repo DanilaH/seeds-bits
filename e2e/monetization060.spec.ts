@@ -240,7 +240,7 @@ test("native safe-area changes reposition the banner and preserve the control ga
   });
   await expect
     .poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.y))
-    .toBe(732);
+    .toBe(754);
   const g = await page.evaluate(() => ({
     ad: document.querySelector("#ad-space")!.getBoundingClientRect().toJSON(),
     footer: document.querySelector("footer")!.getBoundingClientRect().toJSON(),

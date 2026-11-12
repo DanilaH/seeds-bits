@@ -119,7 +119,9 @@ export async function syncBanner(visible: boolean) {
   const r = slot.getBoundingClientRect();
   try {
     await bridge.banner({
-      visible: visible && !adActive && r.width >= 250 && r.height >= 45,
+      // Native validates the real SDK height in pixels. CSS px can differ
+      // from Android dp when the WebView scale changes.
+      visible: visible && !adActive && r.width >= 250 && r.height > 0,
       x: r.x,
       y: r.y,
       width: r.width,

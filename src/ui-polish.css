@@ -1466,8 +1466,7 @@ progress::-moz-progress-bar {
   }
 }
 
-/* Advertising uses a permanent bottom shelf in both orientations. Its empty
-   background is the game's paper, not the contrasting outer canvas. */
+/* A compact stable shelf in both orientations uses the game's paper. */
 :root.has-mobile-ads,
 .has-mobile-ads body,
 .has-mobile-ads #app,
@@ -1476,15 +1475,13 @@ progress::-moz-progress-bar {
 }
 .has-mobile-ads .game:not(:has(#lesson:not([hidden]))) {
   height: calc(100dvh - var(--ad-reserve));
-  padding-bottom: 8px;
+  padding-bottom: 0;
   margin-block: 0;
   box-shadow: none;
   border-radius: 0;
 }
-@media (orientation: landscape) {
-  :root.has-mobile-ads {
-    --banner-height: 60px;
-  }
+.has-mobile-ads .game:not(:has(#lesson:not([hidden]))) .game-actions footer {
+  padding-bottom: 4px;
 }
 @media (orientation: landscape) and (max-height: 420px) {
   .has-mobile-ads .game-top > header {

@@ -39,6 +39,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private BannerAdView banner;
   private FrameLayout bannerHost;
   private int bannerWidth;
+  private int bannerPixelHeight;
   private int bannerCssHeight;
   private PluginCall showing;
   private String showingKind, showingAttempt;
@@ -239,6 +240,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (banner != null) { banner.setBannerAdEventListener(null); banner.destroy(); banner = null; }
     if (bannerHost != null) { if (bannerHost.getParent() instanceof ViewGroup) ((ViewGroup)bannerHost.getParent()).removeView(bannerHost); bannerHost = null; }
     bannerWidth = 0;
+    bannerPixelHeight = 0;
   }
   @PluginMethod public void banner(PluginCall call) { getActivity().runOnUiThread(() -> {
     bannerPlacement = new BannerPlacement(call);
@@ -256,23 +258,21 @@ public class SeedsMonetizationPlugin extends Plugin {
     int[] webLocation = new int[2], rootLocation = new int[2]; web.getLocationOnScreen(webLocation); root.getLocationOnScreen(rootLocation);
     int left = webLocation[0] - rootLocation[0] + Math.round(placement.x * scale);
     int top = webLocation[1] - rootLocation[1] + Math.round(placement.y * scale);
-    if (width < 1 || height < 1 || left < 0 || top < 0 || top + height > root.getHeight()) { if (bannerHost != null) bannerHost.setVisibility(View.GONE); return; }
-    if (banner != null && bannerWidth != width) clearBanner();
+    if (width < 1 || height < 1 || left < 0 || left + width > root.getWidth() || top < 0 || top + height > root.getHeight()) { if (bannerHost != null) bannerHost.setVisibility(View.GONE); return; }
+    if (banner != null && bannerWidth != width) { clearBanner(); lastBannerRequest = 0; }
     if (banner == null) {
       long now = SystemClock.elapsedRealtime();
       if (lastBannerRequest != 0 && now - lastBannerRequest < RETRY) { return; }
-      int dp = Math.round(width / getContext().getResources().getDisplayMetrics().density);
-      BannerAdSize size = BannerAdSize.sticky(getContext(), dp);
-      int requiredCssHeight = (int) Math.ceil(size.getHeightInPixels(getContext()) / scale);
-      if (requiredCssHeight != bannerCssHeight) {
-        bannerCssHeight = requiredCssHeight;
-        notifyListeners("bannerSize", new JSObject().put("height", requiredCssHeight), true);
-      }
-      if (size.getHeightInPixels(getContext()) > height) { return; }
-      bannerWidth = width; lastBannerRequest = now;
+      int dp = Math.max(1, (int) Math.floor(width / getContext().getResources().getDisplayMetrics().density));
+      // Request a compact creative from the SDK; never crop a taller sticky ad.
+      BannerAdSize size = BannerAdSize.inline(getContext(), dp, 50);
+      int requestedHeight = size.getHeightInPixels(getContext());
+      publishBannerHeight(requestedHeight, scale);
+      if (requestedHeight > height) { return; }
+      bannerWidth = width; bannerPixelHeight = requestedHeight; lastBannerRequest = now;
       bannerHost = new FrameLayout(getContext()); root.addView(bannerHost);
       banner = new BannerAdView(getActivity()); banner.setAdSize(size);
-      bannerHost.addView(banner, new FrameLayout.LayoutParams(width, size.getHeightInPixels(getContext()), android.view.Gravity.CENTER));
+      bannerHost.addView(banner, new FrameLayout.LayoutParams(width, bannerPixelHeight, android.view.Gravity.CENTER));
       final BannerAdView currentBanner = banner;
       banner.setBannerAdEventListener(new BannerAdEventListener() {
         @Override public void onAdLoaded() { if (banner != currentBanner) return; if (destroyed) clearBanner(); else event("ad_loaded", "banner"); }
@@ -283,8 +283,17 @@ public class SeedsMonetizationPlugin extends Plugin {
       event("ad_request", "banner"); banner.loadAd(new AdRequest.Builder(unit("banner")).build());
     }
     if (bannerHost == null) return; // A synchronous load failure may have removed this view.
-    FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, height); layout.leftMargin = left; layout.topMargin = top;
+    publishBannerHeight(bannerPixelHeight, scale);
+    if (bannerPixelHeight > height) { bannerHost.setVisibility(View.GONE); return; }
+    FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, bannerPixelHeight); layout.leftMargin = left; layout.topMargin = top + height - bannerPixelHeight;
     bannerHost.setLayoutParams(layout); bannerHost.setVisibility(View.VISIBLE);
+  }
+  private void publishBannerHeight(int pixels, float scale) {
+    int cssHeight = (int) Math.ceil(pixels / scale);
+    if (cssHeight != bannerCssHeight) {
+      bannerCssHeight = cssHeight;
+      notifyListeners("bannerSize", new JSObject().put("height", cssHeight), true);
+    }
   }
   @Override protected void handleOnConfigurationChanged(Configuration config) { bannerPlacement = null; clearBanner(); bannerCssHeight = 0; lastBannerRequest = 0; }
   @Override protected void handleOnPause() { resumed = false; if (bannerHost != null) bannerHost.setVisibility(View.GONE); }
