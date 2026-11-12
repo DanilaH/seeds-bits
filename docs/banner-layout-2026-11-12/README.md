@@ -17,4 +17,14 @@
 
 Браузерные сценарии используют реальное поле `book-v1-2161` — тетрадь 91, задача 1, 212 цифр. Проверяются телефон 320/390 px, короткий и обычный landscape, планшет, обе темы, крупный текст, однократный нижний inset с рекламой и без неё, CSS-высоты 40/80/50 px. Записи сравнивают текущий интерфейс с исходником `e0483c8`; рекламная область на размеченных кадрах — явный макет, не доказательство живой рекламы.
 
-Основание API: [адаптивный inline](https://ads.yandex.com/helpcenter/en/dev/android/adaptive-inline-banner), [переименование методов в SDK 8](https://ads.yandex.com/helpcenter/en/dev/android/release/8-0-0-migration). Визуальные результаты и APK фиксируются после CI.
+Основание API: [адаптивный inline](https://ads.yandex.com/helpcenter/en/dev/android/adaptive-inline-banner), [переименование методов в SDK 8](https://ads.yandex.com/helpcenter/en/dev/android/release/8-0-0-migration).
+
+## Приёмка
+
+Ревизия `53bd826`, проверенный merge `f11b283`, дерево исходников совпадает. [Основной CI](https://github.com/DanilaH/seeds-bits/actions/runs/43220961056) прошёл: 68 + 2 unit, 15 integration/browser, **210 e2e**, 30 native bridge cases, web/Yandex и Android debug с реальным SDK 8.5.0. [Preview CI](https://github.com/DanilaH/seeds-bits/actions/runs/43220961261): 69 целевых browser-сценариев, оптимизированная Android-сборка, восемь сравнительных сцен до/после и 36 PNG без page errors.
+
+В сравнении с `e0483c8` видимая высота поля выросла на **54 CSS px в портрете** и **22 CSS px в landscape**. Резерв по умолчанию — 50 CSS px, расстояние footer–баннер — 8–9 CSS px в проверенных сценах. Просмотрены оба телефона, обе темы, крупный текст и низкий landscape: обе кнопки тетради видны одновременно. Выделенная рекламная область на сравнительных кадрах — подписанный макет.
+
+Тестовый **1.1.2 / 11318**, `seeds-1.1.2-compact-banner-test-no-analytics.apk`, 5 513 336 байт. AppMetrica key пустой, preview-канал, демонстрационная реклама. Подписи v2/v3, package/сертификат предыдущего 11312 и увеличение versionCode, все unsigned entries, все десять web assets, отсутствие старых assets/test hooks и native-мосты проверены. Физическая установка и реальный показ баннера на телефоне остаются ручной приёмкой.
+
+[Итоги](acceptance.json) · [APK](apk.json) · [записи и геометрия](browser-recordings.json) · [native cases](native-cases.json).

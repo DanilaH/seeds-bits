@@ -1,0 +1,381 @@
+{
+  "method": "Real UI using notebook 91 task 1 and a native ad geometry double; no live ad or phone-install claim",
+  "cases": [
+    {
+      "phase": "before",
+      "source": "e0483c8f70b54a91247fcf8f745dbdc6a5c923de",
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 866
+      },
+      "dark": false,
+      "large": false,
+      "errors": [],
+      "geometry": {
+        "ad": {
+          "x": 16,
+          "y": 766,
+          "width": 358,
+          "height": 72,
+          "top": 766,
+          "right": 374,
+          "bottom": 838,
+          "left": 16
+        },
+        "controls": {
+          "x": 22,
+          "y": 647,
+          "width": 346,
+          "height": 99,
+          "top": 647,
+          "right": 368,
+          "bottom": 746,
+          "left": 22
+        },
+        "boardViewport": {
+          "x": 22,
+          "y": 157,
+          "width": 346,
+          "height": 434,
+          "top": 157,
+          "right": 368,
+          "bottom": 591,
+          "left": 22
+        },
+        "systemBottom": 24
+      },
+      "screen": "phone-before.png",
+      "slotScreen": "phone-before-slot.png"
+    },
+    {
+      "phase": "before",
+      "source": "e0483c8f70b54a91247fcf8f745dbdc6a5c923de",
+      "name": "small-dark",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "dark": true,
+      "large": false,
+      "errors": [],
+      "geometry": {
+        "ad": {
+          "x": 16,
+          "y": 468,
+          "width": 288,
+          "height": 72,
+          "top": 468,
+          "right": 304,
+          "bottom": 540,
+          "left": 16
+        },
+        "controls": {
+          "x": 22,
+          "y": 355,
+          "width": 276,
+          "height": 93,
+          "top": 355,
+          "right": 298,
+          "bottom": 448,
+          "left": 22
+        },
+        "boardViewport": {
+          "x": 22,
+          "y": 157,
+          "width": 276,
+          "height": 142,
+          "top": 157,
+          "right": 298,
+          "bottom": 299,
+          "left": 22
+        },
+        "systemBottom": 24
+      },
+      "screen": "small-dark-before.png",
+      "slotScreen": "small-dark-before-slot.png"
+    },
+    {
+      "phase": "before",
+      "source": "e0483c8f70b54a91247fcf8f745dbdc6a5c923de",
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "dark": false,
+      "large": false,
+      "errors": [],
+      "geometry": {
+        "ad": {
+          "x": 222,
+          "y": 302,
+          "width": 400,
+          "height": 60,
+          "top": 302,
+          "right": 622,
+          "bottom": 362,
+          "left": 222
+        },
+        "controls": {
+          "x": 641,
+          "y": 220,
+          "width": 190,
+          "height": 61,
+          "top": 220,
+          "right": 831,
+          "bottom": 281,
+          "left": 641
+        },
+        "boardViewport": {
+          "x": 13,
+          "y": 25,
+          "width": 610,
+          "height": 256,
+          "top": 25,
+          "right": 623,
+          "bottom": 281,
+          "left": 13
+        },
+        "systemBottom": 24
+      },
+      "screen": "landscape-before.png",
+      "slotScreen": "landscape-before-slot.png"
+    },
+    {
+      "phase": "before",
+      "source": "e0483c8f70b54a91247fcf8f745dbdc6a5c923de",
+      "name": "short-large",
+      "viewport": {
+        "width": 568,
+        "height": 320
+      },
+      "dark": true,
+      "large": true,
+      "errors": [],
+      "geometry": {
+        "ad": {
+          "x": 84,
+          "y": 232,
+          "width": 400,
+          "height": 60,
+          "top": 232,
+          "right": 484,
+          "bottom": 292,
+          "left": 84
+        },
+        "controls": {
+          "x": 366,
+          "y": 101,
+          "width": 190,
+          "height": 115,
+          "top": 101,
+          "right": 556,
+          "bottom": 216,
+          "left": 366
+        },
+        "boardViewport": {
+          "x": 12,
+          "y": 24,
+          "width": 336,
+          "height": 188,
+          "top": 24,
+          "right": 348,
+          "bottom": 212,
+          "left": 12
+        },
+        "systemBottom": 24
+      },
+      "screen": "short-large-before.png",
+      "slotScreen": "short-large-before-slot.png"
+    },
+    {
+      "phase": "after",
+      "source": "f11b283a7e00948f4a3b1591bb91b8481092546b",
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 866
+      },
+      "dark": false,
+      "large": false,
+      "errors": [],
+      "geometry": {
+        "ad": {
+          "x": 16,
+          "y": 788,
+          "width": 358,
+          "height": 50,
+          "top": 788,
+          "right": 374,
+          "bottom": 838,
+          "left": 16
+        },
+        "controls": {
+          "x": 22,
+          "y": 701,
+          "width": 346,
+          "height": 79,
+          "top": 701,
+          "right": 368,
+          "bottom": 780,
+          "left": 22
+        },
+        "boardViewport": {
+          "x": 22,
+          "y": 157,
+          "width": 346,
+          "height": 488,
+          "top": 157,
+          "right": 368,
+          "bottom": 645,
+          "left": 22
+        },
+        "systemBottom": 24
+      },
+      "screen": "phone-after.png",
+      "slotScreen": "phone-after-slot.png"
+    },
+    {
+      "phase": "after",
+      "source": "f11b283a7e00948f4a3b1591bb91b8481092546b",
+      "name": "small-dark",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "dark": true,
+      "large": false,
+      "errors": [],
+      "geometry": {
+        "ad": {
+          "x": 16,
+          "y": 490,
+          "width": 288,
+          "height": 50,
+          "top": 490,
+          "right": 304,
+          "bottom": 540,
+          "left": 16
+        },
+        "controls": {
+          "x": 22,
+          "y": 409,
+          "width": 276,
+          "height": 73,
+          "top": 409,
+          "right": 298,
+          "bottom": 482,
+          "left": 22
+        },
+        "boardViewport": {
+          "x": 22,
+          "y": 157,
+          "width": 276,
+          "height": 196,
+          "top": 157,
+          "right": 298,
+          "bottom": 353,
+          "left": 22
+        },
+        "systemBottom": 24
+      },
+      "screen": "small-dark-after.png",
+      "slotScreen": "small-dark-after-slot.png"
+    },
+    {
+      "phase": "after",
+      "source": "f11b283a7e00948f4a3b1591bb91b8481092546b",
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "dark": false,
+      "large": false,
+      "errors": [],
+      "geometry": {
+        "ad": {
+          "x": 222,
+          "y": 312,
+          "width": 400,
+          "height": 50,
+          "top": 312,
+          "right": 622,
+          "bottom": 362,
+          "left": 222
+        },
+        "controls": {
+          "x": 641,
+          "y": 242,
+          "width": 190,
+          "height": 61,
+          "top": 242,
+          "right": 831,
+          "bottom": 303,
+          "left": 641
+        },
+        "boardViewport": {
+          "x": 13,
+          "y": 25,
+          "width": 610,
+          "height": 278,
+          "top": 25,
+          "right": 623,
+          "bottom": 303,
+          "left": 13
+        },
+        "systemBottom": 24
+      },
+      "screen": "landscape-after.png",
+      "slotScreen": "landscape-after-slot.png"
+    },
+    {
+      "phase": "after",
+      "source": "f11b283a7e00948f4a3b1591bb91b8481092546b",
+      "name": "short-large",
+      "viewport": {
+        "width": 568,
+        "height": 320
+      },
+      "dark": true,
+      "large": true,
+      "errors": [],
+      "geometry": {
+        "ad": {
+          "x": 84,
+          "y": 242,
+          "width": 400,
+          "height": 50,
+          "top": 242,
+          "right": 484,
+          "bottom": 292,
+          "left": 84
+        },
+        "controls": {
+          "x": 366,
+          "y": 123,
+          "width": 190,
+          "height": 111,
+          "top": 123,
+          "right": 556,
+          "bottom": 234,
+          "left": 366
+        },
+        "boardViewport": {
+          "x": 12,
+          "y": 24,
+          "width": 336,
+          "height": 210,
+          "top": 24,
+          "right": 348,
+          "bottom": 234,
+          "left": 12
+        },
+        "systemBottom": 24
+      },
+      "screen": "short-large-after.png",
+      "slotScreen": "short-large-after-slot.png"
+    }
+  ]
+}
