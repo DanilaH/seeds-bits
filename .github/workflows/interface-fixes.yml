@@ -1,0 +1,126 @@
+name: Interface fixes acceptance and preview
+on:
+  push:
+    branches: [qa/ui-fixes-20261112]
+permissions:
+  contents: read
+concurrency:
+  group: interface-fixes-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  web:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm ci --no-audit --no-fund
+      - run: npm test && npm run build && npm run build:yandex
+      - run: npx vitest run --config scripts/regression-061/vitest.config.ts
+      - run: npx playwright test --config scripts/regression-061/playwright.config.ts
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: interface-browser-tests, path: test-results/ }
+  captures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+      SEEDS_VISUAL_SWEEP: "1"
+      SEEDS_UX_OUTPUT: test-results/interface-sweep
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm ci --no-audit --no-fund && npx playwright install ffmpeg && npm run build
+      - name: Pinned before frames using the same probe
+        run: |
+          git fetch --no-tags origin 2880012991ea45e520d7fcd90391a1571479f2d9 --depth=1
+          git worktree add --detach "$RUNNER_TEMP/seeds-interface-before" 2880012991ea45e520d7fcd90391a1571479f2d9
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/seeds-interface-before/node_modules"
+          cd "$RUNNER_TEMP/seeds-interface-before"
+          SEEDS_CAPTURE_SOURCE=2880012991ea45e520d7fcd90391a1571479f2d9 SEEDS_INTERFACE_OUTPUT="$GITHUB_WORKSPACE/test-results/interface-before" node "$GITHUB_WORKSPACE/scripts/interface-audit-followup.mjs"
+      - name: Initial action visibility without auto-scroll
+        if: ${{ !cancelled() }}
+        run: SEEDS_ASSERT_ACTIONS=1 SEEDS_INTERFACE_OUTPUT=test-results/interface-after node scripts/interface-audit-followup.mjs
+      - name: Three result scenes and all classic boundaries
+        if: ${{ !cancelled() }}
+        run: node scripts/record-results.mjs
+      - name: All screens and adverse states
+        if: ${{ !cancelled() }}
+        run: node scripts/ux-audit-2026-11-11.mjs
+      - name: First-session journey
+        if: ${{ !cancelled() }}
+        run: node scripts/product-journey.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          {
+            name: interface-fixes-captures,
+            path: test-results/,
+            retention-days: 30,
+          }
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - uses: android-actions/setup-android@v4
+      - run: npm ci --no-audit --no-fund
+      - run: python3 scripts/feedback-native-harness.py && python3 scripts/regression-061/native-harness.py
+      - run: npm run setup:android
+      - name: Analytics-free preview above version 11318
+        run: |
+          GITHUB_RUN_NUMBER=$((400 + GITHUB_RUN_NUMBER)) node scripts/configure-android.mjs
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          root=ET.parse('android/app/src/main/res/values/seeds-services.xml').getroot()
+          v={e.attrib['name']:e.text or '' for e in root}
+          assert v['appmetrica_api_key']=='' and v['analytics_channel']=='preview' and v['ads_test_mode']=='true'
+          PY
+      - run: npm run sync:android
+      - run: |
+          sed -i 's/networkTimeout=10000/networkTimeout=60000/' android/gradle/wrapper/gradle-wrapper.properties
+          chmod +x android/gradlew
+          cd android && ./gradlew assembleRelease
+      - name: Public signing tools
+        run: |
+          python3 - <<'PY'
+          import os, shutil
+          from pathlib import Path
+          out=Path('signing-tools');out.mkdir()
+          sdk=Path(os.environ['ANDROID_HOME'])/'build-tools'
+          tools=max(sdk.iterdir(),key=lambda p:[int(v) if v.isdigit() else 0 for v in p.name.split('.')])
+          for name in ['zipalign','aapt2']:shutil.copy2(tools/name,out/name)
+          shutil.copy2(tools/'lib/apksigner.jar',out/'apksigner.jar')
+          if (tools/'lib64').exists():shutil.copytree(tools/'lib64',out/'lib64')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          {
+            name: interface-preview-unsigned,
+            path: android/app/build/outputs/apk/release/app-release-unsigned.apk,
+          }
+      - uses: actions/upload-artifact@v4
+        with: { name: interface-signing-tools, path: signing-tools/ }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: interface-native-results
+          path: |
+            test-results/feedback-native.json
+            test-results/regression-061/

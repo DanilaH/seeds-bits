@@ -32,7 +32,7 @@ public class SeedsFeedbackPlugin extends Plugin {
     Long revision=call.getLong("epoch"), issued=call.getLong("issuedAt");
     if(revision==null||revision!=epoch||issued==null||Math.abs(System.currentTimeMillis()-issued)>350||!foreground||!enabled){call.resolve();return;}
     String cue=call.getString("cue","button");
-    int priority="win".equals(cue)?4:"full".equals(cue)?3:("pair".equals(cue)||"undo".equals(cue)||"hint".equals(cue)||"reject".equals(cue))?2:"land".equals(cue)?0:1;
+    int priority=("win".equals(cue)||"task".equals(cue)||"page".equals(cue)||"book".equals(cue))?4:"full".equals(cue)?3:("pair".equals(cue)||"undo".equals(cue)||"hint".equals(cue)||"reject".equals(cue))?2:"land".equals(cue)?0:1;
     long now=SystemClock.uptimeMillis(), gap="land".equals(cue)?90:70;
     if((now<protectedUntil && priority<3)||(now-lastPulse<gap && !(priority>lastPriority&&(priority>=3||now-lastPulse>=18)))){call.resolve();return;}
     Vibrator v=vibrator();if(v==null||!v.hasVibrator()){call.resolve();return;}
@@ -40,7 +40,10 @@ public class SeedsFeedbackPlugin extends Plugin {
     AudioAttributes attributes=new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
     try {
       long[] timings=null;int[] amplitudes=null;
-      if("win".equals(cue)){timings=new long[]{0,34,45,42,55,62};amplitudes=new int[]{0,235,0,250,0,255};protectedUntil=now+300;}
+      if("task".equals(cue)){timings=new long[]{0,18,35,24};amplitudes=new int[]{0,155,0,190};protectedUntil=now+150;}
+      else if("page".equals(cue)){timings=new long[]{0,26,38,42};amplitudes=new int[]{0,190,0,235};protectedUntil=now+250;}
+      else if("book".equals(cue)){timings=new long[]{0,30,42,38,52,54};amplitudes=new int[]{0,205,0,230,0,255};protectedUntil=now+350;}
+      else if("win".equals(cue)){timings=new long[]{0,34,45,42,55,62};amplitudes=new int[]{0,235,0,250,0,255};protectedUntil=now+300;}
       else if("full".equals(cue)){timings=new long[]{0,26,64,30,46,18};amplitudes=new int[]{0,220,0,250,0,170};protectedUntil=now+240;}
       else if("undo".equals(cue)){timings=new long[]{0,14,22,20};amplitudes=new int[]{0,160,0,230};}
       else if("hint".equals(cue)){timings=new long[]{0,16,20,18};amplitudes=new int[]{0,180,0,220};}

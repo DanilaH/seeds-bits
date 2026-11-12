@@ -10,7 +10,10 @@ export type HapticCue =
   | "reject"
   | "land"
   | "full"
-  | "win";
+  | "win"
+  | "task"
+  | "page"
+  | "book";
 interface NativeFeedback {
   configure(options: { enabled: boolean; epoch: number }): Promise<void>;
   pulse(options: {
@@ -40,6 +43,9 @@ const profiles: Record<
   reject: { pattern: [18, 24, 18], priority: 2 },
   land: { pattern: 10, priority: 0 },
   full: { pattern: [26, 64, 30, 46, 18], priority: 3, hold: 240 },
+  task: { pattern: [18, 35, 24], priority: 4, hold: 150 },
+  page: { pattern: [26, 38, 42], priority: 4, hold: 250 },
+  book: { pattern: [30, 42, 38, 52, 54], priority: 4, hold: 350 },
   win: { pattern: [34, 45, 42, 55, 62], priority: 4, hold: 300 },
 };
 export function setHapticState(on: boolean, paused: boolean, refresh = false) {
@@ -100,7 +106,7 @@ export async function haptic(cue: HapticCue = "pair") {
       Date.now() - issuedAt > 350
     )
       return;
-    if (cue === "win" || cue === "full")
+    if (["win", "full", "task", "page", "book"].includes(cue))
       await Haptics.notification({ type: NotificationType.Success });
     else
       await Haptics.impact({
