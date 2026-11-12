@@ -1,0 +1,232 @@
+{
+  "source": "37e3163903740cac03e8317fdcbd6026160a5ecd",
+  "baseline_source": "2880012991ea45e520d7fcd90391a1571479f2d9",
+  "initial_actions": {
+    "cases": [
+      {
+        "name": "phone-no-moves",
+        "visible_at_open": true,
+        "action_works": true,
+        "counter": {
+          "text": "2",
+          "color": "rgb(41, 60, 55)",
+          "background": "rgb(250, 251, 249)"
+        }
+      },
+      {
+        "name": "phone-classic-active",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "phone-hint",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "phone-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "phone-book-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "small-normal-no-moves",
+        "visible_at_open": true,
+        "action_works": true,
+        "counter": {
+          "text": "2",
+          "color": "rgb(41, 60, 55)",
+          "background": "rgb(250, 251, 249)"
+        }
+      },
+      {
+        "name": "small-normal-classic-active",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "small-normal-hint",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "small-normal-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "small-normal-book-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "short-large-no-moves",
+        "visible_at_open": true,
+        "action_works": true,
+        "counter": {
+          "text": "2",
+          "color": "rgb(41, 60, 55)",
+          "background": "rgb(250, 251, 249)"
+        }
+      },
+      {
+        "name": "short-large-classic-active",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "short-large-hint",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "short-large-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "short-large-book-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "short-large-dark-safe-no-moves",
+        "visible_at_open": true,
+        "action_works": true,
+        "counter": {
+          "text": "2",
+          "color": "rgb(227, 235, 230)",
+          "background": "rgb(28, 38, 35)"
+        }
+      },
+      {
+        "name": "short-large-dark-safe-classic-active",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "short-large-dark-safe-hint",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "short-large-dark-safe-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "short-large-dark-safe-book-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "small-large-no-moves",
+        "visible_at_open": true,
+        "action_works": true,
+        "counter": {
+          "text": "2",
+          "color": "rgb(41, 60, 55)",
+          "background": "rgb(250, 251, 249)"
+        }
+      },
+      {
+        "name": "small-large-classic-active",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "small-large-hint",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "small-large-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "small-large-book-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "phone-text200-no-moves",
+        "visible_at_open": true,
+        "action_works": true,
+        "counter": {
+          "text": "2",
+          "color": "rgb(227, 235, 230)",
+          "background": "rgb(28, 38, 35)"
+        }
+      },
+      {
+        "name": "phone-text200-classic-active",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "phone-text200-hint",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "phone-text200-result",
+        "visible_at_open": true,
+        "action_works": true
+      },
+      {
+        "name": "phone-text200-book-result",
+        "visible_at_open": true,
+        "action_works": true
+      }
+    ],
+    "before_hidden": 19,
+    "after_hidden": 0,
+    "method": "Current UI, native bridge double, explicit rendered-font scaling; no physical OS zoom claim"
+  },
+  "result_scenes": {
+    "cases": 30,
+    "passed": 30,
+    "frames": 90,
+    "videos": 30,
+    "method": "Real completion actions, explicit progress fixture, native service doubles; physical motor and subjective sound quality not measured"
+  },
+  "screen_sweep": {
+    "source": "37e3163903740cac03e8317fdcbd6026160a5ecd",
+    "scenarios": 53,
+    "completed": 53,
+    "blocked": [],
+    "frames": 394,
+    "horizontalOverflow": [],
+    "pageErrors": []
+  },
+  "journey": {
+    "method": "Scripted real UI; known solutions; mock native ads, analytics and permissions; no human playtest",
+    "scenarios": [
+      {
+        "name": "portrait",
+        "status": "passed",
+        "frames": 19
+      },
+      {
+        "name": "quick-start",
+        "status": "passed",
+        "frames": 15
+      },
+      {
+        "name": "small",
+        "status": "passed",
+        "frames": 19
+      },
+      {
+        "name": "landscape-large-reduced",
+        "status": "passed",
+        "frames": 19
+      }
+    ]
+  }
+}
