@@ -2209,10 +2209,13 @@ header .jar-caption strong {
   padding: 10px 5px;
   border: 1px solid transparent;
   border-radius: 12px;
-  font-size: 0.85em;
+  font-size: clamp(12px, 0.85em, 15px);
   font-weight: 600;
   line-height: 1.25;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+}
+.result-next.is-classic > button:not(#play-again) {
+  white-space: nowrap;
 }
 .result-next.is-classic .difficulty-easier {
   color: var(--easier-ink);

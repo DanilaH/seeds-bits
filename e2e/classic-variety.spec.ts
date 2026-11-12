@@ -255,6 +255,18 @@ for (const viewport of [
           buttons.map((b) => getComputedStyle(b).backgroundColor),
         );
       expect(new Set(colors).size).toBe(3);
+      for (const id of ["classic-easier", "classic-harder"]) {
+        expect(
+          await page.locator(`#${id}`).evaluate((button) => {
+            const text = document.createRange();
+            text.selectNodeContents(button);
+            return (
+              text.getClientRects().length === 1 &&
+              button.scrollWidth <= button.clientWidth
+            );
+          }),
+        ).toBe(true);
+      }
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,

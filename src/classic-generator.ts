@@ -11,7 +11,7 @@ export const CLASSIC_MIN = 0;
 export const CLASSIC_DEFAULT = 1;
 export const CLASSIC_MAX = 2;
 export type ClassicDifficulty = 0 | 1 | 2;
-export const classicDifficultyNames = ["Лёгкая", "Обычная", "Сложная"];
+export const classicDifficultyNames = ["Лёгкая", "Обычная", "Высокая"];
 export type ClassicProof = ([number, number] | null)[];
 export type ClassicRun = {
   version: 1;
