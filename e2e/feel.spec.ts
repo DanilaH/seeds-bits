@@ -378,7 +378,39 @@ test("press feedback preserves a touch at the edge of a navigation button", asyn
 });
 
 const fullPattern = "26,64,30,46,18";
+test("slow save holds the full jar through its spill instead of shaking the next jar", async ({
+  page,
+}) => {
+  await seed(page, { meter: 22 });
+  await page.locator("#resume").click();
+  await page.evaluate(() => {
+    const state = window as any;
+    const request = navigator.locks.request.bind(navigator.locks) as any;
+    state.holdJarSave = true;
+    (navigator.locks as any).request = (...args: any[]) => {
+      if (args[0] === "seeds-save" && state.holdJarSave)
+        return new Promise((resolve) => {
+          state.releaseJarSave = () => {
+            state.holdJarSave = false;
+            resolve(request(...args));
+          };
+        });
+      return request(...args);
+    };
+  });
+  await removePair(page);
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-full", "true");
+  await page.waitForTimeout(600);
+  await expect(page.locator("#jar-spill")).toHaveCount(0);
+  await page.evaluate(() => (window as any).releaseJarSave());
+  await expect(page.locator("#jar-spill i")).toHaveCount(24);
+  await page.waitForTimeout(900);
+  await expect(page.locator("#jar-percent")).toHaveText("100%");
+  await expect(page.locator("#jar-name")).toHaveText("Баночка 1");
+  await expect(page.locator("#jar-name")).toHaveText("Баночка 2");
+});
 for (const viewport of [
+  { width: 320, height: 568 },
   { width: 390, height: 844 },
   { width: 844, height: 390 },
 ])

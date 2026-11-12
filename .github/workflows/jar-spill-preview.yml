@@ -4,6 +4,9 @@ on:
     branches: [qa/jar-spill-20261112]
 permissions:
   contents: read
+concurrency:
+  group: jar-spill-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   preview:
     runs-on: ubuntu-24.04

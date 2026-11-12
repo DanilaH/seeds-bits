@@ -5,7 +5,7 @@ export class JarSpill {
 
   constructor() {
     window.addEventListener("resize", () => this.clear());
-    matchMedia("(prefers-reduced-motion: reduce)").addEventListener(
+    matchMedia("(prefers-reduced-motion: reduce)").addEventListener?.(
       "change",
       () => this.clear(),
     );
@@ -85,7 +85,8 @@ export class JarSpill {
       const frames = Array.from({ length: 33 }, (_, step) => {
         const t = step / 32;
         const elapsed = seconds * t;
-        const px = x + side * spread * t;
+        // Start as a narrow spill, then fan out below the header caption.
+        const px = x + side * spread * t ** 1.8;
         const py = y - lift * elapsed + (gravity * elapsed * elapsed) / 2;
         return {
           transform: `translate3d(${px}px,${py}px,0) rotate(${tilt + spin * t}deg) scaleX(${0.75 + Math.abs(Math.cos(t * Math.PI * 2 + i)) * 0.25})`,

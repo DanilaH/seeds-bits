@@ -666,7 +666,7 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
         capacity: before.capacity,
         until: performance.now() + 1100,
       };
-      fullJarTimer = setTimeout(() => {
+      const nextJar = () => {
         completedJar = undefined;
         renderJar();
         if (!dialog.open && !paused)
@@ -678,7 +678,8 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
             ],
             160,
           );
-      }, 1110);
+      };
+      fullJarTimer = setTimeout(nextJar, 1110);
       const completion = completedJar;
       const revision = presentationRevision;
       // A failed/delayed write must not emit a new milestone, nor may an old
@@ -699,6 +700,10 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
             document.hidden
           )
             return;
+          // Keep the old, full jar through the whole shake if persistence was slow.
+          completion.until = performance.now() + 1100;
+          clearTimeout(fullJarTimer);
+          fullJarTimer = setTimeout(nextJar, 1110);
           jarSpill.play($("jar-glass"));
           feedback("full");
         });
