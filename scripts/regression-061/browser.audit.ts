@@ -398,7 +398,9 @@ test("R10 repeated watch clicks start exactly one fullscreen request", async ({
     .poll(() => page.evaluate(() => (window as any).calls.length))
     .toBe(1);
   await page.evaluate(() => (window as any).finishAd({ status: "closed" }));
-  expect(await page.locator("#app").evaluate((e) => e.inert)).toBe(false);
+  // show() and the queued reward handler settle asynchronously after the SDK result.
+  await expect.poll(() => page.locator("#app").evaluate((e) => e.inert)).toBe(false);
+  expect(await page.evaluate(() => (window as any).calls.length)).toBe(1);
 });
 test("R11 ad dismissal during native background does not re-enable gameplay", async ({
   page,
