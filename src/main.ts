@@ -1,3 +1,5 @@
+import {helpFlags, qaProfile, assignHelp} from "./help-config";
+import {receiptProduct, sameBoard, type HelpIntent, type HelpProduct} from "./help-contract";
 import { dailyRun, streakReward } from "./daily-run";
 import { hintExplanation } from "./hint-explanation";
 import { readClassicDeals, restartClassic } from "./classic-deals";
@@ -31,6 +33,8 @@ import {
   track,
   bridge as adsBridge,
   type RewardReceipt,
+  rewardedReadiness,
+  refreshRewarded,
 } from "./monetization";
 import {
   hintAttempt,
@@ -92,6 +96,8 @@ import {
 } from "./puzzles";
 import {
   fresh,
+  helpProfile,
+  cloneProgress,
   readProgress,
   serializeProgress,
   FutureProgress,
@@ -982,13 +988,14 @@ function syncPauseState() {
   if (!busy) render();
   platform.gameplay(!paused && !dialog.open && occupied(board()) > 0);
   updateBanner();
+  if (!paused) queueMicrotask(() => void applyEarnedHelp());
 }
 let rewardQueue = Promise.resolve();
 let rewardRequest = false;
 let bannerFrame = 0;
 $("app").insertAdjacentHTML(
   "beforeend",
-  `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><div class="hint-heading"><h2 id="hint-offer-title">Ещё подсказки</h2><button id="close-hints" class="plain" aria-label="Закрыть предложение">${icon("close")}</button></div><div class="hint-copy"><p>Бесплатные подсказки и общий запас закончились. За рекламное видео — 3 подсказки в общий запас. Их можно использовать в любом режиме.</p></div><div class="hint-actions"><button id="watch-hints" class="primary">Смотреть рекламу · +3 подсказки</button><button id="cancel-hints" class="secondary">Продолжить без подсказки</button></div></dialog>`,
+  `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><div class="hint-heading"><h2 id="hint-offer-title">Ещё подсказки</h2><button id="close-hints" class="plain" aria-label="Закрыть предложение">${icon("close")}</button></div><div class="hint-copy"><p id="help-offer-copy">Посмотреть видео: показать эту подсказку и оставить ещё 2.</p><p id="rewarded-state" role="status"></p></div><div class="hint-actions"><button id="watch-hints" class="primary">Посмотреть видео · подсказка +2</button><button id="cancel-hints" class="secondary">Продолжить без подсказки</button></div></dialog>`,
 );
 const hintOffer = $<HTMLDialogElement>("hint-offer");
 const lessonQuick = document.createElement("button");
@@ -1080,76 +1087,145 @@ new MutationObserver(updateBanner).observe(document.documentElement, {
   attributeFilter: ["style"],
 });
 window.addEventListener("resize", updateBanner);
+let offeredIntent: HelpIntent | undefined;
+let autoIntent: HelpIntent | undefined;
+let applyingHelp = false;
+function helpData(intent: HelpIntent) {
+  const a = helpProfile(progress).assignments.at(-1);
+  return {product: intent.product, mode: intent.task === "classic" ? "classic" : intent.task.startsWith("book") ? "notebook" : "daily",
+    attempt: intent.attempt, intent_id: intent.id, offer_id: intent.offer, algorithm: intent.algorithm,
+    experiment: a?.experiment ?? "none", variant: a?.variant ?? "control", install: helpProfile(progress).install,
+    qa: Boolean(qaProfile)};
+}
+function helpEvent(name: string, intent: HelpIntent, data: Record<string, string | number | boolean> = {}) {
+  track(`assist_${name}`, {...helpData(intent), ...data});
+}
+function helpFollowup(outcome: string) {
+  const intent = helpProfile(progress).followup;
+  if (!intent || intent.attempt !== hintAttempt(progress).id || intent.task !== progress.active) return;
+  if (adsBridge) enqueueAnalytics(metadata(progress), "assist_followup", {...helpData(intent), outcome});
+  delete helpProfile(progress).followup;
+}
+function validIntent(intent: HelpIntent) {
+  return !futureSave && !storageConflict && progress.active === intent.task &&
+    hintAttempt(progress).id === intent.attempt && intent.rules === session.rules && sameBoard(board(), intent.board);
+}
+function createHintIntent(pair: Connection): HelpIntent {
+  return {version: 1, id: crypto.randomUUID(), offer: crypto.randomUUID(), product: "hint_pack_3",
+    task: progress.active, attempt: hintAttempt(progress).id, rules: 1, algorithm: "hint-v1", board: [...board()], pair: [pair.a, pair.b]};
+}
+async function persistHelp(candidate: Progress, game = session): Promise<boolean> {
+  const wasBusy = busy;
+  busy = true;
+  try {
+    await save(candidate, game);
+    if (saveFailed || futureSave || storageConflict) return false;
+    progress = candidate; session = game;
+    return true;
+  } finally { busy = wasBusy; }
+}
 function receiveReward(r: RewardReceipt): Promise<void> {
-  rewardQueue = rewardQueue
-    .catch(() => {})
-    .then(async () => {
-      if (switching) await saveQueue;
-      if (futureSave || storageConflict || switching) return;
-      const already = metadata(progress).rewardReceipts?.includes(r.token);
-      // A restored backup can predate the rewarded attempt. Keep the earned help.
-      const target = Object.values(metadata(progress).attempts).some(
-        (a) => a.id === r.attempt,
-      )
-        ? r
-        : { ...r, attempt: hintAttempt(progress).id };
-      if (!grantReward(progress, target)) return;
-      if (!already)
-        durableEvent("hint_reward_granted", {
-          count: 3,
-          mode: gameMode(),
-          attempt: target.attempt,
-        });
-      await save();
-      if (!saveFailed && !futureSave && !storageConflict) {
-        await adsBridge?.acknowledge({ token: r.token }).catch(() => {});
-      }
-      if (!busy) render();
-    });
+  rewardQueue = rewardQueue.catch(() => {}).then(async () => {
+    if (switching) await saveQueue;
+    if (futureSave || storageConflict || switching) return;
+    const product = receiptProduct(r);
+    if (!product) { track("assist_result", {outcome: "unsupported_receipt", receipt: typeof r?.token === "string" ? r.token.slice(0,100) : "invalid"}); message("Награда сохранена на устройстве, но её формат пока не поддерживается. Не удаляйте игру."); return; }
+    const candidate = cloneProgress(progress), m = metadata(candidate);
+    const already = m.rewardReceipts?.includes(r.token);
+    if (!grantReward(candidate, r)) return;
+    if (!already && adsBridge) {
+      enqueueAnalytics(m, product === "hint_pack_3" ? "hint_reward_granted" : "assist_grant", {
+        product, count: product === "hint_pack_3" ? 3 : 1, attempt: r.attempt,
+        receipt: r.token, intent_id: r.intent_id ?? "legacy", offer_id: r.offer_id ?? "legacy", ad_session_id: r.ad_session_id ?? "legacy",
+        install: helpProfile(candidate).install, qa: Boolean(qaProfile), mode: gameMode(),
+      });
+    }
+    if (!await persistHelp(candidate)) return;
+    await adsBridge?.acknowledge({token: r.token}).catch(() => {});
+    void refreshRewarded();
+    if (!busy) render();
+  });
   return rewardQueue;
 }
-function offerHints() {
+function updateOfferReadiness() {
+  if (!hintOffer.open) return;
+  const {state, reason} = rewardedReadiness;
+  const charged = offeredIntent?.product !== "hint_pack_3" && offeredIntent && canUseStoredHelp(offeredIntent);
+  $("rewarded-state").textContent = charged ? "Без просмотра видео" : reason === "pending_receipt" ? "Восстанавливаем заработанную награду…" :
+    state === "ready" ? "Видео готово. Награда — только за завершённый просмотр." : state === "loading" ? "Видео загружается… Можно продолжить игру." : state === "disabled" ? "Просмотр видео выключен" : "Сейчас видео недоступно";
+  $<HTMLButtonElement>("watch-hints").disabled = !charged && state !== "ready";
+}
+window.addEventListener("seeds:rewarded-state", updateOfferReadiness);
+function canUseStoredHelp(_intent: HelpIntent): boolean { return false; }
+function offerHints(intent: HelpIntent) {
   if (rewardRequest || hintOffer.open) return;
+  offeredIntent = intent;
   jarSpill.clear();
-  track("hint_offer", { mode: gameMode() });
-  hintOffer.showModal();
+  helpEvent("eligibility", intent);
+  track("hint_offer", {mode: gameMode()});
+  $("hint-offer-title").textContent = "Открыть подсказку";
+  $("help-offer-copy").textContent = "Посмотреть видео: показать эту подсказку и оставить ещё 2. Цифры вы убираете сами.";
+  $("watch-hints").textContent = "Посмотреть видео · подсказка +2";
+  hintOffer.showModal(); updateOfferReadiness();
+  helpEvent("offer", intent, {ready_state: rewardedReadiness.state});
+  void refreshRewarded(true);
+  if (rewardedReadiness.reason === "pending_receipt") void (async () => {
+    const pending = await adsBridge?.pending().catch(() => undefined);
+    if (pending?.reward) {await receiveReward(pending.reward); if (!saveFailed && offeredIntent?.id === intent.id) {hintOffer.close(); offeredIntent = undefined; message("Ранее заработанная награда восстановлена в запасе");}}
+  })();
   updateBanner();
 }
 $("close-hints").onclick = () => $("cancel-hints").click();
 $("cancel-hints").onclick = () => {
-  hintOffer.close();
-  updateBanner();
+  if (offeredIntent) helpEvent("choice", offeredIntent, {outcome: "dismissed"});
+  hintOffer.close(); offeredIntent = undefined; updateBanner();
 };
-$("watch-hints").onclick = async () => {
-  if (rewardRequest) return;
-  if (saveFailed || storageConflict || futureSave) {
-    hintOffer.close();
-    showSaveState();
-    updateBanner();
-    return;
-  }
-  let outcomeMessage = "";
-  rewardRequest = true;
-  hintOffer.close();
-  syncPauseState();
+hintOffer.addEventListener("cancel", e => {e.preventDefault(); $("cancel-hints").click();});
+async function applyEarnedHelp() {
+  if (applyingHelp || !autoIntent || paused || busy || adActive || rewardRequest || !appForeground || document.hidden) return;
+  const intent = autoIntent, grant = helpProfile(progress).grant;
+  if (!grant || grant.intent !== intent.id || grant.product !== intent.product) return;
+  applyingHelp = true;
   try {
-    const attempt = hintAttempt(progress).id;
-    await save();
-    if (saveFailed || storageConflict || futureSave) return;
+    if (!validIntent(intent)) {
+      helpEvent("stored", intent, {outcome: "stale", receipt: grant.token});
+      message(intent.product === "hint_pack_3" ? "3 подсказки добавлены в запас" : "Заряд добавлен в запас");
+      autoIntent = undefined; return;
+    }
+    if (intent.product === "hint_pack_3" && await revealHint(intent)) {
+      message(`Подсказка открыта. Ещё ${metadata(progress).wallet} в запасе`);
+      autoIntent = undefined;
+    }
+  } finally { applyingHelp = false; }
+}
+$("watch-hints").onclick = async () => {
+  const intent = offeredIntent;
+  if (rewardRequest || !intent || !validIntent(intent)) return;
+  await refreshRewarded();
+  if (rewardedReadiness.state !== "ready") {updateOfferReadiness(); return;}
+  if (saveFailed || storageConflict || futureSave) {hintOffer.close(); showSaveState(); return;}
+  helpEvent("choice", intent, {outcome: "accepted"});
+  const candidate = cloneProgress(progress);
+  helpProfile(candidate).intent = intent;
+  if (!await persistHelp(candidate)) return;
+  autoIntent = intent;
+  rewardRequest = true; hintOffer.close(); syncPauseState();
+  const adSession = crypto.randomUUID();
+  helpEvent("request", intent, {ad_session_id: adSession});
+  let outcomeMessage = "";
+  try {
     lastExternalAt = performance.now();
-    const result = await showAd("rewarded", attempt);
-    syncPauseState();
+    const result = await showAd("rewarded", intent.attempt, intent, adSession);
     if (result.reward) await receiveReward(result.reward);
     await rewardQueue;
-    outcomeMessage =
-      hintsLeft(progress) > 0
-        ? "Добавлено 3 подсказки"
-        : result.status === "closed"
-          ? "Видео закрыто. Подсказки не начислены."
-          : "Реклама сейчас недоступна. Попробуйте позже.";
+    helpEvent("result", intent, {ad_session_id: adSession, outcome: result.status ?? "error"});
+    if (helpProfile(progress).grant?.intent !== intent.id) {
+      autoIntent = undefined;
+      outcomeMessage = result.status === "closed" ? "Видео закрыто. Подсказки не начислены." : "Реклама сейчас недоступна. Попробуйте позже.";
+    }
   } finally {
-    rewardRequest = false;
-    syncPauseState();
+    rewardRequest = false; syncPauseState();
+    await applyEarnedHelp();
     if (outcomeMessage && !saveFailed) message(outcomeMessage);
     updateBanner();
   }
@@ -1438,10 +1514,12 @@ function render() {
     !count ||
     (progress.active === "classic" && !available.length);
   const hintCount = monetized ? hintsLeft(progress) : 0;
-  $("hint-count").textContent = monetized ? compactCount(hintCount) : "";
+  const repeatAvailable = available.some(p => hintAttempt(progress).hintKeys?.includes(hintKey(values, p.a, p.b)));
+  const videoHint = helpFlags.visibility && monetized && hintCount === 0 && available.length > 0 && !repeatAvailable;
+  $("hint-count").textContent = videoHint ? "▷ +3" : monetized ? compactCount(hintCount) : "";
   $("hint").setAttribute(
     "aria-label",
-    monetized ? `Подсказка, осталось ${hintCount}` : "Подсказка",
+    videoHint ? "Подсказка: 3 подсказки за просмотр видео" : monetized ? `Подсказка, осталось ${hintCount}` : "Подсказка",
   );
   updateBanner();
   $("add").setAttribute(
@@ -1619,6 +1697,7 @@ async function choose(i: number) {
     firstEvent("first_pair", data);
     if (!assisted) firstEvent("first_unassisted_pair", data);
   }
+  if (lesson < 0) helpFollowup("ordinary_move");
   const flightRects = [cell(a), cell(i)]
     .filter(Boolean)
     .map((n) => n!.getBoundingClientRect());
@@ -1901,25 +1980,35 @@ async function hint() {
     highlight = available[0];
   }
   if (!highlight) return;
-  const key = hintKey(board(), highlight.a, highlight.b);
-  const repeated = attempt.hintKeys?.includes(key) || Boolean(remembered);
-  if (monetized && !spendHint(progress, key)) {
-    highlight = null;
-    render();
-    offerHints();
-    return;
+  const intent = createHintIntent(highlight);
+  highlight = null;
+  if (monetized && !hintsLeft(progress) && !attempt.hintKeys?.includes(hintKey(intent.board, ...intent.pair))) {
+    render(); offerHints(intent); return;
   }
-  (attempt.hintChoices ??= {})[hintKey(board(), 0, 0)] = [
-    highlight.a,
-    highlight.b,
-  ];
+  await revealHint(intent);
+}
+async function revealHint(intent: HelpIntent): Promise<boolean> {
+  if (!validIntent(intent)) return false;
+  const pair = checkPair(board(), ...intent.pair);
+  if (!pair.ok) return false;
+  const candidate = cloneProgress(progress), attempt = hintAttempt(candidate);
+  const key = hintKey(intent.board, ...intent.pair);
+  const repeated = attempt.hintKeys?.includes(key);
+  if (monetized && !spendHint(candidate, key)) return false;
+  (attempt.hintChoices ??= {})[hintKey(intent.board, 0, 0)] = [...intent.pair];
+  if (!repeated) candidate.hints[candidate.active] = (candidate.hints[candidate.active] ?? 0) + 1;
+  helpProfile(candidate).followup = intent;
+  if (adsBridge) enqueueAnalytics(metadata(candidate), "assist_apply", {...helpData(intent), application_id: crypto.randomUUID(), outcome: repeated ? "repeat" : "revealed"});
+  if (!await persistHelp(candidate)) {render(); return false;}
   if (!repeated) {
-    progress.hints[progress.active] =
-      (progress.hints[progress.active] ?? 0) + 1;
-    track("hint_used", { mode: gameMode(), remaining: hintsLeft(progress) });
-    firstEvent("first_hint", { mode: gameMode(), attempt: attempt.id });
+    track("hint_used", {mode: gameMode(), remaining: hintsLeft(progress)});
+    firstEvent("first_hint", {mode: gameMode(), attempt: attempt.id});
+    void save();
   }
-  save();
+  displayHint(pair.path); return true;
+}
+function displayHint(pair: Connection) {
+  highlight = pair;
   selected = -1;
   render();
   feedback("hint");
@@ -2492,6 +2581,15 @@ async function boot() {
   } catch {
     warning = "Сервис площадки недоступен. Можно играть без него.";
   }
+  const profile = helpProfile(progress), beforeAssignments = profile.assignments.length;
+  const assignment = assignHelp(profile, hadStoredState);
+  if (profile.assignments.length !== beforeAssignments && adsBridge) enqueueAnalytics(metadata(progress), "experiment_assignment", {...assignment});
+  if (qaProfile) {
+    const label = document.createElement("span"); label.id = "qa-profile";
+    label.textContent = `QA · ${qaProfile} · тестовая реклама`; document.body.append(label);
+  }
+  await save();
+  await adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}).catch(() => {});
   experience(progress).sessions++;
   await initializeMonetization(() => syncPauseState(), receiveReward);
   if (

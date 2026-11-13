@@ -1,15 +1,24 @@
 import { Capacitor, registerPlugin } from "@capacitor/core";
 import { eventContext } from "./analytics";
 import type { PluginListenerHandle } from "@capacitor/core";
-export type RewardReceipt = { token: string; attempt: string };
+import type { HelpIntent, RewardReceipt } from "./help-contract";
+export type { RewardReceipt } from "./help-contract";
+export type RewardedReadiness = {state: "ready" | "loading" | "unavailable" | "disabled"; reason: string};
+export let rewardedReadiness: RewardedReadiness = {state: "disabled", reason: "disabled"};
+function setReadiness(value: RewardedReadiness) {
+  if (!["ready", "loading", "unavailable", "disabled"].includes(value?.state)) return;
+  rewardedReadiness = value; window.dispatchEvent(new Event("seeds:rewarded-state"));
+}
 type Result = { shown?: boolean; reward?: RewardReceipt; status?: string };
 type Configuration = {
   enabled: boolean;
   test: boolean;
   reward?: RewardReceipt;
+  readiness?: RewardedReadiness;
 };
 export interface MonetizationBridge {
   initialize(): Promise<Configuration>;
+  configureContext?(options: Record<string, string>): Promise<void>;
   banner(options: {
     visible: boolean;
     x: number;
@@ -19,9 +28,11 @@ export interface MonetizationBridge {
     viewportWidth: number;
   }): Promise<void>;
   preload(): Promise<void>;
+  readiness?(): Promise<RewardedReadiness>;
   show(options: {
     kind: "interstitial" | "rewarded";
     attempt?: string;
+    product?: string; intent_id?: string; offer_id?: string; ad_session_id?: string;
   }): Promise<Result>;
   pending(): Promise<{ reward?: RewardReceipt }>;
   acknowledge(options: { token: string }): Promise<void>;
@@ -29,6 +40,7 @@ export interface MonetizationBridge {
     name: string;
     data: Record<string, string | number | boolean>;
   }): Promise<{ accepted: boolean } | void>;
+  addListener(name: "rewardedState", listener: (r: RewardedReadiness) => void): Promise<PluginListenerHandle>;
   addListener(
     name: "reward",
     listener: (r: RewardReceipt) => void,
@@ -77,6 +89,7 @@ export async function initializeMonetization(
   onPause = pause;
   if (!bridge) return;
   try {
+    if (bridge.readiness) await bridge.addListener("rewardedState", setReadiness);
     await bridge.addListener("reward", (r) => {
       void reward(r);
     });
@@ -89,6 +102,7 @@ export async function initializeMonetization(
     });
     const config = await bridge.initialize();
     monetized = config.enabled;
+    setReadiness(config.readiness ?? (bridge.readiness ? await bridge.readiness() : {state: import.meta.env.DEV && config.enabled ? "ready" : "disabled", reason: "legacy_qa_bridge"}));
     document.documentElement.classList.toggle("has-mobile-ads", monetized);
     if (config.reward) await reward(config.reward);
     void bridge.preload().catch(() => {});
@@ -99,12 +113,14 @@ export async function initializeMonetization(
 export async function showAd(
   kind: "interstitial" | "rewarded",
   attempt?: string,
+  intent?: HelpIntent,
+  adSession = crypto.randomUUID(),
 ): Promise<Result> {
   if (!monetized || !bridge || adActive) return { status: "unavailable" };
   adActive = true;
   onPause(true);
   try {
-    return await bridge.show({ kind, attempt });
+    return await bridge.show({ kind, attempt, ad_session_id: adSession, ...(intent ? {product: intent.product, intent_id: intent.id, offer_id: intent.offer} : {}) });
   } catch {
     return { status: "error" };
   } finally {
@@ -131,4 +147,10 @@ export async function syncBanner(visible: boolean) {
   } catch {
     /* Advertising must not interrupt play. */
   }
+}
+
+export async function refreshRewarded(preload = false) {
+  if (!bridge) return;
+  if (preload) await bridge.preload().catch(() => {});
+  if (bridge.readiness) { try { setReadiness(await bridge.readiness()); } catch { setReadiness({state: "unavailable", reason: "bridge_error"}); } }
 }

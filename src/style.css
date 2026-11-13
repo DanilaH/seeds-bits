@@ -1875,3 +1875,5 @@ header .jar-glass {
     var(--safe-area-inset-right, env(safe-area-inset-right, 0px))
   );
 }
+
+#qa-profile {position:fixed;top:0;left:0;right:0;text-align:center;background:#633e15;color:#fff7e3;font:10px/15px sans-serif;z-index:5000;pointer-events:none}

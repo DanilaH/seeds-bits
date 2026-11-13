@@ -1,6 +1,6 @@
 import { compactHintKey } from "./hint-key";
-import { metadata, type Progress, type Attempt } from "./progress";
-import type { RewardReceipt } from "./monetization";
+import { metadata, helpProfile, type Progress, type Attempt } from "./progress";
+import {receiptProduct, type RewardReceipt} from "./help-contract";
 export function hintKey(board: number[], a: number, b: number) {
   return compactHintKey(
     `${board.join("")}:${Math.min(a, b)}:${Math.max(a, b)}`,
@@ -27,11 +27,15 @@ export function spendHint(p: Progress, key: string): boolean {
 }
 export function grantReward(p: Progress, r: RewardReceipt): boolean {
   const m = metadata(p);
+  const product = receiptProduct(r);
+  if (!product) return false;
   if (typeof r.token !== "string" || !r.token || r.token.length > 100)
     return false;
   if (m.rewardReceipts?.includes(r.token)) return true;
   // A pending native receipt remains earned even when its old attempt was replaced.
-  m.wallet += 3;
+  if (product === "hint_pack_3") m.wallet += 3;
+  else helpProfile(p).inventory[product === "magnet_1" ? "magnet" : "plan"]++;
+  if (r.intent_id) helpProfile(p).grant = {token: r.token, intent: r.intent_id, product};
   (m.rewardReceipts ??= []).push(r.token);
   // Native has only one unacknowledged receipt; acknowledgement is after durable save.
   if (m.rewardReceipts.length > 500)

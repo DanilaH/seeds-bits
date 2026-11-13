@@ -8,7 +8,7 @@ export function eventContext() {
   return { launch, occurred_at: Date.now() };
 }
 const names =
-  /^(game_start|game_complete|daily_reward|hint_reward_granted|tutorial_start|tutorial_end|first_pair|first_unassisted_pair|first_no_moves|first_hint|first_complete)$/;
+  /^(game_start|game_complete|daily_reward|hint_reward_granted|tutorial_start|tutorial_end|first_pair|first_unassisted_pair|first_no_moves|first_hint|first_complete|experiment_assignment|assist_(eligibility|offer|choice|request|result|grant|apply|stored|followup))$/;
 export function readAnalytics(raw: unknown): AnalyticsEvent[] {
   if (!Array.isArray(raw)) return [];
   return raw
@@ -23,7 +23,7 @@ export function readAnalytics(raw: unknown): AnalyticsEvent[] {
         e.data &&
         typeof e.data === "object" &&
         !Array.isArray(e.data) &&
-        Object.keys(e.data).length <= 12 &&
+        Object.keys(e.data).length <= 32 &&
         Object.entries(e.data).every(
           ([k, v]) =>
             k.length <= 40 &&

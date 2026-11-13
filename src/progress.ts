@@ -1,3 +1,4 @@
+import { freshHelp, readHelp, readHelpAttempt, type HelpProfile, type HelpAttempt } from "./help-contract";
 import { compactHintKey } from "./hint-key";
 import { readAnalytics, type AnalyticsJournal } from "./analytics";
 import { packSession, unpackSession } from "./history-codec";
@@ -38,19 +39,26 @@ export function readProgress(
   onRecovery: () => void = () => {},
 ): Progress {
   const p = JSON.parse(raw);
-  if (p?.version > 5 || p?.meta?.version > 2 || p?.jars?.version > 2)
+  if (p?.version > 6 || p?.meta?.version > 2 || p?.jars?.version > 2 || p?.meta?.help?.version > 1 || Object.values(p?.meta?.attempts ?? {}).some((a: any) => a?.help?.version > 1))
     throw new FutureProgress("Newer save format");
   if (
     (p?.version !== 2 &&
       p?.version !== 3 &&
       p?.version !== 4 &&
-      p?.version !== 5) ||
+      p?.version !== 5 &&
+      p?.version !== 6) ||
     !validId(p.active) ||
     !p.sessions ||
     !Array.isArray(p.done) ||
     !Array.isArray(p.seen)
   )
     throw Error("Invalid progress");
+  if (p.version === 6) {
+    try {
+      if (p.meta?.help !== undefined) readHelp(p.meta.help);
+      for (const a of Object.values(p.meta?.attempts ?? {}) as any[]) if (a.help !== undefined) readHelpAttempt(a.help);
+    } catch { throw new FutureProgress("Protected assistance data could not be read"); }
+  }
   const clean = fresh();
   for (const [id, s] of Object.entries(p.sessions))
     if (validId(id)) {
@@ -151,6 +159,7 @@ export function readProgress(
             ),
           );
         }
+        if (a.help !== undefined) safe.help = readHelpAttempt(a.help);
         attempts[id] = safe;
       }
       if (m.version === 1) {
@@ -234,6 +243,7 @@ export function readProgress(
           onRecovery();
         }
       }
+      if (m.help !== undefined) m.help = readHelp(m.help);
       clean.meta = m;
     } catch {
       // Statistics are optional; keep valid boards, completion marks and trophies.
@@ -273,8 +283,10 @@ export type Attempt = {
   hintBonus?: number;
   hintKeys?: string[];
   hintChoices?: Record<string, [number, number]>;
+  help?: HelpAttempt;
 };
 export type Meta = AnalyticsJournal & {
+  help?: HelpProfile;
   analyticsCohort?: "fresh-v2" | "legacy";
   version: 2;
   wallet: number;
@@ -330,7 +342,7 @@ export function recordCompletion(p: Progress, task: string, now?: string) {
   if (a.completed) return { seeds: 0, hints: 0 };
   a.completed = true;
   m.completed++;
-  if (!(p.hints[task] ?? 0)) m.unassisted++;
+  if (!(p.hints[task] ?? 0) && !a.help?.assisted) m.unassisted++;
   if (task === "classic") jars(p).wins++;
   let seeds = 0;
   if (task !== "classic" && !p.done.includes(task)) {
@@ -343,13 +355,18 @@ export function recordCompletion(p: Progress, task: string, now?: string) {
   return { seeds, hints: recordDaily(p, task, now) };
 }
 
-/** Wire v5 prevents older builds from dropping wallet, daily series and the migrated jar curve. */
+/** Wire v6 prevents older clients from overwriting product inventory and entitlements. */
 export function serializeProgress(p: Progress): string {
   return JSON.stringify({
     ...p,
-    version: 5,
+    version: 6,
     sessions: Object.fromEntries(
       Object.entries(p.sessions).map(([id, s]) => [id, packSession(s)]),
     ),
   });
 }
+
+export function helpProfile(p: Progress): HelpProfile {
+  return (metadata(p).help ??= freshHelp());
+}
+export function cloneProgress(p: Progress): Progress { return readProgress(serializeProgress(p)); }

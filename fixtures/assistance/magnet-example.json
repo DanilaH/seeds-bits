@@ -1,0 +1,176 @@
+{
+  "baseline": "24ae94ffbe4a2652b8e3ce410c6e15d74ef251d9",
+  "width": 9,
+  "source": "synthetic QA example from a paired 18-digit start followed by real legal removals; not a player capture",
+  "start": [
+    8,
+    2,
+    8,
+    6,
+    3,
+    5,
+    5,
+    7,
+    3,
+    7,
+    4,
+    3,
+    3,
+    6,
+    4,
+    3,
+    2,
+    7
+  ],
+  "normal_prefix": [
+    [
+      11,
+      12
+    ],
+    [
+      8,
+      17
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      7,
+      9
+    ],
+    [
+      10,
+      13
+    ],
+    [
+      5,
+      6
+    ]
+  ],
+  "before": [
+    0,
+    0,
+    8,
+    6,
+    3,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    3,
+    2,
+    0
+  ],
+  "legal_pairs_before": [],
+  "magnet_pair": [
+    3,
+    14
+  ],
+  "ordinary_rejection": {
+    "ok": false,
+    "reason": "direction"
+  },
+  "after_magnet": [
+    0,
+    0,
+    8,
+    0,
+    3,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    3,
+    2,
+    0
+  ],
+  "normal_continuation": [
+    {
+      "pair": [
+        4,
+        15
+      ],
+      "before": [
+        0,
+        0,
+        8,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        2,
+        0
+      ],
+      "after": [
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "pair": [
+        2,
+        16
+      ],
+      "before": [
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "after": []
+    }
+  ],
+  "final": []
+}

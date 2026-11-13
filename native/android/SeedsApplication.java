@@ -23,7 +23,10 @@ public class SeedsApplication extends Application {
     data.put("build_channel", context.getString(R.string.analytics_channel));
     boolean test = context.getResources().getBoolean(R.bool.ads_test_mode);
     data.put("test", test).put("ads_test", test);
-    data.put("schema", 2);
+    data.put("schema", 3);
+    android.content.SharedPreferences prefs = context.getSharedPreferences("seeds-monetization",0);
+    for (String field : new String[]{"install","experiment","variant","config","anchor","cohort","qa"})
+      if (prefs.contains("context_"+field)) data.put(field,prefs.getString("context_"+field,""));
     try {
       PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
       data.put("app_version", info.versionName).put("app_build", info.versionCode);

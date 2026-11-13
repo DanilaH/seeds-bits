@@ -84,7 +84,7 @@ test("damaged packed history preserves current board and other tasks with recove
   expect(restored.sessions.classic.history).toEqual([]);
   expect(restored.sessions["book-v1-1"]).toEqual(p.sessions["book-v1-1"]);
   expect(recovered).toBe(1);
-  expect(() => readProgress(JSON.stringify({ ...raw, version: 6 }))).toThrow(
+  expect(() => readProgress(JSON.stringify({ ...raw, version: 7 }))).toThrow(
     FutureProgress,
   );
 });
