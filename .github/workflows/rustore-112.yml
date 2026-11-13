@@ -1,0 +1,137 @@
+name: RuStore 1.1.2 store APK
+on:
+  push:
+    branches: [release/rustore-1.1.2]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: rustore-112-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SEEDS_BUILD_FLAVOR: release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: npm ci --no-audit --no-fund
+      - run: python3 scripts/feedback-native-harness.py && python3 scripts/regression-061/native-harness.py
+      - run: npm run setup:android
+      - name: Strict live configuration with a distinct store build number
+        env:
+          APPMETRICA_API_KEY: ${{ secrets.APPMETRICA_API_KEY || vars.APPMETRICA_API_KEY }}
+          YANDEX_BANNER_AD_UNIT_ID: ${{ secrets.YANDEX_BANNER_AD_UNIT_ID || vars.YANDEX_BANNER_AD_UNIT_ID }}
+          YANDEX_INTERSTITIAL_AD_UNIT_ID: ${{ secrets.YANDEX_INTERSTITIAL_AD_UNIT_ID || vars.YANDEX_INTERSTITIAL_AD_UNIT_ID }}
+          YANDEX_REWARDED_AD_UNIT_ID: ${{ secrets.YANDEX_REWARDED_AD_UNIT_ID || vars.YANDEX_REWARDED_AD_UNIT_ID }}
+          ADS_MODE: live
+          REQUIRE_MOBILE_CONFIG: true
+        run: |
+          GITHUB_RUN_NUMBER=$((100 + GITHUB_RUN_NUMBER)) node scripts/configure-android.mjs
+          python3 - <<'PY'
+          import re, xml.etree.ElementTree as ET
+          from pathlib import Path
+          r=ET.parse('android/app/src/main/res/values/seeds-services.xml').getroot()
+          v={e.attrib['name']:e.text or '' for e in r}
+          assert v['analytics_channel']=='release' and v['ads_test_mode']=='false'
+          assert v['appmetrica_api_key']
+          ids=[v[k] for k in ['yandex_banner_id','yandex_interstitial_id','yandex_rewarded_id']]
+          assert len(set(ids))==3 and all(x.startswith('R-M-') for x in ids)
+          assert int(re.search(r'versionCode (\d+)',Path('android/app/build.gradle').read_text())[1])>1102015
+          print('Live configuration verified: release channel, analytics enabled, three distinct live units; values withheld')
+          PY
+      - run: npm run sync:android
+      - name: Optimized release APK
+        run: |
+          sed -i 's/networkTimeout=10000/networkTimeout=60000/' android/gradle/wrapper/gradle-wrapper.properties
+          chmod +x android/gradlew
+          cd android && ./gradlew assembleRelease
+      - name: Public build evidence and signing tools
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,re,shutil
+          from pathlib import Path
+          out=Path('release-tools');out.mkdir()
+          sdk=Path(os.environ['ANDROID_HOME'])/'build-tools'
+          tools=max(sdk.iterdir(),key=lambda p:[int(v) if v.isdigit() else 0 for v in p.name.split('.')])
+          for name in ['zipalign','aapt2']:shutil.copy2(tools/name,out/name)
+          shutil.copy2(tools/'lib/apksigner.jar',out/'apksigner.jar')
+          if (tools/'lib64').exists():shutil.copytree(tools/'lib64',out/'lib64')
+          apk=Path('android/app/build/outputs/apk/release/app-release-unsigned.apk')
+          info={'source':os.environ['GITHUB_SHA'],'version':json.loads(Path('package.json').read_text())['version'],'versionCode':int(re.search(r'versionCode (\d+)',Path('android/app/build.gradle').read_text())[1]),'unsignedSha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'storeConfigurationChecked':True,'analyticsChannel':'release','adsTestMode':False}
+          Path('test-results/store-build.json').write_text(json.dumps(info,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with: {name: seeds-112-store-unsigned, path: android/app/build/outputs/apk/release/app-release-unsigned.apk}
+      - uses: actions/upload-artifact@v4
+        with: {name: seeds-112-store-tools, path: release-tools/}
+      - uses: actions/upload-artifact@v4
+        with: {name: seeds-112-store-r8, path: android/app/build/outputs/mapping/release/}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-112-store-build-evidence
+          path: |
+            test-results/store-build.json
+            test-results/feedback-native.json
+            test-results/regression-061/
+  android-acceptance:
+    needs: release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SEEDS_UPGRADE_BASELINE_KIND: exact previously built QA release payload
+      SEEDS_UPGRADE_BASELINE_SOURCE: 160da8c79fd013f25a64607b7338ed6a65131942
+      SEEDS_UPGRADE_BASELINE_VERSION: '1.1.2 (1102015)'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - uses: actions/download-artifact@v4
+        with: {name: seeds-112-store-unsigned, path: new-release/}
+      - uses: actions/download-artifact@v4
+        with:
+          name: seeds-product-release-unsigned
+          path: baseline/
+          run-id: 43032671115
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pin the previously accepted baseline payload
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          assert hashlib.sha256(Path('baseline/app-release-unsigned.apk').read_bytes()).hexdigest()=='2fed06a41c7b2a3d120fc587c5a7e7985c023b9feadbd608684a0e108abac51a'
+          PY
+      - run: python3 -m pip install --user pillow
+      - name: Start Android 35 with host network blocked before boot
+        run: |
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64' 'build-tools;35.0.0'
+          echo no | avdmanager create avd --force --name seeds_store_112 --package 'system-images;android-35;google_apis;x86_64'
+          bash scripts/ci-offline-emulator.sh seeds_store_112
+          keytool -genkeypair -keystore /tmp/store112.p12 -storetype PKCS12 -storepass android -keypass android -alias smoke -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI Offline Store Acceptance' -noprompt
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/store112.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-smoke.apk new-release/app-release-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/store112.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-baseline.apk baseline/app-release-unsigned.apk
+          adb install /tmp/seeds-baseline.apk
+      - run: python3 scripts/android-upgrade.py before
+      - run: adb install -r /tmp/seeds-smoke.apk
+      - run: python3 scripts/android-upgrade.py after
+      - name: Fresh installation of the same payload
+        run: |
+          adb uninstall com.seedsbits.game
+          adb install /tmp/seeds-smoke.apk
+      - run: python3 scripts/android-smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-112-store-android-acceptance
+          path: |
+            test-results/emulator/
+            test-results/emulator-upgrade/
+            test-results/offline-guard/
