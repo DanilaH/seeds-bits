@@ -190,7 +190,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   @PluginMethod public void report(PluginCall call) {
     String name = call.getString("name", "");
-    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_(error|recovered)|tutorial_(start|end)|first_(pair|unassisted_pair|no_moves|hint|complete)|reminder_(permission_requested|permission|toggle|open)|review_(request|flow)|daily_reward|experiment_assignment|assist_(eligibility|offer|choice|request|result|grant|apply|stored|followup)")) {
+    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_(error|recovered)|tutorial_(start|end)|first_(pair|unassisted_pair|no_moves|hint|complete)|reminder_(permission_requested|permission|toggle|open)|review_(request|flow)|daily_reward|result_transition|experiment_assignment|assist_(eligibility|offer|choice|request|result|grant|apply|stored|followup)")) {
       JSObject data = call.getObject("data", new JSObject());
       String id = data.optString("event_id", "");
       if (id.length() > 100) { call.reject("Invalid event id"); return; }

@@ -2525,41 +2525,43 @@ $("confirm-new").onclick = () => {
   else reset();
 };
 $("restart-task").onclick = () => requestRestart();
-async function playNextClassic(delta: -1 | 0 | 1 = 0) {
-  if (busy || adActive || rewardRequest || engagementActive) return;
-  const level = classicDifficulty() + delta;
-  if (level < CLASSIC_MIN || level > CLASSIC_MAX) return;
-  busy = true;
-  renderClassicChoices();
+async function prepareResultTransition(route: "next" | "easier" | "harder" | "short") {
+  if (busy || adActive || rewardRequest || engagementActive || lesson >= 0 || occupied(board())) return false;
+  const policy = route !== "short" || helpFlags.result;
+  const firstShort = route === "short" && !metadata(progress).flags?.includes("result_short_task_seen");
+  if(firstShort)(metadata(progress).flags ??= []).push("result_short_task_seen");
+  const transition = {route,first_short_task:firstShort,attempt:hintAttempt(progress).id,mode:gameMode(),policy_enabled:policy,ad_session_id:crypto.randomUUID()};
+  busy = true;renderClassicChoices();
+  durableEvent("result_transition",{...transition,phase:"choice"});
   await save();
-  if (
-    !saveFailed &&
-    !storageConflict &&
-    !futureSave &&
-    !skipNextInterstitial &&
-    performance.now() - lastExternalAt > 30000
-  ) {
-    lastExternalAt = performance.now();
-    await showAd("interstitial");
-  }
-  skipNextInterstitial = false;
-  busy = false;
-  renderClassicChoices();
-  if (saveFailed || storageConflict || futureSave) return;
-  const next = nextTask(progress.active, progress.done);
-  if (next) await switchGame(next);
-  else if (progress.active.startsWith("book")) openCollection("book");
-  else if (progress.active.startsWith("daily")) openCollection("calendar");
-  else await beginClassic("next", level as ClassicDifficulty);
+  let reason = !policy ? "variant_off" : saveFailed || storageConflict || futureSave ? "save_blocked" :
+    !appForeground || document.hidden ? "background" : skipNextInterstitial || performance.now()-lastExternalAt <= 30000 ? "external_suppression" : "request";
+  if(reason === "request") {
+    lastExternalAt=performance.now();
+    const result=await showAd("interstitial",undefined,undefined,transition.ad_session_id);
+    reason=result.reason ?? result.status ?? "unknown";
+    track("result_transition",{...transition,phase:"result",reason,shown:Boolean(result.shown)});
+  } else track("result_transition",{...transition,phase:"result",reason,shown:false});
+  if(policy)skipNextInterstitial=false;
+  busy=false;renderClassicChoices();
+  return !saveFailed&&!storageConflict&&!futureSave;
 }
-$("play-again").onclick = () => void playNextClassic();
-$("classic-easier").onclick = () => void playNextClassic(-1);
-$("classic-harder").onclick = () => void playNextClassic(1);
-$("try-notebook").onclick = () => {
-  const next =
-    notebook.slice(0, 24).find((p) => !progress.done.includes(p.id)) ??
-    notebook.find((p) => !progress.done.includes(p.id));
-  if (next) void switchGame(next.id);
+async function playNextClassic(delta: -1 | 0 | 1 = 0) {
+  const level=classicDifficulty()+delta;
+  if(level<CLASSIC_MIN||level>CLASSIC_MAX)return;
+  if(!await prepareResultTransition(delta<0 ? "easier" : delta>0 ? "harder" : "next"))return;
+  const next=nextTask(progress.active,progress.done);
+  if(next)await switchGame(next);
+  else if(progress.active.startsWith("book"))openCollection("book");
+  else if(progress.active.startsWith("daily"))openCollection("calendar");
+  else await beginClassic("next",level as ClassicDifficulty);
+}
+$("play-again").onclick=()=>void playNextClassic();
+$("classic-easier").onclick=()=>void playNextClassic(-1);
+$("classic-harder").onclick=()=>void playNextClassic(1);
+$("try-notebook").onclick=async()=>{
+  const next=notebook.slice(0,24).find(p=>!progress.done.includes(p.id)) ?? notebook.find(p=>!progress.done.includes(p.id));
+  if(next&&await prepareResultTransition("short"))await switchGame(next.id);
 };
 function seedWord(n: number) {
   const x = n % 100;

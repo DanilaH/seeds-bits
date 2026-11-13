@@ -101,6 +101,8 @@ public class AuditHarness {
   p=fresh(true);Handler.fire();state=new PluginCall();p.readiness(state);check("N39_load_wait_is_bounded","unavailable".equals(state.result.get("state")) && "load_timeout".equals(state.result.get("reason")),"UI stops waiting without another SDK load");
   a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);state=new PluginCall();p.readiness(state);check("N40_late_loaded_never_autoshows","ready".equals(state.result.get("state")) && a.shows==0,"late loaded only enables a future explicit tap");
 
+  p=fresh(true);SeedsApplication.calls=0;PluginCall route=new PluginCall(new JSObject().put("name","result_transition").put("data",new JSObject().put("event_id","result-route")));p.report(route);check("N41_result_route_native_dispatch",Boolean.TRUE.equals(route.result.get("accepted")) && SeedsApplication.calls==1,"result transition reaches actual native allowlist");
+
  }
 }''')
 files=[str(x)for x in (root/'src').rglob('*.java')]

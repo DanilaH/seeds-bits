@@ -39,7 +39,7 @@ jobs:
       - run: node scripts/verify-help-fixtures.mjs
       - run: node scripts/compare-help-plans.mjs
       - run: python3 scripts/test-help-report.py
-      - run: npx playwright test e2e/help-foundation.spec.ts e2e/magnet.spec.ts e2e/plan.spec.ts --workers 2
+      - run: npx playwright test e2e/help-foundation.spec.ts e2e/magnet.spec.ts e2e/plan.spec.ts e2e/result-transition.spec.ts --workers 2
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -63,7 +63,7 @@ jobs:
         run: |
           mkdir -p test-results/apk
           chmod +x android/gradlew
-          for profile in a3 magnet plan; do
+          for profile in a3 magnet plan result; do
             VITE_SEEDS_QA_PROFILE="$profile" npm run build
             npx cap sync android
             (cd android && ./gradlew assembleRelease)
