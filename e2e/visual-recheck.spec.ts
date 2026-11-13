@@ -263,6 +263,7 @@ test("large-text hint offer keeps both whole buttons reachable by scrolling", as
   await page.locator("#resume").click();
   for (let i = 0; i < 3; i++) {
     await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
     const pair = await page
       .locator(".hinted")
       .evaluateAll((es) => es.map((e) => (e as HTMLElement).dataset.index));
@@ -271,6 +272,7 @@ test("large-text hint offer keeps both whole buttons reachable by scrolling", as
       await page.locator(`[data-index="${index}"]`).click();
   }
   await page.locator("#hint").click();
+  await expect(page.locator("#hint-offer")).toBeVisible();
   await textScale(page, 1.5);
   for (const id of ["watch-hints", "cancel-hints"]) {
     const button = page.locator("#" + id);

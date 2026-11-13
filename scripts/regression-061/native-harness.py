@@ -97,6 +97,10 @@ public class AuditHarness {
   p=fresh(true);a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);PluginCall diskFailure=request("rewarded");p.show(diskFailure);a.listener.onAdShown();p.activity.prefs.fail=true;a.listener.onRewarded(new Reward());boolean noPrematureGrant=p.events.isEmpty();a.listener.onAdDismissed();p.activity.prefs.fail=false;PluginCall retryPending=new PluginCall();p.pending(retryPending);check("N37_native_reward_commit_retry",noPrematureGrant && retryPending.result.get("reward")!=null,"failed native disk commit does not emit reward; retry preserves same earned token");
   p=fresh(true);p.activity.prefs.edit().putString("reward_token","future").putString("reward_attempt","old").putString("reward_version","9").putString("reward_product","unknown").commit();PluginCall future=new PluginCall();p.pending(future);JSObject unknownReceipt=(JSObject)future.result.get("reward");check("N38_future_receipt_preserved",Integer.valueOf(9).equals(unknownReceipt.get("version")) && "unknown".equals(unknownReceipt.get("product")),"native does not reinterpret future product as hints");
 
+
+  p=fresh(true);Handler.fire();state=new PluginCall();p.readiness(state);check("N39_load_wait_is_bounded","unavailable".equals(state.result.get("state")) && "load_timeout".equals(state.result.get("reason")),"UI stops waiting without another SDK load");
+  a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);state=new PluginCall();p.readiness(state);check("N40_late_loaded_never_autoshows","ready".equals(state.result.get("state")) && a.shows==0,"late loaded only enables a future explicit tap");
+
  }
 }''')
 files=[str(x)for x in (root/'src').rglob('*.java')]

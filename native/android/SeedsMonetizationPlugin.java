@@ -31,6 +31,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private final Handler handler = new Handler(Looper.getMainLooper());
   private SharedPreferences prefs;
   private boolean initialized, destroyed, resumed = true, loadingInterstitial, loadingRewarded;
+  private boolean initializationWaitExpired, rewardedWaitExpired;
   private long lastInterstitialRequest, lastRewardedRequest, lastBannerRequest;
   private InterstitialAdLoader interstitialLoader;
   private RewardedAdLoader rewardedLoader;
@@ -63,6 +64,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     fullscreenActive=false;
     prefs = getContext().getSharedPreferences("seeds-monetization", 0);
     if (!prefs.contains("last_fullscreen")) prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
+    handler.postDelayed(() -> { if (!initialized && !destroyed) { initializationWaitExpired=true; publishReadiness(); } },18000);
     getActivity().runOnUiThread(() -> {
       YandexAds.initialize(getContext(), () -> getActivity().runOnUiThread(() -> {
         if (destroyed) return;
@@ -109,34 +111,45 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   private JSObject receipt() {
     if (heldReceipt == null) { heldReceipt = storedReceipt(); receiptNeedsSave = heldReceipt != null; }
-    if (heldReceipt != null && receiptNeedsSave) {
-      if (!persistReceipt(heldReceipt)) return null;
-      receiptNeedsSave = false;
-    }
-    return heldReceipt;
+    return receiptNeedsSave ? null : heldReceipt;
   }
-  private boolean pendingReceipt() { return receipt() != null || heldReceipt != null; }
+  private boolean pendingReceipt() { receipt(); return heldReceipt != null; }
+  private void recoverReceipt() {
+    receipt();
+    if (heldReceipt == null || !receiptNeedsSave || !persistReceipt(heldReceipt)) return;
+    receiptNeedsSave = false;
+    try { SeedsApplication.report(getContext(),"ad_reward_earned",new JSObject()
+      .put("event_id",heldReceipt.optString("token","")+":earned").put("format","rewarded")
+      .put("product",heldReceipt.optString("product","hint_pack_3")).put("receipt",heldReceipt.optString("token",""))
+      .put("intent_id",heldReceipt.optString("intent_id","legacy")).put("offer_id",heldReceipt.optString("offer_id","legacy"))
+      .put("ad_session_id",heldReceipt.optString("ad_session_id","legacy"))); } catch (Exception ignored) {}
+    notifyListeners("reward",heldReceipt,true);
+  }
   private JSObject rewardedState() {
     String state = "unavailable", reason = "not_loaded";
     if (destroyed || !enabled()) { state = "disabled"; reason = "disabled"; }
     else if (pendingReceipt()) reason = "pending_receipt";
     else if (!resumed) reason = "background";
     else if (showing != null) reason = "fullscreen_busy";
-    else if (loadingRewarded || !initialized) { state = "loading"; reason = "loading"; }
+    else if ((loadingRewarded && !rewardedWaitExpired) || (!initialized && !initializationWaitExpired)) { state = "loading"; reason = "loading"; }
+    else if ((!initialized && initializationWaitExpired) || (loadingRewarded && rewardedWaitExpired)) reason = "load_timeout";
     else if (rewarded != null) { state = "ready"; reason = "ready"; }
     return new JSObject().put("state", state).put("reason", reason);
   }
   private void publishReadiness() { notifyListeners("rewardedState", rewardedState(), true); }
   @PluginMethod public void readiness(PluginCall call) { getActivity().runOnUiThread(() -> call.resolve(rewardedState())); }
   @PluginMethod public void initialize(PluginCall call) {
+    recoverReceipt();
     JSObject result = new JSObject().put("enabled", enabled()).put("test", getContext().getResources().getBoolean(R.bool.ads_test_mode));
     JSObject reward = receipt(); if (reward != null) result.put("reward", reward);
     result.put("readiness", rewardedState()); call.resolve(result);
   }
   @PluginMethod public void pending(PluginCall call) {
+    recoverReceipt();
     JSObject result = new JSObject(); JSObject reward = receipt(); if (reward != null) result.put("reward", reward); call.resolve(result);
   }
   @PluginMethod public void acknowledge(PluginCall call) {
+    recoverReceipt();
     JSObject reward = receipt();
     // A failed SharedPreferences commit can mutate its in-memory map. Retain the
     // receipt independently until a disk-backed removal has actually succeeded.
@@ -218,7 +231,11 @@ public class SeedsMonetizationPlugin extends Plugin {
       });
     }
     if (rewarded == null && !loadingRewarded && (lastRewardedRequest == 0 || now - lastRewardedRequest >= RETRY)) {
-      loadingRewarded = true; publishReadiness(); lastRewardedRequest = now; event("ad_request", "rewarded");
+      loadingRewarded = true; rewardedWaitExpired=false;
+      // End the UI wait without starting a parallel SDK load. A late loaded
+      // callback may make a later explicit tap ready, never auto-show a video.
+      handler.postDelayed(() -> { if (loadingRewarded && !destroyed) { rewardedWaitExpired=true; publishReadiness(); } },18000);
+      publishReadiness(); lastRewardedRequest = now; event("ad_request", "rewarded");
       rewardedLoader.loadAd(new AdRequest.Builder(unit("rewarded")).build(), new RewardedAdLoadListener() {
         @Override public void onAdLoaded(@NonNull RewardedAd ad) {
           loadingRewarded = false; if (!destroyed) { rewarded = ad; event("ad_loaded", "rewarded"); publishReadiness(); }
@@ -276,8 +293,7 @@ public class SeedsMonetizationPlugin extends Plugin {
             heldReceipt = new JSObject().put("version",1).put("token",token).put("attempt",showingAttempt).put("product",showingProduct)
               .put("intent_id",showingIntent).put("offer_id",showingOffer).put("ad_session_id",showingSession);
             receiptNeedsSave = true;
-            JSObject earned = receipt();
-            if (earned != null) { event("ad_reward_earned", "rewarded"); notifyListeners("reward", earned, true); }
+            recoverReceipt();
             publishReadiness();
           }
         });
@@ -294,8 +310,10 @@ public class SeedsMonetizationPlugin extends Plugin {
   private void finish(String status) {
     if (showing == null) return;
     handler.removeCallbacks(showDeadline);
+    recoverReceipt();
     JSObject result = new JSObject().put("shown", shown).put("status", status).put("ad_session_id", showingSession);
     if (showingKind.equals("rewarded") && receipt() != null) result.put("reward", receipt());
+    else if (showingKind.equals("rewarded") && pendingReceipt()) result.put("status","reward_pending").put("reason","receipt_save");
     event(status.equals("error") ? "ad_show_error" : "ad_closed", showingKind);
     if (shown) prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
     if (showingKind.equals("rewarded")) { if (rewarded != null) rewarded.setAdEventListener(null); rewarded = null; lastRewardedRequest = 0; }
@@ -364,7 +382,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   @Override protected void handleOnConfigurationChanged(Configuration config) { bannerPlacement = null; clearBanner(); bannerCssHeight = 0; lastBannerRequest = 0; }
   @Override protected void handleOnPause() { resumed = false; publishReadiness(); if (bannerHost != null) bannerHost.setVisibility(View.GONE); }
-  @Override protected void handleOnResume() { resumed = true; preloadAds(); publishReadiness(); }
+  @Override protected void handleOnResume() { resumed = true; recoverReceipt(); preloadAds(); publishReadiness(); }
   @Override protected void handleOnDestroy() {
     destroyed = true; fullscreenActive=false; handler.removeCallbacksAndMessages(null); clearBanner();
     if (interstitial != null) interstitial.setAdEventListener(null);

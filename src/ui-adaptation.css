@@ -637,3 +637,23 @@
     font-size: 22px;
   }
 }
+
+/* An enabled assist shares the existing toolbar; it does not overlay the board. */
+.game:has(#magnet:not([hidden])) footer {grid-template-columns:repeat(4,minmax(0,1fr));}
+.game:has(#magnet:not([hidden])).stacked-actions footer {grid-template-columns:repeat(2,minmax(0,1fr));}
+#magnet-count {font-size:11px;color:var(--muted)}
+#help-preview {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;max-height:200px;overflow:auto;font-size:12px;}
+#help-preview[hidden] {display:none}
+.help-grid {display:grid;grid-template-columns:repeat(9,minmax(0,1fr));margin-top:8px;}
+.help-grid span {aspect-ratio:1;display:grid;place-items:center;border:1px solid var(--line);font-size:12px;}
+.help-grid .magnet-mark {background:var(--selected);font-weight:700;outline:1px solid var(--ink);}
+#hint-offer:has(#help-preview:not([hidden])) {
+  height:fit-content;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+#hint-offer:has(#help-preview:not([hidden]))::backdrop {background:#17292180;}
+@media (max-width:440px) {
+  #help-preview {grid-template-columns:1fr;max-height:260px;gap:10px;}
+  .help-grid span {font-size:18px;}
+}

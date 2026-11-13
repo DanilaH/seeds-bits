@@ -1,3 +1,6 @@
+import {requestHelp} from "./help-client";
+import {helpIntent, applyMagnet, storedHelp, provenMagnet} from "./help-actions";
+import {removePair as proofRemovePair} from "./core";
 import {helpFlags, qaProfile, assignHelp} from "./help-config";
 import {receiptProduct, sameBoard, type HelpIntent, type HelpProduct} from "./help-contract";
 import { dailyRun, streakReward } from "./daily-run";
@@ -137,6 +140,7 @@ let lastStored: string | null = null,
   recoveryAvailable = false;
 let hintGeneration = 0;
 let hintPending = false;
+let helpSearchStop = () => {};
 let readWarning = "";
 const settingsDirty: Record<string, unknown> = {};
 let saveQueue = Promise.resolve(),
@@ -345,6 +349,13 @@ gameActions.append(
   document.querySelector("footer")!,
 );
 document.querySelector(".game")!.insertBefore(gameActions, resultDock);
+const magnetButton = document.createElement("button");
+magnetButton.id = "magnet"; magnetButton.className = "action"; magnetButton.hidden = true;
+magnetButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v9a7 7 0 0 0 14 0V4h-4v9a3 3 0 0 1-6 0V4Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5 8h4m6 0h4" stroke="currentColor" stroke-width="1.7"/></svg><span class="action-label">Магнит <small id="magnet-count"></small></span>';
+$("add").before(magnetButton);
+magnetButton.onclick = () => void openMagnet();
+const resultAssistance = document.createElement("p"); resultAssistance.id = "result-assistance"; resultAssistance.className = "fine";
+$("win-stats").after(resultAssistance);
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
@@ -998,6 +1009,8 @@ $("app").insertAdjacentHTML(
   `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><div class="hint-heading"><h2 id="hint-offer-title">Ещё подсказки</h2><button id="close-hints" class="plain" aria-label="Закрыть предложение">${icon("close")}</button></div><div class="hint-copy"><p id="help-offer-copy">Посмотреть видео: показать эту подсказку и оставить ещё 2.</p><p id="rewarded-state" role="status"></p></div><div class="hint-actions"><button id="watch-hints" class="primary">Посмотреть видео · подсказка +2</button><button id="cancel-hints" class="secondary">Продолжить без подсказки</button></div></dialog>`,
 );
 const hintOffer = $<HTMLDialogElement>("hint-offer");
+const helpPreview = document.createElement("div"); helpPreview.id = "help-preview"; helpPreview.hidden = true;
+$("help-offer-copy").after(helpPreview);
 const lessonQuick = document.createElement("button");
 lessonQuick.id = "lesson-quick";
 lessonQuick.className = "secondary";
@@ -1088,6 +1101,7 @@ new MutationObserver(updateBanner).observe(document.documentElement, {
 });
 window.addEventListener("resize", updateBanner);
 let offeredIntent: HelpIntent | undefined;
+let verifiedHint: HelpIntent | undefined;
 let autoIntent: HelpIntent | undefined;
 let applyingHelp = false;
 function helpData(intent: HelpIntent) {
@@ -1129,7 +1143,7 @@ function receiveReward(r: RewardReceipt): Promise<void> {
     if (switching) await saveQueue;
     if (futureSave || storageConflict || switching) return;
     const product = receiptProduct(r);
-    if (!product) { track("assist_result", {outcome: "unsupported_receipt", receipt: typeof r?.token === "string" ? r.token.slice(0,100) : "invalid"}); message("Награда сохранена на устройстве, но её формат пока не поддерживается. Не удаляйте игру."); return; }
+    if (!product) { track("assist_result", {outcome: "unsupported_receipt", receipt: typeof r?.token === "string" ? r.token.slice(0,100) : "invalid"}); readWarning ||= "Награда сохранена на устройстве, но её формат пока не поддерживается. Не удаляйте игру."; showSaveState(); return; }
     const candidate = cloneProgress(progress), m = metadata(candidate);
     const already = m.rewardReceipts?.includes(r.token);
     if (!grantReward(candidate, r)) return;
@@ -1151,15 +1165,77 @@ function updateOfferReadiness() {
   if (!hintOffer.open) return;
   const {state, reason} = rewardedReadiness;
   const charged = offeredIntent?.product !== "hint_pack_3" && offeredIntent && canUseStoredHelp(offeredIntent);
-  $("rewarded-state").textContent = charged ? "Без просмотра видео" : reason === "pending_receipt" ? "Восстанавливаем заработанную награду…" :
+  $("rewarded-state").textContent = saveFailed ? "Не удалось сохранить действие. Заряд не списан. Закройте окно и повторите сохранение." : charged ? "Без просмотра видео" : reason === "pending_receipt" ? "Восстанавливаем заработанную награду…" :
     state === "ready" ? "Видео готово. Награда — только за завершённый просмотр." : state === "loading" ? "Видео загружается… Можно продолжить игру." : state === "disabled" ? "Просмотр видео выключен" : "Сейчас видео недоступно";
-  $<HTMLButtonElement>("watch-hints").disabled = !charged && state !== "ready";
+  $<HTMLButtonElement>("watch-hints").disabled = saveFailed || (!charged && state !== "ready");
 }
 window.addEventListener("seeds:rewarded-state", updateOfferReadiness);
-function canUseStoredHelp(_intent: HelpIntent): boolean { return false; }
+function canUseStoredHelp(intent: HelpIntent): boolean { return Boolean(storedHelp(progress,intent)); }
+function previewGrid(values: number[], marked: readonly number[] = []) {
+  return `<div class="help-grid" role="img" aria-label="Положение цифр">${values.map((n,i)=>`<span class="${marked.includes(i) ? "magnet-mark" : ""}">${n || ""}</span>`).join("")}</div>`;
+}
+function magnetGoal(intent: HelpIntent) {
+  let end = intent.after ?? [];
+  for (const pair of intent.proof ?? []) end = proofRemovePair(end,...pair);
+  if (!end.some(Boolean)) return `После этого поле можно очистить за ${intent.proof?.length ?? 0} хода`;
+  if (Math.ceil(end.length/9) < Math.ceil(intent.board.length/9)) return "Уберёт эти две цифры и поможет очистить строку";
+  return "Уберёт эти две цифры и откроет ход";
+}
+function offerMagnet(intent: HelpIntent) {
+  if (!validIntent(intent) || hintOffer.open) return;
+  if (!provenMagnet(intent)) {message("Сохранённый эффект не удалось проверить. Заряд не списан.");return;}
+  offeredIntent = intent;
+  const source = storedHelp(progress,intent);
+  if (!source && !helpFlags.magnet) {message("Новые предложения Магнита выключены. Заработанные заряды сохранены."); return;}
+  $("hint-offer-title").textContent = "Магнит";
+  $("help-offer-copy").textContent = `${magnetGoal(intent)}. ${source === "demo" ? "Первый Магнит — бесплатно, один раз на установку." : source === "replay" ? "Повтор уже оплаченного Магнита — бесплатно." : source === "charge" ? "Будет использован 1 сохранённый заряд." : "1 завершённое видео — 1 заряд Магнита."} Отмена вернёт поле. Этот Магнит можно будет повторить здесь бесплатно.`;
+  helpPreview.hidden = false;
+  helpPreview.innerHTML = `<div><strong>До · ${intent.board[intent.pair[0]]} + ${intent.board[intent.pair[1]]}</strong>${previewGrid(intent.board,intent.pair)}</div><div><strong>После Магнита</strong>${previewGrid(intent.after ?? [])}</div>`;
+  $("watch-hints").textContent = source ? source === "demo" ? "Попробовать бесплатно" : source === "replay" ? "Повторить бесплатно" : "Применить · 1 заряд" : "Посмотреть видео · 1 Магнит";
+  $("cancel-hints").textContent = "Не сейчас";
+  hintOffer.showModal();updateOfferReadiness();updateBanner();
+  helpEvent("eligibility",intent);helpEvent("offer",intent,{ready_state:rewardedReadiness.state,source:source ?? "video"});
+  if (!source) void refreshRewarded(true);
+}
+async function openMagnet() {
+  if (busy || paused || lesson >= 0 || progress.active !== "classic" || !hintAttempt(progress).help || hintPending) return;
+  const entitlement = hintAttempt(progress).help?.magnet;
+  if (entitlement) {
+    if (sameBoard(board(),entitlement.intent.board)) offerMagnet(entitlement.intent);
+    else message("Магнит уже использован. Его можно повторить после отмены к исходному полю.");
+    return;
+  }
+  const original = [...board()], attempt = hintAttempt(progress).id, generation = ++hintGeneration;
+  hintPending = true;render();message("Проверяю эффект Магнита…");
+  const search = requestHelp(original,"magnet");helpSearchStop = search.cancel;
+  const result = await search.result;
+  if (generation !== hintGeneration || !sameBoard(board(),original) || attempt !== hintAttempt(progress).id || paused || dialog.open) return;
+  hintPending = false;helpSearchStop = () => {};render();
+  if (result.status !== "found" || !result.proof) {
+    message(result.status === "unknown" ? "Не удалось проверить полезный Магнит за отведённое время. Можно продолжить игру." : "Сейчас проверенного полезного Магнита нет. Добавление и отмена остаются доступны.");return;
+  }
+  offerMagnet(helpIntent(progress,"magnet",result.proof));
+}
+async function performMagnet(intent: HelpIntent) {
+  if (!validIntent(intent)) return false;
+  try {
+    markGameStarted();
+    const applied = applyMagnet(progress,intent,crypto.randomUUID(),viewport.scrollTop);
+    if (applied.duplicate) return true;
+    if (adsBridge) enqueueAnalytics(metadata(applied.progress),"assist_apply",{...helpData(intent),application_id:hintAttempt(applied.progress).help!.magnet!.applications.at(-1)!,entitlement_id:applied.entitlement!,outcome:applied.source!});
+    if (!await persistHelp(applied.progress,applied.session)) {render(); return false;}
+    clearSelection();render();feedback("pair");
+    visibleCellEffects(intent.pair,[{background:"var(--selected)"},{background:"transparent"}],250);
+    message("Магнит применён. Можно продолжать или отменить действие.");
+    if (!occupied(board())) {complete([]);void save();}
+    return true;
+  } catch {message("Этот Магнит сейчас неприменим. Заряд сохранён.");return false;}
+}
 function offerHints(intent: HelpIntent) {
   if (rewardRequest || hintOffer.open) return;
   offeredIntent = intent;
+  helpPreview.hidden = true;
+  $("cancel-hints").textContent = "Продолжить без подсказки";
   jarSpill.clear();
   helpEvent("eligibility", intent);
   track("hint_offer", {mode: gameMode()});
@@ -1178,7 +1254,7 @@ function offerHints(intent: HelpIntent) {
 $("close-hints").onclick = () => $("cancel-hints").click();
 $("cancel-hints").onclick = () => {
   if (offeredIntent) helpEvent("choice", offeredIntent, {outcome: "dismissed"});
-  hintOffer.close(); offeredIntent = undefined; updateBanner();
+  hintOffer.close(); offeredIntent = undefined; render(); updateBanner();
 };
 hintOffer.addEventListener("cancel", e => {e.preventDefault(); $("cancel-hints").click();});
 async function applyEarnedHelp() {
@@ -1192,6 +1268,7 @@ async function applyEarnedHelp() {
       message(intent.product === "hint_pack_3" ? "3 подсказки добавлены в запас" : "Заряд добавлен в запас");
       autoIntent = undefined; return;
     }
+    if (intent.product === "magnet_1" && await performMagnet(intent)) {autoIntent = undefined; return;}
     if (intent.product === "hint_pack_3" && await revealHint(intent)) {
       message(`Подсказка открыта. Ещё ${metadata(progress).wallet} в запасе`);
       autoIntent = undefined;
@@ -1201,6 +1278,14 @@ async function applyEarnedHelp() {
 $("watch-hints").onclick = async () => {
   const intent = offeredIntent;
   if (rewardRequest || !intent || !validIntent(intent)) return;
+  if (intent.product === "magnet_1" && canUseStoredHelp(intent)) {
+    if (busy) return;
+    helpEvent("choice",intent,{outcome:"accepted"});
+    $<HTMLButtonElement>("watch-hints").disabled = true;
+    if (await performMagnet(intent)) {hintOffer.close();offeredIntent=undefined;updateBanner();}
+    else updateOfferReadiness();
+    return;
+  }
   await refreshRewarded();
   if (rewardedReadiness.state !== "ready") {updateOfferReadiness(); return;}
   if (saveFailed || storageConflict || futureSave) {hintOffer.close(); showSaveState(); return;}
@@ -1221,7 +1306,7 @@ $("watch-hints").onclick = async () => {
     helpEvent("result", intent, {ad_session_id: adSession, outcome: result.status ?? "error"});
     if (helpProfile(progress).grant?.intent !== intent.id) {
       autoIntent = undefined;
-      outcomeMessage = result.status === "closed" ? "Видео закрыто. Подсказки не начислены." : "Реклама сейчас недоступна. Попробуйте позже.";
+      outcomeMessage = result.status === "reward_pending" ? "Награда ожидает сохранения на устройстве. Не удаляйте игру; повторите восстановление позже." : result.status === "closed" ? (intent.product === "hint_pack_3" ? "Видео закрыто. Подсказки не начислены." : "Видео закрыто. Заряд не начислен.") : "Реклама сейчас недоступна. Попробуйте позже.";
     }
   } finally {
     rewardRequest = false; syncPauseState();
@@ -1258,6 +1343,8 @@ function complete(rects: DOMRect[]) {
       attempt: hintAttempt(progress).id,
       moves: session.current.moves,
       hints: progress.hints[id] ?? 0,
+      assisted: Boolean(hintAttempt(progress).help?.assisted),
+      assists: session.current.assists ?? 0,
     });
   if (!alreadyCompleted)
     firstEvent("first_complete", {
@@ -1315,6 +1402,8 @@ function renderWin() {
         `<span class="result-stat"><strong>${value}</strong><span>${label}</span></span>`,
     )
     .join("");
+  resultAssistance.textContent = hintAttempt(progress).help?.assisted ? `С помощью · Магнитов: ${session.current.assists ?? 0}` : "";
+  resultAssistance.hidden = !resultAssistance.textContent;
   const i = notebook.findIndex((p) => p.id === id);
   const next = nextTask(id, progress.done);
   const archiveNext = id.startsWith("daily") && next?.startsWith("daily");
@@ -1515,7 +1604,13 @@ function render() {
     (progress.active === "classic" && !available.length);
   const hintCount = monetized ? hintsLeft(progress) : 0;
   const repeatAvailable = available.some(p => hintAttempt(progress).hintKeys?.includes(hintKey(values, p.a, p.b)));
-  const videoHint = helpFlags.visibility && monetized && hintCount === 0 && available.length > 0 && !repeatAvailable;
+  const verifiedPaidHint = progress.active === "classic" ? available.length > 0 : Boolean(verifiedHint && validIntent(verifiedHint));
+  const videoHint = helpFlags.visibility && monetized && hintCount === 0 && verifiedPaidHint && !repeatAvailable;
+  const assist = hintAttempt(progress).help;
+  magnetButton.hidden = lesson >= 0 || progress.active !== "classic" || !count || !assist || (!helpFlags.magnet && !assist.magnet && !helpProfile(progress).inventory.magnet);
+  magnetButton.disabled = busy || hintPending || Boolean(assist?.magnet && !sameBoard(values,assist.magnet.intent.board));
+  $("magnet-count").textContent = assist?.magnet ? "↻" : String(helpProfile(progress).inventory.magnet || (!helpProfile(progress).demo.magnet ? 1 : 0));
+  magnetButton.setAttribute("aria-label",assist?.magnet ? "Повторить Магнит на его исходном поле" : `Магнит, зарядов ${$("magnet-count").textContent}`);
   $("hint-count").textContent = videoHint ? "▷ +3" : monetized ? compactCount(hintCount) : "";
   $("hint").setAttribute(
     "aria-label",
@@ -1578,6 +1673,7 @@ function render() {
 function cancelHint() {
   hintGeneration++;
   hintPending = false;
+  helpSearchStop(); helpSearchStop = () => {};
 }
 function clearSelection() {
   cancelHint();
@@ -1688,7 +1784,7 @@ async function choose(i: number) {
   }
   if (lesson < 0) {
     const shown = hintAttempt(progress).hintChoices?.[hintKey(values, 0, 0)];
-    const assisted = Boolean(shown && shown.includes(a) && shown.includes(i));
+    const assisted = Boolean(hintAttempt(progress).help?.assisted || (shown && shown.includes(a) && shown.includes(i)));
     const data = {
       mode: gameMode(),
       attempt: hintAttempt(progress).id,
@@ -1981,6 +2077,7 @@ async function hint() {
   }
   if (!highlight) return;
   const intent = createHintIntent(highlight);
+  verifiedHint = intent;
   highlight = null;
   if (monetized && !hintsLeft(progress) && !attempt.hintKeys?.includes(hintKey(intent.board, ...intent.pair))) {
     render(); offerHints(intent); return;
@@ -2199,6 +2296,7 @@ async function beginClassic(
   }
   const highWater = jars(candidate).highWater;
   startAttempt(candidate, "classic");
+  if (helpFlags.magnet || helpFlags.plan || helpProfile(candidate).inventory.magnet || helpProfile(candidate).inventory.plan) hintAttempt(candidate).help = {version:1,assisted:false};
   const attempt = m.attempts.classic.id;
   if (action === "next") m.classicRun ??= newClassicRun();
   let nextSession: Session;
@@ -2443,6 +2541,7 @@ $("retry-save").onclick = async () => {
   } catch {
     // Keep the receipt for the next retry or launch; the game remains usable.
   }
+  await applyEarnedHelp();
 };
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && dialog.open) {
@@ -2581,6 +2680,7 @@ async function boot() {
   } catch {
     warning = "Сервис площадки недоступен. Можно играть без него.";
   }
+  if (!hadStoredState && (helpFlags.magnet || helpFlags.plan)) hintAttempt(progress).help = {version:1,assisted:false};
   const profile = helpProfile(progress), beforeAssignments = profile.assignments.length;
   const assignment = assignHelp(profile, hadStoredState);
   if (profile.assignments.length !== beforeAssignments && adsBridge) enqueueAnalytics(metadata(progress), "experiment_assignment", {...assignment});
@@ -3608,3 +3708,29 @@ setInterval(() => {
   }
   if (pendingDailyOpen) void openDailyNotification();
 }, 5000);
+
+if (import.meta.env.DEV || import.meta.env.VITE_SEEDS_QA_PROFILE) {
+  if (qaProfile === "magnet" || qaProfile === "a3") {
+    const scenario = document.createElement("button"); scenario.id = "qa-help-scene"; scenario.className = "secondary";
+    scenario.textContent = qaProfile === "magnet" ? "QA: пример Магнита" : "QA: подсказки за видео";
+    $("home-goal").after(scenario);
+    scenario.onclick = async () => {
+      if (busy || rewardRequest || adActive) return;
+      const candidate = cloneProgress(progress);
+      startAttempt(candidate,"classic"); candidate.active = "classic";
+      const fixture = await import("../fixtures/assistance/magnet-example.json");
+      let game = newSession();
+      if (qaProfile === "magnet") {
+        game.current.board = [...fixture.default.start];
+        for (const [a,b] of fixture.default.normal_prefix) game = commit(game,removePair(game.current.board,a,b),"pair",0);
+        hintAttempt(candidate).help = {version:1,assisted:false};
+        jars(candidate).highWater = game.current.moves;
+      } else {
+        game.current.board = Array(18).fill(5);
+        hintAttempt(candidate).hintKeys = ["qa-used-1","qa-used-2","qa-used-3"];
+      }
+      candidate.sessions.classic = game;
+      if (await persistHelp(candidate,game)) {clearSelection();closeMenu();render();message("QA-пример. Данные исключены из коммерческих расчётов.");}
+    };
+  }
+}

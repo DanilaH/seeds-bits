@@ -198,11 +198,13 @@ test("sticky classic hint is free after deselection, reload and undo", async ({
   await seed(page);
   await page.locator("#resume").click();
   await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
   const indices = await page
     .locator(".hinted")
     .evaluateAll((ns) => ns.map((n) => (n as HTMLElement).dataset.index));
   await page.locator("#board button").last().click();
   await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
   expect(
     await page
       .locator(".hinted")
@@ -212,11 +214,13 @@ test("sticky classic hint is free after deselection, reload and undo", async ({
   await page.reload();
   await page.locator("#resume").click();
   await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
   await page.locator(".hinted").first().click();
   await page.locator(".hinted").last().click();
   await expect(page.locator("#remaining")).toHaveText("4");
   await page.locator("#undo").click();
   await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
   expect((await stored(page)).meta.attempts.classic.hintKeys).toHaveLength(1);
   expect((await stored(page)).meta.wallet).toBe(4);
 });

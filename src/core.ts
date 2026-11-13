@@ -126,6 +126,7 @@ export type Snapshot = {
   scroll: number;
   additions: number;
   moves: number;
+  assists?: number;
 };
 export type Session = { rules: 1; current: Snapshot; history: Snapshot[] };
 export function newSession(): Session {
@@ -138,7 +139,7 @@ export function newSession(): Session {
 export function commit(
   session: Session,
   board: number[],
-  action: "pair" | "add",
+  action: "pair" | "add" | "magnet",
   scroll: number,
 ): Session {
   return {
@@ -146,6 +147,7 @@ export function commit(
     current: {
       board,
       scroll,
+      ...((session.current.assists ?? 0) || action === "magnet" ? {assists: (session.current.assists ?? 0) + (action === "magnet" ? 1 : 0)} : {}),
       additions: session.current.additions + (action === "add" ? 1 : 0),
       moves: session.current.moves + (action === "pair" ? 1 : 0),
     },
@@ -172,6 +174,7 @@ export function decode(raw: string): Session {
     typeof v.scroll === "number" &&
     Number.isFinite(v.scroll) &&
     v.scroll >= 0 &&
+    (v.assists === undefined || integer(v.assists)) &&
     integer(v.moves) &&
     integer(v.additions);
   if (

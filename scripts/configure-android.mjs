@@ -10,7 +10,7 @@ const path = "android/app/build.gradle";
 const storeRelease = process.env.SEEDS_BUILD_FLAVOR === "release";
 const appId = storeRelease
   ? "com.seedsbits.game"
-  : "com.seedsbits.game.preview";
+  : process.env.SEEDS_HELP_QA === "1" ? "com.seedsbits.game.assistqa" : "com.seedsbits.game.preview";
 const version = JSON.parse(readFileSync("package.json", "utf8")).version;
 const [major, minor, patch] = version.split(".").map(Number);
 const build = Number(process.env.GITHUB_RUN_NUMBER || 1);

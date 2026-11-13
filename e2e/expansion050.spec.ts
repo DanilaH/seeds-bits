@@ -74,7 +74,7 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
   );
   expect(p.jars.seeds).toBe(26);
   expect(p.jars.wins).toBe(1);
-  expect(p.version).toBe(5);
+  expect(p.version).toBe(6);
   await expect(page.locator("#jar-meter")).toHaveAttribute("data-filled", "2");
   await expect(page.locator("#jar-meter")).toHaveAttribute(
     "data-capacity",

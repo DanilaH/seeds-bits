@@ -32,7 +32,7 @@ export function receiptProduct(r: RewardReceipt): HelpProduct | undefined {
   if (!r || typeof r.token !== "string" || !r.token || r.token.length > 100 ||
       typeof r.attempt !== "string" || r.attempt.length > 100) return;
   // Only the exact legacy shape may inherit the old hint product.
-  if (r.version === undefined && r.product === undefined) return "hint_pack_3";
+  if (r.version === undefined && r.product === undefined && Object.keys(r).every(k => k === "token" || k === "attempt")) return "hint_pack_3";
   if (r.version !== 1 || !Object.hasOwn(products, r.product ?? "") ||
       ![r.intent_id, r.offer_id, r.ad_session_id].every(id => typeof id === "string" && id.length > 0 && id.length <= 100)) return;
   return r.product as HelpProduct;

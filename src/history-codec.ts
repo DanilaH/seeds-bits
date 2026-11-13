@@ -1,6 +1,6 @@
 import { decode, MAX_CELLS, type Session, type Snapshot } from "./core";
 type Segment = string | [number, number];
-type Frame = [number, number, number, Segment[]];
+type Frame = [number, number, number, Segment[], number?];
 type Packed = { rules: 1; current: Snapshot; packedHistory: Frame[] };
 const cache = new WeakMap<
   Session,
@@ -46,7 +46,7 @@ export function packSession(s: Session): Packed {
         deltas.set(old.board, delta);
       }
       const segments = delta.segments;
-      frames.push([old.scroll, old.moves, old.additions, segments]);
+      frames.push(old.assists !== undefined ? [old.scroll, old.moves, old.additions, segments, old.assists] : [old.scroll, old.moves, old.additions, segments]);
       newer = old.board;
     }
     cached = { board: s.current.board, history: s.history, frames };
@@ -64,7 +64,7 @@ export function unpackSession(value: unknown): Session {
   let newer = current.board;
   const history: Snapshot[] = [];
   for (const frame of p.packedHistory) {
-    if (!Array.isArray(frame) || frame.length !== 4 || !Array.isArray(frame[3]))
+    if (!Array.isArray(frame) || (frame.length !== 4 && frame.length !== 5) || !Array.isArray(frame[3]))
       throw Error("Invalid history frame");
     const board: number[] = [];
     for (const part of frame[3]) {
@@ -91,6 +91,7 @@ export function unpackSession(value: unknown): Session {
       scroll: frame[0],
       moves: frame[1],
       additions: frame[2],
+      ...(frame.length === 5 ? {assists: frame[4]} : {}),
     });
     newer = board;
   }
