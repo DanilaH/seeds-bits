@@ -21,7 +21,7 @@ import com.yandex.mobile.ads.banner.BannerAdEventListener;
 import com.yandex.mobile.ads.common.*;
 import com.yandex.mobile.ads.interstitial.*;
 import com.yandex.mobile.ads.rewarded.*;
-import io.appmetrica.analytics.AppMetrica;
+import org.json.JSONArray;
 import java.util.UUID;
 
 @CapacitorPlugin(name = "SeedsMonetization")
@@ -78,8 +78,8 @@ public class SeedsMonetizationPlugin extends Plugin {
     return getContext().getString(kind.equals("banner") ? R.string.yandex_banner_id : kind.equals("rewarded") ? R.string.yandex_rewarded_id : R.string.yandex_interstitial_id);
   }
   private void event(String name, String kind) {
-    if (!getContext().getString(R.string.appmetrica_api_key).isEmpty())
-      AppMetrica.reportEvent(name, new JSObject().put("format", kind).put("test", getContext().getResources().getBoolean(R.bool.ads_test_mode)).toString());
+    try { SeedsApplication.report(getContext(), name, new JSObject().put("format", kind)); }
+    catch (Exception ignored) { /* Optional telemetry cannot interrupt an ad callback. */ }
   }
   private JSObject receipt() {
     String token = prefs.getString("reward_token", "");
@@ -111,19 +111,39 @@ public class SeedsMonetizationPlugin extends Plugin {
         .putString(key, call.getString("value", ""))
         .putString(settingsKey, call.getString("settings", "")).commit();
       if (!saved) { call.reject("Progress could not be saved", "DISK_COMMIT"); return; }
-      SeedsDailyReminder.sync(getContext());
+      // A reminder failure cannot turn an already durable game write into an error.
+      try { SeedsDailyReminder.sync(getContext()); } catch (Exception ignored) {}
       call.resolve();
     } catch (Exception error) {call.reject("Progress could not be saved", "PERSIST_EXCEPTION");}
   }
 
   @PluginMethod public void report(PluginCall call) {
     String name = call.getString("name", "");
-    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_error|tutorial_(start|end)|first_(pair|no_moves)|reminder_(permission_requested|permission|toggle|open)|review_(request|flow)|daily_reward")) {
+    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_(error|recovered)|tutorial_(start|end)|first_(pair|unassisted_pair|no_moves|hint|complete)|reminder_(permission_requested|permission|toggle|open)|review_(request|flow)|daily_reward")) {
       JSObject data = call.getObject("data", new JSObject());
-      data.put("test", getContext().getResources().getBoolean(R.bool.ads_test_mode));
-      if (!getContext().getString(R.string.appmetrica_api_key).isEmpty()) AppMetrica.reportEvent(name, data.toString());
+      String id = data.optString("event_id", "");
+      if (id.length() > 100) { call.reject("Invalid event id"); return; }
+      try {
+        synchronized (prefs) {
+          JSONArray receipts;
+          try { receipts = new JSONArray(prefs.getString("analytics_receipts", "[]")); }
+          catch (Exception ignored) { receipts = new JSONArray(); }
+          for (int i=0; !id.isEmpty() && i<receipts.length(); i++) {
+            if (id.equals(receipts.optString(i))) { call.resolve(new JSObject().put("accepted",true)); return; }
+          }
+          SeedsApplication.report(getContext(), name, data);
+          if (!id.isEmpty()) {
+            JSONArray next = new JSONArray();
+            for (int i=Math.max(0, receipts.length()-511); i<receipts.length(); i++) next.put(receipts.optString(i));
+            next.put(id);
+            if (!prefs.edit().putString("analytics_receipts",next.toString()).commit()) {
+              call.reject("Event receipt could not be saved"); return;
+            }
+          }
+        }
+      } catch (Exception error) { call.reject("Event could not be queued"); return; }
     }
-    call.resolve();
+    call.resolve(new JSObject().put("accepted",true));
   }
   @PluginMethod public void preload(PluginCall call) { getActivity().runOnUiThread(this::preloadAds); call.resolve(); }
   private void preloadAds() {

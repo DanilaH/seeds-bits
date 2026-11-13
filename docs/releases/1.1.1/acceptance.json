@@ -19,7 +19,7 @@
     "hintBudget": true,
     "notebookBoard": true,
     "darkTheme": true,
-    "scope": "published release payload → new release payload, offline Android 35, same temporary CI certificate; not a physical-device production-certificate install"
+    "scope": "previously built pre-release payload → new release payload, offline Android 35, same temporary CI certificate; not a physical-device production-certificate install"
   },
   "baseline": {
     "classicDigits": 26,
@@ -52,5 +52,6 @@
   "webRun": 42999461571,
   "browserRun": 42999286153,
   "crossTabRepeatRun": 43001696034,
-  "crossTabRepeats": 20
+  "crossTabRepeats": 20,
+  "status_correction": "Owner clarification 2026-11-11: the app has not been published in RuStore or submitted for moderation. This is historical pre-release acceptance, not proof of publication."
 }

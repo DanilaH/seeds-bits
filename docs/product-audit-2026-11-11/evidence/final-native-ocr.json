@@ -1,0 +1,18 @@
+{
+  "method": "Official pinned sources; no apt dependency, no app installation yet",
+  "tesseract": {
+    "version": "5.5.4",
+    "commit": "7e548e6eff172f38f97664afe7f7ce40db36c8d6"
+  },
+  "leptonica": {
+    "version": "1.87.0",
+    "commit": "13275a278eb55b5746e33f95fbf5a2c8f604b3ab"
+  },
+  "tessdata_fast": {
+    "commit": "87416418657359cb625c412a48b6e1d6d41c29bd",
+    "rus_sha256": "e16e5e036cce1d9ec2b00063cf8b54472625b9e14d893a169e2b0dedeb4df225"
+  },
+  "runtimeVersion": "tesseract 5.5.4",
+  "binary_sha256": "a37c4527814d133be10c8a6fc2af576e963ae9be939da4eb9eb3400666b61652",
+  "shippedInApk": false
+}

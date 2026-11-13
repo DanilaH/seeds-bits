@@ -1,4 +1,5 @@
 import { compactHintKey } from "./hint-key";
+import { readAnalytics, type AnalyticsJournal } from "./analytics";
 import { packSession, unpackSession } from "./history-codec";
 import { jars, addSeeds, taskSeeds, migrateJars, type Jars } from "./jars";
 import { validDay } from "./calendar";
@@ -197,6 +198,9 @@ export function readProgress(
           ? m.flags.filter((v: unknown) => typeof v === "string").slice(0, 30)
           : [];
       m.attempts = attempts;
+      if (!["fresh-v2", "legacy"].includes(m.analyticsCohort))
+        delete m.analyticsCohort;
+      if (m.analytics !== undefined) m.analytics = readAnalytics(m.analytics);
       if (m.rewardReceipts !== undefined) {
         if (Array.isArray(m.rewardReceipts)) {
           m.rewardReceipts = m.rewardReceipts.filter((token: unknown) => {
@@ -252,7 +256,8 @@ export type Attempt = {
   hintKeys?: string[];
   hintChoices?: Record<string, [number, number]>;
 };
-export type Meta = {
+export type Meta = AnalyticsJournal & {
+  analyticsCohort?: "fresh-v2" | "legacy";
   version: 2;
   wallet: number;
   daily?: DailyRun;

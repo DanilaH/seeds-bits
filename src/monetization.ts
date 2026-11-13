@@ -1,4 +1,5 @@
 import { Capacitor, registerPlugin } from "@capacitor/core";
+import { eventContext } from "./analytics";
 import type { PluginListenerHandle } from "@capacitor/core";
 export type RewardReceipt = { token: string; attempt: string };
 type Result = { shown?: boolean; reward?: RewardReceipt; status?: string };
@@ -27,7 +28,7 @@ export interface MonetizationBridge {
   report(options: {
     name: string;
     data: Record<string, string | number | boolean>;
-  }): Promise<void>;
+  }): Promise<{ accepted: boolean } | void>;
   addListener(
     name: "reward",
     listener: (r: RewardReceipt) => void,
@@ -65,7 +66,9 @@ export function track(
   name: string,
   data: Record<string, string | number | boolean> = {},
 ) {
-  void bridge?.report({ name, data }).catch(() => {});
+  void bridge
+    ?.report({ name, data: { ...eventContext(), ...data } })
+    .catch(() => {});
 }
 export async function initializeMonetization(
   pause: (active: boolean) => void,

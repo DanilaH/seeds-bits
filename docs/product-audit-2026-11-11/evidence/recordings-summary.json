@@ -1,0 +1,60 @@
+{
+  "source": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "method": "Scripted real UI; known solutions; mock native ads, analytics and permissions; no human playtest",
+  "run": 43032671115,
+  "artifact": 13863146391,
+  "scenarios": [
+    {
+      "name": "portrait",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "large": false,
+      "reduced": false,
+      "status": "passed",
+      "errors": [],
+      "frames": 19,
+      "horizontalOverflow": 0
+    },
+    {
+      "name": "quick-start",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "large": false,
+      "reduced": false,
+      "status": "passed",
+      "errors": [],
+      "frames": 15,
+      "horizontalOverflow": 0
+    },
+    {
+      "name": "small",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "large": false,
+      "reduced": false,
+      "status": "passed",
+      "errors": [],
+      "frames": 19,
+      "horizontalOverflow": 0
+    },
+    {
+      "name": "landscape-large-reduced",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "large": true,
+      "reduced": true,
+      "status": "passed",
+      "errors": [],
+      "frames": 19,
+      "horizontalOverflow": 0
+    }
+  ]
+}

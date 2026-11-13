@@ -16,7 +16,7 @@ concurrency:
 jobs:
   native:
     env:
-      SEEDS_UPGRADE_BASELINE_KIND: published release payload
+      SEEDS_UPGRADE_BASELINE_KIND: previously built pre-release payload
       SEEDS_UPGRADE_BASELINE_SOURCE: e92bd4915d677caf47f74944402c82d48b483d9c
       SEEDS_UPGRADE_BASELINE_VERSION: '1.1.0 (1100024)'
     runs-on: ubuntu-24.04

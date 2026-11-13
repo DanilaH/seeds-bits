@@ -1,0 +1,175 @@
+{
+  "applicationSource": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "baselineSource": "54a18e0e79b501c5d23c520202881287469897ea",
+  "version": "1.1.2",
+  "versionCode": 1102015,
+  "publication": {
+    "published": false,
+    "submittedForModeration": false,
+    "changedProductionAdConfiguration": false
+  },
+  "method": "Automated real UI with known solutions and controlled browser bridges; not human playtesting. Native emulator has host network isolation before boot.",
+  "checks": {
+    "unit": {
+      "passed": 61
+    },
+    "compactHistoryModel": {
+      "passed": 2
+    },
+    "browserLifecycleAdIntegration": {
+      "passed": 15
+    },
+    "browserE2E": {
+      "passed": 167
+    },
+    "originalStrictCrossTabRepeat": {
+      "passed": 30,
+      "workers": 1
+    },
+    "nativeProductionBridgeModel": {
+      "passed": 24,
+      "evidence": "evidence/native-bridge-model.json"
+    },
+    "nativeHapticModel": {
+      "passed": 16,
+      "evidence": "evidence/haptic-model.json"
+    },
+    "browserUxMatrix": {
+      "passedScenarios": 38,
+      "frames": 221,
+      "pageErrors": 0,
+      "measuredHorizontalOverflow": 0,
+      "measuredTextOverflow": 0,
+      "evidence": "evidence/browser-ux-summary.json"
+    },
+    "scriptedJourneys": {
+      "passedScenarios": 4,
+      "frames": 72,
+      "evidence": "evidence/recordings-summary.json",
+      "notHumanPlaytest": true
+    },
+    "builds": {
+      "web": true,
+      "yandex": true,
+      "androidRelease": true,
+      "androidPreview": true
+    },
+    "finalAndroidEmulator": {
+      "status": "success",
+      "applicationSource": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "testSource": "b51a505fb5d74d93683877357d5a687678403446",
+      "run": 43042330546,
+      "artifact": 13866676858,
+      "unsignedApkSha256": "2fed06a41c7b2a3d120fc587c5a7e7985c023b9feadbd608684a0e108abac51a",
+      "uxPassed": 7,
+      "smokePassed": 11,
+      "upgradePassed": true,
+      "scope": "Exact candidate 1102015 release payload, Android 35, host firewall before boot; both upgrade APKs signed temporarily with same CI certificate",
+      "evidence": [
+        "evidence/final-native-offline-guard.json",
+        "evidence/final-native-ux.json",
+        "evidence/final-native-smoke.json",
+        "evidence/final-native-upgrade.json",
+        "evidence/final-native-upgrade-baseline.json",
+        "evidence/final-native-ocr.json"
+      ]
+    },
+    "previousIsolatedAndroidEmulator": {
+      "applicationSource": "c3b4ebf733079c119d57342b23ba38ea9985db7c",
+      "workflowSource": "bfb578049293f68db055cc38b519d55e7950a1e0",
+      "run": 43029903310,
+      "artifact": 13861002960,
+      "nativeJavaMatchesFinal": true,
+      "webRuntimeMatchesFinal": false,
+      "uxPassed": 7,
+      "smokePassed": 11,
+      "upgradePassed": true,
+      "scope": "Android 35; old 1.1.0/1100024 payload to previous 1.1.2 payload, same temporary CI certificate. Not acceptance of final APK.",
+      "evidence": [
+        "evidence/previous-native-offline-guard.json",
+        "evidence/previous-native-ux.json",
+        "evidence/previous-native-smoke.json",
+        "evidence/previous-native-upgrade.json",
+        "evidence/previous-native-upgrade-baseline.json"
+      ]
+    },
+    "phoneApk": {
+      "status": "signed-and-statically-verified",
+      "physicalDeviceRun": false,
+      "versionCode": 1102015,
+      "certificateMatchesPrevious": true,
+      "signatureV2": true,
+      "signatureV3": true,
+      "unsignedZipPayloadUnchanged": true,
+      "evidence": [
+        "evidence/phone-apk.json",
+        "evidence/phone-apk-payload.json"
+      ],
+      "next": "PHONE_CHECK.md"
+    }
+  },
+  "ci": {
+    "productAudit": {
+      "run": 43032671115,
+      "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43032671115",
+      "source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "status": "browser/release success; native setup failed on both attempts"
+    },
+    "defaultPullRequestChecks": {
+      "run": 43036052046,
+      "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43036052046",
+      "source": "243440116e6d345cd23b43c04bda741da694c132",
+      "status": "success",
+      "jobs": {
+        "web": 130575028235,
+        "android": 130575028369
+      },
+      "runtimeEquivalentToApplicationSource": true
+    },
+    "originalDefaultFailure": {
+      "run": 43032679091,
+      "reason": "apt DNS failure prevented browser installation; subsequent E2E failed to launch, not an application acceptance result",
+      "evidence": "evidence/ci-infrastructure.json"
+    },
+    "additionalAuditRun": {
+      "run": 43036042686,
+      "source": "243440116e6d345cd23b43c04bda741da694c132",
+      "note": "Automatic rerun after workflow-only repair. Not used to claim additional acceptance; source src/native trees match the documented candidate."
+    },
+    "finalAndroid": {
+      "run": 43042330546,
+      "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43042330546",
+      "source": "b51a505fb5d74d93683877357d5a687678403446",
+      "status": "success",
+      "exactCandidatePayloadVerified": true
+    },
+    "latestDefaultChecks": {
+      "run": 43037299069,
+      "source": "4fd0c4969abc6376cbd09f4dc6d23e97503df787",
+      "status": "success",
+      "runtimeEquivalentToApplicationSource": true
+    }
+  },
+  "evidence": {
+    "gallery": "README.md",
+    "audit": "../PRODUCT_AUDIT_2026-11-11.md",
+    "handoff": "HANDOFF.md",
+    "mediaInventory": "media.json",
+    "runtimeProvenance": "source-proof.json",
+    "apk": "apk.json",
+    "analyticsQuarantine": "analytics-quarantine.json",
+    "phoneChecklist": "PHONE_CHECK.md"
+  },
+  "limitations": [
+    "No observed 10–15 minute session with a new human player; no retention or comprehension claim.",
+    "No physical motor/speaker assessment, real store review, live earned reward, AppMetrica server receipt or VK attribution acceptance.",
+    "Historical save_error root cause is unproven; power-loss filesystem failure is not exhaustively simulated.",
+    "Native tests use temporary CI signing, not the production certificate.",
+    "SDK enqueue-to-native-receipt crash gap can duplicate an event_id; downstream deduplication is required.",
+    "Optional journal is bounded; prolonged telemetry unavailability may discard oldest analytics, not gameplay progress.",
+    "Early native UX runs were not isolated: exclude QA app builds 1102004–1102014, without asserting that all sent server data.",
+    "Acceptance build 1102015 is reserved for manual QA; use a distinct build number for store publication so excluding QA does not exclude future players."
+  ],
+  "recordedAt": "2026-11-11T15:05:18.057506+00:00",
+  "status": "automated application acceptance complete; physical-device, player and server analytics acceptance pending"
+}

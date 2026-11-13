@@ -1,0 +1,18 @@
+{
+  "source": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "run": 43032671115,
+  "artifact": 13861781627,
+  "version": "1.1.2",
+  "versionCode": 1102015,
+  "bytes": 5445109,
+  "sha256": "2fed06a41c7b2a3d120fc587c5a7e7985c023b9feadbd608684a0e108abac51a",
+  "signing": "unsigned release artifact; CI native tests sign temporarily; not a store upload or production certificate acceptance",
+  "manifestVerified": {
+    "package": "com.seedsbits.game",
+    "versionName": "1.1.2",
+    "versionCode": 1102015,
+    "minSdk": 24,
+    "targetSdk": 36,
+    "method": "aapt2 dump badging of downloaded artifact"
+  }
+}

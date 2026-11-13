@@ -1,0 +1,225 @@
+{
+  "source": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "recording_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "matrix_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+  "method": "Actual browser screenshots and scripted UI recordings; known puzzle solutions and controlled native bridges; not a human playtest",
+  "files": [
+    {
+      "file": "before-lesson-2.png",
+      "stage": "baseline",
+      "sha256": "34f3ca997565898120cef2c65ca0c9c999f576952eb4e02f004179a997d75b48",
+      "bytes": 33581
+    },
+    {
+      "file": "after-lesson-2.png",
+      "stage": "after",
+      "sha256": "23681f67c9d3c5376bce56a4ba4372b62c36c880cdf9d43a1c6538aa70172dfd",
+      "bytes": 35884
+    },
+    {
+      "file": "before-hint.png",
+      "stage": "baseline",
+      "sha256": "d0d9568d7015bb665665be6daacd5a19a23e3717e4bc631e04836bce9b5ba9bd",
+      "bytes": 25551
+    },
+    {
+      "file": "after-hint.png",
+      "stage": "after",
+      "sha256": "d5849b0f25ee05b8639f3bb2c5436020d00f90e485e9fdb95b3792fca40f43dd",
+      "bytes": 24586
+    },
+    {
+      "file": "before-complete-6.png",
+      "stage": "baseline",
+      "sha256": "94451bc210845dada60ce19eaf5238cb0199b482d3e35875185c003dc37412e7",
+      "bytes": 28646
+    },
+    {
+      "file": "after-complete-6.png",
+      "stage": "after",
+      "sha256": "fe1d42669761de5dba6a477216da7cda0da0aca984f54a734ad3ac4d6b00d6b9",
+      "bytes": 28060
+    },
+    {
+      "file": "before-large-text.png",
+      "stage": "baseline-equivalent-56d0c776",
+      "sha256": "c7afb1dc6341c69f564b6704ba4011c77d5e399897a099a3204095674f3ff9b5",
+      "bytes": 33752
+    },
+    {
+      "file": "after-large-text.png",
+      "stage": "after",
+      "sha256": "9c43f45cda4f52518f5011f07d012ba7f3ff7df1a2c4481b88d06a7e1855882d",
+      "bytes": 33854
+    },
+    {
+      "file": "checked-phone390-home.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "fe83b4d41d2fcd4f233706a1f74efa1eb40586c0e03f210530d01edb8d6642b0",
+      "bytes": 31960
+    },
+    {
+      "file": "checked-phone390-books.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "14bc5be006f2b3cafd4d0c46642c4b40b1dd25cae217ca67f94b4fae9561fb26",
+      "bytes": 36107
+    },
+    {
+      "file": "checked-phone390-calendar.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "f85049d83e7d5d455f6457ee2f8953363a6350c63e94a6818d2f5110bf0dc802",
+      "bytes": 43940
+    },
+    {
+      "file": "checked-phone390-progress.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "ba30802575385a39dce3af8321615b204cb10e4c19acd476c93abb5914cebf03",
+      "bytes": 35695
+    },
+    {
+      "file": "checked-phone390-jars.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "6a95619069c6202a86faf7acafa982a5942bd8f22104c40bc4a85c60d4c029d4",
+      "bytes": 38285
+    },
+    {
+      "file": "checked-phone390-medals.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "c1b4562f801aad8f598186bd61a3dd2033f28c8fb97be88df9763eb4f227377a",
+      "bytes": 52983
+    },
+    {
+      "file": "checked-phone390-settings.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "40ff1676a6c2d8b1a1f6b5690938db985936e4574b13df5ab6cbcc3786c7c717",
+      "bytes": 42778
+    },
+    {
+      "file": "checked-phone390-privacy.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "b43e04bd10cbc7e547300c440d4e7ecd74074cdc91025825da862b992129e618",
+      "bytes": 78213
+    },
+    {
+      "file": "checked-landscape568-classic.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "7a11573db5dbb86ec9f9e99b0bde3ca1ed10c648fa7ef2e0ec717ddcb97e3c11",
+      "bytes": 22782
+    },
+    {
+      "file": "checked-largeTextLandscape-classic.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "b0f22dd9738b625875dde67c9edbb8cd57af39b6163d69609ab31f26c386049d",
+      "bytes": 22854
+    },
+    {
+      "file": "checked-book-filters-and-large-field-large-bottom.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "8c3a8876430665cb4b1dfd1375838d933e98373bc3f7669bfb6ba0f944dde4e5",
+      "bytes": 45190
+    },
+    {
+      "file": "checked-daily-result-bronze-result.png",
+      "stage": "after-fixture-where-applicable",
+      "sha256": "1bb36be058b363307708d5a4f3ee98b1a5ed494a1044c29138bde858d7ce5692",
+      "bytes": 51627
+    },
+    {
+      "file": "comparison.webp",
+      "stage": "contact-sheet-original-screens",
+      "sha256": "db71026daa0ed2a6c5a4325ce8c3c17d4890e8bbc815c732a26b7ae0d412bae3",
+      "bytes": 142514
+    },
+    {
+      "file": "quick-choice.gif",
+      "video": "quick-start.webm",
+      "start_seconds": 0.5,
+      "length_seconds": 9.2,
+      "fps": 12,
+      "speed": 1,
+      "sha256": "92b8fa56569da92e9613e8e9aeb1f71b4f95abe446f76048c2d0785dea985629",
+      "bytes": 1246787
+    },
+    {
+      "file": "hint-and-pair.gif",
+      "video": "portrait.webm",
+      "start_seconds": 3.2,
+      "length_seconds": 4.4,
+      "fps": 12,
+      "speed": 1,
+      "sha256": "149ee5d85a9e892bdb69e674150efbd99257a057848de8bff5e8d8eb97a56584",
+      "bytes": 856361
+    },
+    {
+      "file": "page-and-jar.gif",
+      "video": "quick-start.webm",
+      "start_seconds": 30,
+      "length_seconds": 5.5,
+      "fps": 12,
+      "speed": 1,
+      "sha256": "a78c81c87e4156ccef5c1610ae989d5876a2da05e23e4f6020db329d64fec535",
+      "bytes": 825682
+    },
+    {
+      "file": "native-landscape-150-scroll.png",
+      "stage": "native-final-original",
+      "sha256": "bb8a1b3d6724e6b300ce69b6c3401638b62852735806ccc490f93640f1c5ad0a",
+      "bytes": 73653,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-notification-permission.png",
+      "stage": "native-final-original",
+      "sha256": "b4cdb7e56fb54bcc28fbadcf660a986686f849fe5be618bcd2b643953440427a",
+      "bytes": 71871,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-offline-rewarded.png",
+      "stage": "native-final-original",
+      "sha256": "d866a9318a5dfbc1103c84331dc59459fd469c27c0ef78edc4537837b6742b93",
+      "bytes": 60374,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-portrait-150.png",
+      "stage": "native-final-original",
+      "sha256": "5858c853cddefd996e93d8ae940faab12db19f299f8306a4ed764fd87bd99185",
+      "bytes": 82376,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-time-picker.png",
+      "stage": "native-final-original",
+      "sha256": "4d7ce119a06ed9541f55814fbd4b2b7cdc6b784f516f5ccce6df5f8a69e67157",
+      "bytes": 74800,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    },
+    {
+      "file": "native-upgrade.png",
+      "stage": "native-final-original",
+      "sha256": "bee880393c00bb271805a1854b1be0a9e1fb2d0fa2ae4621ef121897f0e56086",
+      "bytes": 60793,
+      "capture_source": "b51a505fb5d74d93683877357d5a687678403446",
+      "application_source": "160da8c79fd013f25a64607b7338ed6a65131942",
+      "run": 43042330546,
+      "artifact": 13866676858
+    }
+  ],
+  "native_method": "Original Android 35 PNG captures of the exact candidate APK 1102015, temporary CI signer, host network isolation before boot; no physical-device or live-ad claim"
+}

@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "denySystemPermissionAndBack": true,
+    "grantSystemPermissionAndBack": true,
+    "grantedPreferenceSurvivesRelaunch": true,
+    "largeTextSettingsAndBack": true,
+    "largeTextLandscapeActions": true,
+    "largeTextLandscapeActionsScroll": true,
+    "nativeTimePickerAndCancel": true
+  },
+  "errors": {},
+  "scope": "Android 35, actual release, offline, disposable signer"
+}

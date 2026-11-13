@@ -1,0 +1,94 @@
+{
+  "reason": "Early native UX jobs started release APKs before network isolation. Real banners are visible in their screenshots; AppMetrica delivery is possible but unconfirmed. These are automated QA builds, not player cohorts.",
+  "version": "1.1.2",
+  "exclude_sdk_app_build_number": [
+    "1102004",
+    "1102005",
+    "1102006",
+    "1102007",
+    "1102008",
+    "1102009",
+    "1102010",
+    "1102011",
+    "1102012",
+    "1102013",
+    "1102014"
+  ],
+  "exclude_custom_app_build": [
+    1102004,
+    1102005,
+    1102006,
+    1102007,
+    1102008,
+    1102009,
+    1102010,
+    1102011,
+    1102012,
+    1102013,
+    1102014
+  ],
+  "runs": [
+    {
+      "run_id": 43016743803,
+      "build": 1102004
+    },
+    {
+      "run_id": 43017673132,
+      "build": 1102005
+    },
+    {
+      "run_id": 43018040901,
+      "build": 1102006
+    },
+    {
+      "run_id": 43018402504,
+      "build": 1102007
+    },
+    {
+      "run_id": 43019051699,
+      "build": 1102008
+    },
+    {
+      "run_id": 43019622377,
+      "build": 1102009
+    },
+    {
+      "run_id": 43020704771,
+      "build": 1102010
+    },
+    {
+      "run_id": 43020877450,
+      "build": 1102011
+    },
+    {
+      "run_id": 43021211309,
+      "build": 1102012
+    },
+    {
+      "run_id": 43022106625,
+      "build": 1102013
+    },
+    {
+      "run_id": 43024428620,
+      "build": 1102014
+    }
+  ],
+  "confirmed_banner_example": {
+    "run_id": 43024428620,
+    "artifact_id": 13857232110,
+    "files": [
+      "ux111-native/font150-portrait-game.png",
+      "ux111-native/font150-landscape-game.png"
+    ],
+    "retained_evidence": "evidence/early-native-network-enabled.png"
+  },
+  "does_not_claim": "No claim that every listed build delivered AppMetrica data, or that historical supplied CSV users were these tests. No events were deleted from the console.",
+  "manual_acceptance": {
+    "app_version": "1.1.2",
+    "app_build": 1102015,
+    "purpose": "Private physical-device acceptance APK delivered to owner; actual server events not yet verified",
+    "excludeFromPlayerCohorts": true,
+    "publicationRule": "Do not publish the same build number as the manual QA APK; keep future organic store cohorts distinguishable",
+    "doesNotClaim": "Offline emulator 1102015 did not receive external access. Manual phone traffic is intentional QA, not another observed isolation failure."
+  }
+}

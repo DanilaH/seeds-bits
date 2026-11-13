@@ -1,4 +1,4 @@
-"""Upgrade the a known published payload to the current release with one CI-only certificate.
+"""Upgrade a previously built pre-release payload to the current release with one CI-only certificate.
 Both APKs are release/non-debuggable. Persistence is exercised through the UI.
 Production APK certificate identity is verified separately on the delivered bytes.
 """
@@ -85,6 +85,6 @@ try:
   assert sum(new.getpixel((new.width//2,new.height//2)))<420,'Dark theme not retained'
   tap(button('Отмена',True));count(28)
   book();count(before['bookDigits']);classic();count(28)
-  (out/'acceptance.json').write_text(json.dumps({'passed':True,'classicBoard':True,'classicUndoHistory':True,'hintBudget':True,'notebookBoard':True,'darkTheme':True,'scope':os.environ.get('SEEDS_UPGRADE_BASELINE_KIND','rebuilt published source')+' → new release payload, offline Android 35, same temporary CI certificate; not a physical-device production-certificate install'},indent=2))
+  (out/'acceptance.json').write_text(json.dumps({'passed':True,'classicBoard':True,'classicUndoHistory':True,'hintBudget':True,'notebookBoard':True,'darkTheme':True,'scope':os.environ.get('SEEDS_UPGRADE_BASELINE_KIND','rebuilt pre-release source')+' → new release payload, offline Android 35, same temporary CI certificate; not a physical-device production-certificate install'},indent=2))
 finally:
  (out/f'{phase}-logcat.txt').write_text(adb('logcat','-d','-t','300'))

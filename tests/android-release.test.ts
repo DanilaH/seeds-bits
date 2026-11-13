@@ -55,7 +55,7 @@ test("store configuration keeps live IDs, correct namespace and branding and is 
       expect(r.status, r.stderr).toBe(0);
     }
     const read = (p: string) => readFileSync(join(root, p), "utf8");
-    expect(read("android/app/build.gradle")).toContain("versionCode 1101007");
+    expect(read("android/app/build.gradle")).toContain("versionCode 1102007");
     const gradle = read("android/app/build.gradle");
     expect(gradle).toContain("minifyEnabled true");
     expect(gradle).toContain("ru.rustore.sdk:review:10.5.2");
@@ -80,10 +80,46 @@ test("store configuration keeps live IDs, correct namespace and branding and is 
     expect(manifest.match(/android:usesCleartextTraffic=/g)).toHaveLength(1);
     const xml = read("android/app/src/main/res/values/seeds-services.xml");
     expect(xml).toContain('name="ads_test_mode">false');
+    expect(xml).toContain(
+      'name="analytics_channel" translatable="false">release',
+    );
+    expect(xml).toContain(env.APPMETRICA_API_KEY);
     expect(xml).not.toContain("demo-");
     expect(read("android/app/src/main/res/values/styles.xml")).toContain(
       "windowSplashScreenAnimatedIcon",
     );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+test("preview cannot silently send QA events to the release counter", () => {
+  const root = fixture(false);
+  try {
+    const qaKey = "00000000-0000-0000-0000-000000000002";
+    for (const key of ["", qaKey]) {
+      const r = spawnSync("node", [script], {
+        cwd: root,
+        encoding: "utf8",
+        env: {
+          ...env,
+          SEEDS_BUILD_FLAVOR: "preview",
+          ADS_MODE: "test",
+          APPMETRICA_QA_API_KEY: key,
+        },
+      });
+      expect(r.status, r.stderr).toBe(0);
+      const xml = readFileSync(
+        join(root, "android/app/src/main/res/values/seeds-services.xml"),
+        "utf8",
+      );
+      expect(xml).not.toContain(env.APPMETRICA_API_KEY);
+      expect(xml).toContain(
+        'name="analytics_channel" translatable="false">preview',
+      );
+      expect(xml).toContain(
+        `name="appmetrica_api_key" translatable="false">${key}</string>`,
+      );
+    }
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
