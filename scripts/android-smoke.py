@@ -41,22 +41,25 @@ def wait_label(choices):
   time.sleep(1)
  raise AssertionError('Accessible label missing: '+repr(choices))
 def reveal_label(choices):
- # UiAutomator can include WebView nodes with clipped, even inverted bounds.
- # Scroll the actual page and acquire the button again before tapping it.
- for attempt in range(8):
+ # WebView accessibility bounds can lag a touch scroll. Native keyboard focus
+ # reveals the control without guessing a stale scrolled position; then tap it.
+ for attempt in range(32):
   root=snapshot()
   web=next(n for n in root.iter('node') if n.get('class')=='android.webkit.WebView')
   left,top,right,bottom=map(int,re.findall(r'\d+',web.get('bounds','')))
   for n in root.iter('node'):
-   if label(n) not in choices:continue
+   if label(n) not in choices or n.get('focused')!='true':continue
    l,t,r,b=map(int,re.findall(r'\d+',n.get('bounds','')))
    x,y=(l+r)//2,(t+b)//2
-   if r>l and b>t and left<x<right and top<y<bottom:return n
-  if attempt<7:
-   adb('shell','input','swipe',str((left+right)//2),str(top+(bottom-top)*4//5),str((left+right)//2),str(top+(bottom-top)*2//5),'350')
-   navigation_scrolls.append({'target':choices,'attempt':attempt+1})
+   if not(r>l and b>t and left<x<right and top<y<bottom):continue
    time.sleep(.3)
- raise AssertionError('Control not reachable after scrolling: '+repr(choices))
+   confirmed=next((v for v in snapshot().iter('node') if label(v) in choices and v.get('focused')=='true' and v.get('bounds')==n.get('bounds')),None)
+   if confirmed is not None:
+    navigation_scrolls.append({'target':choices,'input':'hardware TAB reveals focus; stable bounds acquired twice before touch tap','tabCount':attempt,'bounds':n.get('bounds')})
+    screenshot('navigation-'+str(len(navigation_scrolls))+'.png')
+    return confirmed
+  adb('shell','input','keyevent','61');time.sleep(.15)
+ raise AssertionError('Control not reachable by native focus traversal: '+repr(choices))
 def cells():
  result={}
  for node in snapshot().iter('node'):
