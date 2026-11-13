@@ -1,0 +1,16 @@
+{
+  "source": "ecc3c399a6062d59d71da83179c4ae09cb33ac9c",
+  "unsignedSha256": "eff2c5884543ce437285469c852e8c2ba2b72faa0983a8677f2232d17610b6cc",
+  "signedSha256": "fc0cc444f33a4b1024ed12b748b9cb01c51cd344196a00c528d45e6c2b522868",
+  "bytes": 5517432,
+  "originalZipEntriesUnchanged": 663,
+  "version": "1.1.2",
+  "versionCode": 1102101,
+  "baselineVersionCode": 1102015,
+  "sameProductionPackageAndCertificate": true,
+  "analyticsChannel": "release",
+  "adsTestMode": false,
+  "webAssetsMatchBuild": true,
+  "physicalInstallationTested": false,
+  "purpose": "Store release artifact; no app-store upload performed"
+}

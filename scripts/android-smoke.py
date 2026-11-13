@@ -7,6 +7,7 @@ def adb(*args,check=True):
 
 capture_id=0
 capture_retries=[]
+navigation_scrolls=[]
 def snapshot():
  global capture_id
  # Android 35 UiAutomation can lose its Binder connection after process restart.
@@ -39,6 +40,26 @@ def wait_label(choices):
    if label(node) in choices:return node
   time.sleep(1)
  raise AssertionError('Accessible label missing: '+repr(choices))
+def reveal_label(choices):
+ # WebView accessibility bounds can lag a touch scroll. Native keyboard focus
+ # reveals the control without guessing a stale scrolled position; then tap it.
+ for attempt in range(32):
+  root=snapshot()
+  web=next(n for n in root.iter('node') if n.get('class')=='android.webkit.WebView')
+  left,top,right,bottom=map(int,re.findall(r'\d+',web.get('bounds','')))
+  for n in root.iter('node'):
+   if label(n) not in choices or n.get('focused')!='true':continue
+   l,t,r,b=map(int,re.findall(r'\d+',n.get('bounds','')))
+   x,y=(l+r)//2,(t+b)//2
+   if not(r>l and b>t and left<x<right and top<y<bottom):continue
+   time.sleep(.3)
+   confirmed=next((v for v in snapshot().iter('node') if label(v) in choices and v.get('focused')=='true' and v.get('bounds')==n.get('bounds')),None)
+   if confirmed is not None:
+    navigation_scrolls.append({'target':choices,'input':'hardware TAB reveals focus; stable bounds acquired twice before touch tap','tabCount':attempt,'bounds':n.get('bounds')})
+    screenshot('navigation-'+str(len(navigation_scrolls))+'.png')
+    return confirmed
+  adb('shell','input','keyevent','61');time.sleep(.15)
+ raise AssertionError('Control not reachable by native focus traversal: '+repr(choices))
 def cells():
  result={}
  for node in snapshot().iter('node'):
@@ -100,8 +121,8 @@ try:
  adb('shell','settings','put','system','accelerometer_rotation','0')
  adb('shell','settings','put','system','user_rotation','1');time.sleep(2);wait_cells(remaining_cells);screenshot('landscape.png');checks['rotationPreservesBoard']=True
  adb('shell','settings','put','system','user_rotation','0');time.sleep(2)
- tap(wait_label(['Открыть меню']));tap(wait_label(['Настройки']));tap(wait_label(['Конфиденциальность']));wait_label(['Назад','← Назад']);checks['privacyAccessibleOffline']=True
+ tap(wait_label(['Открыть меню']));tap(reveal_label(['Настройки']));tap(reveal_label(['Конфиденциальность']));wait_label(['О данных']);wait_label(['Назад','← Назад']);checks['privacyAccessibleOffline']=True
  screenshot('privacy.png')
 finally:
- (out/'acceptance.json').write_text(json.dumps({'environment':'Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised','checks':checks,'accessibilityAcquisitionRetries':capture_retries},indent=2)+'\n')
+ (out/'acceptance.json').write_text(json.dumps({'environment':'Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised','checks':checks,'accessibilityAcquisitionRetries':capture_retries,'navigationScrolls':navigation_scrolls},indent=2)+'\n')
  (out/'logcat.txt').write_text(adb('logcat','-d','-t','500',check=False))

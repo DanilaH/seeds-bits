@@ -1,0 +1,38 @@
+{
+  "environment": "Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised",
+  "checks": {
+    "launchOffline": true,
+    "tutorialSkipAndClassic": true,
+    "removePair": true,
+    "undo": true,
+    "nativeMonetizationBridgeInitialized": true,
+    "freeHintAccountingAndStickyRepeat": true,
+    "offlineRewardedReturnsWithoutGrant": true,
+    "saveSurvivesProcessStop": true,
+    "hintBalanceSurvivesProcessStop": true,
+    "rotationPreservesBoard": true,
+    "privacyAccessibleOffline": true
+  },
+  "accessibilityAcquisitionRetries": [
+    "Command '['adb', 'shell', 'cat', '/sdcard/seeds-ui-1.xml']' returned non-zero exit status 1.",
+    "Command '['adb', 'shell', 'cat', '/sdcard/seeds-ui-32.xml']' returned non-zero exit status 1."
+  ],
+  "navigationScrolls": [
+    {
+      "target": [
+        "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438"
+      ],
+      "input": "hardware TAB reveals focus; stable bounds acquired twice before touch tap",
+      "tabCount": 9,
+      "bounds": "[506,1542][732,1640]"
+    },
+    {
+      "target": [
+        "\u041a\u043e\u043d\u0444\u0438\u0434\u0435\u043d\u0446\u0438\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c"
+      ],
+      "input": "hardware TAB reveals focus; stable bounds acquired twice before touch tap",
+      "tabCount": 5,
+      "bounds": "[36,754][366,844]"
+    }
+  ]
+}

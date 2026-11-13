@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "classicBoard": true,
+  "classicUndoHistory": true,
+  "hintBudget": true,
+  "notebookBoard": true,
+  "darkTheme": true,
+  "scope": "exact previously built QA release payload \u2192 new release payload, offline Android 35, same temporary CI certificate; not a physical-device production-certificate install"
+}

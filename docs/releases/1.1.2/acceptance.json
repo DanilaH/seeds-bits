@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-13",
+  "releaseSource": "ecc3c399a6062d59d71da83179c4ae09cb33ac9c",
+  "gameRuntimeSource": "c6c99ce192c6e0c1ae992a65e8c26b446199e19d",
+  "releaseBuild": {
+    "runId": 43379345999,
+    "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43379345999",
+    "buildJob": "success",
+    "nativeUpgrade": "success",
+    "initialSmoke": "failed at settings navigation: clipped/inverted accessibility bounds were tapped without reveal"
+  },
+  "smokeRecheck": {
+    "runId": 43382117809,
+    "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43382117809",
+    "testSource": "cb63733eecfd2d7bfcd95d61bc88692a91a8fd08",
+    "status": "success",
+    "checks": 11,
+    "samePayloadHashVerified": true,
+    "rebuilt": false,
+    "navigationInput": "Hardware TAB reveals control, identical focused bounds acquired twice, then native touch tap; actual target page heading asserted",
+    "acquisitionRetries": 2
+  },
+  "earlierRecheck": {
+    "runId": 43380993895,
+    "status": "failed: touch-scroll accessibility bounds led to another menu destination; source payload unchanged"
+  },
+  "tests": {
+    "uiRuntimeE2E": 212,
+    "unit": 72,
+    "regressionUnit": 2,
+    "integrationBrowser": 15,
+    "nativeFeedback": 24,
+    "nativeMonetization": 30,
+    "android35Smoke": 11,
+    "android35UpgradeFrom": 1102015
+  },
+  "package": "com.seedsbits.game",
+  "name": "Семечки",
+  "versionName": "1.1.2",
+  "versionCode": 1102101,
+  "adsTestMode": false,
+  "analyticsChannel": "release",
+  "signaturesV2V3Verified": true,
+  "sameProductionCertificateAsPrevious": true,
+  "unsignedPayloadEntriesUnchanged": 663,
+  "webAssetsMatch": true,
+  "file": "seeds-1.1.2-1102101-rustore.apk",
+  "bytes": 5517432,
+  "sha256": "fc0cc444f33a4b1024ed12b748b9cb01c51cd344196a00c528d45e6c2b522868",
+  "libraryFileId": "libfile_b8db4c7bbe988191805d17fdd82aa1a6",
+  "artifacts": {
+    "unsigned": 14016002363,
+    "tools": 14015887535,
+    "r8": 14015882565,
+    "buildEvidence": 14015563212,
+    "initialNative": 14016760169,
+    "finalNative": 14017152083
+  },
+  "limitations": [
+    "Native acceptance uses the exact release payload with a temporary CI-only signature; permanent production certificate is verified separately on delivered bytes.",
+    "Physical installation of this production-signed APK is not claimed.",
+    "Live ad fill/close and analytics dashboard receipt were not exercised in offline acceptance.",
+    "No store upload or moderation submission performed."
+  ]
+}
