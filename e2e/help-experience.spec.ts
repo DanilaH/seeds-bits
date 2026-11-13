@@ -86,6 +86,20 @@ for (const profile of ["a3", "magnet", "plan"])
         await page.locator(profile === "a3" ? "#hint" : "#" + profile).click();
         await expect(page.locator("#hint-offer")).toBeVisible();
         await fit(page, "#hint-offer");
+        if (profile === "magnet") {
+          const copy = (await page
+            .locator("#hint-offer .hint-copy")
+            .boundingBox())!;
+          for (const grid of await page
+            .locator("#help-preview .help-grid")
+            .all()) {
+            const rect = (await grid.boundingBox())!;
+            expect(rect.y).toBeGreaterThanOrEqual(copy.y - 1);
+            expect(rect.y + rect.height).toBeLessThanOrEqual(
+              copy.y + copy.height + 1,
+            );
+          }
+        }
         const text = await page.locator("#hint-offer").innerText();
         expect(text.split(/\s+/).length).toBeLessThanOrEqual(48);
         await expect(page.locator("#help-details")).not.toHaveAttribute(

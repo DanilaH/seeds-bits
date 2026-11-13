@@ -1233,7 +1233,7 @@ function offerMagnet(intent: HelpIntent) {
   offeredIntent = intent;
   const source = storedHelp(progress,intent);
   if (!source && !helpFlags.magnet) {message("Новые предложения Магнита выключены. Заработанные заряды сохранены."); return;}
-  setHelpOffer("Магнит",magnetGoal(intent),source==="demo"?"Первый раз бесплатно":source==="replay"?"Повтор бесплатно":source==="charge"?"Из запаса: 1 заряд":"Видео → 1 Магнит",source==="demo"?"Попробовать бесплатно":source==="replay"?"Повторить бесплатно":source==="charge"?"Применить":"Смотреть видео","Отмена вернёт поле · повтор бесплатно","Магнит уберёт две выделенные цифры. Заряд не возвращается после отмены. Повтор именно этого эффекта на исходном поле бесплатный.");
+  setHelpOffer("Магнит",magnetGoal(intent),source==="demo"?"Первый раз бесплатно":source==="replay"?"Повтор бесплатно":source==="charge"?"Из запаса: 1 заряд":"Видео → 1 Магнит",source==="demo"?"Попробовать":source==="replay"?"Повторить бесплатно":source==="charge"?"Применить":"Смотреть видео","Отмена вернёт поле · повтор бесплатно","Магнит уберёт две выделенные цифры. Заряд не возвращается после отмены. Повтор именно этого эффекта на исходном поле бесплатный.");
   helpPreview.hidden = false;
   helpPreview.innerHTML = `<div><strong>До · ${intent.board[intent.pair[0]]} + ${intent.board[intent.pair[1]]}</strong>${previewGrid(intent.board,intent.pair)}</div><div><strong>После Магнита</strong>${previewGrid(intent.after ?? [])}</div>`;
   hintOffer.showModal();updateOfferReadiness();updateBanner();
