@@ -1216,8 +1216,17 @@ function renderWin() {
     resultArtKey = kind;
   }
   symbol.classList.toggle("paper-result", kind === "page" || kind === "book");
-  $("win-stats").innerHTML =
-    `<span>Пар убрано: ${session.current.moves}</span><span>Добавлений: ${session.current.additions}</span><span>Подсказок: ${progress.hints[id] ?? 0}</span>`;
+  symbol.classList.toggle("field-result", kind === "classic");
+  $("win-stats").innerHTML = [
+    ["Пар убрано", session.current.moves],
+    ["Добавлений", session.current.additions],
+    ["Подсказок", progress.hints[id] ?? 0],
+  ]
+    .map(
+      ([label, value]) =>
+        `<span class="result-stat"><strong>${value}</strong><span>${label}</span></span>`,
+    )
+    .join("");
   const i = notebook.findIndex((p) => p.id === id);
   const next = nextTask(id, progress.done);
   const archiveNext = id.startsWith("daily") && next?.startsWith("daily");

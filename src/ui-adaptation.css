@@ -94,9 +94,103 @@
   line-height: 1.2;
 }
 #win-stats {
-  margin: 10px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  max-width: none;
+  margin: 16px auto;
   font-size: 12px;
-  gap: 3px 12px;
+  gap: 0;
+  align-items: start;
+}
+#win-stats > .result-stat {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 4px 6px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+#win-stats > .result-stat + .result-stat {
+  border-left: 1px solid var(--line);
+}
+.result-stat strong {
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+#win[data-result-kind="classic"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
+  padding-block: clamp(16px, 4dvh, 32px);
+}
+#win[data-result-kind="classic"] .result-details {
+  width: 100%;
+  margin: 12px 0;
+}
+#win[data-result-kind="classic"] #result-gains {
+  margin: 0;
+}
+#win .win-symbol.field-result {
+  width: 144px;
+  height: 144px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.result-field-art {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.result-field-halo {
+  fill: var(--selected);
+  opacity: 0.55;
+}
+.result-field-paper {
+  fill: var(--paper);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+.result-field-grid {
+  fill: none;
+  stroke: var(--line);
+}
+.result-field-stem {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  opacity: 0.6;
+}
+.result-field-seed {
+  fill: color-mix(in srgb, #bd975c 65%, var(--paper));
+}
+.result-clearing-cells {
+  fill: var(--accent);
+  opacity: 0;
+}
+.result-field-check circle {
+  fill: var(--selected);
+  stroke: var(--accent);
+  stroke-width: 1.6;
+}
+.result-field-check path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.result-clearing-cells,
+.result-field-check {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 #win .win-symbol {
   display: grid;
@@ -395,6 +489,16 @@
   }
   .game.is-result #win {
     padding-block: 8px;
+  }
+  #win .win-symbol.field-result {
+    width: 84px;
+    height: 84px;
+  }
+  #win[data-result-kind="classic"] .result-details {
+    margin: 0;
+  }
+  #win-stats {
+    margin-block: 8px;
   }
   #win .win-symbol.paper-result {
     width: 100px;

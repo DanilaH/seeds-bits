@@ -92,14 +92,19 @@ try {
       );
       const snap = {
         rules: 1,
-        current: { board: [5, 5], moves: 0, additions: 0, scroll: 0 },
+        current: {
+          board: [5, 5],
+          moves: classic ? 43 : 0,
+          additions: classic ? 6 : 0,
+          scroll: 0,
+        },
         history: [],
       };
       const progress = {
         version: 3,
         active,
         sessions: { [active]: snap },
-        hints: {},
+        hints: classic ? { classic: 3 } : {},
         done: prior,
         seen: [],
         meta: {
@@ -165,6 +170,44 @@ try {
           classic ? "classic" : kind,
         );
         if (scale !== 1) await zoom(page, scale);
+        // Reproduce the reported 44 / 6 / 3 wrap; each value shares one baseline
+        // and the statistics group shares the title's centre at every font size.
+        entry.statistics = await page
+          .locator("#win-stats")
+          .evaluate((stats) => {
+            const group = stats.getBoundingClientRect();
+            const title = document
+              .querySelector("#win h1")
+              .getBoundingClientRect();
+            return {
+              centreDelta: Math.abs(
+                group.x + group.width / 2 - title.x - title.width / 2,
+              ),
+              items: [...stats.children].map((cell) => {
+                const r = cell.getBoundingClientRect();
+                return {
+                  width: r.width,
+                  top: cell.querySelector("strong").getBoundingClientRect().top,
+                  value: cell.querySelector("strong").textContent,
+                  overflow: cell.scrollWidth > cell.clientWidth + 1,
+                };
+              }),
+            };
+          });
+        expect(entry.statistics.centreDelta).toBeLessThan(1);
+        const stats = entry.statistics.items;
+        expect(stats).toHaveLength(3);
+        expect(
+          Math.max(...stats.map((x) => x.top)) -
+            Math.min(...stats.map((x) => x.top)),
+        ).toBeLessThan(1);
+        expect(
+          Math.max(...stats.map((x) => x.width)) -
+            Math.min(...stats.map((x) => x.width)),
+        ).toBeLessThan(1);
+        expect(stats.some((x) => x.overflow)).toBe(false);
+        if (classic)
+          expect(stats.map((x) => x.value)).toEqual(["44", "6", "3"]);
         const selectors = classic ? "#result-next > button" : "#play-again";
         entry.actions = await visible(page, selectors);
         expect(entry.actions.every((x) => x.hit && x.height >= 44)).toBe(true);
@@ -205,6 +248,11 @@ try {
         }
         if (classic) {
           await expect(page.locator("#game-difficulty")).toBeVisible();
+          expect(
+            await page
+              .locator(".result-field-art")
+              .evaluate((el) => el.getAnimations({ subtree: true }).length),
+          ).toBe(0);
         }
         entry.status = "passed";
       } catch (e) {

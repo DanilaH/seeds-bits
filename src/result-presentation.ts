@@ -31,6 +31,8 @@ export function resultKind(
 
 /** Code-native paper artwork; the saved result is already complete at rest. */
 export function resultArtwork(kind: ResultKind): string {
+  if (kind === "classic")
+    return '<svg class="result-field-art" viewBox="0 0 144 144" aria-hidden="true" focusable="false"><circle class="result-field-halo" cx="72" cy="72" r="61"/><g class="result-sprout"><path class="result-field-stem" d="M28 114C10 98 11 74 20 59M116 114c18-16 17-40 8-55"/><path class="result-field-seed" d="M17 82C5 77 5 65 11 60c9 7 12 15 6 22ZM21 105C8 105 3 95 6 88c11 2 18 8 15 17ZM127 82c12-5 12-17 6-22-9 7-12 15-6 22ZM123 105c13 0 18-10 15-17-11 2-18 8-15 17Z"/></g><rect class="result-field-paper" x="34" y="24" width="76" height="94" rx="9"/><path class="result-field-grid" d="M59 24v94M85 24v94M34 55h76M34 87h76"/><g class="result-clearing-cells"><rect x="37" y="27" width="19" height="25" rx="3"/><rect x="62" y="27" width="20" height="25" rx="3"/></g><g class="result-field-check"><circle cx="72" cy="74" r="23"/><path d="m60 74 8 8 17-18"/></g></svg>';
   if (kind !== "page" && kind !== "book") return icon("check");
   const sheet =
     '<path class="result-paper" d="M24 10h64l17 18v88H24z"/><path class="result-fold" d="M88 10v18h17"/>';
@@ -69,7 +71,33 @@ export function celebrateResult(
         node.animate(frames, { duration, easing: "cubic-bezier(.2,.8,.3,1)" }),
       );
   };
-  if (kind === "book") {
+  if (kind === "classic") {
+    animate(
+      host.querySelector(".result-clearing-cells"),
+      [
+        { opacity: 1, transform: "scale(1)" },
+        { opacity: 0, transform: "scale(.6)" },
+      ],
+      280,
+    );
+    animate(
+      host.querySelector(".result-field-check"),
+      [
+        { opacity: 0, transform: "scale(.65)" },
+        { opacity: 0, offset: 0.25 },
+        { opacity: 1, transform: "scale(1)" },
+      ],
+      480,
+    );
+    animate(
+      host.querySelector(".result-sprout"),
+      [
+        { opacity: 0, transform: "translateY(5px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      500,
+    );
+  } else if (kind === "book") {
     for (const [i, leaf] of [
       ...host.querySelectorAll(".result-leaf"),
     ].entries())
