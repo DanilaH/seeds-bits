@@ -12,6 +12,7 @@ test("A public bundle ignores the combined QA URL; only an explicit QA build ena
   vi.resetModules();
   const publicConfig = await import("../src/help-config");
   expect(publicConfig.qaProfile).toBe("");
+  expect(publicConfig.helpPaused).toBe(true);
   expect(Object.values(publicConfig.helpFlags).some(Boolean)).toBe(false);
   expect(publicConfig.assignHelp(freshHelp(), true).qa).toBe(false);
   vi.stubEnv("VITE_SEEDS_QA_PROFILE", "all");
@@ -22,5 +23,19 @@ test("A public bundle ignores the combined QA URL; only an explicit QA build ena
   expect(qa.assignHelp(freshHelp(), true)).toMatchObject({
     qa: true,
     experiment: "seeds-all-qa-v1",
+  });
+});
+
+test("Baseline QA keeps every experiment paused and is marked as QA control", async () => {
+  vi.stubEnv("DEV", false);
+  vi.stubEnv("VITE_SEEDS_QA_PROFILE", "baseline");
+  vi.resetModules();
+  const config = await import("../src/help-config");
+  expect(config.helpPaused).toBe(true);
+  expect(Object.values(config.helpFlags).some(Boolean)).toBe(false);
+  expect(config.assignHelp(freshHelp(), true)).toMatchObject({
+    qa: true,
+    variant: "control",
+    experiment: "seeds-baseline-qa-v1",
   });
 });

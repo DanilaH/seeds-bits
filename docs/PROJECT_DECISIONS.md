@@ -13,6 +13,8 @@ Recorded 13 November 2026. This is the working project baseline, not proof of pu
 
 ## Accepted behavior to preserve
 
+**Latest owner decision:** pause the newly tested monetization products and lab modes after QA 11814. Current delivery is baseline, with earned stock retained but assistant UI/guidance dormant; common correctness/layout fixes remain. See [current pause policy](help-pause-2026-11-13.md). This supersedes the earlier all-features QA delivery.
+
 - Classic uses random deals and three saved difficulty steps. The ordinary/default step retains the previous 28-digit composition; legacy games and the first traditional deal remain supported. The result has one row: easier / another game / harder, with distinct colors and disabled limits. See [difficulty decisions](classic-difficulty-2026-11-12/README.md).
 - Native banner requests a compact creative up to 50 dp. Use actual SDK/WebView geometry, apply the system inset once, and preserve playable space and visible actions. Never crop a taller creative to pretend it is compact. See [banner acceptance](banner-layout-2026-11-12/README.md).
 - Result statistics use three aligned columns. The classic finish has a short cleared-board/seed composition; next actions are available immediately and adapt to small screens and enlarged text. See [result acceptance](classic-result-2026-11-13/README.md) and [UI acceptance](ui-fixes-2026-11-12/README.md).

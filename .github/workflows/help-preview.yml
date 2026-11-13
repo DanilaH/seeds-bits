@@ -1,4 +1,4 @@
-name: Assistance QA preview
+name: Seeds QA preview
 on:
   push:
     branches: [feat/monetization-assists-20261113]
@@ -40,7 +40,7 @@ jobs:
       - run: node scripts/compare-help-plans.mjs
       - run: node scripts/verify-help-labs.mjs
       - run: python3 scripts/test-help-report.py
-      - run: npx playwright test e2e/help-foundation.spec.ts e2e/magnet.spec.ts e2e/plan.spec.ts e2e/result-transition.spec.ts e2e/trials-lab.spec.ts e2e/shuffle-lab.spec.ts e2e/help-experience.spec.ts e2e/help-combined.spec.ts --workers 2
+      - run: npx playwright test e2e/help-foundation.spec.ts e2e/magnet.spec.ts e2e/plan.spec.ts e2e/result-transition.spec.ts e2e/trials-lab.spec.ts e2e/shuffle-lab.spec.ts e2e/help-experience.spec.ts e2e/help-combined.spec.ts e2e/help-baseline.spec.ts --workers 2
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -60,16 +60,16 @@ jobs:
           assert values['appmetrica_api_key']=='' and values['ads_test_mode']=='true'
           assert 'com.seedsbits.game.assistqa' in open('android/app/build.gradle').read()
           PY
-      - name: Build assistance QA candidates
+      - name: Build ordinary QA candidate
         run: |
           mkdir -p test-results/apk
           chmod +x android/gradlew
-          for profile in a3 magnet plan result trials shuffle all; do
+          for profile in baseline; do
             VITE_SEEDS_QA_PROFILE="$profile" npm run build
             npx cap sync android
             (cd android && ./gradlew assembleRelease)
             cp android/app/build/outputs/apk/release/app-release-unsigned.apk "test-results/apk/seeds-help-$profile-unsigned.apk"
-            PROFILE="$profile" node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync(`test-results/apk/${process.env.PROFILE}.json`, JSON.stringify({source:process.env.GITHUB_SHA,profile:process.env.PROFILE,package:"com.seedsbits.game.assistqa",ads:"test",analytics:false,combinedQa:process.env.PROFILE==="all",experiments:process.env.PROFILE==="all"?["visibility","magnet","plan","result","trials","shuffle"]:[process.env.PROFILE]},null,2));'
+            PROFILE="$profile" node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync(`test-results/apk/${process.env.PROFILE}.json`, JSON.stringify({source:process.env.GITHUB_SHA,profile:process.env.PROFILE,package:"com.seedsbits.game.assistqa",ads:"test",analytics:false,combinedQa:process.env.PROFILE==="all",experiments:process.env.PROFILE==="baseline"?[]:process.env.PROFILE==="all"?["visibility","magnet","plan","result","trials","shuffle"]:[process.env.PROFILE]},null,2));'
           done
       - uses: actions/upload-artifact@v4
         with:

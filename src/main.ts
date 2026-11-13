@@ -3,7 +3,7 @@ import {installHelpLab,closeHelpLab} from "./help-lab-ui";
 import {requestHelp} from "./help-client";
 import {helpIntent, applyMagnet, storedHelp, provenMagnet, nextMagnetApplication, applyPlan, planPosition, planBoards} from "./help-actions";
 import {removePair as proofRemovePair} from "./core";
-import {helpFlags, qaProfile, assignHelp} from "./help-config";
+import {helpFlags, helpPaused, qaProfile, assignHelp} from "./help-config";
 import {receiptProduct, sameBoard, freezeIntent, type HelpIntent, type HelpProduct} from "./help-contract";
 import { dailyRun, streakReward } from "./daily-run";
 import { hintExplanation } from "./hint-explanation";
@@ -1125,6 +1125,7 @@ let offeredIntent: HelpIntent | undefined;
 let verifiedHint: HelpIntent | undefined;
 let autoIntent: HelpIntent | undefined;
 let applyingHelp = false;
+function currentPlan(){return helpPaused?undefined:planPosition(progress,session);}
 function helpData(intent: HelpIntent) {
   const a = helpProfile(progress).assignments.at(-1);
   return {product: intent.product, mode: intent.task === "classic" ? "classic" : intent.task.startsWith("book") ? "notebook" : "daily",
@@ -1233,7 +1234,7 @@ function magnetGoal(intent: HelpIntent) {
   return "Открыть обычный ход";
 }
 function offerMagnet(intent: HelpIntent) {
-  if (!validIntent(intent) || hintOffer.open) return;
+  if (helpPaused || !validIntent(intent) || hintOffer.open) return;
   if (!provenMagnet(intent)) {message("Сохранённый эффект не удалось проверить. Заряд не списан.");return;}
   offeredIntent = intent;
   const source = storedHelp(progress,intent);
@@ -1246,7 +1247,7 @@ function offerMagnet(intent: HelpIntent) {
   if (!source) void refreshRewarded(true);
 }
 async function openMagnet() {
-  if (busy || paused || lesson >= 0 || progress.active !== "classic" || !hintAttempt(progress).help || hintPending) return;
+  if (helpPaused || busy || paused || lesson >= 0 || progress.active !== "classic" || !hintAttempt(progress).help || hintPending) return;
   const entitlement = hintAttempt(progress).help?.magnet;
   if (entitlement) {
     if (sameBoard(board(),entitlement.intent.board)) offerMagnet(entitlement.intent);
@@ -1265,7 +1266,7 @@ async function openMagnet() {
   offerMagnet(helpIntent(progress,"magnet",result.proof));
 }
 async function performMagnet(intent: HelpIntent) {
-  if (!validIntent(intent)) return false;
+  if (helpPaused || !validIntent(intent)) return false;
   try {
     const frame=captureHelpFrame($("board"));
     markGameStarted();
@@ -1283,7 +1284,7 @@ async function performMagnet(intent: HelpIntent) {
 }
 function offerPlan(intent: HelpIntent) {
   const states=planBoards(intent);
-  if(!validIntent(intent)||!states||hintOffer.open)return;
+  if(helpPaused||!validIntent(intent)||!states||hintOffer.open)return;
   const source=storedHelp(progress,intent);
   if(!source&&!helpFlags.plan){message("Новые предложения плана выключены. Заряды сохранены.");return;}
   offeredIntent=intent;helpPreview.hidden=true;
@@ -1295,8 +1296,8 @@ function offerPlan(intent: HelpIntent) {
   if(!source)void refreshRewarded(true);
 }
 async function openPlan() {
-  if(busy||paused||lesson>=0||progress.active!=="classic"||!hintAttempt(progress).help||hintPending)return;
-  const current=planPosition(progress,session);
+  if(helpPaused||busy||paused||lesson>=0||progress.active!=="classic"||!hintAttempt(progress).help||hintPending)return;
+  const current=currentPlan();
   if(hintAttempt(progress).help?.plan){
     if(current?.pair){displayHint(current.pair);message("Уберите отмеченную пару");}
     else message(current?.complete ? "Цель оплаченного плана достигнута" : "План доступен после возврата к его позиции");
@@ -1312,12 +1313,12 @@ async function openPlan() {
   offerPlan(helpIntent(progress,"plan",result.proof));
 }
 async function performPlan(intent: HelpIntent) {
-  if(!validIntent(intent))return false;
+  if(helpPaused||!validIntent(intent))return false;
   try{
     markGameStarted();const applied=applyPlan(progress,intent);
     if(!applied.duplicate&&adsBridge)enqueueAnalytics(metadata(applied.progress),"assist_apply",{...helpData(intent),application_id:intent.id+":1",entitlement_id:applied.entitlement,outcome:applied.source});
     if(!applied.duplicate&&!await persistHelp(applied.progress,applied.session)){render();return false;}
-    const plan=planPosition(progress,session);
+    const plan=currentPlan();
     if(plan?.pair){displayHint(plan.pair,true);message("Уберите отмеченную пару");}
     return true;
   }catch{message("План сейчас неприменим. Заряд сохранён.");return false;}
@@ -1347,6 +1348,7 @@ hintOffer.addEventListener("cancel", e => {e.preventDefault(); $("cancel-hints")
 async function applyEarnedHelp() {
   if (applyingHelp || !autoIntent || paused || busy || adActive || rewardRequest || !appForeground || document.hidden) return;
   const intent = autoIntent, grant = helpProfile(progress).grant;
+  if(helpPaused&&intent.product!=="hint_pack_3"){autoIntent=undefined;return;}
   if (!grant || grant.intent !== intent.id || grant.product !== intent.product) return;
   applyingHelp = true;
   try {
@@ -1365,7 +1367,7 @@ async function applyEarnedHelp() {
 }
 $("watch-hints").onclick = async () => {
   const intent = offeredIntent;
-  if (helpChoiceBusy || rewardRequest || !intent || !validIntent(intent)) return;
+  if (helpChoiceBusy || rewardRequest || !intent || !validIntent(intent) || (helpPaused&&intent.product!=="hint_pack_3")) return;
   helpChoiceBusy=true;
   $<HTMLButtonElement>("watch-hints").disabled=true;
   try {
@@ -1494,7 +1496,7 @@ function renderWin() {
         `<span class="result-stat"><strong>${value}</strong><span>${label}</span></span>`,
     )
     .join("");
-  resultAssistance.textContent = hintAttempt(progress).help?.assisted ? hintAttempt(progress).help?.plan ? hintAttempt(progress).help?.magnet ? "С Планом и Магнитом" : "С помощью Плана" : "С помощью Магнита" : "";
+  resultAssistance.textContent = !helpPaused && hintAttempt(progress).help?.assisted ? hintAttempt(progress).help?.plan ? hintAttempt(progress).help?.magnet ? "С Планом и Магнитом" : "С помощью Плана" : "С помощью Магнита" : "";
   resultAssistance.hidden = !resultAssistance.textContent;
   const i = notebook.findIndex((p) => p.id === id);
   const next = nextTask(id, progress.done);
@@ -1678,7 +1680,7 @@ function render() {
             ? `Тетрадь · задача ${Number(progress.active.slice(8))}`
             : `Тетрадь ${volumeOf(progress.active) + 1} · задача ${((Number(progress.active.slice(8)) - 1) % 24) + 1}`
           : `Задача дня · ${progress.active.slice(9).split("-").reverse().join(".")}`;
-  const plan = lesson < 0 ? planPosition(progress,session) : undefined;
+  const plan = lesson < 0 ? currentPlan() : undefined;
   if(!busy){
     if(plan?.pair)highlight=plan.pair;
     else if(planHighlighted)highlight=null;
@@ -1706,10 +1708,10 @@ function render() {
   const verifiedPaidHint = progress.active === "classic" ? available.length > 0 : Boolean(verifiedHint && validIntent(verifiedHint));
   const videoHint = helpFlags.visibility && monetized && hintCount === 0 && verifiedPaidHint && !repeatAvailable;
   const assist = hintAttempt(progress).help;
-  magnetButton.hidden = lesson >= 0 || progress.active !== "classic" || !count || !assist || (!helpFlags.magnet && !assist.magnet && !helpProfile(progress).inventory.magnet);
-  magnetButton.disabled = busy || hintPending || Boolean(assist?.magnet && !sameBoard(values,assist.magnet.intent.board));
-  planButton.hidden=lesson>=0||progress.active!=="classic"||!count||!assist||(!helpFlags.plan&&!assist.plan&&!helpProfile(progress).inventory.plan);
-  planButton.disabled=busy||hintPending||Boolean(assist?.plan && (planPosition(progress,session)?.index ?? -1)<0);
+  magnetButton.hidden = helpPaused || lesson >= 0 || progress.active !== "classic" || !count || !assist || (!helpFlags.magnet && !assist.magnet && !helpProfile(progress).inventory.magnet);
+  magnetButton.disabled = helpPaused || busy || hintPending || Boolean(assist?.magnet && !sameBoard(values,assist.magnet.intent.board));
+  planButton.hidden=helpPaused||lesson>=0||progress.active!=="classic"||!count||!assist||(!helpFlags.plan&&!assist.plan&&!helpProfile(progress).inventory.plan);
+  planButton.disabled=helpPaused||busy||hintPending||Boolean(assist?.plan && (currentPlan()?.index ?? -1)<0);
   $("plan-count").textContent=assist?.plan ? plan?.complete ? "✓" : plan?.pair ? `${plan.index+1}/${plan.intent.proof!.length}` : "↶" : String(helpProfile(progress).inventory.plan || (!helpProfile(progress).demo.plan ? 1 : 0));
   planButton.setAttribute("aria-label",assist?.plan ? "Продолжить оплаченный план" : `Стратегический план, зарядов ${$("plan-count").textContent}`);
   document.querySelector<HTMLElement>("footer")!.style.setProperty("--help-actions",String([...document.querySelectorAll<HTMLButtonElement>("footer button")].filter(b=>!b.hidden).length));
@@ -2023,8 +2025,8 @@ async function choose(i: number) {
   else if (occupied(next) && Math.abs(a - i) > 9)
     teach("gaps", "Пустые клетки между цифрами не мешают соединению.");
   if (!occupied(board()) && lesson < 0) platform.gameplay(false);
-  if(lesson<0&&!saveFailed&&hintAttempt(progress).help?.plan){
-    const plan=planPosition(progress,session);
+  if(!helpPaused&&lesson<0&&!saveFailed&&hintAttempt(progress).help?.plan){
+    const plan=currentPlan();
     if(plan?.complete)message("Цель плана достигнута");
     else if(plan?.pair)message("Уберите отмеченную пару");
     else message("Для возврата к Плану отмените ход");
@@ -2091,7 +2093,7 @@ function undoAction() {
   session = undo(session);
   clearSelection();
   render();
-  const plan=planPosition(progress,session);
+  const plan=currentPlan();
   if(plan?.pair)message("Уберите отмеченную пару");
   viewport.scrollTop = session.current.scroll;
   feedback("undo");
@@ -2113,7 +2115,7 @@ async function hint() {
   saveRecovered = false;
   if (busy || paused || lesson >= 0 || hintPending) return;
   markGameStarted();
-  const plan=planPosition(progress,session);
+  const plan=currentPlan();
   if(plan?.pair){displayHint(plan.pair);message("Уберите отмеченную пару");return;}
   const available = availablePairs(board());
   const attempt = hintAttempt(progress);
@@ -2804,7 +2806,7 @@ async function boot() {
   if (!beforeAssignments.has(assignment.experiment) && adsBridge) enqueueAnalytics(metadata(progress), "experiment_assignment", {...assignment});
   if (qaProfile) {
     const label = document.createElement("span"); label.id = "qa-profile";
-    label.textContent = `QA · ${qaProfile==="all"?"все фичи":qaProfile} · тестовая реклама`; document.body.append(label);
+    label.textContent = `QA · ${qaProfile==="baseline"?"обычная игра":qaProfile==="all"?"все фичи":qaProfile} · тестовая реклама`; document.body.append(label);
   }
   await save();
   await adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}).catch(() => {});

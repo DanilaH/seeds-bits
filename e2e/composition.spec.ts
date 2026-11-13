@@ -20,8 +20,13 @@ test("root home has one classic entry, pause has an explicit return, and wide ho
   await expect(page.locator("#close")).toBeHidden();
   await expect(page.locator("#classic-mode")).toBeHidden();
   await expect(page.locator("#resume")).toContainText("классику");
-  const a = await page.locator(".home-current").boundingBox(),
-    b = await page.locator(".home-modes").boundingBox();
+  // Both columns share the moving dialog. Compare them within one animation frame.
+  const [a, b] = await page.evaluate(() =>
+    [".home-current", ".home-modes"].map((selector) => {
+      const r = document.querySelector(selector)!.getBoundingClientRect();
+      return { x: r.x, y: r.y, width: r.width, height: r.height };
+    }),
+  );
   expect(a!.width).toBeGreaterThan(400);
   expect(b!.x).toBeGreaterThan(a!.x + a!.width);
   expect(Math.abs(a!.y - b!.y)).toBeLessThan(2);
