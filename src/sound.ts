@@ -12,6 +12,9 @@ export function suspendSound() {
 }
 export function playSound(
   kind:
+    | "magnet"
+    | "plan-step"
+    | "shuffle"
     | "select"
     | "button"
     | "pair"
@@ -26,6 +29,7 @@ export function playSound(
     | "page"
     | "book",
   enabled: boolean,
+  stage = 0,
 ) {
   if (blocked || !enabled || document.hidden) return;
   if (kind === "select" && performance.now() - lastSelection < 45) return;
@@ -50,6 +54,9 @@ export function playSound(
     if (active.size >= 6) return;
     const now = context.currentTime,
       base = {
+        magnet: 440,
+        "plan-step": 440 * 2 ** ((Math.min(2, Math.max(0, stage)) * 2) / 12),
+        shuffle: 350,
         select: 420,
         button: 360,
         pair: 260,
@@ -65,6 +72,9 @@ export function playSound(
         win: 440,
       }[kind];
     const duration = {
+      magnet: 0.17,
+      "plan-step": 0.085,
+      shuffle: 0.19,
       select: 0.035,
       button: 0.028,
       undo: 0.065,
@@ -82,7 +92,8 @@ export function playSound(
     tone = context.createOscillator();
     gain = context.createGain();
     tone.type = kind === "land" || kind === "win" ? "triangle" : "sine";
-    const pitch = base * (0.94 + Math.random() * 0.12);
+    const pitch =
+      base * (kind === "plan-step" ? 1 : 0.94 + Math.random() * 0.12);
     tone.frequency.setValueAtTime(pitch, now);
     tone.frequency.exponentialRampToValueAtTime(
       pitch * (kind === "full" ? 1.5 : 0.68),

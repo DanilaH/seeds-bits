@@ -40,7 +40,7 @@ jobs:
       - run: node scripts/compare-help-plans.mjs
       - run: node scripts/verify-help-labs.mjs
       - run: python3 scripts/test-help-report.py
-      - run: npx playwright test e2e/help-foundation.spec.ts e2e/magnet.spec.ts e2e/plan.spec.ts e2e/result-transition.spec.ts e2e/trials-lab.spec.ts e2e/shuffle-lab.spec.ts --workers 2
+      - run: npx playwright test e2e/help-foundation.spec.ts e2e/magnet.spec.ts e2e/plan.spec.ts e2e/result-transition.spec.ts e2e/trials-lab.spec.ts e2e/shuffle-lab.spec.ts e2e/help-experience.spec.ts --workers 2
       - uses: actions/upload-artifact@v4
         if: always()
         with:

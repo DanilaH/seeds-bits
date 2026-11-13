@@ -1,0 +1,202 @@
+[
+  {
+    "profile": "magnet",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "magnet",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "magnet",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "magnet",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "magnet",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "trials",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "trials",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "trials",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "trials",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "trials",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "shuffle",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "shuffle",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "shuffle",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "shuffle",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "shuffle",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  }
+]

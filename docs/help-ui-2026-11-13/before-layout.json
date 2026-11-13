@@ -1,0 +1,703 @@
+[
+  {
+    "profile": "magnet",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "magnet",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "magnet",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "magnet",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [
+      {
+        "id": "hint",
+        "text": "Подсказка",
+        "button": {
+          "x": 161,
+          "y": 294.59375,
+          "width": 133,
+          "height": 44,
+          "right": 294,
+          "bottom": 338.59375
+        },
+        "textBox": {
+          "x": 203,
+          "y": 305,
+          "width": 101.125,
+          "height": 23,
+          "right": 304.125,
+          "bottom": 328
+        }
+      },
+      {
+        "id": "hint",
+        "text": "3",
+        "button": {
+          "x": 161,
+          "y": 294.59375,
+          "width": 133,
+          "height": 44,
+          "right": 294,
+          "bottom": 338.59375
+        },
+        "textBox": {
+          "x": 317.125,
+          "y": 310.59375,
+          "width": 6.125,
+          "height": 12,
+          "right": 323.25,
+          "bottom": 322.59375
+        }
+      },
+      {
+        "id": "add",
+        "text": "Добавить",
+        "button": {
+          "x": 161,
+          "y": 340.59375,
+          "width": 133,
+          "height": 44,
+          "right": 294,
+          "bottom": 384.59375
+        },
+        "textBox": {
+          "x": 203,
+          "y": 351,
+          "width": 92.8125,
+          "height": 23,
+          "right": 295.8125,
+          "bottom": 374
+        }
+      },
+      {
+        "id": "add",
+        "text": "6",
+        "button": {
+          "x": 161,
+          "y": 340.59375,
+          "width": 133,
+          "height": 44,
+          "right": 294,
+          "bottom": 384.59375
+        },
+        "textBox": {
+          "x": 308.8125,
+          "y": 356.59375,
+          "width": 6.125,
+          "height": 12,
+          "right": 314.9375,
+          "bottom": 368.59375
+        }
+      }
+    ],
+    "overlaps": []
+  },
+  {
+    "profile": "magnet",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [
+      {
+        "id": "hint",
+        "text": "3",
+        "button": {
+          "x": 150.5,
+          "y": 204,
+          "width": 132.5,
+          "height": 52,
+          "right": 283,
+          "bottom": 256
+        },
+        "textBox": {
+          "x": 284.25,
+          "y": 224,
+          "width": 6.125,
+          "height": 12,
+          "right": 290.375,
+          "bottom": 236
+        }
+      },
+      {
+        "id": "add",
+        "text": "6",
+        "button": {
+          "x": 419.5,
+          "y": 204,
+          "width": 132.5,
+          "height": 52,
+          "right": 552,
+          "bottom": 256
+        },
+        "textBox": {
+          "x": 549.09375,
+          "y": 224,
+          "width": 6.125,
+          "height": 12,
+          "right": 555.21875,
+          "bottom": 236
+        }
+      }
+    ],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [
+      {
+        "id": "hint",
+        "text": "Подсказка",
+        "button": {
+          "x": 161,
+          "y": 294.59375,
+          "width": 133,
+          "height": 44,
+          "right": 294,
+          "bottom": 338.59375
+        },
+        "textBox": {
+          "x": 203,
+          "y": 305,
+          "width": 101.125,
+          "height": 23,
+          "right": 304.125,
+          "bottom": 328
+        }
+      },
+      {
+        "id": "hint",
+        "text": "3",
+        "button": {
+          "x": 161,
+          "y": 294.59375,
+          "width": 133,
+          "height": 44,
+          "right": 294,
+          "bottom": 338.59375
+        },
+        "textBox": {
+          "x": 317.125,
+          "y": 310.59375,
+          "width": 6.125,
+          "height": 12,
+          "right": 323.25,
+          "bottom": 322.59375
+        }
+      },
+      {
+        "id": "add",
+        "text": "Добавить",
+        "button": {
+          "x": 161,
+          "y": 340.59375,
+          "width": 133,
+          "height": 44,
+          "right": 294,
+          "bottom": 384.59375
+        },
+        "textBox": {
+          "x": 203,
+          "y": 351,
+          "width": 92.8125,
+          "height": 23,
+          "right": 295.8125,
+          "bottom": 374
+        }
+      }
+    ],
+    "overlaps": []
+  },
+  {
+    "profile": "plan",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [
+      {
+        "id": "hint",
+        "text": "3",
+        "button": {
+          "x": 150.5,
+          "y": 204,
+          "width": 132.5,
+          "height": 52,
+          "right": 283,
+          "bottom": 256
+        },
+        "textBox": {
+          "x": 284.25,
+          "y": 224,
+          "width": 6.125,
+          "height": 12,
+          "right": 290.375,
+          "bottom": 236
+        }
+      }
+    ],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [
+      {
+        "id": "hint",
+        "text": "▷ +3",
+        "button": {
+          "x": 420.53125,
+          "y": 204,
+          "width": 67.96875,
+          "height": 52,
+          "right": 488.5,
+          "bottom": 256
+        },
+        "textBox": {
+          "x": 467.515625,
+          "y": 208,
+          "width": 23.609375,
+          "height": 12,
+          "right": 491.125,
+          "bottom": 220
+        }
+      }
+    ],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "a3",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "trials",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [],
+    "overlaps": [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "profile": "trials",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "profile": "trials",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "trials",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "profile": "trials",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "shuffle",
+    "width": 390,
+    "height": 844,
+    "font": 1,
+    "overflow": [
+      {
+        "id": "shuffle-preview",
+        "text": "Предпросмотр",
+        "button": {
+          "x": 33,
+          "y": 634.6265869140625,
+          "width": 102.671875,
+          "height": 44,
+          "right": 135.671875,
+          "bottom": 678.6265869140625
+        },
+        "textBox": {
+          "x": 44,
+          "y": 647.6265869140625,
+          "width": 108.515625,
+          "height": 17,
+          "right": 152.515625,
+          "bottom": 664.6265869140625
+        }
+      }
+    ],
+    "overlaps": [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "profile": "shuffle",
+    "width": 320,
+    "height": 568,
+    "font": 1,
+    "overflow": [],
+    "overlaps": [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "profile": "shuffle",
+    "width": 568,
+    "height": 320,
+    "font": 1,
+    "overflow": [],
+    "overlaps": []
+  },
+  {
+    "profile": "shuffle",
+    "width": 320,
+    "height": 568,
+    "font": 1.5,
+    "overflow": [
+      {
+        "id": "shuffle-preview",
+        "text": "Предпросмотр",
+        "button": {
+          "x": 33,
+          "y": 804.796875,
+          "width": 123,
+          "height": 44,
+          "right": 156,
+          "bottom": 848.796875
+        },
+        "textBox": {
+          "x": 44,
+          "y": 813.796875,
+          "width": 149.21875,
+          "height": 25,
+          "right": 193.21875,
+          "bottom": 838.796875
+        }
+      }
+    ],
+    "overlaps": [
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ],
+      [
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "profile": "shuffle",
+    "width": 568,
+    "height": 320,
+    "font": 1.5,
+    "overflow": [],
+    "overlaps": []
+  }
+]
