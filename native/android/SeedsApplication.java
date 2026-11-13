@@ -26,7 +26,7 @@ public class SeedsApplication extends Application {
     data.put("schema", 3);
     android.content.SharedPreferences prefs = context.getSharedPreferences("seeds-monetization",0);
     for (String field : new String[]{"install","experiment","variant","config","anchor","cohort","qa"})
-      if (prefs.contains("context_"+field)) data.put(field,prefs.getString("context_"+field,""));
+      if (prefs.contains("context_"+field) && !data.has(field)) data.put(field,prefs.getString("context_"+field,""));
     try {
       PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
       data.put("app_version", info.versionName).put("app_build", info.versionCode);

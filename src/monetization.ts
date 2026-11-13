@@ -9,7 +9,7 @@ function setReadiness(value: RewardedReadiness) {
   if (!["ready", "loading", "unavailable", "disabled"].includes(value?.state)) return;
   rewardedReadiness = value; window.dispatchEvent(new Event("seeds:rewarded-state"));
 }
-type Result = { shown?: boolean; reward?: RewardReceipt; status?: string };
+type Result = { shown?: boolean; reward?: RewardReceipt; status?: string; reason?: string; ad_session_id?: string };
 type Configuration = {
   enabled: boolean;
   test: boolean;
@@ -116,13 +116,13 @@ export async function showAd(
   intent?: HelpIntent,
   adSession = crypto.randomUUID(),
 ): Promise<Result> {
-  if (!monetized || !bridge || adActive) return { status: "unavailable" };
+  if (!monetized || !bridge || adActive) return { status: "unavailable", reason: adActive ? "fullscreen_busy" : "disabled" };
   adActive = true;
   onPause(true);
   try {
     return await bridge.show({ kind, attempt, ad_session_id: adSession, ...(intent ? {product: intent.product, intent_id: intent.id, offer_id: intent.offer} : {}) });
   } catch {
-    return { status: "error" };
+    return { status: "error", reason: "bridge_error" };
   } finally {
     adActive = false;
     onPause(false);

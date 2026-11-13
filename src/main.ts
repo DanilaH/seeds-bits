@@ -1303,7 +1303,7 @@ $("watch-hints").onclick = async () => {
     const result = await showAd("rewarded", intent.attempt, intent, adSession);
     if (result.reward) await receiveReward(result.reward);
     await rewardQueue;
-    helpEvent("result", intent, {ad_session_id: adSession, outcome: result.status ?? "error"});
+    helpEvent("result", intent, {ad_session_id: adSession, outcome: result.status ?? "error", reason: result.reason ?? result.status ?? "unknown"});
     if (helpProfile(progress).grant?.intent !== intent.id) {
       autoIntent = undefined;
       outcomeMessage = result.status === "reward_pending" ? "Награда ожидает сохранения на устройстве. Не удаляйте игру; повторите восстановление позже." : result.status === "closed" ? (intent.product === "hint_pack_3" ? "Видео закрыто. Подсказки не начислены." : "Видео закрыто. Заряд не начислен.") : "Реклама сейчас недоступна. Попробуйте позже.";
@@ -2681,9 +2681,9 @@ async function boot() {
     warning = "Сервис площадки недоступен. Можно играть без него.";
   }
   if (!hadStoredState && (helpFlags.magnet || helpFlags.plan)) hintAttempt(progress).help = {version:1,assisted:false};
-  const profile = helpProfile(progress), beforeAssignments = profile.assignments.length;
+  const profile = helpProfile(progress), beforeAssignments = new Set(profile.assignments.map(a=>a.experiment));
   const assignment = assignHelp(profile, hadStoredState);
-  if (profile.assignments.length !== beforeAssignments && adsBridge) enqueueAnalytics(metadata(progress), "experiment_assignment", {...assignment});
+  if (!beforeAssignments.has(assignment.experiment) && adsBridge) enqueueAnalytics(metadata(progress), "experiment_assignment", {...assignment});
   if (qaProfile) {
     const label = document.createElement("span"); label.id = "qa-profile";
     label.textContent = `QA · ${qaProfile} · тестовая реклама`; document.body.append(label);

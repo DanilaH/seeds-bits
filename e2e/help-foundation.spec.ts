@@ -46,3 +46,15 @@ test("A08: failed native acknowledgement cannot duplicate a durable grant on rec
   await expect.poll(()=>wallet(page)).toBe(2);await page.reload();await page.locator("#resume").click();
   expect(await wallet(page)).toBe(2);expect((await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!),key)).meta.rewardReceipts).toHaveLength(1);
 });
+test("A11: an old pending reward during an unavailable request is stored without claiming the new offer",async({page})=>{
+  await install(page);await page.locator("#hint").click();
+  await page.evaluate(()=>{(window as any).unavailable=true;localStorage.nativeHelp=JSON.stringify({token:"old-pending",attempt:"old-attempt"});});
+  await page.locator("#watch-hints").click();await expect.poll(()=>wallet(page)).toBe(3);
+  await expect(page.locator("#board .hinted")).toHaveCount(0);await expect(page.locator("#status")).toContainText("недоступна");
+});
+test("A13: future receipt is retained with a visible recovery diagnosis",async({page})=>{
+  await install(page);await page.evaluate(()=>localStorage.nativeHelp=JSON.stringify({version:9,product:"future_1",token:"future",attempt:"old"}));
+  await page.reload();await expect(page.locator("body")).toContainText("формат пока не поддерживается");
+  expect(await page.evaluate(()=>(window as any).acks.length)).toBe(0);expect(await wallet(page)).toBe(0);
+  expect(await page.evaluate(()=>JSON.parse(localStorage.nativeHelp).version)).toBe(9);
+});
