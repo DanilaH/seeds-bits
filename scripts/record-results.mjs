@@ -208,6 +208,13 @@ try {
         expect(stats.some((x) => x.overflow)).toBe(false);
         if (classic)
           expect(stats.map((x) => x.value)).toEqual(["44", "6", "3"]);
+        if (classic) {
+          entry.visibleStatistics = await visible(
+            page,
+            "#win-stats strong, #win-stats .result-stat > span",
+          );
+          expect(entry.visibleStatistics.every((x) => x.hit)).toBe(true);
+        }
         const selectors = classic ? "#result-next > button" : "#play-again";
         entry.actions = await visible(page, selectors);
         expect(entry.actions.every((x) => x.hit && x.height >= 44)).toBe(true);

@@ -424,10 +424,22 @@ function scheduleActionLayout() {
               (availableWidth - Math.max(0, actions.length - 1) * 2) /
                 actions.length)),
     );
+    const win = $("win");
+    const viewport = $("viewport");
+    const classicResult = !win.hidden && win.dataset.resultKind === "classic";
+    win.classList.toggle(
+      "compact-result",
+      classicResult && viewport.clientHeight < 440,
+    );
+    win.classList.remove("minimal-result");
+    if (classicResult && win.scrollHeight > viewport.clientHeight + 1)
+      win.classList.add("minimal-result");
   });
 }
 const actionObserver = new ResizeObserver(scheduleActionLayout);
 actionObserver.observe(document.querySelector("footer")!);
+actionObserver.observe($("viewport"));
+actionObserver.observe($("win-stats"));
 document
   .querySelectorAll("footer .action span")
   .forEach((label) => actionObserver.observe(label));
