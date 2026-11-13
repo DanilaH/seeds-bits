@@ -407,19 +407,23 @@ function scheduleActionLayout() {
       (b) => getComputedStyle(b).display !== "none" && !b.hidden,
     );
     footer.style.setProperty("--help-actions",String(actions.length));
+    const hasAssist=actions.some(button=>button.id==="magnet"||button.id==="plan");
     let widest = 44;
     const required = actions.reduce(
       (width, button) => {
         const label =
           button.querySelector<HTMLElement>(".action-label") ??
           button.querySelector<HTMLElement>("span")!;
-        // Measure the natural label, not its already wrapped/squeezed box.
-        const probe=document.createElement("span");probe.textContent=label.textContent;
-        Object.assign(probe.style,{position:"fixed",visibility:"hidden",whiteSpace:"nowrap",width:"max-content",maxWidth:"none",font:getComputedStyle(label).font,letterSpacing:getComputedStyle(label).letterSpacing});
-        button.append(probe);
-        const range = document.createRange();range.selectNodeContents(probe);
-        const needed = Math.max(44, range.getBoundingClientRect().width + 12);
-        probe.remove();
+        const range=document.createRange();range.selectNodeContents(label);
+        let needed=Math.max(44,range.getBoundingClientRect().width+6);
+        if(hasAssist){
+          // New four-action toolbars need unwrapped labels. Preserve the established
+          // three-action sidebar measurement so ordinary landscape keeps its height.
+          const probe=document.createElement("span");probe.textContent=label.textContent;
+          Object.assign(probe.style,{position:"fixed",visibility:"hidden",whiteSpace:"nowrap",width:"max-content",maxWidth:"none",font:getComputedStyle(label).font,letterSpacing:getComputedStyle(label).letterSpacing});
+          button.append(probe);range.selectNodeContents(probe);
+          needed=Math.max(44,range.getBoundingClientRect().width+12);probe.remove();
+        }
         widest = Math.max(widest, needed);
         return width + needed;
       },
@@ -1019,6 +1023,7 @@ function syncPauseState() {
 }
 let rewardQueue = Promise.resolve();
 let rewardRequest = false;
+let helpChoiceBusy = false;
 let bannerFrame = 0;
 $("app").insertAdjacentHTML(
   "beforeend",
@@ -1183,7 +1188,7 @@ function updateOfferReadiness() {
   const charged=offeredIntent?.product!=="hint_pack_3"&&offeredIntent&&canUseStoredHelp(offeredIntent);
   $("rewarded-state").hidden=Boolean(charged)&&!saveFailed;
   $("rewarded-state").textContent=saveFailed?"Не сохранено. Заряд на месте.":reason==="pending_receipt"?"Восстанавливаем награду…":state==="ready"?"Награда за завершённое видео":state==="loading"?"Видео загружается…":state==="disabled"?"Видео выключено":"Сейчас видео недоступно";
-  $<HTMLButtonElement>("watch-hints").disabled=saveFailed||(!charged&&state!=="ready");
+  $<HTMLButtonElement>("watch-hints").disabled=helpChoiceBusy||saveFailed||(!charged&&state!=="ready");
 }
 function setHelpOffer(title:string,goal:string,price:string,cta:string,undo:string,details:string){
   $("hint-offer-title").textContent=title;$("help-offer-copy").textContent=goal;
@@ -1360,7 +1365,10 @@ async function applyEarnedHelp() {
 }
 $("watch-hints").onclick = async () => {
   const intent = offeredIntent;
-  if (rewardRequest || !intent || !validIntent(intent)) return;
+  if (helpChoiceBusy || rewardRequest || !intent || !validIntent(intent)) return;
+  helpChoiceBusy=true;
+  $<HTMLButtonElement>("watch-hints").disabled=true;
+  try {
   if (intent.product !== "hint_pack_3" && canUseStoredHelp(intent)) {
     if (busy) return;
     helpEvent("choice",intent,{outcome:"accepted"});
@@ -1397,6 +1405,7 @@ $("watch-hints").onclick = async () => {
     if (outcomeMessage && !saveFailed) message(outcomeMessage);
     updateBanner();
   }
+  } finally {helpChoiceBusy=false;if(hintOffer.open)updateOfferReadiness();}
 };
 let earnedAward = "",
   earnedSeeds = 0,

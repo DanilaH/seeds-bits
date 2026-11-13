@@ -318,3 +318,31 @@ test("Plan tone rises only as the real player advances the paid path", async ({
     )
     .toBe(true);
 });
+
+test("Repeated offer acceptance during slow readiness starts one video and resumes once", async ({
+  page,
+}) => {
+  await scene(page, "a3");
+  await page.locator("#hint").click();
+  await page.evaluate(() => {
+    const w = window as any,
+      original = w.__SEEDS_ADS_TEST__.readiness;
+    w.__SEEDS_ADS_TEST__.readiness = async () => {
+      await new Promise((r) => setTimeout(r, 180));
+      return original();
+    };
+    const b = document.getElementById("watch-hints") as HTMLButtonElement;
+    b.click();
+    b.click();
+    b.click();
+  });
+  await expect(page.locator("#qa-ad")).toBeVisible();
+  await page.waitForTimeout(250);
+  expect(await page.evaluate(() => (window as any).requests.length)).toBe(1);
+  await page.locator("#qa-ad").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
+  await expect
+    .poll(() => page.locator("#app").evaluate((e) => (e as HTMLElement).inert))
+    .toBe(false);
+  expect(await page.evaluate(() => (window as any).requests.length)).toBe(1);
+});
