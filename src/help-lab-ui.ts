@@ -52,26 +52,31 @@ export function installHelpLab(
   parent: HTMLElement,
   feedback: LabFeedback = () => {},
 ) {
-  if (profile !== "trials" && profile !== "shuffle") return;
-  const entry = document.createElement("button");
-  entry.id = "qa-lab";
-  entry.className = "secondary";
-  entry.textContent =
-    profile === "trials" ? "QA: Испытания" : "QA: Собрать остатки";
-  parent.append(entry);
-  entry.onclick = () => {
-    if (profile === "trials") void openTrials(feedback);
-    else
-      void import("./shuffle-lab-ui").then((m) =>
-        m.openShuffle(
-          dialog,
-          (value) => {
-            busy = value;
-          },
-          feedback,
-        ),
-      );
-  };
+  const labs =
+    profile === "all"
+      ? ["trials", "shuffle"]
+      : [profile].filter((p) => p === "trials" || p === "shuffle");
+  for (const lab of labs) {
+    const entry = document.createElement("button");
+    entry.id = profile === "all" ? `qa-${lab}-lab` : "qa-lab";
+    entry.className = "secondary";
+    entry.textContent =
+      lab === "trials" ? "QA: Испытания" : "QA: Собрать остатки";
+    parent.append(entry);
+    entry.onclick = () => {
+      if (lab === "trials") void openTrials(feedback);
+      else
+        void import("./shuffle-lab-ui").then((m) =>
+          m.openShuffle(
+            dialog,
+            (value) => {
+              busy = value;
+            },
+            feedback,
+          ),
+        );
+    };
+  }
 }
 async function openTrials(feedback: LabFeedback) {
   let p: Trials,

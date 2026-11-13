@@ -663,3 +663,6 @@
 @media(orientation:landscape) and (max-height:420px){#help-preview{grid-template-columns:1fr 1fr;max-height:120px;margin:5px 0}#hint-offer .hint-actions{grid-template-columns:1fr 1fr}#hint-offer[open]{gap:6px;padding:10px 14px}#help-preview .help-grid span{font-size:14px;aspect-ratio:auto;min-height:20px}#help-details{margin-top:4px}#help-steps{margin:8px 0}}
 
 .game-actions footer .action-count{left:auto;right:2px;max-width:calc(100% - 4px)}
+
+/* Owner-facing tools in the combined QA build. */
+#qa-help-tools{display:grid;gap:8px;margin-top:20px}#qa-help-tools h3{margin:0 0 4px;font-size:18px}#qa-help-tools>button{width:100%;margin:0}

@@ -450,12 +450,12 @@ function scheduleActionLayout() {
       else statusParent.prepend(status);
     }
     const availableWidth = dock ? game.clientWidth - 32 : footer.clientWidth;
-    footer.style.setProperty("--assist-columns",widest+12>(availableWidth-8)/2?"1":"2");
+    footer.style.setProperty("--assist-columns",actions.length>4&&widest+12<=(availableWidth-12)/3?"3":widest+12>(availableWidth-8)/2?"1":"2");
     game.classList.toggle(
       "stacked-actions",
       actions.length > 0 &&
         (required > availableWidth ||
-          (!landscape &&
+          ((!landscape || hasAssist) &&
             widest >
               (availableWidth - Math.max(0, actions.length - 1) * 2) /
                 actions.length)),
@@ -2804,7 +2804,7 @@ async function boot() {
   if (!beforeAssignments.has(assignment.experiment) && adsBridge) enqueueAnalytics(metadata(progress), "experiment_assignment", {...assignment});
   if (qaProfile) {
     const label = document.createElement("span"); label.id = "qa-profile";
-    label.textContent = `QA · ${qaProfile} · тестовая реклама`; document.body.append(label);
+    label.textContent = `QA · ${qaProfile==="all"?"все фичи":qaProfile} · тестовая реклама`; document.body.append(label);
   }
   await save();
   await adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}).catch(() => {});
@@ -3828,23 +3828,26 @@ setInterval(() => {
 }, 5000);
 
 if (import.meta.env.DEV || import.meta.env.VITE_SEEDS_QA_PROFILE) {
-  installHelpLab(qaProfile,$("menu-content"),assistFeedback);
-  if (qaProfile === "magnet" || qaProfile === "a3" || qaProfile === "plan") {
-    const scenario = document.createElement("button"); scenario.id = "qa-help-scene"; scenario.className = "secondary";
-    scenario.textContent = qaProfile === "magnet" ? "QA: пример Магнита" : qaProfile === "plan" ? "QA: пример плана" : "QA: подсказки за видео";
-    $("home-goal").after(scenario);
+  const qaTools=document.createElement("section");qaTools.id="qa-help-tools";
+  if(qaProfile==="all"){qaTools.innerHTML='<h3>Проверка новых фич</h3>';$("menu-content").append(qaTools);}
+  installHelpLab(qaProfile,qaProfile==="all"?qaTools:$("menu-content"),assistFeedback);
+  const scenes=qaProfile==="all"?["magnet","plan","a3"]:[qaProfile].filter(profile=>["magnet","plan","a3"].includes(profile));
+  for (const scene of scenes) {
+    const scenario = document.createElement("button"); scenario.id = qaProfile==="all"?`qa-${scene}-scene`:"qa-help-scene"; scenario.className = "secondary";
+    scenario.textContent = scene === "magnet" ? "QA: пример Магнита" : scene === "plan" ? "QA: пример плана" : "QA: подсказки за видео";
+    if(qaProfile==="all")qaTools.append(scenario);else $("home-goal").after(scenario);
     scenario.onclick = async () => {
       if (busy || rewardRequest || adActive) return;
       const candidate = cloneProgress(progress);
       startAttempt(candidate,"classic"); candidate.active = "classic";
       const fixture = await import("../fixtures/assistance/magnet-example.json");
       let game = newSession();
-      if (qaProfile === "magnet") {
+      if (scene === "magnet") {
         game.current.board = [...fixture.default.start];
         for (const [a,b] of fixture.default.normal_prefix) game = commit(game,removePair(game.current.board,a,b),"pair",0);
         hintAttempt(candidate).help = {version:1,assisted:false};
         jars(candidate).highWater = game.current.moves;
-      } else if(qaProfile === "plan") {
+      } else if(scene === "plan") {
         game.current.board = [5,5,0,0,0,0,0,0,0,7,3,2,8];
         hintAttempt(candidate).help={version:1,assisted:false};
       } else {
