@@ -1230,9 +1230,9 @@ function renderWin() {
   symbol.classList.toggle("paper-result", kind === "page" || kind === "book");
   symbol.classList.toggle("field-result", kind === "classic");
   $("win-stats").innerHTML = [
-    ["Пар убрано", session.current.moves],
-    ["Добавлений", session.current.additions],
-    ["Подсказок", progress.hints[id] ?? 0],
+    ["Пары", session.current.moves],
+    ["Добавления", session.current.additions],
+    ["Подсказки", progress.hints[id] ?? 0],
   ]
     .map(
       ([label, value]) =>
@@ -1333,9 +1333,9 @@ function renderClassicChoices() {
   difficultyCaption.hidden = !isClassic;
   difficultyCaption.textContent =
     level === CLASSIC_MIN
-      ? "Самая лёгкая сложность"
+      ? "Сложность: минимум"
       : level === CLASSIC_MAX
-        ? "Максимальная сложность"
+        ? "Сложность: максимум"
         : `${classicDifficultyNames[level]} сложность`;
   for (const [id, atLimit] of [
     ["classic-easier", level === CLASSIC_MIN],

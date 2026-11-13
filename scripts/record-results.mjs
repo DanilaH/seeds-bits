@@ -36,6 +36,10 @@ async function visible(page, selector) {
           [r.x + r.width / 2, r.bottom - 8],
         ];
         return {
+          fitting: document.querySelector("#win").className,
+          viewportHeight: document.querySelector("#viewport").clientHeight,
+          resultHeight: document.querySelector("#win").getBoundingClientRect()
+            .height,
           id: e.id,
           height: r.height,
           hit: points.every(([x, y]) => {

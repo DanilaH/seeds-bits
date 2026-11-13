@@ -154,16 +154,19 @@
   margin: 8px 0 4px;
 }
 #win.minimal-result {
-  padding-block: 4px;
+  padding-block: 2px;
 }
 #win.minimal-result .win-symbol.field-result {
   display: none;
 }
 #win.minimal-result h1 {
-  margin: 0 0 8px;
+  margin: 0 0 4px;
 }
 #win.minimal-result #win-stats {
-  margin: 4px 0;
+  margin: 2px 0;
+}
+#win.minimal-result #win-stats > .result-stat {
+  padding: 2px 0;
 }
 #win .win-symbol.field-result {
   width: 144px;
