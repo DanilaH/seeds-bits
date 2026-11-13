@@ -1,18 +1,27 @@
 import {read} from "./platform";
+import {checkPair,pairs} from "./core";
 import {saveLab} from "./lab-storage";
 import {requestShuffle} from "./shuffle-lab-client";
-import {SHUFFLE_KEY,freshShuffle,readShuffle,restartShuffle,shuffleIntent,applyShuffle,undoShuffle,canReplayShuffle,mockShuffleReceipt,storeShuffleEarned,grantShuffleEarned,shuffleCount,type ShuffleLab,type ShuffleIntent} from "./shuffle-lab";
+import {SHUFFLE_KEY,freshShuffle,readShuffle,restartShuffle,shuffleIntent,applyShuffle,undoShuffle,canReplayShuffle,mockShuffleReceipt,storeShuffleEarned,grantShuffleEarned,shuffleCount,shufflePair,type ShuffleLab,type ShuffleIntent} from "./shuffle-lab";
 const cells=(board:readonly number[])=>board.map(n=>`<span>${n||''}</span>`).join('');
 export async function openShuffle(dialog:HTMLDialogElement,onBusy:(busy:boolean)=>void){
- let p:ShuffleLab,stored:string|null=null,busy=false,note='',intent:ShuffleIntent|undefined;
+ let p:ShuffleLab,stored:string|null=null,busy=false,note='',selected=-1,intent:ShuffleIntent|undefined;
  try{stored=await read(SHUFFLE_KEY);p=stored?readShuffle(stored):freshShuffle();}catch{dialog.innerHTML='<h2>Лабораторное сохранение защищено</h2><p>Эта версия не прочитана; данные не перезаписаны.</p><button id="lab-close">Закрыть</button>';dialog.querySelector<HTMLButtonElement>('#lab-close')!.onclick=()=>dialog.close();dialog.showModal();return;}
  const scene=crypto.randomUUID();dialog.dataset.labScene=scene;
  function lock(value:boolean){busy=value;onBusy(value);if(value)dialog.querySelectorAll<HTMLButtonElement>('button').forEach(n=>n.disabled=true);}
- async function write(q:ShuffleLab){if(busy)return false;lock(true);try{const raw=JSON.stringify(q);await saveLab(SHUFFLE_KEY,raw,stored);stored=raw;p=q;note='';return true;}catch(e){note=e instanceof Error?e.message:'Не удалось сохранить. Заряд не потрачен.';return false;}finally{lock(false);render();}}
+ async function write(q:ShuffleLab){if(busy)return false;lock(true);try{const raw=JSON.stringify(q);await saveLab(SHUFFLE_KEY,raw,stored);stored=raw;p=q;selected=-1;note='';return true;}catch(e){note=e instanceof Error?e.message:'Не удалось сохранить. Заряд не потрачен.';return false;}finally{lock(false);render();}}
  function render(){
   if(dialog.dataset.labScene!==scene)return;
-  dialog.innerHTML=`<div class="lab-heading"><h2>Собрать остатки</h2><button id="lab-close" aria-label="Закрыть">×</button></div><p class="lab-tag">Лаборатория QA · реклама имитируется · отдельное сохранение</p><p>Собрать имеющиеся цифры без пустот и переставить их. Цифры не удаляются и не добавляются. Проверяем обычную пару; полное решение не обещаем.</p><strong id="shuffle-count">${shuffleCount(p)} цифр · ширина 9</strong><div id="shuffle-board" class="lab-board shuffle-grid">${cells(p.session.current.board)}</div><p id="lab-status" role="status">${note || (p.entitlement ? canReplayShuffle(p)?'Ту же перестановку можно повторить бесплатно.':'Перестановка использована. Отмена вернёт прежнее поле и прокрутку.':'Откройте предпросмотр. Одно новое применение на попытку.')}</p><div class="lab-actions"><button id="shuffle-preview" ${p.entitlement&&!canReplayShuffle(p)||p.pending?'disabled':''}>${canReplayShuffle(p)?'Повторить предпросмотр':'Предпросмотр'}</button><button id="lab-undo" ${p.session.history.length?'':'disabled'}>Отмена</button><button id="lab-restart">Сначала</button></div>${p.credit?'<p>1 QA-заряд в запасе.</p>':''}${p.pending?'<button id="lab-recover">Восстановить QA-награду</button>':''}`;
+  dialog.innerHTML=`<div class="lab-heading"><h2>Собрать остатки</h2><button id="lab-close" aria-label="Закрыть">×</button></div><p class="lab-tag">Лаборатория QA · реклама имитируется · отдельное сохранение</p><p>Собрать имеющиеся цифры без пустот и переставить их. Цифры не удаляются и не добавляются. Проверяем обычную пару; полное решение не обещаем.</p><strong id="shuffle-count">Цифр: ${shuffleCount(p)} · ширина 9</strong><div id="shuffle-board" class="lab-board">${p.session.current.board.map((n,i)=>`<button data-shuffle-index="${i}" ${n?'':'disabled'} aria-label="${n||'Пусто'}, клетка ${i+1}">${n||''}</button>`).join('')}</div><p id="lab-status" role="status">${note || (!shuffleCount(p)?'Поле очищено!':p.entitlement ? canReplayShuffle(p)?'Ту же перестановку можно повторить бесплатно.':pairs(p.session.current.board).length?'Есть обычная пара. Соедините её сами; перестановка уже использована.':'Пар нет. Можно отменить ход или начать новый QA-пример.':'Откройте предпросмотр. Одно новое применение на попытку.')}</p><div class="lab-actions"><button id="shuffle-preview" ${p.entitlement&&!canReplayShuffle(p)||p.pending?'disabled':''}>${canReplayShuffle(p)?'Повторить предпросмотр':'Предпросмотр'}</button><button id="lab-undo" ${p.session.history.length?'':'disabled'}>Отмена</button><button id="lab-restart">Сначала</button></div>${p.credit?'<p>1 QA-заряд в запасе.</p>':''}${p.pending?'<button id="lab-recover">Восстановить QA-награду</button>':''}`;
   dialog.querySelector<HTMLButtonElement>('#lab-close')!.onclick=()=>dialog.close();
+  for(const cell of dialog.querySelectorAll<HTMLButtonElement>('[data-shuffle-index]'))cell.onclick=async()=>{
+   if(busy)return;const i=Number(cell.dataset.shuffleIndex);
+   if(selected<0){selected=i;cell.classList.add('selected');return;}
+   const a=selected;selected=-1;
+   if(checkPair(p.session.current.board,a,i).ok)await write(shufflePair(p,a,i,dialog.scrollTop));
+   else{note='Эта пара не подходит. Выберите другую.';render();}
+  };
+
   dialog.querySelector<HTMLButtonElement>('#lab-undo')!.onclick=()=>void write(undoShuffle(p));
   dialog.querySelector<HTMLButtonElement>('#lab-restart')!.onclick=()=>void write(restartShuffle(p));
   dialog.querySelector<HTMLButtonElement>('#lab-recover')?.addEventListener('click',()=>void write(grantShuffleEarned(p)));

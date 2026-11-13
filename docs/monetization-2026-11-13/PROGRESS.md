@@ -55,3 +55,8 @@ The final refinement persists/freeze-validates intermediate plan states (with co
 ## Verified APK source and regression synchronization
 
 `6a6b576` produced six successful Android/R8 QA builds in workflow43449880397. Its general Android job passed, all247 main e2e passed,104 unit and2 regression unit passed. One regression assertion R10 checked `app.inert` synchronously immediately after resolving the mock show promise, before the async reward queue/finally settled. It was corrected to wait for the actual unlocked state and still assert exactly one show call; no product/native/bundled code changed. With the heavy-save fixture generated, the local complete regression suite passes15/15 without skips. The final verification commit is test/documentation only; delivered APK source remains6a6b576. Actual device/live money remain unverified.
+
+
+## Playable shuffle demonstration
+
+The isolated B4 lab now allows tapping the proved ordinary pair after the fixed shuffle, then Undo of that pair and Undo/replay of the original shuffle. This makes its claimed next move directly reviewable rather than only present in JSON. Ordinary moves remain ordinary, assist/demo limits stay sticky, production progress is untouched. Four targeted unit and four browser scenarios pass. The final QA source is the commit containing this refinement; the earlier6a6 APKs are retained as prior evidence, not relabelled as this source.

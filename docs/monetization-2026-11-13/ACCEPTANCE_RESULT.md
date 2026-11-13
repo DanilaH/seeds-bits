@@ -21,7 +21,7 @@
 
 ## Проверенная автоматическая часть
 
-Код APK: `6a6b576`. Локальный финальный прогон: 104 unit-теста, 35 целевых browser-сценариев, TypeScript/Vite build; полный отдельный regression15/15 после генерации heavy-save fixture. В CI все247 основных e2e и Android job прошли. Первое R10 ожидание до async-resume исправлено отдельным test-only изменением; код APK не менялся. В CI дополнительно выполняются широкий browser/regression прогон, 43 проверки исходного native bridge с Android/SDK doubles и реальная Android/R8 сборка. Итоговые SHA, runs, результаты и контрольные суммы APK фиксируются в выдаваемом manifest; наличие этой таблицы не подменяет результат CI.
+Первый полный кандидат: `6a6b576`; финальный исходник APK фиксируется в manifest после добавления обычного хода в B4. Локальный финальный прогон: 105 unit-тестов, 35 целевых browser-сценариев, TypeScript/Vite build; полный отдельный regression15/15 после генерации heavy-save fixture. В CI все247 основных e2e и Android job прошли. Первое R10 ожидание до async-resume исправлено отдельным test-only изменением; эта правка не меняла код APK. Позднее в изолированный B4 добавлен обычный ход после перестановки. В CI дополнительно выполняются широкий browser/regression прогон, 43 проверки исходного native bridge с Android/SDK doubles и реальная Android/R8 сборка. Итоговые SHA, runs, результаты и контрольные суммы APK фиксируются в выдаваемом manifest; наличие этой таблицы не подменяет результат CI.
 
 | Приёмка | Техническое доказательство | Статус автоматической части |
 |---|---|---|
@@ -40,7 +40,7 @@
 | D10–13 | QA исключение, окна168/192ч, нет победителя при неполных данных, выключение офферов сохраняет запас/права | PASS для кода/синтетики |
 | A4 | Шесть новых + 11 прежних рекламных browser-сценариев; shared cooldown/reward suppression в native N07–12; result event N41 | PASS |
 | B3 | Три полных core-witness в2 Add; 4 unit +3 browser, остановка/bonus/Undo/reload/stale; native lab commit N42–43 | PASS как лаборатория |
-| B4 | Multiset/count/width9/обычная пара, bounded worker, fixed preview/отказ/Undo/replay/mock receipt;3 unit +4 browser | PASS как лаборатория |
+| B4 | Multiset/count/width9/обычная пара, bounded worker, fixed preview/отказ/Undo/replay/mock receipt;4 unit +4 browser | PASS как лаборатория |
 
 Поиск Магнита:128 кандидатов /4000 узлов /120мс, worker1с hard stop; 1800 логических клеток — guard, не измеренный телефонный FPS. План использует тот же общий бюджет. Shuffle:128 перестановок /120мс, worker1с. `unknown` не означает отсутствие решения и не разрешает продажу.
 

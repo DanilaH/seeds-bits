@@ -1,4 +1,4 @@
-import {checkPair,decode,newSession,occupied,pairs,undo,MAX_CELLS,type Session,type Snapshot} from "./core";
+import {checkPair,commit,decode,newSession,occupied,pairs,removePair,undo,MAX_CELLS,type Session,type Snapshot} from "./core";
 import {sameBoard} from "./help-contract";
 import fixture from "../fixtures/assistance/magnet-example.json";
 export const SHUFFLE_KEY="seeds-bits.lab.shuffle.v1";
@@ -36,6 +36,7 @@ export function applyShuffle(p:ShuffleLab,i:ShuffleIntent,scroll=0):ShuffleLab{
  else{if(q.credit)q.credit=false;else if(!q.demoUsed)q.demoUsed=true;else throw Error("No lab charge");q.entitlement=structuredClone(i);}
  q.session={rules:1,current:{...q.session.current,board:[...i.proof.after],scroll,assists:(q.session.current.assists??0)+1},history:[...q.session.history,{...q.session.current,scroll}]};return q;
 }
+export function shufflePair(p:ShuffleLab,a:number,b:number,scroll=0):ShuffleLab{const q=clone(p);q.session=commit(q.session,removePair(q.session.current.board,a,b),"pair",scroll);return q;}
 export function undoShuffle(p:ShuffleLab):ShuffleLab{const q=clone(p);q.session=undo(q.session);return q;}
 export function mockShuffleReceipt(p:ShuffleLab,intent:ShuffleIntent):MockReceipt{
  if(p.entitlement||p.pending||p.credit||!p.demoUsed||!matches(p,intent)||!verifyShuffle(intent.proof))throw Error("No mock offer");return {version:1,product:"shuffle_1",sequence:p.lastEarned+1,intent:structuredClone(intent)};
