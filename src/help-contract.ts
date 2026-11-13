@@ -37,6 +37,12 @@ export function receiptProduct(r: RewardReceipt): HelpProduct | undefined {
       ![r.intent_id, r.offer_id, r.ad_session_id].every(id => typeof id === "string" && id.length > 0 && id.length <= 100)) return;
   return r.product as HelpProduct;
 }
+export function freezeIntent(intent: HelpIntent): HelpIntent {
+  Object.freeze(intent.board);Object.freeze(intent.pair);
+  if(intent.after)Object.freeze(intent.after);
+  if(intent.proof){intent.proof.forEach(Object.freeze);Object.freeze(intent.proof);}
+  return Object.freeze(intent);
+}
 export function sameBoard(a: readonly number[], b: readonly number[]) {
   return a.length === b.length && a.every((n, i) => n === b[i]);
 }
@@ -49,9 +55,9 @@ export function readIntent(v: any): HelpIntent | undefined {
   if (v.after !== undefined && !board(v.after)) return;
   if (v.proof !== undefined && (!Array.isArray(v.proof) || v.proof.length > 3 || !v.proof.every((p: any) => Array.isArray(p) && p.length === 2 && p.every((n: unknown) => Number.isInteger(n) && Number(n) >= 0 && Number(n) < MAX_CELLS)))) return;
   if (v.product === "hint_pack_3" && !checkPair(v.board, ...v.pair as [number, number]).ok) return;
-  return {version: 1, id: v.id, offer: v.offer, product: v.product, task: v.task, attempt: v.attempt,
+  return freezeIntent({version: 1, id: v.id, offer: v.offer, product: v.product, task: v.task, attempt: v.attempt,
     rules: 1, algorithm: v.algorithm, board: [...v.board], pair: [v.pair[0], v.pair[1]],
-    ...(v.after !== undefined ? {after: [...v.after]} : {}), ...(v.proof ? {proof: v.proof.map((p: number[]) => [...p])} : {})};
+    ...(v.after !== undefined ? {after: [...v.after]} : {}), ...(v.proof ? {proof: v.proof.map((p: number[]) => [...p])} : {})});
 }
 export function readHelp(v: any): HelpProfile {
   if (v?.version !== 1 || !id(v.install) || ![v.inventory?.magnet, v.inventory?.plan].every(n => Number.isSafeInteger(n) && n >= 0) ||

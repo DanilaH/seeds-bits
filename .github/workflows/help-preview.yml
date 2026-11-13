@@ -37,8 +37,9 @@ jobs:
       - run: python3 scripts/regression-061/native-harness.py
       - run: node scripts/build-help-fixtures.mjs
       - run: node scripts/verify-help-fixtures.mjs
+      - run: node scripts/compare-help-plans.mjs
       - run: python3 scripts/test-help-report.py
-      - run: npx playwright test e2e/help-foundation.spec.ts e2e/magnet.spec.ts --workers 2
+      - run: npx playwright test e2e/help-foundation.spec.ts e2e/magnet.spec.ts e2e/plan.spec.ts --workers 2
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -58,11 +59,11 @@ jobs:
           assert values['appmetrica_api_key']=='' and values['ads_test_mode']=='true'
           assert 'com.seedsbits.game.assistqa' in open('android/app/build.gradle').read()
           PY
-      - name: Build separate A3 and Magnet candidates
+      - name: Build isolated assistance candidates
         run: |
           mkdir -p test-results/apk
           chmod +x android/gradlew
-          for profile in a3 magnet; do
+          for profile in a3 magnet plan; do
             VITE_SEEDS_QA_PROFILE="$profile" npm run build
             npx cap sync android
             (cd android && ./gradlew assembleRelease)

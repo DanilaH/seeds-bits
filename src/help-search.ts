@@ -25,6 +25,8 @@ export function verifyHelpProof(before: readonly number[], proof: HelpProof, kin
     let board = kind === "magnet" ? removeMagnetPair(before, ...proof.pair) : [...before];
     if (kind === "magnet" && (board.length !== proof.after.length || board.some((n,i)=>n!==proof.after[i]))) return false;
     if (proof.path.length > 3 || (kind === "plan" && proof.path.length < 2)) return false;
+    // A row already removable by one ordinary hint is not a premium row plan.
+    if (kind === "plan" && proof.goal === "row" && pairs(before).some(p=>rows(removePair(before,p.a,p.b))<rows(before))) return false;
     let origins = Array.from(before,(_,i)=>i);
     if (kind === "magnet") origins = identities(before,origins,proof.pair);
     const directlyOpened = new Set<string>();

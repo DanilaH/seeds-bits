@@ -657,3 +657,6 @@
   #help-preview {grid-template-columns:1fr;max-height:260px;gap:10px;}
   .help-grid span {font-size:18px;}
 }
+.game:has(#magnet:not([hidden]),#plan:not([hidden])) footer {grid-template-columns:repeat(var(--help-actions,4),minmax(0,1fr));}
+.game:has(#magnet:not([hidden]),#plan:not([hidden])).stacked-actions footer {grid-template-columns:repeat(2,minmax(0,1fr));}
+#plan-count {font-size:11px;color:var(--muted)}
