@@ -206,6 +206,8 @@ for (const [width, height] of [
           });
         await page.waitForTimeout(100);
         await fitFooter(page);
+        const footer = (await page.locator("footer").boundingBox())!;
+        expect(footer.y + footer.height).toBeGreaterThanOrEqual(height - 120);
         for (const id of ["magnet", "plan"]) {
           const box = (await page.locator("#" + id).boundingBox())!;
           expect(box.y).toBeGreaterThanOrEqual(0);

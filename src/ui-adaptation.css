@@ -666,3 +666,5 @@
 
 /* Owner-facing tools in the combined QA build. */
 #qa-help-tools{display:grid;gap:8px;margin-top:20px}#qa-help-tools h3{margin:0 0 4px;font-size:18px}#qa-help-tools>button{width:100%;margin:0}
+
+@media (orientation:portrait),(max-width:539px){.game:has(#magnet:not([hidden])):has(#plan:not([hidden])) .game-actions{margin-top:auto}}
