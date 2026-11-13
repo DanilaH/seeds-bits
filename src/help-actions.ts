@@ -6,8 +6,10 @@ import {HELP_ALGORITHM, removeMagnetPair, verifyHelpProof, type HelpProof} from 
 export function helpIntent(p: Progress, kind: "magnet" | "plan", proof: HelpProof): HelpIntent {
   const before = p.sessions[p.active].current.board;
   if (p.active !== "classic" || !hintAttempt(p).help || !verifyHelpProof(before, proof, kind)) throw Error("Unproven effect");
+  const states=[[...before]];
+  if(kind==="plan")for(const pair of proof.path)states.push(removePair(states.at(-1)!,...pair));
   return freezeIntent({version: 1, id: crypto.randomUUID(), offer: crypto.randomUUID(), product: `${kind}_1`, task: p.active,
-    attempt: hintAttempt(p).id, rules: 1, algorithm: HELP_ALGORITHM, board: [...before], pair: kind === "plan" ? [...proof.path[0]] : [...proof.pair], after: kind === "plan" ? proof.path.reduce((b,pair)=>removePair(b,...pair),[...before]) : [...proof.after], proof: proof.path.map(p=>[...p])});
+    attempt: hintAttempt(p).id, rules: 1, algorithm: HELP_ALGORITHM, board: [...before], pair: kind === "plan" ? [...proof.path[0]] : [...proof.pair], after: kind === "plan" ? proof.path.reduce((b,pair)=>removePair(b,...pair),[...before]) : [...proof.after], proof: proof.path.map(p=>[...p]),...(kind==="plan"?{states}:{})});
 }
 export function entitlementMatches(e: HelpEntitlement | undefined, intent: HelpIntent) {
   return Boolean(e && e.intent.id === intent.id && e.intent.attempt === intent.attempt &&
@@ -69,7 +71,9 @@ export function planBoards(intent: HelpIntent): number[][] | undefined {
     const after = states.at(-1)!;
     const proof: HelpProof = {pair:intent.pair,after:intent.board,path:intent.proof,goal:after.length ? "row" : "clear",opened:[]};
     if (!sameBoard(after,intent.after ?? []) || !verifyHelpProof(intent.board,proof,"plan")) return;
-    planCache.set(intent,states);
+    if(intent.states && (intent.states.length!==states.length||intent.states.some((b,i)=>!sameBoard(b,states[i]))))return;
+    states.forEach(Object.freeze);Object.freeze(states);
+    freezeIntent(intent);planCache.set(intent,states);
     return states;
   } catch {return;}
 }

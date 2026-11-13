@@ -18,3 +18,13 @@ conflict=[money[0],{**money[0],'revenue':'0.13'}];assert 'conflicting_impression
 Path('test-results/help').mkdir(parents=True,exist_ok=True)
 Path('test-results/help/report-synthetic-example.json').write_text(json.dumps(r,indent=2)+'\n')
 print('PASS: original-user denominator, churn, 168/192-hour maturity, QA exclusion, decimal sum, unknown ILRD, dedup and conflicting money')
+extra=[{'name':name,'data':{'install':'one','experiment':'e','event_id':name,'product':'magnet_1','occurred_at':anchor+1000}} for name in ['assist_offer','assist_apply','game_complete']]
+extra+=[{'name':'result_transition','data':{'install':'one','experiment':'e','event_id':'route-choice','route':'short','phase':'choice','first_short_task':True,'occurred_at':anchor+1000}},{'name':'result_transition','data':{'install':'one','experiment':'e','event_id':'route-result','route':'short','phase':'result','reason':'not_loaded','occurred_at':anchor+1001}}]
+with_format={**money[0],'payload':{**money[0]['payload'],'format':'rewarded'}}
+r=m.report(events+extra+extra,[with_format],anchor+192*m.HOUR);g=r['groups'][0]
+assert g['formats']['rewarded']['measured_revenue']['RUB']=='0.12'
+assert g['funnel']['magnet_1']['assist_apply']['events']==1 and g['funnel']['magnet_1']['assist_offer']['share_of_assigned_r7']==0.5
+assert g['result_routes']['short']['choices']==1 and g['result_routes']['short']['results']['not_loaded']==1 and g['first_short_task_users']==1
+assert g['completed_games_per_assigned_r7']==0.5
+Path('test-results/help/report-synthetic-example.json').write_text(json.dumps(r,indent=2)+'\n')
+print('PASS: stable milestone dedup, product funnel, first-short-task route, native format money and all-assigned denominator')

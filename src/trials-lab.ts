@@ -51,7 +51,7 @@ export function readTrials(raw:string):Trials{
  const p=JSON.parse(raw);
  if(p?.version!==1||!tasks.some(t=>t.id===p.task)||typeof p.attempt!=="string"||typeof p.bonus!=="boolean"||typeof p.rewardClaimed!=="boolean"||!Number.isSafeInteger(p.lastEarned)||p.lastEarned<0)throw Error("Protected trial save");
  p.session=decode(JSON.stringify(p.session));if(p.session.current.additions>3)throw Error("Invalid Add budget");
- const proof=(v:BonusProof)=>{if(!v||!Array.isArray(v.before)||!Array.isArray(v.after)||!Array.isArray(v.pair))throw Error("Invalid bonus proof");const after=addNumbers(v.before);if(!sameBoard(after,v.after)||!checkPair(after,...v.pair).ok)throw Error("Invalid bonus proof");};
+ const proof=(v:BonusProof)=>{if(!v||!Array.isArray(v.before)||!Array.isArray(v.after)||!Array.isArray(v.pair))throw Error("Invalid bonus proof");decode(JSON.stringify({rules:1,current:{board:v.before,scroll:0,moves:0,additions:0},history:[]}));const after=addNumbers(v.before);if(!sameBoard(after,v.after)||!checkPair(after,...v.pair).ok)throw Error("Invalid bonus proof");};
  if(p.entitlement)proof(p.entitlement);
  if(p.pending){if(p.pending.version!==1||p.pending.product!=="trial_add_1"||!Number.isSafeInteger(p.pending.sequence)||p.pending.sequence!==p.lastEarned+1||typeof p.pending.attempt!=="string")throw Error("Protected mock receipt");proof(p.pending.proof);}
  return p;

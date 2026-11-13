@@ -2532,7 +2532,8 @@ async function prepareResultTransition(route: "next" | "easier" | "harder" | "sh
   const policy = route !== "short" || helpFlags.result;
   const firstShort = route === "short" && !metadata(progress).flags?.includes("result_short_task_seen");
   if(firstShort)(metadata(progress).flags ??= []).push("result_short_task_seen");
-  const transition = {route,first_short_task:firstShort,attempt:hintAttempt(progress).id,mode:gameMode(),policy_enabled:policy,ad_session_id:crypto.randomUUID()};
+  const assignment=helpProfile(progress).assignments.at(-1);
+  const transition = {install:helpProfile(progress).install,experiment:assignment?.experiment??"none",variant:assignment?.variant??"control",qa:Boolean(qaProfile),config:assignment?.config??"none",route,first_short_task:firstShort,attempt:hintAttempt(progress).id,mode:gameMode(),policy_enabled:policy,ad_session_id:crypto.randomUUID()};
   busy = true;renderClassicChoices();
   durableEvent("result_transition",{...transition,phase:"choice"});
   await save();

@@ -35,7 +35,7 @@ final class SeedsAdRevenue {
       JSONObject network=raw.optJSONObject("network");
       AdType type=kind.equals("banner")?AdType.BANNER:kind.equals("rewarded")?AdType.REWARDED:AdType.INTERSTITIAL;
       Map<String,String> payload = new HashMap<>();
-      payload.put("impression_id",impressionId); payload.put("ad_session_id",adSession); payload.put("dataset","manual-ilrd-v1");
+      payload.put("format",kind); payload.put("impression_id",impressionId); payload.put("ad_session_id",adSession); payload.put("dataset","manual-ilrd-v1");
       for (String key : new String[]{"install","experiment","variant","config","anchor","cohort","qa"})
         payload.put(key,prefs.getString("context_"+key,"unknown"));
       JSONArray ids;

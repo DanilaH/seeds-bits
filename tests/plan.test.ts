@@ -17,7 +17,7 @@ test("P01/02: full goal from current board, no single ordinary move sold as a pr
 test("P05/06/09: one charge pays the entire path, row compaction, Undo and reload resume without another debit",()=>{
   let p=setup();helpProfile(p).inventory.plan=2;helpProfile(p).demo.plan=true;
   const intent=helpIntent(p,"plan",found());p=applyPlan(p,intent).progress;
-  expect(helpProfile(p).inventory.plan).toBe(1);expect(planBoards(intent)?.at(-1)).toEqual([]);
+  expect(helpProfile(p).inventory.plan).toBe(1);expect(planBoards(intent)?.at(-1)).toEqual([]);expect(intent.states).toEqual(planBoards(intent));expect(Object.isFrozen(intent.states![1])).toBe(true);
   const first=planPosition(p)!.pair!;
   p.sessions.classic=commit(p.sessions.classic,removePair(p.sessions.classic.current.board,first.a,first.b),"pair",9);
   p=readProgress(serializeProgress(p));expect(planPosition(p)!.index).toBe(1);
