@@ -103,6 +103,9 @@ public class AuditHarness {
 
   p=fresh(true);SeedsApplication.calls=0;PluginCall route=new PluginCall(new JSObject().put("name","result_transition").put("data",new JSObject().put("event_id","result-route")));p.report(route);check("N41_result_route_native_dispatch",Boolean.TRUE.equals(route.result.get("accepted")) && SeedsApplication.calls==1,"result transition reaches actual native allowlist");
 
+  p=fresh(true);PluginCall lab=new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","lab-only"));p.persistLabState(lab);game=p.activity.getSharedPreferences("CapacitorStorage",0);boolean isolated=lab.result!=null && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1"));boolean invalidLab=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.progress.v2").put("value","bad")));}catch(RuntimeException failure){invalidLab=true;}check("N42_lab_storage_namespace",isolated&&invalidLab&&!game.data.containsKey("seeds-bits.progress.v2"),"lab method cannot write production progress");
+  game.fail=true;boolean labFailure=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","not-saved")));}catch(RuntimeException failure){labFailure=true;}check("N43_lab_storage_failure",labFailure && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1")) && "lab-only".equals(game.data.get("seeds-bits.lab.trials.v1")),"failed lab commit retains previous authority");
+
  }
 }''')
 files=[str(x)for x in (root/'src').rglob('*.java')]

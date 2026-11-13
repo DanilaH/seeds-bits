@@ -178,6 +178,19 @@ public class SeedsMonetizationPlugin extends Plugin {
     } catch (Exception error) {call.reject("Progress could not be saved", "PERSIST_EXCEPTION");}
   }
 
+  @PluginMethod public void persistLabState(PluginCall call) {
+    String key=call.getString("key","");
+    if(!key.equals("seeds-bits.lab.trials.v1")&&!key.equals("seeds-bits.lab.shuffle.v1")){call.reject("Invalid lab key");return;}
+    SharedPreferences storage=getContext().getSharedPreferences("CapacitorStorage",0);
+    String previous=storage.getString(key,null);
+    if(!storage.edit().putString(key,call.getString("value","")).commit()){
+      SharedPreferences.Editor rollback=storage.edit();
+      if(previous==null)rollback.remove(key);else rollback.putString(key,previous);
+      rollback.commit();call.reject("Lab state could not be saved","DISK_COMMIT");return;
+    }
+    call.resolve();
+  }
+
   @PluginMethod public void configureContext(PluginCall call) {
     SharedPreferences.Editor edit = prefs.edit();
     for (String key : new String[]{"install","experiment","variant","config","anchor","cohort","qa"}) {

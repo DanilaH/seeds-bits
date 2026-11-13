@@ -1,0 +1,18 @@
+import {test,expect,type Page} from "@playwright/test";
+import {install,key} from "./help-test-utils";
+import tasks from "../fixtures/lab/trials.json" with {type:"json"};
+const labkey="seeds-bits.lab.trials.v1";
+test.use({video:process.env.SEEDS_RECORD_HELP === "1" ? "on" : "off"});
+async function open(page:Page){await install(page,"ready","trials");await page.locator('#menu').click();await page.locator('#qa-lab').click();await expect(page.locator('#help-lab')).toBeVisible();}
+async function action(page:Page,a:{kind:string;pair?:number[]}){if(a.kind==='add')await page.locator('#lab-add').click();else{for(const n of a.pair!)await page.locator(`[data-lab-index="${n}"]`).click();}}
+async function stopped(page:Page){await page.locator('#lab-task').selectOption('trial-2');for(const a of [{kind:"pair",pair:[4,5]},{kind:"add"},{kind:"pair",pair:[0,9]},{kind:"pair",pair:[3,6]},{kind:"add"},{kind:"pair",pair:[1,9]},{kind:"pair",pair:[2,10]}])await action(page,a);await expect(page.locator('#lab-status')).toContainText('Нет пар и добавлений');}
+test("B3: all three QA tasks clear with legal two-Add witnesses",async({page})=>{await open(page);for(const t of tasks){await page.locator('#lab-task').selectOption(t.id);for(const a of t.witness)await action(page,a);await expect(page.locator('#lab-status')).toHaveText('Поле очищено!');}});
+test("B3: marked mock earned, exact Undo/replay and reload do not farm rights or change Classic",async({page})=>{
+ await open(page);const classic=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).sessions.classic,key);await stopped(page);await expect(page.locator('#lab-add')).toBeDisabled();if(process.env.SEEDS_RECORD_HELP)await page.waitForTimeout(700);await page.locator('#lab-bonus').click();await expect(page.locator('#help-lab')).toContainText('без настоящей рекламы');await page.locator('#lab-earn').click();await expect(page.locator('#lab-board button:not([disabled])')).toHaveCount(8);await page.locator('#lab-undo').click();await expect(page.locator('#lab-add')).toContainText('повтор бесплатно');await page.locator('#lab-add').click();await expect(page.locator('#lab-board button:not([disabled])')).toHaveCount(8);
+ await page.reload();await page.locator('#resume').click();await page.locator('#menu').click();await page.locator('#qa-lab').click();await page.locator('#lab-undo').click();await expect(page.locator('#lab-bonus')).not.toBeVisible();await expect(page.locator('#lab-add')).toContainText('повтор бесплатно');
+ expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).sessions.classic,key)).toEqual(classic);expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).lastEarned,labkey)).toBe(1);
+});
+test("B3: crash gap after durable mock earned restores one bonus after reload",async({page})=>{
+ await open(page);await stopped(page);await page.locator('#lab-bonus').click();await page.evaluate(k=>{const orig=Storage.prototype.setItem;Storage.prototype.setItem=function(key,v){if(key===k&&JSON.parse(v).lastEarned===1)throw Error('grant disk failure');return orig.call(this,key,v);};},labkey);await page.locator('#lab-earn').click();await expect(page.locator('#lab-recover')).toBeVisible();
+ await page.reload();await page.locator('#resume').click();await page.locator('#menu').click();await page.locator('#qa-lab').click();await expect(page.locator('#lab-bonus')).toContainText('сохранённый');await page.locator('#lab-bonus').click();await expect(page.locator('#lab-board button:not([disabled])')).toHaveCount(8);expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).lastEarned,labkey)).toBe(1);
+});

@@ -1,3 +1,4 @@
+import {installHelpLab,closeHelpLab} from "./help-lab-ui";
 import {requestHelp} from "./help-client";
 import {helpIntent, applyMagnet, storedHelp, provenMagnet, nextMagnetApplication, applyPlan, planPosition, planBoards} from "./help-actions";
 import {removePair as proofRemovePair} from "./core";
@@ -2264,6 +2265,7 @@ function closeMenu() {
   platform.gameplay(!paused && occupied(board()) > 0);
 }
 function navigateBack(native = false): boolean {
+  if(closeHelpLab())return true;
   if (adActive || rewardRequest || engagementActive) return true;
   if (hintOffer.open) {
     hintOffer.close();
@@ -3781,6 +3783,7 @@ setInterval(() => {
 }, 5000);
 
 if (import.meta.env.DEV || import.meta.env.VITE_SEEDS_QA_PROFILE) {
+  installHelpLab(qaProfile,$("menu-content"));
   if (qaProfile === "magnet" || qaProfile === "a3" || qaProfile === "plan") {
     const scenario = document.createElement("button"); scenario.id = "qa-help-scene"; scenario.className = "secondary";
     scenario.textContent = qaProfile === "magnet" ? "QA: пример Магнита" : qaProfile === "plan" ? "QA: пример плана" : "QA: подсказки за видео";

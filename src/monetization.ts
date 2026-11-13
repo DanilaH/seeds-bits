@@ -57,6 +57,7 @@ declare global {
 }
 export const nativePlugin = registerPlugin<
   MonetizationBridge & {
+    persistLabState(options:{key:string;value:string}):Promise<void>;
     persistState(options: {
       key: string;
       value: string;
