@@ -9,9 +9,9 @@ export function closeHelpLab(){if(!dialog.open)return false;if(!busy)dialog.clos
 dialog.addEventListener("cancel",e=>{e.preventDefault();closeHelpLab();});
 const cellMarkup=(board:readonly number[])=>board.map((n,i)=>`<button type="button" data-lab-index="${i}" ${n?'':'disabled'} aria-label="${n || 'Пусто'}, клетка ${i+1}">${n||''}</button>`).join("");
 export function installHelpLab(profile:string,parent:HTMLElement){
- if(profile!=="trials")return;
- const entry=document.createElement("button");entry.id="qa-lab";entry.className="secondary";entry.textContent="QA: Испытания · лаборатория";parent.append(entry);
- entry.onclick=()=>void openTrials();
+ if(profile!=="trials"&&profile!=="shuffle")return;
+ const entry=document.createElement("button");entry.id="qa-lab";entry.className="secondary";entry.textContent=profile==="trials"?"QA: Испытания · лаборатория":"QA: Собрать остатки · лаборатория";parent.append(entry);
+ entry.onclick=()=>{if(profile==="trials")void openTrials();else void import("./shuffle-lab-ui").then(m=>m.openShuffle(dialog,value=>{busy=value;}));};
 }
 async function openTrials(){
  let p:Trials,stored:string|null=null,selected=-1,note="";
