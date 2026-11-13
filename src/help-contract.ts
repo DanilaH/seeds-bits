@@ -11,7 +11,7 @@ export type HelpIntent = {
   attempt: string; rules: 1; algorithm: string; board: number[];
   pair: [number, number]; after?: number[]; proof?: [number, number][];
 };
-export type HelpEntitlement = { id: string; intent: HelpIntent; applications: string[] };
+export type HelpEntitlement = { id: string; intent: HelpIntent; applications: string[]; applicationSequence?: number };
 export type HelpAttempt = {
   version: 1; assisted: boolean; magnet?: HelpEntitlement; plan?: HelpEntitlement;
 };
@@ -74,7 +74,8 @@ export function readHelpAttempt(v: any): HelpAttempt {
   for (const key of ["magnet", "plan"] as const) if (v[key] !== undefined) {
     const e = v[key], intent = readIntent(e?.intent);
     if (!id(e?.id) || !intent || intent.product !== `${key}_1` || !Array.isArray(e.applications) || e.applications.length > 32 || !e.applications.every(id)) throw Error("Invalid entitlement");
-    result[key] = {id: e.id, intent, applications: [...e.applications]};
+    if (e.applicationSequence !== undefined && (!Number.isSafeInteger(e.applicationSequence) || e.applicationSequence < 0)) throw Error("Invalid application sequence");
+    result[key] = {id: e.id, intent, applications: [...e.applications], applicationSequence: e.applicationSequence ?? 0};
   }
   return result;
 }

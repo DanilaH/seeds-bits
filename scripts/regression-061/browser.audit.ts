@@ -441,6 +441,7 @@ test("R13 repeat hint is free after confirmed undo persistence", async ({
 }) => {
   await boot(page, false);
   await page.locator("#hint").click();
+  await expect(page.locator(".hinted")).toHaveCount(2);
   const ids = await page
     .locator(".hinted")
     .evaluateAll((es) =>

@@ -11,7 +11,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 const script = resolve("scripts/configure-android.mjs");
-function fixture(release = true) {
+function fixture(release = true, helpQa = false) {
   const root = mkdtempSync(join(tmpdir(), "seeds-release-"));
   mkdirSync(join(root, "android/app"), { recursive: true });
   const tar = spawnSync("tar", [
@@ -23,7 +23,7 @@ function fixture(release = true) {
   ]);
   if (tar.status) throw Error(String(tar.stderr));
   const file = join(root, "android/app/build.gradle"),
-    app = release ? "com.seedsbits.game" : "com.seedsbits.game.preview";
+    app = release ? "com.seedsbits.game" : helpQa ? "com.seedsbits.game.assistqa" : "com.seedsbits.game.preview";
   writeFileSync(
     file,
     readFileSync(file, "utf8").replace("com.getcapacitor.app", app),
@@ -34,6 +34,7 @@ function fixture(release = true) {
 }
 const env = {
   ...process.env,
+  SEEDS_HELP_QA: "",
   SEEDS_BUILD_FLAVOR: "release",
   REQUIRE_MOBILE_CONFIG: "true",
   ADS_MODE: "live",
@@ -142,4 +143,17 @@ test("store configuration rejects demo mode and missing production IDs", () => {
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test("assistance QA has its own namespace and no analytics key", () => {
+  const root = fixture(false, true);
+  try {
+    const r = spawnSync("node", [script], {cwd:root,encoding:"utf8",env:{...env,SEEDS_HELP_QA:"1",SEEDS_BUILD_FLAVOR:"preview",ADS_MODE:"test",APPMETRICA_QA_API_KEY:""}});
+    expect(r.status,r.stderr).toBe(0);
+    const source = readFileSync(join(root,"android/app/src/main/java/com/seedsbits/game/assistqa/SeedsMonetizationPlugin.java"),"utf8");
+    expect(source).toContain("package com.seedsbits.game.assistqa;");
+    const xml = readFileSync(join(root,"android/app/src/main/res/values/seeds-services.xml"),"utf8");
+    expect(xml).toContain('name="appmetrica_api_key" translatable="false"></string>');
+    expect(xml).toContain('name="ads_test_mode">true');
+  } finally {rmSync(root,{recursive:true,force:true});}
 });

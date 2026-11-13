@@ -1,5 +1,5 @@
 import {requestHelp} from "./help-client";
-import {helpIntent, applyMagnet, storedHelp, provenMagnet} from "./help-actions";
+import {helpIntent, applyMagnet, storedHelp, provenMagnet, nextMagnetApplication} from "./help-actions";
 import {removePair as proofRemovePair} from "./core";
 import {helpFlags, qaProfile, assignHelp} from "./help-config";
 import {receiptProduct, sameBoard, type HelpIntent, type HelpProduct} from "./help-contract";
@@ -1220,7 +1220,7 @@ async function performMagnet(intent: HelpIntent) {
   if (!validIntent(intent)) return false;
   try {
     markGameStarted();
-    const applied = applyMagnet(progress,intent,crypto.randomUUID(),viewport.scrollTop);
+    const applied = applyMagnet(progress,intent,nextMagnetApplication(progress,intent),viewport.scrollTop);
     if (applied.duplicate) return true;
     if (adsBridge) enqueueAnalytics(metadata(applied.progress),"assist_apply",{...helpData(intent),application_id:hintAttempt(applied.progress).help!.magnet!.applications.at(-1)!,entitlement_id:applied.entitlement!,outcome:applied.source!});
     if (!await persistHelp(applied.progress,applied.session)) {render(); return false;}
@@ -1292,7 +1292,7 @@ $("watch-hints").onclick = async () => {
   helpEvent("choice", intent, {outcome: "accepted"});
   const candidate = cloneProgress(progress);
   helpProfile(candidate).intent = intent;
-  if (!await persistHelp(candidate)) return;
+  if (!await persistHelp(candidate)) {hintOffer.close();offeredIntent=undefined;showSaveState();updateBanner();return;}
   autoIntent = intent;
   rewardRequest = true; hintOffer.close(); syncPauseState();
   const adSession = crypto.randomUUID();

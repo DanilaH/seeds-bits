@@ -24,8 +24,13 @@ export function storedHelp(p: Progress, intent: HelpIntent): "replay" | "charge"
   if (!profile?.demo[kind]) return "demo";
 }
 export function applyMagnet(p: Progress, intent: HelpIntent, application: string, scroll: number) {
+  if (p.active !== "classic" || hintAttempt(p).id !== intent.attempt) throw Error("Stale attempt");
   const old = hintAttempt(p).help?.magnet;
-  if (old?.applications.includes(application)) return {progress:p, session:p.sessions[p.active], duplicate:true};
+  if (old && !entitlementMatches(old,intent)) throw Error("Attempt limit");
+  const sequence = Number(application.slice(intent.id.length + 1));
+  if (!application.startsWith(intent.id+":") || !Number.isSafeInteger(sequence) || sequence < 1) throw Error("Invalid application id");
+  if (sequence <= (old?.applicationSequence ?? 0)) return {progress:p, session:p.sessions[p.active], duplicate:true};
+  if (sequence !== (old?.applicationSequence ?? 0) + 1) throw Error("Out-of-order application");
   if (intent.product !== "magnet_1" || p.active !== "classic" || !sameBoard(p.sessions.classic.current.board,intent.board)) throw Error("Stale magnet");
   const kind = storedHelp(p,intent);
   if (!kind) throw Error("No magnet entitlement");
@@ -34,7 +39,8 @@ export function applyMagnet(p: Progress, intent: HelpIntent, application: string
   if (kind === "charge") profile.inventory.magnet--;
   if (kind === "demo") profile.demo.magnet = true;
   a.help!.assisted = true;
-  a.help!.magnet ??= {id:crypto.randomUUID(),intent,applications:[]};
+  a.help!.magnet ??= {id:intent.id,intent,applications:[],applicationSequence:0};
+  a.help!.magnet.applicationSequence = sequence;
   a.help!.magnet.applications = [...a.help!.magnet.applications,application].slice(-32);
   const session = commit(candidate.sessions.classic,removeMagnetPair(intent.board,...intent.pair),"magnet",scroll);
   candidate.sessions.classic = session;
@@ -49,3 +55,5 @@ export function provenMagnet(intent: HelpIntent) {
   const valid = (["clear","row","moves"] as const).some(goal=>verifyHelpProof(intent.board,{...proof,goal},"magnet"));
   return valid;
 }
+
+export function nextMagnetApplication(p: Progress, intent: HelpIntent) { return `${intent.id}:${(hintAttempt(p).help?.magnet?.applicationSequence ?? 0) + 1}`; }
