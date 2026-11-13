@@ -56,6 +56,12 @@ import { requestAdvice } from "./advice-client";
 import { trophyMark, celebrateTrophy } from "./trophies";
 import "./style.css";
 import "./ui-polish.css";
+import "./ui-adaptation.css";
+import {
+  resultKind,
+  resultArtwork,
+  celebrateResult,
+} from "./result-presentation";
 import {
   WIDTH,
   classic,
@@ -154,6 +160,8 @@ let completedJar:
   { index: number; capacity: number; until: number } | undefined;
 let clearContact = () => {};
 let clearTrophyCelebration = () => {};
+let clearResultCelebration = () => {};
+let resultArtKey = "";
 let fullJarTimer: ReturnType<typeof setTimeout> | undefined;
 let boardRevealTimer: ReturnType<typeof setTimeout> | undefined;
 let boardRevealCancel: (() => void) | undefined;
@@ -218,6 +226,68 @@ const difficultyCaption = document.createElement("p");
 difficultyCaption.id = "classic-difficulty";
 difficultyCaption.hidden = true;
 resultNext.before(difficultyCaption);
+const resultDock = document.createElement("section");
+resultDock.id = "result-actions";
+resultDock.hidden = true;
+resultDock.setAttribute("aria-label", "Продолжение игры");
+resultDock.append(
+  difficultyCaption,
+  resultNext,
+  $("try-notebook"),
+  $("result-reminder"),
+);
+document.querySelector(".game")!.append(resultDock);
+const gameDifficulty = document.createElement("small");
+gameDifficulty.id = "game-difficulty";
+const modeDescription = document.createElement("span");
+modeDescription.className = "mode-description";
+$("mode").before(modeDescription);
+modeDescription.append($("mode"), gameDifficulty);
+const resultTitle = document.querySelector<HTMLElement>("#win h1")!;
+const resultSubtitle = document.createElement("p");
+resultSubtitle.id = "result-subtitle";
+resultTitle.after(resultSubtitle);
+const choiceFits = new WeakMap<HTMLElement, { base: string; fitted: string }>();
+const choiceObserver = new ResizeObserver(() => scheduleActionLayout());
+function prepareResultLabels() {
+  for (const button of resultNext.querySelectorAll<HTMLButtonElement>(
+    "button",
+  )) {
+    if (button.firstElementChild) continue;
+    const label = document.createElement("span");
+    label.className = "choice-label";
+    label.textContent = button.textContent;
+    button.replaceChildren(label);
+    choiceObserver.observe(label);
+  }
+}
+function fitResultLabels() {
+  if (resultDock.hidden || !resultNext.classList.contains("is-classic")) return;
+  for (const label of resultNext.querySelectorAll<HTMLElement>(
+    ".choice-label",
+  )) {
+    const button = label.parentElement!;
+    if (button.hidden) continue;
+    const previous = choiceFits.get(label);
+    const base =
+      previous && label.style.fontSize === previous.fitted
+        ? previous.base
+        : label.style.fontSize;
+    label.style.fontSize = base;
+    const style = getComputedStyle(button);
+    const available =
+      button.clientWidth -
+      parseFloat(style.paddingLeft) -
+      parseFloat(style.paddingRight) -
+      2;
+    const range = document.createRange();
+    range.selectNodeContents(label);
+    const width = range.getBoundingClientRect().width;
+    if (width > available && available > 0)
+      label.style.fontSize = `${Math.max(10, (parseFloat(getComputedStyle(label).fontSize) * available) / width)}px`;
+    choiceFits.set(label, { base, fitted: label.style.fontSize });
+  }
+}
 // Home has its own composition; the same controls keep their navigation handlers.
 const homeLayout = document.createElement("div");
 homeLayout.className = "home-layout";
@@ -225,7 +295,7 @@ const homeCurrent = document.createElement("section");
 homeCurrent.className = "home-current";
 homeCurrent.setAttribute("aria-labelledby", "home-game-title");
 homeCurrent.innerHTML =
-  '<p class="home-eyebrow" id="home-eyebrow"></p><h2 id="home-game-title"></h2>';
+  '<p class="home-eyebrow" id="home-eyebrow"></p><h2 id="home-game-title"></h2><p id="home-difficulty" hidden></p>';
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
 $("new").className = "text-button restart-action";
@@ -244,6 +314,12 @@ $("menu-content").insertBefore(
   homeLayout,
   document.querySelector(".home-links"),
 );
+const settingsBasics = document.createElement("section");
+settingsBasics.className = "settings-basics";
+for (const node of [...$("settings-panel").children])
+  if (!node.matches(".screen-heading,#reminder-settings"))
+    settingsBasics.append(node);
+$("settings-panel").insertBefore(settingsBasics, $("reminder-settings"));
 for (const id of ["dark", "sound", "vibration", "reminders"])
   $(id).setAttribute("role", "switch");
 let enteredGame = false;
@@ -262,7 +338,7 @@ gameActions.append(
   document.querySelector(".status-wrap")!,
   document.querySelector("footer")!,
 );
-document.querySelector(".game")!.append(gameActions);
+document.querySelector(".game")!.insertBefore(gameActions, resultDock);
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
@@ -299,6 +375,7 @@ let actionsFrame = 0;
 function scheduleActionLayout() {
   cancelAnimationFrame(actionsFrame);
   actionsFrame = requestAnimationFrame(() => {
+    fitResultLabels();
     const footer = document.querySelector<HTMLElement>("footer")!;
     const actions = [...footer.querySelectorAll<HTMLElement>(".action")].filter(
       (b) => getComputedStyle(b).display !== "none" && !b.hidden,
@@ -320,22 +397,49 @@ function scheduleActionLayout() {
     const landscape = matchMedia(
       "(orientation: landscape) and (min-width: 540px)",
     ).matches;
-    document
-      .querySelector(".game")!
-      .classList.toggle(
-        "stacked-actions",
-        actions.length > 0 &&
-          (required > footer.clientWidth ||
-            (landscape
-              ? actions.length === 2 && widest > (footer.clientWidth - 2) / 2
-              : widest >
-                (footer.clientWidth - Math.max(0, actions.length - 1) * 2) /
-                  actions.length)),
-      );
+    const game = document.querySelector<HTMLElement>(".game")!;
+    // Compare with the stable sidebar width, not a footer that widens after docking.
+    const sideWidth = gameTop.clientWidth;
+    const dock =
+      landscape &&
+      innerHeight <= 420 &&
+      !game.classList.contains("is-result") &&
+      actions.length > 0 &&
+      (required > sideWidth ||
+        (actions.length === 2 && widest > (sideWidth - 2) / 2));
+    game.classList.toggle("docked-actions", dock);
+    const status = document.querySelector<HTMLElement>(".status-wrap")!;
+    const statusParent = dock ? gameTop : gameActions;
+    if (status.parentElement !== statusParent) {
+      if (dock) statusParent.append(status);
+      else statusParent.prepend(status);
+    }
+    const availableWidth = dock ? game.clientWidth - 32 : footer.clientWidth;
+    game.classList.toggle(
+      "stacked-actions",
+      actions.length > 0 &&
+        (required > availableWidth ||
+          (!landscape &&
+            widest >
+              (availableWidth - Math.max(0, actions.length - 1) * 2) /
+                actions.length)),
+    );
+    const win = $("win");
+    const viewport = $("viewport");
+    const classicResult = !win.hidden && win.dataset.resultKind === "classic";
+    win.classList.toggle(
+      "compact-result",
+      classicResult && viewport.clientHeight < 440,
+    );
+    win.classList.remove("minimal-result");
+    if (classicResult && win.scrollHeight > viewport.clientHeight + 1)
+      win.classList.add("minimal-result");
   });
 }
 const actionObserver = new ResizeObserver(scheduleActionLayout);
 actionObserver.observe(document.querySelector("footer")!);
+actionObserver.observe($("viewport"));
+actionObserver.observe($("win-stats"));
 document
   .querySelectorAll("footer .action span")
   .forEach((label) => actionObserver.observe(label));
@@ -649,6 +753,7 @@ function settlePresentation() {
   jarSpill.clear();
   clearContact();
   clearTrophyCelebration();
+  clearResultCelebration();
   clearBoardReveal();
   clearTimeout(fullJarTimer);
   completedJar = undefined;
@@ -757,14 +862,13 @@ function maybeCelebrateResult() {
   )
     return;
   pendingResult = undefined;
-  feedback("win");
-  motion(
-    document.querySelector(".win-symbol"),
-    [
-      { opacity: 0, transform: "scale(.8) rotate(-8deg)" },
-      { opacity: 1, transform: "scale(1) rotate(-8deg)" },
-    ],
-    220,
+  const kind = resultKind(progress.active, progress.done, notebook);
+  feedback(kind === "classic" || kind === "daily" ? "win" : kind);
+  clearResultCelebration();
+  clearResultCelebration = celebrateResult(
+    document.querySelector<HTMLElement>(".win-symbol")!,
+    kind,
+    reduced(),
   );
   if (earnedSeeds) animateSeeds(pending.rects, earnedSeeds, true);
   if (earnedSeeds || earnedHints)
@@ -884,7 +988,7 @@ let rewardRequest = false;
 let bannerFrame = 0;
 $("app").insertAdjacentHTML(
   "beforeend",
-  `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><h2 id="hint-offer-title">Ещё подсказки</h2><p>Бесплатные подсказки и общий запас закончились. За рекламное видео — 3 подсказки в общий запас. Их можно использовать в любом режиме.</p><button id="watch-hints" class="primary">Смотреть рекламу · +3 подсказки</button><button id="cancel-hints" class="secondary">Продолжить без подсказки</button></dialog>`,
+  `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><div class="hint-heading"><h2 id="hint-offer-title">Ещё подсказки</h2><button id="close-hints" class="plain" aria-label="Закрыть предложение">${icon("close")}</button></div><div class="hint-copy"><p>Бесплатные подсказки и общий запас закончились. За рекламное видео — 3 подсказки в общий запас. Их можно использовать в любом режиме.</p></div><div class="hint-actions"><button id="watch-hints" class="primary">Смотреть рекламу · +3 подсказки</button><button id="cancel-hints" class="secondary">Продолжить без подсказки</button></div></dialog>`,
 );
 const hintOffer = $<HTMLDialogElement>("hint-offer");
 const lessonQuick = document.createElement("button");
@@ -1011,6 +1115,7 @@ function offerHints() {
   hintOffer.showModal();
   updateBanner();
 }
+$("close-hints").onclick = () => $("cancel-hints").click();
 $("cancel-hints").onclick = () => {
   hintOffer.close();
   updateBanner();
@@ -1094,9 +1199,46 @@ function complete(rects: DOMRect[]) {
 function renderWin() {
   const id = progress.active;
   renderClassicChoices();
+  const kind = resultKind(id, progress.done, notebook);
+  $("win").dataset.resultKind = kind;
   $("win").classList.toggle("daily-result", id.startsWith("daily"));
-  $("win-stats").innerHTML =
-    `<span>Пар убрано: ${session.current.moves}</span><span>Добавлений: ${session.current.additions}</span><span>Подсказок: ${progress.hints[id] ?? 0}</span>`;
+  const index = notebook.findIndex((p) => p.id === id);
+  resultTitle.textContent =
+    kind === "classic"
+      ? "Поле очищено!"
+      : kind === "daily"
+        ? "Задача дня решена"
+        : kind === "book"
+          ? `Тетрадь ${volumeOf(id) + 1} пройдена!`
+          : kind === "page"
+            ? `Страница ${(Math.floor(index / 6) % 4) + 1} завершена!`
+            : "Задача решена";
+  resultSubtitle.textContent =
+    kind === "book"
+      ? "Все четыре страницы готовы"
+      : kind === "page"
+        ? "6 из 6 задач"
+        : kind === "daily"
+          ? id.slice(9).split("-").reverse().join(".")
+          : "";
+  resultSubtitle.hidden = !resultSubtitle.textContent;
+  const symbol = document.querySelector<HTMLElement>(".win-symbol")!;
+  if (resultArtKey !== kind) {
+    symbol.innerHTML = resultArtwork(kind);
+    resultArtKey = kind;
+  }
+  symbol.classList.toggle("paper-result", kind === "page" || kind === "book");
+  symbol.classList.toggle("field-result", kind === "classic");
+  $("win-stats").innerHTML = [
+    ["Пары", session.current.moves],
+    ["Добавления", session.current.additions],
+    ["Подсказки", progress.hints[id] ?? 0],
+  ]
+    .map(
+      ([label, value]) =>
+        `<span class="result-stat"><strong>${value}</strong><span>${label}</span></span>`,
+    )
+    .join("");
   const i = notebook.findIndex((p) => p.id === id);
   const next = nextTask(id, progress.done);
   const archiveNext = id.startsWith("daily") && next?.startsWith("daily");
@@ -1178,6 +1320,8 @@ function renderWin() {
     award.hidden = false;
     award.innerHTML = `<div class="trophy-heading"><strong>${monthName(m)}</strong><span>${t.count} из ${days(m).length} дней</span></div>${trophyMark(m, t.count, days(m).length, saveFailed)}`;
   }
+  prepareResultLabels();
+  scheduleActionLayout();
 }
 function classicDifficulty(): ClassicDifficulty {
   return metadata(progress).classicRun?.difficulty ?? CLASSIC_DEFAULT;
@@ -1187,7 +1331,12 @@ function renderClassicChoices() {
   const level = classicDifficulty();
   resultNext.classList.toggle("is-classic", isClassic);
   difficultyCaption.hidden = !isClassic;
-  difficultyCaption.textContent = `${classicDifficultyNames[level]} сложность`;
+  difficultyCaption.textContent =
+    level === CLASSIC_MIN
+      ? "Сложность: минимум"
+      : level === CLASSIC_MAX
+        ? "Сложность: максимум"
+        : `${classicDifficultyNames[level]} сложность`;
   for (const [id, atLimit] of [
     ["classic-easier", level === CLASSIC_MIN],
     ["classic-harder", level === CLASSIC_MAX],
@@ -1232,6 +1381,12 @@ function render() {
       values.length <= 54 && count > 0 && lesson < 0,
     );
   renderJar();
+  gameDifficulty.hidden = lesson >= 0 || progress.active !== "classic";
+  gameDifficulty.textContent = difficultyLabel();
+  gameDifficulty.dataset.level = String(classicDifficulty());
+  const ended = count === 0 && lesson < 0;
+  document.querySelector(".game")!.classList.toggle("is-result", ended);
+  resultDock.hidden = !ended;
   const taskIndex = notebook.findIndex((p) => p.id === progress.active);
   const marks = $("page-progress");
   marks.hidden = lesson >= 0 || taskIndex < 0;
@@ -1306,7 +1461,7 @@ function render() {
   $("add-count").textContent = addCount ? compactCount(addCount) : "";
   $("add").setAttribute(
     "aria-label",
-    addCount ? `Добавить ${addCount} цифр` : "Добавить",
+    addCount ? `Добавить ${addCount} ${digitWord(addCount)}` : "Добавить",
   );
   $("add").classList.toggle(
     "ready",
@@ -2676,6 +2831,34 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   }
   if (kind === "trophies") html += "</section>";
   panel.innerHTML = html;
+  if (kind === "calendar") {
+    const layout = document.createElement("div");
+    layout.className = "calendar-layout";
+    const activity = document.createElement("section");
+    activity.className = "calendar-activity";
+    const month = document.createElement("section");
+    month.className = "calendar-month";
+    for (const node of [...panel.children]) {
+      if (node.matches(".screen-back,h2")) continue;
+      (node.matches(".daily-run,#today-task") ? activity : month).append(node);
+    }
+    layout.append(activity, month);
+    panel.append(layout);
+  }
+  if (kind === "trophies") {
+    const jars = panel.querySelector(".jar-collection")!;
+    const overview = document.createElement("div");
+    overview.className = "jar-overview";
+    const history = document.createElement("div");
+    history.className = "jar-history";
+    const summary = jars.querySelector("p");
+    for (const node of [...jars.children])
+      (node.matches("h3,.progress-hero") || node === summary
+        ? overview
+        : history
+      ).append(node);
+    jars.append(overview, history);
+  }
   if (kind === "book") {
     const resume = document.createElement("section");
     resume.className = "book-resume";
@@ -2836,9 +3019,16 @@ function jarPicture(j: ReturnType<typeof jarState>) {
 function jarHero(j: ReturnType<typeof jarState>) {
   return `<section class="progress-hero" aria-label="Следующая баночка">${jarPicture(j)}<div><span class="hero-kicker">Баночка ${j.index + 1} · ${j.name}</span><p class="hero-value">${j.percent}<span>%</span></p><p class="hero-count">${j.filled} из ${j.capacity} семечек</p><progress max="${j.capacity}" value="${j.filled}" aria-label="Заполнение баночки"></progress><p class="fine">До следующей — ${j.capacity - j.filled}</p></div></section>`;
 }
+function difficultyLabel() {
+  const level = classicDifficulty();
+  return `${classicDifficultyNames[level]}${level === CLASSIC_MIN ? " · минимум" : level === CLASSIC_MAX ? " · максимум" : ""}`;
+}
 function renderHomeCurrent() {
   const count = occupied(board()),
     classicMode = progress.active === "classic";
+  $("home-difficulty").hidden = !classicMode || lesson >= 0;
+  $("home-difficulty").textContent =
+    `${classicDifficultyNames[classicDifficulty()]} сложность${classicDifficulty() === CLASSIC_MIN ? " · минимум" : classicDifficulty() === CLASSIC_MAX ? " · максимум" : ""}`;
   homeGoal.hidden = lesson >= 0;
   $("next-classic").hidden = !classicMode || lesson >= 0;
   $("menu-easier").hidden = !classicMode || lesson >= 0 || !count;

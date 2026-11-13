@@ -1,0 +1,67 @@
+name: Independent interface audit 2026-11-12
+on:
+  push:
+    branches: [qa/ui-ux-audit-20261112]
+permissions:
+  contents: read
+concurrency:
+  group: interface-audit-20261112
+  cancel-in-progress: true
+jobs:
+  browser:
+    if: ${{ !contains(github.event.head_commit.message, '[focused-audit]') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+      SEEDS_VISUAL_SWEEP: '1'
+      SEEDS_UX_OUTPUT: test-results/interface-audit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install ffmpeg
+      - run: npm test && npm run build
+      - name: Current complete browser suite
+        run: npm run test:e2e
+      - name: Every screen and adverse states
+        if: ${{ !cancelled() }}
+        run: node scripts/ux-audit-2026-11-11.mjs
+      - name: First session journey recordings
+        if: ${{ !cancelled() }}
+        run: node scripts/product-journey.mjs
+      - name: Current classic difficulty recordings
+        if: ${{ !cancelled() }}
+        run: node scripts/record-classic-variety.mjs
+      - name: Reward animation recordings
+        if: ${{ !cancelled() }}
+        run: node scripts/record-jar-spill.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-interface-audit
+          path: test-results/
+          retention-days: 30
+  focused:
+    if: ${{ contains(github.event.head_commit.message, '[focused-audit]') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      SEEDS_CHROMIUM: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: node scripts/interface-audit-followup.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: focused-interface-audit
+          path: test-results/interface-followup/
+          retention-days: 30

@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-12",
+  "source": "37e3163903740cac03e8317fdcbd6026160a5ecd",
+  "baseline_source": "2880012991ea45e520d7fcd90391a1571479f2d9",
+  "workflow": {
+    "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43289085244",
+    "run_id": 43289085244,
+    "web": "success",
+    "captures": "success",
+    "android": "success"
+  },
+  "tests": {
+    "unit": 72,
+    "regression_unit": 2,
+    "e2e": 212,
+    "integration_browser": 15,
+    "native_feedback": 24,
+    "native_monetization": 30,
+    "initial_action_cases": 30,
+    "result_scene_cases": 30,
+    "calendar_initial_date_checks": 3,
+    "screen_scenarios": 53,
+    "screen_frames": 394,
+    "journey_flows": 4,
+    "journey_frames": 72
+  },
+  "issues": {
+    "U1": "implemented and verified in browser or deterministic native harness",
+    "U2": "implemented and verified in browser or deterministic native harness",
+    "U3": "implemented and verified in browser or deterministic native harness",
+    "U4": "implemented and verified in browser or deterministic native harness",
+    "U5": "implemented and verified in browser or deterministic native harness",
+    "U6": "implemented and verified in browser or deterministic native harness",
+    "U7": "implemented and verified in browser or deterministic native harness"
+  },
+  "artifact_ids": {
+    "captures": 13975868748,
+    "actions": 13976147949,
+    "scenes": 13975528934,
+    "native": 13976462526,
+    "unsigned_apk": 13975823403,
+    "browser_tests": 13975248857
+  },
+  "preview": {
+    "version_code": 11502,
+    "library_file_id": "libfile_e746a5515d448191b75c343991f6c5b9",
+    "apk_verification": "apk.json"
+  },
+  "limitations": [
+    "No physical Android installation or motor/speaker calibration in this acceptance.",
+    "Native SDK behavior uses deterministic doubles; no live ad request or analytics events during browser probes.",
+    "Font enlargement is explicit rendered CSS font scaling, not a claim of physical OS font testing.",
+    "Visual assessment is expert review, not evidence of improved player retention."
+  ],
+  "publication": {
+    "merged": false,
+    "store_submission": false
+  }
+}

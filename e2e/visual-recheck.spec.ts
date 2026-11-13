@@ -205,10 +205,27 @@ test("oversized status text scrolls inside its region and leaves the board and a
   await textScale(page, 2);
   await expect(page.locator(".game")).toHaveClass(/stacked-actions/);
   const actions = page.locator(".game-actions");
+  // Enlarged explanations scroll independently; controls stay fixed and reachable.
   await expect
-    .poll(() => actions.evaluate((e) => e.scrollHeight > e.clientHeight))
+    .poll(() =>
+      page
+        .locator(".status-wrap")
+        .evaluate((e) => e.scrollHeight > e.clientHeight),
+    )
     .toBe(true);
-  await page.locator("#hint").scrollIntoViewIfNeeded();
+  expect(
+    await actions.evaluate((e) => e.scrollHeight <= e.clientHeight + 1),
+  ).toBe(true);
+  expect(
+    await page.locator("#hint").evaluate((e) => {
+      const r = e.getBoundingClientRect();
+      const t = document.elementFromPoint(
+        r.x + r.width / 2,
+        r.y + r.height / 2,
+      );
+      return t === e || e.contains(t);
+    }),
+  ).toBe(true);
   await expect(page.locator("#hint")).toBeInViewport();
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);

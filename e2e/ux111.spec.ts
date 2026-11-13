@@ -233,7 +233,7 @@ test("landscape enlarged action text gets whole words and reachable controls", a
     .evaluateAll((ns) =>
       ns.forEach((n) => ((n as HTMLElement).style.fontSize = "20px")),
     );
-  await expect(page.locator(".game")).toHaveClass(/stacked-actions/);
+  await expect(page.locator(".game")).toHaveClass(/docked-actions/);
   expect(
     await page
       .locator(".status-wrap")
@@ -241,7 +241,16 @@ test("landscape enlarged action text gets whole words and reachable controls", a
   ).toBe(true);
   for (const id of ["hint", "undo", "add"]) {
     const b = page.locator(`#${id}`);
-    await b.scrollIntoViewIfNeeded();
+    expect(
+      await b.evaluate((e) => {
+        const r = e.getBoundingClientRect();
+        const t = document.elementFromPoint(
+          r.x + r.width / 2,
+          r.y + r.height / 2,
+        );
+        return t === e || e.contains(t);
+      }),
+    ).toBe(true);
     await expect(b).toBeInViewport();
   }
 });

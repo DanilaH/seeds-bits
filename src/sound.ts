@@ -21,7 +21,10 @@ export function playSound(
     | "undo"
     | "hint"
     | "add"
-    | "win",
+    | "win"
+    | "task"
+    | "page"
+    | "book",
   enabled: boolean,
 ) {
   if (blocked || !enabled || document.hidden) return;
@@ -56,6 +59,9 @@ export function playSound(
         undo: 330,
         hint: 520,
         add: 390,
+        task: 440,
+        page: 520,
+        book: 440,
         win: 440,
       }[kind];
     const duration = {
@@ -64,6 +70,9 @@ export function playSound(
       undo: 0.065,
       hint: 0.09,
       add: 0.08,
+      task: 0.16,
+      page: 0.32,
+      book: 0.48,
       win: 0.24,
       pair: 0.1,
       land: 0.055,
@@ -79,6 +88,20 @@ export function playSound(
       pitch * (kind === "full" ? 1.5 : 0.68),
       now + duration,
     );
+    if (["task", "page", "book"].includes(kind)) {
+      const notes =
+        kind === "task"
+          ? [440, 554.37]
+          : kind === "page"
+            ? [523.25, 659.25, 783.99]
+            : [440, 554.37, 659.25, 880];
+      notes.forEach((note, i) =>
+        tone!.frequency.setValueAtTime(
+          note,
+          now + (i * duration) / notes.length,
+        ),
+      );
+    }
     if (kind === "win") {
       tone.frequency.setValueAtTime(440, now);
       tone.frequency.setValueAtTime(554.37, now + 0.075);

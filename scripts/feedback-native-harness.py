@@ -45,6 +45,11 @@ public class FeedbackHarness {
   config(p,14,true);p.handleOnDestroy();p.handleOnResume();n=v.pulses;SystemClock.now+=500;pulse(p,14,"win");check("F16_destroy_drops_late_callbacks",v.pulses==n);
   p=new SeedsFeedbackPlugin();v=p.context.v;Build.VERSION.SDK_INT=35;config(p,15,true);pulse(p,15,"full");check("F17_full_jar_three_contacts",java.util.Arrays.equals(v.last.timing,new long[]{0,26,64,30,46,18})&&java.util.Arrays.equals(v.last.amp,new int[]{0,220,0,250,0,170}));
   n=v.pulses;SystemClock.now+=100;pulse(p,15,"land");check("F18_full_jar_protects_spill_rhythm",v.pulses==n);config(p,16,false);check("F19_full_jar_opt_out_cancels",v.cancels>0);
+  config(p,17,true);pulse(p,17,"task");check("F20_task_two_soft_contacts",java.util.Arrays.equals(v.last.timing,new long[]{0,18,35,24})&&v.last.amp[1]==155);
+  config(p,18,true);pulse(p,18,"page");check("F21_page_distinct_two_contacts",java.util.Arrays.equals(v.last.timing,new long[]{0,26,38,42})&&v.last.amp[3]==235);
+  config(p,19,true);pulse(p,19,"book");check("F22_book_three_contacts",java.util.Arrays.equals(v.last.timing,new long[]{0,30,42,38,52,54}));
+  n=v.pulses;SystemClock.now+=100;pulse(p,19,"land");check("F23_book_protects_celebration",v.pulses==n);config(p,20,false);pulse(p,19,"book");check("F24_book_cancel_barrier",v.pulses==n);
+
  }
 }''')
  files=[str(p)for p in (root/'src').rglob('*.java')]

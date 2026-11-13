@@ -1,0 +1,456 @@
+{
+  "source": "c6c99ce192c6e0c1ae992a65e8c26b446199e19d",
+  "method": "Real completion actions, explicit progress fixture, native service doubles; physical motor and subjective sound quality not measured",
+  "cases": [
+    {
+      "name": "phone-task",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "phone-page",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "phone-book",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "phone-classic-0",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "phone-classic-1",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "phone-classic-2",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "small-dark-task",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "small-dark-page",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "small-dark-book",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "small-dark-classic-0",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result"
+    },
+    {
+      "name": "small-dark-classic-1",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result"
+    },
+    {
+      "name": "small-dark-classic-2",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result"
+    },
+    {
+      "name": "landscape-task",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "landscape-page",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "landscape-book",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "landscape-classic-0",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result"
+    },
+    {
+      "name": "landscape-classic-1",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result"
+    },
+    {
+      "name": "landscape-classic-2",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result"
+    },
+    {
+      "name": "short-large-task",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "short-large-page",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "short-large-book",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "short-large-classic-0",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result minimal-result"
+    },
+    {
+      "name": "short-large-classic-1",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result minimal-result"
+    },
+    {
+      "name": "short-large-classic-2",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result minimal-result"
+    },
+    {
+      "name": "text200-task",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "text200-page",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "text200-book",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "1",
+        "0",
+        "0"
+      ],
+      "all_stat_text_hit": null,
+      "all_actions_hit": true,
+      "fitting": ""
+    },
+    {
+      "name": "text200-classic-0",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result minimal-result"
+    },
+    {
+      "name": "text200-classic-1",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result minimal-result"
+    },
+    {
+      "name": "text200-classic-2",
+      "status": "passed",
+      "centre_delta": 0,
+      "value_top_delta": 0.0,
+      "column_width_delta": 0.015625,
+      "values": [
+        "44",
+        "6",
+        "3"
+      ],
+      "all_stat_text_hit": true,
+      "all_actions_hit": true,
+      "fitting": "compact-result minimal-result"
+    }
+  ]
+}

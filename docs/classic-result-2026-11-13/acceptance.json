@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-13",
+  "source": "c6c99ce192c6e0c1ae992a65e8c26b446199e19d",
+  "workflow": {
+    "url": "https://github.com/DanilaH/seeds-bits/actions/runs/43376098679",
+    "id": 43376098679,
+    "run_number": 5,
+    "web": "success",
+    "captures": "success",
+    "android": "success"
+  },
+  "tests": {
+    "unit": 72,
+    "regression_unit": 2,
+    "e2e": 212,
+    "integration_browser": 15,
+    "native_feedback": 24,
+    "native_monetization": 30,
+    "initial_action_cases": 30,
+    "result_scenes": 30,
+    "classic_statistic_hit_cases": 15,
+    "calendar_date_checks": 3,
+    "screen_scenarios": 53,
+    "screen_frames": 394,
+    "journey_flows": 4,
+    "journey_frames": 72
+  },
+  "alignment": {
+    "reported_values": [
+      44,
+      6,
+      3
+    ],
+    "max_centre_delta": 0,
+    "all_classic_numbers_and_labels_hit_at_open": true
+  },
+  "preview": {
+    "version_name": "1.1.2",
+    "version_code": 11505,
+    "baseline_version_code": 11502,
+    "library_file_id": "libfile_21a890291e70819189f0146b28f2e4b2",
+    "apk_verification": "apk.json"
+  },
+  "artifact_ids": {
+    "captures": 14014138773,
+    "result_scenes": 14014168165,
+    "actions": 14014946400,
+    "native": 14014232770,
+    "unsigned": 14014133446,
+    "browser_tests": 14014972007
+  },
+  "visual_review": {
+    "result_scene_contact_sheets": 5,
+    "result_scene_frames_reviewed": 30,
+    "profiles": [
+      "390x844 light",
+      "320x568 dark",
+      "844x390 light",
+      "568x320 dark text150 reduced",
+      "360x640 dark text200 reduced"
+    ]
+  },
+  "limitations": [
+    "No physical installation of preview 11505 in this acceptance.",
+    "Browser scene captures use service doubles; live native ad presentation and motor/speaker feel are not inferred.",
+    "Explicit font scaling is not a physical Android system-font test."
+  ],
+  "publication": {
+    "merged": false,
+    "store_submission": false
+  }
+}

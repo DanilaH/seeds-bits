@@ -1,0 +1,37 @@
+{
+  "source_kind": "Signed exact CI release payload, aligned locally; static inspection, no physical installation claim",
+  "package": "com.seedsbits.game.preview",
+  "name": "Семечки · тест",
+  "version_name": "1.1.2",
+  "version_code": 11502,
+  "bytes": 5517432,
+  "sha256": "273f2c025929e846a74dbfe4a92986cb8bd7a7163c77bcd0a802f3a86d350662",
+  "certificate_sha256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+  "v2_v3_signatures_verified": true,
+  "baseline_version_code": 11318,
+  "upgrade_package_and_certificate_match": true,
+  "unsigned_entries_unchanged": 663,
+  "web_assets_match_local_dist": [
+    "assets/advice-worker-6LRsD5M8.js",
+    "assets/esm-BnQSz-f8.js",
+    "assets/esm-tDqgnqKx.js",
+    "assets/index-BduKQwhs.css",
+    "assets/index-Br-2_-Sg.js",
+    "assets/notebook-extra-B_1ZZVK0.js",
+    "assets/web-Bb49L65r.js",
+    "assets/web-C-KXWCdv.js",
+    "assets/web-X4PFJS1r.js",
+    "index.html"
+  ],
+  "no_stale_asset_files": true,
+  "no_development_hooks": true,
+  "native_bridges": {
+    "SeedsFeedbackPlugin": true,
+    "SeedsMonetizationPlugin": true,
+    "SeedsEngagementPlugin": true,
+    "SeedsApplication": true
+  },
+  "analytics_disabled": true,
+  "ads_test_mode": true,
+  "physical_installation_tested": false
+}
