@@ -7,6 +7,7 @@ def adb(*args,check=True):
 
 capture_id=0
 capture_retries=[]
+navigation_scrolls=[]
 def snapshot():
  global capture_id
  # Android 35 UiAutomation can lose its Binder connection after process restart.
@@ -39,6 +40,23 @@ def wait_label(choices):
    if label(node) in choices:return node
   time.sleep(1)
  raise AssertionError('Accessible label missing: '+repr(choices))
+def reveal_label(choices):
+ # UiAutomator can include WebView nodes with clipped, even inverted bounds.
+ # Scroll the actual page and acquire the button again before tapping it.
+ for attempt in range(8):
+  root=snapshot()
+  web=next(n for n in root.iter('node') if n.get('class')=='android.webkit.WebView')
+  left,top,right,bottom=map(int,re.findall(r'\d+',web.get('bounds','')))
+  for n in root.iter('node'):
+   if label(n) not in choices:continue
+   l,t,r,b=map(int,re.findall(r'\d+',n.get('bounds','')))
+   x,y=(l+r)//2,(t+b)//2
+   if r>l and b>t and left<x<right and top<y<bottom:return n
+  if attempt<7:
+   adb('shell','input','swipe',str((left+right)//2),str(top+(bottom-top)*4//5),str((left+right)//2),str(top+(bottom-top)*2//5),'350')
+   navigation_scrolls.append({'target':choices,'attempt':attempt+1})
+   time.sleep(.3)
+ raise AssertionError('Control not reachable after scrolling: '+repr(choices))
 def cells():
  result={}
  for node in snapshot().iter('node'):
@@ -100,8 +118,8 @@ try:
  adb('shell','settings','put','system','accelerometer_rotation','0')
  adb('shell','settings','put','system','user_rotation','1');time.sleep(2);wait_cells(remaining_cells);screenshot('landscape.png');checks['rotationPreservesBoard']=True
  adb('shell','settings','put','system','user_rotation','0');time.sleep(2)
- tap(wait_label(['Открыть меню']));tap(wait_label(['Настройки']));tap(wait_label(['Конфиденциальность']));wait_label(['Назад','← Назад']);checks['privacyAccessibleOffline']=True
+ tap(wait_label(['Открыть меню']));tap(reveal_label(['Настройки']));tap(reveal_label(['Конфиденциальность']));wait_label(['О данных']);wait_label(['Назад','← Назад']);checks['privacyAccessibleOffline']=True
  screenshot('privacy.png')
 finally:
- (out/'acceptance.json').write_text(json.dumps({'environment':'Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised','checks':checks,'accessibilityAcquisitionRetries':capture_retries},indent=2)+'\n')
+ (out/'acceptance.json').write_text(json.dumps({'environment':'Android 35 emulator; release payload temporarily signed with CI-only smoke certificate; offline; no real ads exercised','checks':checks,'accessibilityAcquisitionRetries':capture_retries,'navigationScrolls':navigation_scrolls},indent=2)+'\n')
  (out/'logcat.txt').write_text(adb('logcat','-d','-t','500',check=False))
