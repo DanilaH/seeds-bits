@@ -27,7 +27,7 @@ Guidance snapshot SHA: `aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0` (exact checkou
 
 The four local [kit guides](kit-guidance/TASK_ROUTER.md) were reviewed against a temporary guidance-only generation from that exact checkout and copied after diff review. Existing project instructions were preserved; guidance:adopt was not rerun. All external kit links in them use the same SHA. They replace the obsolete `e2382670fbd5c2aa76462fea688c60de2b067392` guidance from the separate historical `chore/adopt-kit-agent-guidance-2026-11-12` branch; that branch was not merged wholesale.
 
-Runtime source pin: `a9325265e87583a4872cf6a158e1e881a0d7508e`. The original vendored kit module is [value-transfer.ts](../src/vendor/mini-games-kit/value-transfer.ts), with [source record](../src/vendor/mini-games-kit/README.md). Its SHA-256 is `601cb5c0cae59b0f02d9f065b940faed5743c4477498dd48bf167f647456fed6`; No runtime replacement is included in this UI guidance update. There is no direct npm kit dependency. This documentation adoption does not change the runtime pin, lockfile or native SDKs.
+Runtime pins are per module, recorded in [source provenance](../src/vendor/mini-games-kit/README.md). The original [value-transfer.ts](../src/vendor/mini-games-kit/value-transfer.ts) remains at `a9325265e87583a4872cf6a158e1e881a0d7508e`, SHA256 `601cb5c0cae59b0f02d9f065b940faed5743c4477498dd48bf167f647456fed6`. The subsequent owner-approved owned-dom-motion extraction uses `0d5638e8d2146d3d8906e4936ccfa6ec1eeab7d7`; see the separate extraction decision below. The preceding UI guidance adoption did not change runtime. There is no direct npm kit dependency; lockfile and native SDKs remain unchanged.
 
 Optional commercial research SHA: `6bff183070f6feecad3f561d268145a8500fbb1b`, [draft PR #30](https://github.com/DanilaH/mini-games-kit/pull/30), still open/draft when checked on 13 November. It is routed separately through [COMMERCIAL_RESEARCH.md](COMMERCIAL_RESEARCH.md), without mixing draft links into the four generated stable guides. Accepting its methodology does not mean its hypotheses have been implemented or measured in this game.
 
@@ -38,6 +38,7 @@ Adoption matrix:
 | Task/reference/feedback guides | REUSE | Stable guidance SHA, project rules preserved |
 | Commercial research | REUSE methodology | Separate draft SHA; one concrete question/experiment per task |
 | Value transfer | Existing REUSE | Existing vendored runtime retained |
+| Owned DOM motion | EXTRACTED | Owner-approved shared primitive, unchanged pinned Seeds consumption; game policy stays local |
 | Native banner, durable rewards, hints, balance | LOCAL POLICY | Reuse compatible contracts only after source/API review |
 | Android/Phaser or Yandex bootstrap | NOT APPLICABLE | Existing DOM/Capacitor game; no runtime migration |
 
@@ -67,4 +68,4 @@ Owner explicitly approved transfer to kit after reviewing the single-consumer ca
 
 main.ts delegates generic property ownership, visible-value handoff and cancellation to OwnedDomMotion. A small Seeds-only map retains selected/hinted reconciliation. Host policy owns duration/easing, reduced motion, pause/visibility, final CSS classes, input guards and durable state. Shared completion callbacks are unused here; they never authorize rewards.
 
-The shared module deliberately fixes shorthand/longhand overlap with var() through CSSOM property expansion, validates replace-only compositing and explicit keyframes, and uses the target document's constructors. Generic browser and actual Seeds input/lifecycle acceptance are required before claiming EXTRACTED. No product flag, save schema, ad cadence or economy changes.
+The shared module deliberately fixes shorthand/longhand overlap with var() through CSSOM property expansion, validates replace-only compositing and explicit keyframes, and uses the target document's constructors. KIT IMPACT: EXTRACTED. [Kit PR #33](https://github.com/DanilaH/mini-games-kit/pull/33) is merged; source pin is an ancestor of main `e04a3fe87ca93d506e01df4acc5afe690408cefa`. Kit passed 219 unit and 8 browser contracts. Seeds consumer source `322644f075122a7a16ea04aaa2cd6e5178a800ae` passed browser input/lifecycle and offline Android 35 upgrade/fresh/lifecycle acceptance. [Evidence and limits](owned-dom-motion-2026-11-14.md). Seeds is the one demonstrated real consumer; this is the owner's explicit exception to waiting for a second consumer. No product flag, save schema, ad cadence or economy changes.
