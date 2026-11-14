@@ -4,7 +4,7 @@ Recorded 13 November 2026. This is the working project baseline, not proof of pu
 
 ## Source, platform and release baseline
 
-- Repository: `DanilaH/seeds-bits`; working branch: `release/rustore-1.1.2`. Baseline before this documentation adoption: `24ae94ffbe4a2652b8e3ce410c6e15d74ef251d9`.
+- Repository: `DanilaH/seeds-bits`; current working branch: `feat/monetization-assists-20261113`. Verified ordinary-game base before the 14 November UI pass: `a6aa3f4c80a2642ff8c4696a94f7677a5810872e`; UI runtime change: `15c9464fdc939098fbefbfc07eb12a9153701999`, acceptance source: `dda69c667bc39257de5ff986e7c8863ac963a274`. Historical prepared-store branch: `release/rustore-1.1.2`, documentation baseline `24ae94ffbe4a2652b8e3ce410c6e15d74ef251d9`.
 - Runtime accepted at `c6c99ce192c6e0c1ae992a65e8c26b446199e19d`; release build source `ecc3c399a6062d59d71da83179c4ae09cb33ac9c`. The subsequent baseline commit records signed APK evidence, not a new runtime.
 - TypeScript + Vite + DOM/CSS/SVG, Capacitor native bridges; no React or Phaser. Android/RuStore is the current production target. Web/Yandex prototype and iOS scaffold are separate, not evidence of completed platform releases.
 - Prepared APK: 1.1.2 / 1102101, package `com.seedsbits.game`, production ads/analytics configuration. Exact artifact and verification limits: [release evidence](releases/1.1.2/README.md). Preview package `com.seedsbits.game.preview` and quarantined QA versions must remain separate.
@@ -58,3 +58,5 @@ Technical checks, offline emulators, recorded fixtures and SDK doubles do not pr
 - Existing local timings: press 80–90 ms, color 120 ms, selection 120 ms, error 160 ms, row collapse 170 ms, result ≤500 ms. Reduced motion retains the static state and available actions. No count-up gates statistics or Continue.
 - Reward grant → durable save → acknowledgement → separately saved hint reveal remain distinct. No reward/economy/ad-cadence change. QA uses test ads and empty analytics keys.
 - Applied routes: UI Motion Recipes and Stable Progress UI, with UX & Art System as the component/style contract. Exact rules and observed acceptance are recorded in the UI pass report; browser evidence is not phone feel or commercial evidence.
+
+UI pass details and delivery limit: [14 November acceptance](ui-motion-2026-11-14.md). The QA private key used by 11815 is unavailable in the current workspace and found archives; an unsigned payload is not an installable update. Do not silently substitute another certificate or ask the owner to erase app data.

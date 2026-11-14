@@ -1,3 +1,11 @@
+# Status — 14 November 2026
+
+UI/motion guidance pinned to `aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0`; strict doctor clean. Source `dda69c6`, same current feature branch and ordinary baseline, all six flags off. Fixed owned/interruptible cell color effects and presentation cleanup, simplified duplicate hint-offer text. Existing input remapping guard, style, durable reward/save order, stock/rights and runtime/dependencies retained. [Acceptance and exact limits](ui-motion-2026-11-14.md).
+
+Final checks: 107 + 2 unit, 298 + 15 browser, 68 targeted help/browser, 18 comparable UI/motion contracts, 43 + 24 native doubles, optimized Android APK; Android 35 offline upgrade from exact 11815 plus 14 fresh/lifecycle/font150 checks passed. Actual native screenshots/recordings are in the delivered review package.
+
+**Installable APK delivery is blocked by the missing previous QA private key.** Prepared payload is 1.1.2 / 11820, com.seedsbits.game.assistqa, test ads, empty analytics keys, baseline. It is unsigned and cannot update the owner's installed 11815. Do not replace the signing identity or erase data; recover qa.p12 / helpqa with certificate f43900f8… first. Physical phone, live ads/revenue and retention were not checked; no store publication or kit runtime change.
+
 # Status — 13 November 2026
 
 ## Current: ordinary game, new features paused

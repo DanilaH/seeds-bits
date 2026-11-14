@@ -5,7 +5,7 @@
 
 Small, offline-first Number Match game. TypeScript + Vite + HTML/CSS/SVG. No React, game engine, remote fonts, backend or accounts.
 
-For project work, start with [AGENTS.md](AGENTS.md) and [current project decisions](docs/PROJECT_DECISIONS.md). The working 1.1.2 baseline is `release/rustore-1.1.2`. [Task-routed kit guidance](docs/kit-guidance/TASK_ROUTER.md) and [commercial research](docs/COMMERCIAL_RESEARCH.md) have separately recorded exact revisions; documentation adoption does not upgrade the vendored runtime.
+For project work, start with [AGENTS.md](AGENTS.md) and [current project decisions](docs/PROJECT_DECISIONS.md). The current working baseline is `feat/monetization-assists-20261113`: ordinary Undo / Hint / Add, with all six product experiments paused. The prepared store 1.1.2 baseline remains historical release evidence. [Task-routed kit guidance](docs/kit-guidance/TASK_ROUTER.md) and [commercial research](docs/COMMERCIAL_RESEARCH.md) have separately recorded exact revisions; documentation adoption does not upgrade the vendored runtime.
 
 ## Run
 

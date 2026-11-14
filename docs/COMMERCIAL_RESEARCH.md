@@ -4,7 +4,7 @@ Adopted for research/decision work on 13 November 2026. This supplement routes t
 
 ## Sources and status
 
-Research snapshot: `6bff183070f6feecad3f561d268145a8500fbb1b`, from [draft PR #30](https://github.com/DanilaH/mini-games-kit/pull/30) in `DanilaH/mini-games-kit`. Still draft/open at adoption; separate from stable guidance `1f286e6e98cafee6679a1a0a13519c7bcded97a5` and the vendored runtime pin. Recheck status before a later update, and review changes deliberately.
+Research snapshot: `6bff183070f6feecad3f561d268145a8500fbb1b`, from [draft PR #30](https://github.com/DanilaH/mini-games-kit/pull/30) in `DanilaH/mini-games-kit`. Still draft/open at adoption; separate from current stable guidance `aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0` (UI guidance update, 14 November) and the vendored runtime pin. The commercial research snapshot itself was not upgraded. Recheck status before a later update, and review changes deliberately.
 
 Choose at most two relevant studies alongside the [stable router](kit-guidance/TASK_ROUTER.md). Do not read the whole source atlas for a small fix.
 
