@@ -786,6 +786,7 @@ function revealAddedCells(start: number, end: number) {
 }
 function settlePresentation() {
   presentationRevision++;
+  clearMotions();
   jarSpill.clear();
   clearContact();
   clearTrophyCelebration();
@@ -951,8 +952,57 @@ function drawPath(path: Connection | null) {
   updateJump();
 }
 const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+type MotionOwner = { el: Element; properties: Set<string>; selection: string };
+const ownedMotions = new Map<Animation, MotionOwner>();
+const cellSelection = (el: Element) =>
+  `${el.classList.contains("selected")}/${el.classList.contains("hinted")}`;
+function clearMotions() {
+  for (const animation of ownedMotions.keys()) animation.cancel();
+  ownedMotions.clear();
+}
 function motion(el: Element | null, frames: Keyframe[], duration = 160) {
-  if (el && !reduced()) el.animate(frames, { duration, easing: "ease-out" });
+  if (!el) return;
+  const properties = new Set(frames.flatMap(frame =>
+    Object.keys(frame).filter(key => !["offset", "easing", "composite"].includes(key)),
+  ));
+  const previous = [...ownedMotions].filter(([, owner]) =>
+    owner.el === el && [...properties].some(key => owner.properties.has(key)),
+  );
+  // Sample before cancelling the previous owner. Repeated effects continue from
+  // the visible value; independent translate/opacity channels may coexist.
+  const first = {...frames[0]};
+  if (previous.length || properties.has("background")) {
+    const visible = getComputedStyle(el);
+    for (const key of Object.keys(first)) {
+      if (properties.has(key))
+        (first as Record<string, unknown>)[key] =
+          visible.getPropertyValue(key.replace(/[A-Z]/g, c => "-" + c.toLowerCase()));
+    }
+  }
+  for (const [animation] of previous) {
+    ownedMotions.delete(animation);
+    animation.cancel();
+  }
+  if (reduced() || paused || document.hidden) return;
+  const animation = el.animate([first, ...frames.slice(1)], { duration, easing: "ease-out" });
+  ownedMotions.set(animation, {el, properties, selection: cellSelection(el)});
+  const release = () => ownedMotions.delete(animation);
+  animation.addEventListener("finish", release, {once:true});
+  animation.addEventListener("cancel", release, {once:true});
+}
+function reconcileCellMotions() {
+  for (const [animation, owner] of [...ownedMotions]) {
+    if (!owner.el.matches(".cell") || !owner.properties.has("background")) continue;
+    if (animation.playState === "idle" || !owner.el.isConnected) {
+      ownedMotions.delete(animation);
+      continue;
+    }
+    if (owner.selection === cellSelection(owner.el)) continue;
+    const visible = getComputedStyle(owner.el).backgroundColor;
+    const target = owner.el.classList.contains("selected") ? "var(--selected)"
+      : owner.el.classList.contains("hinted") ? "var(--highlight)" : "transparent";
+    motion(owner.el, [{background:visible}, {background:target}], 100);
+  }
 }
 function cell(i: number) {
   return boardView.cell(i);
@@ -1187,13 +1237,14 @@ function updateOfferReadiness() {
   if(!hintOffer.open)return;
   const {state,reason}=rewardedReadiness;
   const charged=offeredIntent?.product!=="hint_pack_3"&&offeredIntent&&canUseStoredHelp(offeredIntent);
-  $("rewarded-state").hidden=Boolean(charged)&&!saveFailed;
+  $("rewarded-state").hidden=!saveFailed&&(Boolean(charged)||(offeredIntent?.product==="hint_pack_3"&&state==="ready"));
   $("rewarded-state").textContent=saveFailed?"Не сохранено. Заряд на месте.":reason==="pending_receipt"?"Восстанавливаем награду…":state==="ready"?"Награда за завершённое видео":state==="loading"?"Видео загружается…":state==="disabled"?"Видео выключено":"Сейчас видео недоступно";
   $<HTMLButtonElement>("watch-hints").disabled=helpChoiceBusy||saveFailed||(!charged&&state!=="ready");
 }
 function setHelpOffer(title:string,goal:string,price:string,cta:string,undo:string,details:string){
   $("hint-offer-title").textContent=title;$("help-offer-copy").textContent=goal;
-  $("help-price").textContent=price;$("help-undo").textContent=undo;$("help-undo").hidden=!undo;
+  $("help-price").textContent=price;$("help-price").hidden=!price;$("help-undo").textContent=undo;$("help-undo").hidden=!undo;
+  $("help-price").parentElement!.hidden=!price&&!undo;
   $("watch-hints").textContent=cta;$("cancel-hints").textContent="Не сейчас";
   $("help-details-copy").textContent=details;($<HTMLDetailsElement>("help-details")).open=false;
   $("help-pack").hidden=true;$("help-steps").hidden=true;
@@ -1328,7 +1379,7 @@ function offerHints(intent: HelpIntent) {
   offeredIntent = intent;
   helpPreview.hidden = true;
   jarSpill.clear();helpEvent("eligibility",intent);track("hint_offer",{mode:gameMode()});
-  setHelpOffer("Открыть подсказку","Покажем пару на этом поле","Видео → 3 подсказки","Смотреть видео","","После завершённого видео откроем эту пару и оставим ещё две подсказки в запасе. Повтор уже открытой пары бесплатный.");
+  setHelpOffer("Открыть подсказку","Досмотрите видео — покажем пару.","","Смотреть видео","","После завершённого видео откроем эту пару и оставим ещё две подсказки в запасе. Повтор уже открытой пары бесплатный.");
   $("help-pack").hidden=false;$("help-pack").innerHTML=`<span>${icon("hint")}<strong>1 сейчас</strong></span><span>${icon("hint")}<strong>+2 в запас</strong></span>`;
   hintOffer.showModal(); updateOfferReadiness();
   helpEvent("offer", intent, {ready_state: rewardedReadiness.state});
@@ -1688,6 +1739,7 @@ function render() {
   }
   updatePlanRail(plan);
   boardView.render(values, selected, highlight);
+  reconcileCellMotions();
   $("win").hidden = count > 0 || lesson >= 0;
   document.querySelector<HTMLElement>("footer")!.hidden = !count && lesson < 0;
   if (!count && lesson < 0) renderWin();
@@ -1865,7 +1917,8 @@ async function choose(i: number) {
     render();
     feedback("reject");
     motion(cell(a), [
-      { background: "var(--reject)" },
+      { background: "transparent" },
+      { background: "var(--reject)", offset: 0.35 },
       { background: "transparent" },
     ]);
     motion(cell(i)?.querySelector(".digit") ?? null, [

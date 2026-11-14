@@ -25,6 +25,7 @@ async function rawClick(page:Page, selector:string) {
 }
 async function evidence(page:Page,name:string,data:unknown) {
   writeFileSync(`${out}/${name}.json`,JSON.stringify(data,null,2));
+  if(!['rapid-selection','retarget-color'].includes(name))await page.waitForTimeout(200);
   await page.screenshot({path:`${out}/${name}.png`});
 }
 
@@ -55,6 +56,19 @@ test('selection replaces a previous rejection and effects end on navigation',asy
   if(!snapshot)expect(remaining).toBe(0);
   await page.locator('#resume').click();await page.waitForTimeout(220);
   await expect(cell(page,2)).toHaveAttribute('aria-pressed','true');
+});
+
+for(const viewport of [{width:320,height:568},{width:568,height:320}]) for(const dark of [false,true])
+test(`hint offer initial actions and text ${viewport.width} ${dark?'dark':'light'}`,async({page})=>{
+  await page.setViewportSize(viewport);await fixture(page,{wallet:0,dark,large:true});
+  await rawClick(page,'#hint');await expect(page.locator('#watch-hints')).toBeEnabled();
+  const data=await page.evaluate(()=>['watch-hints','cancel-hints','close-hints'].map(id=>{
+    const e=document.getElementById(id)!,r=e.getBoundingClientRect();const hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+    return {id,x:r.x,y:r.y,w:r.width,h:r.height,visible:r.top>=0&&r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight,hit:e===hit||e.contains(hit)};
+  }));
+  for(const d of data){expect(d.visible).toBe(true);expect(d.hit).toBe(true);}
+  await evidence(page,`offer-${viewport.width}-${dark?'dark':'light'}`,data);
+  await rawClick(page,'#cancel-hints');await expect(page.locator('#hint-offer')).not.toBeVisible();
 });
 
 test('repeat rejection starts from the currently visible color',async({page})=>{
@@ -161,6 +175,9 @@ for(const reduce of [false,true])test(`result/Continue and background cleanup ${
   expect(await page.locator('#seed-flights i,.result-seed-burst').count()).toBe(0);
   await page.evaluate(()=>{
     Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));
+    // The shared reward double otherwise opens a fake video for interstitials
+    // too. Exercise the real baseline continuation with a no-fill SDK result.
+    (window as any).unavailable=true;
   });
   await rawClick(page,'#play-again');await expect(page.locator('#win')).toBeHidden();
   await page.waitForTimeout(650);expect(await page.locator('.result-seed-burst').count()).toBe(0);

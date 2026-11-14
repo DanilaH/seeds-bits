@@ -75,3 +75,60 @@ jobs:
         with:
           name: assistance-qa-unsigned
           path: test-results/apk/
+  android-acceptance:
+    needs: verify-and-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SEEDS_ANDROID_PACKAGE: com.seedsbits.game.assistqa
+      SEEDS_UPGRADE_BASELINE_KIND: exact QA 11815 payload, both APKs temporarily re-signed for CI only
+      SEEDS_UPGRADE_BASELINE_SOURCE: a6aa3f4c80a2642ff8c4696a94f7677a5810872e
+      SEEDS_UPGRADE_BASELINE_VERSION: '1.1.2 (11815)'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - uses: actions/download-artifact@v4
+        with: {name: assistance-qa-unsigned, path: candidate/}
+      - uses: actions/download-artifact@v4
+        with:
+          name: assistance-qa-unsigned
+          path: baseline/
+          run-id: 43485806449
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: python3 -m pip install --user pillow
+      - name: Verify original 11815 source and payload
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          assert json.loads(pathlib.Path('baseline/baseline.json').read_text())['source']=='a6aa3f4c80a2642ff8c4696a94f7677a5810872e'
+          assert hashlib.sha256(pathlib.Path('baseline/seeds-help-baseline-unsigned.apk').read_bytes()).hexdigest()=='705ba5fedd76a5c957540594b4005d1a1821f229970562b192a6c7c5abc448a2'
+          PY
+      - name: Boot offline emulator and install the original QA payload
+        run: |
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64' 'build-tools;35.0.0'
+          echo no | avdmanager create avd --force --name seeds_ui_motion --package 'system-images;android-35;google_apis;x86_64'
+          bash scripts/ci-offline-emulator.sh seeds_ui_motion
+          keytool -genkeypair -keystore /tmp/seeds-ui-smoke.p12 -storetype PKCS12 -storepass android -keypass android -alias smoke -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=CI Seeds UI Only' -noprompt
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/seeds-ui-smoke.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-ui-before.apk baseline/seeds-help-baseline-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks /tmp/seeds-ui-smoke.p12 --ks-key-alias smoke --ks-pass pass:android --out /tmp/seeds-ui-after.apk candidate/seeds-help-baseline-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging /tmp/seeds-ui-after.apk > candidate/badging.txt
+          adb install /tmp/seeds-ui-before.apk
+      - run: python3 scripts/android-upgrade.py before
+      - run: adb install -r /tmp/seeds-ui-after.apk
+      - run: python3 scripts/android-upgrade.py after
+      - name: Fresh installation and lifecycle
+        run: |
+          adb uninstall com.seedsbits.game.assistqa
+          adb install /tmp/seeds-ui-after.apk
+          python3 scripts/android-smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: baseline-android-acceptance
+          path: |
+            candidate/badging.txt
+            test-results/emulator/
+            test-results/emulator-upgrade/
+            test-results/offline-guard/

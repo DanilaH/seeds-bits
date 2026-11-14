@@ -4,7 +4,7 @@ Production APK certificate identity is verified separately on the delivered byte
 """
 import json,os,pathlib,re,subprocess,sys,time,xml.etree.ElementTree as ET
 out=pathlib.Path('test-results/emulator-upgrade');out.mkdir(parents=True,exist_ok=True)
-pkg='com.seedsbits.game';phase=sys.argv[1]
+pkg=os.environ.get('SEEDS_ANDROID_PACKAGE','com.seedsbits.game');phase=sys.argv[1]
 def adb(*args):return subprocess.run(['adb',*args],check=True,capture_output=True,text=True).stdout
 def ui():
  for attempt in range(5):

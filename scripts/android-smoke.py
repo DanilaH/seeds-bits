@@ -1,7 +1,7 @@
 """Exercise a non-debuggable release payload through Android accessibility, offline."""
-import json,pathlib,re,subprocess,time,xml.etree.ElementTree as ET
+import json,os,pathlib,re,subprocess,time,xml.etree.ElementTree as ET
 out=pathlib.Path('test-results/emulator');out.mkdir(parents=True,exist_ok=True)
-package='com.seedsbits.game'
+package=os.environ.get('SEEDS_ANDROID_PACKAGE','com.seedsbits.game')
 def adb(*args,check=True):
  return subprocess.run(['adb',*args],check=check,capture_output=True,text=True).stdout
 
@@ -112,10 +112,26 @@ try:
   tap(hint_button(remaining));hint_button(remaining)
   a,b=pair(cells());tap(a);tap(b);remaining_cells-=2;wait_cells(remaining_cells)
  checks['freeHintAccountingAndStickyRepeat']=True
- tap(hint_button(0));tap(wait_label(['Смотреть рекламу · +3 подсказки']))
- wait_label(['Реклама сейчас недоступна. Попробуйте позже.']);hint_button(0)
+ tap(hint_button(0))
+ watch=wait_label(['Смотреть рекламу · +3 подсказки','Смотреть видео'])
+ if watch.get('enabled')=='false':
+  wait_label(['Сейчас видео недоступно','Видео загружается…'])
+  tap(wait_label(['Не сейчас']))
+ else:
+  tap(watch);wait_label(['Реклама сейчас недоступна. Попробуйте позже.'])
+ hint_button(0)
  checks['offlineRewardedReturnsWithoutGrant']=True
  screenshot('portrait.png')
+ recording=subprocess.Popen(['adb','shell','screenrecord','--time-limit','20','/sdcard/seeds-lifecycle.mp4'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+ try:
+  time.sleep(.5)
+  adb('shell','input','keyevent','4');wait_label(['Продолжить','Продолжить игру']);checks['nativeBackOpensMenu']=True
+  tap(wait_label(['Продолжить','Продолжить игру']));wait_cells(remaining_cells)
+  adb('shell','input','keyevent','3');time.sleep(.6)
+  adb('shell','am','start','-n',package+'/.MainActivity');wait_cells(remaining_cells);checks['homeAndResumePreserveBoard']=True
+ finally:
+  adb('shell','pkill','-INT','screenrecord',check=False);recording.wait(timeout=25)
+  adb('pull','/sdcard/seeds-lifecycle.mp4',str(out/'lifecycle.mp4'),check=False)
  adb('shell','am','force-stop',package);launch();tap(wait_label(['Продолжить','Продолжить игру','Играть']));wait_cells(remaining_cells);checks['saveSurvivesProcessStop']=True
  hint_button(0);checks['hintBalanceSurvivesProcessStop']=True
  adb('shell','settings','put','system','accelerometer_rotation','0')
