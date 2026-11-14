@@ -138,9 +138,16 @@ try:
  adb('shell','settings','put','system','user_rotation','1');time.sleep(2);wait_cells(remaining_cells);screenshot('landscape.png');checks['rotationPreservesBoard']=True
  adb('shell','settings','put','system','user_rotation','0');time.sleep(2)
  font_checks=[]
+ def resume_after_configuration():
+  # Android may recreate the Activity after a system font change. A fresh
+  # entry intentionally starts at Home; resume the saved game before measuring
+  # gameplay controls. Never scroll a critical action into view here.
+  root=snapshot()
+  if any(label(n) in ['Продолжить','Продолжить игру'] for n in root.iter('node')):
+   tap(wait_label(['Продолжить','Продолжить игру']))
  adb('shell','settings','put','system','font_scale','1.5');time.sleep(2)
  for rotation,name in [('0','font150-portrait'),('1','font150-landscape')]:
-  adb('shell','settings','put','system','user_rotation',rotation);time.sleep(2);screenshot(name+'.png')
+  adb('shell','settings','put','system','user_rotation',rotation);time.sleep(2);resume_after_configuration();screenshot(name+'.png')
   from PIL import Image
   with Image.open(out/(name+'.png')) as image:width,height=image.size
   targets=[wait_label(['Открыть меню']),wait_label(['Отмена']),hint_button(0)]
@@ -153,7 +160,7 @@ try:
  (out/'font150.json').write_text(json.dumps(font_checks,ensure_ascii=False,indent=2))
  checks['font150ControlsVisibleInPortraitAndLandscape']=True
  adb('shell','settings','put','system','font_scale','1.0')
- adb('shell','settings','put','system','user_rotation','0');time.sleep(2)
+ adb('shell','settings','put','system','user_rotation','0');time.sleep(2);resume_after_configuration()
  tap(wait_label(['Открыть меню']));tap(reveal_label(['Настройки']));tap(reveal_label(['Конфиденциальность']));wait_label(['О данных']);wait_label(['Назад','← Назад']);checks['privacyAccessibleOffline']=True
  screenshot('privacy.png')
 finally:

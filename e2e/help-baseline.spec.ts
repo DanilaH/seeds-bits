@@ -78,6 +78,11 @@ test("Paused build hides owned assistants and plan guidance, preserves rights an
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("6");
   await plain(page);
+  // Switching the QA URL destroys this page. The rendered Undo precedes its
+  // asynchronous durable write; wait for that write before recreating the app.
+  await expect.poll(async () =>
+    (await state(page)).sessions.classic.current.board.filter(Boolean).length,
+  ).toBe(6);
   await page.goto("/?qa=all");
   await page.locator("#resume").click();
   await page.locator("#magnet").click();
