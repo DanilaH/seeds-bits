@@ -1,0 +1,41 @@
+name: UI motion evidence
+on:
+  push:
+    branches: [feat/monetization-assists-20261113]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SEEDS_RECORD_HELP: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium ffmpeg
+      - name: Capture exact original baseline
+        run: |
+          git worktree add --detach /tmp/seeds-ui-before a6aa3f4c80a2642ff8c4696a94f7677a5810872e
+          ln -s "$GITHUB_WORKSPACE/node_modules" /tmp/seeds-ui-before/node_modules
+          cp e2e/ui-motion.spec.ts /tmp/seeds-ui-before/e2e/
+          cd /tmp/seeds-ui-before
+          SEEDS_UI_PHASE=before npx playwright test e2e/ui-motion.spec.ts --workers 2
+      - name: Capture and verify candidate
+        if: always()
+        run: npx playwright test e2e/ui-motion.spec.ts --workers 2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-motion-before-after
+          path: |
+            /tmp/seeds-ui-before/test-results/
+            test-results/ui-motion/
+            test-results/main/

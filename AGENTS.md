@@ -1,6 +1,6 @@
 # Agent contract — Семечки
 
-Read [project decisions](docs/PROJECT_DECISIONS.md), [current status](docs/STATUS.md) and [README](README.md). Establish the actual branch/HEAD and requested scope before editing. The working 1.1.2 baseline is `release/rustore-1.1.2`; older `main` and stacked QA branches are not interchangeable. Historical publication claims are not evidence of a store release.
+Read [project decisions](docs/PROJECT_DECISIONS.md), [current status](docs/STATUS.md) and [README](README.md). Establish the actual branch/HEAD and requested scope before editing. The current working baseline is `feat/monetization-assists-20261113` (verified `a6aa3f4c80a2642ff8c4696a94f7677a5810872e` before the 14 November UI pass); `main` is older in gameplay. Preserve subsequent work. All six assistance experiments stay off; ordinary controls are Undo, Hint and Add. Historical publication claims are not evidence of a store release.
 
 This is an offline-first TypeScript/Vite/DOM game with Capacitor, targeting Android/RuStore. The separate Yandex Games web build is a prototype; its web SDK is not Yandex Mobile Ads Android. Do not install a Phaser/bootstrap runtime into this existing game.
 
@@ -10,7 +10,9 @@ Preserve accepted game rules, feel, saved progression, reward authority and offl
 
 For substantial tasks open [TASK_ROUTER.md](docs/kit-guidance/TASK_ROUTER.md); select only 1–2 applicable routes (NONE for a small fix). For a reference game, screenshot, video, GIF or UX/feel comparison, follow [REFERENCE_PROTOCOL.md](docs/kit-guidance/REFERENCE_PROTOCOL.md). Separate what was inspected, inferred and inaccessible.
 
-Guidance snapshot: 1f286e6e98cafee6679a1a0a13519c7bcded97a5.
+Before UI changes, select the matching UI route, inspect existing components and the project UI profile, and verify changed states with comparable frames/transitions. Preserve the accepted style, disabled products, input/index-remapping guards and durable reward authority.
+
+Guidance snapshot: aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0.
 
 The runtime is separately pinned: only `src/vendor/mini-games-kit/value-transfer.ts`, copied from `a9325265e87583a4872cf6a158e1e881a0d7508e`; see its [provenance](src/vendor/mini-games-kit/README.md). Inspect API availability at that runtime pin before importing. Newer guidance does not install newer exports or upgrade dependencies.
 

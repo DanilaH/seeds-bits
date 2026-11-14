@@ -15,7 +15,7 @@
 ## 1. Cheap discovery: проверить до нового компонента
 
 При любом существенном инфраструктурном изменении:
-1. Посмотреть [Public API](https://github.com/DanilaH/mini-games-kit/blob/1f286e6e98cafee6679a1a0a13519c7bcded97a5/docs/API.md), доступные docs выбранных subpaths. Не делать три отдельных helper-а для уже имеющегося layout/snapshot/receipt/activity/feel.
+1. Посмотреть [Public API](https://github.com/DanilaH/mini-games-kit/blob/aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0/docs/API.md), доступные docs выбранных subpaths. Не делать три отдельных helper-а для уже имеющегося layout/snapshot/receipt/activity/feel.
 2. Сравнить **действующий контракт** и **локальную задачу**, а не похожие названия функций.
 3. Если kit уже имеет механизм, проверить pinned dependency/peer/version и реальную совместимость; consumer может использовать старый закреплённый commit — не переписывать dependency незаметно.
 4. Если кит отсутствует offline, не писать «kit ничего такого не содержит». Пометить discovery UNKNOWN и указать, какой доступ нужен, либо работать с локальным уже закреплённым пакетом.
@@ -36,7 +36,7 @@
 
 **Research documentation/protocol:** реальная повторяемая ошибка агента может оправдать изменение Task Router уже после одного случая — это не публичный runtime API.
 
-В самом kit для нового экспорта обязательно: [Contributing checklist](https://github.com/DanilaH/mini-games-kit/blob/1f286e6e98cafee6679a1a0a13519c7bcded97a5/CONTRIBUTING.md), [Public API](https://github.com/DanilaH/mini-games-kit/blob/1f286e6e98cafee6679a1a0a13519c7bcded97a5/docs/API.md), focused docs в docs/, tests, provenance/source SHA, semantic differences, migration/compatibility. Стили, rewards, balance, content, host-specific SDK constraints принадлежат consumer, если нет общего доказанного механизма.
+В самом kit для нового экспорта обязательно: [Contributing checklist](https://github.com/DanilaH/mini-games-kit/blob/aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0/CONTRIBUTING.md), [Public API](https://github.com/DanilaH/mini-games-kit/blob/aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0/docs/API.md), focused docs в docs/, tests, provenance/source SHA, semantic differences, migration/compatibility. Стили, rewards, balance, content, host-specific SDK constraints принадлежат consumer, если нет общего доказанного механизма.
 
 **Никаких побочных массовых изменений всех игр** при обновлении kit: в каждом consumer закреплён собственный SHA. Upgrade требует отдельного намеренного PR/проверки, иначе reproducibility нарушится.
 
@@ -61,7 +61,7 @@
 ## 5. Независимое опровержение перед extraction
 
 - Совпадает ли **семантическая** задача или только имя (например, два разных Help UX)?
-- Достаточна ли существующая [API](https://github.com/DanilaH/mini-games-kit/blob/1f286e6e98cafee6679a1a0a13519c7bcded97a5/docs/API.md) уже сейчас и не стал ли новый wrapper бессмысленным?
+- Достаточна ли существующая [API](https://github.com/DanilaH/mini-games-kit/blob/aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0/docs/API.md) уже сейчас и не стал ли новый wrapper бессмысленным?
 - Добавит ли общая abstraction больше maintenance, чем две короткие локальные реализации?
 - Можно ли импортировать без дополнительных framework/native dependencies и не подтягивает ли новый экспорт project policy?
 - Есть ли независимый test повторяемости, очищения listeners, error/retry, save migration и performance при частом вызове?

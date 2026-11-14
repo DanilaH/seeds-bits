@@ -23,11 +23,11 @@ Recorded 13 November 2026. This is the working project baseline, not proof of pu
 
 ## Separate kit revisions
 
-Guidance snapshot SHA: `1f286e6e98cafee6679a1a0a13519c7bcded97a5` (reviewed `mini-games-kit/main`).
+Guidance snapshot SHA: `aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0` (exact checkout, reviewed 14 November 2026; previously `1f286e6e98cafee6679a1a0a13519c7bcded97a5`).
 
-The four local [kit guides](kit-guidance/TASK_ROUTER.md) were generated using `installKitGuidance` from that exact revision. All external kit links in them use the same SHA. They replace the obsolete `e2382670fbd5c2aa76462fea688c60de2b067392` guidance from the separate historical `chore/adopt-kit-agent-guidance-2026-11-12` branch; that branch was not merged wholesale.
+The four local [kit guides](kit-guidance/TASK_ROUTER.md) were reviewed against a temporary guidance-only generation from that exact checkout and copied after diff review. Existing project instructions were preserved; guidance:adopt was not rerun. All external kit links in them use the same SHA. They replace the obsolete `e2382670fbd5c2aa76462fea688c60de2b067392` guidance from the separate historical `chore/adopt-kit-agent-guidance-2026-11-12` branch; that branch was not merged wholesale.
 
-Runtime source pin: `a9325265e87583a4872cf6a158e1e881a0d7508e`. The only vendored kit module is [value-transfer.ts](../src/vendor/mini-games-kit/value-transfer.ts), with [source record](../src/vendor/mini-games-kit/README.md). Its SHA-256 is `601cb5c0cae59b0f02d9f065b940faed5743c4477498dd48bf167f647456fed6`; it also matches the same module at the adopted guidance revision. There is no direct npm kit dependency. This documentation adoption does not change the runtime pin, lockfile or native SDKs.
+Runtime source pin: `a9325265e87583a4872cf6a158e1e881a0d7508e`. The only vendored kit module is [value-transfer.ts](../src/vendor/mini-games-kit/value-transfer.ts), with [source record](../src/vendor/mini-games-kit/README.md). Its SHA-256 is `601cb5c0cae59b0f02d9f065b940faed5743c4477498dd48bf167f647456fed6`; No runtime replacement is included in this UI guidance update. There is no direct npm kit dependency. This documentation adoption does not change the runtime pin, lockfile or native SDKs.
 
 Optional commercial research SHA: `6bff183070f6feecad3f561d268145a8500fbb1b`, [draft PR #30](https://github.com/DanilaH/mini-games-kit/pull/30), still open/draft when checked on 13 November. It is routed separately through [COMMERCIAL_RESEARCH.md](COMMERCIAL_RESEARCH.md), without mixing draft links into the four generated stable guides. Accepting its methodology does not mean its hypotheses have been implemented or measured in this game.
 
@@ -48,3 +48,13 @@ The current native code already reports impression revenue through [SeedsAdReven
 Yandex Ads SDK synchronization and AppMetrica revenue-source selection are dashboard configuration. Before changing them, check the actual app/account and existing manual reporting to avoid counting the same impression twice. No dashboard settings were changed or verified by this adoption.
 
 Technical checks, offline emulators, recorded fixtures and SDK doubles do not prove human feel, commercial uplift, live fill, actual payout or store status. Existing signed APK remains the delivered artifact; no new APK is needed for these documentation-only changes.
+
+## UI profile — 14 November 2026
+
+- Ordinary baseline: field → three tools (Отмена / Подсказка / Добавить); jar and mode in the header; secondary navigation in the existing sheet. Six product flags stay false; progress, stock and entitlements remain authoritative.
+- Existing DOM/CSS/SVG tokens in style.css and ui-polish.css define the soft paper/grid style, light/dark roles, selected/hinted/error states, line icons and typography. No new theme or UI runtime.
+- Press changes the visual child/color, never the actual hit target; activation remains on click, and cancel/scroll clears contact. Cell nodes and separate digit slots persist.
+- Selection uses the current state and short color transitions; decorative effects must have an owner and release stale effects on new input/navigation/background. The short choose() busy gate protects erase/index remapping and remains.
+- Existing local timings: press 80–90 ms, color 120 ms, selection 120 ms, error 160 ms, row collapse 170 ms, result ≤500 ms. Reduced motion retains the static state and available actions. No count-up gates statistics or Continue.
+- Reward grant → durable save → acknowledgement → separately saved hint reveal remain distinct. No reward/economy/ad-cadence change. QA uses test ads and empty analytics keys.
+- Applied routes: UI Motion Recipes and Stable Progress UI, with UX & Art System as the component/style contract. Exact rules and observed acceptance are recorded in the UI pass report; browser evidence is not phone feel or commercial evidence.
