@@ -147,10 +147,13 @@ try:
    tap(wait_label(['Продолжить','Продолжить игру']))
  adb('shell','settings','put','system','font_scale','1.5');time.sleep(2)
  for rotation,name in [('0','font150-portrait'),('1','font150-landscape')]:
-  adb('shell','settings','put','system','user_rotation',rotation);time.sleep(2);resume_after_configuration();screenshot(name+'.png')
+  adb('shell','settings','put','system','user_rotation',rotation);time.sleep(2);resume_after_configuration()
+  targets=[wait_label(['Открыть меню']),wait_label(['Отмена']),hint_button(0)]
+  # Capture the same settled gameplay state whose controls are measured below,
+  # after asynchronous Home → game continuation has actually completed.
+  screenshot(name+'.png')
   from PIL import Image
   with Image.open(out/(name+'.png')) as image:width,height=image.size
-  targets=[wait_label(['Открыть меню']),wait_label(['Отмена']),hint_button(0)]
   bounds=[]
   for node in targets:
    l,t,r,b=map(int,re.findall(r'\d+',node.get('bounds','')))

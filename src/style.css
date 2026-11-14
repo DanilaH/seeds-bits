@@ -1876,4 +1876,4 @@ header .jar-glass {
   );
 }
 
-#qa-profile {position:fixed;top:0;left:0;right:0;text-align:center;background:#633e15;color:#fff7e3;font:10px/15px sans-serif;z-index:5000;pointer-events:none}
+#qa-profile {display:block;margin-top:12px;padding:4px 6px;text-align:center;background:#633e15;color:#fff7e3;font:11px/1.4 sans-serif;border-radius:6px}

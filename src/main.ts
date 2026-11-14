@@ -2859,7 +2859,7 @@ async function boot() {
   if (!beforeAssignments.has(assignment.experiment) && adsBridge) enqueueAnalytics(metadata(progress), "experiment_assignment", {...assignment});
   if (qaProfile) {
     const label = document.createElement("span"); label.id = "qa-profile";
-    label.textContent = `QA · ${qaProfile==="baseline"?"обычная игра":qaProfile==="all"?"все фичи":qaProfile} · тестовая реклама`; document.body.append(label);
+    label.textContent = `QA · ${qaProfile==="baseline"?"обычная игра":qaProfile==="all"?"все фичи":qaProfile} · тестовая реклама`; $("menu-content").append(label);
   }
   await save();
   await adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}).catch(() => {});

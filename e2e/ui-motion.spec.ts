@@ -84,6 +84,20 @@ test('repeat rejection starts from the currently visible color',async({page})=>{
   if(!snapshot)expect(samples.after).toBe(samples.before);
 });
 
+test('QA identity stays in menu flow and cannot cover the gameplay header',async({page})=>{
+  await install(page,'ready','baseline');
+  await page.setViewportSize({width:568,height:320});
+  const data=await page.locator('#qa-profile').evaluate(e=>({
+    parent:e.parentElement?.id,position:getComputedStyle(e).position,
+    visible:e.getBoundingClientRect().height>0,
+  }));
+  await evidence(page,'qa-marker-gameplay',data);
+  if(!snapshot){expect(data.parent).toBe('menu-content');expect(data.visible).toBe(false);}
+  await rawClick(page,'#menu');
+  if(!snapshot)await expect(page.locator('#qa-profile')).toHaveCSS('position','static');
+  await page.keyboard.press('Escape');await expect(page.locator('#dialog')).not.toBeVisible();
+});
+
 test('rapid accepted pair keeps the removal/index-remapping gate and Undo',async({page})=>{
   await fixture(page,{board:[5,5,0,0,0,0,0,0,0,1,1,2]});
   await page.evaluate(()=>{
