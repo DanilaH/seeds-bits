@@ -122,7 +122,7 @@ for(const dark of [false,true]) for(const viewport of [{width:320,height:568},{w
   test(`stable counters and available controls ${dark?'dark':'light'} ${viewport.width}`,async({page})=>{
     await page.setViewportSize(viewport);
     const results=[];
-    for(const wallet of [9,10,99,100,999]){
+    for(const wallet of [9,10,99,100,999,1000,Number.MAX_SAFE_INTEGER]){
       await fixture(page,{wallet,dark,large:true});
       results.push(await page.evaluate(()=>{
         const ids=['undo','hint','add','menu','jar-name','jar-percent'];

@@ -33,6 +33,21 @@ def hint_count(expected):
 def tap(n):
  b=list(map(int,re.findall(r'\d+',n.get('bounds',''))));assert len(b)==4
  adb('shell','input','tap',str((b[0]+b[2])//2),str((b[1]+b[3])//2));time.sleep(.3)
+def reveal_secondary(part):
+ # Settings is secondary, inside the scrollable home sheet. Virtual WebView
+ # nodes may expose inverted bounds for offscreen rows; never tap those bounds.
+ # Keyboard focus reveals the real control, then a fresh snapshot supplies a
+ # touch target. Critical gameplay/continue actions do not use this helper.
+ for _ in range(32):
+  root=ui();web=next(n for n in root.iter('node') if n.get('class')=='android.webkit.WebView')
+  left,top,right,bottom=map(int,re.findall(r'\d+',web.get('bounds','')))
+  for n in root.iter('node'):
+   if label(n)!=part or n.get('focused')!='true':continue
+   l,t,r,b=map(int,re.findall(r'\d+',n.get('bounds','')))
+   if l>=left and t>=top and r<=right and b<=bottom and r>l and b>t:
+    time.sleep(.3);return button(part,True)
+  adb('shell','input','keyevent','61');time.sleep(.1)
+ raise AssertionError('Secondary control not revealed: '+part)
 def cells():
  found={}
  for n in ui().iter('node'):
@@ -72,7 +87,7 @@ try:
   tap(hint_count(3));hint_count(2)
   book();initial=len(cells());pair(cells());count(initial-2)
   classic();count(26)
-  tap(button('Открыть меню',True));tap(button('Настройки',True));tap(button('Тёмная тема',True));tap(button('Закрыть меню',True));count(26)
+  tap(button('Открыть меню',True));tap(reveal_secondary('Настройки'));tap(button('Тёмная тема',True));tap(button('Закрыть меню',True));count(26)
   screenshot('before.png')
   (out/'baseline.json').write_text(json.dumps({'classicDigits':26,'classicHintBudget':2,'bookDigits':initial-2,'baselineSource':os.environ.get('SEEDS_UPGRADE_BASELINE_SOURCE','86d950b970a69e5dec3ebc269075143a1c28f94a'),'baselineVersion':os.environ.get('SEEDS_UPGRADE_BASELINE_VERSION','1.0.0 (1000010)'),'signature':'same temporary CI-only key for both APKs'}))
   adb('shell','am','force-stop',pkg)
