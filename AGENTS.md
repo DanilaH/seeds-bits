@@ -14,7 +14,7 @@ Before UI changes, select the matching UI route, inspect existing components and
 
 Guidance snapshot: aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0.
 
-The runtime is separately pinned: only `src/vendor/mini-games-kit/value-transfer.ts`, copied from `a9325265e87583a4872cf6a158e1e881a0d7508e`; see its [provenance](src/vendor/mini-games-kit/README.md). Inspect API availability at that runtime pin before importing. Newer guidance does not install newer exports or upgrade dependencies.
+Runtime modules are individually pinned: `value-transfer.ts` remains at `a9325265e87583a4872cf6a158e1e881a0d7508e`; the owner-approved `owned-dom-motion.ts` extraction is at `0d5638e8d2146d3d8906e4936ccfa6ec1eeab7d7`. See exact source paths/hashes and API links in [provenance](src/vendor/mini-games-kit/README.md). Inspect API availability at the relevant module pin before importing. Newer guidance does not install newer exports or upgrade dependencies.
 
 For monetization, rewarded help, commercial teardowns, experiments or revenue attribution, also read [commercial research guidance](docs/COMMERCIAL_RESEARCH.md). Its separate research SHA is an explicitly labelled draft, not the stable guidance/runtime pin or an approved gameplay change. Check existing native Ad Revenue reporting before enabling another revenue source.
 

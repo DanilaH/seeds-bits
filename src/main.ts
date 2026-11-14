@@ -60,6 +60,7 @@ import {
   createValueTransferPlan,
   valueAfterVisualArrival,
 } from "./vendor/mini-games-kit/value-transfer";
+import { OwnedDomMotion } from "./vendor/mini-games-kit/owned-dom-motion";
 import { BoardView } from "./board-view";
 import { requestAdvice } from "./advice-client";
 import { trophyMark, celebrateTrophy } from "./trophies";
@@ -952,56 +953,36 @@ function drawPath(path: Connection | null) {
   updateJump();
 }
 const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
-type MotionOwner = { el: Element; properties: Set<string>; selection: string };
-const ownedMotions = new Map<Animation, MotionOwner>();
+const ownedDomMotion = new OwnedDomMotion();
+const cellColorMotions = new Map<Element, {animation: Animation; selection: string}>();
 const cellSelection = (el: Element) =>
   `${el.classList.contains("selected")}/${el.classList.contains("hinted")}`;
 function clearMotions() {
-  for (const animation of ownedMotions.keys()) animation.cancel();
-  ownedMotions.clear();
+  ownedDomMotion.cancelAll();
+  cellColorMotions.clear();
 }
 function motion(el: Element | null, frames: Keyframe[], duration = 160) {
-  if (!el) return;
-  const properties = new Set(frames.flatMap(frame =>
-    Object.keys(frame).filter(key => !["offset", "easing", "composite"].includes(key)),
-  ));
-  const previous = [...ownedMotions].filter(([, owner]) =>
-    owner.el === el && [...properties].some(key => owner.properties.has(key)),
-  );
-  // Sample before cancelling the previous owner. Repeated effects continue from
-  // the visible value; independent translate/opacity channels may coexist.
-  const first = {...frames[0]};
-  if (previous.length || properties.has("background")) {
-    const visible = getComputedStyle(el);
-    for (const key of Object.keys(first)) {
-      if (properties.has(key))
-        (first as Record<string, unknown>)[key] =
-          visible.getPropertyValue(key.replace(/[A-Z]/g, c => "-" + c.toLowerCase()));
-    }
+  const color = frames.some(frame => "background" in frame || "backgroundColor" in frame);
+  const animation = ownedDomMotion.animate(el, frames, {duration, easing: "ease-out"}, {
+    enabled: !reduced() && !paused && !document.hidden,
+    fromCurrent: color ? "always" : "replace",
+  });
+  if (color && el?.matches(".cell")) {
+    if (animation) cellColorMotions.set(el, {animation, selection: cellSelection(el)});
+    else cellColorMotions.delete(el);
   }
-  for (const [animation] of previous) {
-    ownedMotions.delete(animation);
-    animation.cancel();
-  }
-  if (reduced() || paused || document.hidden) return;
-  const animation = el.animate([first, ...frames.slice(1)], { duration, easing: "ease-out" });
-  ownedMotions.set(animation, {el, properties, selection: cellSelection(el)});
-  const release = () => ownedMotions.delete(animation);
-  animation.addEventListener("finish", release, {once:true});
-  animation.addEventListener("cancel", release, {once:true});
 }
 function reconcileCellMotions() {
-  for (const [animation, owner] of [...ownedMotions]) {
-    if (!owner.el.matches(".cell") || !owner.properties.has("background")) continue;
-    if (animation.playState === "idle" || !owner.el.isConnected) {
-      ownedMotions.delete(animation);
+  for (const [el, owner] of cellColorMotions) {
+    if (["idle", "finished"].includes(owner.animation.playState) || !el.isConnected) {
+      cellColorMotions.delete(el);
       continue;
     }
-    if (owner.selection === cellSelection(owner.el)) continue;
-    const visible = getComputedStyle(owner.el).backgroundColor;
-    const target = owner.el.classList.contains("selected") ? "var(--selected)"
-      : owner.el.classList.contains("hinted") ? "var(--highlight)" : "transparent";
-    motion(owner.el, [{background:visible}, {background:target}], 100);
+    if (owner.selection === cellSelection(el)) continue;
+    const visible = getComputedStyle(el).backgroundColor;
+    const target = el.classList.contains("selected") ? "var(--selected)"
+      : el.classList.contains("hinted") ? "var(--highlight)" : "transparent";
+    motion(el, [{background:visible}, {background:target}], 100);
   }
 }
 function cell(i: number) {

@@ -26,13 +26,25 @@ async function seed(
         },
       });
       const animate = Element.prototype.animate;
+      const play = Animation.prototype.play;
+      const recorded = new WeakSet<Animation>();
+      const record = (animation: Animation) => {
+        if (recorded.has(animation)) return;
+        const effect = animation.effect as KeyframeEffect | null;
+        const target = effect?.target as HTMLElement | null;
+        if (!target) return;
+        recorded.add(animation);
+        w.effects.push({target: target.id || target.className,
+          duration: effect!.getTiming().duration, index: target.dataset?.index});
+      };
       Element.prototype.animate = function (frames: any, opts: any) {
-        w.effects.push({
-          target: this.id || this.className,
-          duration: typeof opts === "number" ? opts : opts?.duration,
-          index: (this as HTMLElement).dataset?.index,
-        });
-        return animate.call(this, frames, opts);
+        const animation = animate.call(this, frames, opts);
+        record(animation);
+        return animation;
+      };
+      Animation.prototype.play = function () {
+        play.call(this);
+        record(this);
       };
       if (!sessionStorage.feel) {
         sessionStorage.feel = "1";

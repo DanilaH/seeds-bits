@@ -27,7 +27,7 @@ Guidance snapshot SHA: `aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0` (exact checkou
 
 The four local [kit guides](kit-guidance/TASK_ROUTER.md) were reviewed against a temporary guidance-only generation from that exact checkout and copied after diff review. Existing project instructions were preserved; guidance:adopt was not rerun. All external kit links in them use the same SHA. They replace the obsolete `e2382670fbd5c2aa76462fea688c60de2b067392` guidance from the separate historical `chore/adopt-kit-agent-guidance-2026-11-12` branch; that branch was not merged wholesale.
 
-Runtime source pin: `a9325265e87583a4872cf6a158e1e881a0d7508e`. The only vendored kit module is [value-transfer.ts](../src/vendor/mini-games-kit/value-transfer.ts), with [source record](../src/vendor/mini-games-kit/README.md). Its SHA-256 is `601cb5c0cae59b0f02d9f065b940faed5743c4477498dd48bf167f647456fed6`; No runtime replacement is included in this UI guidance update. There is no direct npm kit dependency. This documentation adoption does not change the runtime pin, lockfile or native SDKs.
+Runtime source pin: `a9325265e87583a4872cf6a158e1e881a0d7508e`. The original vendored kit module is [value-transfer.ts](../src/vendor/mini-games-kit/value-transfer.ts), with [source record](../src/vendor/mini-games-kit/README.md). Its SHA-256 is `601cb5c0cae59b0f02d9f065b940faed5743c4477498dd48bf167f647456fed6`; No runtime replacement is included in this UI guidance update. There is no direct npm kit dependency. This documentation adoption does not change the runtime pin, lockfile or native SDKs.
 
 Optional commercial research SHA: `6bff183070f6feecad3f561d268145a8500fbb1b`, [draft PR #30](https://github.com/DanilaH/mini-games-kit/pull/30), still open/draft when checked on 13 November. It is routed separately through [COMMERCIAL_RESEARCH.md](COMMERCIAL_RESEARCH.md), without mixing draft links into the four generated stable guides. Accepting its methodology does not mean its hypotheses have been implemented or measured in this game.
 
@@ -60,3 +60,11 @@ Technical checks, offline emulators, recorded fixtures and SDK doubles do not pr
 - Applied routes: UI Motion Recipes and Stable Progress UI, with UX & Art System as the component/style contract. Exact rules and observed acceptance are recorded in the UI pass report; browser evidence is not phone feel or commercial evidence.
 
 UI pass details and delivery limit: [14 November acceptance](ui-motion-2026-11-14.md). The QA private key used by 11815 is unavailable in the current workspace and found archives; an unsigned payload is not an installable update. Do not silently substitute another certificate or ask the owner to erase app data.
+
+## Owned DOM motion extraction — 14 November 2026
+
+Owner explicitly approved transfer to kit after reviewing the single-consumer candidate. Shared source is [owned-dom-motion.ts](../src/vendor/mini-games-kit/owned-dom-motion.ts), pinned unchanged at `0d5638e8d2146d3d8906e4936ccfa6ec1eeab7d7` (SHA256 `b6802555790032dec22416c88b3453b0a6887e225be8a1819b805f6f6a18e234`). The existing value-transfer and guidance pins stay unchanged.
+
+main.ts delegates generic property ownership, visible-value handoff and cancellation to OwnedDomMotion. A small Seeds-only map retains selected/hinted reconciliation. Host policy owns duration/easing, reduced motion, pause/visibility, final CSS classes, input guards and durable state. Shared completion callbacks are unused here; they never authorize rewards.
+
+The shared module deliberately fixes shorthand/longhand overlap with var() through CSSOM property expansion, validates replace-only compositing and explicit keyframes, and uses the target document's constructors. Generic browser and actual Seeds input/lifecycle acceptance are required before claiming EXTRACTED. No product flag, save schema, ad cadence or economy changes.

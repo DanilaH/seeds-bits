@@ -1,3 +1,7 @@
+# Latest — shared DOM motion extraction, 14 November 2026
+
+По прямому поручению владельца общий механизм вынесен в mini-games-kit [PR #33](https://github.com/DanilaH/mini-games-kit/pull/33). Seeds подключает неизменённый owned-dom-motion.ts с точным runtime pin `0d5638e8d2146d3d8906e4936ccfa6ec1eeab7d7`; guidance и value-transfer остаются на прежних ревизиях. В main.ts оставлены только игровые состояния выделения и UI policy. Все шесть флагов по-прежнему выключены; правила, сохранения/права, экономика, реклама и choose() busy не меняются. Новая интеграция проверяется теми же реальными input/lifecycle сценариями, отдельно от исходной UI-приёмки ниже.
+
 # Status — 14 November 2026
 
 UI/motion guidance pinned to `aab9dc8e06bf1b487da9b3a5e67444975e7c8ac0`; strict doctor clean. Source `dda69c6`, same current feature branch and ordinary baseline, all six flags off. Fixed owned/interruptible cell color effects and presentation cleanup, simplified duplicate hint-offer text. Existing input remapping guard, style, durable reward/save order, stock/rights and runtime/dependencies retained. [Acceptance and exact limits](ui-motion-2026-11-14.md).

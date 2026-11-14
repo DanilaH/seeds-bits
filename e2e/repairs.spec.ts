@@ -248,15 +248,22 @@ test("fast selection retains the moving cell instead of replacing it", async ({
   await start(page);
   await page.evaluate(() => {
     const original = Element.prototype.animate;
+    const play = Animation.prototype.play;
     (window as any).moving = [];
-    Element.prototype.animate = function (...args) {
-      const a = original.apply(this, args);
-      if (a.effect?.getTiming().duration === 170) {
+    const recorded = new WeakSet<Animation>();
+    const observe = (a: Animation) => {
+      if (!recorded.has(a) && a.effect?.getTiming().duration === 170) {
+        recorded.add(a);
         a.pause();
         (window as any).moving.push(a);
       }
+    };
+    Element.prototype.animate = function (...args) {
+      const a = original.apply(this, args);
+      observe(a);
       return a;
     };
+    Animation.prototype.play = function () { play.call(this); observe(this); };
   });
   await pair(page, 0, 1);
   await page.evaluate(() =>
@@ -264,6 +271,7 @@ test("fast selection retains the moving cell instead of replacing it", async ({
   );
   expect(
     await page.evaluate(() =>
+      (window as any).moving.length > 0 &&
       (window as any).moving.every((a: any) => a.effect.target.isConnected),
     ),
   ).toBe(true);
