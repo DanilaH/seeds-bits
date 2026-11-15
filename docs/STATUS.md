@@ -1,3 +1,11 @@
+# Latest — prepared store APK 1102103, 15 November 2026
+
+Подготовлен и подписан прежним production-ключом **1.1.2 / 1102103**, пакет com.seedsbits.game, обычный public baseline, все шесть экспериментов false, боевая реклама и аналитика release. Release source `24c4be113b387859b89ceabc7ca4bed2830026db`, ветка release/rustore-1.1.2; игровые/native-файлы и зависимости совпадают с проверенным `322644f`, вся работа через `7fee610` сохранена. Предыдущий магазинный 1102101 остаётся историческим артефактом.
+
+107 unit, 43 + 24 native doubles, четыре проверки настоящего production bundle, R8 build, Android 35 upgrade 1102101 → 1102103 и все 14 fresh/lifecycle/font150 checks прошли. Подписи v2/v3, production-сертификат, 16KB alignment, 664 неизменённых ZIP entries, 11 web assets и мосты проверены. SHA256: `29851bb5e4900524bf60ee3cec6a4445ab34c6d4f74025a41397a45b5955cf2f`. [Файл и точная приёмка](releases/1.1.2-1102103/README.md).
+
+Production-ключ восстановлен из отдельного приватного backup; ограничение старого QA-ключа касается только assistqa. Физический телефон, live SDK/доход и доставка событий в кабинет ещё не проверены: [короткий проход](releases/1.1.2-1102103/PHONE_CHECK.md). В RuStore не отправляли. KIT IMPACT: REUSE; новых изменений в kit нет.
+
 # Latest — shared DOM motion extraction, 14 November 2026
 
 По прямому поручению владельца общий механизм вынесен в mini-games-kit [PR #33](https://github.com/DanilaH/mini-games-kit/pull/33). Seeds подключает неизменённый owned-dom-motion.ts с точным runtime pin `0d5638e8d2146d3d8906e4936ccfa6ec1eeab7d7`; guidance и value-transfer остаются на прежних ревизиях. В main.ts оставлены только игровые состояния выделения и UI policy. Все шесть флагов по-прежнему выключены; правила, сохранения/права, экономика, реклама и choose() busy не меняются. Перенос принят: kit PR #33 объединён в main, 219 unit и 8 browser-контрактов прошли. Интеграция Seeds `322644f` прошла 107 + 2 unit, 298 + 15 browser, 68 targeted help/browser, 18 UI/motion-контрактов, Android build и offline Android 35 upgrade/fresh/lifecycle/font150. [Точная приёмка и границы](owned-dom-motion-2026-11-14.md). KIT IMPACT: EXTRACTED; это авторизованное исключение для одного реального потребителя, не доказательство внедрения в других играх.

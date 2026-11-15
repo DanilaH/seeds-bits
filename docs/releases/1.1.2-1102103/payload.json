@@ -1,0 +1,32 @@
+{
+  "source": "24c4be113b387859b89ceabc7ca4bed2830026db",
+  "runtimeMatchesAcceptedSource": "322644f075122a7a16ea04aaa2cd6e5178a800ae",
+  "workflowRun": 43691966244,
+  "version": "1.1.2",
+  "versionCode": 1102103,
+  "baselineVersionCode": 1102101,
+  "package": "com.seedsbits.game",
+  "signedSha256": "29851bb5e4900524bf60ee3cec6a4445ab34c6d4f74025a41397a45b5955cf2f",
+  "unsignedSha256": "d15b88da4481779882397c16abfffa393e51a591f2986a8c843a7a089f203ee5",
+  "bytes": 5538002,
+  "originalZipEntriesUnchanged": 664,
+  "sameProductionPackageAndCertificate": true,
+  "baselineSignatureV2V3Verified": true,
+  "alignment16kbCheck": true,
+  "analyticsChannel": "release",
+  "adsTestMode": false,
+  "clientConfigurationUnchangedFrom1102101": true,
+  "webAssetsMatchBuild": true,
+  "publicProfile": "",
+  "helpFlags": {
+    "visibility": false,
+    "magnet": false,
+    "plan": false,
+    "result": false,
+    "trials": false,
+    "shuffle": false
+  },
+  "physicalInstallationTested": false,
+  "liveSdkAndDashboardTested": false,
+  "storeSubmissionPerformed": false
+}

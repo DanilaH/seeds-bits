@@ -5,7 +5,7 @@
 
 Small, offline-first Number Match game. TypeScript + Vite + HTML/CSS/SVG. No React, game engine, remote fonts, backend or accounts.
 
-For project work, start with [AGENTS.md](AGENTS.md) and [current project decisions](docs/PROJECT_DECISIONS.md). The current working baseline is `feat/monetization-assists-20261113`: ordinary Undo / Hint / Add, with all six product experiments paused. The prepared store 1.1.2 baseline remains historical release evidence. [Task-routed kit guidance](docs/kit-guidance/TASK_ROUTER.md) and [commercial research](docs/COMMERCIAL_RESEARCH.md) have separately recorded exact revisions; documentation adoption does not upgrade the vendored runtime.
+For project work, start with [AGENTS.md](AGENTS.md) and [current project decisions](docs/PROJECT_DECISIONS.md). The current working baseline is `feat/monetization-assists-20261113`: ordinary Undo / Hint / Add, with all six product experiments paused. The latest prepared store APK is [1.1.2 / 1102103](docs/releases/1.1.2-1102103/README.md), source `24c4be1` on release/rustore-1.1.2, with the same accepted gameplay; phone/live verification and submission remain separate. [Task-routed kit guidance](docs/kit-guidance/TASK_ROUTER.md) and [commercial research](docs/COMMERCIAL_RESEARCH.md) have separately recorded exact revisions; documentation adoption does not upgrade the vendored runtime.
 
 ## Run
 

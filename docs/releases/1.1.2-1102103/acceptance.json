@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-15",
+  "releaseSource": "24c4be113b387859b89ceabc7ca4bed2830026db",
+  "branch": "release/rustore-1.1.2",
+  "preservedBase": "7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b",
+  "unchangedGameplaySource": "322644f075122a7a16ea04aaa2cd6e5178a800ae",
+  "workflowRun": 43691966244,
+  "releaseJob": {
+    "id": 132744324586,
+    "conclusion": "success"
+  },
+  "androidJob": {
+    "id": 132745416884,
+    "conclusion": "success"
+  },
+  "versionName": "1.1.2",
+  "versionCode": 1102103,
+  "package": "com.seedsbits.game",
+  "apkSha256": "29851bb5e4900524bf60ee3cec6a4445ab34c6d4f74025a41397a45b5955cf2f",
+  "certificateSha256": "ca2f9ae57a84bba5cc5b844aee65515a88bfde83fe3b5a85ae4d189b6cf8bfe1",
+  "unitTests": 107,
+  "nativeHarnessCases": 43,
+  "feedbackHarnessCases": 24,
+  "builtPublicBrowserContracts": 4,
+  "androidFreshLifecycleChecks": 14,
+  "androidUpgrade": {
+    "passed": true,
+    "fromVersionCode": 1102101,
+    "toVersionCode": 1102103,
+    "baselineUnsignedSha256": "eff2c5884543ce437285469c852e8c2ba2b72faa0983a8677f2232d17610b6cc",
+    "baselineSource": "ecc3c399a6062d59d71da83179c4ae09cb33ac9c",
+    "environment": "Offline Android 35, same temporary CI-only signing key for both payloads"
+  },
+  "deliveredSigning": "Original production private key; independently verified against the public certificate and actual delivered 1102101",
+  "helpFlags": {
+    "visibility": false,
+    "magnet": false,
+    "plan": false,
+    "result": false,
+    "trials": false,
+    "shuffle": false
+  },
+  "analyticsChannel": "release",
+  "adsMode": "live",
+  "evidenceArtifacts": {
+    "publicBaseline": 14152782906,
+    "android": 14153455040,
+    "build": 14152763319,
+    "r8": 14152892922,
+    "unsigned": 14152568942
+  },
+  "failedPreparationRun": {
+    "id": 43691726307,
+    "source": "00e36cda62462e68d332e97e5fd02527b922aa2a",
+    "reason": "New test attempted disabled Add while legal pairs existed; fixture corrected; game unchanged",
+    "apkDelivered": false
+  },
+  "physicalPhoneTested": false,
+  "liveFillRewardAndDashboardTested": false,
+  "realRevenueOrRetentionEvidence": false,
+  "storeSubmissionPerformed": false,
+  "kitImpact": "REUSE"
+}

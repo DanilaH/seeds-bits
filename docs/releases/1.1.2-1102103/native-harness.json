@@ -1,0 +1,220 @@
+{
+  "method": "unmodified production Java source compiled with deterministic SDK/Android doubles",
+  "results": [
+    {
+      "case": "N01_duplicate_reward_after_ack",
+      "passed": true,
+      "detail": "native receipts=1"
+    },
+    {
+      "case": "N02_delayed_sdk_banner",
+      "passed": true,
+      "detail": "banner requests after SDK ready=1"
+    },
+    {
+      "case": "N03_stale_banner_callback",
+      "passed": true,
+      "detail": "replacement destroyed=false"
+    },
+    {
+      "case": "N04_missing_preshow_callback",
+      "passed": true,
+      "detail": "deadline released call=true"
+    },
+    {
+      "case": "N05_no_immediate_retry",
+      "passed": true,
+      "detail": "requests=1"
+    },
+    {
+      "case": "N06_retry_after_interval",
+      "passed": true,
+      "detail": "requests=2"
+    },
+    {
+      "case": "N07_initial_grace",
+      "passed": true,
+      "detail": "shows=0"
+    },
+    {
+      "case": "N08_interval_eligible",
+      "passed": true,
+      "detail": "shows=1"
+    },
+    {
+      "case": "N09_interval_persisted",
+      "passed": true,
+      "detail": "shows=0"
+    },
+    {
+      "case": "N10_destroy_unblocks",
+      "passed": true,
+      "detail": "resolved=true"
+    },
+    {
+      "case": "N11_durable_save_failure",
+      "passed": true,
+      "detail": "volatileGame=false,durableGame=false,nativePending=true"
+    },
+    {
+      "case": "N12_reward_delays_interstitial",
+      "passed": true,
+      "detail": "shows=0"
+    },
+    {
+      "case": "N13_durable_both_keys",
+      "passed": true,
+      "detail": "both keys committed"
+    },
+    {
+      "case": "N14_ack_failure_reported",
+      "passed": true,
+      "detail": "ack rejected=true"
+    },
+    {
+      "case": "N15_stale_fullscreen_callback",
+      "passed": true,
+      "detail": "replacement open, receipts=1"
+    },
+    {
+      "case": "N16_sdk_ready_respects_hidden",
+      "passed": true,
+      "detail": "banners=0"
+    },
+    {
+      "case": "N17_sdk_height_before_request",
+      "passed": true,
+      "detail": "no request until 90px reserved"
+    },
+    {
+      "case": "N18_reserved_sdk_height_loads",
+      "passed": true,
+      "detail": "banner loaded into resized shelf"
+    },
+    {
+      "case": "N19_rotation_recalculates_height",
+      "passed": true,
+      "detail": "new orientation reports its own size"
+    },
+    {
+      "case": "N20_fullscreen_suppresses_reminder",
+      "passed": true,
+      "detail": "fullscreen flag set before SDK callbacks"
+    },
+    {
+      "case": "N21_dismiss_releases_reminder",
+      "passed": true,
+      "detail": "fullscreen flag released after dismissal"
+    },
+    {
+      "case": "N22_reminder_failure_after_commit",
+      "passed": true,
+      "detail": "game remains durable and acknowledged"
+    },
+    {
+      "case": "N23_event_receipt_dedup",
+      "passed": true,
+      "detail": "one SDK enqueue across repeat and disk restore"
+    },
+    {
+      "case": "N24_event_receipt_failure",
+      "passed": true,
+      "detail": "journal remains pending; SDK crash gap requires event_id dedup"
+    },
+    {
+      "case": "N25_compact_ad_request",
+      "passed": true,
+      "detail": "SDK receives available width and a 50dp height cap"
+    },
+    {
+      "case": "N26_density_and_webview_scale",
+      "passed": true,
+      "detail": "50dp maps to 60 CSS px, stays bottom-aligned without stretching"
+    },
+    {
+      "case": "N27_small_slot_never_clips",
+      "passed": true,
+      "detail": "wait for sufficient reserved height instead of cropping"
+    },
+    {
+      "case": "N28_resized_slot_restores_view",
+      "passed": true,
+      "detail": "existing creative restored without another request"
+    },
+    {
+      "case": "N29_width_change_rebuilds",
+      "passed": true,
+      "detail": "real resize is not delayed by failed-load backoff"
+    },
+    {
+      "case": "N30_banner_failure_backoff",
+      "passed": true,
+      "detail": "failed load still retries only after the interval"
+    },
+    {
+      "case": "N31_frozen_product",
+      "passed": true,
+      "detail": "immutable product and intent despite request mutation"
+    },
+    {
+      "case": "N32_failed_ack_blocks_overwrite",
+      "passed": true,
+      "detail": "failed removal retains earned receipt independently of prefs memory"
+    },
+    {
+      "case": "N33_ack_retry_recovers_receipt",
+      "passed": true,
+      "detail": "same pending product restored before retry"
+    },
+    {
+      "case": "N34_loading_readiness",
+      "passed": true,
+      "detail": "native loading snapshot"
+    },
+    {
+      "case": "N35_lifecycle_readiness",
+      "passed": true,
+      "detail": "loaded object is not ready in background"
+    },
+    {
+      "case": "N36_real_dispatch_allowlist",
+      "passed": true,
+      "detail": "new assist dispatches exactly once; unknown name rejected"
+    },
+    {
+      "case": "N37_native_reward_commit_retry",
+      "passed": true,
+      "detail": "failed native disk commit does not emit reward; retry preserves same earned token"
+    },
+    {
+      "case": "N38_future_receipt_preserved",
+      "passed": true,
+      "detail": "native does not reinterpret future product as hints"
+    },
+    {
+      "case": "N39_load_wait_is_bounded",
+      "passed": true,
+      "detail": "UI stops waiting without another SDK load"
+    },
+    {
+      "case": "N40_late_loaded_never_autoshows",
+      "passed": true,
+      "detail": "late loaded only enables a future explicit tap"
+    },
+    {
+      "case": "N41_result_route_native_dispatch",
+      "passed": true,
+      "detail": "result transition reaches actual native allowlist"
+    },
+    {
+      "case": "N42_lab_storage_namespace",
+      "passed": true,
+      "detail": "lab method cannot write production progress"
+    },
+    {
+      "case": "N43_lab_storage_failure",
+      "passed": true,
+      "detail": "failed lab commit retains previous authority"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "method": "Production native feedback bridge with Android/Capacitor doubles, no physical motor inference",
+  "results": [
+    {
+      "case": "F01_off_before_configuration",
+      "passed": true
+    },
+    {
+      "case": "F02_api31_manager_contact",
+      "passed": true
+    },
+    {
+      "case": "F03_stale_pulse_dropped",
+      "passed": true
+    },
+    {
+      "case": "F04_cancel_reorder_cannot_restart_motor",
+      "passed": true
+    },
+    {
+      "case": "F05_explicit_new_epoch_works",
+      "passed": true
+    },
+    {
+      "case": "F06_pause_is_native_generation_barrier",
+      "passed": true
+    },
+    {
+      "case": "F07_win_protects_its_pattern",
+      "passed": true
+    },
+    {
+      "case": "F08_new_contact_after_win",
+      "passed": true
+    },
+    {
+      "case": "F09_pair_can_replace_selection",
+      "passed": true
+    },
+    {
+      "case": "F10_rapid_low_priority_has_no_queue",
+      "passed": true
+    },
+    {
+      "case": "F11_no_motor_is_optional",
+      "passed": true
+    },
+    {
+      "case": "F12_waveform_without_amplitude_control",
+      "passed": true
+    },
+    {
+      "case": "F13_one_shot_default_amplitude_fallback",
+      "passed": true
+    },
+    {
+      "case": "F14_api24_waveform",
+      "passed": true
+    },
+    {
+      "case": "F15_motor_failure_does_not_break_game",
+      "passed": true
+    },
+    {
+      "case": "F16_destroy_drops_late_callbacks",
+      "passed": true
+    },
+    {
+      "case": "F17_full_jar_three_contacts",
+      "passed": true
+    },
+    {
+      "case": "F18_full_jar_protects_spill_rhythm",
+      "passed": true
+    },
+    {
+      "case": "F19_full_jar_opt_out_cancels",
+      "passed": true
+    },
+    {
+      "case": "F20_task_two_soft_contacts",
+      "passed": true
+    },
+    {
+      "case": "F21_page_distinct_two_contacts",
+      "passed": true
+    },
+    {
+      "case": "F22_book_three_contacts",
+      "passed": true
+    },
+    {
+      "case": "F23_book_protects_celebration",
+      "passed": true
+    },
+    {
+      "case": "F24_book_cancel_barrier",
+      "passed": true
+    }
+  ]
+}

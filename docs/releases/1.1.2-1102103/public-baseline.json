@@ -1,0 +1,41 @@
+{
+  "environment": "Chromium, actual Vite production bundle; no live SDK",
+  "cases": [
+    {
+      "name": "320x568-light",
+      "passed": true,
+      "publicAssignment": true,
+      "urlOverrideIgnored": true,
+      "rightsAndStockRetained": true,
+      "hintPairUndoAddReload": true,
+      "pageErrors": []
+    },
+    {
+      "name": "320x568-dark",
+      "passed": true,
+      "publicAssignment": true,
+      "urlOverrideIgnored": true,
+      "rightsAndStockRetained": true,
+      "hintPairUndoAddReload": true,
+      "pageErrors": []
+    },
+    {
+      "name": "568x320-light",
+      "passed": true,
+      "publicAssignment": true,
+      "urlOverrideIgnored": true,
+      "rightsAndStockRetained": true,
+      "hintPairUndoAddReload": true,
+      "pageErrors": []
+    },
+    {
+      "name": "568x320-dark",
+      "passed": true,
+      "publicAssignment": true,
+      "urlOverrideIgnored": true,
+      "rightsAndStockRetained": true,
+      "hintPairUndoAddReload": true,
+      "pageErrors": []
+    }
+  ]
+}
