@@ -14,6 +14,8 @@ jobs:
     timeout-minutes: 25
     env:
       SEEDS_BUILD_FLAVOR: release
+      SEEDS_HELP_QA: "0"
+      VITE_SEEDS_QA_PROFILE: ""
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,6 +24,8 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npx playwright install chromium
       - run: python3 scripts/feedback-native-harness.py && python3 scripts/regression-061/native-harness.py
       - run: npm run setup:android
       - name: Strict live configuration with a distinct store build number
@@ -43,10 +47,15 @@ jobs:
           assert v['appmetrica_api_key']
           ids=[v[k] for k in ['yandex_banner_id','yandex_interstitial_id','yandex_rewarded_id']]
           assert len(set(ids))==3 and all(x.startswith('R-M-') for x in ids)
-          assert int(re.search(r'versionCode (\d+)',Path('android/app/build.gradle').read_text())[1])>1102015
+          assert int(re.search(r'versionCode (\d+)',Path('android/app/build.gradle').read_text())[1])>1102101
           print('Live configuration verified: release channel, analytics enabled, three distinct live units; values withheld')
           PY
       - run: npm run sync:android
+      - name: Verify the actual public baseline bundle
+        run: node scripts/store-baseline-check.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: seeds-112-store-public-baseline, path: test-results/store-baseline/}
       - name: Optimized release APK
         run: |
           sed -i 's/networkTimeout=10000/networkTimeout=60000/' android/gradle/wrapper/gradle-wrapper.properties
@@ -86,9 +95,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
-      SEEDS_UPGRADE_BASELINE_KIND: exact previously built QA release payload
-      SEEDS_UPGRADE_BASELINE_SOURCE: 160da8c79fd013f25a64607b7338ed6a65131942
-      SEEDS_UPGRADE_BASELINE_VERSION: '1.1.2 (1102015)'
+      SEEDS_UPGRADE_BASELINE_KIND: exact previously delivered store 1102101 payload, both APKs temporarily re-signed for CI only
+      SEEDS_UPGRADE_BASELINE_SOURCE: ecc3c399a6062d59d71da83179c4ae09cb33ac9c
+      SEEDS_UPGRADE_BASELINE_VERSION: '1.1.2 (1102101)'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -98,16 +107,16 @@ jobs:
         with: {name: seeds-112-store-unsigned, path: new-release/}
       - uses: actions/download-artifact@v4
         with:
-          name: seeds-product-release-unsigned
+          name: seeds-112-store-unsigned
           path: baseline/
-          run-id: 43032671115
+          run-id: 43379345999
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Pin the previously accepted baseline payload
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import hashlib
-          assert hashlib.sha256(Path('baseline/app-release-unsigned.apk').read_bytes()).hexdigest()=='2fed06a41c7b2a3d120fc587c5a7e7985c023b9feadbd608684a0e108abac51a'
+          assert hashlib.sha256(Path('baseline/app-release-unsigned.apk').read_bytes()).hexdigest()=='eff2c5884543ce437285469c852e8c2ba2b72faa0983a8677f2232d17610b6cc'
           PY
       - run: python3 -m pip install --user pillow
       - name: Start Android 35 with host network blocked before boot
