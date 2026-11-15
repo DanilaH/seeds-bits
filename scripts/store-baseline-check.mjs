@@ -23,10 +23,10 @@ try {
       await page.addInitScript(({ key, dark }) => {
         if (sessionStorage.storeSeeded) return;
         sessionStorage.storeSeeded = '1';
-        const board = [5, 5, 5, 5, 5, 5];
+        const board = [5, 5, 1, 2, 3];
         const intent = kind => ({ version: 1, id: kind + '-intent', offer: 'saved-offer',
           product: kind + '_1', task: 'classic', attempt: 'store-attempt', rules: 1,
-          algorithm: 'saved-v1', board, pair: [0, 1], after: [0, 0, 5, 5, 5, 5] });
+          algorithm: 'saved-v1', board, pair: [0, 1], after: [0, 0, 1, 2, 3] });
         const help = { version: 1, assisted: true,
           magnet: { id: 'owned-magnet', intent: intent('magnet'), applications: [] },
           plan: { id: 'owned-plan', intent: intent('plan'), applications: [] } };
@@ -49,7 +49,7 @@ try {
       await page.locator('#resume').click();
       await expect(page.locator('html')).toHaveAttribute('data-theme', dark ? 'dark' : 'light');
       await plain();
-      await expect(page.locator('#remaining')).toHaveText('6');
+      await expect(page.locator('#remaining')).toHaveText('5');
       await expect(page.locator('.hinted')).toHaveCount(0);
       const before = await saved();
       assert.deepEqual(before.meta.help.inventory, { magnet: 2, plan: 3 });
@@ -59,18 +59,19 @@ try {
       await expect(page.locator('.hinted')).toHaveCount(2);
       const pair = await page.locator('#board .hinted').evaluateAll(ns => ns.map(n => n.dataset.index));
       for (const index of pair) await page.locator(`#board [data-index="${index}"]`).click();
-      await expect(page.locator('#remaining')).toHaveText('4');
-      await page.locator('#undo').click();
-      await expect(page.locator('#remaining')).toHaveText('6');
+      await expect(page.locator('#remaining')).toHaveText('3');
+      // Add is legal only after all available pairs are gone; use the real enabled state.
       await page.locator('#add').click();
-      await expect(page.locator('#remaining')).toHaveText('12');
-      await page.locator('#undo').click();
       await expect(page.locator('#remaining')).toHaveText('6');
-      await expect.poll(async () => (await saved()).sessions.classic.current.board.filter(Boolean).length).toBe(6);
+      await page.locator('#undo').click();
+      await expect(page.locator('#remaining')).toHaveText('3');
+      await page.locator('#undo').click();
+      await expect(page.locator('#remaining')).toHaveText('5');
+      await expect.poll(async () => (await saved()).sessions.classic.current.board.filter(Boolean).length).toBe(5);
       await page.reload();
       await page.locator('#resume').click();
       await plain();
-      await expect(page.locator('#remaining')).toHaveText('6');
+      await expect(page.locator('#remaining')).toHaveText('5');
       const after = await saved();
       assert.deepEqual(after.meta.help.inventory, before.meta.help.inventory);
       assert.deepEqual(after.meta.attempts.classic.help, before.meta.attempts.classic.help);
