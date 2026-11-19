@@ -87,6 +87,7 @@ mkdirSync(java, { recursive: true });
 for (const name of [
   "MainActivity",
   "SeedsApplication",
+  "SeedsInstallStore",
   "SeedsMonetizationPlugin",
   "SeedsEngagementPlugin",
   "SeedsFeedbackPlugin",

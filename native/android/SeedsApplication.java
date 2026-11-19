@@ -1,10 +1,13 @@
 package com.seedsbits.game.preview;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import com.getcapacitor.JSObject;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.profile.Attribute;
+import io.appmetrica.analytics.profile.UserProfile;
 public class SeedsApplication extends Application {
   private static boolean analyticsInitialized;
   /** A local alarm/boot receiver is not a player's return to the game. */
@@ -15,6 +18,10 @@ public class SeedsApplication extends Application {
       AppMetrica.activate(application,AppMetricaConfig.newConfigBuilder(key).withLocationTracking(false).build());
       AppMetrica.enableActivityAutoTracking(application);
       analyticsInitialized=true;
+      String installStore = SeedsInstallStore.capture(application);
+      AppMetrica.reportUserProfile(UserProfile.newBuilder()
+          .apply(Attribute.customString(SeedsInstallStore.KEY).withValue(installStore))
+          .build());
     }
   }
   /** Common non-personal context. `test` stays compatible and describes ads only. */
@@ -24,7 +31,8 @@ public class SeedsApplication extends Application {
     boolean test = context.getResources().getBoolean(R.bool.ads_test_mode);
     data.put("test", test).put("ads_test", test);
     data.put("schema", 3);
-    android.content.SharedPreferences prefs = context.getSharedPreferences("seeds-monetization",0);
+    SharedPreferences prefs = context.getSharedPreferences("seeds-monetization", Context.MODE_PRIVATE);
+    data.put(SeedsInstallStore.KEY, SeedsInstallStore.read(prefs));
     for (String field : new String[]{"install","experiment","variant","config","anchor","cohort","qa"})
       if (prefs.contains("context_"+field) && !data.has(field)) data.put(field,prefs.getString("context_"+field,""));
     try {

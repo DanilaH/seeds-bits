@@ -10,7 +10,41 @@ def put(path,body):
 for a in ['NonNull','Nullable']:
  put(f'androidx/annotation/{a}.java',f'package androidx.annotation; public @interface {a} {{}}')
 put('android/content/SharedPreferences.java','''package android.content; import java.util.*; public class SharedPreferences { public Map<String,Object> data=new HashMap<>(),durable=new HashMap<>();public Map<String,Object> getAll(){return data;} public boolean fail=false; public boolean contains(String k){return data.containsKey(k);}public String getString(String k,String d){return (String)data.getOrDefault(k,d);}public long getLong(String k,long d){return ((Number)data.getOrDefault(k,d)).longValue();} public Editor edit(){return new Editor();} public class Editor {Map<String,Object> pending=new HashMap<>();Set<String>removed=new HashSet<>();public Editor putString(String k,String v){pending.put(k,v);return this;}public Editor putLong(String k,long v){pending.put(k,v);return this;}public Editor remove(String k){removed.add(k);return this;}public Editor clear(){removed.addAll(data.keySet());return this;}public boolean commit(){for(String k:removed)data.remove(k);data.putAll(pending);if(fail)return false;durable.clear();durable.putAll(data);return true;}public void apply(){commit();}}}''')
-put('android/content/Context.java','''package android.content; import android.content.res.Resources;public class Context {public SharedPreferences prefs=new SharedPreferences();public java.util.Map<String,SharedPreferences> groups=new java.util.HashMap<>();public SharedPreferences getSharedPreferences(String n,int m){return n.equals("seeds-monetization")?prefs:groups.computeIfAbsent(n,k->new SharedPreferences());}public String getString(int id){return id==1?"": "configured";}public Resources getResources(){return new Resources();}}''')
+put('android/content/Context.java','''package android.content;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+public class Context {
+ public static final int MODE_PRIVATE=0;
+ public SharedPreferences prefs=new SharedPreferences();
+ public java.util.Map<String,SharedPreferences> groups=new java.util.HashMap<>();
+ public PackageManager packages=new PackageManager();
+ public PackageManager getPackageManager(){return packages;}
+ public String getPackageName(){return "com.seedsbits.game";}
+ public SharedPreferences getSharedPreferences(String n,int m){return n.equals("seeds-monetization")?prefs:groups.computeIfAbsent(n,k->new SharedPreferences());}
+ public String getString(int id){return id==1?"":"configured";}
+ public Resources getResources(){return new Resources();}
+}''')
+put('android/content/pm/PackageManager.java','''package android.content.pm;
+public class PackageManager {
+ public static class NameNotFoundException extends Exception {}
+ public PackageInfo app=new PackageInfo();
+ public InstallSourceInfo source=new InstallSourceInfo();
+ public boolean fail=false;
+ public PackageInfo getPackageInfo(String name,int flags) throws NameNotFoundException {
+   if(fail)throw new NameNotFoundException();
+   return app;
+ }
+ public InstallSourceInfo getInstallSourceInfo(String name) throws NameNotFoundException {return source;}
+ public String getInstallerPackageName(String name){return source.installing;}
+}''')
+put('android/content/pm/PackageInfo.java','package android.content.pm;public class PackageInfo {public long firstInstallTime=1,lastUpdateTime=1;}')
+put('android/content/pm/InstallSourceInfo.java','''package android.content.pm;
+public class InstallSourceInfo {
+ public String initiating,installing;
+ public String getInitiatingPackageName(){return initiating;}
+ public String getInstallingPackageName(){return installing;}
+}''')
+put('android/os/Build.java','package android.os;public class Build {public static class VERSION {public static int SDK_INT=35;}public static class VERSION_CODES {public static final int R=30;}}')
 put('android/content/res/Resources.java','''package android.content.res;public class Resources {public static float density=1;public boolean getBoolean(int i){return true;}public Metrics getDisplayMetrics(){return new Metrics();}public static class Metrics{public float density=Resources.density;}}''')
 put('android/content/res/Configuration.java','package android.content.res;public class Configuration{}')
 put('android/os/Looper.java','package android.os;public class Looper {public static Looper getMainLooper(){return new Looper();}}')
@@ -50,6 +84,7 @@ put('com/seedsbits/game/preview/SeedsAdRevenue.java','package com.seedsbits.game
 put('com/seedsbits/game/preview/SeedsApplication.java','package com.seedsbits.game.preview;public class SeedsApplication {public static int calls;static void report(android.content.Context c,String n,com.getcapacitor.JSObject d){calls++;}}')
 put('org/json/JSONArray.java','''package org.json;import java.util.*;public class JSONArray {List<String> items=new ArrayList<>();public JSONArray(){}public JSONArray(String s){String body=s.substring(1,s.length()-1);if(!body.isEmpty())for(String x:body.split(","))items.add(x.substring(1,x.length()-1));}public int length(){return items.size();}public String optString(int i){return items.get(i);}public JSONArray put(String s){items.add(s);return this;}public String toString(){List<String> quoted=new ArrayList<>();for(String s:items)quoted.add(((char)34)+s+((char)34));return "["+String.join(",",quoted)+"]";}}''')
 shutil.copyfile('native/android/SeedsMonetizationPlugin.java',root/'src/com/seedsbits/game/preview/SeedsMonetizationPlugin.java')
+shutil.copyfile('native/android/SeedsInstallStore.java',root/'src/com/seedsbits/game/preview/SeedsInstallStore.java')
 for name in ['Preferences','PreferencesConfiguration']:
  put(f'com/capacitorjs/plugins/preferences/{name}.java',Path(f'node_modules/@capacitor/preferences/android/src/main/java/com/capacitorjs/plugins/preferences/{name}.java').read_text())
 put('com/capacitorjs/plugins/preferences/Probe.java','package com.capacitorjs.plugins.preferences;import android.content.Context;public class Probe{public static void write(Context c,String k,String v){new Preferences(c,PreferencesConfiguration.DEFAULTS).set(k,v);}}')
@@ -105,6 +140,32 @@ public class AuditHarness {
 
   p=fresh(true);PluginCall lab=new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","lab-only"));p.persistLabState(lab);game=p.activity.getSharedPreferences("CapacitorStorage",0);boolean isolated=lab.result!=null && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1"));boolean invalidLab=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.progress.v2").put("value","bad")));}catch(RuntimeException failure){invalidLab=true;}check("N42_lab_storage_namespace",isolated&&invalidLab&&!game.data.containsKey("seeds-bits.progress.v2"),"lab method cannot write production progress");
   game.fail=true;boolean labFailure=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","not-saved")));}catch(RuntimeException failure){labFailure=true;}check("N43_lab_storage_failure",labFailure && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1")) && "lab-only".equals(game.data.get("seeds-bits.lab.trials.v1")),"failed lab commit retains previous authority");
+
+  android.content.Context nash=new android.content.Context();
+  nash.packages.source.initiating="com.nashstore";
+  nash.packages.source.installing="ru.vk.store";
+  check("N44_nashstore_initiates_install","nashstore".equals(SeedsInstallStore.capture(nash)),"initiating package takes priority");
+  nash.prefs.data.clear();nash.prefs.data.putAll(nash.prefs.durable);
+  nash.packages.source.initiating="ru.vk.store";nash.packages.app.lastUpdateTime=2;
+  check("N45_store_frozen_after_update","nashstore".equals(SeedsInstallStore.capture(nash)),"process restart and another installer preserve the recorded store");
+
+  android.content.Context rustore=new android.content.Context();
+  rustore.packages.source.installing="ru.vk.store";
+  check("N46_rustore_installer_fallback","rustore".equals(SeedsInstallStore.capture(rustore)),"uses the installer of record when initiating package is unavailable");
+  android.content.Context legacy=new android.content.Context();
+  legacy.packages.source.installing="com.nashstore";Build.VERSION.SDK_INT=29;
+  check("N47_pre_android_11","nashstore".equals(SeedsInstallStore.capture(legacy)),"uses legacy installer API on older Android");
+  Build.VERSION.SDK_INT=35;
+
+  android.content.Context oldInstall=new android.content.Context();
+  oldInstall.packages.source.initiating="com.nashstore";oldInstall.packages.app.lastUpdateTime=2;
+  check("N48_upgrade_with_no_observation","unknown".equals(SeedsInstallStore.capture(oldInstall)),"will not turn the updater into the original store");
+  android.content.Context other=new android.content.Context();
+  other.packages.source.initiating="com.android.shell";
+  check("N49_unknown_install_source","unknown".equals(SeedsInstallStore.capture(other)),"leaves ADB and other unrecognized sources unknown");
+  android.content.Context unavailable=new android.content.Context();
+  unavailable.packages.fail=true;
+  check("N50_package_metadata_unavailable","unknown".equals(SeedsInstallStore.capture(unavailable)),"package manager failure falls back to unknown");
 
  }
 }''')
