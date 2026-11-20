@@ -1,0 +1,26 @@
+{
+  "difficulty": "ordinary",
+  "firstSeed": 0,
+  "seeds": 512,
+  "distinctBoards": 512,
+  "results": {
+    "first": {
+      "clearedWithoutAdd": 86,
+      "firstDeadEnds": 426,
+      "noPairAfterFirstAdd": 15,
+      "noPairAfterSecondAdd": 0
+    },
+    "last": {
+      "clearedWithoutAdd": 68,
+      "firstDeadEnds": 444,
+      "noPairAfterFirstAdd": 14,
+      "noPairAfterSecondAdd": 0
+    },
+    "deterministicSample": {
+      "clearedWithoutAdd": 66,
+      "firstDeadEnds": 446,
+      "noPairAfterFirstAdd": 14,
+      "noPairAfterSecondAdd": 0
+    }
+  }
+}

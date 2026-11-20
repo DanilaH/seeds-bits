@@ -1,0 +1,509 @@
+{
+  "schema": "consumer-adoption-ledger-v1",
+  "consumer": "DanilaH/seeds-bits",
+  "consumerCommit": "7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b",
+  "sourceInventory": "https://github.com/DanilaH/mini-games-kit/blob/a0bc409a34033ea47501a7d59966e690e9b647cd/research/games/seeds/porting/SOURCE_FEATURES.json",
+  "scope": "Первая сверка по раннему плюсу, тупику, подсказке и связанным вариантам. MATCH относится к конкретному наблюдаемому свойству, а не к полному совпадению сессии Android.",
+  "roadmap": "./2026-11-20/ROADMAP.md",
+  "features": [
+    {
+      "id": "eb-add-order",
+      "parity": "MATCH",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "currentImplementation": "core.ts:addNumbers дописывает board.filter(Boolean) после логического конца.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "tutorial_step_5_description",
+      "nextAction": "Сравнить поле с внутренними и хвостовыми пустотами в оригинале.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ],
+      "consumerTest": "../../e2e/porting-classic-add.spec.ts"
+    },
+    {
+      "id": "eb-add-shuffle-remaining",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "Классика всегда сохраняет порядок.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/help-config.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/shuffle-lab.ts"
+      ],
+      "sourceLocator": "tutorial_step_5_description_remaining_numbers",
+      "nextAction": "Записать несколько прибавок с различимыми остатками и установить вариант обучения.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-add-random",
+      "parity": "UNKNOWN",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "Наша выдача копирует ровно оставшийся состав.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "tutorial_step_5_description_more_numbers",
+      "nextAction": "Сравнить мультимножества до и после, не приписывать генерацию новых значений одному тексту.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-add-budget",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "Счётчик additions хранит число использований. При наличии свободной ёмкости как шестое, так и седьмое добавление работают.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "balance.MaxAddForBoard",
+      "nextAction": "На чистой установке записать пополнение/сброс счётчика на границе этапов, затем дойти до нуля.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ],
+      "consumerTest": "../../e2e/porting-classic-add.spec.ts"
+    },
+    {
+      "id": "eb-early-add",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "Обработчик add() отклоняет попытку при любой доступной паре.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "missed_pairs_popup_body_one; _showMissedPairsPopupAfterAddAnimation; MissedPairsPopup",
+      "nextAction": "При явно видимой паре нажать плюс и записать поле, момент сообщения и оба счётчика.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ],
+      "consumerTest": "../../e2e/porting-classic-add.spec.ts"
+    },
+    {
+      "id": "eb-missed-pair-count",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "Игра сообщает, что на поле ещё есть пары, без вывода количества в этой ветке.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "missed_pairs_popup_body_one; missed_pairs_popup_body_many",
+      "nextAction": "Сравнить состояния с одной и несколькими парами.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-undo-plus",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "Общая «Отмена» возвращает снимок после разрешённого Add. Отдельного диалога раннего плюса нет.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "missed_pairs_popup_button_undo; CloseMissedPairsPopup",
+      "nextAction": "Проверить доску, запас плюсов и подсказок до/после отмены и после перезапуска.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-add-preview",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "До нажатия показано количество цифр, после нажатия — анимация появления.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "gamescreen_preview_description",
+      "nextAction": "Снять вызов и отмену предпросмотра, установить его режим и стоимость.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-end-result",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "В классике пустое поле даёт результат. Тупик предлагает Add. Предел размера предлагает отмену/новую партию.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "game_screen_no_more_moves_button2; no_moves_button_end",
+      "nextAction": "Захватить непустую доску без пар при нуле плюсов и экран отказа от продолжения.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-revive-plus",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "В обычной классике нет запаса плюсов, который можно докупить или пополнить.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "no_moves_button_get_plus; no_moves_button_get_pluses; GetSecondChanceAddsCount; SecondChanceRewardedCallback",
+      "nextAction": "Отдельно проверить число до/после, отказ, офлайн и возможное видео в этой сборке.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-revive-shuffle",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "QA Shuffle находится на паузе. В обычном результате такого действия нет.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/help-config.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/shuffle-lab.ts"
+      ],
+      "sourceLocator": "game_over_button_ad; shuffle_free; balance.AllowGameOverShuffles",
+      "nextAction": "Установить доступность и цену по состоянию интерфейса. Проверить состав цифр и число пар после.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-vip-offer",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "В текущей классике такого пути нет.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "second_chance_vip_description_get",
+      "nextAction": "Зафиксировать экран на аккаунте без VIP, если он появляется. Scope и оффер изначально неизвестны.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-vip-revive",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "Публичная классика не предлагает VIP-бустер.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "second_chance_vip_description_available",
+      "nextAction": "Достаточно легально доступной записи соответствующего состояния, покупка не требуется.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-hint-empty",
+      "parity": "PARTIAL",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "render() отключает обычную подсказку при нуле пар и сообщает, что нужно добавить цифры.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/hint-budget.ts"
+      ],
+      "sourceLocator": "game_screen_tooltip_no_pairs_left; _noPairsHintPopup; HintNoPairType",
+      "nextAction": "В классике записать нажатие при запасе 1 и 0, списание и возможный оффер.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ],
+      "consumerTest": "../../e2e/porting-classic-add.spec.ts"
+    },
+    {
+      "id": "eb-empty-copy",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "При нуле пар статус направляет к «Добавить», действия копирования вручную нет.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "game_screen_copy_hint",
+      "nextAction": "Установить вид кнопки и переключатель варианта на записи поля.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-empty-hammer",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "В обычной игре инструмента удаления одной цифры нет.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "game_screen_hammer_hint",
+      "nextAction": "Зафиксировать режим, заряд, допустимые цели и изменение поля.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-limited-hints",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "При включённой монетизации есть три бесплатных открытия на попытку, кошелёк и бесплатное повторение той же пары.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/hint-budget.ts"
+      ],
+      "sourceLocator": "balance.UnlimitedHints",
+      "nextAction": "Измерить расход на новой и повторной паре, при тупике и на границе этапа.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-hint-refill",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "Наше предложение относится к конкретной доступной паре при исчерпании запаса. Для него есть rewarded-пакет.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/hint-budget.ts"
+      ],
+      "sourceLocator": "collect_hints_button_ad; g_hint_add",
+      "nextAction": "Различить обычное пополнение на доске и окно при входе в этап, сверить число наград и момент показа.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-start-hint-offer",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "В классике показ предложения завязан на запрос подсказки, а не на вход в этап.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/hint-budget.ts"
+      ],
+      "sourceLocator": "game_screen_start_ad_button1; assets/start_messages/main.ebr",
+      "nextAction": "Отметить номер этапа, предлагаемый бонус и возможность начать без получения.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-collapse",
+      "parity": "UNKNOWN",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "Наш removePair убирает целиком пустые строки. Это иная описанная операция.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "game_screen_collapse",
+      "nextAction": "Проверить конкретный режим и что именно сдвигается при сжатии.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-challenge-restart",
+      "parity": "UNKNOWN",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "Испытания в лаборатории на паузе. Отдельного соответствия правил не установлено.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "extra_challenge_no_moves_left_popup_restart",
+      "nextAction": "Записать это испытание отдельно от классики.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-first-try-revive",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "В обычной классике нет связанного событийного прогресса этого вида.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "um_croco_rewarded_game_over_get_pluses",
+      "nextAction": "Проверить награду и последствия отказа именно в событии.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-multiplier-preserve",
+      "parity": "MISSING",
+      "status": "RESEARCHED",
+      "currentImplementation": "Отдельного предложения сохранения событийного множителя не обнаружено в обычном результате.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "um_ppt_rewarded_game_over_button_ad",
+      "nextAction": "Проверить счётчик множителя при успехе и отказе в событии.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-autosolve-threshold",
+      "parity": "UNKNOWN",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "Обычная пара и обычная подсказка в Seeds требуют действий игрока.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "balance.AutoSolveMaxPairs",
+      "nextAction": "Снять последние одну, две, три и четыре пары. Установить условия входа автозавершения.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-deal-tuning",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "У Seeds собственные генератор, уровни сложности и проверка существования пути.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/classic-generator.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts"
+      ],
+      "sourceLocator": "sizeAndPairTuning",
+      "nextAction": "Сопоставить фактические стартовые доски. Не переносить числа без подтверждения активной конфигурации.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-score-row",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "Удаление строки есть, а система баночек считает семечки со своей экономикой.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/jars.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "scoreBonuses",
+      "nextAction": "Проверить взаимодействие со счётом за пару и множественную очистку.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-score-board",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "У нас свой результат классики и свои награды.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/jars.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "scoreBonuses",
+      "nextAction": "Проверить сложение с очками за последнюю пару и строку.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "eb-analytics-actions",
+      "parity": "PARTIAL",
+      "status": "RESEARCHED",
+      "currentImplementation": "В Seeds есть собственные игровые и рекламные события, у неопубликованных механик иной набор.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/analytics.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "declaredAnalyticsEvents",
+      "nextAction": "При сравнении живых данных отделить наличие схемы от фактической отправки и денежного результата.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "nado-add-counter",
+      "parity": "PARTIAL",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "Счётчик под плюсом показывает размер предстоящей выдачи и исчезает при доступной паре.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "screenshots 2, 3",
+      "nextAction": "Нажать плюс при видимой паре, проверить списание, продолжить до последнего использования.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "nado-hint-counter",
+      "parity": "PARTIAL",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "В Seeds есть собственный бюджет подсказок. В тупике кнопка недоступна.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/hint-budget.ts"
+      ],
+      "sourceLocator": "screenshots 2, 3",
+      "nextAction": "Снять одно поле до/после использования при доступной паре, затем в тупике.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "nado-end-reset",
+      "parity": "MISSING",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "У обычной классики нет обнаруженного проигрыша по остатку плюсов и последовательности этапов со сбросом.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "reviews 2026-11-15, 2025-12-31",
+      "nextAction": "Записать настоящий проигрыш на этапе 2+, зафиксировать счёт, этап и возможный второй шанс.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "nado-hint-ad",
+      "parity": "PARTIAL",
+      "status": "EVIDENCE_GAP",
+      "currentImplementation": "Наш rewarded-оффер открывается для доступной пары при нулевом кошельке. Дедупликация и начисление независимы от закрытия рекламы.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/hint-budget.ts"
+      ],
+      "sourceLocator": "review 2026-03-02",
+      "nextAction": "Проверить в NADO наличие пары/запас/онлайн по отдельности. Установить момент оффера и размер награды.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    },
+    {
+      "id": "nado-stuck-add",
+      "parity": "MATCH",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "currentImplementation": "Кнопка доступна при нуле пар. Порядок дописывания у нас установлен исходным кодом.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/core.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b/src/main.ts"
+      ],
+      "sourceLocator": "publisher rules",
+      "nextAction": "Зафиксировать последовательность дописанных значений и поведение на неполной строке оригинала.",
+      "dependencies": [
+        "Запись конкретного варианта оригинала для проверки поведения в игре"
+      ]
+    }
+  ]
+}
