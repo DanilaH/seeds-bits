@@ -1,0 +1,25 @@
+viewport_font,step,selector,result
+320-568-1.5,1 / 2,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-1.5,1 / 2,"[data-index=""1""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-1.5,2 / 2,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-1.5,2 / 2,"[data-index=""1""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-1.5,1 / 6,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-1.5,1 / 6,"[data-index=""1""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-1.5,5 / 6,"[data-index=""8""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-1.5,5 / 6,"[data-index=""9""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,1 / 2,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,1 / 2,"[data-index=""1""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,2 / 2,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,2 / 2,"[data-index=""1""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,1 / 6,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,1 / 6,"[data-index=""1""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,2 / 6,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,2 / 6,"[data-index=""1""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,3 / 6,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,3 / 6,"[data-index=""3""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,4 / 6,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,4 / 6,"[data-index=""20""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,5 / 6,"[data-index=""8""]",normal click timed out; diagnostic DOM action used to inspect following state
+320-568-2,5 / 6,"[data-index=""9""]",normal click timed out; diagnostic DOM action used to inspect following state
+390-844-2,2 / 2,"[data-index=""0""]",normal click timed out; diagnostic DOM action used to inspect following state
+390-844-2,2 / 2,"[data-index=""1""]",normal click timed out; diagnostic DOM action used to inspect following state

@@ -1,0 +1,61 @@
+name: Seeds layout research on Android
+on:
+  push:
+    branches: [research/seeds-layout-audit-20261120]
+    paths: [src/**, scripts/layout-audit/**, .github/workflows/layout-research-android.yml]
+permissions:
+  contents: read
+concurrency:
+  group: layout-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      SEEDS_BUILD_FLAVOR: preview
+      VITE_SEEDS_QA_PROFILE: baseline
+      ADS_MODE: test
+      REQUIRE_MOBILE_CONFIG: "false"
+      # Regression after the full 12-case run 44732728904; unset to repeat all.
+      LAYOUT_CASE: "640x1136:2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: npm ci --no-audit --no-fund && npm run setup:android
+      - run: node scripts/configure-android.mjs && chmod +x android/gradlew && cd android && ./gradlew assembleDebug
+      - run: |
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-avd"
+          mkdir -p "$ANDROID_AVD_HOME"
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
+          echo no | avdmanager create avd --force --name layout --package 'system-images;android-35;google_apis;x86_64'
+          mkdir -p test-results/layout-android
+          sudo chmod 666 /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -avd layout -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/layout-android/emulator.log 2>&1 &
+          emulator_pid=$!
+          for attempt in $(seq 1 120); do
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/layout-android/emulator.log; exit 1; fi
+            if [ "$(timeout 4 adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then break; fi
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          adb root
+          adb wait-for-device
+          adb shell svc wifi disable
+          adb shell svc data disable
+          adb shell iptables -I OUTPUT '!' -o lo -j REJECT
+          adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
+          adb shell input keyevent 82
+          adb shell wm size 780x1688
+          adb shell wm density 320
+          adb install android/app/build/outputs/apk/debug/app-debug.apk
+          node scripts/layout-audit/acceptance.mjs android/app/build/outputs/apk/debug/app-debug.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-layout-android
+          path: test-results/layout-android/
