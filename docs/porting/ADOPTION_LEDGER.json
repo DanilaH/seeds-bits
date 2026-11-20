@@ -2,8 +2,8 @@
   "schema": "consumer-adoption-ledger-v1",
   "consumer": "DanilaH/seeds-bits",
   "consumerCommit": "7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b",
-  "sourceInventory": "https://github.com/DanilaH/mini-games-kit/blob/a0bc409a34033ea47501a7d59966e690e9b647cd/research/games/seeds/porting/SOURCE_FEATURES.json",
-  "scope": "Первая сверка по раннему плюсу, тупику, подсказке и связанным вариантам. MATCH относится к конкретному наблюдаемому свойству, а не к полному совпадению сессии Android.",
+  "sourceInventory": "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/porting/SOURCE_FEATURES.json",
+  "scope": "Первая сверка по раннему плюсу, тупику, подсказке и связанным вариантам. MATCH относится к конкретному наблюдаемому свойству, а не к полному совпадению сессии Android. Следующие три записи проверены на 2e7f30f5407aa00ec6ec766ec0b5f0a166eec338 и описывают доступность объяснения. Старые 33 строки сохраняют свои исходные привязки.",
   "roadmap": "./2026-11-20/ROADMAP.md",
   "features": [
     {
@@ -504,6 +504,60 @@
       "dependencies": [
         "Запись конкретного варианта оригинала для проверки поведения в игре"
       ]
+    },
+    {
+      "id": "eb-tutorial-gap-copy",
+      "parity": "PARTIAL",
+      "status": "ROADMAPPED",
+      "consumerCommit": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
+      "currentImplementation": "Полный урок 3 демонстрирует пропуск. На первом запуске он упоминается одним предложением. Все 44 решения первой задачи тетради требуют прямой через пустоту.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
+        "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L188",
+        "../research/first-session-2026-11-20/route.json"
+      ],
+      "sourceLocator": "RU/tutorial_step_3_description",
+      "nextAction": "Проверить самостоятельный ход через пропуск сразу после собственного вводного примера.",
+      "dependencies": [
+        "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
+      ],
+      "consumerTest": "../research/first-session-2026-11-20/replay.mjs"
+    },
+    {
+      "id": "eb-tutorial-row-edge-copy",
+      "parity": "PARTIAL",
+      "status": "ROADMAPPED",
+      "consumerCommit": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
+      "currentImplementation": "Полный урок 5 содержит пример; в коротком курсе перенос только в тексте. В обратном порядке касаний SVG ставит крайние маркеры на противоположные строки.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
+        "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L970",
+        "../research/first-session-2026-11-20/route.json"
+      ],
+      "sourceLocator": "RU/tutorial_step_4_title, tutorial_step_4_description",
+      "nextAction": "Проверить учебное распознавание пути в обе стороны, затем независимое поле без подсветки.",
+      "dependencies": [
+        "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
+      ],
+      "consumerTest": "../research/first-session-2026-11-20/replay.mjs"
+    },
+    {
+      "id": "eb-daily-intro-monthly-cup-copy",
+      "parity": "PARTIAL",
+      "status": "ROADMAPPED",
+      "consumerCommit": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
+      "currentImplementation": "Число решённых дат и трофей показаны в календаре и результате. Первый вход через кнопку дня сразу открывает поле. У Семечек свои пороги месячных трофеев.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
+        "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L3413",
+        "../research/first-session-2026-11-20/route.json"
+      ],
+      "sourceLocator": "RU/dc_tutorial_2",
+      "nextAction": "Объяснить собственную отметку календаря перед первой датой и проверить, различает ли человек сегодня и архив.",
+      "dependencies": [
+        "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
+      ],
+      "consumerTest": "../research/first-session-2026-11-20/replay.mjs"
     }
   ],
   "localAdaptations": [
@@ -555,6 +609,29 @@
       },
       "acceptance": "../layout-audit-2026-11-20/FIXES.md",
       "nextAction": "Телефонная приёмка preview 12054 при системном шрифте 100/150/200%; эксперименты и оригиналы отдельно."
+    },
+    {
+      "id": "first-session-20261120",
+      "sourceFeatureIds": [
+        "eb-tutorial-gap-copy",
+        "eb-tutorial-row-edge-copy",
+        "eb-daily-intro-monthly-cup-copy"
+      ],
+      "localIssueIds": [
+        "SEEDS-START-01",
+        "SEEDS-START-02"
+      ],
+      "scope": "Первый самостоятельный ход и ориентирование между классикой, тетрадью и днём. Тетрадь является собственной адаптацией.",
+      "status": "ROADMAPPED",
+      "evidence": {
+        "build": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
+        "browser": "24 состояния и обе очередности нажатий, Chromium 390×844.",
+        "model": "Первая задача тетради: 44 полных пути; во всех прямой ход через пустоту; в восьми переход в порядке чтения.",
+        "device": "Новый UX не проверен на физическом телефоне.",
+        "liveAudience": "Один пересказ наблюдения владельцем. Новая версия людьми не проверена."
+      },
+      "acceptance": "../research/first-session-2026-11-20/README.md",
+      "nextAction": "Пакеты A и B, затем проверка незнакомыми с Number Match людьми."
     }
   ]
 }
