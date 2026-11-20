@@ -586,7 +586,9 @@ $("load-latest").onclick = () => location.reload();
 function showSaveState() {
   const parent = dialog.open
     ? dialogScroller()
-    : document.querySelector(".status-wrap")!;
+    : lesson < 0 && !occupied(board())
+      ? $("win")
+      : document.querySelector(".status-wrap")!;
   if (notice.parentElement !== parent) parent.prepend(notice);
   if (readNotice.parentElement !== parent) parent.prepend(readNotice);
   readNotice.hidden = !readWarning;
@@ -1755,6 +1757,7 @@ function render() {
   document.querySelector<HTMLElement>("footer")!.hidden = !count && lesson < 0;
   if (!count && lesson < 0) renderWin();
   $("board-wrap").hidden = count === 0;
+  showSaveState();
   $<HTMLButtonElement>("undo").disabled =
     busy ||
     (lesson >= 0
