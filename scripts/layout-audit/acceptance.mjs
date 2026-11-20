@@ -60,12 +60,15 @@ async function attach() {
   };
   return {evaluate,close:()=>ws.close()};
 }
-for (const [size,font] of [
+const matrix = [
   ["780x1688",1],["780x1688",1.5],["780x1688",2],
   ["640x1136",1],["640x1136",1.5],["640x1136",2],
   ["1136x640",1],["1136x640",1.5],["1136x640",2],
   ["1688x780",1],["1688x780",1.5],["1688x780",2],
-]) {
+] ;
+const selected=matrix.filter(([size,font])=>!process.env.LAYOUT_CASE||process.env.LAYOUT_CASE===`${size}:${font}`);
+assert(selected.length,'Unknown LAYOUT_CASE');
+for (const [size,font] of selected) {
   let evaluate,close;
   try {
   adb("shell","am","force-stop",app);adb("shell","pm","clear",app);
@@ -169,6 +172,7 @@ for (const [size,font] of [
     await digit(0);await digit(1);await until("!document.querySelector('#save-notice').hidden");
     assert(await evaluate("document.querySelector('#status').hidden"));
     assert(await evaluate("document.querySelector('#viewport').clientHeight>=document.querySelector('#board .cell').getBoundingClientRect().height"));
+    assert(await evaluate("(()=>{const v=document.querySelector('#viewport').getBoundingClientRect(),r=document.querySelector('#board .cell').getBoundingClientRect();return r.top>=v.top-1&&r.bottom<=v.bottom+1})()"));
     await record("save-error",true);
     await evaluate("document.querySelector('#retry-save').addEventListener('click',()=>window.failLayoutSave=false,{once:true,capture:true})");await tap("#retry-save",".status-wrap");
     await until("document.querySelector('#save-notice').hidden");
@@ -189,4 +193,4 @@ for (const [size,font] of [
   } finally {close?.();}
 }
 assert.equal(failures.length,0,'Android layout cases failed; see failures.json');
-fs.writeFileSync(out+"/passed.json",JSON.stringify({cases:12,shortAndFullLessons:true,adbTouches:true,domClickFallback:false,systemFonts:[1,1.5,2],rotationPreservesSelection:true,hintDirections:["below","above"],coveredCellCentres:0},null,2));
+fs.writeFileSync(out+"/passed.json",JSON.stringify({cases:selected.length,shortAndFullLessons:true,adbTouches:true,domClickFallback:false,systemFonts:[1,1.5,2],rotationPreservesSelection:true,hintDirections:["below","above"],coveredCellCentres:0},null,2));

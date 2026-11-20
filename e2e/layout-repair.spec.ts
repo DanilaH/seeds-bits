@@ -136,7 +136,9 @@ for (const height of [520,568]) test(`LAYOUT-03: failed save owns one bounded no
   await page.setViewportSize({width:320,height});
   await page.emulateMedia({reducedMotion:"reduce"});
   const board = Array(90).fill(1); board[0] = board[1] = 5;
-  await seed(page, board); await textScale(page, 2);
+  await seed(page, board);
+  if (height === 520) await page.evaluate(() => document.body.classList.add("has-mobile-ads"));
+  await textScale(page, 2);
   await page.evaluate(() => {
     const set = Storage.prototype.setItem;
     (window as any).restoreSave = () => Storage.prototype.setItem = set;
@@ -152,6 +154,11 @@ for (const height of [520,568]) test(`LAYOUT-03: failed save owns one bounded no
   const fieldHeight = await page.locator("#viewport").evaluate(el => el.clientHeight);
   const row = await page.locator("#board .cell").first().evaluate(el => el.getBoundingClientRect().height);
   expect(fieldHeight).toBeGreaterThanOrEqual(row);
+  const visibleRow = await page.locator("#board .cell").first().evaluate(el => {
+    const r=el.getBoundingClientRect(), v=document.getElementById("viewport")!.getBoundingClientRect();
+    return r.top>=v.top-1 && r.bottom<=v.bottom+1;
+  });
+  expect(visibleRow).toBe(true);
   // End the injected fault at the user's retry, not while queued saves settle.
   await page.locator("#retry-save").evaluate(el => el.addEventListener("click", () => (window as any).restoreSave(), {once:true,capture:true}));
   await rawClick(page, "#retry-save");

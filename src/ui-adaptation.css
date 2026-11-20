@@ -827,8 +827,8 @@
     overflow: hidden;
   }
   .game:not(:has(#lesson:not([hidden]))):has(#save-notice:not([hidden])) > #viewport {
-    flex: 1 1 44px;
-    min-height: 44px;
+    flex: 1 1 var(--minimum-field-row, 64px);
+    min-height: var(--minimum-field-row, 64px);
   }
   .game:not(:has(#lesson:not([hidden]))):has(#save-notice:not([hidden])) > .game-actions {
     flex: 0 1 auto;

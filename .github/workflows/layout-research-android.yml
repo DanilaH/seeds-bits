@@ -17,6 +17,8 @@ jobs:
       VITE_SEEDS_QA_PROFILE: baseline
       ADS_MODE: test
       REQUIRE_MOBILE_CONFIG: "false"
+      # Regression after the full 12-case run 44732728904; unset to repeat all.
+      LAYOUT_CASE: "640x1136:2"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

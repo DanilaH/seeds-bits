@@ -474,6 +474,14 @@ function scheduleActionLayout() {
     );
     const win = $("win");
     const viewport = $("viewport");
+    if (document.querySelector("#save-notice:not([hidden])")) {
+      const row = document.querySelector("#board .cell")?.getBoundingClientRect();
+      if (row?.height) {
+        const minimum = `${Math.ceil(Math.max(44, row.height + 2))}px`;
+        if (viewport.style.getPropertyValue("--minimum-field-row") !== minimum)
+          viewport.style.setProperty("--minimum-field-row", minimum);
+      }
+    }
     const classicResult = !win.hidden && win.dataset.resultKind === "classic";
     win.classList.toggle(
       "compact-result",
