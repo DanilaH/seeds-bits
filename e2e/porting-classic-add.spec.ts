@@ -97,6 +97,34 @@ test("an Add without pairs reports when the next Add would exceed the cell limit
   await expect(page.locator("#status")).toHaveText(
     "Добавлено 8 цифр. Пар пока нет. Поле больше не расширяется. Отмените ход или начните новую партию.",
   );
+  await page.setViewportSize({width: 568, height: 320});
+  await page.evaluate(() => {
+    const sizes = [...document.querySelectorAll<HTMLElement>("body *")]
+      .map(el => [el, parseFloat(getComputedStyle(el).fontSize) * 1.5] as const);
+    for (const [el, size] of sizes) el.style.fontSize = `${size}px`;
+  });
+  await expect.poll(() => page.evaluate(() => {
+    const status = document.querySelector<HTMLElement>("#status")!;
+    const wrap = status.parentElement!;
+    return status.getBoundingClientRect().top >= wrap.getBoundingClientRect().top;
+  })).toBe(true);
+  // The end is reachable by scrolling; footer actions stay in the viewport.
+  await page.evaluate(() => {
+    const wrap = document.querySelector<HTMLElement>(".status-wrap")!;
+    wrap.scrollTop = wrap.scrollHeight;
+  });
+  expect(await page.evaluate(() => {
+    const status = document.querySelector<HTMLElement>("#status")!;
+    const wrap = status.parentElement!;
+    return status.getBoundingClientRect().bottom <= wrap.getBoundingClientRect().bottom + 1;
+  })).toBe(true);
+  for (const id of ["undo", "add"]) {
+    expect(await page.locator(`#${id}`).evaluate(el => {
+      const rect = el.getBoundingClientRect();
+      return rect.top >= 0 && rect.bottom <= innerHeight;
+    })).toBe(true);
+  }
+  await page.screenshot({path: "test-results/classic-add-limit-large-landscape.png"});
   await page.locator("#add").click();
   await expect(page.locator("#remaining")).toHaveText("16");
   await page.locator("#undo").click();

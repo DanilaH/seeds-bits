@@ -98,6 +98,8 @@ progress,
 .status-wrap {
   min-height: 56px;
   padding-top: 10px;
+  /* Long Add feedback must start inside the scrollable status area. */
+  justify-content: safe center;
 }
 #status {
   font-size: 13px;
