@@ -644,10 +644,11 @@
         "runtime": "7ad737e: новый первый вход только с VITE_SEEDS_FIRST_SESSION=1, чистая настоящая book-v1-1, добровольная задача 2. Исправлены четыре замечания независимого аудита. Итоговые CI/APK/Android evidence — в acceptance.",
         "code": "Runtime 7ad737e; QA 0c33b38. CI 44766644206 passed (118 + 2 unit, 320 + 15 browser, web/Yandex, Android debug/native doubles). CI 44766629267 passed (25 targeted browser, optimized Android, native update/fresh/font200).",
         "emulator": "Android 35 / WebView 124: exact old optimized 12054 → current optimized 12061 re-signed with one ephemeral CI certificate, board/history/settings/hints/wallet/paused inventory preserved; debug Undo restored 8. Fresh real task, manual task 2; 320x520/system font200 instruction visibility and stable lesson field.",
-        "apk": "../research/first-session-2026-11-20/implementation/APK.json"
+        "apk": "../research/first-session-2026-11-20/implementation/APK.json",
+        "followup12061": "25 целевых browser-тестов прошли повторно. Независимый прогон assets/public из optimized CI APK 12061: первая встреча с краем в задаче 5 без инструкции, частичная команда 568×320/200% и устаревший заголовок открытого дня после полуночи. Физическая проверка и плейтест открыты. См. ../research/first-session-2026-11-20/implementation/FOLLOWUP_12061.md."
       },
       "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
-      "nextAction": "Пройти APK 12061 на физическом телефоне, наблюдать новичков без объяснений ведущего. Отдельное решение владельца требуется для публичного включения; ранний плюс/лимит оригиналов и шесть приостановленных экспериментов остаются отдельными работами.",
+      "nextAction": "Плейтест 12061 на телефонах; до публичного включения проверить первое обязательное соединение через край после задачи 1. При 568×320/200% сделать команду видимой полностью и при смене даты обновлять подпись открытого дня. Решение о публичном включении остаётся за владельцем.",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "consumerCommit": "7ad737e3581dd734d7970da5b18ef52fd49e1412"
     }
