@@ -2,12 +2,20 @@
 import {execFileSync} from "node:child_process";
 import fs from "node:fs";
 import assert from "node:assert/strict";
+import {createHash} from "node:crypto";
 const app = "com.seedsbits.game.preview";
 const out = "test-results/layout-android/acceptance";
 fs.mkdirSync(out,{recursive:true});
 const adb = (...args) => execFileSync("adb",args,{encoding:"utf8"}).trim();
 const wait = ms => new Promise(resolve => setTimeout(resolve,ms));
 const rows = [];
+const apk = process.argv[2];
+if (apk) fs.writeFileSync(out+"/build.json",JSON.stringify({
+  commit:process.env.GITHUB_SHA,package:app,
+  sha256:createHash('sha256').update(fs.readFileSync(apk)).digest('hex'),
+  version:adb('shell','dumpsys','package',app).split('\n').filter(x=>/versionName=|versionCode=/.test(x)).map(x=>x.trim()),
+  webview:adb('shell','dumpsys','webviewupdate').split('\n').find(x=>x.includes('Current WebView package')),
+},null,2));
 async function attach() {
   let target;
   for (let i=0;i<60;i++) {
@@ -38,7 +46,7 @@ for (const [size,font] of [
   adb("shell","am","force-stop",app);adb("shell","pm","clear",app);
   adb("shell","wm","size",size);adb("shell","settings","put","system","font_scale",String(font));
   adb("shell","monkey","-p",app,"1");
-  const {evaluate,close}=await attach();
+  let {evaluate,close}=await attach();
   const until=async expression=>{
     for(let i=0;i<60;i++){if(await evaluate(expression))return;await wait(200);}
     throw Error("Timed out: "+expression);
@@ -96,8 +104,13 @@ for (const [size,font] of [
   await tap("#add",".game-actions");await tap("#undo",".game-actions");
   await tap("#lesson-next","#lesson-actions");
   assert(await evaluate("document.querySelector('#lesson').hidden"));
-  await evaluate(`(async()=>{const put=(key,value)=>window.Capacitor.nativePromise('Preferences','set',{key,value:JSON.stringify(value)});const board=Array.from({length:180},(_,i)=>i%9===0?0:1);board[0]=board[171]=5;await put('seeds-bits.settings.v1',{tutorialDone:true});await put('seeds-bits.progress.v2',{version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]});setTimeout(()=>location.reload(),100);})()`);
-  await wait(1200);await until("!document.querySelector('#app').inert&&document.querySelector('#dialog').open");
+  await evaluate(`(async()=>{const put=(key,value)=>window.Capacitor.nativePromise('Preferences','set',{key,value:JSON.stringify(value)});const board=Array.from({length:180},(_,i)=>i%9===0?0:1);board[0]=board[171]=5;await put('seeds-bits.settings.v1',{tutorialDone:true});await put('seeds-bits.progress.v2',{version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]});})()`);
+  // Restore the fixture through a cold app launch, just as a saved phone session.
+  // location.reload() can retain an in-flight native bridge from the old document.
+  close();adb('shell','am','force-stop',app);adb('shell','monkey','-p',app,'1');
+  ({evaluate,close}=await attach());
+  await until("!document.querySelector('#app').inert&&document.querySelector('#dialog').open");
+  measureBounds();
   await tap("#resume");
   const before=await record("hint-before",true);
   await tap("#hint");await until("!document.querySelector('#hint-jump').hidden");
@@ -113,8 +126,10 @@ for (const [size,font] of [
   await tap("#menu");await tap("#book-mode","dialog");
   assert(await evaluate("document.querySelector('#hint-jump').hidden"));
   if(size==="640x1136"&&font===2) {
-    await evaluate(`(async()=>{const board=Array(90).fill(1);board[0]=board[1]=5;await window.Capacitor.nativePromise('Preferences','set',{key:'seeds-bits.progress.v2',value:JSON.stringify({version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]})});setTimeout(()=>location.reload(),100);})()`);
-    await wait(1200);await until("!document.querySelector('#app').inert&&document.querySelector('#dialog').open");
+    await evaluate(`(async()=>{const board=Array(90).fill(1);board[0]=board[1]=5;await window.Capacitor.nativePromise('Preferences','set',{key:'seeds-bits.progress.v2',value:JSON.stringify({version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]})});})()`);
+    close();adb('shell','am','force-stop',app);adb('shell','monkey','-p',app,'1');
+    ({evaluate,close}=await attach());
+    await until("!document.querySelector('#app').inert&&document.querySelector('#dialog').open");measureBounds();
     await tap("#resume");
     await evaluate(`(()=>{const native=window.Capacitor.nativePromise;window.failLayoutSave=true;window.Capacitor.nativePromise=(plugin,method,options)=>plugin==='SeedsMonetization'&&method==='persistState'&&window.failLayoutSave?Promise.reject(new Error('layout acceptance: storage full')):native(plugin,method,options);})()`);
     await digit(0);await digit(1);await until("!document.querySelector('#save-notice').hidden");
