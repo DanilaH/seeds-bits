@@ -505,5 +505,28 @@
         "Запись конкретного варианта оригинала для проверки поведения в игре"
       ]
     }
+  ],
+  "localAdaptations": [
+    {
+      "id": "classic-add-feedback-20261120",
+      "sourceFeatureIds": [
+        "eb-add-order",
+        "nado-stuck-add"
+      ],
+      "scope": "Классика Seeds; наш текст по явному заданию владельца в PR #7. Такой текст в оригиналах не наблюдался.",
+      "status": "PRODUCT_IMPLEMENTED",
+      "implementation": [
+        "src/main.ts:render",
+        "src/core.ts:addNumbers (не менялся)"
+      ],
+      "behavior": "После Add без пар: фактическое добавление, следующая выдача либо отмена/новая партия при MAX_CELLS. Undo/reload используют существующую историю.",
+      "verification": {
+        "code": "build + 107 unit + 8 browser passed locally",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED"
+      },
+      "acceptance": "./2026-11-20/FEEDBACK_ACCEPTANCE.md",
+      "nextAction": "Выдать подписанный preview APK и пройти на телефоне; ранний плюс/бюджет оригиналов исследовать отдельно."
+    }
   ]
 }
