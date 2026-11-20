@@ -1,0 +1,36 @@
+name: Seeds layout research on Android
+on:
+  push:
+    branches: [research/seeds-layout-audit-20261120]
+    paths: [scripts/layout-audit/android.mjs, .github/workflows/layout-research-android.yml]
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      SEEDS_BUILD_FLAVOR: preview
+      VITE_SEEDS_QA_PROFILE: baseline
+      ADS_MODE: test
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: npm ci --no-audit --no-fund && npm run setup:android
+      - run: node scripts/configure-android.mjs && chmod +x android/gradlew && cd android && ./gradlew assembleDebug
+      - run: |
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
+          echo no | avdmanager create avd --force --name layout --package 'system-images;android-35;google_apis;x86_64'
+          bash scripts/ci-offline-emulator.sh layout
+          adb install android/app/build/outputs/apk/debug/app-debug.apk
+          node scripts/layout-audit/android.mjs android/app/build/outputs/apk/debug/app-debug.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seeds-layout-android
+          path: test-results/layout-android/
