@@ -110,7 +110,7 @@ for (const [size,font] of [
   // location.reload() can retain an in-flight native bridge from the old document.
   close();adb('shell','am','force-stop',app);adb('shell','monkey','-p',app,'1');
   ({evaluate,close}=await attach());
-  await until("!document.querySelector('#app').inert&&document.querySelector('#dialog').open");
+  await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");
   measureBounds();
   await tap("#resume");
   const before=await record("hint-before",true);
@@ -130,7 +130,7 @@ for (const [size,font] of [
     await evaluate(`(async()=>{const board=Array(90).fill(1);board[0]=board[1]=5;await window.Capacitor.nativePromise('Preferences','set',{key:'seeds-bits.progress.v2',value:JSON.stringify({version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]})});})()`);
     close();adb('shell','am','force-stop',app);adb('shell','monkey','-p',app,'1');
     ({evaluate,close}=await attach());
-    await until("!document.querySelector('#app').inert&&document.querySelector('#dialog').open");measureBounds();
+    await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");measureBounds();
     await tap("#resume");
     await evaluate(`(()=>{const native=window.Capacitor.nativePromise;window.failLayoutSave=true;window.Capacitor.nativePromise=(plugin,method,options)=>plugin==='SeedsMonetization'&&method==='persistState'&&window.failLayoutSave?Promise.reject(new Error('layout acceptance: storage full')):native(plugin,method,options);})()`);
     await digit(0);await digit(1);await until("!document.querySelector('#save-notice').hidden");
