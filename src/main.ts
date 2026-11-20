@@ -353,6 +353,11 @@ gameActions.append(
   document.querySelector("footer")!,
 );
 document.querySelector(".game")!.insertBefore(gameActions, resultDock);
+const hintDock = document.createElement("div");
+hintDock.id = "hint-dock";
+hintDock.hidden = true;
+gameActions.insertBefore(hintDock, document.querySelector("footer"));
+$("hint-jump").textContent = "↓ Вторая цифра ниже";
 const magnetButton = document.createElement("button");
 magnetButton.id = "magnet"; magnetButton.className = "action"; magnetButton.hidden = true;
 magnetButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v9a7 7 0 0 0 14 0V4h-4v9a3 3 0 0 1-6 0V4Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5 8h4m6 0h4" stroke="currentColor" stroke-width="1.7"/></svg><span class="action-label">Магнит</span><small id="magnet-count" class="action-count" aria-hidden="true"></small>';
@@ -439,6 +444,7 @@ function scheduleActionLayout() {
     const sideWidth = gameTop.clientWidth;
     const dock =
       landscape &&
+      lesson < 0 &&
       innerHeight <= 420 &&
       !game.classList.contains("is-result") &&
       actions.length > 0 &&
@@ -451,6 +457,10 @@ function scheduleActionLayout() {
       if (dock) statusParent.append(status);
       else statusParent.prepend(status);
     }
+    hintDock.hidden = !landscape || lesson >= 0;
+    const jump = $("hint-jump");
+    const jumpParent = landscape && lesson < 0 ? hintDock : status;
+    if (jump.parentElement !== jumpParent) jumpParent.prepend(jump);
     const availableWidth = dock ? game.clientWidth - 32 : footer.clientWidth;
     footer.style.setProperty("--assist-columns",actions.length>4&&widest+12<=(availableWidth-12)/3?"3":widest+12>(availableWidth-8)/2?"1":"2");
     game.classList.toggle(
@@ -498,6 +508,7 @@ function availablePairs(values: readonly number[]) {
 }
 function message(text: string) {
   $("status").textContent = text;
+  if (lesson >= 0) $("lesson-feedback").textContent = text;
 }
 const notice = document.createElement("aside");
 notice.id = "save-notice";
@@ -570,12 +581,12 @@ restoreRead.onclick = async () => {
   }
 };
 readNotice.append(readText, restoreRead, dismissRead);
-document.querySelector(".game")!.prepend(notice);
+document.querySelector(".status-wrap")!.prepend(notice);
 $("load-latest").onclick = () => location.reload();
 function showSaveState() {
   const parent = dialog.open
     ? dialogScroller()
-    : document.querySelector(".game")!;
+    : document.querySelector(".status-wrap")!;
   if (notice.parentElement !== parent) parent.prepend(notice);
   if (readNotice.parentElement !== parent) parent.prepend(readNotice);
   readNotice.hidden = !readWarning;
@@ -588,6 +599,8 @@ function showSaveState() {
     : "Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.";
   $("load-latest").hidden = !storageConflict;
   $("retry-save").hidden = !saveFailed || storageConflict;
+  // The notice owns the error and recovery action; do not announce it twice.
+  $("status").hidden = saveFailed;
 }
 function save(state = progress, game = session) {
   if (storageConflict && !futureSave && Object.keys(settingsDirty).length) {
@@ -992,7 +1005,7 @@ function cell(i: number) {
 function updateJump() {
   const button = $("hint-jump");
   button.hidden = true;
-  if (!highlight) return;
+  if (!highlight || lesson >= 0) return;
   const rect = viewport.getBoundingClientRect();
   const other =
     selected === highlight.a
@@ -1002,10 +1015,14 @@ function updateJump() {
         : highlight.b;
   const c = cell(other)?.getBoundingClientRect();
   if (!c) return;
-  if (c.top < rect.top || c.bottom > rect.bottom) {
+  const tolerance = 1; // Fractional WebView rows can extend a fraction of a CSS px.
+  const above = c.top < rect.top - tolerance && viewport.scrollTop > tolerance;
+  const below = c.bottom > rect.bottom + tolerance &&
+    viewport.scrollTop < viewport.scrollHeight - viewport.clientHeight - tolerance;
+  if (above || below) {
     button.hidden = false;
     button.textContent =
-      c.top < rect.top ? "↑ Вторая цифра выше" : "↓ Вторая цифра ниже";
+      above ? "↑ Вторая цифра выше" : "↓ Вторая цифра ниже";
     button.onclick = () =>
       cell(other)?.scrollIntoView({
         block: "center",
@@ -1070,6 +1087,15 @@ lessonQuick.className = "secondary";
 lessonQuick.textContent = "Начать с короткой задачи";
 lessonQuick.hidden = true;
 $("lesson-next").after(lessonQuick);
+const lessonActions = document.createElement("div");
+lessonActions.id = "lesson-actions";
+lessonActions.hidden = true;
+lessonActions.append($("lesson-next"), lessonQuick);
+document.querySelector(".game")!.insertBefore(lessonActions, gameActions);
+const lessonFeedback = document.createElement("p");
+lessonFeedback.id = "lesson-feedback";
+lessonFeedback.setAttribute("role", "status");
+$("lesson").append(lessonFeedback);
 lessonQuick.onclick = () => {
   const task = notebook.find((p) => !progress.done.includes(p.id));
   if (!task || busy) return;
@@ -1650,6 +1676,9 @@ function compactCount(n: number) {
   return n > 999 ? "999+" : String(n);
 }
 function render() {
+  lessonActions.hidden = lesson < 0;
+  lessonActions.dataset.short = String(shortLesson);
+  document.querySelector<HTMLElement>(".game")!.dataset.lesson = String(lesson);
   $("recover-task").hidden = true;
   const focusedIndex = document.activeElement?.closest("#board")
     ? (document.activeElement as HTMLElement).dataset.index

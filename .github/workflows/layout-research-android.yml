@@ -2,7 +2,7 @@ name: Seeds layout research on Android
 on:
   push:
     branches: [research/seeds-layout-audit-20261120]
-    paths: [scripts/layout-audit/android.mjs, .github/workflows/layout-research-android.yml]
+    paths: [src/**, scripts/layout-audit/**, .github/workflows/layout-research-android.yml]
 permissions:
   contents: read
 jobs:
@@ -49,6 +49,7 @@ jobs:
           adb shell wm density 320
           adb install android/app/build/outputs/apk/debug/app-debug.apk
           node scripts/layout-audit/android.mjs android/app/build/outputs/apk/debug/app-debug.apk
+          node scripts/layout-audit/acceptance.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

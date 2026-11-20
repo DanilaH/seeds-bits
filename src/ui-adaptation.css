@@ -668,3 +668,175 @@
 #qa-help-tools{display:grid;gap:8px;margin-top:20px}#qa-help-tools h3{margin:0 0 4px;font-size:18px}#qa-help-tools>button{width:100%;margin:0}
 
 @media (orientation:portrait),(max-width:539px){.game:has(#magnet:not([hidden])):has(#plan:not([hidden])) .game-actions{margin-top:auto}}
+
+/* Lesson instructions, practice and continuation own separate bounded zones. */
+.game:has(#lesson:not([hidden])) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto clamp(90px, 28dvh, 200px) minmax(64px, 1fr) auto auto;
+  overflow: hidden;
+}
+.game:has(#lesson:not([hidden])) > .game-top {
+  display: block;
+  grid-row: 1;
+  min-height: 0;
+}
+.game:has(#lesson:not([hidden])) .game-top > header {
+  min-height: 48px;
+  padding-block: 0;
+}
+.game:has(#lesson:not([hidden])) .game-meta {
+  display: none;
+}
+.game:has(#lesson:not([hidden])) #lesson {
+  grid-row: 2;
+  min-height: 0;
+  margin: 0;
+  padding: 0 4px 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.game:has(#lesson:not([hidden])) #viewport {
+  grid-row: 3;
+  min-height: 64px;
+  max-height: none;
+  overflow: auto;
+  align-self: stretch;
+}
+.game:has(#lesson:not([hidden])) #board-wrap {
+  margin: 0;
+  padding-block: 8px;
+}
+#lesson-feedback {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+#lesson-actions {
+  grid-row: 4;
+  display: grid;
+  gap: 6px;
+  min-height: 0;
+  padding-block: 8px;
+  overflow-y: auto;
+}
+#lesson-actions > button {
+  width: 100%;
+  margin: 0;
+  min-height: 44px;
+  padding: 8px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+/* Keep the same continuation slots before and after answering. */
+#lesson-actions #lesson-next[hidden],
+#lesson-actions[data-short="true"] #lesson-quick[hidden] {
+  display: block !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+.game:has(#lesson:not([hidden])) > .game-actions {
+  grid-row: 5;
+  display: block;
+  min-height: 0;
+  max-height: 32dvh;
+  overflow: auto;
+}
+.game:has(#lesson:not([hidden])) .status-wrap:not(:has(#save-notice:not([hidden]), #read-notice:not([hidden]))),
+.game:has(#lesson:not([hidden])) #status,
+.game:has(#lesson:not([hidden])) #hint-jump,
+.game:has(#lesson:not([hidden])):not([data-lesson="5"]) footer {
+  display: none;
+}
+@media (orientation: landscape) and (min-width: 540px) {
+  .game:has(#lesson:not([hidden])) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(64px, 1fr) auto;
+    column-gap: 16px;
+  }
+  .game:has(#lesson:not([hidden])) > .game-top {
+    grid-column: 1 / -1;
+  }
+  .game:has(#lesson:not([hidden])) #lesson {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .game:has(#lesson:not([hidden])) #viewport {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  #lesson-actions {
+    grid-column: 1;
+    grid-row: 3;
+    max-height: 45dvh;
+  }
+  .game:has(#lesson:not([hidden])) > .game-actions {
+    grid-column: 2;
+    grid-row: 3;
+    max-height: 45dvh;
+  }
+}
+
+/* Hints and save recovery never float over cells or grow the playing chrome. */
+.status-wrap #hint-jump {
+  position: static;
+  transform: none;
+  width: 100%;
+  max-width: 100%;
+  min-height: 44px;
+  margin: 0;
+  white-space: normal;
+  flex-shrink: 0;
+}
+#hint-dock {
+  flex: 0 0 auto;
+  padding-block: 2px;
+}
+#hint-dock #hint-jump {
+  position: static;
+  transform: none;
+  width: 100%;
+  margin: 0;
+  min-height: 44px;
+  white-space: normal;
+}
+#hint-dock #hint-jump[hidden] {
+  display: block !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+@media (orientation: portrait), (max-width: 539px) {
+  .game:not(:has(#lesson:not([hidden]))) .status-wrap {
+    flex: 0 0 84px;
+    height: 84px;
+    min-height: 0;
+    max-height: 84px;
+    overflow: auto;
+    justify-content: safe flex-start;
+    padding-block: 4px;
+  }
+}
+.status-wrap > #save-notice,
+.status-wrap > #read-notice {
+  flex: 0 0 auto;
+  margin: 0;
+  width: 100%;
+}
+#dialog[data-screen="privacy"] #collection a {
+  display: inline-block;
+  max-width: 100%;
+  min-height: 44px;
+  overflow-wrap: anywhere;
+}
+.progress-hero {
+  display: flex;
+  flex-wrap: wrap;
+}
+.progress-hero > div {
+  flex: 1 1 200px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.progress-hero > .jar-picture {
+  flex: 0 0 auto;
+}
