@@ -1,0 +1,1078 @@
+{
+  "build": {
+    "package": "com.seedsbits.game.preview",
+    "sha256": "162602d1564a71c2c2e5bd7bb2e0df65372c0f771d7e8cfa3736da874387d1b5",
+    "version": [
+      "versionCode=11105 minSdk=24 targetSdk=36",
+      "versionName=1.1.2"
+    ],
+    "webview": "  Current WebView package (name, version): (com.google.android.webview, 124.0.6367.219)",
+    "commit": "a5de4c71f55feabb6d05addc9ff3f0adf21c98e5"
+  },
+  "measurements": [
+    {
+      "size": "780x1688",
+      "scale": "1.0",
+      "state": "tutorial-start",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        289,
+        346,
+        369
+      ],
+      "first": [
+        22,
+        289,
+        38,
+        38
+      ],
+      "lesson": [
+        22,
+        105,
+        346,
+        168
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.0",
+      "state": "tutorial-pair",
+      "firstCentreReachable": null,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        346,
+        346,
+        312
+      ],
+      "first": null,
+      "lesson": [
+        22,
+        105,
+        346,
+        225
+      ],
+      "next": [
+        32,
+        268,
+        326,
+        45
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Получилось!"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.0",
+      "state": "tutorial-second",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        335,
+        346,
+        322
+      ],
+      "first": [
+        22,
+        335,
+        38,
+        38
+      ],
+      "lesson": [
+        22,
+        105,
+        346,
+        214
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.0",
+      "state": "distant-hint",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": false,
+      "hit": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        120,
+        346,
+        479
+      ],
+      "first": [
+        22,
+        120,
+        38,
+        38
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        115,
+        559,
+        160,
+        40
+      ],
+      "overlap": 40,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.0",
+      "state": "idle-8s",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": false,
+      "hit": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        120,
+        346,
+        479
+      ],
+      "first": [
+        22,
+        120,
+        38,
+        38
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        115,
+        559,
+        160,
+        40
+      ],
+      "overlap": 40,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.0",
+      "state": "after-jump",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": true,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        120,
+        346,
+        479
+      ],
+      "first": [
+        22,
+        -170,
+        38,
+        38
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.5",
+      "state": "tutorial-start",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        423,
+        346,
+        232
+      ],
+      "first": [
+        22,
+        423,
+        38,
+        44
+      ],
+      "lesson": [
+        22,
+        115,
+        346,
+        292
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.5",
+      "state": "tutorial-pair",
+      "firstCentreReachable": null,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        489,
+        346,
+        166
+      ],
+      "first": null,
+      "lesson": [
+        22,
+        115,
+        346,
+        359
+      ],
+      "next": [
+        32,
+        402,
+        326,
+        55
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Получилось!"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.5",
+      "state": "tutorial-second",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        527,
+        346,
+        128
+      ],
+      "first": [
+        22,
+        527,
+        38,
+        44
+      ],
+      "lesson": [
+        22,
+        115,
+        346,
+        397
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.5",
+      "state": "distant-hint",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": false,
+      "hit": [
+        82,
+        83,
+        84,
+        85,
+        86,
+        87
+      ],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        135,
+        346,
+        439
+      ],
+      "first": [
+        22,
+        135,
+        38,
+        44
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        80,
+        526,
+        230,
+        49
+      ],
+      "overlap": 48,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.5",
+      "state": "idle-8s",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": false,
+      "hit": [
+        82,
+        83,
+        84,
+        85,
+        86,
+        87
+      ],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        135,
+        346,
+        439
+      ],
+      "first": [
+        22,
+        135,
+        38,
+        44
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        80,
+        526,
+        230,
+        49
+      ],
+      "overlap": 48,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "780x1688",
+      "scale": "1.5",
+      "state": "after-jump",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": true,
+      "hit": [
+        172,
+        173,
+        174,
+        175,
+        176,
+        177
+      ],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        135,
+        346,
+        439
+      ],
+      "first": [
+        22,
+        -306,
+        38,
+        44
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        80,
+        526,
+        230,
+        49
+      ],
+      "overlap": 48,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "780x1688",
+      "scale": "2.0",
+      "state": "tutorial-start",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        554,
+        346,
+        2
+      ],
+      "first": [
+        22,
+        554,
+        38,
+        57
+      ],
+      "lesson": [
+        22,
+        124,
+        346,
+        414
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "780x1688",
+      "scale": "2.0",
+      "state": "tutorial-pair",
+      "firstCentreReachable": null,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        629,
+        346,
+        0
+      ],
+      "first": null,
+      "lesson": [
+        22,
+        124,
+        346,
+        490
+      ],
+      "next": [
+        32,
+        533,
+        326,
+        64
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Получилось!"
+    },
+    {
+      "size": "780x1688",
+      "scale": "2.0",
+      "state": "tutorial-second",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        833,
+        346,
+        0
+      ],
+      "first": [
+        22,
+        833,
+        38,
+        57
+      ],
+      "lesson": [
+        22,
+        124,
+        346,
+        693
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "780x1688",
+      "scale": "2.0",
+      "state": "distant-hint",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": false,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        166,
+        346,
+        331
+      ],
+      "first": [
+        22,
+        166,
+        38,
+        57
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        30,
+        507,
+        330,
+        58
+      ],
+      "overlap": 0,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "780x1688",
+      "scale": "2.0",
+      "state": "idle-8s",
+      "firstCentreReachable": true,
+      "destinationCentreReachable": false,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        166,
+        346,
+        331
+      ],
+      "first": [
+        22,
+        166,
+        38,
+        57
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        30,
+        507,
+        330,
+        58
+      ],
+      "overlap": 0,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "780x1688",
+      "scale": "2.0",
+      "state": "after-jump",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": true,
+      "hit": [],
+      "screen": [
+        390,
+        796
+      ],
+      "board": [
+        22,
+        166,
+        346,
+        331
+      ],
+      "first": [
+        22,
+        -643,
+        38,
+        57
+      ],
+      "lesson": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        30,
+        507,
+        330,
+        58
+      ],
+      "overlap": 0,
+      "text": "Одинаковые цифры: 5 и 5 · по вертикали"
+    },
+    {
+      "size": "640x1136",
+      "scale": "1.5",
+      "state": "tutorial-start",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        320,
+        520
+      ],
+      "board": [
+        22,
+        352,
+        276,
+        0
+      ],
+      "first": [
+        22,
+        352,
+        31,
+        43
+      ],
+      "lesson": [
+        22,
+        115,
+        276,
+        229
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "640x1136",
+      "scale": "1.5",
+      "state": "tutorial-pair",
+      "firstCentreReachable": null,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        320,
+        520
+      ],
+      "board": [
+        22,
+        400,
+        276,
+        0
+      ],
+      "first": null,
+      "lesson": [
+        22,
+        115,
+        276,
+        278
+      ],
+      "next": [
+        32,
+        341,
+        256,
+        43
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Получилось!"
+    },
+    {
+      "size": "640x1136",
+      "scale": "1.5",
+      "state": "tutorial-second",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        320,
+        520
+      ],
+      "board": [
+        22,
+        437,
+        276,
+        0
+      ],
+      "first": [
+        22,
+        437,
+        31,
+        43
+      ],
+      "lesson": [
+        22,
+        115,
+        276,
+        315
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "640x1136",
+      "scale": "2.0",
+      "state": "tutorial-start",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        320,
+        520
+      ],
+      "board": [
+        22,
+        463,
+        276,
+        0
+      ],
+      "first": [
+        22,
+        463,
+        31,
+        56
+      ],
+      "lesson": [
+        22,
+        124,
+        276,
+        331
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    },
+    {
+      "size": "640x1136",
+      "scale": "2.0",
+      "state": "tutorial-pair",
+      "firstCentreReachable": null,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        320,
+        520
+      ],
+      "board": [
+        22,
+        520,
+        276,
+        0
+      ],
+      "first": null,
+      "lesson": [
+        22,
+        124,
+        276,
+        389
+      ],
+      "next": [
+        32,
+        452,
+        256,
+        52
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Получилось!"
+    },
+    {
+      "size": "640x1136",
+      "scale": "2.0",
+      "state": "tutorial-second",
+      "firstCentreReachable": false,
+      "destinationCentreReachable": null,
+      "hit": [],
+      "screen": [
+        320,
+        520
+      ],
+      "board": [
+        22,
+        745,
+        276,
+        0
+      ],
+      "first": [
+        22,
+        745,
+        31,
+        56
+      ],
+      "lesson": [
+        22,
+        124,
+        276,
+        613
+      ],
+      "next": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "jump": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap": 0,
+      "text": "Попробуйте на маленьком поле"
+    }
+  ]
+}
