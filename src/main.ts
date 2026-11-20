@@ -74,6 +74,7 @@ import {
 } from "./result-presentation";
 import {
   WIDTH,
+  MAX_CELLS,
   classic,
   occupied,
   pairs,
@@ -1781,6 +1782,15 @@ function render() {
       count > 0 &&
       (progress.active === "classic" || lesson === 5),
   );
+  const previous = session.history.at(-1);
+  const addedCount = previous &&
+    session.current.additions === previous.additions + 1 &&
+    session.current.moves === previous.moves
+      ? count - occupied(previous.board)
+      : 0;
+  const nextAddMessage = values.length + count <= MAX_CELLS
+    ? `Можно добавить ещё ${count} ${digitWord(count)}.`
+    : "Поле больше не расширяется. Отмените ход или начните новую партию.";
   if (lesson < 0 && !saveFailed)
     message(
       saveRecovered
@@ -1794,7 +1804,11 @@ function render() {
                 ? "Равные или сумма 10"
                 : ""
             : progress.active === "classic"
-              ? "Пар нет. Добавьте оставшиеся цифры."
+              ? addedCount > 0
+                ? `Добавлено ${addedCount} ${digitWord(addedCount)}. Пар пока нет. ${nextAddMessage}`
+                : values.length + count > MAX_CELLS
+                  ? `Пар нет. ${nextAddMessage}`
+                  : "Пар нет. Добавьте оставшиеся цифры."
               : "Пар нет. Отмените ход или начните задачу заново.",
     );
   drawPath(highlight);

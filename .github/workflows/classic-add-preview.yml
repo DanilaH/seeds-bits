@@ -1,0 +1,49 @@
+name: Classic Add feedback preview
+on:
+  push:
+    branches: [research/seeds-classic-add-20261120]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: classic-add-preview-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      VITE_SEEDS_QA_PROFILE: baseline
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - run: npx playwright test e2e/porting-classic-add.spec.ts e2e/game.spec.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: classic-add-browser
+          path: test-results/
+      - run: npm run setup:android
+      - name: Configure isolated preview with reserved version 12051
+        run: GITHUB_RUN_NUMBER=951 node scripts/configure-android.mjs
+      - run: chmod +x android/gradlew && cd android && ./gradlew assembleRelease
+      - name: Record exact source and preview configuration
+        run: |
+          mkdir -p test-results/apk
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/apk/seeds-classic-add-12051-unsigned.apk
+          node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync("test-results/apk/source.json", JSON.stringify({source:process.env.GITHUB_SHA,version:"1.1.2",versionCode:12051,package:"com.seedsbits.game.preview",profile:"baseline",ads:"test",analytics:false},null,2))'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: classic-add-preview-unsigned
+          path: test-results/apk/
