@@ -22,11 +22,14 @@ async function scale(p:Page,z:number){await p.evaluate(z=>{
   const es=[...document.querySelectorAll<HTMLElement>("body *")],sizes=es.map(e=>parseFloat(getComputedStyle(e).fontSize));es.forEach((e,i)=>e.style.fontSize=`${sizes[i]*z}px`);
 },z);await stable(p);}
 async function fullyVisible(p:Page,selector:string,region:string){
-  expect(await p.locator(selector).evaluate((e,region)=>{
+  const result = await p.locator(selector).evaluate((e,region)=>{
     const r=e.getBoundingClientRect(),v=document.querySelector(region)!.getBoundingClientRect();
     const range=document.createRange();range.selectNodeContents(e);
-    return [...range.getClientRects()].every(b=>b.top>=v.top-1&&b.bottom<=v.bottom+1&&b.left>=-1&&b.right<=innerWidth+1)&&r.height>0;
-  },region)).toBe(true);
+    const lines = [...range.getClientRects()];
+    const visible = lines.length > 0 && lines.every(b=>b.top>=v.top-1&&b.bottom<=v.bottom+1&&b.left>=-1&&b.right<=innerWidth+1)&&r.height>0;
+    return {visible, region:v.toJSON(), lines:lines.map(line=>line.toJSON())};
+  },region);
+  expect(result.visible, JSON.stringify(result)).toBe(true);
 }
 test("clean first run is a real saved task, voluntary task 2 and no duplicate reward",async({page})=>{
   await start(page);await expect(page.locator("#dialog")).not.toHaveAttribute("open");await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 1");
@@ -180,6 +183,8 @@ for (const [first, second] of [[6, 10], [10, 6]]) {
 test("landscape 568×320 at 200% fits the first command and the two-option answer", async ({page}) => {
   await page.setViewportSize({width:568, height:320});
   await start(page);
+  // The native ad slot applies its layout even when the device is offline.
+  await page.evaluate(() => document.documentElement.classList.add("has-mobile-ads"));
   await scale(page, 2);
   const geometry = () => page.locator("#viewport").boundingBox();
   const before = await geometry();

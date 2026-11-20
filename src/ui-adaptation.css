@@ -980,6 +980,11 @@
 }
 @media (orientation: landscape) and (max-height: 420px) {
   #page-progress.opening-guide { height: clamp(90px, 40dvh, 132px); }
+  .game.docked-actions:has(#page-progress.opening-guide) .game-actions footer .action {
+    flex-direction: row;
+    gap: 6px;
+    padding-block: 4px;
+  }
 }
 
 #win:not([data-result-kind="classic"]) #win-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }

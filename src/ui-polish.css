@@ -2417,7 +2417,7 @@ header .jar-caption strong {
     #page-progress {
     padding-bottom: 2px;
   }
-  .has-mobile-ads .game:not(:has(#lesson:not([hidden]))) #page-progress > span {
+  .has-mobile-ads .game:not(:has(#lesson:not([hidden]))) #page-progress:not(.opening-guide) > span {
     display: none;
   }
   .has-mobile-ads

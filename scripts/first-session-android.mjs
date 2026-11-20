@@ -66,7 +66,7 @@ async function attach(){
   }
   const digit=i=>tap(`#board [data-index="${i}"]`,"#viewport");
   const move=async(a,b)=>{const n=await evaluate("+document.querySelector('#remaining').textContent");await digit(a);await digit(b);await until(`+document.querySelector('#remaining').textContent===${n-2}`);};
-  const fullText=async(selector,region)=>assert(await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),v=document.querySelector(${JSON.stringify(region)}).getBoundingClientRect(),r=document.createRange();r.selectNodeContents(e);return [...r.getClientRects()].every(b=>b.top>=v.top-1&&b.bottom<=v.bottom+1&&b.left>=0&&b.right<=innerWidth)})()`),selector+" not fully visible");
+  const fullText=async(selector,region)=>assert(await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),v=document.querySelector(${JSON.stringify(region)}).getBoundingClientRect(),r=document.createRange();r.selectNodeContents(e);const lines=[...r.getClientRects()];return lines.length>0&&getComputedStyle(e).visibility==='visible'&&lines.every(b=>b.top>=v.top-1&&b.bottom<=v.bottom+1&&b.left>=0&&b.right<=innerWidth)})()`),selector+" not fully visible");
   return{evaluate,until,tap,digit,move,fullText,close:()=>ws.close()};
 }
 const progress="seeds-bits.progress.v2",settings="seeds-bits.settings.v1";
