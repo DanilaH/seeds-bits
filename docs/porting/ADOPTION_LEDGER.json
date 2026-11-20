@@ -532,15 +532,17 @@
       "id": "eb-tutorial-row-edge-copy",
       "parity": "PARTIAL",
       "status": "IMPLEMENTED_UNVERIFIED",
-      "consumerCommit": "7ad737e3581dd734d7970da5b18ef52fd49e1412",
-      "currentImplementation": "Собственный test-only первый вход: при оставшемся переходе чтения короткая команда появляется до хода, а SVG края одинаков при обоих порядках касаний. Полный курс по запросу сохранён.",
+      "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26",
+      "currentImplementation": "В тестовой тетради короткое объяснение появляется до первого обязательного хода через край, в том числе в задаче 5. Первый успешный ход сохраняет отметку правила. Проверены оба порядка касания.",
       "evidenceRef": [
         "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
         "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L970",
         "../research/first-session-2026-11-20/route.json",
         "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/first-session.ts",
         "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/main.ts",
-        "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md"
+        "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
+        "https://github.com/DanilaH/seeds-bits/blob/6d67fea7312d43a43786f68a2a64106a44b71d26/src/main.ts",
+        "../research/first-session-2026-11-20/implementation/FOLLOWUP_12062.md"
       ],
       "sourceLocator": "RU/tutorial_step_4_title, tutorial_step_4_description",
       "nextAction": "Плейтест на телефоне: человек должен найти пару через пропуск/край без лампочки. Отдельно наблюдать момент объяснения в оригинале; PARTIAL не означает полное совпадение FTUE.",
@@ -549,7 +551,7 @@
       ],
       "consumerTest": "../../e2e/first-session.spec.ts",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
-      "acceptanceEvidence": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md"
+      "acceptanceEvidence": "../research/first-session-2026-11-20/implementation/FOLLOWUP_12062.md"
     },
     {
       "id": "eb-daily-intro-monthly-cup-copy",
@@ -645,12 +647,13 @@
         "code": "Runtime 7ad737e; QA 0c33b38. CI 44766644206 passed (118 + 2 unit, 320 + 15 browser, web/Yandex, Android debug/native doubles). CI 44766629267 passed (25 targeted browser, optimized Android, native update/fresh/font200).",
         "emulator": "Android 35 / WebView 124: exact old optimized 12054 → current optimized 12061 re-signed with one ephemeral CI certificate, board/history/settings/hints/wallet/paused inventory preserved; debug Undo restored 8. Fresh real task, manual task 2; 320x520/system font200 instruction visibility and stable lesson field.",
         "apk": "../research/first-session-2026-11-20/implementation/APK.json",
-        "followup12061": "25 целевых browser-тестов прошли повторно. Независимый прогон assets/public из optimized CI APK 12061: первая встреча с краем в задаче 5 без инструкции, частичная команда 568×320/200% и устаревший заголовок открытого дня после полуночи. Физическая проверка и плейтест открыты. См. ../research/first-session-2026-11-20/implementation/FOLLOWUP_12061.md."
+        "followup12061": "25 целевых browser-тестов прошли повторно. Независимый прогон assets/public из optimized CI APK 12061: первая встреча с краем в задаче 5 без инструкции, частичная команда 568×320/200% и устаревший заголовок открытого дня после полуночи. Физическая проверка и плейтест открыты. См. ../research/first-session-2026-11-20/implementation/FOLLOWUP_12061.md.",
+        "followup12062": "Финальная ревизия 6d67fea. Три случая исправлены. 30 целевых браузерных сценариев и offline Android 35 прошли в CI 44793614971. Подпись для выдачи прежним сертификатом ждёт восстановления среды."
       },
       "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
-      "nextAction": "Плейтест 12061 на телефонах; до публичного включения проверить первое обязательное соединение через край после задачи 1. При 568×320/200% сделать команду видимой полностью и при смене даты обновлять подпись открытого дня. Решение о публичном включении остаётся за владельцем.",
+      "nextAction": "Подписать APK 12062 прежним preview-сертификатом. На физическом телефоне проверить самостоятельное соединение через край, альбом при системных 200% и обновление старой партии.",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
-      "consumerCommit": "7ad737e3581dd734d7970da5b18ef52fd49e1412"
+      "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26"
     }
   ]
 }
