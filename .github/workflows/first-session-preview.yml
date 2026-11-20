@@ -1,0 +1,87 @@
+name: First session preview
+on:
+  push:
+    branches: [research/seeds-first-session-20261120]
+    paths: [src/**, tests/**, e2e/**, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: first-session-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - run: npx playwright test --config playwright.first-session.config.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: first-session-browser, path: test-results/}
+      - run: npm run setup:android
+      - run: GITHUB_RUN_NUMBER=961 node scripts/configure-android.mjs
+      - run: |
+          chmod +x android/gradlew
+          cd android
+          if ! ./gradlew assembleRelease assembleDebug; then
+            ./gradlew --refresh-dependencies assembleRelease assembleDebug
+          fi
+      - run: |
+          mkdir -p test-results/first-session-apk
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/first-session-apk/seeds-first-session-12061-unsigned.apk
+          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12061,firstSession:true,profile:"baseline",analytics:false},null,2))'
+      - uses: actions/upload-artifact@v4
+        with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
+      - uses: actions/download-artifact@v4
+        with:
+          name: layout-preview-unsigned
+          run-id: 44734430875
+          github-token: ${{ github.token }}
+          path: baseline
+      - run: |
+          echo 'd7f5111ddc0ae5e0965410566f8bc09a71984d37292b4a24af0f03744753199e  baseline/seeds-layout-12054-unsigned.apk' | sha256sum -c -
+          keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
+          build_tools_dir=$(rg --files "$ANDROID_HOME/build-tools" | rg "/apksigner$" | sort -V | tail -1)
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-layout-12054-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
+      - run: |
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-first-session-avd"
+          mkdir -p "$ANDROID_AVD_HOME" test-results/first-session-android
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
+          echo no | avdmanager create avd --force --name firstsession --package 'system-images;android-35;google_apis;x86_64'
+          sudo chmod 666 /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
+          emulator_pid=$!
+          for attempt in $(seq 1 120); do
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/first-session-android/emulator.log; exit 1; fi
+            if [ "$(timeout 4 adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then break; fi
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          adb root
+          adb wait-for-device
+          adb shell svc wifi disable
+          adb shell svc data disable
+          adb shell iptables -I OUTPUT '!' -o lo -j REJECT
+          adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
+          adb shell input keyevent 82
+          node scripts/first-session-android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: first-session-android, path: test-results/first-session-android/}
