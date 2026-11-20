@@ -17,7 +17,7 @@ async function click(p:Page,selector:string,region?:string){
 }
 async function digit(p:Page,i:number){await click(p,`#board [data-index="${i}"]`,"#viewport");}
 async function move(p:Page,a:number,b:number){const before=+(await p.locator("#remaining").innerText());await digit(p,a);await digit(p,b);await expect(p.locator("#remaining")).toHaveText(String(before-2));await stable(p);}
-async function start(p:Page){await p.emulateMedia({reducedMotion:"reduce"});await p.goto("/");await expect(cue(p)).toHaveText("Уберите все цифры. Нажмите любую.");}
+async function start(p:Page){await p.emulateMedia({reducedMotion:"reduce"});await p.goto("/");await expect(cue(p)).toHaveText("Нажмите любую цифру.");}
 async function scale(p:Page,z:number){await p.evaluate(z=>{
   const es=[...document.querySelectorAll<HTMLElement>("body *")],sizes=es.map(e=>parseFloat(getComputedStyle(e).fontSize));es.forEach((e,i)=>e.style.fontSize=`${sizes[i]*z}px`);
 },z);await stable(p);}
@@ -54,7 +54,7 @@ test("first explicit hint replaces the opening command",async({page})=>{
 });
 for(const reverse of [false,true])test(`gap cue before the move, explicit hint, edge order ${reverse}`,async({page})=>{
   await start(page);const top=await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top);
-  await move(page,8,17);await page.locator("#undo").click();await expect(cue(page)).toHaveText("Уберите все цифры. Нажмите любую.");
+  await move(page,8,17);await page.locator("#undo").click();await expect(cue(page)).toHaveText("Нажмите любую цифру.");
   await move(page,8,17);await move(page,4,5);await expect(cue(page)).toHaveText("Пустые клетки можно пропускать.");
   await expect(page.locator("#board .hinted")).toHaveCount(0);await page.locator("#hint").click();
   await expect(cue(page)).toContainText("3 и 3");await expect(cue(page)).toContainText("по горизонтали");await expect(page.locator("#status")).toHaveText("");
@@ -120,3 +120,134 @@ for(const height of [520,568])test(`returning short course command fully visible
   await expect(page.locator("#lesson-text")).toHaveText("Соедините 3 и 7.");await fullyVisible(page,"#lesson-text","#lesson");
   expect(Math.abs(await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top)-top)).toBeLessThanOrEqual(1);
 });
+
+const edgeRoute = [
+  [[4,14],[5,7],[8,17],[0,2]],
+  [[7,15],[2,8],[3,4],[7,8]],
+  [[2,3],[4,14],[5,15],[6,16],[0,2]],
+  [[1,11],[6,7],[4,8],[1,4],[7,8]],
+  [[2,11],[3,4],[5,13],[15,16],[12,17]],
+];
+
+for (const [first, second] of [[6, 10], [10, 6]]) {
+  test(`first required reading-order pair in task 5, starting at ${first}`, async ({page}) => {
+    await start(page);
+    for (const [index, route] of edgeRoute.entries()) {
+      let board = notebook[index].board;
+      for (const [a, b] of route) {
+        expect(pairs(board)).toContainEqual({a, b, kind: "straight"});
+        await move(page, a, b);
+        board = removePair(board, a, b);
+      }
+      if (index === 4) {
+        expect(pairs(board)).toEqual([{a:6, b:10, kind:"reading"}]);
+      } else {
+        await page.locator("#play-again").click();
+        await expect(page.locator("#mode")).toContainText(`задача ${index + 2}`);
+        await expect(page.locator("#remaining")).toHaveText(String(notebook[index + 1].board.filter(Boolean).length));
+      }
+    }
+
+    const status = page.locator("#status");
+    const seen = () => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).seen, key);
+    await expect(status).toHaveText("От правого края — в начало строки ниже.");
+    expect(await seen()).not.toContain("reading");
+    await page.reload();
+    await page.locator("#resume").click();
+    await expect(status).toHaveText("От правого края — в начало строки ниже.");
+    await digit(page, first);
+    await expect(status).toHaveText("От правого края — в начало строки ниже.");
+    await expect(page.locator("#paths path, #board .hinted")).toHaveCount(0);
+    if (first === 10) {
+      await page.locator("#hint").click();
+      await expect(status).toContainText("2 и 2");
+      await expect(page.locator("#paths path")).toHaveCount(1);
+      await digit(page, first);
+    }
+    await digit(page, second);
+    await expect(page.locator("#win")).toBeVisible();
+    await expect.poll(seen).toContain("reading");
+
+    await page.locator("#book-top").click();
+    await page.locator('[data-game="book-v1-5"]').click();
+    await expect(page.locator("#remaining")).toHaveText("12");
+    for (const [a, b] of edgeRoute[4]) await move(page, a, b);
+    expect(await status.textContent()).not.toContain("От правого края");
+    await expect(page.locator("#remaining")).toHaveText("2");
+  });
+}
+
+test("landscape 568×320 at 200% fits the first command and the two-option answer", async ({page}) => {
+  await page.setViewportSize({width:568, height:320});
+  await start(page);
+  await scale(page, 2);
+  const geometry = () => page.locator("#viewport").boundingBox();
+  const before = await geometry();
+  await fullyVisible(page, ".opening-copy", "#page-progress");
+  await fullyVisible(page, ".opening-copy", ".game-top");
+  await page.screenshot({path:"test-results/first-session/landscape-opening-200.png"});
+  // Without scrolling, tap a digit on each row and check the menu at the end.
+  await click(page, '#board [data-index="4"]');
+  await expect(cue(page)).toContainText("9 + 1 = 10");
+  await fullyVisible(page, ".opening-copy", "#page-progress");
+  await fullyVisible(page, ".opening-copy", ".game-top");
+  await page.screenshot({path:"test-results/first-session/landscape-nine-200.png"});
+  expect(await geometry()).toEqual(before);
+  await click(page, '#board [data-index="14"]');
+  await expect(page.locator("#remaining")).toHaveText("6");
+  await click(page, "#menu");
+  await expect(page.locator("#dialog")).toBeVisible();
+});
+
+for (const trigger of ["timer", "focus"]) {
+  test(`midnight relabels the open daily board on ${trigger} without changing play`, async ({page}) => {
+    const beforeMidnight = new Date("2026-11-20T23:59:45+05:00");
+    const afterMidnight = new Date("2026-11-21T00:00:05+05:00");
+    await page.clock.install({time:beforeMidnight});
+    await start(page);
+    await page.locator("#menu").click();
+    await page.locator("#daily-mode").click();
+    const mode = page.locator("#mode");
+    await expect(mode).toHaveText("Задача дня · 20 ноября");
+    const {solution} = daily("2026-11-20");
+    await move(page, solution[0].a, solution[0].b);
+    const next = solution[1];
+    // Make this five-row board scroll so the rollover exercises a nonzero offset.
+    await page.locator("#viewport").evaluate(el => {el.style.maxHeight = "95px";});
+    await digit(page, next.a);
+    const selected = page.locator(`#board [data-index="${next.a}"]`);
+    await expect(selected).toHaveAttribute("aria-pressed", "true");
+    await page.locator("#viewport").evaluate(el => {el.scrollTop = el.scrollHeight;});
+    await stable(page);
+
+    const read = () => page.evaluate(k => {
+      const saved = JSON.parse(localStorage.getItem(k)!);
+      return {active:saved.active, game:saved.sessions[saved.active], scroll:document.querySelector("#viewport")!.scrollTop};
+    }, key);
+    const before = await read();
+    expect(before.scroll).toBeGreaterThan(0);
+    if (trigger === "timer") {
+      await page.clock.fastForward(afterMidnight.getTime() - beforeMidnight.getTime());
+    } else {
+      await page.clock.setSystemTime(afterMidnight);
+      await expect(mode).toHaveText("Задача дня · 20 ноября");
+      await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+    }
+    await expect(mode).toHaveText("Задача из архива · 20 ноября");
+    const after = await read();
+    expect(after.active).toBe("daily-v1-2026-11-20");
+    expect(after.game.current.board).toEqual(before.game.current.board);
+    expect(after.game.packedHistory).toEqual(before.game.packedHistory);
+    expect(after.scroll).toBe(before.scroll);
+    await expect(selected).toHaveAttribute("aria-pressed", "true");
+
+    await page.locator("#viewport").evaluate(el => {el.style.maxHeight = "";});
+    await digit(page, next.b);
+    await expect(page.locator("#remaining")).toHaveText(String(before.game.current.board.filter(Boolean).length - 2));
+    for (const pair of solution.slice(2)) await move(page, pair.a, pair.b);
+    await expect(page.locator("#win h1")).toHaveText("Задача за 20 ноября решена");
+    const done = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).done, key);
+    expect(done).toContain("daily-v1-2026-11-20");
+    expect(done).not.toContain("daily-v1-2026-11-21");
+  });
+}

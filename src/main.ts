@@ -1,4 +1,4 @@
-import {firstSessionEnabled, firstGuideId as guideId, openingGoal, gapCue, edgeCue, acrossGap, openingSelection, requiredRule, taskDate} from "./first-session";
+import {firstSessionEnabled, firstGuideId as guideId, openingGoal, edgeCue, acrossGap, openingSelection, requiredRule, taskDate} from "./first-session";
 import {captureHelpFrame,presentHelpChange,presentHelpStep,clearHelpEffects,helpEffectEpoch} from "./help-presentation";
 import {installHelpLab,closeHelpLab} from "./help-lab-ui";
 import {requestHelp} from "./help-client";
@@ -347,6 +347,19 @@ const openingErrors: Record<string, string> = {
 function inOpening() {
   return firstSessionEnabled && lesson < 0 && progress.active === "book-v1-1" &&
     progress.seen.includes(guideId) && !progress.done.includes(progress.active);
+}
+function notebookEdgeUnseen() {
+  return firstSessionEnabled && lesson < 0 && progress.active.startsWith("book-v1-") &&
+    !progress.seen.includes("reading");
+}
+function needsNotebookEdge(available: readonly Connection[]) {
+  return notebookEdgeUnseen() && available.length > 0 &&
+    available.every(pair => pair.kind === "reading");
+}
+function dailyFieldTitle(id: string, currentDate = today()) {
+  const day = id.slice(9);
+  const mode = day === currentDate ? "Задача дня" : "Задача из архива";
+  return `${mode} · ${taskDate(day)}`;
 }
 document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
 const gameTop = document.createElement("div");
@@ -1807,7 +1820,7 @@ function render() {
           ? volumeOf(progress.active) === 0
             ? `${inOpening() ? "Тетрадь 1" : "Тетрадь"} · задача ${Number(progress.active.slice(8))}`
             : `Тетрадь ${volumeOf(progress.active) + 1} · задача ${((Number(progress.active.slice(8)) - 1) % 24) + 1}`
-          : `${progress.active.slice(9) === today() ? "Задача дня" : "Задача из архива"} · ${taskDate(progress.active.slice(9))}`;
+          : dailyFieldTitle(progress.active);
   const plan = lesson < 0 ? currentPlan() : undefined;
   if(!busy){
     if(plan?.pair)highlight=plan.pair;
@@ -1887,6 +1900,7 @@ function render() {
   const nextAddMessage = values.length + count <= MAX_CELLS
     ? `Можно добавить ещё ${count} ${digitWord(count)}.`
     : "Поле больше не расширяется. Отмените ход или начните новую партию.";
+  const edgeNeeded = !inOpening() && needsNotebookEdge(available);
   if (lesson < 0 && !saveFailed)
     message(
       saveRecovered
@@ -1895,8 +1909,9 @@ function render() {
           ? "Партия завершена"
           : available.length
             ? highlight
-              ? "Соедините две отмеченные цифры"
+              ? edgeNeeded ? hintExplanation(values, highlight) : "Соедините две отмеченные цифры"
               : inOpening() ? ""
+              : edgeNeeded ? edgeCue
               : session.current.moves < 3
                 ? "Равные или сумма 10"
                 : ""
@@ -2083,6 +2098,8 @@ async function choose(i: number) {
   // Commit the accepted move before awaiting a decorative animation.
   if (lesson < 0) {
     session = commit(session, next, "pair", viewport.scrollTop);
+    if (result.path.kind === "reading" && notebookEdgeUnseen())
+      progress.seen.push("reading");
     removedPairs.set(session.current.board, [a, i]);
     hintIndex = 0;
     if (progress.active === "classic") {
@@ -2175,7 +2192,9 @@ async function choose(i: number) {
   }
   maybeCelebrateResult();
   if (lesson >= 0) message("Получилось!");
-  else if (inOpening()) { /* The guide already explains this move. */ }
+  else if (inOpening() || needsNotebookEdge(availablePairs(next))) {
+    // Keep the instruction for the move that is now possible.
+  }
   else if (occupied(next) && result.path.kind === "reading")
     teach(
       "reading",
@@ -3031,7 +3050,10 @@ async function boot() {
             .catch(() => {});
       }
       syncPauseState();
-      if (active) void openDailyNotification();
+      if (active) {
+        refreshDate();
+        void openDailyNotification();
+      }
       if (!active && !busy) save();
     })
     .catch(() => {});
@@ -3610,9 +3632,16 @@ function updateHome() {
 }
 let displayedDate = today();
 function refreshDate() {
-  if (displayedDate === today() || busy) return;
-  displayedDate = today();
+  const date = today();
+  if (displayedDate === date || busy) return;
+  displayedDate = date;
   updateHome();
+  // Refresh the label in place: rendering the board would replace feedback and focus.
+  if (lesson < 0 && progress.active.startsWith("daily-v1-")) {
+    $("mode").textContent = dailyFieldTitle(progress.active, date);
+    if (!$("win").hidden) renderWin();
+    if (dialog.open && dialog.dataset.screen === "home") renderHomeCurrent();
+  }
   if (dialog.open && dialog.dataset.screen === "calendar") {
     const focused = document.activeElement as HTMLElement | null;
     const game = focused?.dataset.game,
@@ -3628,7 +3657,6 @@ function refreshDate() {
       target.focus({ preventScroll: true });
     dialogScroller().scrollTop = scroll;
   }
-  if (!occupied(board())) renderWin();
 }
 setInterval(refreshDate, 1000);
 window.addEventListener("focus", refreshDate);

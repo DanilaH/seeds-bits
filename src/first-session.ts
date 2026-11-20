@@ -2,7 +2,7 @@ import {pairs, WIDTH, type Board, type Connection} from "./core";
 
 export const firstSessionEnabled = import.meta.env.VITE_SEEDS_FIRST_SESSION === "1";
 export const firstGuideId = "first-notebook-guide-v1";
-export const openingGoal = "Уберите все цифры. Нажмите любую.";
+export const openingGoal = "Нажмите любую цифру.";
 export const gapCue = "Пустые клетки можно пропускать.";
 export const edgeCue = "От правого края — в начало строки ниже.";
 
@@ -19,7 +19,7 @@ export function openingSelection(board: Board, selected: number): string {
   if (!values.size) return "У этой цифры пока нет пары. Выберите другую.";
   const equal = values.has(value), other = 10 - value;
   if (equal && (other === value || !values.has(other))) return `Найдите ещё одну ${value}.`;
-  if (equal) return `Найдите ещё одну ${value} или ${other} (${value} + ${other} = 10).`;
+  if (equal) return `Ещё ${value} или ${other}.\n${value} + ${other} = 10.`;
   return `Найдите ${other}: ${value} + ${other} = 10.`;
 }
 

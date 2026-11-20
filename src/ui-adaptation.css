@@ -951,7 +951,7 @@
   overscroll-behavior: contain;
 }
 #page-progress.opening-guide > .opening-spacer { display: none; }
-#page-progress.opening-guide > .opening-copy { display: block; font-size: 16px; line-height: 1.25; }
+#page-progress.opening-guide > .opening-copy { display: block; font-size: 16px; line-height: 1.25; white-space: pre-line; }
 .game:has(#page-progress.opening-guide) header .brand,
 .game:has(#page-progress.opening-guide) header #jar-meter,
 .game:has(#page-progress.opening-guide) .game-meta > span:last-child { display: none; }
