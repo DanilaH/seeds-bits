@@ -8,7 +8,7 @@ const out = "test-results/layout-android/acceptance";
 fs.mkdirSync(out,{recursive:true});
 const adb = (...args) => execFileSync("adb",args,{encoding:"utf8"}).trim();
 const wait = ms => new Promise(resolve => setTimeout(resolve,ms));
-const rows = [];
+const rows = [], failures = [];
 const apk = process.argv[2];
 if (apk) fs.writeFileSync(out+"/build.json",JSON.stringify({
   commit:process.env.GITHUB_SHA,package:app,
@@ -51,7 +51,10 @@ async function attach() {
   await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
   ws.onmessage=({data})=>{const m=JSON.parse(data);if(pending.has(m.id)){pending.get(m.id)(m);pending.delete(m.id);}};
   const evaluate=async expression=>{
-    const id=++seq,promise=new Promise(resolve=>pending.set(id,resolve));
+    const id=++seq,promise=new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP evaluation timed out'));},15000);
+      pending.set(id,m=>{clearTimeout(timer);resolve(m);});
+    });
     ws.send(JSON.stringify({id,method:"Runtime.evaluate",params:{expression,returnByValue:true,awaitPromise:true}}));
     const m=await promise;assert(!m.error&&!m.result.exceptionDetails,JSON.stringify(m));return m.result.result.value;
   };
@@ -63,10 +66,12 @@ for (const [size,font] of [
   ["1136x640",1],["1136x640",1.5],["1136x640",2],
   ["1688x780",1],["1688x780",1.5],["1688x780",2],
 ]) {
+  let evaluate,close;
+  try {
   adb("shell","am","force-stop",app);adb("shell","pm","clear",app);
   adb("shell","wm","size",size);adb("shell","settings","put","system","font_scale",String(font));
   adb("shell","monkey","-p",app,"1");
-  let {evaluate,close}=await attach();
+  ({evaluate,close}=await attach());
   const until=async expression=>{
     for(let i=0;i<60;i++){if(await evaluate(expression))return;await wait(200);}
     throw Error("Timed out: "+expression);
@@ -74,13 +79,19 @@ for (const [size,font] of [
   await until("document.querySelector('#lesson-feedback')&&!document.querySelector('#app').inert&&!document.querySelector('#lesson').hidden");
   await wait(300);
   let bounds;
-  const measureBounds=()=>{
-    adb("shell","uiautomator","dump","/sdcard/layout-window.xml");
-    const xml=adb("shell","cat","/sdcard/layout-window.xml");
-    const m=xml.match(/class="android\.webkit\.WebView"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/);
-    assert(m,"WebView bounds missing");bounds=m.slice(1).map(Number);
+  const measureBounds=async()=>{
+    let xml='';
+    for(let attempt=0;attempt<5;attempt++) {
+      adb("shell","uiautomator","dump","/sdcard/layout-window.xml");
+      xml=adb("shell","cat","/sdcard/layout-window.xml");
+      const m=xml.match(/class="android\.webkit\.WebView"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/);
+      if(m){bounds=m.slice(1).map(Number);return;}
+      await wait(300);
+    }
+    fs.writeFileSync(`${out}/failed-bounds-${size}-${font}.xml`,xml);
+    throw Error('WebView bounds missing after five UIA snapshots');
   };
-  measureBounds();
+  await measureBounds();
   async function tap(selector,scrollRegion) {
     if(scrollRegion)await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),v=${scrollRegion === "dialog" ? "(document.querySelector('.dialog-scroll:not([hidden])')??document.querySelector('#dialog'))" : `document.querySelector(${JSON.stringify(scrollRegion)})`},r=e.getBoundingClientRect(),b=v.getBoundingClientRect();const top=Math.max(0,b.top),bottom=Math.min(innerHeight,b.bottom);if(r.top<top)v.scrollBy({top:r.top-top,behavior:'instant'});else if(r.bottom>bottom)v.scrollBy({top:r.bottom-bottom,behavior:'instant'});})()`);
     const p=await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e)return null;const b=e.getBoundingClientRect(),x=b.x+b.width/2,y=b.y+b.height/2;return{x,y,w:innerWidth,h:innerHeight,ok:x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&e.contains(document.elementFromPoint(x,y))}})()`);
@@ -105,7 +116,7 @@ for (const [size,font] of [
     if(size==="780x1688"&&font===1&&step===0) {
       adb("shell","wm","size","1688x780");await wait(600);
       assert(await evaluate("document.querySelector('[data-index=\"0\"]').classList.contains('selected')"));
-      adb("shell","wm","size",size);await wait(600);measureBounds();
+      adb("shell","wm","size",size);await wait(600);await measureBounds();
     }
     await digit(1);
     await until("!document.querySelector('#lesson-next').hidden");
@@ -129,7 +140,7 @@ for (const [size,font] of [
   close();installFixture(hintBoard);
   ({evaluate,close}=await attach());
   await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");
-  measureBounds();
+  await measureBounds();
   await tap("#resume");
   assert.equal(await evaluate("document.querySelector('#remaining').textContent"),"162","Hint fixture was not restored");
   const before=await record("hint-before",true);
@@ -149,7 +160,7 @@ for (const [size,font] of [
     const saveBoard=Array(90).fill(1);saveBoard[0]=saveBoard[1]=5;
     close();installFixture(saveBoard);
     ({evaluate,close}=await attach());
-    await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");measureBounds();
+    await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");await measureBounds();
     await tap("#resume");
     assert.equal(await evaluate("document.querySelector('#remaining').textContent"),"90","Save fixture was not restored");
     await evaluate(`(()=>{const native=window.Capacitor.nativePromise;window.failLayoutSave=true;window.Capacitor.nativePromise=(plugin,method,options)=>plugin==='SeedsMonetization'&&method==='persistState'&&window.failLayoutSave?Promise.reject(new Error('layout acceptance: storage full')):native(plugin,method,options);})()`);
@@ -168,6 +179,12 @@ for (const [size,font] of [
     assert(await evaluate("[...document.querySelectorAll('.progress-hero .hero-kicker,.progress-hero .hero-count,.progress-hero .fine')].every(e=>e.scrollWidth<=e.clientWidth+1)"));
     await record("progress",true);
   }
-  close();
+  } catch(error) {
+    failures.push({size,font,error:String(error),stack:error.stack});
+    fs.writeFileSync(out+'/failures.json',JSON.stringify(failures,null,2));
+    try{fs.writeFileSync(`${out}/failed-${size}-${font}.png`,execFileSync('adb',['exec-out','screencap','-p']));}catch{}
+    console.error('LAYOUT_CASE_FAILED',JSON.stringify(failures.at(-1)));
+  } finally {close?.();}
 }
+assert.equal(failures.length,0,'Android layout cases failed; see failures.json');
 fs.writeFileSync(out+"/passed.json",JSON.stringify({cases:12,shortAndFullLessons:true,adbTouches:true,domClickFallback:false,systemFonts:[1,1.5,2],rotationPreservesSelection:true,hintDirections:["below","above"],coveredCellCentres:0},null,2));
