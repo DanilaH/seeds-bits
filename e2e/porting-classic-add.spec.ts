@@ -109,13 +109,10 @@ test("an Add without pairs reports when the next Add would exceed the cell limit
     return status.getBoundingClientRect().top >= wrap.getBoundingClientRect().top;
   })).toBe(true);
   // The end is reachable by scrolling; footer actions stay in the viewport.
-  await page.evaluate(() => {
-    const wrap = document.querySelector<HTMLElement>(".status-wrap")!;
-    wrap.scrollTop = wrap.scrollHeight;
-  });
-  expect(await page.evaluate(() => {
+  await expect.poll(() => page.evaluate(() => {
     const status = document.querySelector<HTMLElement>("#status")!;
     const wrap = status.parentElement!;
+    wrap.scrollTo({top: wrap.scrollHeight, behavior: "instant"});
     return status.getBoundingClientRect().bottom <= wrap.getBoundingClientRect().bottom + 1;
   })).toBe(true);
   for (const id of ["undo", "add"]) {
