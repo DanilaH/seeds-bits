@@ -144,11 +144,14 @@ test("LAYOUT-03: failed save owns one bounded notice and retry preserves the mov
   await digit(page,0); await digit(page,1);
   await expect(page.locator("#save-notice")).toBeVisible();
   await expect(page.locator("#status")).toBeHidden();
+  expect(await page.locator("#save-warning").evaluate(el => el.clientHeight >= parseFloat(getComputedStyle(el).fontSize))).toBe(true);
+  await rawClick(page, "#retry-save");
+  await expect(page.locator("#save-notice")).toBeVisible();
   const height = await page.locator("#viewport").evaluate(el => el.clientHeight);
   const row = await page.locator("#board .cell").first().evaluate(el => el.getBoundingClientRect().height);
   expect(height).toBeGreaterThanOrEqual(row);
   await page.evaluate(() => (window as any).restoreSave());
-  await page.locator("#retry-save").click();
+  await rawClick(page, "#retry-save");
   await expect(page.locator("#save-notice")).toBeHidden();
   await expect(page.locator("#remaining")).toHaveText("88");
   await page.reload(); await page.locator("#resume").click();

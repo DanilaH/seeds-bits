@@ -5,6 +5,9 @@ on:
     paths: [src/**, scripts/layout-audit/**, .github/workflows/layout-research-android.yml]
 permissions:
   contents: read
+concurrency:
+  group: layout-native-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   native:
     runs-on: ubuntu-24.04

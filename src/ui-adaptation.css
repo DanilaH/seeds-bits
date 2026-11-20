@@ -815,6 +815,28 @@
     justify-content: safe flex-start;
     padding-block: 4px;
   }
+  .game:not(:has(#lesson:not([hidden]))) .status-wrap:has(#save-notice:not([hidden])) {
+    flex-basis: 144px;
+    height: 144px;
+    max-height: 144px;
+    overflow: hidden;
+  }
+  .game .status-wrap > #save-notice {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    padding: 4px;
+  }
+  .status-wrap #save-warning {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+  }
+  .status-wrap #save-notice > button {
+    flex-shrink: 0;
+  }
 }
 .status-wrap > #save-notice,
 .status-wrap > #read-notice {
