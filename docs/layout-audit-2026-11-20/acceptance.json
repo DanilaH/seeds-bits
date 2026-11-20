@@ -1,11 +1,10 @@
 {
-  "sourceCommit": "e1fbaba163522c48a5c80b243507d95fe8095a66",
-  "qaDriverCommit": "b15f2f0dc9c564ce385d1da7d11031f4e007eb85",
+  "sourceCommit": "204b18667f8d017bed721fb023ef39118bb8d969",
+  "qaDriverCommit": "204b18667f8d017bed721fb023ef39118bb8d969",
   "qaDriverChangesRuntime": false,
   "scope": "Seeds baseline, local UI adaptation; no original Number Match behavior claim",
   "local": {
-    "unitPassed": 107,
-    "browserPassed": 87,
+    "browserPassed": 18,
     "productionBuild": true,
     "layoutCases": 12,
     "layoutStates": 639,
@@ -17,16 +16,16 @@
     }
   },
   "targetedCi": {
-    "run": 44727458790,
-    "browserPassed": 25,
+    "run": 44734430875,
+    "browserPassed": 26,
     "releaseBuild": true
   },
   "fullCi": {
-    "run": 44730238998,
+    "run": 44734437466,
     "status": "PASSED",
     "unitPassed": 107,
     "regressionUnitPassed": 2,
-    "browserPassed": 319,
+    "browserPassed": 320,
     "regressionBrowserPassed": 15,
     "builds": [
       "web",
@@ -35,8 +34,34 @@
     ]
   },
   "native": {
-    "run": 44731169472,
-    "status": "RUNNING",
+    "status": "PASSED_COMPONENTS_WITH_SCOPED_FINAL_RERUN",
+    "fullMatrix": {
+      "run": 44732728904,
+      "source": "e4173978524dcb63c67f703bdda3193cc928bf63",
+      "sizeFontCases": 12,
+      "states": 280,
+      "bothTutorialsAndHintsPassedAllCases": true,
+      "saveErrorFailedAt": "320x520/font200",
+      "evidence": "android-matrix.json.gz"
+    },
+    "finalRerun": {
+      "run": 44734430854,
+      "source": "204b18667f8d017bed721fb023ef39118bb8d969",
+      "sizeFontCases": 1,
+      "cssViewport": [
+        320,
+        520
+      ],
+      "fontScale": 2,
+      "states": 26,
+      "saveErrorViewportHeight": 58,
+      "fullRowInsideViewport": true,
+      "retryRemainingDigits": 88,
+      "bothTutorialsAndHintsPassed": true,
+      "privacyProgressPassed": true,
+      "evidence": "android-final.json"
+    },
+    "all12CasesRerunAtFinalSha": false,
     "releaseApkInstalled": false
   },
   "phone": "NOT_VERIFIED",
@@ -48,5 +73,17 @@
     "tutorialFrames": "tutorial-after.gif",
     "hintFrames": "hint-after.gif"
   },
-  "kitImpact": "REUSE; QA improvement proposal only; pins unchanged"
+  "kitImpact": "REUSE; QA improvement proposal only; pins unchanged",
+  "replacedCandidates": [
+    {
+      "versionCode": 12052,
+      "sha256": "2af8057aedd9071d7cc70d70df4c8f1c4bf5641d9e9106941cc1439ae167bb27",
+      "reason": "Native save failure could collapse the field."
+    },
+    {
+      "versionCode": 12053,
+      "sha256": "4d30ffda5bc85c4d1d6b0a791961977c6424ddf01434e734f2ca90697634d7af",
+      "reason": "Fixed 44 CSS px could be shorter than the real native row."
+    }
+  ]
 }

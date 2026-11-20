@@ -1,0 +1,443 @@
+{
+  "source": "204b18667f8d017bed721fb023ef39118bb8d969",
+  "run": 44734430854,
+  "build": {
+    "commit": "204b18667f8d017bed721fb023ef39118bb8d969",
+    "package": "com.seedsbits.game.preview",
+    "sha256": "675141961efef4b87396e1846b3142480697e6cc459149e2c3c9a04ba38ab2ad",
+    "version": [
+      "versionCode=11117 minSdk=24 targetSdk=36",
+      "versionName=1.1.2"
+    ],
+    "webview": "  Current WebView package (name, version): (com.google.android.webview, 124.0.6367.219)"
+  },
+  "scope": {
+    "sizesPixels": [
+      "640x1136"
+    ],
+    "cssViewport": [
+      320,
+      520
+    ],
+    "systemFonts": [
+      2
+    ],
+    "bothCourses": true,
+    "hintDirections": [
+      "below",
+      "above"
+    ],
+    "saveFailureAndRetry": true,
+    "privacyAndProgress": true,
+    "rotationTested": false
+  },
+  "rows": [
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "short-0-before",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 142.90625,
+      "covered": [],
+      "step": "1 / 2",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "short-0-after",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 142.90625,
+      "covered": [],
+      "step": "1 / 2",
+      "jumpHidden": true,
+      "firstVisible": false
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "short-next",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 102.90625,
+      "covered": [],
+      "step": "2 / 2",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "short-1-before",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 102.90625,
+      "covered": [],
+      "step": "2 / 2",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "short-1-after",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 102.90625,
+      "covered": [],
+      "step": "2 / 2",
+      "jumpHidden": true,
+      "firstVisible": false
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-1-before",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "1 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-1-after",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "1 / 6",
+      "jumpHidden": true,
+      "firstVisible": false
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-1-next",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "2 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-2-before",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "2 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-2-after",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "2 / 6",
+      "jumpHidden": true,
+      "firstVisible": false
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-2-next",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "3 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-3-before",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "3 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-3-after",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "3 / 6",
+      "jumpHidden": true,
+      "firstVisible": false
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-3-next",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "4 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-4-before",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "4 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-4-after",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "4 / 6",
+      "jumpHidden": true,
+      "firstVisible": false
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-4-next",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "5 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-5-before",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "5 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-5-after",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 241.90625,
+      "covered": [],
+      "step": "5 / 6",
+      "jumpHidden": true,
+      "firstVisible": false
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "full-5-next",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 204.09375,
+      "height": 88.90625,
+      "covered": [],
+      "step": "6 / 6",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "hint-before",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 165.6953125,
+      "height": 61.3046875,
+      "covered": [],
+      "step": "",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "hint-shown",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 165.6953125,
+      "height": 61.3046875,
+      "covered": [],
+      "step": "",
+      "jumpHidden": false,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "hint-arrived",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 165.6953125,
+      "height": 61.3046875,
+      "covered": [],
+      "step": "",
+      "jumpHidden": true,
+      "firstVisible": false
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "save-error",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 165.6953125,
+      "height": 58,
+      "covered": [],
+      "step": "",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "privacy",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 165.6953125,
+      "height": 61.3046875,
+      "covered": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "step": "",
+      "jumpHidden": true,
+      "firstVisible": true
+    },
+    {
+      "size": "640x1136",
+      "font": 2,
+      "state": "progress",
+      "screen": [
+        320,
+        520
+      ],
+      "top": 165.6953125,
+      "height": 61.3046875,
+      "covered": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "step": "",
+      "jumpHidden": true,
+      "firstVisible": true
+    }
+  ],
+  "passed": true
+}

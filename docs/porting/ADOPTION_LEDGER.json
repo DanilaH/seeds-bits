@@ -547,14 +547,14 @@
       ],
       "behavior": "Отдельные устойчивые зоны обучения и навигации к дальней цифре, одно доступное предупреждение сохранения, перенос длинных подписей и карточки банки.",
       "verification": {
-        "code": "Runtime e1fbaba163522c48a5c80b243507d95fe8095a66. CI 44728220796 (QA-only 7eaf293): 107 + 2 unit, 319 + 15 browser, web/Yandex, Android debug. Target 44727458790: 25 browser, optimized release. Signed 12052 exact CI payload/14 web assets, same preview certificate as 12051.",
-        "emulator": "PENDING",
+        "code": "Runtime 204b18667f8d017bed721fb023ef39118bb8d969: CI 44734437466 passed (107 + 2 unit, 320 + 15 browser, web/Yandex, Android debug); target 44734430875 passed (26 browser, optimized release). Signed 12054 exact CI payload/14 web assets, same preview certificate as 12053/12052/12051.",
+        "emulator": "Android 35/WebView 124: both courses and hints at 12 size/font combinations on e417397 (44732728904). Final scoped rerun at 320x520/font200 passed on 204b186 (44734430854), including full row at save error, retry/88 digits, privacy/progress. Full matrix not repeated at final SHA.",
         "device": "NOT_VERIFIED",
         "liveAudience": "NOT_VERIFIED",
         "apk": "../layout-audit-2026-11-20/APK.json"
       },
       "acceptance": "../layout-audit-2026-11-20/FIXES.md",
-      "nextAction": "Телефонная приёмка preview 12052 при системном шрифте 100/150/200%; эксперименты и оригиналы отдельно."
+      "nextAction": "Телефонная приёмка preview 12054 при системном шрифте 100/150/200%; эксперименты и оригиналы отдельно."
     }
   ]
 }

@@ -193,4 +193,4 @@ for (const [size,font] of selected) {
   } finally {close?.();}
 }
 assert.equal(failures.length,0,'Android layout cases failed; see failures.json');
-fs.writeFileSync(out+"/passed.json",JSON.stringify({cases:selected.length,shortAndFullLessons:true,adbTouches:true,domClickFallback:false,systemFonts:[1,1.5,2],rotationPreservesSelection:true,hintDirections:["below","above"],coveredCellCentres:0},null,2));
+fs.writeFileSync(out+"/passed.json",JSON.stringify({cases:selected.length,shortAndFullLessons:true,adbTouches:true,domClickFallback:false,systemFonts:[...new Set(selected.map(([,font])=>font))],rotationPreservesSelection:selected.some(([size,font])=>size==="780x1688"&&font===1),hintDirections:["below","above"],hintCoveredCellCentres:0},null,2));
