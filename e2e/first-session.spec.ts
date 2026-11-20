@@ -89,7 +89,7 @@ for(const profile of ["classic","book-v1-2","daily-v1-2026-11-19","settings-only
 });
 test("archive date is retained across menu, victory, replay and restart",async({page})=>{
   await page.clock.install({time:new Date("2026-11-20T10:00:00+05:00")});await start(page);
-  await page.locator("#menu").click();await page.locator("#calendar-open").click();await page.locator('[data-game="daily-v1-2026-11-19"]').click();await expect(page.locator("#mode")).toContainText("19 ноября");
+  await page.locator("#menu").click();await page.locator("#calendar-open").click();await page.locator('[data-game="daily-v1-2026-11-19"]').click();await expect(page.locator("#mode")).toContainText("19 ноября");await expect(page.locator("#remaining")).toHaveText(String(daily("2026-11-19").board.filter(Boolean).length));
   await page.locator("#menu").click();await expect(page.locator("#resume")).toHaveText("Продолжить задачу за 19 ноября");await page.locator("#resume").click();
   // Solve the real generated daily board using the existing verified solver.
   for(const step of daily("2026-11-19").solution)await move(page,step.a,step.b);
@@ -99,7 +99,7 @@ test("archive date is retained across menu, victory, replay and restart",async({
   await page.locator("#menu").click();await page.locator("#calendar-open").click();
   await expect(page.locator('[data-game="daily-v1-2026-11-19"]')).toHaveClass(/done/);
   await expect(page.locator('[data-game="daily-v1-2026-11-20"]')).not.toHaveClass(/done/);
-  await page.locator('[data-game="daily-v1-2026-11-19"]').click();await expect(page.locator("#mode")).toContainText("19 ноября");
+  await page.locator('[data-game="daily-v1-2026-11-19"]').click();await expect(page.locator("#mode")).toContainText("19 ноября");await expect(page.locator("#remaining")).toHaveText(String(daily("2026-11-19").board.filter(Boolean).length));
   for(const step of daily("2026-11-19").solution)await move(page,step.a,step.b);
   await expect(page.locator("#win h1")).toHaveText("Задача за 19 ноября решена");
   expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).done.filter((x:string)=>x==="daily-v1-2026-11-19").length,key)).toBe(1);
