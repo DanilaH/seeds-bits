@@ -157,6 +157,7 @@ let jarShelfPage = 0;
 let selectedVolume = 0,
   bookFilter = "all",
   trophyYear = today().slice(0, 4);
+let rewardSeenDuringBoot = false;
 let bootComplete = false,
   reviewPreparing = false;
 let engagementAvailable = false,
@@ -1261,6 +1262,7 @@ async function persistHelp(candidate: Progress, game = session): Promise<boolean
   } finally { busy = wasBusy; }
 }
 function receiveReward(r: RewardReceipt): Promise<void> {
+  if (!bootComplete) rewardSeenDuringBoot = true;
   rewardQueue = rewardQueue.catch(() => {}).then(async () => {
     if (switching) await saveQueue;
     if (futureSave || storageConflict || switching) return;
@@ -3034,7 +3036,7 @@ async function boot() {
     })
     .catch(() => {});
   void platform.listenBack(() => navigateBack(true)).catch(() => {});
-  if (firstSessionEnabled && !hadStoredState && !hadSettings && !hadBackup && !readWarning && !warning && !saveFailed && !futureSave && !storageConflict && !pendingDailyOpen) {
+  if (firstSessionEnabled && !hadStoredState && !hadSettings && !hadBackup && !readWarning && !warning && !saveFailed && !futureSave && !storageConflict && !pendingDailyOpen && !rewardSeenDuringBoot) {
     progress.seen.push(guideId);
     settings.tutorialDone = true;
     settingsDirty.tutorialDone = true;

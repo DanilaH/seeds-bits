@@ -57,7 +57,7 @@ jobs:
       - run: |
           echo 'd7f5111ddc0ae5e0965410566f8bc09a71984d37292b4a24af0f03744753199e  baseline/seeds-layout-12054-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
-          build_tools_dir=$(rg --files "$ANDROID_HOME/build-tools" | rg "/apksigner$" | sort -V | tail -1)
+          build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-layout-12054-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
       - run: |
