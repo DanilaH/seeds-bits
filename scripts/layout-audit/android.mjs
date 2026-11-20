@@ -80,7 +80,14 @@ console.log(
   "LAYOUT_BUILD",
   fs.readFileSync(output + "/build.json", "utf8").replaceAll("\n", " "),
 );
-for (const scale of ["1.0", "1.5", "2.0"]) {
+for (const [size, scale] of [
+  ["780x1688", "1.0"],
+  ["780x1688", "1.5"],
+  ["780x1688", "2.0"],
+  ["640x1136", "1.5"],
+  ["640x1136", "2.0"],
+]) {
+  adb("shell", "wm", "size", size);
   adb("shell", "am", "force-stop", app);
   adb("shell", "pm", "clear", app);
   adb("shell", "settings", "put", "system", "font_scale", scale);
@@ -102,16 +109,16 @@ for (const scale of ["1.0", "1.5", "2.0"]) {
   };
   async function record(state) {
     const row = await evaluate(
-      `(()=>{const r=s=>{const el=document.querySelector(s);if(!el)return null;const b=el.getBoundingClientRect();return [b.x,b.y,b.width,b.height].map(Math.round)};const v=r('#viewport'),j=r('#hint-jump');const hit=[...document.querySelectorAll("#board [data-index]")].filter(e=>{if(!e.textContent.trim()||!j[2])return false; const b=e.getBoundingClientRect(),x=b.x+b.width/2,y=b.y+b.height/2;return x>=v[0]&&x<v[0]+v[2]&&y>=v[1]&&y<v[1]+v[3]&&document.elementFromPoint(x,y)?.closest("#hint-jump")}).map(e=>+e.dataset.index);return {hit,screen:[innerWidth,innerHeight],board:v,first:r('[data-index="0"]'),lesson:r('#lesson'),next:r('#lesson-next'),jump:j,overlap:Math.max(0,Math.min(j[1]+j[3],v[1]+v[3])-Math.max(j[1],v[1])),text:document.querySelector('#status').textContent}})()`,
+      `(()=>{const r=s=>{const el=document.querySelector(s);if(!el)return null;const b=el.getBoundingClientRect();return [b.x,b.y,b.width,b.height].map(Math.round)};const v=r('#viewport'),j=r('#hint-jump');const hit=[...document.querySelectorAll("#board [data-index]")].filter(e=>{if(!e.textContent.trim()||!j[2])return false; const b=e.getBoundingClientRect(),x=b.x+b.width/2,y=b.y+b.height/2;return x>=v[0]&&x<v[0]+v[2]&&y>=v[1]&&y<v[1]+v[3]&&document.elementFromPoint(x,y)?.closest("#hint-jump")}).map(e=>+e.dataset.index);const centre=i=>{const el=document.querySelector('[data-index="'+i+'"]');if(!el)return null;const b=el.getBoundingClientRect();return document.elementFromPoint(b.x+b.width/2,b.y+b.height/2)?.closest("[data-index]")?.dataset.index===String(i)};return {firstCentreReachable:centre(0),destinationCentreReachable:centre(171),hit,screen:[innerWidth,innerHeight],board:v,first:r('[data-index="0"]'),lesson:r('#lesson'),next:r('#lesson-next'),jump:j,overlap:Math.max(0,Math.min(j[1]+j[3],v[1]+v[3])-Math.max(j[1],v[1])),text:document.querySelector('#status').textContent}})()`,
     );
-    evidence.push({ scale, state, ...row });
-    console.log("LAYOUT_ROW", JSON.stringify({ scale, state, ...row }));
+    evidence.push({ size, scale, state, ...row });
+    console.log("LAYOUT_ROW", JSON.stringify({ size, scale, state, ...row }));
     fs.writeFileSync(
       output + "/measurements.json",
       JSON.stringify(evidence, null, 2),
     );
     fs.writeFileSync(
-      output + "/" + scale + "-" + state + ".png",
+      output + "/" + size + "-" + scale + "-" + state + ".png",
       execFileSync("adb", ["exec-out", "screencap", "-p"]),
     );
   }
@@ -123,6 +130,12 @@ for (const scale of ["1.0", "1.5", "2.0"]) {
   await click('[data-index="1"]');
   await until("document.querySelector('#lesson-next')?.hidden===false");
   await record("tutorial-pair");
+  await click("#lesson-next");
+  await record("tutorial-second");
+  if (size === "640x1136") {
+    close();
+    continue;
+  }
   await evaluate(`(async()=>{
     const call=(method,options)=>window.Capacitor.nativePromise('Preferences',method,options);
     const put=(key,value)=>call('set',{key,value:JSON.stringify(value)});
