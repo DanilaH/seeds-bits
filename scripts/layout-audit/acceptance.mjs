@@ -54,7 +54,7 @@ for (const [size,font] of [
   };
   measureBounds();
   async function tap(selector,scrollRegion) {
-    if(scrollRegion)await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),v=document.querySelector(${JSON.stringify(scrollRegion)}),r=e.getBoundingClientRect(),b=v.getBoundingClientRect();if(r.top<b.top)v.scrollBy({top:r.top-b.top,behavior:'instant'});else if(r.bottom>b.bottom)v.scrollBy({top:r.bottom-b.bottom,behavior:'instant'});})()`);
+    if(scrollRegion)await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),v=${scrollRegion === "dialog" ? "(document.querySelector('.dialog-scroll')??document.querySelector('#dialog'))" : `document.querySelector(${JSON.stringify(scrollRegion)})`},r=e.getBoundingClientRect(),b=v.getBoundingClientRect();if(r.top<b.top)v.scrollBy({top:r.top-b.top,behavior:'instant'});else if(r.bottom>b.bottom)v.scrollBy({top:r.bottom-b.bottom,behavior:'instant'});})()`);
     const p=await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e)return null;const b=e.getBoundingClientRect(),x=b.x+b.width/2,y=b.y+b.height/2;return{x,y,w:innerWidth,h:innerHeight,ok:x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&e.contains(document.elementFromPoint(x,y))}})()`);
     assert(p?.ok,selector+" "+JSON.stringify(p));
     adb("shell","input","tap",String(Math.round(bounds[0]+p.x*(bounds[2]-bounds[0])/p.w)),String(Math.round(bounds[1]+p.y*(bounds[3]-bounds[1])/p.h)));
@@ -85,7 +85,7 @@ for (const [size,font] of [
     await tap("#lesson-next","#lesson-actions");
     if(step===0)assert(Math.abs((await record("short-next",true)).top-before.top)<=1,"Field moved at the next lesson");
   }
-  await tap("#menu");await tap("#learn");
+  await tap("#menu");await tap("#learn","dialog");
   for(const [step,a,b] of [[1,0,1],[2,0,1],[3,0,3],[4,0,20],[5,8,9]]) {
     const before=await record("full-"+step+"-before");
     await digit(a);await digit(b);await until("!document.querySelector('#lesson-next').hidden");
@@ -110,7 +110,7 @@ for (const [size,font] of [
   await digit(171);await until("!document.querySelector('#hint-jump').hidden");
   assert((await evaluate("document.querySelector('#hint-jump').textContent")).includes("выше"));
   await tap("#hint-jump");await until("document.querySelector('#hint-jump').hidden");
-  await tap("#menu");await tap("#book-mode");
+  await tap("#menu");await tap("#book-mode","dialog");
   assert(await evaluate("document.querySelector('#hint-jump').hidden"));
   if(size==="640x1136"&&font===2) {
     await evaluate(`(async()=>{const board=Array(90).fill(1);board[0]=board[1]=5;await window.Capacitor.nativePromise('Preferences','set',{key:'seeds-bits.progress.v2',value:JSON.stringify({version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]})});setTimeout(()=>location.reload(),100);})()`);
@@ -121,14 +121,14 @@ for (const [size,font] of [
     assert(await evaluate("document.querySelector('#status').hidden"));
     assert(await evaluate("document.querySelector('#viewport').clientHeight>=document.querySelector('#board .cell').getBoundingClientRect().height"));
     await record("save-error",true);
-    await evaluate("window.failLayoutSave=false");await tap("#retry-save",".status-wrap");
+    await evaluate("document.querySelector('#retry-save').addEventListener('click',()=>window.failLayoutSave=false,{once:true,capture:true})");await tap("#retry-save",".status-wrap");
     await until("document.querySelector('#save-notice').hidden");
     assert.equal(await evaluate("document.querySelector('#remaining').textContent"),"88");
-    await tap("#menu");await tap("#settings-open");await tap("#privacy-open");
+    await tap("#menu");await tap("#settings-open","dialog");await tap("#privacy-open","dialog");
     assert(await evaluate("[...document.querySelectorAll('#collection a')].every(a=>a.scrollWidth<=a.clientWidth+1)"));
     await evaluate("document.querySelector('#collection a').scrollIntoView({block:'center',behavior:'instant'})");
     await record("privacy",true);
-    await tap("#privacy-back");await tap("#settings-back");await tap("#progress-open");
+    await tap("#privacy-back");await tap("#settings-back");await tap("#progress-open","dialog");
     assert(await evaluate("[...document.querySelectorAll('.progress-hero .hero-kicker,.progress-hero .hero-count,.progress-hero .fine')].every(e=>e.scrollWidth<=e.clientWidth+1)"));
     await record("progress",true);
   }

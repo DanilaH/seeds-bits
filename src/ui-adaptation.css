@@ -712,6 +712,11 @@
   line-height: 1.4;
   color: var(--muted);
 }
+#lesson-title,
+#lesson-text,
+#lesson-feedback {
+  overflow-wrap: anywhere;
+}
 #lesson-actions {
   grid-row: 4;
   display: grid;
@@ -848,6 +853,12 @@
   display: inline-block;
   max-width: 100%;
   min-height: 44px;
+  overflow-wrap: anywhere;
+}
+.settings-basics > button,
+.settings-basics > a {
+  max-width: 100%;
+  white-space: normal;
   overflow-wrap: anywhere;
 }
 .progress-hero {

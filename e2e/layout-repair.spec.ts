@@ -53,6 +53,7 @@ for (const [width, height] of [[320,568], [390,844], [568,320], [844,390]]) {
       await page.goto("/");
       await expect(page.locator("#lesson")).toBeVisible();
       await textScale(page, scale);
+      expect(await page.locator("#lesson-title").evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
       for (let step = 0; step < 2; step++) {
         const before = await top(page);
         const heightBefore = await page.locator("#viewport").evaluate(el => el.clientHeight);
@@ -163,7 +164,10 @@ test("LAYOUT-03: failed save owns one bounded notice and retry preserves the mov
 test("LAYOUT-04: privacy links and jar captions wrap at 200%", async ({page}) => {
   await page.setViewportSize({width:320,height:568});
   await seed(page,[5,5]);
-  await page.locator("#menu").click(); await page.locator("#settings-open").click(); await page.locator("#privacy-open").click();
+  await page.locator("#menu").click(); await page.locator("#settings-open").click();
+  await textScale(page,2);
+  expect(await page.locator("#privacy-open").evaluate(el => el.scrollWidth <= el.clientWidth + 1 && el.getBoundingClientRect().right <= innerWidth)).toBe(true);
+  await page.locator("#privacy-open").click();
   await textScale(page,2);
   const link = page.getByRole("link",{name:"Политика конфиденциальности",exact:true});
   await link.scrollIntoViewIfNeeded();
