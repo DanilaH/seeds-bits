@@ -1,0 +1,52 @@
+{
+  "sourceCommit": "e1fbaba163522c48a5c80b243507d95fe8095a66",
+  "qaDriverCommit": "b15f2f0dc9c564ce385d1da7d11031f4e007eb85",
+  "qaDriverChangesRuntime": false,
+  "scope": "Seeds baseline, local UI adaptation; no original Number Match behavior claim",
+  "local": {
+    "unitPassed": 107,
+    "browserPassed": 87,
+    "productionBuild": true,
+    "layoutCases": 12,
+    "layoutStates": 639,
+    "routeErrors": 0,
+    "remainingWidthWarnings": {
+      "element": "jar-name",
+      "count": 126,
+      "accepted": "existing header ellipsis"
+    }
+  },
+  "targetedCi": {
+    "run": 44727458790,
+    "browserPassed": 25,
+    "releaseBuild": true
+  },
+  "fullCi": {
+    "run": 44730238998,
+    "status": "PASSED",
+    "unitPassed": 107,
+    "regressionUnitPassed": 2,
+    "browserPassed": 319,
+    "regressionBrowserPassed": 15,
+    "builds": [
+      "web",
+      "Yandex",
+      "Android debug"
+    ]
+  },
+  "native": {
+    "run": 44731169472,
+    "status": "RUNNING",
+    "releaseApkInstalled": false
+  },
+  "phone": "NOT_VERIFIED",
+  "liveAudience": "NOT_VERIFIED",
+  "apk": "APK.json",
+  "evidence": {
+    "browser": "browser-after.json.gz",
+    "modeSwitch": "mode-switch.json",
+    "tutorialFrames": "tutorial-after.gif",
+    "hintFrames": "hint-after.gif"
+  },
+  "kitImpact": "REUSE; QA improvement proposal only; pins unchanged"
+}

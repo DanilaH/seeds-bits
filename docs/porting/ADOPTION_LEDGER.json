@@ -528,6 +528,33 @@
       },
       "acceptance": "./2026-11-20/FEEDBACK_ACCEPTANCE.md",
       "nextAction": "Пройти на телефоне подписанный preview 12051. Ранний плюс/бюджет оригиналов исследовать отдельно."
+    },
+    {
+      "id": "layout-feedback-20261120",
+      "sourceFeatureIds": [],
+      "localIssueIds": [
+        "SEEDS-LAYOUT-01",
+        "SEEDS-LAYOUT-02",
+        "SEEDS-LAYOUT-03",
+        "SEEDS-LAYOUT-04"
+      ],
+      "scope": "Собственная компоновка Seeds, baseline, оба обучения и обычная игра. Задания аудита PR #8; не наблюдение интерфейса оригиналов.",
+      "status": "PRODUCT_IMPLEMENTED",
+      "implementation": [
+        "src/main.ts:loadLesson/lessonNextText/updateJump/showSaveState",
+        "src/ui-adaptation.css",
+        "e2e/layout-repair.spec.ts"
+      ],
+      "behavior": "Отдельные устойчивые зоны обучения и навигации к дальней цифре, одно доступное предупреждение сохранения, перенос длинных подписей и карточки банки.",
+      "verification": {
+        "code": "Runtime e1fbaba163522c48a5c80b243507d95fe8095a66. CI 44728220796 (QA-only 7eaf293): 107 + 2 unit, 319 + 15 browser, web/Yandex, Android debug. Target 44727458790: 25 browser, optimized release. Signed 12052 exact CI payload/14 web assets, same preview certificate as 12051.",
+        "emulator": "PENDING",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED",
+        "apk": "../layout-audit-2026-11-20/APK.json"
+      },
+      "acceptance": "../layout-audit-2026-11-20/FIXES.md",
+      "nextAction": "Телефонная приёмка preview 12052 при системном шрифте 100/150/200%; эксперименты и оригиналы отдельно."
     }
   ]
 }
