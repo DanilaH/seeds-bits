@@ -36,6 +36,7 @@ async function attach() {
 const evidence=[];
 const apk=process.argv[2];
 fs.writeFileSync(output+'/build.json',JSON.stringify({package:app,sha256:createHash('sha256').update(fs.readFileSync(apk)).digest('hex'),version:adb('shell','dumpsys','package',app).split('\n').filter(l=>/versionName=|versionCode=/.test(l)).map(l=>l.trim()),webview:adb('shell','dumpsys','webviewupdate').split('\n').find(l=>l.includes('Current WebView package')),commit:process.env.GITHUB_SHA},null,2));
+console.log('LAYOUT_BUILD',fs.readFileSync(output+'/build.json','utf8').replaceAll('\n',' '));
 for(const scale of ['1.0','1.5','2.0']){
   adb('shell','am','force-stop',app);
   adb('shell','pm','clear',app);
@@ -46,7 +47,7 @@ for(const scale of ['1.0','1.5','2.0']){
   const click=async s=>{await evaluate('document.querySelector('+JSON.stringify(s)+').click()');await wait(400)};
   async function record(state){
     const row=await evaluate(`(()=>{const r=s=>{const el=document.querySelector(s);if(!el)return null;const b=el.getBoundingClientRect();return [b.x,b.y,b.width,b.height].map(Math.round)};const v=r('#viewport'),j=r('#hint-jump');const hit=[...document.querySelectorAll("#board [data-index]")].filter(e=>{if(!e.textContent.trim()||!j[2])return false; const b=e.getBoundingClientRect(),x=b.x+b.width/2,y=b.y+b.height/2;return x>=v[0]&&x<v[0]+v[2]&&y>=v[1]&&y<v[1]+v[3]&&document.elementFromPoint(x,y)?.closest("#hint-jump")}).map(e=>+e.dataset.index);return {hit,screen:[innerWidth,innerHeight],board:v,first:r('[data-index="0"]'),lesson:r('#lesson'),next:r('#lesson-next'),jump:j,overlap:Math.max(0,Math.min(j[1]+j[3],v[1]+v[3])-Math.max(j[1],v[1])),text:document.querySelector('#status').textContent}})()`);
-    evidence.push({scale,state,...row});
+    evidence.push({scale,state,...row});console.log("LAYOUT_ROW",JSON.stringify({scale,state,...row}));
     fs.writeFileSync(output+'/measurements.json',JSON.stringify(evidence,null,2));
     fs.writeFileSync(output+'/'+scale+'-'+state+'.png',execFileSync('adb',['exec-out','screencap','-p']));
   }
