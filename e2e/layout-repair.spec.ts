@@ -132,8 +132,8 @@ for (const [width, height, scale] of [[390,844,1.5],[568,320,2],[320,568,2]]) {
   });
 }
 
-test("LAYOUT-03: failed save owns one bounded notice and retry preserves the move", async ({page}) => {
-  await page.setViewportSize({width:320,height:568});
+for (const height of [520,568]) test(`LAYOUT-03: failed save owns one bounded notice and retry preserves the move at 320x${height}`, async ({page}) => {
+  await page.setViewportSize({width:320,height});
   await page.emulateMedia({reducedMotion:"reduce"});
   const board = Array(90).fill(1); board[0] = board[1] = 5;
   await seed(page, board); await textScale(page, 2);
@@ -149,9 +149,9 @@ test("LAYOUT-03: failed save owns one bounded notice and retry preserves the mov
   await expect(page.locator("#save-notice")).toBeVisible();
   await expect(page.locator("#status")).toBeHidden();
   expect(await page.locator("#save-warning").evaluate(el => el.clientHeight >= parseFloat(getComputedStyle(el).fontSize))).toBe(true);
-  const height = await page.locator("#viewport").evaluate(el => el.clientHeight);
+  const fieldHeight = await page.locator("#viewport").evaluate(el => el.clientHeight);
   const row = await page.locator("#board .cell").first().evaluate(el => el.getBoundingClientRect().height);
-  expect(height).toBeGreaterThanOrEqual(row);
+  expect(fieldHeight).toBeGreaterThanOrEqual(row);
   // End the injected fault at the user's retry, not while queued saves settle.
   await page.locator("#retry-save").evaluate(el => el.addEventListener("click", () => (window as any).restoreSave(), {once:true,capture:true}));
   await rawClick(page, "#retry-save");

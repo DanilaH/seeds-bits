@@ -826,6 +826,15 @@
     max-height: 144px;
     overflow: hidden;
   }
+  .game:not(:has(#lesson:not([hidden]))):has(#save-notice:not([hidden])) > #viewport {
+    flex: 1 1 44px;
+    min-height: 44px;
+  }
+  .game:not(:has(#lesson:not([hidden]))):has(#save-notice:not([hidden])) > .game-actions {
+    flex: 0 1 auto;
+    min-height: 144px;
+    overflow-y: auto;
+  }
   .game .status-wrap > #save-notice {
     display: flex;
     flex-direction: column;

@@ -82,10 +82,12 @@ for (const [size,font] of [
   const measureBounds=async()=>{
     let xml='';
     for(let attempt=0;attempt<5;attempt++) {
+      try {
       adb("shell","uiautomator","dump","/sdcard/layout-window.xml");
       xml=adb("shell","cat","/sdcard/layout-window.xml");
       const m=xml.match(/class="android\.webkit\.WebView"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/);
       if(m){bounds=m.slice(1).map(Number);return;}
+      } catch(error) {console.log("UIA_RETRY",size,font,attempt,String(error));}
       await wait(300);
     }
     fs.writeFileSync(`${out}/failed-bounds-${size}-${font}.xml`,xml);
@@ -141,7 +143,7 @@ for (const [size,font] of [
   ({evaluate,close}=await attach());
   await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");
   await measureBounds();
-  await tap("#resume");
+  await tap("#resume","dialog");
   assert.equal(await evaluate("document.querySelector('#remaining').textContent"),"162","Hint fixture was not restored");
   const before=await record("hint-before",true);
   await tap("#hint");await until("!document.querySelector('#hint-jump').hidden");
@@ -161,7 +163,7 @@ for (const [size,font] of [
     close();installFixture(saveBoard);
     ({evaluate,close}=await attach());
     await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");await measureBounds();
-    await tap("#resume");
+    await tap("#resume","dialog");
     assert.equal(await evaluate("document.querySelector('#remaining').textContent"),"90","Save fixture was not restored");
     await evaluate(`(()=>{const native=window.Capacitor.nativePromise;window.failLayoutSave=true;window.Capacitor.nativePromise=(plugin,method,options)=>plugin==='SeedsMonetization'&&method==='persistState'&&window.failLayoutSave?Promise.reject(new Error('layout acceptance: storage full')):native(plugin,method,options);})()`);
     await digit(0);await digit(1);await until("!document.querySelector('#save-notice').hidden");

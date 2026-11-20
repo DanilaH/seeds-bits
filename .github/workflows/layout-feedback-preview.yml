@@ -33,11 +33,11 @@ jobs:
         if: always()
         with: {name: layout-browser, path: test-results/}
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=952 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=953 node scripts/configure-android.mjs
       - run: chmod +x android/gradlew && cd android && ./gradlew assembleRelease
       - run: |
           mkdir -p test-results/apk
-          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/apk/seeds-layout-12052-unsigned.apk
-          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12052,profile:"baseline",analytics:false},null,2))'
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/apk/seeds-layout-12053-unsigned.apk
+          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12053,profile:"baseline",analytics:false},null,2))'
       - uses: actions/upload-artifact@v4
         with: {name: layout-preview-unsigned, path: test-results/apk/}
