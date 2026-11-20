@@ -62,8 +62,9 @@ for (const [size,font] of [
   };
   measureBounds();
   async function tap(selector,scrollRegion) {
-    if(scrollRegion)await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),v=${scrollRegion === "dialog" ? "(document.querySelector('.dialog-scroll')??document.querySelector('#dialog'))" : `document.querySelector(${JSON.stringify(scrollRegion)})`},r=e.getBoundingClientRect(),b=v.getBoundingClientRect();if(r.top<b.top)v.scrollBy({top:r.top-b.top,behavior:'instant'});else if(r.bottom>b.bottom)v.scrollBy({top:r.bottom-b.bottom,behavior:'instant'});})()`);
+    if(scrollRegion)await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)}),v=${scrollRegion === "dialog" ? "(document.querySelector('.dialog-scroll:not([hidden])')??document.querySelector('#dialog'))" : `document.querySelector(${JSON.stringify(scrollRegion)})`},r=e.getBoundingClientRect(),b=v.getBoundingClientRect();const top=Math.max(0,b.top),bottom=Math.min(innerHeight,b.bottom);if(r.top<top)v.scrollBy({top:r.top-top,behavior:'instant'});else if(r.bottom>bottom)v.scrollBy({top:r.bottom-bottom,behavior:'instant'});})()`);
     const p=await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e)return null;const b=e.getBoundingClientRect(),x=b.x+b.width/2,y=b.y+b.height/2;return{x,y,w:innerWidth,h:innerHeight,ok:x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&e.contains(document.elementFromPoint(x,y))}})()`);
+    if(!p?.ok)fs.writeFileSync(`${out}/failed-tap.png`,execFileSync("adb",["exec-out","screencap","-p"]));
     assert(p?.ok,selector+" "+JSON.stringify(p));
     adb("shell","input","tap",String(Math.round(bounds[0]+p.x*(bounds[2]-bounds[0])/p.w)),String(Math.round(bounds[1]+p.y*(bounds[3]-bounds[1])/p.h)));
     await wait(250);
