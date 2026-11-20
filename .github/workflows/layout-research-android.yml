@@ -24,6 +24,8 @@ jobs:
       - run: npm ci --no-audit --no-fund && npm run setup:android
       - run: node scripts/configure-android.mjs && chmod +x android/gradlew && cd android && ./gradlew assembleDebug
       - run: |
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-avd"
+          mkdir -p "$ANDROID_AVD_HOME"
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
           echo no | avdmanager create avd --force --name layout --package 'system-images;android-35;google_apis;x86_64'
           bash scripts/ci-offline-emulator.sh layout

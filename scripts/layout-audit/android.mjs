@@ -45,7 +45,7 @@ for(const scale of ['1.0','1.5','2.0']){
   async function until(expression){for(let n=0;n<60;n++){if(await evaluate(expression)) return;await wait(500)}throw Error('Timed out: '+expression)}
   const click=async s=>{await evaluate('document.querySelector('+JSON.stringify(s)+').click()');await wait(400)};
   async function record(state){
-    const row=await evaluate(`(()=>{const r=s=>{const b=document.querySelector(s).getBoundingClientRect();return [b.x,b.y,b.width,b.height].map(Math.round)};const v=r('#viewport'),j=r('#hint-jump');return {screen:[innerWidth,innerHeight],board:v,first:r('[data-index="0"]'),lesson:r('#lesson'),next:r('#lesson-next'),jump:j,overlap:Math.max(0,Math.min(j[1]+j[3],v[1]+v[3])-Math.max(j[1],v[1])),text:document.querySelector('#status').textContent}})()`);
+    const row=await evaluate(`(()=>{const r=s=>{const el=document.querySelector(s);if(!el)return null;const b=el.getBoundingClientRect();return [b.x,b.y,b.width,b.height].map(Math.round)};const v=r('#viewport'),j=r('#hint-jump');const hit=[...document.querySelectorAll("#board [data-index]")].filter(e=>{if(!e.textContent.trim()||!j[2])return false; const b=e.getBoundingClientRect(),x=b.x+b.width/2,y=b.y+b.height/2;return x>=v[0]&&x<v[0]+v[2]&&y>=v[1]&&y<v[1]+v[3]&&document.elementFromPoint(x,y)?.closest("#hint-jump")}).map(e=>+e.dataset.index);return {hit,screen:[innerWidth,innerHeight],board:v,first:r('[data-index="0"]'),lesson:r('#lesson'),next:r('#lesson-next'),jump:j,overlap:Math.max(0,Math.min(j[1]+j[3],v[1]+v[3])-Math.max(j[1],v[1])),text:document.querySelector('#status').textContent}})()`);
     evidence.push({scale,state,...row});
     fs.writeFileSync(output+'/measurements.json',JSON.stringify(evidence,null,2));
     fs.writeFileSync(output+'/'+scale+'-'+state+'.png',execFileSync('adb',['exec-out','screencap','-p']));
@@ -55,7 +55,7 @@ for(const scale of ['1.0','1.5','2.0']){
   await click('[data-index="0"]');await click('[data-index="1"]');
   await until("!document.querySelector('#lesson-next').hidden");
   await record('tutorial-pair');
-  await evaluate(`(()=>{localStorage.clear();localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true}));const board=Array(540).fill(0);board[0]=board[539]=5;localStorage.setItem('seeds-bits.session.v1',JSON.stringify({rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}));setTimeout(()=>location.reload(),10)})()`);
+  await evaluate(`(()=>{localStorage.clear();localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true}));const board=Array.from({length:180},(_,i)=>i%9===0?0:1);board[0]=board[171]=5;localStorage.setItem('seeds-bits.session.v1',JSON.stringify({rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}));setTimeout(()=>location.reload(),10)})()`);
   await wait(1600);await until("document.querySelector('#dialog')?.open && !document.querySelector('#app').inert");
   await click('#resume');await click('#hint');await until("document.querySelector('#hint-jump')?.hidden===false");
   await wait(800);await record('distant-hint');await wait(8000);await record('idle-8s');await click('#hint-jump');await wait(800);await record('after-jump');close();
