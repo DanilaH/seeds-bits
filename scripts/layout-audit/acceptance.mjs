@@ -16,6 +16,26 @@ if (apk) fs.writeFileSync(out+"/build.json",JSON.stringify({
   version:adb('shell','dumpsys','package',app).split('\n').filter(x=>/versionName=|versionCode=/.test(x)).map(x=>x.trim()),
   webview:adb('shell','dumpsys','webviewupdate').split('\n').find(x=>x.includes('Current WebView package')),
 },null,2));
+// Install only synthetic state while the debug application is fully stopped.
+// An active document can persist its old board on pause, overwriting Preferences.set.
+function installFixture(board) {
+  adb('shell','am','force-stop',app);
+  let xml=adb('shell','run-as',app,'cat','shared_prefs/CapacitorStorage.xml');
+  const values={
+    'seeds-bits.settings.v1':{tutorialDone:true},
+    'seeds-bits.progress.v2':{version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]},
+  };
+  for(const [key,value] of Object.entries(values)) {
+    const text=JSON.stringify(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    const node=`<string name="${key}">${text}</string>`;let replaced=false;
+    xml=xml.replace(/<string name="([^"]+)">[\s\S]*?<\/string>/g,(entry,name)=>name===key?(replaced=true,node):entry);
+    if(!replaced)xml=xml.replace('</map>',node+'\n</map>');
+  }
+  const file='/tmp/seeds-layout-fixture.xml';fs.writeFileSync(file,xml);
+  adb('push',file,'/data/local/tmp/seeds-layout-fixture.xml');
+  adb('shell','run-as',app,'cp','/data/local/tmp/seeds-layout-fixture.xml','shared_prefs/CapacitorStorage.xml');
+  adb('shell','monkey','-p',app,'1');
+}
 async function attach() {
   let target;
   for (let i=0;i<60;i++) {
@@ -105,14 +125,13 @@ for (const [size,font] of [
   await tap("#add",".game-actions");await tap("#undo",".game-actions");
   await tap("#lesson-next","#lesson-actions");
   assert(await evaluate("document.querySelector('#lesson').hidden"));
-  await evaluate(`(async()=>{const put=(key,value)=>window.Capacitor.nativePromise('Preferences','set',{key,value:JSON.stringify(value)});const board=Array.from({length:180},(_,i)=>i%9===0?0:1);board[0]=board[171]=5;await put('seeds-bits.settings.v1',{tutorialDone:true});await put('seeds-bits.progress.v2',{version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]});})()`);
-  // Restore the fixture through a cold app launch, just as a saved phone session.
-  // location.reload() can retain an in-flight native bridge from the old document.
-  close();adb('shell','am','force-stop',app);adb('shell','monkey','-p',app,'1');
+  const hintBoard=Array.from({length:180},(_,i)=>i%9===0?0:1);hintBoard[0]=hintBoard[171]=5;
+  close();installFixture(hintBoard);
   ({evaluate,close}=await attach());
   await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");
   measureBounds();
   await tap("#resume");
+  assert.equal(await evaluate("document.querySelector('#remaining').textContent"),"162","Hint fixture was not restored");
   const before=await record("hint-before",true);
   await tap("#hint");await until("!document.querySelector('#hint-jump').hidden");
   const shown=await record("hint-shown",true);
@@ -127,11 +146,12 @@ for (const [size,font] of [
   await tap("#menu");await tap("#book-mode","dialog");
   assert(await evaluate("document.querySelector('#hint-jump').hidden"));
   if(size==="640x1136"&&font===2) {
-    await evaluate(`(async()=>{const board=Array(90).fill(1);board[0]=board[1]=5;await window.Capacitor.nativePromise('Preferences','set',{key:'seeds-bits.progress.v2',value:JSON.stringify({version:3,active:'classic',sessions:{classic:{rules:1,current:{board,moves:0,scroll:0,additions:0},history:[]}},hints:{},done:[],seen:[]})});})()`);
-    close();adb('shell','am','force-stop',app);adb('shell','monkey','-p',app,'1');
+    const saveBoard=Array(90).fill(1);saveBoard[0]=saveBoard[1]=5;
+    close();installFixture(saveBoard);
     ({evaluate,close}=await attach());
     await until("document.querySelector('#dialog')?.open&&!document.querySelector('#app').inert");measureBounds();
     await tap("#resume");
+    assert.equal(await evaluate("document.querySelector('#remaining').textContent"),"90","Save fixture was not restored");
     await evaluate(`(()=>{const native=window.Capacitor.nativePromise;window.failLayoutSave=true;window.Capacitor.nativePromise=(plugin,method,options)=>plugin==='SeedsMonetization'&&method==='persistState'&&window.failLayoutSave?Promise.reject(new Error('layout acceptance: storage full')):native(plugin,method,options);})()`);
     await digit(0);await digit(1);await until("!document.querySelector('#save-notice').hidden");
     assert(await evaluate("document.querySelector('#status').hidden"));
