@@ -45,6 +45,7 @@ jobs:
       - run: |
           mkdir -p test-results/first-session-apk
           cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/first-session-apk/seeds-first-session-12061-unsigned.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk test-results/first-session-apk/seeds-first-session-12061-debug.apk
           node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12061,firstSession:true,profile:"baseline",analytics:false},null,2))'
       - uses: actions/upload-artifact@v4
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}

@@ -38,11 +38,18 @@ function installPrefs(values){
   adb("shell",`cat /data/local/tmp/first-session-prefs.xml > ${prefsFile}`);
 }
 async function tapText(text){
-  const tree=await xml();const nodes=[...tree.matchAll(/<node\b[^>]*>/g)].map(m=>m[0]);
-  const node=nodes.find(n=>{const s=/text="([^"]*)"/.exec(n)?.[1],d=/content-desc="([^"]*)"/.exec(n)?.[1];return decode(s??"")===text||decode(d??"")===text;});
+  let node,tree;
+  const normalize=s=>decode(s).replace(/\s+/g," ").trim();
+  for(let attempt=0;attempt<10;attempt++){
+    tree=await xml();const nodes=[...tree.matchAll(/<node\b[^>]*>/g)].map(m=>m[0]);
+    node=nodes.find(n=>{const s=/text="([^"]*)"/.exec(n)?.[1],d=/content-desc="([^"]*)"/.exec(n)?.[1];return normalize(s??"")===text||normalize(d??"")===text;});
+    if(node)break;await wait(250);
+  }
+  if(!node)fs.writeFileSync(out+"/missing-label.xml",tree??"");
   assert(node,"Native label missing: "+text);const b=/bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/.exec(node).slice(1).map(Number);
   adb("shell","input","tap",String(Math.round((b[0]+b[2])/2)),String(Math.round((b[1]+b[3])/2)));await wait(300);
 }
+
 async function attach(){
   let target;
   for(let i=0;i<70;i++){try{adb("forward","tcp:9223","localabstract:webview_devtools_remote_"+adb("shell","pidof",app));target=(await(await fetch("http://127.0.0.1:9223/json/list")).json()).find(t=>t.type==="page");if(target)break;}catch{}await wait(300);}
