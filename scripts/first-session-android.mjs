@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import {createHash} from "node:crypto";
 const app="com.seedsbits.game.preview",out="test-results/first-session-android";
 fs.mkdirSync(out,{recursive:true});
-const [candidate,baseline]=process.argv.slice(2);
+const [candidate,baseline,releaseCandidate]=process.argv.slice(2);
 const adb=(...a)=>execFileSync("adb",a,{encoding:"utf8",maxBuffer:8e6}).trim();
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const launch=()=>adb("shell","am","start","-W","-n",app+"/.MainActivity");
@@ -68,15 +68,19 @@ async function upgrade(){
   for(let i=0;i<45;i++){try{const x=readPrefs();if(x.values[progress]&&x.values[settings])break;}catch{}await wait(250);}
   stop();
   const original=readPrefs(),p=JSON.parse(original.values[progress]),s=JSON.parse(original.values[settings]);
-  p.active="classic";p.sessions.classic={rules:1,current:{board:[5,5,1,1,2,2,9,1],scroll:0,moves:0,additions:0},history:[]};p.hints.classic=1;p.meta.wallet=17;p.meta.help.inventory={magnet:2,plan:3};p.seen.push("old-profile-upgrade-check");s.tutorialDone=true;s.theme="dark";s.sound=false;s.vibration=false;
+  p.active="classic";p.sessions.classic={rules:1,current:{board:[5,5,1,1,2,2,9,1],scroll:0,moves:0,additions:0},packedHistory:[]};p.hints.classic=1;p.meta.wallet=17;p.meta.help.inventory={magnet:2,plan:3};p.seen.push("old-profile-upgrade-check");s.tutorialDone=true;s.theme="dark";s.sound=false;s.vibration=false;
   installPrefs({[progress]:JSON.stringify(p),[settings]:JSON.stringify(s)});launch();await wait(1800);await tapText("Начать классику");await tapText("5, строка 1, столбец 1");await tapText("5, строка 1, столбец 2");await wait(500);stop();
-  const before=readPrefs(),old=JSON.parse(before.values[progress]);assert.equal(old.sessions.classic.current.moves,1);assert.equal(old.sessions.classic.history.length,1);
+  const before=readPrefs(),old=JSON.parse(before.values[progress]);assert.equal(old.sessions.classic.current.moves,1);assert.equal(old.sessions.classic.packedHistory.length,1);
+  // First upgrade to the exact optimized release payload; inspect durable state before debug instrumentation.
+  adb("install","-r",releaseCandidate);launch();await wait(1800);await tapText("Продолжить классику");shot("upgrade-release-resumed");stop();
+  const optimized=JSON.parse(readPrefs().values[progress]);assert.deepEqual(optimized.sessions.classic,old.sessions.classic);assert.equal(optimized.active,"classic");assert.equal(optimized.hints.classic,old.hints.classic);assert.equal(optimized.meta.wallet,old.meta.wallet);assert.deepEqual(optimized.meta.help.inventory,old.meta.help.inventory);assert.equal(optimized.meta.help.install,old.meta.help.install);assert(optimized.seen.includes("old-profile-upgrade-check"));
+  const optimizedSettings=JSON.parse(readPrefs().values[settings]);for(const k of ["theme","sound","vibration"])assert.equal(optimizedSettings[k],s[k]);
   adb("install","-r",candidate);launch();const ui=await attach();
   assert(await ui.evaluate("document.querySelector('#dialog').open&&!document.querySelector('.opening-copy')"));await ui.tap("#resume","#dialog");
   assert.equal(await ui.evaluate("document.querySelector('#mode').textContent"),"Классика");assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"6");shot("upgrade-resumed");
   const now=JSON.parse(readPrefs().values[progress]);assert.deepEqual(now.sessions.classic,old.sessions.classic);assert.equal(now.hints.classic,old.hints.classic);assert.equal(now.meta.wallet,old.meta.wallet);assert.deepEqual(now.meta.help.inventory,old.meta.help.inventory);assert.equal(now.meta.help.install,old.meta.help.install);assert(await ui.evaluate("document.querySelector('#magnet').hidden&&document.querySelector('#plan').hidden"));assert(now.seen.includes("old-profile-upgrade-check"));
   const currentSettings=JSON.parse(readPrefs().values[settings]);for(const k of ["theme","sound","vibration"])assert.equal(currentSettings[k],s[k]);await ui.tap("#undo");await ui.until("document.querySelector('#remaining').textContent==='8'");ui.close();stop();
-  fs.writeFileSync(out+"/upgrade.json",JSON.stringify({baselineVersion:12054,candidateVersion:12061,package:app,baselineSha256:createHash("sha256").update(fs.readFileSync(baseline)).digest("hex"),candidateSha256:createHash("sha256").update(fs.readFileSync(candidate)).digest("hex"),method:"Exact old optimized payload and current debug payload re-signed with one ephemeral CI certificate; no app-data deletion between installs",boardHistorySettingsHintsWalletRetained:true,undoRestoresEight:true,oldBoard:old.sessions.classic},null,2));
+  fs.writeFileSync(out+"/upgrade.json",JSON.stringify({baselineVersion:12054,candidateVersion:12061,package:app,baselineSha256:createHash("sha256").update(fs.readFileSync(baseline)).digest("hex"),candidateReleaseSha256:createHash("sha256").update(fs.readFileSync(releaseCandidate)).digest("hex"),candidateDebugSha256:createHash("sha256").update(fs.readFileSync(candidate)).digest("hex"),method:"Exact old optimized payload upgraded to exact current optimized release payload, then current debug payload for CDP/Undo; all signed with one ephemeral CI certificate; no app-data deletion between installs",boardHistorySettingsHintsWalletRetained:true,undoRestoresEight:true,oldBoard:old.sessions.classic},null,2));
 }
 async function fresh(){
   adb("shell","pm","clear",app);adb("shell","settings","put","system","font_scale","1");adb("shell","wm","size","780x1688");
@@ -90,7 +94,7 @@ async function fresh(){
 async function font200(){
   adb("shell","pm","clear",app);adb("shell","wm","size","640x1136");adb("shell","settings","put","system","font_scale","2");launch();const ui=await attach();
   try{await ui.until("!!document.querySelector('.opening-copy')");await ui.fullText(".opening-copy","#page-progress");shot("first-launch-200");const top=await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top");await ui.move(8,17);await ui.move(4,5);assert.equal(await ui.evaluate("document.querySelector('.opening-copy').textContent"),"Пустые клетки можно пропускать.");await ui.tap("#hint");assert((await ui.evaluate("document.querySelector('.opening-copy').textContent")).includes("3 и 3"));assert.equal(await ui.evaluate("document.querySelector('#status').textContent"),"");shot("gap-hint-200");
-    await ui.tap("#menu");await ui.tap("#learn","#dialog");await ui.fullText("#lesson-text","#lesson");assert.equal(await ui.evaluate("document.querySelector('#lesson-text').textContent"),"Нажмите на две четвёрки.");shot("lesson-command-200");const lessonTop=await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top");await ui.digit(0);await ui.digit(1);await ui.tap("#lesson-next","#lesson-actions");await ui.fullText("#lesson-text","#lesson");assert(Math.abs((await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top"))-lessonTop)<=1);
+    await ui.tap("#menu");await ui.tap("#learn","#dialog");await ui.fullText("#lesson-text","#lesson");assert.equal(await ui.evaluate("document.querySelector('#lesson-text').textContent"),"Нажмите на две четвёрки.");shot("lesson-command-200");const lessonTop=await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top");await ui.digit(0);await ui.digit(1);await ui.until("!document.querySelector('#lesson-next').hidden");await ui.tap("#lesson-next","#lesson-actions");await ui.fullText("#lesson-text","#lesson");assert(Math.abs((await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top"))-lessonTop)<=1);
     fs.writeFileSync(out+"/font-200.json",JSON.stringify({cssViewport:await ui.evaluate("[innerWidth,innerHeight]"),systemFont:adb("shell","settings","get","system","font_scale"),openingInstructionFullyVisible:true,lessonInstructionFullyVisible:true,lessonFieldTopStable:true,openingFieldTop:top,explicitHintReplacesOldInstruction:true},null,2));
   }finally{ui.close();stop();}
 }

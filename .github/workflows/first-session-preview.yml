@@ -59,6 +59,7 @@ jobs:
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
           build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-layout-12054-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" android/app/build/outputs/apk/release/app-release-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
       - run: |
           export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-first-session-avd"
@@ -81,7 +82,7 @@ jobs:
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
           adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
           adb shell input keyevent 82
-          node scripts/first-session-android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk"
+          node scripts/first-session-android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk"
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: first-session-android, path: test-results/first-session-android/}

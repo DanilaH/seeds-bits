@@ -70,7 +70,7 @@ for(const height of [520,568])test(`first commands fully visible at 320x${height
   await page.screenshot({path:`test-results/first-session/first-${height}-200.png`});await digit(page,9);await expect(cue(page)).toHaveText("Найдите ещё одну 3.");await fullyVisible(page,".opening-copy","#page-progress");
   await page.locator("#menu").click();await page.locator("#learn").click();await stable(page);
   await expect(page.locator("#lesson-text")).toHaveText("Нажмите на две четвёрки.");await fullyVisible(page,"#lesson-text","#lesson");
-  const before=await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top);await digit(page,0);await digit(page,1);await click(page,"#lesson-next","#lesson-actions");
+  const before=await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top);await digit(page,0);await digit(page,1);await expect(page.locator("#lesson-next")).toBeVisible();await click(page,"#lesson-next","#lesson-actions");
   await expect(page.locator("#lesson-text")).toHaveText("Соедините 3 и 7.");await fullyVisible(page,"#lesson-text","#lesson");expect(Math.abs(await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top)-before)).toBeLessThanOrEqual(1);
 });
 for(const profile of ["classic","book-v1-2","daily-v1-2026-11-19","settings-only","backup-only","empty-settings","broken-settings","legacy"])test(`existing ${profile} keeps its route and stored position`,async({page})=>{
@@ -96,4 +96,27 @@ test("archive date is retained across menu, victory, replay and restart",async({
   await expect(page.locator("#win h1")).toHaveText("Задача за 19 ноября решена");
   const done=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).done,key);expect(done).toContain("daily-v1-2026-11-19");expect(done).not.toContain("daily-v1-2026-11-20");
   await page.reload();await page.locator("#resume").click();await expect(page.locator("#win h1")).toHaveText("Задача за 19 ноября решена");
+  await page.locator("#menu").click();await page.locator("#calendar-open").click();
+  await expect(page.locator('[data-game="daily-v1-2026-11-19"]')).toHaveClass(/done/);
+  await expect(page.locator('[data-game="daily-v1-2026-11-20"]')).not.toHaveClass(/done/);
+  await page.locator('[data-game="daily-v1-2026-11-19"]').click();await expect(page.locator("#mode")).toContainText("19 ноября");
+  for(const step of daily("2026-11-19").solution)await move(page,step.a,step.b);
+  await expect(page.locator("#win h1")).toHaveText("Задача за 19 ноября решена");
+  expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).done.filter((x:string)=>x==="daily-v1-2026-11-19").length,key)).toBe(1);
+  await page.locator("#menu").click();await page.locator("#calendar-open").click();await page.locator("#today-task").click();
+  await expect(page.locator("#mode")).toHaveText("Задача дня · 20 ноября");
+  const first=daily("2026-11-20").solution[0];await move(page,first.a,first.b);
+  await page.locator("#menu").click();await expect(page.locator("#resume")).toHaveText("Продолжить задачу дня");await page.locator("#resume").click();
+  for(const step of daily("2026-11-20").solution.slice(1))await move(page,step.a,step.b);
+  await expect(page.locator("#win h1")).toHaveText("Задача дня решена");
+});
+
+for(const height of [520,568])test(`returning short course command fully visible at 320x${height} and 200%`,async({page})=>{
+  await page.setViewportSize({width:320,height});await page.emulateMedia({reducedMotion:"reduce"});
+  await page.addInitScript(key=>localStorage.setItem(key,JSON.stringify({tutorialDone:false})),settings);
+  await page.goto("/");await expect(page.locator("#lesson-text")).toHaveText("Нажмите на две четвёрки.");await scale(page,2);
+  await fullyVisible(page,"#lesson-text","#lesson");const top=await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top);
+  await digit(page,0);await digit(page,1);await click(page,"#lesson-next","#lesson-actions");
+  await expect(page.locator("#lesson-text")).toHaveText("Соедините 3 и 7.");await fullyVisible(page,"#lesson-text","#lesson");
+  expect(Math.abs(await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top)-top)).toBeLessThanOrEqual(1);
 });
