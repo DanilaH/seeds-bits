@@ -521,12 +521,13 @@
       ],
       "behavior": "После Add без пар: фактическое добавление, следующая выдача либо отмена/новая партия при MAX_CELLS. Undo/reload используют существующую историю.",
       "verification": {
-        "code": "build + 107 unit + 8 browser passed locally",
+        "code": "Source 4f723e8: CI 44717991998 passed (107 + 2 unit, 302 e2e + 15 browser regressions, Android debug, web/Yandex builds). Targeted CI 44717985605 passed (8 browser, optimized Android release). Signed APK 12051 verified against exact CI payload and preview 11505.",
         "device": "NOT_VERIFIED",
-        "liveAudience": "NOT_VERIFIED"
+        "liveAudience": "NOT_VERIFIED",
+        "apk": "./2026-11-20/APK.json"
       },
       "acceptance": "./2026-11-20/FEEDBACK_ACCEPTANCE.md",
-      "nextAction": "Выдать подписанный preview APK и пройти на телефоне; ранний плюс/бюджет оригиналов исследовать отдельно."
+      "nextAction": "Пройти на телефоне подписанный preview 12051. Ранний плюс/бюджет оригиналов исследовать отдельно."
     }
   ]
 }
