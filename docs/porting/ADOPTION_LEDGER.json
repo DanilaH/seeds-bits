@@ -3,7 +3,7 @@
   "consumer": "DanilaH/seeds-bits",
   "consumerCommit": "7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b",
   "sourceInventory": "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/porting/SOURCE_FEATURES.json",
-  "scope": "Первая сверка по раннему плюсу, тупику, подсказке и связанным вариантам. MATCH относится к конкретному наблюдаемому свойству, а не к полному совпадению сессии Android. Следующие три записи проверены на 2e7f30f5407aa00ec6ec766ec0b5f0a166eec338 и описывают доступность объяснения. Старые 33 строки сохраняют свои исходные привязки.",
+  "scope": "Первая сверка по раннему плюсу, тупику, подсказке и связанным вариантам. MATCH относится к конкретному наблюдаемому свойству, а не к полному совпадению сессии Android. Следующие три записи проверены на 2e7f30f5407aa00ec6ec766ec0b5f0a166eec338 и описывают доступность объяснения. Старые 33 строки сохраняют свои исходные привязки. Обновление PR #9: первый сеанс — test-only локальная адаптация; исходные source feature PARTIAL и пробелы наблюдения оригиналов сохранены.",
   "roadmap": "./2026-11-20/ROADMAP.md",
   "features": [
     {
@@ -508,38 +508,48 @@
     {
       "id": "eb-tutorial-gap-copy",
       "parity": "PARTIAL",
-      "status": "ROADMAPPED",
-      "consumerCommit": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
-      "currentImplementation": "Полный урок 3 демонстрирует пропуск. На первом запуске он упоминается одним предложением. Все 44 решения первой задачи тетради требуют прямой через пустоту.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "7ad737e3581dd734d7970da5b18ef52fd49e1412",
+      "currentImplementation": "Собственный test-only первый вход: в book-v1-1 обязательный прямой пропуск объясняется до хода, без автоматического выделения; явная лампочка заменяет команду объяснением отмеченной пары.",
       "evidenceRef": [
         "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
         "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L188",
-        "../research/first-session-2026-11-20/route.json"
+        "../research/first-session-2026-11-20/route.json",
+        "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/first-session.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/main.ts",
+        "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md"
       ],
       "sourceLocator": "RU/tutorial_step_3_description",
-      "nextAction": "Проверить самостоятельный ход через пропуск сразу после собственного вводного примера.",
+      "nextAction": "Плейтест на телефоне: человек должен найти пару через пропуск/край без лампочки. Отдельно наблюдать момент объяснения в оригинале; PARTIAL не означает полное совпадение FTUE.",
       "dependencies": [
         "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
       ],
-      "consumerTest": "../research/first-session-2026-11-20/replay.mjs"
+      "consumerTest": "../../e2e/first-session.spec.ts",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "acceptanceEvidence": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md"
     },
     {
       "id": "eb-tutorial-row-edge-copy",
       "parity": "PARTIAL",
-      "status": "ROADMAPPED",
-      "consumerCommit": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
-      "currentImplementation": "Полный урок 5 содержит пример; в коротком курсе перенос только в тексте. В обратном порядке касаний SVG ставит крайние маркеры на противоположные строки.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "7ad737e3581dd734d7970da5b18ef52fd49e1412",
+      "currentImplementation": "Собственный test-only первый вход: при оставшемся переходе чтения короткая команда появляется до хода, а SVG края одинаков при обоих порядках касаний. Полный курс по запросу сохранён.",
       "evidenceRef": [
         "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
         "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L970",
-        "../research/first-session-2026-11-20/route.json"
+        "../research/first-session-2026-11-20/route.json",
+        "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/first-session.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/main.ts",
+        "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md"
       ],
       "sourceLocator": "RU/tutorial_step_4_title, tutorial_step_4_description",
-      "nextAction": "Проверить учебное распознавание пути в обе стороны, затем независимое поле без подсветки.",
+      "nextAction": "Плейтест на телефоне: человек должен найти пару через пропуск/край без лампочки. Отдельно наблюдать момент объяснения в оригинале; PARTIAL не означает полное совпадение FTUE.",
       "dependencies": [
         "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
       ],
-      "consumerTest": "../research/first-session-2026-11-20/replay.mjs"
+      "consumerTest": "../../e2e/first-session.spec.ts",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "acceptanceEvidence": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md"
     },
     {
       "id": "eb-daily-intro-monthly-cup-copy",
@@ -622,18 +632,24 @@
         "SEEDS-START-02"
       ],
       "scope": "Первый самостоятельный ход и ориентирование между классикой, тетрадью и днём. Тетрадь является собственной адаптацией.",
-      "status": "ROADMAPPED",
+      "status": "IMPLEMENTED_UNVERIFIED",
       "evidence": {
         "build": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
         "browser": "24 состояния и обе очередности нажатий, Chromium 390×844.",
         "model": "book-v1-1: 6 первых ходов, 44 успешных последовательности, 0 тупиков, все 44 содержат прямой пропуск, у 8 есть переход чтения. Среди первых пяти задач переход обязателен для победы впервые в №5. check-opening.mjs.",
-        "device": "Новый UX не проверен на физическом телефоне.",
+        "device": "NOT_VERIFIED: physical phone playtest remains open.",
         "liveAudience": "Один пересказ наблюдения владельцем. Новая версия людьми не проверена.",
-        "prototype": "Исследовательская сборка из исходного интерфейса и движка. Chromium offline, четыре размера/масштаба, шесть состояний на каждом; обе очередности, результат, выбор задачи 2 и восстановление после reload. first-game-checks.json. В продуктовый runtime не внесено.",
-        "independentCheck": "Повтор normal entry PR #8 и отдельного пилота PR #9, исправный возврат и четыре проблемы читаемости/подсказок/архива. См. ../research/first-session-2026-11-20/INDEPENDENT_CHECK.md. Телефон и живые игроки для нового входа открыты."
+        "prototype": "Исследовательская сборка из исходного интерфейса и движка. Chromium offline, четыре размера/масштаба, шесть состояний на каждом; обе очередности, результат, выбор задачи 2 и восстановление после reload. first-game-checks.json. В продуктовый runtime не внесено. Исторический результат до продуктового переноса.",
+        "independentCheck": "Повтор normal entry PR #8 и отдельного пилота PR #9, исправный возврат и четыре проблемы читаемости/подсказок/архива. См. ../research/first-session-2026-11-20/INDEPENDENT_CHECK.md. Телефон и живые игроки для нового входа открыты.",
+        "runtime": "7ad737e: новый первый вход только с VITE_SEEDS_FIRST_SESSION=1, чистая настоящая book-v1-1, добровольная задача 2. Исправлены четыре замечания независимого аудита. Итоговые CI/APK/Android evidence — в acceptance.",
+        "code": "Runtime 7ad737e; QA 0c33b38. CI 44766644206 passed (118 + 2 unit, 320 + 15 browser, web/Yandex, Android debug/native doubles). CI 44766629267 passed (25 targeted browser, optimized Android, native update/fresh/font200).",
+        "emulator": "Android 35 / WebView 124: exact old optimized 12054 → current optimized 12061 re-signed with one ephemeral CI certificate, board/history/settings/hints/wallet/paused inventory preserved; debug Undo restored 8. Fresh real task, manual task 2; 320x520/system font200 instruction visibility and stable lesson field.",
+        "apk": "../research/first-session-2026-11-20/implementation/APK.json"
       },
-      "acceptance": "../research/first-session-2026-11-20/README.md",
-      "nextAction": "До пилота исправить подсказки для фактических партнёров, обязательного пропуска и явной подсказки; согласовать названия архива. Для штатного урока проверить начальную инструкцию при 200%. Затем плейтест с новичками."
+      "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
+      "nextAction": "Пройти APK 12061 на физическом телефоне, наблюдать новичков без объяснений ведущего. Отдельное решение владельца требуется для публичного включения; ранний плюс/лимит оригиналов и шесть приостановленных экспериментов остаются отдельными работами.",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "consumerCommit": "7ad737e3581dd734d7970da5b18ef52fd49e1412"
     }
   ]
 }

@@ -1,0 +1,39 @@
+{
+  "baselineVersion": 12054,
+  "candidateVersion": 12061,
+  "package": "com.seedsbits.game.preview",
+  "baselineSha256": "1f32c317d5c7b6b53b483a0d4b7e84d9d3471e497c1c887037f138e190fe3997",
+  "candidateReleaseSha256": "a5e5691b36f2ecc1b42b498a1070a173d169e57e71889eb4fa39efafde205a3b",
+  "candidateDebugSha256": "6eea2505ad1cbab8b5ad40e41efaa1a0777018788d7201a40fd5bfe8d089655a",
+  "method": "Exact old optimized payload upgraded to exact current optimized release payload, then current debug payload for CDP/Undo; all signed with one ephemeral CI certificate; no app-data deletion between installs",
+  "boardHistorySettingsHintsWalletRetained": true,
+  "undoRestoresEight": true,
+  "oldBoard": {
+    "rules": 1,
+    "current": {
+      "board": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        9,
+        1
+      ],
+      "scroll": 0,
+      "additions": 0,
+      "moves": 1
+    },
+    "packedHistory": [
+      [
+        0,
+        0,
+        0,
+        [
+          "55112291"
+        ]
+      ]
+    ]
+  }
+}
