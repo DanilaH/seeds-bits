@@ -15,6 +15,7 @@ async function textScale(page: Page, scale: number) {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 }
 async function rawClick(page: Page, selector: string) {
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const point = await page.locator(selector).evaluate(el => {
     const r = el.getBoundingClientRect(), x = r.x + r.width / 2, y = r.y + r.height / 2;
     return {x, y, reachable: x >= 0 && y >= 0 && x < innerWidth && y < innerHeight && el.contains(document.elementFromPoint(x, y))};
@@ -54,10 +55,12 @@ for (const [width, height] of [[320,568], [390,844], [568,320], [844,390]]) {
       await textScale(page, scale);
       for (let step = 0; step < 2; step++) {
         const before = await top(page);
+        const heightBefore = await page.locator("#viewport").evaluate(el => el.clientHeight);
         if (step === 0) await page.screenshot({path:`test-results/layout-repair/${width}-${height}-${scale}-lesson-before.png`});
         await digit(page, 0); await digit(page, 1);
         await expect(page.locator("#lesson-next")).toBeVisible();
         expect(Math.abs(await top(page) - before)).toBeLessThanOrEqual(1);
+        expect(Math.abs(await page.locator("#viewport").evaluate(el => el.clientHeight) - heightBefore)).toBeLessThanOrEqual(1);
         if (step === 0) await page.screenshot({path:`test-results/layout-repair/${width}-${height}-${scale}-lesson-after.png`});
         if (step === 1) await expect(page.locator("#lesson-quick")).toBeVisible();
         await rawClick(page, "#lesson-next");

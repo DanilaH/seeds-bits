@@ -1873,6 +1873,9 @@ function startLesson(short = false) {
   closeMenu();
   void save();
 }
+function lessonNextText() {
+  return shortLesson && lesson === 1 ? "Играть в классику" : lesson === 5 ? "Начать игру" : "Дальше";
+}
 function loadLesson() {
   lessonQuick.hidden = true;
   lessonBoard = [...lessons[lesson].cells];
@@ -1888,6 +1891,10 @@ function loadLesson() {
       ? " Пары ищутся по горизонтали, вертикали и диагонали, а ещё через край строки. Между ними — только пустые клетки."
       : "");
   $("lesson-next").hidden = true;
+  // The invisible continuation slot must already have its final text geometry.
+  $("lesson-next").textContent = lessonNextText();
+  $("lesson").scrollTop = 0;
+  lessonActions.scrollTop = 0;
   viewport.scrollTop = 0;
   render();
   message("Попробуйте на маленьком поле");
@@ -2043,12 +2050,7 @@ async function choose(i: number) {
     lessonBoard = next;
     lessonPhase = 2;
     $("lesson-next").hidden = false;
-    $("lesson-next").textContent =
-      shortLesson && lesson === 1
-        ? "Играть в классику"
-        : lesson === 5
-          ? "Начать игру"
-          : "Дальше";
+    $("lesson-next").textContent = lessonNextText();
     lessonQuick.hidden = !(shortLesson && lesson === 1);
   }
   clearSelection();
