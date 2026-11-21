@@ -287,7 +287,7 @@ pauseLanguage.id="pause-language";
 pauseLanguage.className="plain";
 pauseLanguage.innerHTML=globe;
 pauseLanguage.hidden=true;
-$("menu-content").querySelector(".home-title")!.append(pauseLanguage);
+$("menu-content").querySelector(".home-links")!.append(pauseLanguage);
 let languageEntry: "settings" | "pause" = "settings";
 let changingLanguage=false;
 function drawLanguage() {

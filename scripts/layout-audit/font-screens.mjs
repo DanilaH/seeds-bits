@@ -33,7 +33,7 @@ function screenshot(path) {
 function setProfile({active = "classic", board = [5,5,1,1], history = [], done = [], settings = {}, meta} = {}) {
   stop();
   const entries = {
-    [settingsKey]: {tutorialDone:true, sound:false, vibration:false, ...settings},
+    [settingsKey]: {tutorialDone:true, sound:false, vibration:false, languageChoice:"ru", ...settings},
     [progressKey]: {version:3, active, sessions:{[active]:{rules:1,current:snap(board, history.length),history}},
       hints:{}, seen:[], done, ...(meta ? {meta} : {})},
   };
@@ -196,6 +196,14 @@ async function opening() {
   await ui.shown(".opening-copy");
   const field = () => ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().toJSON()");
   await checkpoint("first-start", {command:".opening-copy",within:"#page-progress"});
+  if (await ui.evaluate("document.documentElement.lang !== 'ru'")) {
+    await ui.tap("#menu");
+    await ui.tap("#pause-language");
+    await ui.tap('#language-options button[data-language="ru"]');
+    await ui.until("document.documentElement.lang === 'ru'");
+    await ui.tap("#language-close");
+    await ui.tap("#resume");
+  }
   const start = await field();
   await ui.digit(4, {scroll:false});
   await checkpoint("first-two-partners", {command:".opening-copy",within:"#page-progress"});
