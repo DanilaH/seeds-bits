@@ -709,6 +709,27 @@
       ],
       "nextAction": "Повторить оба сценария без устной инструкции. Взять соответствующую правку при наблюдении её условия.",
       "acceptance": "../research/ux-handoff-2026-11-21/ACCEPTANCE.md"
+    },
+    {
+      "id": "seeds-markets-localization-20261121",
+      "sourceFeatureIds": [],
+      "localIssueIds": [
+        "SEEDS-MARKETS-A",
+        "SEEDS-MARKETS-B",
+        "SEEDS-MARKETS-C"
+      ],
+      "scope": "Локальная дистрибуция, язык игры и измерение по каналам. Языки карточки Easybrain приведены как контекст предложения.",
+      "status": "PROPOSED",
+      "consumerCommit": "145a512457484f9ffe49ace435883e622dc38934",
+      "acceptance": "../research/markets-localization-2026-11-21/README.md",
+      "evidence": {
+        "code": "В preview 12066 есть Android AppMetrica и очередь событий. В NashStore 7537d9c сохранён install_store для RuStore/NashStore. В текущем preview его нет.",
+        "research": "../research/markets-localization-2026-11-21/AUDIENCE.md",
+        "channels": "../research/markets-localization-2026-11-21/channels.json",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "UNKNOWN — для выбора следующего перевода нужен отчёт по первым запускам, запрошенной локали и показанному языку."
+      },
+      "nextAction": "A — перенос определения источника и первый веб-канал. B — RU/EN, переключатель и нативные строки. C — события, тестовые отчёты и сверка счётчиков."
     }
   ]
 }
