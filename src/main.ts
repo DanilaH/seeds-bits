@@ -475,7 +475,8 @@ function scheduleActionLayout() {
       innerHeight <= 420 &&
       !game.classList.contains("is-result") &&
       actions.length > 0 &&
-      (required > sideWidth ||
+      (inOpening() ||
+        required > sideWidth ||
         (actions.length === 2 && widest > (sideWidth - 2) / 2));
     game.classList.toggle("docked-actions", dock);
     const status = document.querySelector<HTMLElement>(".status-wrap")!;
