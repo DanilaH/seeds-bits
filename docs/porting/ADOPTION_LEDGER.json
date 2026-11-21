@@ -727,10 +727,11 @@
         "research": "../research/markets-localization-2026-11-21/AUDIENCE.md",
         "channels": "../research/markets-localization-2026-11-21/channels.json",
         "launchCopy": "../research/markets-localization-2026-11-21/launch-copy.json",
+        "browserLayoutProbe": "../research/markets-localization-2026-11-21/layout-probe/README.md",
         "device": "NOT_VERIFIED",
         "liveAudience": "UNKNOWN — проверить реальное покрытие десяти языков и спрос на следующие по первым запускам, запрошенной локали и показанному языку."
       },
-      "nextAction": "A — перенос определения источника и первый веб-канал. B1 — переключатель и ru/en/es/tr/pt-BR. B2 — fr/de/it/vi/id. Стартовые 120 ключей на всех десяти языках в launchCopy. Обе поставки готовятся параллельно с A и C. C — события, тестовые отчёты и сверка счётчиков."
+      "nextAction": "A — перенос определения источника и первый веб-канал. B1 — переключатель и ru/en/es/tr/pt-BR. B2 — fr/de/it/vi/id. В launchCopy 131 ключ на десяти языках. Сверить L10N-READ-01, L10N-ROUTE-02 и L10N-DATE-03 на интегрированной сборке. Обе поставки готовятся параллельно с A и C. C — события, тестовые отчёты и сверка счётчиков."
     }
   ]
 }
