@@ -586,7 +586,7 @@ test("failed switch can retry without lost attempt or rapid-click double transit
   expect((await data(page)).active).toBe("book-v1-2");
   await page.reload();
   await page.locator("#resume").click();
-  await expect(page.locator("#mode")).toHaveText("Тетрадь · задача 2");
+  await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 2");
 });
 
 test("backup recovery is explicit and survives reload", async ({ page }) => {

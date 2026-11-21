@@ -8,7 +8,7 @@ export function hintExplanation(board: number[], pair: Connection): string {
       : `${board[pair.a]} + ${board[pair.b]} = 10`;
   const direction =
     pair.kind === "reading"
-      ? "по порядку чтения"
+      ? "через край строки"
       : Math.floor(pair.a / 9) === Math.floor(pair.b / 9)
         ? "по горизонтали"
         : pair.a % 9 === pair.b % 9

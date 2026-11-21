@@ -57,7 +57,7 @@ test("home hides board, layouts fit and modes survive settings and restart", asy
     animations: "disabled",
   });
   await page.locator("#resume").click();
-  await expect(page.locator("#mode")).toHaveText("Тетрадь · задача 1");
+  await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 1");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);

@@ -80,6 +80,7 @@ import {
   occupied,
   pairs,
   checkPair,
+  pairBlockers,
   removePair,
   addNumbers,
   newSession,
@@ -226,7 +227,7 @@ const lessons = [
   },
 ];
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню">${icon("menu")}</button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>Напоминать о задаче дня</button><button id="try-notebook" class="secondary" hidden>Короткая задача</button><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">Подсказка</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">Добавить</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Если пар больше нет, добавьте цифры</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">Сборники по 24 задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">Напоминать о задаче дня<input id="reminders" type="checkbox"></label><label class="reminder-time">Напоминать около<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>Разрешить уведомления</button><button id="notification-system-settings" class="text-button" hidden>Настройки уведомлений Android</button><p class="fine">По местному времени, если задача ещё не решена.</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="Открыть меню">${icon("menu")}</button><div class="brand">семечки</div><button id="book-top" class="plain" aria-label="Открыть тетрадь">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="Коллекция баночек"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">Классическая партия</span><span><strong id="remaining">28</strong> <span id="noun">цифр</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">Пропустить</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>Дальше</button></section><div id="viewport" tabindex="0" aria-label="Игровое поле с вертикальной прокруткой"><div id="board-wrap"><div id="board" role="group" aria-label="Цифры игрового поля"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>Все пары найдены</h1><section class="result-details" aria-label="Итоги партии"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>Напоминать о задаче дня</button><button id="try-notebook" class="secondary" hidden>Открыть тетрадь</button><button id="play-again" class="primary">Ещё партия</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>Начать задачу заново</button><button id="retry-save" class="text-button" hidden>Повторить сохранение</button></div><footer><button id="undo" class="action">${icon("undo")}<span>Отмена</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">Подсказка</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">Добавить</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="Меню Семечек"><div class="dialog-head"><h2>Семечки</h2><button id="close" class="plain" aria-label="Закрыть меню">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>семечки</h1></div><button id="resume" class="primary">Продолжить игру</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>Классика<small>Если пар больше нет, добавьте цифры</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>Тетради<small><span id="book-count">Сборники по 24 задачи</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>Задача дня<small><span id="daily-state">Начать</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">Другие дни ${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">Прогресс</button><button id="learn" class="text-button">Как играть</button><button id="settings-open" class="text-button">Настройки</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="Назад">${icon("back")}</button><h2>Настройки</h2></div><div class="settings"><label>Тёмная тема<input id="dark" type="checkbox"></label><label>Звук<input id="sound" type="checkbox"></label><label>Вибрация<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">Напоминать о задаче дня<input id="reminders" type="checkbox"></label><label class="reminder-time">Напоминать около<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>Разрешить уведомления</button><button id="notification-system-settings" class="text-button" hidden>Настройки уведомлений Android</button><p class="fine">По местному времени, если задача ещё не решена.</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">Начать текущую партию заново</button><p class="intro">Прогресс сохраняется автоматически.</p><button id="privacy-open" class="text-button">Конфиденциальность</button></section><div id="confirm-content" hidden><p>Начать новую партию? Текущее поле и история отмены будут заменены.</p><button id="confirm-new" class="primary">Начать заново</button><button id="cancel-new" class="secondary">Оставить текущую</button></div><section id="collection" hidden></section></dialog>`;
 // Keep the primary result action ahead of the optional reminder.
 $("play-again").after($("result-reminder"));
 const resultNext = document.createElement("div");
@@ -852,6 +853,7 @@ function settlePresentation() {
   clearTrophyCelebration();
   clearResultCelebration();
   clearBoardReveal();
+  clearPairFeedback();
   clearTimeout(fullJarTimer);
   completedJar = undefined;
   pendingResult = undefined;
@@ -1002,26 +1004,74 @@ function maybeCelebrateResult() {
     }
   }
 }
-function drawPath(path: Connection | null) {
-  $("paths").innerHTML = "";
-  if (path?.kind === "reading") {
-    const lo = Math.min(path.a, path.b), hi = Math.max(path.a, path.b);
-    const origin = $("paths").getBoundingClientRect();
-    const boardBox = $("board").getBoundingClientRect();
-    const width = boardBox.width / WIDTH;
-    function center(index: number) {
-      const box = cell(index)?.getBoundingClientRect();
-      return box ? {x: box.left + box.width / 2 - origin.left, y: box.top + box.height / 2 - origin.top}
-        : {x: boardBox.left - origin.left + (index % WIDTH + 0.5) * width,
-           y: boardBox.top - origin.top + (Math.floor(index / WIDTH) + 0.5) * width};
-    }
-    const upper = center(lo), lower = center(hi);
-    const right = boardBox.right - origin.left - 3, left = boardBox.left - origin.left + 3;
-    const end = Math.max(left + 5, lower.x - width * 0.24);
-    $("paths").innerHTML =
-      `<path d="M${Math.min(right - 5, upper.x + width * 0.24)},${upper.y}H${right}m-4,-4l4,4 -4,4 M${left},${lower.y}H${end}m-4,-4l4,4 -4,4"/>`;
-  }
+function cellCenter(index: number, origin: DOMRect, boardBox: DOMRect) {
+  const box = cell(index)?.getBoundingClientRect();
+  const width = boardBox.width / WIDTH;
+  return box
+    ? {x: box.left + box.width / 2 - origin.left, y: box.top + box.height / 2 - origin.top}
+    : {x: boardBox.left - origin.left + (index % WIDTH + 0.5) * width,
+       y: boardBox.top - origin.top + (Math.floor(index / WIDTH) + 0.5) * width};
+}
+function edgeArrows(path: Connection, origin: DOMRect, sequence: boolean) {
+  const boardBox = $("board").getBoundingClientRect();
+  const upper = cellCenter(Math.min(path.a, path.b), origin, boardBox);
+  const lower = cellCenter(Math.max(path.a, path.b), origin, boardBox);
+  const inset = boardBox.width / WIDTH * 0.24;
+  const right = boardBox.right - origin.left - 3, left = boardBox.left - origin.left + 3;
+  const exit = `M${Math.min(right - 5, upper.x + inset)},${upper.y}H${right}m-4,-4l4,4 -4,4`;
+  const entry = `M${left},${lower.y}H${Math.max(left + 5, lower.x - inset)}m-4,-4l4,4 -4,4`;
+  return sequence
+    ? `<path class="edge-exit" d="${exit}"/><path class="edge-entry" d="${entry}"/>`
+    : `<path d="${exit} ${entry}"/>`;
+}
+function drawPath(path: Connection | null, sequence = false) {
+  const overlay = $("paths");
+  const next = path?.kind === "reading" ? edgeArrows(path, overlay.getBoundingClientRect(), sequence) : "";
+  if (sequence || overlay.innerHTML !== next) overlay.innerHTML = next;
   updateJump();
+}
+let pairTrace: SVGSVGElement | undefined;
+let outlinedBlockers: HTMLElement[] = [];
+let pairFeedbackTimer: ReturnType<typeof setTimeout>;
+function clearPairFeedback() {
+  clearTimeout(pairFeedbackTimer);
+  pairTrace?.remove();
+  pairTrace = undefined;
+  for (const blocker of outlinedBlockers) blocker.classList.remove("pair-blocker");
+  outlinedBlockers = [];
+}
+function showPairBlockers(indices: readonly number[]) {
+  for (const index of indices) {
+    const node = cell(index);
+    if (node) {
+      node.classList.add("pair-blocker");
+      outlinedBlockers.push(node);
+    }
+  }
+  if (outlinedBlockers.length) pairFeedbackTimer = setTimeout(clearPairFeedback, 850);
+}
+function clipPairTrace() {
+  if (!pairTrace) return;
+  const trace = pairTrace.getBoundingClientRect(), view = viewport.getBoundingClientRect();
+  pairTrace.style.clipPath = `inset(${Math.max(0, view.top - trace.top)}px ${Math.max(0, trace.right - view.right)}px ${Math.max(0, trace.bottom - view.bottom)}px ${Math.max(0, view.left - trace.left)}px)`;
+}
+function showPairTrace(path: Connection) {
+  const view = viewport.getBoundingClientRect();
+  const trace = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  trace.id = "pair-trace";
+  trace.setAttribute("aria-hidden", "true");
+  Object.assign(trace.style, {left: `${view.left}px`, top: `${view.top}px`, width: `${view.width}px`, height: `${view.height}px`});
+  if (path.kind === "reading") {
+    trace.innerHTML = edgeArrows(path, view, true);
+    $("paths").replaceChildren();
+  } else {
+    const boardBox = $("board").getBoundingClientRect();
+    const a = cellCenter(path.a, view, boardBox), b = cellCenter(path.b, view, boardBox);
+    trace.innerHTML = `<path class="gap-trail" d="M${a.x},${a.y} L${b.x},${b.y}"/>`;
+  }
+  $("app").append(trace);
+  pairTrace = trace;
+  pairFeedbackTimer = setTimeout(clearPairFeedback, 360);
 }
 const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ownedDomMotion = new OwnedDomMotion();
@@ -1679,11 +1729,6 @@ function renderWin() {
         .filter(Boolean)
         .map((text) => `<span>${text}</span>`)
         .join("");
-  $("try-notebook").textContent = notebook
-    .slice(0, 24)
-    .some((p) => !progress.done.includes(p.id))
-    ? "Короткая задача"
-    : "Задача из тетради";
   $("try-notebook").hidden =
     id !== "classic" || !notebook.some((p) => !progress.done.includes(p.id));
   const award = $("award");
@@ -1822,9 +1867,7 @@ function render() {
       : progress.active === "classic"
         ? "Классика"
         : progress.active.startsWith("book")
-          ? volumeOf(progress.active) === 0
-            ? `${inOpening() ? "Тетрадь 1" : "Тетрадь"} · задача ${Number(progress.active.slice(8))}`
-            : `Тетрадь ${volumeOf(progress.active) + 1} · задача ${((Number(progress.active.slice(8)) - 1) % 24) + 1}`
+          ? `Тетрадь ${volumeOf(progress.active) + 1} · задача ${((Number(progress.active.slice(8)) - 1) % 24) + 1}`
           : dailyFieldTitle(progress.active);
   const plan = lesson < 0 ? currentPlan() : undefined;
   if(!busy){
@@ -1905,6 +1948,7 @@ function render() {
   const nextAddMessage = values.length + count <= MAX_CELLS
     ? `Можно добавить ещё ${count} ${digitWord(count)}.`
     : "Поле больше не расширяется. Отмените ход или начните новую партию.";
+  const copied = digitWord(count) === "цифра" ? "скопируется" : "скопируются";
   const edgeNeeded = !inOpening() && needsNotebookEdge(available);
   if (lesson < 0 && !saveFailed)
     message(
@@ -1925,13 +1969,14 @@ function render() {
                 ? `Добавлено ${addedCount} ${digitWord(addedCount)}. Пар пока нет. ${nextAddMessage}`
                 : values.length + count > MAX_CELLS
                   ? `Пар нет. ${nextAddMessage}`
-                  : "Пар нет. Добавьте оставшиеся цифры."
+                  : `Пар нет. Нажмите «Добавить» — в конец поля ${copied} ${count} ${digitWord(count)}.`
               : "Пар нет. Отмените ход или начните задачу заново.",
     );
   const selectedEdge = !highlight && inOpening() && selected >= 0 &&
     available.length && available.every(pair => pair.kind === "reading")
     ? available.find(pair => pair.a === selected || pair.b === selected) : undefined;
   drawPath(highlight ?? selectedEdge ?? null);
+  clipPairTrace();
   if (focusedIndex !== undefined) {
     const target = $("board").querySelector<HTMLElement>(
       `button[data-index="${focusedIndex}"]`,
@@ -2015,6 +2060,7 @@ async function choose(i: number) {
   saveRecovered = false;
   if (busy || paused || dialog.open) return;
   clearBoardReveal();
+  clearPairFeedback();
   const values = board();
   if (!values[i] || selected === i) {
     clearSelection();
@@ -2041,6 +2087,9 @@ async function choose(i: number) {
     selected = i;
     highlight = null;
     render();
+    const blockers = lesson < 0 ? pairBlockers(values, a, i, result.reason) : [];
+    showPairBlockers(blockers);
+    const blockedEdge = result.reason === "direction" && blockers.length > 0;
     feedback("reject");
     motion(cell(a), [
       { background: "transparent" },
@@ -2054,7 +2103,8 @@ async function choose(i: number) {
     ]);
     if (inOpening() && openingErrors[result.reason]) {
       const copy = document.querySelector<HTMLElement>(".opening-copy");
-      if (copy) copy.textContent = openingErrors[result.reason];
+      if (copy) copy.textContent = blockedEdge ? "Переход через край строки закрыт."
+        : blockers.length ? "На пути есть препятствия." : openingErrors[result.reason];
       return;
     }
     message(
@@ -2063,7 +2113,7 @@ async function choose(i: number) {
         empty: "Здесь нет цифры",
         value: "Нужны одинаковые цифры или сумма 10",
         blocked: "Между цифрами есть препятствие",
-        direction: "Соединяйте по прямой или по порядку чтения",
+        direction: blockedEdge ? "Переход через край строки закрыт." : "Соединяйте по прямой или через край строки",
       }[result.reason],
     );
     return;
@@ -2095,6 +2145,9 @@ async function choose(i: number) {
   busy = true;
   highlight = result.path;
   render();
+  const firstEdge = lesson < 0 && result.path.kind === "reading" && !progress.seen.includes("edge-trace");
+  const traceMove = firstEdge || (lesson < 0 && result.path.kind === "straight" && acrossGap(a, i));
+  if (traceMove) showPairTrace(result.path);
   for (const n of [a, i]) cell(n)?.classList.add("erasing");
   const oldLength = values.length,
     next = removePair(values, a, i);
@@ -2103,6 +2156,7 @@ async function choose(i: number) {
   // Commit the accepted move before awaiting a decorative animation.
   if (lesson < 0) {
     session = commit(session, next, "pair", viewport.scrollTop);
+    if (firstEdge) progress.seen.push("edge-trace");
     if (result.path.kind === "reading" && notebookEdgeUnseen())
       progress.seen.push("reading");
     removedPairs.set(session.current.board, [a, i]);
@@ -2114,7 +2168,10 @@ async function choose(i: number) {
     if (!occupied(next)) complete(flightRects);
     save();
   }
-  await new Promise((r) => setTimeout(r, reduced() ? 0 : 100));
+  // A finishing route is shown on the old field before it gives way to the result.
+  // Non-finishing moves keep the usual erase/remap interval.
+  await new Promise((r) => setTimeout(r, ending && traceMove ? 240 : reduced() ? 0 : 100));
+  if (ending) clearPairFeedback();
   const blank = [...values];
   blank[a] = blank[i] = 0;
   const positions = new Map<number, number>();
@@ -2197,13 +2254,13 @@ async function choose(i: number) {
   }
   maybeCelebrateResult();
   if (lesson >= 0) message("Получилось!");
-  else if (inOpening() || needsNotebookEdge(availablePairs(next))) {
-    // Keep the instruction for the move that is now possible.
+  else if (inOpening() || !availablePairs(next).length || needsNotebookEdge(availablePairs(next))) {
+    // Keep the instruction or dead-end action for the current field.
   }
   else if (occupied(next) && result.path.kind === "reading")
     teach(
       "reading",
-      "Конец строки продолжается в начале следующей. Пустоты не мешают.",
+      "Через край строки можно соединять цифры, если путь свободен.",
     );
   else if (
     occupied(next) &&
@@ -2224,6 +2281,7 @@ async function choose(i: number) {
 function add() {
   saveRecovered = false;
   if (busy || paused) return;
+  clearPairFeedback();
   markGameStarted();
   const values = board();
   if (lesson >= 0 && lesson !== 5) return;
@@ -2266,6 +2324,7 @@ function add() {
 function undoAction() {
   saveRecovered = false;
   if (busy || paused || (lesson < 0 && !occupied(board()))) return;
+  clearPairFeedback();
   if (lesson === 5 && lessonPhase === 1) {
     lessonBoard = [...lessons[5].cells];
     lessonPhase = 2;
@@ -2303,6 +2362,7 @@ function undoAction() {
 async function hint() {
   saveRecovered = false;
   if (busy || paused || lesson >= 0 || hintPending) return;
+  clearPairFeedback();
   markGameStarted();
   const plan=currentPlan();
   if(plan?.pair){displayHint(plan.pair);message("Уберите отмеченную пару");return;}
@@ -2413,6 +2473,7 @@ function displayHint(pair: Connection,quiet=false) {
   highlight = pair;
   selected = -1;
   render();
+  if (pair.kind === "reading") drawPath(pair, true);
   if(!quiet)feedback("hint");
   visibleCellEffects(
     [highlight.a, highlight.b],
@@ -2865,6 +2926,7 @@ dialog.addEventListener("cancel", (e) => {
 });
 let scrollTimer: ReturnType<typeof setTimeout>;
 viewport.addEventListener("scroll", () => {
+  if (pairTrace) clearPairFeedback();
   updateJump();
   clearTimeout(scrollTimer);
   scrollTimer = setTimeout(() => {

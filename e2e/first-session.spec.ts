@@ -164,7 +164,7 @@ for (const [first, second] of [[6, 10], [10, 6]]) {
     if (first === 10) {
       await page.locator("#hint").click();
       await expect(status).toContainText("2 и 2");
-      await expect(page.locator("#paths path")).toHaveCount(1);
+      await expect(page.locator("#paths path")).toHaveCount(2);
       await digit(page, first);
     }
     await digit(page, second);

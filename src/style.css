@@ -158,6 +158,9 @@ header {
 .cell.hinted {
   background: var(--highlight);
 }
+.cell.pair-blocker {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--reject) 60%, var(--ink));
+}
 .cell:focus-visible {
   outline-offset: -3px;
   z-index: 1;
@@ -174,10 +177,37 @@ header {
   overflow: visible;
   color: var(--accent);
 }
-#paths path {
+#paths path,
+#pair-trace path {
   stroke: currentColor;
   stroke-width: 2;
   fill: none;
+}
+#pair-trace {
+  position: fixed;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--accent);
+}
+#pair-trace .gap-trail {
+  stroke-linecap: round;
+  opacity: .68;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #paths .edge-entry,
+  #pair-trace .edge-entry {
+    animation: edge-entry 65ms ease-out 85ms backwards;
+  }
+  #pair-trace {
+    animation: pair-trace-fade 145ms ease-out 210ms forwards;
+  }
+}
+@keyframes edge-entry {
+  from { opacity: 0; }
+}
+@keyframes pair-trace-fade {
+  to { opacity: 0; }
 }
 #paths circle {
   fill: currentColor;
