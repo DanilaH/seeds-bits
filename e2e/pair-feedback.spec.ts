@@ -89,7 +89,7 @@ for (const [name, entries, endpoints] of [
       expect(end[0]).toBeCloseTo(centers[1][0],1);
       expect(end[1]).toBeCloseTo(centers[1][1],1);
       const after = removePair(board,a,b);
-      await page.clock.runFor(250);
+      await page.clock.runFor(occupied(after) ? 115 : 250);
       await expect(page.locator("#remaining")).toHaveText(String(occupied(after)));
       if (occupied(after)) {
         await expect(line).toHaveCount(1);

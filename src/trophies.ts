@@ -49,7 +49,7 @@ export function trophyMark(
         : t("ui.puzzles");
   const emblem = monthEmblem(Number(month.slice(5)));
   const preview = next
-    ? `<span class="next-medal" style="--preview-metal:${next.color}" aria-label="${t("ui.next-medal-to-go", { "0": next.name, "1": left, "2": taskWord })}"><span class="next-eyebrow">${complete && !pending ? "Следующая" : "Следом"}</span><svg class="next-medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false">${ribbon}${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g></svg><strong>${next.name}</strong><span class="next-count">${t("ui.to-go", { "0": left, "1": taskWord })}</span></span>`
+    ? `<span class="next-medal" style="--preview-metal:${next.color}" aria-label="${t("ui.next-medal-to-go", { "0": next.name, "1": left, "2": taskWord })}"><span class="next-eyebrow">${complete && !pending ? t("ui.next") : t("ui.coming-up")}</span><svg class="next-medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false">${ribbon}${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g></svg><strong>${next.name}</strong><span class="next-count">${t("ui.to-go", { "0": left, "1": taskWord })}</span></span>`
     : "";
   const id = `medal-${++artworkId}`;
   const fillY = 68 - (48 * filled) / target;

@@ -1363,8 +1363,7 @@ function gameMode() {
       : "daily";
 }
 const committedAnalytics = new CommittedAnalytics(async (event) => {
-  if (webAcquisition) return webAcquisition.product(event);
-  if (!adsBridge) return false;
+  if (!adsBridge) return webAcquisition?.product(event) ?? false;
   const result = await adsBridge.report({
     name: event.name,
     data: { ...event.data, event_id: event.id, schema: 2 },
