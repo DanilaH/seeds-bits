@@ -1,4 +1,4 @@
-import registry from "./distribution-channels.json";
+import registry from "./distribution-channels.json" with {type:"json"};
 import { CommittedAnalytics, enqueueAnalytics, readAnalytics, type AnalyticsEvent, type EventData } from "./analytics";
 
 export type InstallContext = {

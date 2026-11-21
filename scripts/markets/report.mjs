@@ -58,7 +58,7 @@ export function marketReport({installations=[], events=[]}, {
       evidence:record?.store_evidence??"no_context",state:record?.acquisition_state??"no_context",
       requested:record?.requested_locale??"unknown",ui:record?.initial_ui_language??"unknown",startDay,reinc};
     if(period(startDay))android.push({...details,application_id:row.application_id});
-    if(record?.acquisition_state==="fresh"&&!reinc)ensure(initial,details);
+    ensure(initial,{...details,cohort:record?.acquisition_state==="fresh"&&!reinc});
   }
   const sessionOnly=[];
   for(const e of unique) {
@@ -66,9 +66,13 @@ export function marketReport({installations=[], events=[]}, {
     if(!k)continue;
     const current=day(e.data.occurred_at);
     if(e.name==="web_session_open"&&e.data.storage_scope==="session_only"&&period(current))sessionOnly.push(e.data);
-    if(e.name==="web_first_play"&&e.data.storage_scope==="persistent"&&e.data.acquisition_state==="fresh")
-      ensure(k,{surface:"web",channel:e.data.portal_id,distributor:e.data.distributor_id,
-        evidence:e.data.portal_evidence,requested:e.data.requested_locale,ui:e.data.ui_language,startDay:current});
+    if(e.data.surface==="web" && e.data.storage_scope==="persistent" && e.data.portal_id!=="unknown") {
+      const context={surface:"web",channel:e.data.portal_id,distributor:e.data.distributor_id,
+        evidence:e.data.portal_evidence,requested:e.data.requested_locale,ui:e.data.ui_language,startDay:current};
+      const profile=ensure(k,{...context,cohort:false});
+      if(!profile.cohort && e.name==="web_first_play" && e.data.acquisition_state==="fresh")
+        Object.assign(profile,context,{cohort:true});
+    }
     const profile=profiles.get(k);
     if(!profile)continue;
     profile.events.push(e);
@@ -78,7 +82,7 @@ export function marketReport({installations=[], events=[]}, {
   const summary=new Map(), languages=new Map();
   for(const p of profiles.values()){
     const key=[p.surface,p.channel,p.distributor??"",p.artifact??""].join("/");
-    if(period(p.startDay)){
+    if(p.cohort&&period(p.startDay)){
       const row=summary.get(key)??{surface:p.surface,channel:p.channel,...(p.distributor?{distributor:p.distributor}:{}),
         ...(p.artifact?{artifact:p.artifact}:{}),newProfiles:0,firstPair:0,firstPuzzle:0,d1Eligible:0,d1:0,localeMatrix:{}};
       row.newProfiles++;

@@ -43,7 +43,11 @@ const file=process.argv[2];
 const actualBrowser=file?JSON.parse(fs.readFileSync(file,"utf8")):null;
 if(actualBrowser){
   const actual=marketReport(actualBrowser,{...cfg,from:"2026-11-01",to:"2026-11-30",asOf:"2026-12-01"});
-  assert.equal(actual.cohorts.find(r=>r.channel==="yandex_games").newProfiles,1);
+  const portal = actual.cohorts.find(r=>r.channel==="yandex_games");
+  assert.equal(portal.newProfiles,1);
+  assert.equal(portal.firstPair,1);
+  assert.equal(portal.firstPuzzle,1);
+  assert.equal(portal.d1,1);
   assert.equal(actual.languagePicker.find(r=>r.channel==="yandex_games").changes,2);
   console.log(JSON.stringify({syntheticControls:summary,browserSDKDouble:actual},null,2));
 }else console.log(JSON.stringify(summary,null,2));

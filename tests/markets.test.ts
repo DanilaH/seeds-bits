@@ -1,9 +1,9 @@
 import {describe, expect, it} from "vitest";
 import {resolveLocale, choice, launchLanguages} from "../src/i18n";
 import {identifyPortal} from "../src/distribution";
-import notes from "../src/i18n/launch-copy.json";
-import ui from "../src/i18n/ui-copy.json";
-import registry from "../src/distribution-channels.json";
+import notes from "../src/i18n/launch-copy.json" with {type:"json"};
+import ui from "../src/i18n/ui-copy.json" with {type:"json"};
+import registry from "../src/distribution-channels.json" with {type:"json"};
 
 describe("distribution and locale contracts",()=>{
   it("keeps the 41 planned channels and separates portal from distributor",()=>{

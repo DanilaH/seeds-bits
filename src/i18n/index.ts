@@ -1,5 +1,5 @@
-import copy from "./launch-copy.json";
-import extra from "./ui-copy.json";
+import copy from "./launch-copy.json" with {type:"json"};
+import extra from "./ui-copy.json" with {type:"json"};
 
 export const launchLanguages = ["ru", "en", "es", "tr", "pt-BR"] as const;
 export type Language = keyof typeof copy.languageNames;

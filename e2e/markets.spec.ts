@@ -36,6 +36,7 @@ async function openPicker(page:Page) {
 test("portal language before play, two tabs and switching with the same selection and Undo",async({page,context},testInfo)=>{
   const events:QAEvent[]=[];
   await setup(context,"en",events);
+  await page.clock.setFixedTime(new Date("2026-11-19T04:00:00Z"));
   await page.goto("/");
   await expect(page.locator(".opening-copy")).toHaveText("Tap any number.");
   await expect.poll(()=>events.filter(e=>e.name==="web_first_play").length).toBe(1);
@@ -65,11 +66,26 @@ test("portal language before play, two tabs and switching with the same selectio
   await choose(page,"auto");
   await expect(page.locator("html")).toHaveAttribute("lang","en");
   await page.locator("#language-close").click();
+  await page.locator("#settings-back").click();
+  await page.locator("#resume").click();
+  for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2],[7,14,0]]) {
+    await digit(page,a).click();
+    await digit(page,b).click();
+    await expect(page.locator("#remaining")).toHaveText(String(n));
+  }
+  await page.locator("#play-again").click();
+  await expect(page.locator("#mode")).toContainText("Puzzle 2");
+  await digit(page,7).click();
+  await digit(page,15).click();
+  await expect.poll(()=>events.some(e=>e.name==="first_unassisted_pair")).toBe(true);
+  await expect.poll(()=>events.some(e=>e.name==="game_complete")).toBe(true);
   const other=await context.newPage();
+  await other.clock.setFixedTime(new Date("2026-11-20T04:00:00Z"));
   await other.goto("/");
   await other.locator("#resume").click();
   await expect(other.locator("html")).toHaveAttribute("lang","en");
   await expect.poll(()=>events.filter(e=>e.name==="language_changed").length).toBe(2);
+  await expect.poll(()=>events.some(e=>e.name==="web_session_open"&&e.data.activity_day==="2026-11-20")).toBe(true);
   expect(events.filter(e=>e.name==="web_first_play")).toHaveLength(1);
   const event=events.find(e=>e.name==="web_first_play")!;
   expect(event.data).toMatchObject({surface:"web",portal_id:"yandex_games",portal_evidence:"sdk",requested_locale:"en",ui_language:"en",storage_scope:"persistent"});
