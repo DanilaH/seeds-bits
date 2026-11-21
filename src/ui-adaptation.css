@@ -821,7 +821,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 68px;
+  height: 76px;
 }
 #hint-dock > .status-wrap {
   flex: 1 1 0;
@@ -829,7 +829,7 @@
   height: 100%;
   max-height: none;
   padding: 0;
-  justify-content: safe center;
+  justify-content: flex-start;
   overflow: auto;
 }
 #hint-dock > .status-wrap:has(#recover-task:not([hidden])) {
@@ -1062,7 +1062,7 @@
   color: var(--muted);
   overflow-wrap: anywhere;
 }
-#pause-language { min-width: 44px; min-height: 44px; padding: 4px; }
+#pause-language { flex: 0 0 44px; min-width: 44px; min-height: 44px; padding: 4px; }
 #language-sheet[open] {
   display: flex;
   flex-direction: column;
@@ -1100,4 +1100,18 @@
     max-height: 110px;
   }
   .game.stacked-actions .game-actions #status { line-height: 1.2; }
+}
+
+@media (orientation: portrait) and (max-width: 380px) {
+  /* Reserve a readable cue on narrow notebook fields before the first touch. */
+  #app .game.compact-game:not(:has(#lesson:not([hidden]), #page-progress.opening-guide))
+    .status-wrap:not(:has(#save-notice:not([hidden]))) {
+    flex-basis: 104px;
+    height: 104px;
+    max-height: 104px;
+    padding-block: 2px;
+  }
+  #app .game.compact-game:not(:has(#lesson:not([hidden]), #page-progress.opening-guide)) #status {
+    line-height: 1.2;
+  }
 }

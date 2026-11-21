@@ -286,7 +286,8 @@ const pauseLanguage = document.createElement("button");
 pauseLanguage.id="pause-language";
 pauseLanguage.className="plain";
 pauseLanguage.innerHTML=globe;
-$("menu-content").querySelector(".home-links")!.append(pauseLanguage);
+pauseLanguage.hidden=true;
+$("menu-content").querySelector(".home-title")!.append(pauseLanguage);
 let languageEntry: "settings" | "pause" = "settings";
 let changingLanguage=false;
 function drawLanguage() {
@@ -615,6 +616,7 @@ function scheduleActionLayout() {
       !game.classList.contains("is-result") &&
       actions.length > 0 &&
       (inOpening() ||
+        (game.classList.contains("compact-game") && innerWidth<=600 && innerHeight<=340) ||
         required > sideWidth ||
         (actions.length === 2 && widest > (sideWidth - 2) / 2));
     game.classList.toggle("docked-actions", dock);
@@ -3207,7 +3209,7 @@ async function boot() {
       nativeAcquisition=acquisition;
       if(acquisition.locales?.length) deviceLanguages=acquisition.locales;
     }
-  } else {
+  } else if(platform.webAnalyticsEnabled()) {
     const source=platform.webDistribution();
     webAcquisition=new WebAcquisition(source,hadStoredState||hadSettings||hadBackup,
       platform.webAnalyticsEnabled,platform.reportWeb);

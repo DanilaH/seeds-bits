@@ -121,6 +121,14 @@ for(const [width,height] of [[320,568],[568,320]])for(const reverse of [false,tr
       elements.forEach((e,i)=>e.style.fontSize=heights[i]*2+"px");
     });
     await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+    const statusMetrics=await status.evaluate(el=>{
+      const range=document.createRange();range.selectNodeContents(el);
+      const box=el.parentElement!.getBoundingClientRect();
+      const lines=Array.from(range.getClientRects(),rect=>rect.toJSON());
+      return {ok:lines.every(rect=>rect.top>=box.top-1&&rect.bottom<=box.bottom+1),box:box.toJSON(),lines,
+        style:getComputedStyle(el).font, layout:document.querySelector(".game")!.className, rail:el.parentElement!.parentElement!.id};
+    });
+    expect(statusMetrics.ok,JSON.stringify(statusMetrics)).toBe(true);
     const [first,second]=reverse?[9,8]:[8,9];
     const box=await digit(page,first).evaluate(el=>{
       const viewport=document.querySelector("#viewport")!;
