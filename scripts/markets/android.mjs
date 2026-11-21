@@ -125,11 +125,12 @@ async function showEdge(size,order,video) {
     const caption="From the right edge, continue at the left of the next row.";
     const status="document.querySelector('#status').textContent";
     assert.equal(await ui.evaluate(status),caption);
-    assert(await ui.evaluate(`(()=>{
+    const cueFits=`(()=>{
       const e=document.querySelector('#status'),r=document.createRange();
       const box=e.parentElement.getBoundingClientRect();r.selectNodeContents(e);
       return Array.from(r.getClientRects()).every(b=>b.top>=box.top-1&&b.bottom<=box.bottom+1&&b.left>=0&&b.right<=innerWidth);
-    })()`),"The edge cue does not fit the status area");
+    })()`;
+    assert(await ui.evaluate(cueFits),"The English edge cue does not fit the status area");
     shot("edge-"+size+"-"+order[0]);
     await ui.tap(digit(order[0]),false);
     assert.equal(await ui.evaluate("document.querySelector('#viewport').scrollTop"),0);
@@ -145,6 +146,8 @@ async function showEdge(size,order,video) {
     await ui.tap("#resume");
     assert(await ui.evaluate(`document.querySelector('${digit(order[0])}').classList.contains('selected')`));
     assert((await ui.evaluate(`document.querySelector('${digit(order[0])}').getAttribute('aria-label')`)).includes("fila"));
+    assert(await ui.evaluate(cueFits),"The Spanish edge cue does not fit the status area");
+    assert.deepEqual(await geometry(),before);
     assert.equal(await ui.evaluate("document.querySelector('#viewport').scrollTop"),0);
     await ui.tap(digit(order[1]),false);
     await ui.until("!document.querySelector('#win').hidden");
