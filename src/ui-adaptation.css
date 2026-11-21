@@ -1043,3 +1043,61 @@
 }
 
 #win:not([data-result-kind="classic"]) #win-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.language-row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) minmax(0, 1.6fr);
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  text-align: start;
+  color: var(--ink);
+  background: transparent;
+  border-bottom: 1px solid var(--line);
+}
+#language-current {
+  text-align: end;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+#pause-language { min-width: 44px; min-height: 44px; padding: 4px; }
+#language-sheet[open] {
+  display: flex;
+  flex-direction: column;
+  width: min(420px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: hidden;
+  padding: 12px;
+}
+.language-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.language-heading h2 { margin: 0; }
+#language-close { min-width: 44px; min-height: 44px; }
+#language-options { min-height: 0; overflow: auto; }
+#language-options button {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  gap: 8px;
+  text-align: start;
+  color: var(--ink);
+  background: transparent;
+  border-bottom: 1px solid var(--line);
+}
+#language-options button[aria-pressed="true"] { color: var(--accent); font-weight: 650; }
+#language-options button[aria-pressed="false"] .language-check { visibility: hidden; }
+
+#app.locale-pending { visibility: hidden; }
+
+@media (orientation: portrait), (max-width:539px) {
+  .game.stacked-actions:not(:has(#lesson:not([hidden]))) .status-wrap:not(:has(#save-notice:not([hidden]))) {
+    flex-basis: 110px;
+    height: 110px;
+    max-height: 110px;
+  }
+  .game.stacked-actions .game-actions #status { line-height: 1.2; }
+}

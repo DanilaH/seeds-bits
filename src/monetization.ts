@@ -1,5 +1,6 @@
 import { Capacitor, registerPlugin } from "@capacitor/core";
 import { eventContext } from "./analytics";
+import type { InstallContext } from "./distribution";
 import type { PluginListenerHandle } from "@capacitor/core";
 import type { HelpIntent, RewardReceipt } from "./help-contract";
 export type { RewardReceipt } from "./help-contract";
@@ -18,6 +19,7 @@ type Configuration = {
 };
 export interface MonetizationBridge {
   initialize(): Promise<Configuration>;
+  installContext?(): Promise<InstallContext & {locales: string[]; enabled: boolean; build_channel: string}>;
   configureContext?(options: Record<string, string>): Promise<void>;
   banner(options: {
     visible: boolean;

@@ -87,6 +87,7 @@ mkdirSync(java, { recursive: true });
 for (const name of [
   "MainActivity",
   "SeedsApplication",
+  "SeedsInstallStore",
   "SeedsMonetizationPlugin",
   "SeedsEngagementPlugin",
   "SeedsFeedbackPlugin",
@@ -111,13 +112,27 @@ copyFileSync(
   "native/android/notification-icon.xml",
   "android/app/src/main/res/drawable/ic_seed_notification.xml",
 );
+const channels = JSON.parse(readFileSync("src/distribution-channels.json", "utf8")).channels;
+const artifactChannel = process.env.SEEDS_ARTIFACT_CHANNEL || "unknown";
+if (artifactChannel !== "unknown" && !channels.some(channel => channel.surface === "android" && channel.id === artifactChannel))
+  throw Error("Unknown Android artifact channel");
 const xmlPath = "android/app/src/main/res/values/seeds-services.xml";
 const escape = (s) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll('"', "&quot;");
 writeFileSync(
   xmlPath,
-  `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n<string name="appmetrica_api_key" translatable="false">${escape(values.APPMETRICA_API_KEY)}</string>\n<string name="yandex_banner_id" translatable="false">${escape(values.YANDEX_BANNER_AD_UNIT_ID || (test ? "demo-banner-yandex" : ""))}</string>\n<string name="yandex_interstitial_id" translatable="false">${escape(values.YANDEX_INTERSTITIAL_AD_UNIT_ID)}</string>\n<string name="yandex_rewarded_id" translatable="false">${escape(values.YANDEX_REWARDED_AD_UNIT_ID)}</string>\n<string name="analytics_channel" translatable="false">${storeRelease ? "release" : "preview"}</string>\n<bool name="ads_test_mode">${test}</bool>\n</resources>\n`,
+  `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n<string name="appmetrica_api_key" translatable="false">${escape(values.APPMETRICA_API_KEY)}</string>\n<string name="yandex_banner_id" translatable="false">${escape(values.YANDEX_BANNER_AD_UNIT_ID || (test ? "demo-banner-yandex" : ""))}</string>\n<string name="yandex_interstitial_id" translatable="false">${escape(values.YANDEX_INTERSTITIAL_AD_UNIT_ID)}</string>\n<string name="yandex_rewarded_id" translatable="false">${escape(values.YANDEX_REWARDED_AD_UNIT_ID)}</string>\n<string name="artifact_channel" translatable="false">${escape(artifactChannel)}</string>\n<string name="analytics_channel" translatable="false">${storeRelease ? "release" : "preview"}</string>\n<bool name="ads_test_mode">${test}</bool>\n</resources>\n`,
 );
+const languagePack = JSON.parse(readFileSync("src/i18n/launch-copy.json", "utf8"));
+const activeLocales = ["ru","en","es","tr","pt-BR"];
+const reminderData = Object.fromEntries(activeLocales.map(locale => [locale,{
+  ...Object.fromEntries(Object.entries(languagePack.messages)
+    .filter(([key])=>key.startsWith("notification."))
+    .map(([key, message])=>[key.slice("notification.".length),message[locale]])),
+  milestone:languagePack.plurals["notification.milestone"][locale],
+}]));
+mkdirSync("android/app/src/main/res/raw",{recursive:true});
+writeFileSync("android/app/src/main/res/raw/seeds_notification_copy.json",JSON.stringify(reminderData));
 const manifestPath = "android/app/src/main/AndroidManifest.xml";
 let manifest = readFileSync(manifestPath, "utf8");
 if (!manifest.includes('android:name=".SeedsApplication"'))

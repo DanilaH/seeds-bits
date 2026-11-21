@@ -2,7 +2,7 @@ name: First session preview
 on:
   push:
     branches: [research/seeds-first-session-20261120]
-    paths: [src/**, tests/**, e2e/**, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
+    paths: [src/**, native/android/**, scripts/markets/**, tests/**, e2e/**, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
 permissions:
   contents: read
   actions: read
@@ -18,6 +18,7 @@ jobs:
       VITE_SEEDS_QA_PROFILE: baseline
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
+      SEEDS_ARTIFACT_CHANNEL: rustore
       APPMETRICA_API_KEY: ""
       APPMETRICA_QA_API_KEY: ""
       REQUIRE_MOBILE_CONFIG: "false"
@@ -34,8 +35,16 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: first-session-browser, path: test-results/}
+      - run: npx playwright test --config playwright.markets.config.ts
+      - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: markets-yandex-qa, path: dist-yandex/}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: markets-browser-controls, path: test-results/markets/}
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=966 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=967 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
@@ -44,22 +53,22 @@ jobs:
           fi
       - run: |
           mkdir -p test-results/first-session-apk
-          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/first-session-apk/seeds-first-session-12066-unsigned.apk
-          cp android/app/build/outputs/apk/debug/app-debug.apk test-results/first-session-apk/seeds-first-session-12066-debug.apk
-          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12066,firstSession:true,profile:"baseline",analytics:false},null,2))'
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/first-session-apk/seeds-first-session-12067-unsigned.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk test-results/first-session-apk/seeds-first-session-12067-debug.apk
+          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12067,firstSession:true,profile:"baseline",analytics:false},null,2))'
       - uses: actions/upload-artifact@v4
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
       - uses: actions/download-artifact@v4
         with:
           name: first-session-preview-unsigned
-          run-id: 44893873241
+          run-id: 44911332505
           github-token: ${{ github.token }}
           path: baseline
       - run: |
-          echo '592ce08fec003cf58cdf2992cd55fe3b7f4cfa72724162e028580fd0f37aaf7c  baseline/seeds-first-session-12065-unsigned.apk' | sha256sum -c -
+          echo 'a6b58279c6e27178db6613b81964b3cdda8eed771a92ee53b4fe150c510fa54c  baseline/seeds-first-session-12066-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
           build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12065-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12066-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" android/app/build/outputs/apk/release/app-release-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
       - run: |
@@ -83,7 +92,7 @@ jobs:
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
           adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
           adb shell input keyevent 82
-          node scripts/first-session-android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk"
+          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk"
       - uses: actions/upload-artifact@v4
         if: always()
-        with: {name: first-session-android, path: test-results/first-session-android/}
+        with: {name: markets-android, path: test-results/markets-android/}

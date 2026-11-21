@@ -1,7 +1,7 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "e2e",
-  testIgnore: "first-session.spec.ts",
+  testIgnore: ["first-session.spec.ts", "markets.spec.ts"],
   outputDir: "test-results/main",
   timeout: 90000,
   workers: 2,
@@ -9,6 +9,7 @@ export default defineConfig({
     launchOptions: process.env.SEEDS_CHROMIUM
       ? { executablePath: process.env.SEEDS_CHROMIUM, args: ["--no-sandbox"] }
       : {},
+    locale: "ru-RU",
     baseURL: "http://127.0.0.1:5173",
     viewport: { width: 390, height: 844 },
   },

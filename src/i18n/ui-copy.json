@@ -1,0 +1,2137 @@
+{
+  "ui.seeds-bits": {
+    "ru": "семечки",
+    "en": "Seeds Bits",
+    "es": "Seeds Bits",
+    "tr": "Seeds Bits",
+    "pt-BR": "Seeds Bits"
+  },
+  "ui.jar-collection": {
+    "ru": "Коллекция баночек",
+    "en": "Jar collection",
+    "es": "Colección de frascos",
+    "tr": "Kavanoz koleksiyonu",
+    "pt-BR": "Coleção de potes"
+  },
+  "ui.classic-game": {
+    "ru": "Классическая партия",
+    "en": "Classic game",
+    "es": "Partida clásica",
+    "tr": "Klasik oyun",
+    "pt-BR": "Partida clássica"
+  },
+  "ui.numbers": {
+    "ru": "цифр",
+    "en": "numbers",
+    "es": "números",
+    "tr": "sayı",
+    "pt-BR": "números"
+  },
+  "ui.vertically-scrollable-board": {
+    "ru": "Игровое поле с вертикальной прокруткой",
+    "en": "Vertically scrollable board",
+    "es": "Tablero con desplazamiento vertical",
+    "tr": "Dikey kaydırılabilen tahta",
+    "pt-BR": "Tabuleiro com rolagem vertical"
+  },
+  "ui.numbers-on-the-board": {
+    "ru": "Цифры игрового поля",
+    "en": "Numbers on the board",
+    "es": "Números del tablero",
+    "tr": "Tahtadaki sayılar",
+    "pt-BR": "Números do tabuleiro"
+  },
+  "ui.all-pairs-found": {
+    "ru": "Все пары найдены",
+    "en": "All pairs found",
+    "es": "Encontraste todas las parejas",
+    "tr": "Tüm çiftler bulundu",
+    "pt-BR": "Todos os pares encontrados"
+  },
+  "ui.game-results": {
+    "ru": "Итоги партии",
+    "en": "Game results",
+    "es": "Resultados de la partida",
+    "tr": "Oyun sonuçları",
+    "pt-BR": "Resultados da partida"
+  },
+  "ui.restart-puzzle": {
+    "ru": "Начать задачу заново",
+    "en": "Restart puzzle",
+    "es": "Reiniciar reto",
+    "tr": "Bulmacayı yeniden başlat",
+    "pt-BR": "Reiniciar desafio"
+  },
+  "ui.seeds-bits-menu": {
+    "ru": "Меню Семечек",
+    "en": "Seeds Bits menu",
+    "es": "Menú de Seeds Bits",
+    "tr": "Seeds Bits menüsü",
+    "pt-BR": "Menu do Seeds Bits"
+  },
+  "ui.seeds-bits-2": {
+    "ru": "Семечки",
+    "en": "Seeds Bits",
+    "es": "Seeds Bits",
+    "tr": "Seeds Bits",
+    "pt-BR": "Seeds Bits"
+  },
+  "ui.close-menu": {
+    "ru": "Закрыть меню",
+    "en": "Close menu",
+    "es": "Cerrar menú",
+    "tr": "Menüyü kapat",
+    "pt-BR": "Fechar menu"
+  },
+  "ui.other-days": {
+    "ru": "Другие дни {0}",
+    "en": "Other days {0}",
+    "es": "Otros días {0}",
+    "tr": "Diğer günler {0}",
+    "pt-BR": "Outros dias {0}"
+  },
+  "ui.back": {
+    "ru": "Назад",
+    "en": "Back",
+    "es": "Atrás",
+    "tr": "Geri",
+    "pt-BR": "Voltar"
+  },
+  "ui.reminder-time": {
+    "ru": "Напоминать около",
+    "en": "Reminder time",
+    "es": "Hora del recordatorio",
+    "tr": "Hatırlatma saati",
+    "pt-BR": "Horário do lembrete"
+  },
+  "ui.allow-notifications": {
+    "ru": "Разрешить уведомления",
+    "en": "Allow notifications",
+    "es": "Permitir notificaciones",
+    "tr": "Bildirimlere izin ver",
+    "pt-BR": "Permitir notificações"
+  },
+  "ui.android-notification-settings": {
+    "ru": "Настройки уведомлений Android",
+    "en": "Android notification settings",
+    "es": "Ajustes de notificaciones de Android",
+    "tr": "Android bildirim ayarları",
+    "pt-BR": "Configurações de notificações do Android"
+  },
+  "ui.at-local-time-if-the-puzzle-is-still-unsolved": {
+    "ru": "По местному времени, если задача ещё не решена.",
+    "en": "At local time if the puzzle is still unsolved.",
+    "es": "A la hora local si el reto sigue sin resolverse.",
+    "tr": "Bulmaca çözülmediyse yerel saatte.",
+    "pt-BR": "No horário local se o desafio ainda não foi resolvido."
+  },
+  "ui.restart-current-game": {
+    "ru": "Начать текущую партию заново",
+    "en": "Restart current game",
+    "es": "Reiniciar partida actual",
+    "tr": "Mevcut oyunu yeniden başlat",
+    "pt-BR": "Reiniciar partida atual"
+  },
+  "ui.privacy": {
+    "ru": "Конфиденциальность",
+    "en": "Privacy",
+    "es": "Privacidad",
+    "tr": "Gizlilik",
+    "pt-BR": "Privacidade"
+  },
+  "ui.start-a-new-game-the-board-and-undo-history": {
+    "ru": "Начать новую партию? Текущее поле и история отмены будут заменены.",
+    "en": "Start a new game? The board and undo history will be replaced.",
+    "es": "¿Iniciar otra partida? Se reemplazarán el tablero y el historial.",
+    "tr": "Yeni oyun başlatılsın mı? Tahta ve geri alma geçmişi değişecek.",
+    "pt-BR": "Começar outra partida? O tabuleiro e o histórico serão substituídos."
+  },
+  "ui.restart": {
+    "ru": "Начать заново",
+    "en": "Restart",
+    "es": "Reiniciar",
+    "tr": "Yeniden başlat",
+    "pt-BR": "Reiniciar"
+  },
+  "ui.keep-current-game": {
+    "ru": "Оставить текущую",
+    "en": "Keep current game",
+    "es": "Mantener partida actual",
+    "tr": "Mevcut oyuna dön",
+    "pt-BR": "Manter partida atual"
+  },
+  "ui.next-game": {
+    "ru": "Следующая партия",
+    "en": "Next game",
+    "es": "Siguiente partida",
+    "tr": "Sonraki oyun",
+    "pt-BR": "Próxima partida"
+  },
+  "ui.easier": {
+    "ru": "Легче",
+    "en": "Easier",
+    "es": "Más fácil",
+    "tr": "Daha kolay",
+    "pt-BR": "Mais fácil"
+  },
+  "ui.harder": {
+    "ru": "Сложнее",
+    "en": "Harder",
+    "es": "Más difícil",
+    "tr": "Daha zor",
+    "pt-BR": "Mais difícil"
+  },
+  "ui.continue-playing": {
+    "ru": "Продолжение игры",
+    "en": "Continue playing",
+    "es": "Seguir jugando",
+    "tr": "Oyuna devam et",
+    "pt-BR": "Continuar jogando"
+  },
+  "ui.new-game": {
+    "ru": "Новая партия",
+    "en": "New game",
+    "es": "Nueva partida",
+    "tr": "Yeni oyun",
+    "pt-BR": "Nova partida"
+  },
+  "ui.new-easier-game": {
+    "ru": "Новая партия полегче",
+    "en": "New easier game",
+    "es": "Partida más fácil",
+    "tr": "Daha kolay yeni oyun",
+    "pt-BR": "Nova partida mais fácil"
+  },
+  "ui.game-modes": {
+    "ru": "Режимы игры",
+    "en": "Game modes",
+    "es": "Modos de juego",
+    "tr": "Oyun modları",
+    "pt-BR": "Modos de jogo"
+  },
+  "ui.archived-puzzle": {
+    "ru": "Задача из архива",
+    "en": "Archived puzzle",
+    "es": "Reto del archivo",
+    "tr": "Arşiv bulmacası",
+    "pt-BR": "Desafio do arquivo"
+  },
+  "ui.second-number-below": {
+    "ru": "↓ Вторая цифра ниже",
+    "en": "↓ Second number below",
+    "es": "↓ Segundo número abajo",
+    "tr": "↓ İkinci sayı aşağıda",
+    "pt-BR": "↓ Segundo número abaixo"
+  },
+  "ui.restart-2": {
+    "ru": "Начать заново?",
+    "en": "Restart?",
+    "es": "¿Reiniciar?",
+    "tr": "Yeniden başlatılsın mı?",
+    "pt-BR": "Reiniciar?"
+  },
+  "ui.load-saved-game": {
+    "ru": "Загрузить сохранённую партию",
+    "en": "Load saved game",
+    "es": "Cargar partida guardada",
+    "tr": "Kayıtlı oyunu yükle",
+    "pt-BR": "Carregar partida salva"
+  },
+  "ui.got-it": {
+    "ru": "Понятно",
+    "en": "Got it",
+    "es": "Entendido",
+    "tr": "Anladım",
+    "pt-BR": "Entendi"
+  },
+  "ui.restore-backup": {
+    "ru": "Восстановить резервную копию",
+    "en": "Restore backup",
+    "es": "Restaurar copia",
+    "tr": "Yedeği geri yükle",
+    "pt-BR": "Restaurar cópia"
+  },
+  "ui.the-backup-is-damaged-and-cannot-be-restored-the": {
+    "ru": "Копия повреждена и не подходит для восстановления. Текущая партия не изменена.",
+    "en": "The backup is damaged and cannot be restored. The current game is unchanged.",
+    "es": "La copia está dañada y no se puede restaurar. La partida actual sigue igual.",
+    "tr": "Yedek hasarlı ve geri yüklenemiyor. Mevcut oyun aynı kaldı.",
+    "pt-BR": "A cópia está corrompida e não pode ser restaurada. A partida atual está intacta."
+  },
+  "ui.could-not-save-the-restored-game-the-current-game": {
+    "ru": "Не удалось сохранить восстановленную партию. Текущая партия не изменена. Попробуйте ещё раз.",
+    "en": "Could not save the restored game. The current game is unchanged. Try again.",
+    "es": "No se pudo guardar la partida restaurada. La partida actual sigue igual. Inténtalo de nuevo.",
+    "tr": "Geri yüklenen oyun kaydedilemedi. Mevcut oyun aynı kaldı. Tekrar dene.",
+    "pt-BR": "Não foi possível salvar a partida restaurada. A partida atual está intacta. Tente novamente."
+  },
+  "ui.could-not-save-the-game-keep-it-open-and": {
+    "ru": "Не удалось сохранить партию. Не закрывайте игру — повторите сохранение.",
+    "en": "Could not save the game. Keep it open and try saving again.",
+    "es": "No se pudo guardar la partida. Déjala abierta e intenta guardar de nuevo.",
+    "tr": "Oyun kaydedilemedi. Oyunu kapatmadan tekrar kaydetmeyi dene.",
+    "pt-BR": "Não foi possível salvar a partida. Mantenha o jogo aberto e tente salvar de novo."
+  },
+  "ui.another-tab-has-a-newer-save-the-newer-save": {
+    "ru": "В другой вкладке есть более новое сохранение. Оно защищено от перезаписи.",
+    "en": "Another tab has a newer save. The newer save is protected.",
+    "es": "Otra pestaña tiene una partida guardada más reciente. Está protegida.",
+    "tr": "Başka bir sekmede daha yeni kayıt var. Yeni kayıt korunuyor.",
+    "pt-BR": "Outra aba tem um salvamento mais recente. Ele está protegido."
+  },
+  "ui.game-saved": {
+    "ru": "Партия сохранена",
+    "en": "Game saved",
+    "es": "Partida guardada",
+    "tr": "Oyun kaydedildi",
+    "pt-BR": "Partida salva"
+  },
+  "ui.second-number-above": {
+    "ru": "↑ Вторая цифра выше",
+    "en": "↑ Second number above",
+    "es": "↑ Segundo número arriba",
+    "tr": "↑ İkinci sayı yukarıda",
+    "pt-BR": "↑ Segundo número acima"
+  },
+  "ui.numbers-2": {
+    "ru": "цифры",
+    "en": "numbers",
+    "es": "números",
+    "tr": "sayı",
+    "pt-BR": "números"
+  },
+  "ui.number": {
+    "ru": "цифра",
+    "en": "number",
+    "es": "número",
+    "tr": "sayı",
+    "pt-BR": "número"
+  },
+  "ui.more-hints": {
+    "ru": "Ещё подсказки",
+    "en": "More hints",
+    "es": "Más pistas",
+    "tr": "Daha fazla ipucu",
+    "pt-BR": "Mais dicas"
+  },
+  "ui.close-offer": {
+    "ru": "Закрыть предложение",
+    "en": "Close offer",
+    "es": "Cerrar oferta",
+    "tr": "Teklifi kapat",
+    "pt-BR": "Fechar oferta"
+  },
+  "ui.watch-a-video-to-reveal-this-pair-and-get": {
+    "ru": "Посмотреть видео: показать эту подсказку и оставить ещё 2.",
+    "en": "Watch a video to reveal this pair and get two more hints.",
+    "es": "Mira un vídeo para revelar esta pareja y conseguir dos pistas más.",
+    "tr": "Bu çifti görmek ve iki ipucu daha almak için video izle.",
+    "pt-BR": "Assista a um vídeo para revelar este par e ganhar mais duas dicas."
+  },
+  "ui.how-it-works": {
+    "ru": "Как работает",
+    "en": "How it works",
+    "es": "Cómo funciona",
+    "tr": "Nasıl çalışır",
+    "pt-BR": "Como funciona"
+  },
+  "ui.watch-video-2-hints": {
+    "ru": "Посмотреть видео · подсказка +2",
+    "en": "Watch video · +2 hints",
+    "es": "Ver vídeo · +2 pistas",
+    "tr": "Video izle · +2 ipucu",
+    "pt-BR": "Assistir ao vídeo · +2 dicas"
+  },
+  "ui.continue-without-a-hint": {
+    "ru": "Продолжить без подсказки",
+    "en": "Continue without a hint",
+    "es": "Seguir sin pista",
+    "tr": "İpucu olmadan devam et",
+    "pt-BR": "Continuar sem dica"
+  },
+  "ui.start-with-a-short-puzzle": {
+    "ru": "Начать с короткой задачи",
+    "en": "Start with a short puzzle",
+    "es": "Empezar con un reto corto",
+    "tr": "Kısa bir bulmacayla başla",
+    "pt-BR": "Começar com um desafio curto"
+  },
+  "ui.the-reward-is-saved-on-your-device-but-its": {
+    "ru": "Награда сохранена на устройстве, но её формат пока не поддерживается. Не удаляйте игру.",
+    "en": "The reward is saved on your device, but its format is unsupported. Keep the game installed.",
+    "es": "La recompensa está guardada en tu dispositivo, pero su formato aún no es compatible. Mantén el juego instalado.",
+    "tr": "Ödül cihazda kayıtlı ancak biçimi henüz desteklenmiyor. Oyunu kaldırma.",
+    "pt-BR": "A recompensa está salva no dispositivo, mas o formato ainda não é compatível. Mantenha o jogo instalado."
+  },
+  "ui.reward-for-watching-the-full-video": {
+    "ru": "Награда за завершённое видео",
+    "en": "Reward for watching the full video",
+    "es": "Recompensa por ver el vídeo completo",
+    "tr": "Videonun tamamını izleme ödülü",
+    "pt-BR": "Recompensa por assistir ao vídeo completo"
+  },
+  "ui.not-now": {
+    "ru": "Не сейчас",
+    "en": "Not now",
+    "es": "Ahora no",
+    "tr": "Şimdi değil",
+    "pt-BR": "Agora não"
+  },
+  "ui.step-of": {
+    "ru": "Шаг {0} из {1}",
+    "en": "Step {0} of {1}",
+    "es": "Paso {0} de {1}",
+    "tr": "Adım {0}/{1}",
+    "pt-BR": "Etapa {0} de {1}"
+  },
+  "ui.reveal-hint": {
+    "ru": "Открыть подсказку",
+    "en": "Reveal hint",
+    "es": "Revelar pista",
+    "tr": "İpucunu göster",
+    "pt-BR": "Revelar dica"
+  },
+  "ui.finish-the-video-to-reveal-this-pair-and-save": {
+    "ru": "После завершённого видео откроем эту пару и оставим ещё две подсказки в запасе. Повтор уже открытой пары бесплатный.",
+    "en": "Finish the video to reveal this pair and save two more hints. You can reveal this pair again for free.",
+    "es": "Termina el vídeo para revelar esta pareja y guardar dos pistas más. Volver a ver la misma pareja es gratis.",
+    "tr": "Bu çifti görmek ve iki ipucu daha almak için videoyu tamamla. Aynı çifti tekrar görmek ücretsizdir.",
+    "pt-BR": "Veja o vídeo até o fim para revelar este par e guardar mais duas dicas. Rever o mesmo par é grátis."
+  },
+  "ui.1-now": {
+    "ru": "1 сейчас",
+    "en": "1 now",
+    "es": "1 ahora",
+    "tr": "1 şimdi",
+    "pt-BR": "1 agora"
+  },
+  "ui.2-to-keep": {
+    "ru": "+2 в запас",
+    "en": "+2 to keep",
+    "es": "+2 para guardar",
+    "tr": "+2 yedek",
+    "pt-BR": "+2 para guardar"
+  },
+  "ui.previously-earned-reward-restored": {
+    "ru": "Ранее заработанная награда восстановлена в запасе",
+    "en": "Previously earned reward restored",
+    "es": "Recompensa anterior recuperada",
+    "tr": "Önceden kazanılan ödül geri yüklendi",
+    "pt-BR": "Recompensa anterior recuperada"
+  },
+  "ui.3-hints-added-to-your-balance": {
+    "ru": "3 подсказки добавлены в запас",
+    "en": "3 hints added to your balance",
+    "es": "Se añadieron 3 pistas",
+    "tr": "Bakiyene 3 ipucu eklendi",
+    "pt-BR": "3 dicas adicionadas ao saldo"
+  },
+  "ui.hint-revealed-left": {
+    "ru": "Подсказка открыта. Ещё {0} в запасе",
+    "en": "Hint revealed. {0} left",
+    "es": "Pista revelada. Quedan {0}",
+    "tr": "İpucu gösterildi. {0} kaldı",
+    "pt-BR": "Dica revelada. Restam {0}"
+  },
+  "ui.ads-are-unavailable-now-try-again-later": {
+    "ru": "Реклама сейчас недоступна. Попробуйте позже.",
+    "en": "Ads are unavailable now. Try again later.",
+    "es": "No hay anuncios disponibles. Inténtalo más tarde.",
+    "tr": "Şu anda reklam yok. Daha sonra tekrar dene.",
+    "pt-BR": "Anúncios indisponíveis. Tente mais tarde."
+  },
+  "ui.video-closed-no-hints-were-added": {
+    "ru": "Видео закрыто. Подсказки не начислены.",
+    "en": "Video closed. No hints were added.",
+    "es": "Vídeo cerrado. No se añadieron pistas.",
+    "tr": "Video kapatıldı. İpucu eklenmedi.",
+    "pt-BR": "Vídeo fechado. Nenhuma dica foi adicionada."
+  },
+  "ui.the-reward-is-waiting-to-be-saved-keep-the": {
+    "ru": "Награда ожидает сохранения на устройстве. Не удаляйте игру; повторите восстановление позже.",
+    "en": "The reward is waiting to be saved. Keep the game installed and try restoring it later.",
+    "es": "La recompensa está pendiente de guardar. Mantén el juego instalado e intenta recuperarla más tarde.",
+    "tr": "Ödül kaydedilmeyi bekliyor. Oyunu kaldırma ve daha sonra geri yüklemeyi dene.",
+    "pt-BR": "A recompensa aguarda salvamento. Mantenha o jogo instalado e tente restaurá-la mais tarde."
+  },
+  "ui.for": {
+    "ru": "{0} за {1}",
+    "en": "{0} for {1}",
+    "es": "{0} de {1}",
+    "tr": "{1}: {0}",
+    "pt-BR": "{0} de {1}"
+  },
+  "ui.bronze": {
+    "ru": "Бронза",
+    "en": "Bronze",
+    "es": "Bronce",
+    "tr": "Bronz",
+    "pt-BR": "Bronze"
+  },
+  "ui.silver": {
+    "ru": "Серебро",
+    "en": "Silver",
+    "es": "Plata",
+    "tr": "Gümüş",
+    "pt-BR": "Prata"
+  },
+  "ui.gold": {
+    "ru": "Золото",
+    "en": "Gold",
+    "es": "Oro",
+    "tr": "Altın",
+    "pt-BR": "Ouro"
+  },
+  "ui.page-complete": {
+    "ru": "Страница {0} завершена!",
+    "en": "Page {0} complete!",
+    "es": "¡Página {0} completada!",
+    "tr": "Sayfa {0} tamamlandı!",
+    "pt-BR": "Página {0} concluída!"
+  },
+  "ui.puzzle-for-solved": {
+    "ru": "Задача за {0} решена",
+    "en": "Puzzle for {0} solved",
+    "es": "Reto del {0} resuelto",
+    "tr": "{0} bulmacası çözüldü",
+    "pt-BR": "Desafio de {0} resolvido"
+  },
+  "ui.6-of-6-puzzles": {
+    "ru": "6 из 6 задач",
+    "en": "6 of 6 puzzles",
+    "es": "6 de 6 retos",
+    "tr": "6/6 bulmaca",
+    "pt-BR": "6 de 6 desafios"
+  },
+  "ui.all-four-pages-complete": {
+    "ru": "Все четыре страницы готовы",
+    "en": "All four pages complete",
+    "es": "Las cuatro páginas están completas",
+    "tr": "Dört sayfa da tamamlandı",
+    "pt-BR": "As quatro páginas estão completas"
+  },
+  "ui.todays-puzzle": {
+    "ru": "Сегодняшняя задача",
+    "en": "Today’s puzzle",
+    "es": "Reto de hoy",
+    "tr": "Bugünün bulmacası",
+    "pt-BR": "Desafio de hoje"
+  },
+  "ui.all-available-days-complete": {
+    "ru": "Все доступные дни решены",
+    "en": "All available days complete",
+    "es": "Todos los días disponibles están completos",
+    "tr": "Mevcut tüm günler tamamlandı",
+    "pt-BR": "Todos os dias disponíveis foram concluídos"
+  },
+  "ui.into-the-jar": {
+    "ru": "В баночку: +{0} {1}",
+    "en": "Into the jar: +{0} {1}",
+    "es": "Al frasco: +{0} {1}",
+    "tr": "Kavanoza: +{0} {1}",
+    "pt-BR": "Para o pote: +{0} {1}"
+  },
+  "ui.streak-reward": {
+    "ru": "За серию дней: +{0} {1}",
+    "en": "Streak reward: +{0} {1}",
+    "es": "Premio por racha: +{0} {1}",
+    "tr": "Seri ödülü: +{0} {1}",
+    "pt-BR": "Recompensa da sequência: +{0} {1}"
+  },
+  "ui.reward-waiting-to-be-saved": {
+    "ru": "Награда ожидает сохранения",
+    "en": "Reward waiting to be saved",
+    "es": "Recompensa pendiente de guardar",
+    "tr": "Ödül kaydedilmeyi bekliyor",
+    "pt-BR": "Recompensa aguardando salvamento"
+  },
+  "ui.page-of-6": {
+    "ru": "Страница {0} · {1} из 6",
+    "en": "Page {0} · {1} of 6",
+    "es": "Página {0} · {1} de 6",
+    "tr": "Sayfa {0} · {1}/6",
+    "pt-BR": "Página {0} · {1} de 6"
+  },
+  "ui.page-complete-2": {
+    "ru": "✓ Страница {0} завершена",
+    "en": "✓ Page {0} complete",
+    "es": "✓ Página {0} completada",
+    "tr": "✓ Sayfa {0} tamamlandı",
+    "pt-BR": "✓ Página {0} concluída"
+  },
+  "ui.of-days": {
+    "ru": "{0} из {1} дней",
+    "en": "{0} of {1} days",
+    "es": "{0} de {1} días",
+    "tr": "{0}/{1} gün",
+    "pt-BR": "{0} de {1} dias"
+  },
+  "ui.difficulty": {
+    "ru": "{0} сложность",
+    "en": "{0} difficulty",
+    "es": "Dificultad {0}",
+    "tr": "{0} zorluk",
+    "pt-BR": "Dificuldade {0}"
+  },
+  "ui.difficulty-highest": {
+    "ru": "Сложность: максимум",
+    "en": "Difficulty: highest",
+    "es": "Dificultad: máxima",
+    "tr": "Zorluk: en yüksek",
+    "pt-BR": "Dificuldade: máxima"
+  },
+  "ui.difficulty-lowest": {
+    "ru": "Сложность: минимум",
+    "en": "Difficulty: lowest",
+    "es": "Dificultad: mínima",
+    "tr": "Zorluk: en düşük",
+    "pt-BR": "Dificuldade: mínima"
+  },
+  "ui.start-a-harder-game": {
+    "ru": "Начать новую партию сложнее",
+    "en": "Start a harder game",
+    "es": "Empezar una partida más difícil",
+    "tr": "Daha zor bir oyun başlat",
+    "pt-BR": "Começar uma partida mais difícil"
+  },
+  "ui.start-an-easier-game": {
+    "ru": "Начать новую партию легче",
+    "en": "Start an easier game",
+    "es": "Empezar una partida más fácil",
+    "tr": "Daha kolay bir oyun başlat",
+    "pt-BR": "Começar uma partida mais fácil"
+  },
+  "ui.already-at-the-highest-difficulty": {
+    "ru": "Уже самая высокая сложность",
+    "en": "Already at the highest difficulty",
+    "es": "Ya estás en la dificultad más alta",
+    "tr": "Zaten en yüksek zorlukta",
+    "pt-BR": "Já está na dificuldade mais alta"
+  },
+  "ui.already-at-the-lowest-difficulty": {
+    "ru": "Уже самая лёгкая сложность",
+    "en": "Already at the lowest difficulty",
+    "es": "Ya estás en la dificultad más baja",
+    "tr": "Zaten en düşük zorlukta",
+    "pt-BR": "Já está na dificuldade mais baixa"
+  },
+  "ui.page": {
+    "ru": "Страница {0}",
+    "en": "Page {0}",
+    "es": "Página {0}",
+    "tr": "Sayfa {0}",
+    "pt-BR": "Página {0}"
+  },
+  "ui.puzzle-book-page-puzzle-of-6": {
+    "ru": "Тетрадь {0} · стр. {1}, задача {2} из 6",
+    "en": "Puzzle book {0} · Page {1}, puzzle {2} of 6",
+    "es": "Cuaderno {0} · Página {1}, reto {2} de 6",
+    "tr": "Bulmaca kitabı {0} · Sayfa {1}, bulmaca {2}/6",
+    "pt-BR": "Caderno {0} · Página {1}, desafio {2} de 6"
+  },
+  "ui.find-the-next-pair": {
+    "ru": "Найдите следующую пару.",
+    "en": "Find the next pair.",
+    "es": "Busca la próxima pareja.",
+    "tr": "Sonraki çifti bul.",
+    "pt-BR": "Encontre o próximo par."
+  },
+  "ui.hint-left": {
+    "ru": "Подсказка, осталось {0}",
+    "en": "Hint, {0} left",
+    "es": "Pista, quedan {0}",
+    "tr": "İpucu, {0} kaldı",
+    "pt-BR": "Dica, restam {0}"
+  },
+  "ui.hint-watch-a-video-for-3-hints": {
+    "ru": "Подсказка: 3 подсказки за просмотр видео",
+    "en": "Hint: watch a video for 3 hints",
+    "es": "Pista: mira un vídeo para obtener 3 pistas",
+    "tr": "İpucu: 3 ipucu için video izle",
+    "pt-BR": "Dica: assista a um vídeo para ganhar 3 dicas"
+  },
+  "ui.add": {
+    "ru": "Добавить {0} {1}",
+    "en": "Add {0} {1}",
+    "es": "Añadir {0} {1}",
+    "tr": "{0} {1} ekle",
+    "pt-BR": "Adicionar {0} {1}"
+  },
+  "ui.the-board-is-full-undo-a-move-or-start": {
+    "ru": "Поле больше не расширяется. Отмените ход или начните новую партию.",
+    "en": "The board is full. Undo a move or start a new game.",
+    "es": "El tablero está lleno. Deshaz un movimiento o empieza otra partida.",
+    "tr": "Tahta dolu. Bir hamleyi geri al veya yeni oyun başlat.",
+    "pt-BR": "O tabuleiro está cheio. Desfaça uma jogada ou comece outra partida."
+  },
+  "ui.you-can-add-more": {
+    "ru": "Можно добавить ещё {0} {1}.",
+    "en": "You can add {0} more {1}.",
+    "es": "Puedes añadir {0} {1} más.",
+    "tr": "{0} {1} daha ekleyebilirsin.",
+    "pt-BR": "Você pode adicionar mais {0} {1}."
+  },
+  "ui.copied": {
+    "ru": "скопируются",
+    "en": "copied",
+    "es": "se copiarán",
+    "tr": "kopyalanır",
+    "pt-BR": "serão copiados"
+  },
+  "ui.copied-2": {
+    "ru": "скопируется",
+    "en": "copied",
+    "es": "se copiará",
+    "tr": "kopyalanır",
+    "pt-BR": "será copiado"
+  },
+  "ui.no-pairs-tap-add-to-copy-to-the-end": {
+    "ru": "Пар нет. Нажмите «Добавить» — в конец поля {0} {1} {2}.",
+    "en": "No pairs. Tap Add to have {1} {2} {0} to the end of the board.",
+    "es": "No hay parejas. Toca Añadir y {0} {1} {2} al final del tablero.",
+    "tr": "Çift yok. Ekle’ye dokun, {1} {2} tahtanın sonuna {0}.",
+    "pt-BR": "Sem pares. Toque em Adicionar e {1} {2} {0} para o fim do tabuleiro."
+  },
+  "ui.no-pairs": {
+    "ru": "Пар нет. {0}",
+    "en": "No pairs. {0}",
+    "es": "No hay parejas. {0}",
+    "tr": "Çift yok. {0}",
+    "pt-BR": "Sem pares. {0}"
+  },
+  "ui.added-still-no-pairs": {
+    "ru": "Добавлено {0} {1}. Пар пока нет. {2}",
+    "en": "Added {0} {1}. Still no pairs. {2}",
+    "es": "Se añadieron {0} {1}. Aún no hay parejas. {2}",
+    "tr": "{0} {1} eklendi. Henüz çift yok. {2}",
+    "pt-BR": "{0} {1} adicionados. Ainda sem pares. {2}"
+  },
+  "ui.equal-or-add-up-to-10": {
+    "ru": "Равные или сумма 10",
+    "en": "Equal or add up to 10",
+    "es": "Iguales o que sumen 10",
+    "tr": "Eşit ya da toplamı 10",
+    "pt-BR": "Iguais ou que somem 10"
+  },
+  "ui.match-the-two-highlighted-numbers": {
+    "ru": "Соедините две отмеченные цифры",
+    "en": "Match the two highlighted numbers",
+    "es": "Une los dos números resaltados",
+    "tr": "İşaretli iki sayıyı eşleştir",
+    "pt-BR": "Junte os dois números destacados"
+  },
+  "ui.game-complete": {
+    "ru": "Партия завершена",
+    "en": "Game complete",
+    "es": "Partida completada",
+    "tr": "Oyun tamamlandı",
+    "pt-BR": "Partida concluída"
+  },
+  "ui.try-on-a-small-board": {
+    "ru": "Попробуйте на маленьком поле",
+    "en": "Try on a small board",
+    "es": "Prueba en un tablero pequeño",
+    "tr": "Küçük bir tahtada dene",
+    "pt-BR": "Experimente em um tabuleiro pequeno"
+  },
+  "ui.something-is-blocking-the-pair": {
+    "ru": "Между цифрами есть препятствие",
+    "en": "Something is blocking the pair",
+    "es": "Hay un obstáculo entre los números",
+    "tr": "Sayıların arasında engel var",
+    "pt-BR": "Há um obstáculo entre os números"
+  },
+  "ui.try-add-first-then-undo": {
+    "ru": "Сначала попробуйте «Добавить», затем «Отмена»",
+    "en": "Try Add first, then Undo",
+    "es": "Prueba Añadir y luego Deshacer",
+    "tr": "Önce Ekle’yi, sonra Geri al’ı dene",
+    "pt-BR": "Experimente Adicionar e depois Desfazer"
+  },
+  "ui.empty-cells-between-numbers-do-not-block-a-match": {
+    "ru": "Пустые клетки между цифрами не мешают соединению.",
+    "en": "Empty cells between numbers do not block a match.",
+    "es": "Las casillas vacías no impiden unir números.",
+    "tr": "Sayıların arasındaki boş kareler eşleşmeyi engellemez.",
+    "pt-BR": "Casas vazias entre números não bloqueiam um par."
+  },
+  "ui.you-can-also-match-diagonally-if-the-cells-in": {
+    "ru": "По диагонали тоже можно: если между цифрами пусто.",
+    "en": "You can also match diagonally if the cells in between are empty.",
+    "es": "También puedes unir en diagonal si las casillas del medio están vacías.",
+    "tr": "Aradaki kareler boşsa çapraz da eşleştirebilirsin.",
+    "pt-BR": "Você também pode juntar na diagonal se as casas entre eles estiverem vazias."
+  },
+  "ui.you-can-match-across-a-row-break-if-the": {
+    "ru": "Через край строки можно соединять цифры, если путь свободен.",
+    "en": "You can match across a row break if the path is clear.",
+    "es": "Puedes unir saltando de fila si el camino está libre.",
+    "tr": "Yol açıksa satır sonundan diğer satıra geçebilirsin.",
+    "pt-BR": "Você pode juntar passando de uma linha para outra se o caminho estiver livre."
+  },
+  "ui.well-done": {
+    "ru": "Получилось!",
+    "en": "Well done!",
+    "es": "¡Bien hecho!",
+    "tr": "Başardın!",
+    "pt-BR": "Muito bem!"
+  },
+  "ui.you-cannot-add-numbers-in-a-short-puzzle-undo": {
+    "ru": "В короткой задаче цифры не добавляются. Есть решение из начальной позиции: используйте отмену.",
+    "en": "You cannot add numbers in a short puzzle. Undo moves to get back to a solvable board.",
+    "es": "En un reto corto no se añaden números. Deshaz movimientos para volver a un tablero resoluble.",
+    "tr": "Kısa bulmacada sayı eklenmez. Çözülebilir tahtaya dönmek için hamleleri geri al.",
+    "pt-BR": "Em desafios curtos, não dá para adicionar números. Desfaça jogadas até voltar a um tabuleiro com solução."
+  },
+  "ui.there-are-still-pairs-you-can-use-a-hint": {
+    "ru": "На поле ещё есть пары. Можно воспользоваться подсказкой.",
+    "en": "There are still pairs. You can use a hint.",
+    "es": "Todavía hay parejas. Puedes usar una pista.",
+    "tr": "Tahtada hâlâ çiftler var. İpucu kullanabilirsin.",
+    "pt-BR": "Ainda há pares. Você pode usar uma dica."
+  },
+  "ui.numbers-added-now-tap-undo": {
+    "ru": "Цифры добавлены. Теперь нажмите «Отмена».",
+    "en": "Numbers added. Now tap Undo.",
+    "es": "Números añadidos. Ahora toca Deshacer.",
+    "tr": "Sayılar eklendi. Şimdi Geri al’a dokun.",
+    "pt-BR": "Números adicionados. Agora toque em Desfazer."
+  },
+  "ui.now-tap-undo": {
+    "ru": "Теперь нажмите «Отмена»",
+    "en": "Now tap Undo",
+    "es": "Ahora toca Deshacer",
+    "tr": "Şimdi Geri al’a dokun",
+    "pt-BR": "Agora toque em Desfazer"
+  },
+  "ui.the-board-is-full-undo-the-last-move-or": {
+    "ru": "Поле больше не расширяется. Отмените последний ход или начните новую партию.",
+    "en": "The board is full. Undo the last move or start a new game.",
+    "es": "El tablero está lleno. Deshaz el último movimiento o empieza otra partida.",
+    "tr": "Tahta dolu. Son hamleyi geri al veya yeni oyun başlat.",
+    "pt-BR": "O tabuleiro está cheio. Desfaça a última jogada ou comece outra partida."
+  },
+  "ui.board-restored-youre-ready": {
+    "ru": "Поле восстановлено. Вы готовы!",
+    "en": "Board restored. You’re ready!",
+    "es": "Tablero restaurado. ¡Ya puedes jugar!",
+    "tr": "Tahta eski hâline döndü. Hazırsın!",
+    "pt-BR": "Tabuleiro restaurado. Tudo pronto!"
+  },
+  "ui.looking-for-a-hint": {
+    "ru": "Ищу подсказку…",
+    "en": "Looking for a hint…",
+    "es": "Buscando una pista…",
+    "tr": "İpucu aranıyor…",
+    "pt-BR": "Procurando uma dica…"
+  },
+  "ui.there-is-no-solution-from-here-restart-the-puzzle": {
+    "ru": "Из этой позиции решения нет. Начните задачу заново.",
+    "en": "There is no solution from here. Restart the puzzle.",
+    "es": "Desde aquí no hay solución. Reinicia el reto.",
+    "tr": "Bu konumdan çözüm yok. Bulmacayı yeniden başlat.",
+    "pt-BR": "Não há solução a partir daqui. Reinicie o desafio."
+  },
+  "ui.board-restored-continue-on-your-own-or-tap-hint": {
+    "ru": "Поле восстановлено. Продолжите сами или нажмите «Подсказка».",
+    "en": "Board restored. Continue on your own or tap Hint.",
+    "es": "Tablero restaurado. Sigue por tu cuenta o toca Pista.",
+    "tr": "Tahta eski hâline döndü. Kendin devam et veya İpucu’na dokun.",
+    "pt-BR": "Tabuleiro restaurado. Continue por conta própria ou toque em Dica."
+  },
+  "ui.we-could-not-check-whether-there-is-a-solution": {
+    "ru": "Пока не удалось проверить, есть ли решение.",
+    "en": "We could not check whether there is a solution yet.",
+    "es": "Aún no pudimos comprobar si hay solución.",
+    "tr": "Çözüm olup olmadığı henüz doğrulanamadı.",
+    "pt-BR": "Ainda não foi possível verificar se existe uma solução."
+  },
+  "ui.there-is-no-solution-from-here": {
+    "ru": "Из этой позиции решения нет.",
+    "en": "There is no solution from here.",
+    "es": "Desde aquí no hay solución.",
+    "tr": "Bu konumdan çözüm yok.",
+    "pt-BR": "Não há solução a partir daqui."
+  },
+  "ui.we-could-not-check-whether-there-is-a-solution-2": {
+    "ru": "Пока не удалось проверить, есть ли решение. Попробуйте ещё раз или продолжите самостоятельно.",
+    "en": "We could not check whether there is a solution yet. Try again or continue on your own.",
+    "es": "Aún no pudimos comprobar si hay solución. Inténtalo de nuevo o sigue por tu cuenta.",
+    "tr": "Çözüm henüz doğrulanamadı. Tekrar dene veya kendin devam et.",
+    "pt-BR": "Ainda não foi possível verificar se existe uma solução. Tente de novo ou continue por conta própria."
+  },
+  "ui.we-could-not-check-whether-there-is-a-solution-3": {
+    "ru": "Пока не удалось проверить, есть ли решение. Можно отменить последний ход или продолжить самостоятельно.",
+    "en": "We could not check whether there is a solution yet. Undo the last move or continue on your own.",
+    "es": "Aún no pudimos comprobar si hay solución. Deshaz el último movimiento o sigue por tu cuenta.",
+    "tr": "Çözüm henüz doğrulanamadı. Son hamleyi geri al veya kendin devam et.",
+    "pt-BR": "Ainda não foi possível verificar se existe uma solução. Desfaça a última jogada ou continue por conta própria."
+  },
+  "ui.could-not-prepare-a-new-game-try-again": {
+    "ru": "Не удалось подготовить новую партию. Попробуйте ещё раз.",
+    "en": "Could not prepare a new game. Try again.",
+    "es": "No se pudo preparar otra partida. Inténtalo de nuevo.",
+    "tr": "Yeni oyun hazırlanamadı. Tekrar dene.",
+    "pt-BR": "Não foi possível preparar outra partida. Tente novamente."
+  },
+  "ui.new-game-2": {
+    "ru": "Новая партия?",
+    "en": "New game?",
+    "es": "¿Nueva partida?",
+    "tr": "Yeni oyun?",
+    "pt-BR": "Nova partida?"
+  },
+  "ui.easier-game": {
+    "ru": "Партия полегче?",
+    "en": "Easier game?",
+    "es": "¿Partida más fácil?",
+    "tr": "Daha kolay oyun?",
+    "pt-BR": "Partida mais fácil?"
+  },
+  "ui.restart-this-board-your-undo-history-will-be-cleared": {
+    "ru": "Вернуться к началу этого поля? История отмены будет очищена. Собранные семечки и награды останутся.",
+    "en": "Restart this board? Your undo history will be cleared. Seeds and rewards are kept.",
+    "es": "¿Reiniciar el tablero? Se borrará el historial. Conservarás las semillas y recompensas.",
+    "tr": "Bu tahta yeniden başlatılsın mı? Geri alma geçmişi silinecek. Tohumlar ve ödüller kalacak.",
+    "pt-BR": "Reiniciar o tabuleiro? O histórico será limpo. Você mantém as sementes e recompensas."
+  },
+  "ui.the-board-and-undo-history-will-be-replaced-seeds": {
+    "ru": "Текущее поле и история отмены будут заменены. Собранные семечки и награды останутся.",
+    "en": "The board and undo history will be replaced. Seeds and rewards are kept.",
+    "es": "Se reemplazarán el tablero y el historial. Conservarás las semillas y recompensas.",
+    "tr": "Tahta ve geri alma geçmişi değişecek. Tohumlar ve ödüller kalacak.",
+    "pt-BR": "O tabuleiro e o histórico serão substituídos. Você mantém as sementes e recompensas."
+  },
+  "ui.start-a-new-game": {
+    "ru": "Начать новую партию",
+    "en": "Start a new game",
+    "es": "Empezar una partida",
+    "tr": "Yeni oyun başlat",
+    "pt-BR": "Começar nova partida"
+  },
+  "ui.about-your-data": {
+    "ru": "О данных",
+    "en": "About your data",
+    "es": "Acerca de tus datos",
+    "tr": "Verilerin hakkında",
+    "pt-BR": "Sobre seus dados"
+  },
+  "ui.games-undo-history-and-settings-are-stored-on-this": {
+    "ru": "Партии, отмены и настройки хранятся на устройстве. Регистрация не нужна. Удаление данных приложения удалит прогресс.",
+    "en": "Games, undo history and settings are stored on this device. No account is required. Clearing the app’s data removes progress.",
+    "es": "Las partidas, el historial y los ajustes se guardan en este dispositivo. No hace falta una cuenta. Si borras los datos de la aplicación, perderás el progreso.",
+    "tr": "Oyunlar, geri alma geçmişi ve ayarlar bu cihazda saklanır. Hesap gerekmez. Uygulama verisini silmek ilerlemeyi kaldırır.",
+    "pt-BR": "Partidas, histórico e configurações ficam neste dispositivo. Você não precisa de conta. Limpar os dados do app apaga o progresso."
+  },
+  "ui.on-android-appmetrica-and-yandex-ads-send-technical-information": {
+    "ru": "В Android-версии AppMetrica и рекламный SDK Яндекса передают технические сведения об устройстве, установке, сеансах, сбоях и рекламе. Могут использоваться IP-адрес и рекламный идентификатор. Содержимое поля и полные сохранения в события аналитики не отправляются.",
+    "en": "On Android, AppMetrica and Yandex Ads send technical information about the device, installation, sessions, crashes and ads. They may use IP addresses and advertising identifiers. Board contents and full saves are excluded from analytics events.",
+    "es": "En Android, AppMetrica y Yandex Ads envían datos técnicos sobre el dispositivo, la instalación, las sesiones, los fallos y los anuncios. Pueden usar direcciones IP e identificadores de publicidad. El tablero y las partidas guardadas completas quedan fuera de los eventos.",
+    "tr": "Android’de AppMetrica ve Yandex Reklam; cihaz, kurulum, oturum, çökme ve reklam verileri gönderir. IP adresi ve reklam kimliği kullanılabilir. Tahta içeriği ve tam kayıtlar analiz olaylarına dahil edilmez.",
+    "pt-BR": "No Android, AppMetrica e Yandex Ads enviam dados técnicos sobre dispositivo, instalação, sessões, falhas e anúncios. Podem usar endereços IP e identificadores de publicidade. O tabuleiro e o salvamento completo ficam fora dos eventos de análise."
+  },
+  "ui.daily-puzzle-reminders-are-on-by-default-and-use": {
+    "ru": "Напоминание о задаче дня включено по умолчанию и работает по местному времени на устройстве. Его можно выключить в настройках игры. Разрешение Android можно отключить в системных настройках.",
+    "en": "Daily puzzle reminders are on by default and use the device’s local time. You can turn them off in the game settings. Android permission can be revoked in system settings.",
+    "es": "Los recordatorios están activados por defecto y siguen la hora local del dispositivo. Puedes desactivarlos en el juego. El permiso de Android puede revocarse en los ajustes del sistema.",
+    "tr": "Günlük bulmaca hatırlatmaları varsayılan olarak açık ve cihazın yerel saatini kullanır. Oyunun ayarlarından kapatabilirsin. Android iznini sistem ayarlarından kaldırabilirsin.",
+    "pt-BR": "Lembretes diários vêm ativados e seguem o horário local do dispositivo. Você pode desligá-los no jogo. A permissão do Android pode ser revogada nas configurações do sistema."
+  },
+  "ui.rustore-provides-the-review-window-the-game-receives-neither": {
+    "ru": "Окно оценки обслуживает RuStore. Игра не получает текст отзыва и звёзды и не выдаёт за них награду.",
+    "en": "RuStore provides the review window. The game receives neither the review nor the rating and offers no reward for them.",
+    "es": "RuStore proporciona la ventana de valoración. El juego no recibe el texto ni las estrellas y no ofrece premios por valorar.",
+    "tr": "Değerlendirme penceresini RuStore sağlar. Oyun yorum metnini veya puanı almaz ve bunlar için ödül vermez.",
+    "pt-BR": "A janela de avaliação é do RuStore. O jogo não recebe o texto nem as estrelas e não oferece prêmios pela avaliação."
+  },
+  "ui.the-game-does-not-request-precise-location-camera-microphone": {
+    "ru": "Доступ к точному местоположению, камере, микрофону, контактам и файлам не запрашивается. Отслеживание геолокации AppMetrica отключено.",
+    "en": "The game does not request precise location, camera, microphone, contacts or files. AppMetrica location tracking is disabled.",
+    "es": "El juego no solicita ubicación precisa, cámara, micrófono, contactos ni archivos. La localización de AppMetrica está desactivada.",
+    "tr": "Oyun kesin konum, kamera, mikrofon, kişiler veya dosya erişimi istemez. AppMetrica konum takibi kapalıdır.",
+    "pt-BR": "O jogo não solicita localização precisa, câmera, microfone, contatos ou arquivos. A localização da AppMetrica está desativada."
+  },
+  "ui.full-policy-and-developer-contact": {
+    "ru": "Полная политика и обращение к разработчику:",
+    "en": "Full policy and developer contact:",
+    "es": "Política completa y contacto:",
+    "tr": "Tam politika ve geliştirici iletişimi:",
+    "pt-BR": "Política completa e contato:"
+  },
+  "ui.privacy-policy": {
+    "ru": "Политика конфиденциальности",
+    "en": "Privacy policy",
+    "es": "Política de privacidad",
+    "tr": "Gizlilik politikası",
+    "pt-BR": "Política de privacidade"
+  },
+  "ui.contact-the-developer": {
+    "ru": "Связь с разработчиком",
+    "en": "Contact the developer",
+    "es": "Contactar con el desarrollador",
+    "tr": "Geliştiriciye ulaş",
+    "pt-BR": "Falar com o desenvolvedor"
+  },
+  "ui.seeds": {
+    "ru": "семечек",
+    "en": "seeds",
+    "es": "semillas",
+    "tr": "tohum",
+    "pt-BR": "sementes"
+  },
+  "ui.seed": {
+    "ru": "семечко",
+    "en": "seed",
+    "es": "semilla",
+    "tr": "tohum",
+    "pt-BR": "semente"
+  },
+  "ui.hints": {
+    "ru": "подсказок",
+    "en": "hints",
+    "es": "pistas",
+    "tr": "ipucu",
+    "pt-BR": "dicas"
+  },
+  "ui.hints-2": {
+    "ru": "подсказки",
+    "en": "hints",
+    "es": "pistas",
+    "tr": "ipucu",
+    "pt-BR": "dicas"
+  },
+  "ui.hint": {
+    "ru": "подсказка",
+    "en": "hint",
+    "es": "pista",
+    "tr": "ipucu",
+    "pt-BR": "dica"
+  },
+  "ui.part-of-the-save-is-damaged-valid-games-and": {
+    "ru": "Часть сохранения повреждена. Исправные партии и отметки задач восстановлены.",
+    "en": "Part of the save is damaged. Valid games and puzzle marks were restored.",
+    "es": "Parte de la partida guardada está dañada. Se recuperaron las partidas válidas y sus marcas.",
+    "tr": "Kaydın bir bölümü hasarlı. Geçerli oyunlar ve bulmaca işaretleri geri yüklendi.",
+    "pt-BR": "Parte do salvamento está corrompida. Partidas válidas e marcas de desafios foram restauradas."
+  },
+  "ui.could-not-read-the-save-a-new-game-was": {
+    "ru": "Сохранение не удалось прочитать. Открыта новая партия.",
+    "en": "Could not read the save. A new game was opened.",
+    "es": "No se pudo leer la partida guardada. Se abrió una nueva partida.",
+    "tr": "Kayıt okunamadı. Yeni bir oyun açıldı.",
+    "pt-BR": "Não foi possível ler o salvamento. Foi aberta uma nova partida."
+  },
+  "ui.this-save-is-from-a-newer-version-update-the": {
+    "ru": "Сохранение создано более новой версией игры. Обновите игру. Запись отключена, исходный прогресс защищён.",
+    "en": "This save is from a newer version. Update the game. Saving is off to protect your progress.",
+    "es": "La partida se guardó en una versión más nueva. Actualiza el juego. Se desactivó el guardado para proteger tu progreso.",
+    "tr": "Bu kayıt daha yeni bir sürümden. Oyunu güncelle. İlerlemeni korumak için kaydetme kapalı.",
+    "pt-BR": "O salvamento é de uma versão mais recente. Atualize o jogo. Salvamentos estão desativados para proteger seu progresso."
+  },
+  "ui.a-backup-is-available-restoring-it-will-replace-your": {
+    "ru": "Доступна резервная копия. Восстановление заменит текущий прогресс данными копии.",
+    "en": "A backup is available. Restoring it will replace your current progress.",
+    "es": "Hay una copia disponible. Restaurarla reemplazará el progreso actual.",
+    "tr": "Yedek mevcut. Geri yükleme, mevcut ilerlemenin yerini alacak.",
+    "pt-BR": "Há uma cópia disponível. A restauração substituirá seu progresso atual."
+  },
+  "ui.your-saved-board-is-available-to-restore-hints-try": {
+    "ru": "Сохранённое поле доступно. Чтобы вернуть подсказки, попробуйте открыть эту тетрадь заново.",
+    "en": "Your saved board is available. To restore hints, try opening this puzzle book again.",
+    "es": "Puedes acceder al tablero guardado. Para recuperar las pistas, vuelve a abrir este cuaderno.",
+    "tr": "Kayıtlı tahta kullanılabilir. İpuçlarını geri getirmek için bu kitabı yeniden açmayı dene.",
+    "pt-BR": "Seu tabuleiro salvo está disponível. Para restaurar dicas, tente abrir o caderno novamente."
+  },
+  "ui.qa-test-ads": {
+    "ru": "QA · {0} · тестовая реклама",
+    "en": "QA · {0} · test ads",
+    "es": "QA · {0} · anuncios de prueba",
+    "tr": "QA · {0} · test reklamları",
+    "pt-BR": "QA · {0} · anúncios de teste"
+  },
+  "ui.all-features": {
+    "ru": "все фичи",
+    "en": "all features",
+    "es": "todas las funciones",
+    "tr": "tüm özellikler",
+    "pt-BR": "todos os recursos"
+  },
+  "ui.standard-game": {
+    "ru": "обычная игра",
+    "en": "standard game",
+    "es": "juego estándar",
+    "tr": "standart oyun",
+    "pt-BR": "jogo padrão"
+  },
+  "ui.first-launch": {
+    "ru": "первый запуск",
+    "en": "first launch",
+    "es": "primer inicio",
+    "tr": "ilk açılış",
+    "pt-BR": "primeira abertura"
+  },
+  "ui.opening-puzzle-book": {
+    "ru": "Открываю тетрадь…",
+    "en": "Opening puzzle book…",
+    "es": "Abriendo el cuaderno…",
+    "tr": "Bulmaca kitabı açılıyor…",
+    "pt-BR": "Abrindo o caderno…"
+  },
+  "ui.could-not-open-the-puzzle-book-reload-to-try": {
+    "ru": "Не удалось открыть тетрадь. Перезагрузите игру, чтобы повторить загрузку. Текущая партия будет сохранена.",
+    "en": "Could not open the puzzle book. Reload to try again. Your current game will be saved.",
+    "es": "No se pudo abrir el cuaderno. Recarga para reintentar. Se guardará la partida actual.",
+    "tr": "Bulmaca kitabı açılamadı. Tekrar denemek için oyunu yenile. Mevcut oyun kaydedilecek.",
+    "pt-BR": "Não foi possível abrir o caderno. Recarregue para tentar de novo. A partida atual será salva."
+  },
+  "ui.save-and-reload": {
+    "ru": "Сохранить и перезагрузить",
+    "en": "Save and reload",
+    "es": "Guardar y recargar",
+    "tr": "Kaydet ve yenile",
+    "pt-BR": "Salvar e recarregar"
+  },
+  "ui.collection": {
+    "ru": "Коллекция",
+    "en": "Collection",
+    "es": "Colección",
+    "tr": "Koleksiyon",
+    "pt-BR": "Coleção"
+  },
+  "ui.collection-section": {
+    "ru": "Раздел коллекции",
+    "en": "Collection section",
+    "es": "Sección de colección",
+    "tr": "Koleksiyon bölümü",
+    "pt-BR": "Seção da coleção"
+  },
+  "ui.jars": {
+    "ru": "Баночки",
+    "en": "Jars",
+    "es": "Frascos",
+    "tr": "Kavanozlar",
+    "pt-BR": "Potes"
+  },
+  "ui.monthly-trophies": {
+    "ru": "Трофеи месяца",
+    "en": "Monthly trophies",
+    "es": "Trofeos del mes",
+    "tr": "Ayın kupaları",
+    "pt-BR": "Troféus do mês"
+  },
+  "ui.collected-seeds": {
+    "ru": "{0} собрано · {1} семечек",
+    "en": "{0} collected · {1} seeds",
+    "es": "{0} de colección · {1} semillas",
+    "tr": "{0} toplandı · {1} tohum",
+    "pt-BR": "{0} coletados · {1} sementes"
+  },
+  "ui.earlier": {
+    "ru": "Раньше",
+    "en": "Earlier",
+    "es": "Anteriores",
+    "tr": "Öncekiler",
+    "pt-BR": "Anteriores"
+  },
+  "ui.newer": {
+    "ru": "Новее",
+    "en": "Newer",
+    "es": "Más recientes",
+    "tr": "Yeniler",
+    "pt-BR": "Mais recentes"
+  },
+  "ui.how-jars-fill-up": {
+    "ru": "Как заполняются баночки",
+    "en": "How jars fill up",
+    "es": "Cómo se llenan los frascos",
+    "tr": "Kavanozlar nasıl dolar?",
+    "pt-BR": "Como os potes enchem"
+  },
+  "ui.earn-two-seeds-for-each-new-move-in-classic": {
+    "ru": "В классике — две семечки за новый ход. Первая победа в задаче тетради или календаря тоже пополняет банку: от 4 до 24 семечек в зависимости от размера поля. Повторы не начисляются. После отмены в классике нужно пройти дальше прежнего хода.",
+    "en": "Earn two seeds for each new move in Classic. Your first win in a book or daily puzzle earns 4 to 24 seeds, depending on the board size. Replays earn none. After undoing a Classic move, go beyond your previous move count to earn again.",
+    "es": "Gana dos semillas por cada movimiento nuevo en Clásico. La primera victoria en un reto de cuaderno o diario da entre 4 y 24 semillas según el tamaño. Las repeticiones no suman. Si deshaces en Clásico, supera tu número anterior de movimientos para volver a ganar.",
+    "tr": "Klasik’te her yeni hamle iki tohum kazandırır. Kitap veya günlük bulmacadaki ilk zafer, tahta boyutuna göre 4–24 tohum verir. Tekrarlar ödül vermez. Geri aldıktan sonra tekrar kazanmak için önceki hamle sayını geç.",
+    "pt-BR": "Ganhe duas sementes por nova jogada no Clássico. A primeira vitória num desafio de caderno ou diário rende de 4 a 24 sementes, conforme o tamanho. Repetições não dão prêmio. Após desfazer no Clássico, avance além da jogada anterior para ganhar de novo."
+  },
+  "ui.boards-cleared": {
+    "ru": "Полностью очищено полей: {0}",
+    "en": "Boards cleared: {0}",
+    "es": "Tableros despejados: {0}",
+    "tr": "Temizlenen tahtalar: {0}",
+    "pt-BR": "Tabuleiros limpos: {0}"
+  },
+  "ui.nothing-yet": {
+    "ru": "Пока пусто",
+    "en": "Nothing yet",
+    "es": "Aún no hay nada",
+    "tr": "Henüz boş",
+    "pt-BR": "Ainda vazio"
+  },
+  "ui.clear-5-boards-to-earn-your-first-badge": {
+    "ru": "Первая отметка мастерства — за 5 очищенных полей",
+    "en": "Clear 5 boards to earn your first badge",
+    "es": "Despeja 5 tableros para conseguir tu primera insignia",
+    "tr": "İlk rozetin için 5 tahta temizle",
+    "pt-BR": "Limpe 5 tabuleiros para ganhar a primeira medalha"
+  },
+  "ui.solid-start-5-boards": {
+    "ru": "Уверенный старт · 5 полей",
+    "en": "Solid start · 5 boards",
+    "es": "Buen comienzo · 5 tableros",
+    "tr": "İyi başlangıç · 5 tahta",
+    "pt-BR": "Bom começo · 5 tabuleiros"
+  },
+  "ui.expert-25-boards": {
+    "ru": "Знаток · 25 полей",
+    "en": "Expert · 25 boards",
+    "es": "Experto · 25 tableros",
+    "tr": "Uzman · 25 tahta",
+    "pt-BR": "Especialista · 25 tabuleiros"
+  },
+  "ui.master-100-boards": {
+    "ru": "Мастер · 100 полей",
+    "en": "Master · 100 boards",
+    "es": "Maestro · 100 tableros",
+    "tr": "Usta · 100 tahta",
+    "pt-BR": "Mestre · 100 tabuleiros"
+  },
+  "ui.bronze-7-puzzles-silver-14-gold-the-whole-month": {
+    "ru": "Бронза — 7 задач · серебро — 14 · золото — весь месяц",
+    "en": "Bronze: 7 puzzles · Silver: 14 · Gold: the whole month",
+    "es": "Bronce: 7 retos · Plata: 14 · Oro: el mes entero",
+    "tr": "Bronz: 7 bulmaca · Gümüş: 14 · Altın: tüm ay",
+    "pt-BR": "Bronze: 7 desafios · Prata: 14 · Ouro: mês inteiro"
+  },
+  "ui.trophy-year": {
+    "ru": "Год трофеев",
+    "en": "Trophy year",
+    "es": "Año de los trofeos",
+    "tr": "Kupa yılı",
+    "pt-BR": "Ano dos troféus"
+  },
+  "ui.days": {
+    "ru": "{0}/{1} дней",
+    "en": "{0}/{1} days",
+    "es": "{0}/{1} días",
+    "tr": "{0}/{1} gün",
+    "pt-BR": "{0}/{1} dias"
+  },
+  "ui.previous-month": {
+    "ru": "Предыдущий месяц",
+    "en": "Previous month",
+    "es": "Mes anterior",
+    "tr": "Önceki ay",
+    "pt-BR": "Mês anterior"
+  },
+  "ui.choose-month": {
+    "ru": "Выбрать месяц",
+    "en": "Choose month",
+    "es": "Seleccionar mes",
+    "tr": "Ay seç",
+    "pt-BR": "Escolher mês"
+  },
+  "ui.next-month": {
+    "ru": "Следующий месяц",
+    "en": "Next month",
+    "es": "Mes siguiente",
+    "tr": "Sonraki ay",
+    "pt-BR": "Próximo mês"
+  },
+  "ui.of-puzzles-solved": {
+    "ru": "{0} из {1} задач решено",
+    "en": "{0} of {1} puzzles solved",
+    "es": "{0} de {1} retos resueltos",
+    "tr": "{1} bulmacadan {0} tanesi çözüldü",
+    "pt-BR": "{0} de {1} desafios resolvidos"
+  },
+  "ui.you-can-play-past-days-any-time": {
+    "ru": "Прошедшие дни доступны в любое время.",
+    "en": "You can play past days any time.",
+    "es": "Puedes jugar días anteriores en cualquier momento.",
+    "tr": "Geçmiş günleri istediğin zaman oynayabilirsin.",
+    "pt-BR": "Você pode jogar dias anteriores a qualquer hora."
+  },
+  "ui.how-streaks-work": {
+    "ru": "Как считается серия",
+    "en": "How streaks work",
+    "es": "Cómo funcionan las rachas",
+    "tr": "Seriler nasıl işler?",
+    "pt-BR": "Como funcionam as sequências"
+  },
+  "ui.solve-todays-puzzle-today-archive-puzzles-count-towards-monthly": {
+    "ru": "Решайте сегодняшнюю задачу в её день. Архив идёт в трофеи месяца. За третий день серии — 1 подсказка, за каждые семь дней подряд — 3. Награды поступают в общий запас автоматически. После пропуска сохраняются рекорд и награды. Задача, законченная после полуночи, остаётся в архиве, но уже не увеличивает серию за вчера.",
+    "en": "Solve today’s puzzle today. Archive puzzles count towards monthly trophies. Earn 1 hint on day 3 and 3 hints every seven days in a row. Rewards go to your shared balance automatically. A missed day keeps your best streak and rewards. Finishing after midnight counts for the archive but does not extend yesterday’s streak.",
+    "es": "Resuelve cada reto diario en su fecha. Los retos del archivo cuentan para los trofeos del mes. Gana 1 pista el tercer día y 3 cada siete días seguidos. Las recompensas se añaden al saldo compartido. Si saltas un día, conservas el récord y los premios. Terminar después de medianoche cuenta para el archivo, pero no alarga la racha de ayer.",
+    "tr": "Bugünün bulmacasını bugün çöz. Arşiv bulmacaları ay kupaları için sayılır. Üçüncü gün 1, art arda her yedi gün 3 ipucu kazanırsın. Ödüller otomatik olarak ortak bakiyene eklenir. Bir günü kaçırırsan rekorun ve ödüllerin kalır. Gece yarısından sonra tamamlanan bulmaca arşive sayılır ama dünkü seriyi uzatmaz.",
+    "pt-BR": "Resolva o desafio de hoje no mesmo dia. Os desafios do arquivo contam para os troféus mensais. Ganhe 1 dica no terceiro dia e 3 a cada sete dias seguidos. As recompensas entram no saldo compartilhado. Se perder um dia, você mantém o recorde e os prêmios. Depois da meia-noite, vale para o arquivo, mas não prolonga a sequência de ontem."
+  },
+  "ui.bronze-7-puzzles-silver-14-gold-the-whole-month-2": {
+    "ru": "Бронза — 7 задач, серебро — 14, золото — весь месяц.",
+    "en": "Bronze: 7 puzzles. Silver: 14. Gold: the whole month.",
+    "es": "Bronce: 7 retos. Plata: 14. Oro: todo el mes.",
+    "tr": "Bronz 7 bulmaca, gümüş 14, altın tüm ay.",
+    "pt-BR": "Bronze: 7 desafios. Prata: 14. Ouro: mês inteiro."
+  },
+  "ui.play-today": {
+    "ru": "Играть сегодня",
+    "en": "Play today",
+    "es": "Jugar hoy",
+    "tr": "Bugün oyna",
+    "pt-BR": "Jogar hoje"
+  },
+  "ui.replay-today": {
+    "ru": "Повторить сегодняшнюю",
+    "en": "Replay today",
+    "es": "Repetir el reto de hoy",
+    "tr": "Bugünü tekrar oyna",
+    "pt-BR": "Rejogar hoje"
+  },
+  "ui.mon": {
+    "ru": "Пн",
+    "en": "Mon",
+    "es": "Lun",
+    "tr": "Pzt",
+    "pt-BR": "Seg"
+  },
+  "ui.tue": {
+    "ru": "Вт",
+    "en": "Tue",
+    "es": "Mar",
+    "tr": "Sal",
+    "pt-BR": "Ter"
+  },
+  "ui.wed": {
+    "ru": "Ср",
+    "en": "Wed",
+    "es": "Mié",
+    "tr": "Çar",
+    "pt-BR": "Qua"
+  },
+  "ui.thu": {
+    "ru": "Чт",
+    "en": "Thu",
+    "es": "Jue",
+    "tr": "Per",
+    "pt-BR": "Qui"
+  },
+  "ui.fri": {
+    "ru": "Пт",
+    "en": "Fri",
+    "es": "Vie",
+    "tr": "Cum",
+    "pt-BR": "Sex"
+  },
+  "ui.sat": {
+    "ru": "Сб",
+    "en": "Sat",
+    "es": "Sáb",
+    "tr": "Cmt",
+    "pt-BR": "Sáb"
+  },
+  "ui.sun": {
+    "ru": "Вс",
+    "en": "Sun",
+    "es": "Dom",
+    "tr": "Paz",
+    "pt-BR": "Dom"
+  },
+  "ui.solved": {
+    "ru": ", решена",
+    "en": ", solved",
+    "es": ", resuelto",
+    "tr": ", çözüldü",
+    "pt-BR": ", resolvido"
+  },
+  "ui.100-puzzle-books-2-400-puzzles": {
+    "ru": "100 тетрадей · 2400 задач",
+    "en": "100 puzzle books · 2,400 puzzles",
+    "es": "100 cuadernos · 2400 retos",
+    "tr": "100 bulmaca kitabı · 2400 bulmaca",
+    "pt-BR": "100 cadernos · 2400 desafios"
+  },
+  "ui.section": {
+    "ru": "Раздел",
+    "en": "Section",
+    "es": "Sección",
+    "tr": "Bölüm",
+    "pt-BR": "Seção"
+  },
+  "ui.show": {
+    "ru": "Показать",
+    "en": "Show",
+    "es": "Mostrar",
+    "tr": "Göster",
+    "pt-BR": "Mostrar"
+  },
+  "ui.all": {
+    "ru": "Все",
+    "en": "All",
+    "es": "Todos",
+    "tr": "Tümü",
+    "pt-BR": "Todos"
+  },
+  "ui.not-started": {
+    "ru": "Не начаты",
+    "en": "Not started",
+    "es": "Sin empezar",
+    "tr": "Başlanmamış",
+    "pt-BR": "Não iniciados"
+  },
+  "ui.in-progress": {
+    "ru": "В процессе",
+    "en": "In progress",
+    "es": "En curso",
+    "tr": "Devam ediyor",
+    "pt-BR": "Em andamento"
+  },
+  "ui.completed": {
+    "ru": "Пройдены",
+    "en": "Completed",
+    "es": "Completados",
+    "tr": "Tamamlandı",
+    "pt-BR": "Concluídos"
+  },
+  "ui.puzzle-book-of-24": {
+    "ru": "Тетрадь {0}, {1} из 24",
+    "en": "Puzzle book {0}, {1} of 24",
+    "es": "Cuaderno {0}, {1} de 24",
+    "tr": "Bulmaca kitabı {0}, {1}/24",
+    "pt-BR": "Caderno {0}, {1} de 24"
+  },
+  "ui.no-puzzle-books-in-this-section-have-that-status": {
+    "ru": "В этом разделе нет тетрадей с таким статусом.",
+    "en": "No puzzle books in this section have that status.",
+    "es": "Ningún cuaderno de esta sección tiene ese estado.",
+    "tr": "Bu bölümde bu duruma uygun kitap yok.",
+    "pt-BR": "Nenhum caderno desta seção tem esse estado."
+  },
+  "ui.show-all-in-this-section": {
+    "ru": "Показать все в разделе",
+    "en": "Show all in this section",
+    "es": "Mostrar toda la sección",
+    "tr": "Bu bölümün tümünü göster",
+    "pt-BR": "Mostrar toda a seção"
+  },
+  "ui.puzzle-book": {
+    "ru": "Тетрадь {0}",
+    "en": "Puzzle book {0}",
+    "es": "Cuaderno {0}",
+    "tr": "Bulmaca kitabı {0}",
+    "pt-BR": "Caderno {0}"
+  },
+  "ui.puzzle": {
+    "ru": "{0} · задача {1}",
+    "en": "{0} · Puzzle {1}",
+    "es": "{0} · Reto {1}",
+    "tr": "{0} · Bulmaca {1}",
+    "pt-BR": "{0} · Desafio {1}"
+  },
+  "ui.replay": {
+    "ru": "Повторить",
+    "en": "Replay",
+    "es": "Repetir",
+    "tr": "Tekrar oyna",
+    "pt-BR": "Rejogar"
+  },
+  "ui.puzzle-2": {
+    "ru": "Задача {0}{1}",
+    "en": "Puzzle {0}{1}",
+    "es": "Reto {0}{1}",
+    "tr": "Bulmaca {0}{1}",
+    "pt-BR": "Desafio {0}{1}"
+  },
+  "ui.completed-2": {
+    "ru": "Завершено ✓",
+    "en": "Completed ✓",
+    "es": "Completado ✓",
+    "tr": "Tamamlandı ✓",
+    "pt-BR": "Concluído ✓"
+  },
+  "ui.jars-and-trophies": {
+    "ru": "Баночки и трофеи {0}",
+    "en": "Jars and trophies {0}",
+    "es": "Frascos y trofeos {0}",
+    "tr": "Kavanozlar ve kupalar {0}",
+    "pt-BR": "Potes e troféus {0}"
+  },
+  "ui.of-24-puzzles": {
+    "ru": "{0} из 24 задач",
+    "en": "{0} of 24 puzzles",
+    "es": "{0} de 24 retos",
+    "tr": "{0}/24 bulmaca",
+    "pt-BR": "{0} de 24 desafios"
+  },
+  "ui.book-puzzles": {
+    "ru": "Задачи в тетрадях",
+    "en": "Book puzzles",
+    "es": "Retos de cuadernos",
+    "tr": "Kitap bulmacaları",
+    "pt-BR": "Desafios dos cadernos"
+  },
+  "ui.of": {
+    "ru": "{0} из {1}",
+    "en": "{0} of {1}",
+    "es": "{0} de {1}",
+    "tr": "{0}/{1}",
+    "pt-BR": "{0} de {1}"
+  },
+  "ui.daily-puzzles": {
+    "ru": "Задачи дня",
+    "en": "Daily puzzles",
+    "es": "Retos diarios",
+    "tr": "Günlük bulmacalar",
+    "pt-BR": "Desafios diários"
+  },
+  "ui.games-completed": {
+    "ru": "Завершено партий",
+    "en": "Games completed",
+    "es": "Partidas completadas",
+    "tr": "Tamamlanan oyunlar",
+    "pt-BR": "Partidas concluídas"
+  },
+  "ui.without-hints": {
+    "ru": "Без подсказок",
+    "en": "Without hints",
+    "es": "Sin pistas",
+    "tr": "İpucusuz",
+    "pt-BR": "Sem dicas"
+  },
+  "ui.how-progress-is-counted": {
+    "ru": "Как считается прогресс",
+    "en": "How progress is counted",
+    "es": "Cómo se cuenta el progreso",
+    "tr": "İlerleme nasıl hesaplanır?",
+    "pt-BR": "Como o progresso é contado"
+  },
+  "ui.games-and-wins-without-hints-are-counted-from-earlier": {
+    "ru": "Партии и прохождения без подсказок считаются с {0}. Старые отметки задач сохранены.",
+    "en": "Games and wins without hints are counted from {0}. Earlier puzzle marks are kept.",
+    "es": "Las partidas y victorias sin pistas cuentan desde el {0}. Se conservan las marcas anteriores.",
+    "tr": "Oyunlar ve ipucusuz zaferler {0} tarihinden itibaren sayılır. Önceki bulmaca işaretleri korunur.",
+    "pt-BR": "Partidas e vitórias sem dicas são contadas desde {0}. As marcas anteriores foram mantidas."
+  },
+  "ui.progress-is-saved-on-this-device": {
+    "ru": "Прогресс сохраняется на этом устройстве.",
+    "en": "Progress is saved on this device.",
+    "es": "El progreso se guarda en este dispositivo.",
+    "tr": "İlerleme bu cihazda kaydedilir.",
+    "pt-BR": "O progresso é salvo neste dispositivo."
+  },
+  "ui.choose-puzzle-book": {
+    "ru": "Выбор тетради",
+    "en": "Choose puzzle book",
+    "es": "Elegir cuaderno",
+    "tr": "Bulmaca kitabı seç",
+    "pt-BR": "Escolher caderno"
+  },
+  "ui.next-jar": {
+    "ru": "Следующая баночка",
+    "en": "Next jar",
+    "es": "Próximo frasco",
+    "tr": "Sonraki kavanoz",
+    "pt-BR": "Próximo pote"
+  },
+  "ui.jar": {
+    "ru": "Баночка {0} · {1}",
+    "en": "Jar {0} · {1}",
+    "es": "Frasco {0} · {1}",
+    "tr": "Kavanoz {0} · {1}",
+    "pt-BR": "Pote {0} · {1}"
+  },
+  "ui.of-seeds": {
+    "ru": "{0} из {1} семечек",
+    "en": "{0} of {1} seeds",
+    "es": "{0} de {1} semillas",
+    "tr": "{0}/{1} tohum",
+    "pt-BR": "{0} de {1} sementes"
+  },
+  "ui.jar-fill": {
+    "ru": "Заполнение баночки",
+    "en": "Jar fill",
+    "es": "Progreso del frasco",
+    "tr": "Kavanoz doluluğu",
+    "pt-BR": "Progresso do pote"
+  },
+  "ui.to-the-next-jar": {
+    "ru": "До следующей — {0}",
+    "en": "{0} to the next jar",
+    "es": "Faltan {0} para el próximo",
+    "tr": "Sonraki kavanoza {0}",
+    "pt-BR": "Faltam {0} para o próximo"
+  },
+  "ui.highest": {
+    "ru": "· максимум",
+    "en": "· highest",
+    "es": "· máxima",
+    "tr": "· en yüksek",
+    "pt-BR": "· máxima"
+  },
+  "ui.lowest": {
+    "ru": "· минимум",
+    "en": "· lowest",
+    "es": "· mínima",
+    "tr": "· en düşük",
+    "pt-BR": "· mínima"
+  },
+  "ui.difficulty-2": {
+    "ru": "{0} сложность{1}",
+    "en": "{0} difficulty{1}",
+    "es": "Dificultad {0}{1}",
+    "tr": "{0} zorluk{1}",
+    "pt-BR": "Dificuldade {0}{1}"
+  },
+  "ui.replay-puzzle": {
+    "ru": "Повторить задачу",
+    "en": "Replay puzzle",
+    "es": "Repetir reto",
+    "tr": "Bulmacayı tekrar oyna",
+    "pt-BR": "Rejogar desafio"
+  },
+  "ui.tutorial": {
+    "ru": "Обучение",
+    "en": "Tutorial",
+    "es": "Tutorial",
+    "tr": "Öğretici",
+    "pt-BR": "Tutorial"
+  },
+  "ui.continue-tutorial": {
+    "ru": "Продолжить обучение",
+    "en": "Continue tutorial",
+    "es": "Seguir tutorial",
+    "tr": "Öğreticiye devam et",
+    "pt-BR": "Continuar tutorial"
+  },
+  "ui.game": {
+    "ru": "Игра",
+    "en": "Game",
+    "es": "Partida",
+    "tr": "Oyun",
+    "pt-BR": "Partida"
+  },
+  "ui.current-game": {
+    "ru": "Текущая партия",
+    "en": "Current game",
+    "es": "Partida actual",
+    "tr": "Mevcut oyun",
+    "pt-BR": "Partida atual"
+  },
+  "ui.puzzle-3": {
+    "ru": "Задача {0} · {1} {2}",
+    "en": "Puzzle {0} · {1} {2}",
+    "es": "Reto {0} · {1} {2}",
+    "tr": "Bulmaca {0} · {1} {2}",
+    "pt-BR": "Desafio {0} · {1} {2}"
+  },
+  "ui.on-the-board": {
+    "ru": "{0} {1} на поле",
+    "en": "{0} {1} on the board",
+    "es": "{0} {1} en el tablero",
+    "tr": "Tahtada {0} {1}",
+    "pt-BR": "{0} {1} no tabuleiro"
+  },
+  "ui.play": {
+    "ru": "Играть",
+    "en": "Play",
+    "es": "Jugar",
+    "tr": "Oyna",
+    "pt-BR": "Jogar"
+  },
+  "ui.start-classic": {
+    "ru": "Начать классику",
+    "en": "Start Classic",
+    "es": "Empezar Clásico",
+    "tr": "Klasik başlat",
+    "pt-BR": "Começar Clássico"
+  },
+  "ui.resume-puzzle-for": {
+    "ru": "Продолжить задачу за {0}",
+    "en": "Resume puzzle for {0}",
+    "es": "Continuar reto del {0}",
+    "tr": "{0} bulmacasına devam et",
+    "pt-BR": "Continuar desafio de {0}"
+  },
+  "ui.resume-puzzle": {
+    "ru": "Продолжить задачу {0}",
+    "en": "Resume puzzle {0}",
+    "es": "Continuar reto {0}",
+    "tr": "Bulmaca {0} ile devam et",
+    "pt-BR": "Continuar desafio {0}"
+  },
+  "ui.resume-classic": {
+    "ru": "Продолжить классику",
+    "en": "Resume Classic",
+    "es": "Continuar Clásico",
+    "tr": "Klasik’e devam et",
+    "pt-BR": "Continuar Clássico"
+  },
+  "ui.view-results": {
+    "ru": "Посмотреть результат",
+    "en": "View results",
+    "es": "Ver resultados",
+    "tr": "Sonuçları gör",
+    "pt-BR": "Ver resultado"
+  },
+  "ui.of-puzzles": {
+    "ru": "{0} из {1} задач",
+    "en": "{0} of {1} puzzles",
+    "es": "{0} de {1} retos",
+    "tr": "{0}/{1} bulmaca",
+    "pt-BR": "{0} de {1} desafios"
+  },
+  "ui.completed-puzzles": {
+    "ru": "Пройденные задачи",
+    "en": "Completed puzzles",
+    "es": "Retos completados",
+    "tr": "Tamamlanan bulmacalar",
+    "pt-BR": "Desafios concluídos"
+  },
+  "ui.jar-2": {
+    "ru": "Баночка {0} · {1}%",
+    "en": "Jar {0} · {1}%",
+    "es": "Frasco {0} · {1} %",
+    "tr": "Kavanoz {0} · %{1}",
+    "pt-BR": "Pote {0} · {1}%"
+  },
+  "ui.in-a-row": {
+    "ru": "{0} {1} подряд{2}",
+    "en": "{0} {1} in a row{2}",
+    "es": "{0} {1} seguidos{2}",
+    "tr": "Art arda {0} {1}{2}",
+    "pt-BR": "{0} {1} seguidos{2}"
+  },
+  "ui.until-reward": {
+    "ru": "· до награды {0} {1}",
+    "en": "· {0} {1} until reward",
+    "es": "· faltan {0} {1} para el premio",
+    "tr": "· ödüle {0} {1}",
+    "pt-BR": "· faltam {0} {1} até o prêmio"
+  },
+  "ui.jar-3": {
+    "ru": "Баночка {0}",
+    "en": "Jar {0}",
+    "es": "Frasco {0}",
+    "tr": "Kavanoz {0}",
+    "pt-BR": "Pote {0}"
+  },
+  "ui.jar-collected": {
+    "ru": "Баночка собрана",
+    "en": "Jar collected",
+    "es": "Frasco completado",
+    "tr": "Kavanoz tamamlandı",
+    "pt-BR": "Pote completo"
+  },
+  "ui.jar-percent-full-of-open-collection": {
+    "ru": "Баночка {0}{1}, заполнено {2} процентов, {3} из {4}. Открыть коллекцию",
+    "en": "Jar {0}{1}, {2} percent full, {3} of {4}. Open collection",
+    "es": "Frasco {0}{1}, {2} por ciento, {3} de {4}. Abrir colección",
+    "tr": "Kavanoz {0}{1}, yüzde {2} dolu, {3}/{4}. Koleksiyonu aç",
+    "pt-BR": "Pote {0}{1}, {2} por cento cheio, {3} de {4}. Abrir coleção"
+  },
+  "ui.collected": {
+    "ru": ", собрана",
+    "en": ", collected",
+    "es": ", completado",
+    "tr": ", tamamlandı",
+    "pt-BR": ", completo"
+  },
+  "ui.year": {
+    "ru": "Год",
+    "en": "Year",
+    "es": "Año",
+    "tr": "Yıl",
+    "pt-BR": "Ano"
+  },
+  "ui.month": {
+    "ru": "Месяц",
+    "en": "Month",
+    "es": "Mes",
+    "tr": "Ay",
+    "pt-BR": "Mês"
+  },
+  "ui.days-2": {
+    "ru": "дней",
+    "en": "days",
+    "es": "días",
+    "tr": "gün",
+    "pt-BR": "dias"
+  },
+  "ui.days-3": {
+    "ru": "дня",
+    "en": "days",
+    "es": "días",
+    "tr": "gün",
+    "pt-BR": "dias"
+  },
+  "ui.day": {
+    "ru": "день",
+    "en": "day",
+    "es": "día",
+    "tr": "gün",
+    "pt-BR": "dia"
+  },
+  "ui.daily-streak": {
+    "ru": "Серия дней",
+    "en": "Daily streak",
+    "es": "Racha diaria",
+    "tr": "Günlük seri",
+    "pt-BR": "Sequência diária"
+  },
+  "ui.best": {
+    "ru": "Рекорд · {0}",
+    "en": "Best · {0}",
+    "es": "Récord · {0}",
+    "tr": "Rekor · {0}",
+    "pt-BR": "Recorde · {0}"
+  },
+  "ui.until-reward-2": {
+    "ru": "До награды: {0} {1} · +{2} {3}",
+    "en": "Until reward: {0} {1} · +{2} {3}",
+    "es": "Faltan {0} {1} · +{2} {3}",
+    "tr": "Ödüle {0} {1} · +{2} {3}",
+    "pt-BR": "Até o prêmio: {0} {1} · +{2} {3}"
+  },
+  "ui.new-streak": {
+    "ru": "Новая серия",
+    "en": "New streak",
+    "es": "Nueva racha",
+    "tr": "Yeni seri",
+    "pt-BR": "Nova sequência"
+  },
+  "ui.in-a-row-2": {
+    "ru": "{0} {1} подряд",
+    "en": "{0} {1} in a row",
+    "es": "{0} {1} seguidos",
+    "tr": "Art arda {0} {1}",
+    "pt-BR": "{0} {1} seguidos"
+  },
+  "ui.day-2": {
+    "ru": "{0}-й день{1}",
+    "en": "Day {0}{1}",
+    "es": "Día {0}{1}",
+    "tr": "{0}. gün{1}",
+    "pt-BR": "Dia {0}{1}"
+  },
+  "ui.counted": {
+    "ru": ", засчитан",
+    "en": ", counted",
+    "es": ", registrado",
+    "tr": ", sayıldı",
+    "pt-BR": ", registrado"
+  },
+  "ui.android-permission-is-needed-well-ask-after-your-first": {
+    "ru": "Нужно разрешение Android. Запросим его после первой пройденной задачи дня. Можно разрешить сейчас.",
+    "en": "Android permission is needed. We’ll ask after your first daily puzzle. You can also allow it now.",
+    "es": "Se necesita permiso de Android. Lo pediremos al resolver tu primer reto diario. También puedes concederlo ahora.",
+    "tr": "Android izni gerekiyor. İlk günlük bulmacadan sonra isteyeceğiz. Şimdi de izin verebilirsin.",
+    "pt-BR": "É necessária permissão do Android. Vamos pedir após seu primeiro desafio diário. Você também pode permitir agora."
+  },
+  "ui.notifications-are-off-in-android-allow-them-in-system": {
+    "ru": "Уведомления отключены в Android. Разрешите их в системных настройках, затем включите напоминание.",
+    "en": "Notifications are off in Android. Allow them in system settings, then turn on the reminder.",
+    "es": "Las notificaciones están desactivadas en Android. Permítelas en el sistema y activa el recordatorio.",
+    "tr": "Android’de bildirimler kapalı. Sistem ayarlarından izin verip hatırlatmayı aç.",
+    "pt-BR": "As notificações estão desativadas no Android. Permita nas configurações do sistema e ative o lembrete."
+  },
+  "ui.could-not-open-the-android-prompt-try-again-or": {
+    "ru": "Не удалось открыть запрос Android. Можно повторить или разрешить уведомления в системных настройках.",
+    "en": "Could not open the Android prompt. Try again or allow notifications in system settings.",
+    "es": "No se pudo abrir el aviso de Android. Vuelve a intentarlo o permite las notificaciones en los ajustes del sistema.",
+    "tr": "Android isteği açılamadı. Tekrar dene veya sistem ayarlarından izin ver.",
+    "pt-BR": "Não foi possível abrir a solicitação do Android. Tente de novo ou permita notificações nas configurações do sistema."
+  },
+  "ui.reminder-off": {
+    "ru": "Напоминание выключено.",
+    "en": "Reminder off.",
+    "es": "Recordatorio desactivado.",
+    "tr": "Hatırlatma kapalı.",
+    "pt-BR": "Lembrete desativado."
+  },
+  "ui.reminder-on": {
+    "ru": "Напоминание включено.",
+    "en": "Reminder on.",
+    "es": "Recordatorio activado.",
+    "tr": "Hatırlatma açık.",
+    "pt-BR": "Lembrete ativado."
+  },
+  "ui.waiting-for-android": {
+    "ru": "Ожидаем ответ Android…",
+    "en": "Waiting for Android…",
+    "es": "Esperando a Android…",
+    "tr": "Android yanıtı bekleniyor…",
+    "pt-BR": "Aguardando o Android…"
+  },
+  "ui.saving-settings": {
+    "ru": "Сохраняем настройки…",
+    "en": "Saving settings…",
+    "es": "Guardando ajustes…",
+    "tr": "Ayarlar kaydediliyor…",
+    "pt-BR": "Salvando configurações…"
+  },
+  "ui.try-again": {
+    "ru": "Повторить запрос",
+    "en": "Try again",
+    "es": "Volver a intentar",
+    "tr": "Tekrar dene",
+    "pt-BR": "Tentar de novo"
+  },
+  "ui.shared-balance-your-three-free-hints-for-this-game": {
+    "ru": "Общий запас: {0} {1}. Сначала расходуются три бесплатные подсказки текущей партии.",
+    "en": "Shared balance: {0} {1}. Your three free hints for this game are used first.",
+    "es": "Saldo compartido: {0} {1}. Primero se usan las tres pistas gratis de la partida.",
+    "tr": "Ortak bakiye: {0} {1}. Önce bu oyunun üç ücretsiz ipucu kullanılır.",
+    "pt-BR": "Saldo compartilhado: {0} {1}. As três dicas grátis desta partida são usadas primeiro."
+  },
+  "ui.first-pages": {
+    "ru": "Первые страницы",
+    "en": "First pages",
+    "es": "Primeras páginas",
+    "tr": "İlk sayfalar",
+    "pt-BR": "Primeiras páginas"
+  },
+  "ui.easy-lines": {
+    "ru": "Лёгкие линии",
+    "en": "Easy lines",
+    "es": "Líneas fáciles",
+    "tr": "Kolay çizgiler",
+    "pt-BR": "Linhas fáceis"
+  },
+  "ui.interwoven-paths": {
+    "ru": "Переплетения",
+    "en": "Interwoven paths",
+    "es": "Caminos cruzados",
+    "tr": "İç içe yollar",
+    "pt-BR": "Caminhos cruzados"
+  },
+  "ui.open-spaces": {
+    "ru": "Простор",
+    "en": "Open spaces",
+    "es": "Espacios abiertos",
+    "tr": "Açık alanlar",
+    "pt-BR": "Espaços abertos"
+  },
+  "ui.long-trails": {
+    "ru": "Длинные дорожки",
+    "en": "Long trails",
+    "es": "Senderos largos",
+    "tr": "Uzun patikalar",
+    "pt-BR": "Trilhas longas"
+  },
+  "ui.big-pages": {
+    "ru": "Большие страницы",
+    "en": "Big pages",
+    "es": "Páginas grandes",
+    "tr": "Büyük sayfalar",
+    "pt-BR": "Páginas grandes"
+  },
+  "ui.depth": {
+    "ru": "Глубина",
+    "en": "Depth",
+    "es": "Profundidad",
+    "tr": "Derinlik",
+    "pt-BR": "Profundidade"
+  },
+  "ui.faraway-routes": {
+    "ru": "Дальние маршруты",
+    "en": "Faraway routes",
+    "es": "Rutas lejanas",
+    "tr": "Uzak rotalar",
+    "pt-BR": "Rotas distantes"
+  },
+  "ui.wide-horizon": {
+    "ru": "Широкий горизонт",
+    "en": "Wide horizon",
+    "es": "Horizonte amplio",
+    "tr": "Geniş ufuk",
+    "pt-BR": "Horizonte amplo"
+  },
+  "ui.a-long-journey": {
+    "ru": "Большое путешествие",
+    "en": "A long journey",
+    "es": "Un largo viaje",
+    "tr": "Uzun bir yolculuk",
+    "pt-BR": "Uma longa jornada"
+  },
+  "ui.linen": {
+    "ru": "Льняная",
+    "en": "Linen",
+    "es": "Lino",
+    "tr": "Keten",
+    "pt-BR": "Linho"
+  },
+  "ui.honey": {
+    "ru": "Медовая",
+    "en": "Honey",
+    "es": "Miel",
+    "tr": "Bal",
+    "pt-BR": "Mel"
+  },
+  "ui.pine": {
+    "ru": "Хвойная",
+    "en": "Pine",
+    "es": "Pino",
+    "tr": "Çam",
+    "pt-BR": "Pinho"
+  },
+  "ui.sea": {
+    "ru": "Морская",
+    "en": "Sea",
+    "es": "Mar",
+    "tr": "Deniz",
+    "pt-BR": "Mar"
+  },
+  "ui.plum": {
+    "ru": "Сливовая",
+    "en": "Plum",
+    "es": "Ciruela",
+    "tr": "Erik",
+    "pt-BR": "Ameixa"
+  },
+  "ui.night": {
+    "ru": "Ночная",
+    "en": "Night",
+    "es": "Noche",
+    "tr": "Gece",
+    "pt-BR": "Noite"
+  },
+  "ui.bronze-earned": {
+    "ru": "Бронза получена",
+    "en": "Bronze earned",
+    "es": "Bronce conseguido",
+    "tr": "Bronz kazanıldı",
+    "pt-BR": "Bronze conquistado"
+  },
+  "ui.silver-earned": {
+    "ru": "Серебро получено",
+    "en": "Silver earned",
+    "es": "Plata conseguida",
+    "tr": "Gümüş kazanıldı",
+    "pt-BR": "Prata conquistada"
+  },
+  "ui.gold-earned": {
+    "ru": "Золото получено",
+    "en": "Gold earned",
+    "es": "Oro conseguido",
+    "tr": "Altın kazanıldı",
+    "pt-BR": "Ouro conquistado"
+  },
+  "ui.bronze-and-silver-earned": {
+    "ru": "Бронза и серебро получены",
+    "en": "Bronze and silver earned",
+    "es": "Bronce y plata conseguidos",
+    "tr": "Bronz ve gümüş kazanıldı",
+    "pt-BR": "Bronze e prata conquistados"
+  },
+  "ui.all-monthly-medals-collected": {
+    "ru": "Все медали месяца собраны",
+    "en": "All monthly medals collected",
+    "es": "Todas las medallas del mes conseguidas",
+    "tr": "Ayın tüm madalyaları toplandı",
+    "pt-BR": "Todas as medalhas do mês conquistadas"
+  },
+  "ui.waiting-to-save": {
+    "ru": "Ожидает сохранения",
+    "en": "Waiting to save",
+    "es": "Pendiente de guardar",
+    "tr": "Kaydedilmeyi bekliyor",
+    "pt-BR": "Aguardando salvamento"
+  },
+  "ui.puzzles": {
+    "ru": "задач",
+    "en": "puzzles",
+    "es": "retos",
+    "tr": "bulmaca",
+    "pt-BR": "desafios"
+  },
+  "ui.puzzles-2": {
+    "ru": "задачи",
+    "en": "puzzles",
+    "es": "retos",
+    "tr": "bulmaca",
+    "pt-BR": "desafios"
+  },
+  "ui.puzzle-4": {
+    "ru": "задача",
+    "en": "puzzle",
+    "es": "reto",
+    "tr": "bulmaca",
+    "pt-BR": "desafio"
+  },
+  "ui.next-medal-to-go": {
+    "ru": "Следующая медаль: {0}, ещё {1} {2}",
+    "en": "Next medal: {0}, {1} {2} to go",
+    "es": "Siguiente medalla: {0}, faltan {1} {2}",
+    "tr": "Sonraki madalya: {0}, {1} {2} kaldı",
+    "pt-BR": "Próxima medalha: {0}, faltam {1} {2}"
+  },
+  "ui.to-go": {
+    "ru": "Ещё {0} {1}",
+    "en": "{0} {1} to go",
+    "es": "Faltan {0} {1}",
+    "tr": "{0} {1} kaldı",
+    "pt-BR": "Faltam {0} {1}"
+  },
+  "ui.coming-up": {
+    "ru": "Следом",
+    "en": "Coming up",
+    "es": "A continuación",
+    "tr": "Sırada",
+    "pt-BR": "A seguir"
+  },
+  "ui.next": {
+    "ru": "Следующая",
+    "en": "Next",
+    "es": "Siguiente",
+    "tr": "Sonraki",
+    "pt-BR": "Próxima"
+  },
+  "ui.done": {
+    "ru": "Готово",
+    "en": "Done",
+    "es": "Listo",
+    "tr": "Tamam",
+    "pt-BR": "Pronto"
+  },
+  "ui.easy": {
+    "ru": "Лёгкая",
+    "en": "Easy",
+    "es": "Fácil",
+    "tr": "Kolay",
+    "pt-BR": "Fácil"
+  },
+  "ui.normal": {
+    "ru": "Обычная",
+    "en": "Normal",
+    "es": "Normal",
+    "tr": "Normal",
+    "pt-BR": "Normal"
+  },
+  "ui.hard": {
+    "ru": "Высокая",
+    "en": "Hard",
+    "es": "Difícil",
+    "tr": "Zor",
+    "pt-BR": "Difícil"
+  },
+  "ui.document-title": {
+    "ru": "Семечки — игра с числами",
+    "en": "Seeds Bits — Number Match",
+    "es": "Seeds Bits — juego de números",
+    "tr": "Seeds Bits — sayı oyunu",
+    "pt-BR": "Seeds Bits — jogo de números"
+  },
+  "ui.language-save-error": {
+    "ru": "Не удалось сохранить язык. Попробуйте ещё раз.",
+    "en": "Could not save the language. Try again.",
+    "es": "No se pudo guardar el idioma. Inténtalo de nuevo.",
+    "tr": "Dil kaydedilemedi. Tekrar dene.",
+    "pt-BR": "Não foi possível salvar o idioma. Tente novamente."
+  },
+  "ui.seed-plural": {
+    "ru": "семечка",
+    "en": "seeds",
+    "es": "semillas",
+    "tr": "tohum",
+    "pt-BR": "sementes"
+  }
+}

@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import { icon, monthEmblem } from "./icons";
 
 const ribbon =
@@ -7,9 +8,9 @@ const rim =
 const emblemTransform = "translate(18 30) scale(1.166667)";
 let artworkId = 0;
 const metals = [
-  { name: "Бронза", color: "#b77946", light: "#f2d0a1", ink: "#58351b" },
-  { name: "Серебро", color: "#8c9eb3", light: "#e6edf6", ink: "#3a4e65" },
-  { name: "Золото", color: "#d0a037", light: "#ffeb9e", ink: "#60430b" },
+  { get name() { return t("ui.bronze"); }, color: "#b77946", light: "#f2d0a1", ink: "#58351b" },
+  { get name() { return t("ui.silver"); }, color: "#8c9eb3", light: "#e6edf6", ink: "#3a4e65" },
+  { get name() { return t("ui.gold"); }, color: "#d0a037", light: "#ffeb9e", ink: "#60430b" },
 ];
 /** Show a reached milestone at its boundary; otherwise fill the next one. */
 export function trophyMark(
@@ -25,35 +26,35 @@ export function trophyMark(
   const complete = filled === target;
   const title =
     complete && !pending
-      ? ["Бронза получена", "Серебро получено", "Золото получено"][i]
+      ? [t("ui.bronze-earned"), t("ui.silver-earned"), t("ui.gold-earned")][i]
       : metal.name;
   const note = pending
-    ? "Ожидает сохранения"
+    ? t("ui.waiting-to-save")
     : complete && i === 2
-      ? "Все медали месяца собраны"
+      ? t("ui.all-monthly-medals-collected")
       : !complete && i === 1
-        ? "Бронза получена"
+        ? t("ui.bronze-earned")
         : !complete && i === 2
-          ? "Бронза и серебро получены"
+          ? t("ui.bronze-and-silver-earned")
           : "";
   const next = i < 2 ? metals[i + 1] : undefined;
   const left = [14, total][i] - count;
   const taskWord =
     left % 10 === 1 && left % 100 !== 11
-      ? "задача"
+      ? t("ui.puzzle-4")
       : left % 10 >= 2 &&
           left % 10 <= 4 &&
           !(left % 100 >= 12 && left % 100 <= 14)
-        ? "задачи"
-        : "задач";
+        ? t("ui.puzzles-2")
+        : t("ui.puzzles");
   const emblem = monthEmblem(Number(month.slice(5)));
   const preview = next
-    ? `<span class="next-medal" style="--preview-metal:${next.color}" aria-label="Следующая медаль: ${next.name}, ещё ${left} ${taskWord}"><span class="next-eyebrow">${complete && !pending ? "Следующая" : "Следом"}</span><svg class="next-medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false">${ribbon}${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g></svg><strong>${next.name}</strong><span class="next-count">Ещё ${left} ${taskWord}</span></span>`
+    ? `<span class="next-medal" style="--preview-metal:${next.color}" aria-label="${t("ui.next-medal-to-go", { "0": next.name, "1": left, "2": taskWord })}"><span class="next-eyebrow">${complete && !pending ? "Следующая" : "Следом"}</span><svg class="next-medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false">${ribbon}${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g></svg><strong>${next.name}</strong><span class="next-count">${t("ui.to-go", { "0": left, "1": taskWord })}</span></span>`
     : "";
   const id = `medal-${++artworkId}`;
   const fillY = 68 - (48 * filled) / target;
   const fillHeight = (48 * filled) / target;
-  return `<span class="trophy-display${next ? " has-next" : ""}"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light};--metal-ink:${metal.ink}"><span class="medal-figure"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><clipPath id="${id}-ink"><rect class="medal-ink-level" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs>${ribbon}<circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}" fill="url(#${id}-metal)"/><path class="medal-sheen" d="M-36 10h12l78 78H42Z" fill="#fff" opacity="0"/></g>${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g><g clip-path="url(#${id}-ink)"><g class="medal-emblem on-metal" transform="${emblemTransform}">${emblem}</g></g></svg><span class="medal-receipt" aria-hidden="true" ${complete && !pending ? "" : "hidden"}>${icon("check")}</span></span><span class="metal-name">${title}</span><span class="metal-count">${filled} из ${target} дней</span><span class="medal-note">${note}</span></span>${preview}</span>`;
+  return `<span class="trophy-display${next ? " has-next" : ""}"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light};--metal-ink:${metal.ink}"><span class="medal-figure"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><clipPath id="${id}-ink"><rect class="medal-ink-level" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs>${ribbon}<circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}" fill="url(#${id}-metal)"/><path class="medal-sheen" d="M-36 10h12l78 78H42Z" fill="#fff" opacity="0"/></g>${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g><g clip-path="url(#${id}-ink)"><g class="medal-emblem on-metal" transform="${emblemTransform}">${emblem}</g></g></svg><span class="medal-receipt" aria-hidden="true" ${complete && !pending ? "" : "hidden"}>${icon("check")}</span></span><span class="metal-name">${title}</span><span class="metal-count">${t("ui.of-days", { "0": filled, "1": target })}</span><span class="medal-note">${note}</span></span>${preview}</span>`;
 }
 
 /** A bounded, local burst. It owns no rewards, timers or input and cancels on navigation. */
