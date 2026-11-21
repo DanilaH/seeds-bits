@@ -726,12 +726,13 @@
       "behavior": "Пять локалей B1. Выбор языка работает в текущей партии и оставляет выделение и Undo. Первый магазин, метка APK, веб-портал и дистрибьютор сохраняются отдельными полями. Android-установки и веб-профили разделены в отчёте.",
       "verification": {
         "code": "10 целевых сценариев Playwright, 31 тест первого сеанса и 80 контрольных экранов. 46 сценариев на подставных Android API, в том числе магазины, конфликт, APK-файл и перезапуск после обновления.",
+        "emulator": "../research/markets-localization-2026-11-21/ANDROID_12069.json",
         "device": "NOT_VERIFIED",
         "liveAudience": "NOT_VERIFIED",
-        "apk": "../research/markets-localization-2026-11-21/APK_12067.json",
+        "apk": "../research/markets-localization-2026-11-21/APK_12069.json",
         "controlledReport": "../research/markets-localization-2026-11-21/CONTROL_REPORT.json"
       },
-      "consumerCommit": "2f0cb449e0a15c013e6441c4b27cc9f9db598517",
+      "consumerCommit": "12bc67fdf7409823871a19e2db2e229c4b7650cb",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "acceptance": "../research/markets-localization-2026-11-21/ACCEPTANCE.md",
       "nextAction": "Подключить тестовые кабинеты RuStore, NashStore и Яндекс Игр, принять нативный 200% и напоминание на телефоне, проверить ОК в реальном размещении GamePush."

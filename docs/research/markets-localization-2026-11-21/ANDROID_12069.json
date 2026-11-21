@@ -1,0 +1,65 @@
+{
+  "runtime_commit": "12bc67fdf7409823871a19e2db2e229c4b7650cb",
+  "run_id": 44940993229,
+  "attempt": 1,
+  "version_code": 12069,
+  "system_font": 2,
+  "physical_phone": false,
+  "optimized_upgrade_12066": "passed",
+  "forwarded_file_context": "passed",
+  "controls": [
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "indices": [
+        8,
+        9
+      ],
+      "status": "passed"
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "indices": [
+        9,
+        8
+      ],
+      "status": "passed"
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "indices": [
+        8,
+        9
+      ],
+      "status": "passed"
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "indices": [
+        9,
+        8
+      ],
+      "status": "device_offline_before_capture"
+    }
+  ],
+  "checks_for_passed_cases": [
+    "English and Spanish full cue",
+    "same field geometry after first tap and after language choice",
+    "no auto-scroll",
+    "selected digit retained",
+    "pair solved"
+  ],
+  "recording": "Emulator disconnected after saving landscape solution screenshot and before pulling the screenrecord. The provided GIF combines the three saved screenshots.",
+  "artifact": "https://github.com/DanilaH/seeds-bits/actions/runs/44940993229/artifacts/14722345031"
+}
