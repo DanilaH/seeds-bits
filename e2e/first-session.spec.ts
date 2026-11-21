@@ -180,7 +180,7 @@ for (const [first, second] of [[6, 10], [10, 6]]) {
   });
 }
 
-test("landscape 568×320 at 200% fits the first command and the two-option answer", async ({page}) => {
+test("landscape 568×320 at 200% fits the first command and required pair explanations", async ({page}) => {
   await page.setViewportSize({width:568, height:320});
   await start(page);
   // The native ad slot applies its layout even when the device is offline.
@@ -198,8 +198,17 @@ test("landscape 568×320 at 200% fits the first command and the two-option answe
   await fullyVisible(page, ".opening-copy", ".game-top");
   await page.screenshot({path:"test-results/first-session/landscape-nine-200.png"});
   expect(await geometry()).toEqual(before);
-  await click(page, '#board [data-index="14"]');
-  await expect(page.locator("#remaining")).toHaveText("6");
+  await click(page, '#board [data-index="4"]');
+  await move(page, 8, 17);
+  await move(page, 4, 5);
+  await expect(cue(page)).toHaveText("Пустые клетки можно пропускать.");
+  await fullyVisible(page, ".opening-copy", "#page-progress");
+  await fullyVisible(page, ".opening-copy", ".game-top");
+  await move(page, 9, 11);
+  await expect(cue(page)).toHaveText("От правого края — в начало строки ниже.");
+  await fullyVisible(page, ".opening-copy", "#page-progress");
+  await fullyVisible(page, ".opening-copy", ".game-top");
+  expect(await geometry()).toEqual(before);
   await click(page, "#menu");
   await expect(page.locator("#dialog")).toBeVisible();
 });

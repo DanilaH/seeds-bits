@@ -196,10 +196,10 @@ async function opening() {
   await ui.move(8,17);
   await ui.move(4,5);
   assert.match(await ui.text(".opening-copy"), /Пустые клетки/);
-  await checkpoint("first-gap");
+  await checkpoint("first-gap", {command:".opening-copy",within:"#page-progress"});
   await ui.move(9,11);
   assert.match(await ui.text(".opening-copy"), /края/);
-  await checkpoint("first-edge");
+  await checkpoint("first-edge", {command:".opening-copy",within:"#page-progress"});
   await ui.move(14,7);
   await ui.shown("#win");
   assert.match(await ui.text("#win"), /1 из 24/);
