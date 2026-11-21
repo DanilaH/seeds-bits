@@ -821,11 +821,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  height: 68px;
 }
 #hint-dock > .status-wrap {
   flex: 1 1 0;
   min-width: 0;
-  height: 64px;
+  height: 100%;
   max-height: none;
   padding: 0;
   justify-content: safe center;
@@ -852,7 +853,11 @@
 }
 #hint-dock:has(> .status-wrap) #hint-jump {
   width: auto;
-  max-width: 40%;
+  max-width: 50%;
+  max-height: 100%;
+  padding: 4px 8px;
+  line-height: 1.15;
+  overflow: auto;
 }
 #hint-dock:has(> .status-wrap) #hint-jump[hidden] {
   display: none !important;
