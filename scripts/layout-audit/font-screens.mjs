@@ -6,7 +6,8 @@ import fs from "node:fs";
 import {join} from "node:path";
 
 const app = "com.seedsbits.game.preview";
-const output = "test-results/system-font-android";
+const classicOnly = process.env.FONT_CLASSIC_RESULT_ONLY === "1";
+const output = classicOnly ? "test-results/system-font-classic" : "test-results/system-font-android";
 const prefs = `/data/user/0/${app}/shared_prefs/CapacitorStorage.xml`;
 const settingsKey = "seeds-bits.settings.v1";
 const progressKey = "seeds-bits.progress.v2";
@@ -38,6 +39,8 @@ function setProfile({active = "classic", board = [5,5,1,1], history = [], done =
   };
   // The test app already created this file. Overwrite in place while stopped to keep owner and label.
   const escape = s => s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+  // Prevent Android from restoring a previous fixture if it was stopped during a write.
+  adb("shell", `if [ ! -f ${prefs} ] && [ -f ${prefs}.bak ]; then mv ${prefs}.bak ${prefs}; fi`);
   let xml = adb("shell", "cat", prefs);
   xml = xml.replace(/<string name="seeds-bits\.progress\.v2\.(?:recovery|damaged)">[\s\S]*?<\/string>/g, "");
   for (const [key, value] of Object.entries(entries)) {
@@ -49,6 +52,7 @@ function setProfile({active = "classic", board = [5,5,1,1], history = [], done =
   fs.writeFileSync(fixture, xml);
   adb("push", fixture, "/data/local/tmp/seeds-font-fixture.xml");
   adb("shell", `cat /data/local/tmp/seeds-font-fixture.xml > ${prefs}`);
+  adb("shell", "rm", "-f", prefs + ".bak");
   fs.unlinkSync(fixture);
 }
 
@@ -297,10 +301,11 @@ async function navigation() {
   await checkpoint("month-picker");
   await ui.tap("#calendar-picker summary");
   await ui.tap('.calendar [data-game]:not([disabled]):not(.today)');
-  assert.match(await ui.text("#mode"), /архива/);
+  await ui.until("document.querySelector('#mode').textContent.includes('архива')");
   await checkpoint("archived-board");
   await ui.tap("#menu");
   await ui.tap("#daily-mode");
+  await ui.until("document.querySelector('#mode').textContent.includes('Задача дня')");
   await checkpoint("today-board");
   await ui.tap("#menu");
   await ui.tap("#book-mode");
@@ -347,6 +352,7 @@ async function longHint() {
 
 async function saveError() {
   await ui.tap("#resume");
+  await ui.until("document.querySelector('#remaining').textContent === '90'");
   await ui.evaluate(`(() => {
     const native=window.Capacitor.nativePromise;
     window.failAuditSave=true;
@@ -411,12 +417,13 @@ async function result(kind) {
       button=>button.scrollWidth <= button.clientWidth + 1
     )`), "Classic result choice label overflows");
   }
-  await ui.tap("#play-again");
+  await ui.tap(kind === "classic" ? "#classic-harder" : "#play-again");
+  await ui.hidden("#win");
 }
 
 const commit = process.env.GITHUB_SHA;
 const artifact = process.argv[2];
-for (size of sizes) for (font of [1,1.5,2]) {
+for (size of sizes) for (font of classicOnly ? [2] : [1,1.5,2]) {
   dir = join(output,`${size}-${font}`);
   fs.mkdirSync(dir,{recursive:true});
   stop();
@@ -425,6 +432,13 @@ for (size of sizes) for (font of [1,1.5,2]) {
   adb("shell","settings","put","system","font_scale",String(font));
   assert.equal(Number(adb("shell","settings","get","system","font_scale")),font);
   launch();
+  if (classicOnly) {
+    const fresh = await attach();
+    await fresh.shown(".opening-copy");
+    fresh.close();
+    await runSection("classic-result",{board:[5,5]},()=>result("classic"));
+    continue;
+  }
   await runSection("opening", null, opening);
   const dark = size === "640x1136" || size === "1136x736";
   await runSection("courses",{settings:{theme:dark?"dark":"light",tutorialDone:false}},courses);
@@ -446,9 +460,9 @@ for (size of sizes) for (font of [1,1.5,2]) {
     await runSection("page-result",{active:"book-v1-6",board:[5,5],done:book.slice(0,5).map(x=>x.id)},()=>result("page"));
     await runSection("book-result",{active:"book-v1-24",board:[5,5],done:book.slice(0,23).map(x=>x.id)},()=>result("book"));
   }
-  fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12065,physicalPhone:false,
-    webView:adb("shell","dumpsys","webviewupdate").split("\n").find(line=>line.includes("Current WebView package"))?.trim(),
-    apkSha256:createHash("sha256").update(fs.readFileSync(artifact)).digest("hex"),rows,failures},null,2));
   console.log("FONT_CASE",size,font,rows.filter(r=>r.size===size&&r.font===font).length,failures.filter(r=>r.size===size&&r.font===font).length);
 }
+fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12065,physicalPhone:false,
+    webView:adb("shell","dumpsys","webviewupdate").split("\n").find(line=>line.includes("Current WebView package"))?.trim(),
+    apkSha256:createHash("sha256").update(fs.readFileSync(artifact)).digest("hex"),rows,failures},null,2));
 assert.equal(failures.length,0,"Check report.json and failure screenshots");

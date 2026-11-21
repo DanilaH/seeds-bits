@@ -59,7 +59,13 @@ jobs:
           adb shell wm size 780x1688
           adb shell wm density 320
           adb install android/app/build/outputs/apk/debug/app-debug.apk
-          node scripts/layout-audit/font-screens.mjs android/app/build/outputs/apk/debug/app-debug.apk
+          FONT_CLASSIC_RESULT_ONLY=1 node scripts/layout-audit/font-screens.mjs android/app/build/outputs/apk/debug/app-debug.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: system-font-classic-${{ matrix.shard }}
+          path: test-results/system-font-classic/
+      - run: node scripts/layout-audit/font-screens.mjs android/app/build/outputs/apk/debug/app-debug.apk
       - uses: actions/upload-artifact@v4
         if: always()
         with:
