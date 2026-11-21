@@ -201,7 +201,17 @@ async function recordTaskFiveEdges() {
       stop();
     }
   }
-  assert.deepEqual(records[0].segments,records[1].segments);
+  const relativeGeometry = record => {
+    const [exit,entry] = record.segments.map(({d}) => {
+      const [,left,y,right] = d.match(/^M([^,]+),([^H]+)H([^m]+)/);
+      return {left:Number(left),right:Number(right),y:Number(y)};
+    });
+    assert(exit.y < entry.y && exit.left > entry.right);
+    assert(exit.left < exit.right && entry.left < entry.right);
+    // The last tap can scroll the viewport to a different offset within the same board.
+    return [exit.left,exit.right,entry.left,entry.right,entry.y-exit.y];
+  };
+  assert.deepEqual(relativeGeometry(records[0]),relativeGeometry(records[1]));
   fs.writeFileSync(`${out}/task-five-edges.json`,JSON.stringify({task:task.id,systemFont:2,orders:records},null,2));
 }
 try{adb("shell","wm","density","320");adb("shell","wm","size","780x1688");await upgrade();await fresh();await font200();await landscapeFont200();await recordTaskFiveEdges();fs.writeFileSync(out+"/passed.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,version:12066,upgrade:true,freshRealTask:true,voluntaryTask2:true,firstInstructionFont200:true,physicalPhone:false,webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));}
