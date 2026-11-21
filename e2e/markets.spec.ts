@@ -57,8 +57,15 @@ test("portal language before play, two tabs and switching with the same selectio
   await expect(digit(page,8)).toHaveClass(/selected/);
   await digit(page,17).click();
   await expect(page.locator("#remaining")).toHaveText("6");
+  const savedDigit=()=>page.evaluate(()=>{
+    const progress=JSON.parse(localStorage.getItem("seeds-bits.progress.v2")??"{}");
+    return progress.sessions?.["book-v1-1"]?.current?.board?.[8];
+  });
+  await expect.poll(savedDigit).toBe(0);
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("8");
+  // The board updates immediately. Leave the page after its queued save has reached storage.
+  await expect.poll(savedDigit).toBe(Number(value));
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang","ru");
   await page.locator("#resume").click();
