@@ -176,6 +176,8 @@ async function recordTaskFiveEdges() {
       await ui.tap("#resume","#dialog");
       for (const [i,j] of [[4,5],[3,13],[2,11],[15,16],[12,17]]) await ui.move(i,j);
       assert.equal(await ui.evaluate("document.querySelector('#status').textContent"),"От правого края — в начало строки ниже.");
+      await ui.fullText("#status",".status-wrap");
+      await ui.fullText("#status",".game-actions");
       recorder = spawn("adb",["shell","screenrecord","--bit-rate","1700000","--time-limit","25",movie],{stdio:"ignore"});
       await wait(1000);
       await ui.digit(a);

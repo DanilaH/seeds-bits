@@ -213,6 +213,33 @@ test("landscape 568×320 at 200% fits the first command and required pair explan
   await expect(page.locator("#dialog")).toBeVisible();
 });
 
+test("the first required edge in task 5 explains the route at 568×320 and 200%", async ({page}) => {
+  const active = notebook[4].id;
+  let board = notebook[4].board;
+  for (const [a,b] of edgeRoute[4]) board = removePair(board,a,b);
+  await page.addInitScript(({key,settings,active,board}) => {
+    localStorage.setItem(settings,JSON.stringify({tutorialDone:true}));
+    localStorage.setItem(key,JSON.stringify({version:3,active,done:[],seen:[],hints:{},sessions:{
+      [active]:{rules:1,current:{board,scroll:0,moves:5,additions:0},history:[]},
+    }}));
+  },{key,settings,active,board});
+  await page.setViewportSize({width:568,height:320});
+  await page.goto("/");
+  await page.locator("#resume").click();
+  await page.evaluate(() => document.documentElement.classList.add("has-mobile-ads"));
+  await scale(page,2);
+  await expect(page.locator(".game")).toHaveClass(/docked-actions/);
+  const field = await page.locator("#viewport").boundingBox();
+  await expect(page.locator("#status")).toHaveText("От правого края — в начало строки ниже.");
+  await fullyVisible(page,"#status",".status-wrap");
+  await fullyVisible(page,"#status",".game-actions");
+  await digit(page,10);
+  await expect(page.locator("#paths path")).toHaveCount(0);
+  expect(await page.locator("#viewport").boundingBox()).toEqual(field);
+  await digit(page,6);
+  await expect(page.locator("#win")).toBeVisible();
+});
+
 for (const trigger of ["timer", "focus"]) {
   test(`midnight relabels the open daily board on ${trigger} without changing play`, async ({page}) => {
     const beforeMidnight = new Date("2026-11-20T23:59:45+05:00");

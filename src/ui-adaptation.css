@@ -816,6 +816,47 @@
   visibility: hidden;
   pointer-events: none;
 }
+/* On a low landscape screen this rail has the full field and sidebar width. */
+#hint-dock:has(> .status-wrap) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#hint-dock > .status-wrap {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 64px;
+  max-height: none;
+  padding: 0;
+  justify-content: safe center;
+  overflow: auto;
+}
+#hint-dock > .status-wrap:has(#recover-task:not([hidden])) {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+#hint-dock > .status-wrap #status {
+  flex: 0 0 auto;
+  max-width: none;
+  margin: 0;
+  line-height: 1.2;
+}
+#hint-dock > .status-wrap:has(#recover-task:not([hidden])) #status {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+#hint-dock > .status-wrap #recover-task {
+  flex: 0 0 auto;
+  min-height: 44px;
+}
+#hint-dock:has(> .status-wrap) #hint-jump {
+  width: auto;
+  max-width: 40%;
+}
+#hint-dock:has(> .status-wrap) #hint-jump[hidden] {
+  display: none !important;
+}
 @media (orientation: portrait), (max-width: 539px) {
   .game:not(:has(#lesson:not([hidden]))) .status-wrap {
     flex: 0 0 84px;

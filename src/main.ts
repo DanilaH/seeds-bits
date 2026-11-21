@@ -482,9 +482,9 @@ function scheduleActionLayout() {
         (actions.length === 2 && widest > (sideWidth - 2) / 2));
     game.classList.toggle("docked-actions", dock);
     const status = document.querySelector<HTMLElement>(".status-wrap")!;
-    const statusParent = dock ? gameTop : gameActions;
+    const statusParent = dock ? (inOpening() ? gameTop : hintDock) : gameActions;
     if (status.parentElement !== statusParent) {
-      if (dock) statusParent.append(status);
+      if (statusParent === gameTop) gameTop.append(status);
       else statusParent.prepend(status);
     }
     hintDock.hidden = !landscape || lesson >= 0;
@@ -2422,8 +2422,8 @@ async function hint() {
         };
         message(
           advice.kind === "dead"
-            ? "Из этой позиции решения нет. Можно отменить ходы до решаемого поля."
-            : "Пока не удалось проверить, есть ли решение. Можно отменить ходы до проверенного поля.",
+            ? "Из этой позиции решения нет."
+            : "Пока не удалось проверить, есть ли решение.",
         );
       } else message("Из этой позиции решения нет. Начните задачу заново.");
       return;
