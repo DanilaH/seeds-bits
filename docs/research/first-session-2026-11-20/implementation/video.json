@@ -1,0 +1,49 @@
+{
+  "source_kind": "Actual Android 35 emulator screenrecord with ADB taps; current debug APK, identical public web assets to optimized deliverable; not physical-phone or human playtest",
+  "source": "0c33b38a353138a5cde47edd9e5e85134ba26958",
+  "package": "com.seedsbits.game.preview",
+  "version_name": "1.1.2",
+  "version_code": 12061,
+  "workflow_run": 44766629267,
+  "artifact_id": 14646462528,
+  "artifact_zip_sha256": "53a969e6b72a1a8f777dcc2569046275201e91db1f06de9d4b782091ec651a93",
+  "raw_file": "first-run.mp4",
+  "raw_sha256": "cc8b1ffc0d13f3e6040f040c3fbac6b737077df45e49dea070fb24e8e5a7ebee",
+  "delivered_file": "seeds-first-run-to-task-2.mp4",
+  "delivered_sha256": "4c6ddb29728ebe6f5eda9feb782758dd6b5639c3c48582500662aa11d45f6519",
+  "duration_seconds": 18.8,
+  "processing": "VFR screenrecord normalized to 30 fps/H.264; final actual frame held for 2 seconds for reading; no scene/interaction inserted",
+  "media_timecodes": [
+    {
+      "at": "00:04",
+      "action": "First real notebook task is visible"
+    },
+    {
+      "at": "00:14",
+      "action": "Victory: 1 of 24; button to task 2"
+    },
+    {
+      "at": "00:17",
+      "action": "Task 2 after voluntary button tap"
+    }
+  ],
+  "actions_clock": "actions.json timeMs is elapsed wall time from the recorder command, not exact MP4 presentation time",
+  "screenshots": [
+    {
+      "file": "first-launch-200.png",
+      "sha256": "20e8af6b8bc3765e34ab38c65aa8b88fb61e86cc24dbbaeb17bd21652e23d717"
+    },
+    {
+      "file": "lesson-command-200.png",
+      "sha256": "8c562d6cfd35ff81150d36dd9c38261c417b19c3ac94165af93d38187c3b3bee"
+    },
+    {
+      "file": "upgrade-release-resumed.png",
+      "sha256": "fb2ad3b7b1850c3d124d20ec81dd6b00a585902fd1c1c0d4a01688be266f2f04"
+    },
+    {
+      "file": "task-2.png",
+      "sha256": "28f07e8f0f84304a924becafd692fe20da4dbaded69f0dc369a5aeca37417761"
+    }
+  ]
+}

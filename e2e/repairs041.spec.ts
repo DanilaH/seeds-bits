@@ -586,7 +586,7 @@ test("failed switch can retry without lost attempt or rapid-click double transit
   expect((await data(page)).active).toBe("book-v1-2");
   await page.reload();
   await page.locator("#resume").click();
-  await expect(page.locator("#mode")).toHaveText("Тетрадь · задача 2");
+  await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 2");
 });
 
 test("backup recovery is explicit and survives reload", async ({ page }) => {
@@ -599,7 +599,7 @@ test("backup recovery is explicit and survives reload", async ({ page }) => {
   }, KEY);
   await page.reload();
   await page.locator("#restore-backup").click();
-  await expect(page.locator("#book-count")).toHaveText("2 из 2400 решено");
+  await expect(page.locator("#book-count")).toHaveText("Сборники по 24 задачи · решено 2");
   expect((await data(page)).done).toEqual(["book-v1-1", "book-v1-2"]);
 });
 

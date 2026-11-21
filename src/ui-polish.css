@@ -784,13 +784,14 @@ progress::-moz-progress-bar {
     max(20px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)))
     max(24px, var(--safe-area-inset-left, env(safe-area-inset-left, 0px)));
 }
-#dialog[data-screen="home"][data-entry="root"] .dialog-head {
+#dialog[data-screen="home"] .dialog-head,
+#dialog[data-screen="home"][data-entry="root"] #close {
   display: none;
 }
-#dialog[data-screen="home"][data-entry="pause"] .dialog-head {
-  max-width: 1040px;
-  height: 36px;
-  margin: 0 auto 4px;
+@media (orientation: portrait) and (max-width: 460px) {
+  #dialog[data-screen="home"][data-entry="pause"] .home-title h1 {
+    font-size: clamp(24px, 8vw, 36px);
+  }
 }
 #menu-content {
   display: flex;
@@ -801,18 +802,25 @@ progress::-moz-progress-bar {
   min-height: min-content;
   margin: 0 auto;
 }
-#dialog[data-entry="pause"] #menu-content {
-  height: calc(100% - 40px);
-}
 .home-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   flex-shrink: 0;
   padding: 0;
   text-align: left;
 }
 .home-title h1 {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: 44px;
   line-height: 1.1;
   letter-spacing: -2px;
+}
+.home-title #close {
+  flex: 0 0 44px;
+  min-height: 44px;
 }
 .home-layout {
   display: flex;
@@ -1401,13 +1409,6 @@ progress::-moz-progress-bar {
   .home-title h1 {
     font-size: 26px;
   }
-  #dialog[data-screen="home"][data-entry="pause"] .dialog-head {
-    height: 24px;
-    margin: 0;
-  }
-  #dialog[data-entry="pause"] #menu-content {
-    height: calc(100% - 24px);
-  }
   .home-layout {
     padding-block: 8px;
   }
@@ -1454,9 +1455,6 @@ progress::-moz-progress-bar {
   }
 }
 @media (max-height: 420px) and (orientation: landscape) {
-  #dialog[data-entry="pause"] .home-title {
-    display: none;
-  }
   .home-title h1 {
     font-size: 26px;
   }
@@ -1716,12 +1714,13 @@ button.cell:is(:active, .is-pressed) {
   visibility: hidden;
 }
 header .jar-caption {
-  flex: 0 0 94px;
+  flex: 1 1 94px;
   width: 94px;
   min-width: 0;
 }
 header .jar-caption strong {
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 header .jar-level {
   display: flex;
@@ -1958,11 +1957,6 @@ header .jar-level {
     flex-basis: 65px;
     width: 65px;
   }
-}
-/* Long counters remain available to assistive tech; names can yield at large text sizes. */
-header .jar-caption strong {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .action-label {
   max-width: 100%;
@@ -2211,10 +2205,16 @@ header .jar-caption strong {
   font-size: clamp(12px, 0.85em, 15px);
   font-weight: 600;
   line-height: 1.25;
-  overflow-wrap: normal;
+  white-space: normal;
 }
-.result-next.is-classic > button:not(#play-again) {
-  white-space: nowrap;
+.result-next.is-classic .choice-label {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 350px) {
+  .result-next.is-classic {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr);
+  }
 }
 .result-next.is-classic .difficulty-easier {
   color: var(--easier-ink);
@@ -2417,7 +2417,7 @@ header .jar-caption strong {
     #page-progress {
     padding-bottom: 2px;
   }
-  .has-mobile-ads .game:not(:has(#lesson:not([hidden]))) #page-progress > span {
+  .has-mobile-ads .game:not(:has(#lesson:not([hidden]))) #page-progress:not(.opening-guide) > span {
     display: none;
   }
   .has-mobile-ads

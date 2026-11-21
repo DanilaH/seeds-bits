@@ -136,8 +136,29 @@ test("home, archive, progress and play remain readable across portrait, landscap
       await expect(page.locator("#dialog")).toBeHidden();
       await capture("task");
       await page.locator("#menu").click();
-      await expect(page.locator("#settings-open")).toBeInViewport();
+      const title = await page.locator(".home-title h1").boundingBox();
+      const close = await page.locator("#close").boundingBox();
+      expect(title!.x + title!.width).toBeLessThanOrEqual(close!.x);
+      expect(Math.abs(title!.y + title!.height / 2 - close!.y - close!.height / 2)).toBeLessThan(5);
+      await expect(page.locator("#close")).toBeInViewport();
+      await expect(page.locator("#resume")).toBeInViewport();
       await capture("pause");
+      if (!dark && width <= 390) {
+        // Simulate enlarged text without changing the viewport or the hit target.
+        const title = page.locator(".home-title h1");
+        const size = await title.evaluate(el => getComputedStyle(el).fontSize);
+        await title.evaluate((el, size) => {el.style.fontSize = (parseFloat(size) * 2) + "px";}, size);
+        const bounds = await title.evaluate(el => {
+          const text = document.createRange();
+          text.selectNodeContents(el);
+          const lines = text.getClientRects();
+          const close = document.getElementById("close")!.getBoundingClientRect();
+          return {lines:lines.length, textRight:text.getBoundingClientRect().right, closeLeft:close.left};
+        });
+        expect(bounds.lines).toBe(1);
+        expect(bounds.textRight).toBeLessThanOrEqual(bounds.closeLeft);
+        await title.evaluate(el => {el.style.fontSize = "";});
+      }
       await page.locator("#progress-open").click();
       await capture("progress");
       report.push({ width, height, dark });

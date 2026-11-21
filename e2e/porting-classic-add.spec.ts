@@ -44,7 +44,7 @@ test("a generated ordinary board needs two consecutive Adds to restore moves", a
   await expect(status).toHaveText(addedMessage);
   await page.locator("#undo").click();
   await expect.poll(board).toEqual(fixture.stuck);
-  await expect(status).toHaveText("Пар нет. Добавьте оставшиеся цифры.");
+  await expect(status).toHaveText("Пар нет. Нажмите «Добавить» — в конец поля скопируются 8 цифр.");
   await add.click();
   await expect(status).toHaveText(addedMessage);
   await add.click();
@@ -75,7 +75,7 @@ test("a first Add that restores pairs keeps the ordinary status and supports Und
   await expect(page.locator("#status")).toHaveText("Равные или сумма 10");
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("9");
-  await expect(page.locator("#status")).toHaveText("Пар нет. Добавьте оставшиеся цифры.");
+  await expect(page.locator("#status")).toHaveText("Пар нет. Нажмите «Добавить» — в конец поля скопируются 9 цифр.");
 });
 
 test("an Add without pairs reports when the next Add would exceed the cell limit", async ({page}) => {
@@ -126,7 +126,7 @@ test("an Add without pairs reports when the next Add would exceed the cell limit
   await expect(page.locator("#remaining")).toHaveText("16");
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("8");
-  await expect(page.locator("#status")).toHaveText("Пар нет. Добавьте оставшиеся цифры.");
+  await expect(page.locator("#status")).toHaveText("Пар нет. Нажмите «Добавить» — в конец поля скопируются 8 цифр.");
 });
 
 test("a dead end remains playable with an exhausted hint wallet and five prior Adds", async ({page}) => {

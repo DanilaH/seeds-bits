@@ -18,6 +18,13 @@ export function classic(): number[] {
 export function occupied(board: Board): number {
   return board.reduce((n, v) => n + (v !== 0 ? 1 : 0), 0);
 }
+function straightStep(lo: number, hi: number, width: number): number {
+  const dr = Math.floor(hi / width) - Math.floor(lo / width);
+  const dc = hi % width - lo % width;
+  if (dr === 0) return 1;
+  if (dc === 0) return width;
+  return dr === Math.abs(dc) ? width + Math.sign(dc) : 0;
+}
 export function checkPair(
   board: Board,
   a: number,
@@ -29,13 +36,9 @@ export function checkPair(
     return { ok: false, reason: "empty" };
   if (board[a] !== board[b] && board[a] + board[b] !== 10)
     return { ok: false, reason: "value" };
-  const lo = Math.min(a, b),
-    hi = Math.max(a, b),
-    dr = Math.floor(hi / width) - Math.floor(lo / width),
-    dc = (hi % width) - (lo % width);
-  const aligned = dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc);
-  if (aligned) {
-    const step = dr === 0 ? 1 : dc === 0 ? width : width + Math.sign(dc);
+  const lo = Math.min(a, b), hi = Math.max(a, b);
+  const step = straightStep(lo, hi, width);
+  if (step) {
     let clear = true;
     for (let i = lo + step; i < hi; i += step)
       if (board[i]) {
@@ -51,7 +54,21 @@ export function checkPair(
       break;
     }
   if (clear) return { ok: true, path: { a, b, kind: "reading" } };
-  return { ok: false, reason: aligned ? "blocked" : "direction" };
+  return { ok: false, reason: step ? "blocked" : "direction" };
+}
+
+/** Explain a checked rejection along the attempted line or an adjacent row edge. */
+export function pairBlockers(board: Board, a: number, b: number, reason: Rejection): number[] {
+  const lo = Math.min(a, b), hi = Math.max(a, b);
+  const adjacentEdge = reason === "direction" &&
+    Math.floor(hi / WIDTH) === Math.floor(lo / WIDTH) + 1 && hi % WIDTH < lo % WIDTH;
+  const step = reason === "blocked" ? straightStep(lo, hi, WIDTH) : adjacentEdge ? 1 : 0;
+  if (!step) return [];
+  const blockers: number[] = [];
+  for (let i = lo + step; i < hi; i += step) {
+    if (board[i]) blockers.push(i);
+  }
+  return blockers;
 }
 /** First visible occupied cell along each ray, plus reading-order neighbours. */
 export function pairs(board: Board, width = WIDTH): Connection[] {

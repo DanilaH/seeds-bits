@@ -423,7 +423,7 @@ test("cold reminder opens today's task and preserves another mode without an ad"
   page,
 }) => {
   await seed(page, { entry: true });
-  await expect(page.locator("#mode")).toContainText("08.11.2026");
+  await expect(page.locator("#mode")).toHaveText("Задача дня · 8 ноября");
   await expect(page.locator("#dialog")).toBeHidden();
   expect((await stored(page)).sessions.classic.current.board).toEqual([
     5, 5, 5, 5, 5, 5,

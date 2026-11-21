@@ -11,6 +11,6 @@ it("explains values and the actual connection without inventing a strategy", () 
     "Одинаковые цифры: 4 и 4 · по диагонали",
   );
   expect(hintExplanation(b, { a: 0, b: 10, kind: "reading" })).toContain(
-    "по порядку чтения",
+    "через край строки",
   );
 });

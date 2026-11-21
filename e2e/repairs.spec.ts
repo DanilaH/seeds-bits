@@ -123,7 +123,7 @@ test("all 24 notebook games finish by following reliable hints", async ({
     await page.locator("#book-mode").click();
     await page.locator(`[data-game="book-v1-${n}"]`).click();
     await expect(page.locator("#dialog")).not.toBeVisible();
-    await expect(page.locator("#mode")).toHaveText(`Тетрадь · задача ${n}`);
+    await expect(page.locator("#mode")).toHaveText(`Тетрадь 1 · задача ${n}`);
     for (let move = 0; move < 20; move++) {
       if ((await page.locator("#remaining").textContent()) === "0") break;
       await page.locator("#hint").click();
@@ -180,9 +180,11 @@ test("dead puzzle offers a recovery to a solvable position", async ({
   );
   await start(page);
   await page.locator("#hint").click();
-  await expect(page.locator("#recover-task")).toBeVisible();
+  await expect(page.locator("#recover-task")).toHaveText("Отменить 1 ход");
   await page.locator("#recover-task").click();
   await expect(page.locator("#remaining")).toHaveText("10");
+  await expect(page.locator(".hinted")).toHaveCount(0);
+  await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
   const ids = await page
     .locator(".hinted")
@@ -221,10 +223,10 @@ test("next skips completed tasks and explicit replay remains playable", async ({
   await start(page);
   await pair(page, 0, 1);
   await page.locator("#play-again").click();
-  await expect(page.locator("#mode")).toHaveText("Тетрадь · задача 3");
+  await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 3");
   await page.locator("#book-top").click();
   await page.locator('[data-game="book-v1-2"]').click();
-  await expect(page.locator("#mode")).toHaveText("Тетрадь · задача 2");
+  await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 2");
   await expect(page.locator("#win")).toBeHidden();
 });
 test("fast selection retains the moving cell instead of replacing it", async ({
