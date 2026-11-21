@@ -726,10 +726,11 @@
         "code": "В preview 12066 есть Android AppMetrica и очередь событий. В NashStore 7537d9c сохранён install_store для RuStore/NashStore. В текущем preview его нет.",
         "research": "../research/markets-localization-2026-11-21/AUDIENCE.md",
         "channels": "../research/markets-localization-2026-11-21/channels.json",
+        "launchCopy": "../research/markets-localization-2026-11-21/launch-copy.json",
         "device": "NOT_VERIFIED",
         "liveAudience": "UNKNOWN — для выбора следующего перевода нужен отчёт по первым запускам, запрошенной локали и показанному языку."
       },
-      "nextAction": "A — перенос определения источника и первый веб-канал. B — RU/EN, переключатель и нативные строки. C — события, тестовые отчёты и сверка счётчиков."
+      "nextAction": "A — перенос определения источника и первый веб-канал. B — параллельно с аналитикой подключить ru/en/es/tr/pt-BR, переключатель и нативные строки; стартовые переводы в launchCopy. C — события, тестовые отчёты и сверка счётчиков."
     }
   ]
 }
