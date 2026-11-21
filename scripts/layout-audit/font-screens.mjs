@@ -320,9 +320,9 @@ async function classic() {
   await ui.tap("#resume");
   await checkpoint("classic-board");
   await ui.move(0,1);
-  const docked = await ui.evaluate("!!document.querySelector('#hint-dock > .status-wrap')");
-  await checkpoint("classic-no-pairs", docked ? {command:"#status",within:".status-wrap"} : {});
-  assert.match(await ui.text("#status"), /Пар нет/);
+  await checkpoint("classic-no-pairs");
+  assert.equal(await ui.text("#status"),"Пар нет. Нажмите «Добавить» — в конец поля скопируются 2 цифры.");
+  assert.deepEqual(rows.at(-1).coveredCells,[]);
   await ui.tap("#add");
   await ui.until("document.querySelector('#remaining').textContent === '4'");
   await checkpoint("classic-after-add");
