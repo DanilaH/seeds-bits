@@ -648,10 +648,11 @@
         "emulator": "Android 35 / WebView 124: exact old optimized 12054 → current optimized 12061 re-signed with one ephemeral CI certificate, board/history/settings/hints/wallet/paused inventory preserved; debug Undo restored 8. Fresh real task, manual task 2; 320x520/system font200 instruction visibility and stable lesson field.",
         "apk": "../research/first-session-2026-11-20/implementation/APK.json",
         "followup12061": "25 целевых browser-тестов прошли повторно. Независимый прогон assets/public из optimized CI APK 12061: первая встреча с краем в задаче 5 без инструкции, частичная команда 568×320/200% и устаревший заголовок открытого дня после полуночи. Физическая проверка и плейтест открыты. См. ../research/first-session-2026-11-20/implementation/FOLLOWUP_12061.md.",
-        "followup12062": "Финальная ревизия 6d67fea. Три случая исправлены. 30 целевых браузерных сценариев и offline Android 35 прошли в CI 44793614971. Подпись для выдачи прежним сертификатом ждёт восстановления среды."
+        "followup12062": "Финальная ревизия 6d67fea. Три случая исправлены. 30 целевых браузерных сценариев и offline Android 35 прошли в CI 44793614971. Подписанная выдача выполнена в preview 12063.",
+        "apk12063": "../research/first-session-2026-11-20/implementation/APK_12063.json"
       },
       "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
-      "nextAction": "Подписать APK 12062 прежним preview-сертификатом. На физическом телефоне проверить самостоятельное соединение через край, альбом при системных 200% и обновление старой партии.",
+      "nextAction": "На физическом телефоне проверить preview 12063: самостоятельное соединение через край, альбом при системных 200% и обновление старой партии.",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26"
     }
