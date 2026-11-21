@@ -35,7 +35,7 @@ jobs:
         if: always()
         with: {name: first-session-browser, path: test-results/}
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=963 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=964 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
@@ -44,22 +44,22 @@ jobs:
           fi
       - run: |
           mkdir -p test-results/first-session-apk
-          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/first-session-apk/seeds-first-session-12063-unsigned.apk
-          cp android/app/build/outputs/apk/debug/app-debug.apk test-results/first-session-apk/seeds-first-session-12063-debug.apk
-          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12063,firstSession:true,profile:"baseline",analytics:false},null,2))'
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/first-session-apk/seeds-first-session-12064-unsigned.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk test-results/first-session-apk/seeds-first-session-12064-debug.apk
+          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12064,firstSession:true,profile:"baseline",analytics:false},null,2))'
       - uses: actions/upload-artifact@v4
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
       - uses: actions/download-artifact@v4
         with:
           name: first-session-preview-unsigned
-          run-id: 44766629267
+          run-id: 44890076049
           github-token: ${{ github.token }}
           path: baseline
       - run: |
-          echo '6263c14c1adbe613101547bcb7b05e2861c7340e6b217c0ef73796b5e595a8ea  baseline/seeds-first-session-12061-unsigned.apk' | sha256sum -c -
+          echo 'a5127cf47caedcd36bdb3e8019f05f9fce8a185693b343267851d31247079feb  baseline/seeds-first-session-12063-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
           build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12061-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12063-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" android/app/build/outputs/apk/release/app-release-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
       - run: |

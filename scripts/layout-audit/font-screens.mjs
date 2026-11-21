@@ -98,8 +98,12 @@ async function attach() {
     } catch {}
   }
   assert(box, "Missing WebView screen bounds");
-  const shown = selector => until(`!!document.querySelector(${JSON.stringify(selector)})?.getClientRects().length`);
-  const hidden = selector => until(`!document.querySelector(${JSON.stringify(selector)})?.getClientRects().length`);
+  const visible = selector => `(() => {
+    const el=document.querySelector(${JSON.stringify(selector)});
+    return el && !el.hidden && el.getClientRects().length && getComputedStyle(el).visibility==='visible';
+  })()`;
+  const shown = selector => until(visible(selector));
+  const hidden = selector => until(`!${visible(selector)}`);
   const text = selector => evaluate(`document.querySelector(${JSON.stringify(selector)})?.textContent`);
   async function tap(selector, {scroll = true} = {}) {
     await shown(selector);
@@ -185,9 +189,9 @@ async function runSection(section, fixture, route) {
 
 async function opening() {
   await ui.shown(".opening-copy");
-  await checkpoint("first-start", {command:".opening-copy",within:".game-top"});
+  await checkpoint("first-start", {command:".opening-copy",within:"#page-progress"});
   await ui.digit(4, {scroll:false});
-  await checkpoint("first-two-partners", {command:".opening-copy",within:".game-top"});
+  await checkpoint("first-two-partners", {command:".opening-copy",within:"#page-progress"});
   await ui.digit(4);
   await ui.move(8,17);
   await ui.move(4,5);
@@ -375,6 +379,11 @@ async function result(kind) {
   const observed = await ui.evaluate("document.querySelector('#win').dataset.resultKind");
   assert.equal(observed,kind);
   await checkpoint(`result-${kind}`);
+  const headingFits = await ui.evaluate(`(() => {
+    const e = document.querySelector('#win h1');
+    return e.scrollWidth <= e.clientWidth + 1;
+  })()`);
+  assert(headingFits, "Result heading overflows");
   await ui.tap("#play-again");
 }
 
@@ -387,6 +396,7 @@ for (size of sizes) for (font of [1,1.5,2]) {
   adb("shell","pm","clear",app);
   adb("shell","wm","size",size);
   adb("shell","settings","put","system","font_scale",String(font));
+  assert.equal(Number(adb("shell","settings","get","system","font_scale")),font);
   launch();
   await runSection("opening", null, opening);
   const dark = size === "640x1136" || size === "1136x736";
@@ -409,7 +419,8 @@ for (size of sizes) for (font of [1,1.5,2]) {
     await runSection("page-result",{active:"book-v1-6",board:[5,5],done:book.slice(0,5).map(x=>x.id)},()=>result("page"));
     await runSection("book-result",{active:"book-v1-24",board:[5,5],done:book.slice(0,23).map(x=>x.id)},()=>result("book"));
   }
-  fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,physicalPhone:false,
+  fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12064,physicalPhone:false,
+    webView:adb("shell","dumpsys","webviewupdate").split("\n").find(line=>line.includes("Current WebView package"))?.trim(),
     apkSha256:createHash("sha256").update(fs.readFileSync(artifact)).digest("hex"),rows,failures},null,2));
   console.log("FONT_CASE",size,font,rows.filter(r=>r.size===size&&r.font===font).length,failures.filter(r=>r.size===size&&r.font===font).length);
 }

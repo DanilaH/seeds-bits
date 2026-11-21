@@ -92,6 +92,12 @@
   margin: 10px 0 8px;
   font-size: 26px;
   line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 350px) {
+  #win:is([data-result-kind="page"], [data-result-kind="book"]) h1 {
+    font-size: 22px;
+  }
 }
 #win #win-stats {
   display: grid;

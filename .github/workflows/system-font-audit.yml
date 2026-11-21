@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: layout-native-${{ github.ref }}
+  group: layout-native-${{ github.sha }}
   cancel-in-progress: true
 jobs:
   native:
@@ -33,7 +33,7 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund && npm run setup:android
-      - run: GITHUB_RUN_NUMBER=963 node scripts/configure-android.mjs && chmod +x android/gradlew && cd android && ./gradlew assembleDebug
+      - run: GITHUB_RUN_NUMBER=964 node scripts/configure-android.mjs && chmod +x android/gradlew && cd android && ./gradlew assembleDebug
       - run: |
           export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-avd"
           mkdir -p "$ANDROID_AVD_HOME"

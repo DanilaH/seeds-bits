@@ -1714,12 +1714,13 @@ button.cell:is(:active, .is-pressed) {
   visibility: hidden;
 }
 header .jar-caption {
-  flex: 0 0 94px;
+  flex: 1 1 94px;
   width: 94px;
   min-width: 0;
 }
 header .jar-caption strong {
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 header .jar-level {
   display: flex;
@@ -1956,11 +1957,6 @@ header .jar-level {
     flex-basis: 65px;
     width: 65px;
   }
-}
-/* Long counters remain available to assistive tech; names can yield at large text sizes. */
-header .jar-caption strong {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .action-label {
   max-width: 100%;
