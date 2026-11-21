@@ -87,7 +87,7 @@ async function upgrade(){
   assert.equal(await ui.evaluate("document.querySelector('#mode').textContent"),"Классика");assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"6");shot("upgrade-resumed");
   const now=JSON.parse(readPrefs().values[progress]);assert.deepEqual(now.sessions.classic,old.sessions.classic);assert.equal(now.hints.classic,old.hints.classic);assert.equal(now.meta.wallet,old.meta.wallet);assert.deepEqual(now.meta.help.inventory,old.meta.help.inventory);assert.equal(now.meta.help.install,old.meta.help.install);assert(await ui.evaluate("document.querySelector('#magnet').hidden&&document.querySelector('#plan').hidden"));assert(now.seen.includes("old-profile-upgrade-check"));
   const currentSettings=JSON.parse(readPrefs().values[settings]);for(const k of ["theme","sound","vibration"])assert.equal(currentSettings[k],s[k]);await ui.tap("#undo");await ui.until("document.querySelector('#remaining').textContent==='8'");ui.close();stop();
-  fs.writeFileSync(out+"/upgrade.json",JSON.stringify({baselineVersion:12063,candidateVersion:12065,package:app,baselineSha256:createHash("sha256").update(fs.readFileSync(baseline)).digest("hex"),candidateReleaseSha256:createHash("sha256").update(fs.readFileSync(releaseCandidate)).digest("hex"),candidateDebugSha256:createHash("sha256").update(fs.readFileSync(candidate)).digest("hex"),method:"Exact old optimized payload upgraded to exact current optimized release payload, then current debug payload for CDP/Undo; all signed with one ephemeral CI certificate; no app-data deletion between installs",boardHistorySettingsHintsWalletRetained:true,undoRestoresEight:true,oldBoard:old.sessions.classic},null,2));
+  fs.writeFileSync(out+"/upgrade.json",JSON.stringify({baselineVersion:12065,candidateVersion:12066,package:app,baselineSha256:createHash("sha256").update(fs.readFileSync(baseline)).digest("hex"),candidateReleaseSha256:createHash("sha256").update(fs.readFileSync(releaseCandidate)).digest("hex"),candidateDebugSha256:createHash("sha256").update(fs.readFileSync(candidate)).digest("hex"),method:"Exact old optimized payload upgraded to exact current optimized release payload, then current debug payload for CDP/Undo; all signed with one ephemeral CI certificate; no app-data deletion between installs",boardHistorySettingsHintsWalletRetained:true,undoRestoresEight:true,oldBoard:old.sessions.classic},null,2));
 }
 async function fresh(){
   adb("shell","pm","clear",app);adb("shell","settings","put","system","font_scale","1");adb("shell","wm","size","780x1688");
@@ -157,5 +157,52 @@ async function landscapeFont200() {
     stop();
   }
 }
-try{adb("shell","wm","density","320");adb("shell","wm","size","780x1688");await upgrade();await fresh();await font200();await landscapeFont200();fs.writeFileSync(out+"/passed.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,version:12065,upgrade:true,freshRealTask:true,voluntaryTask2:true,firstInstructionFont200:true,physicalPhone:false,webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));}
+async function recordTaskFiveEdges() {
+  const task = JSON.parse(fs.readFileSync("src/notebook.json", "utf8"))[4];
+  const records = [];
+  for (const [a,b] of [[6,10],[10,6]]) {
+    const label = a === 6 ? "upper-first" : "lower-first";
+    installPrefs({
+      [settings]:JSON.stringify({tutorialDone:true,sound:false,vibration:false}),
+      [progress]:JSON.stringify({version:3,active:task.id,done:[],seen:[],hints:{},sessions:{
+        [task.id]:{rules:1,current:{board:task.board,moves:0,additions:0,scroll:0},history:[]},
+      }}),
+    });
+    launch();
+    const ui = await attach();
+    const movie = `/sdcard/edge-${label}.mp4`;
+    let recorder;
+    try {
+      await ui.tap("#resume","#dialog");
+      for (const [i,j] of [[4,5],[3,13],[2,11],[15,16],[12,17]]) await ui.move(i,j);
+      assert.equal(await ui.evaluate("document.querySelector('#status').textContent"),"От правого края — в начало строки ниже.");
+      recorder = spawn("adb",["shell","screenrecord","--bit-rate","1700000","--time-limit","25",movie],{stdio:"ignore"});
+      await wait(1000);
+      await ui.digit(a);
+      assert.equal(await ui.evaluate("document.querySelectorAll('#paths path').length"),0);
+      await wait(500);
+      await ui.evaluate(`new MutationObserver((_,observer)=>{
+        const trace=document.querySelector('#pair-trace');
+        if(trace){window.qaEdge=[...trace.querySelectorAll('path')].map(p=>({d:p.getAttribute('d'),delay:getComputedStyle(p).animationDelay}));observer.disconnect();}
+      }).observe(document.querySelector('#app'),{childList:true})`);
+      await ui.digit(b);
+      await ui.until("!document.querySelector('#win').hidden");
+      const segments = await ui.evaluate("window.qaEdge");
+      assert.deepEqual(segments.map(segment=>segment.delay),["0s","0.085s"]);
+      records.push({order:[a,b],segments});
+      await wait(2100);
+    } finally {
+      ui.close();
+      if (recorder) {
+        try { adb("shell","pkill","-2","screenrecord"); } catch {}
+        await new Promise(resolve=>recorder.exitCode!==null?resolve():recorder.once("exit",resolve));
+        adb("pull",movie,`${out}/edge-${label}.mp4`);
+      }
+      stop();
+    }
+  }
+  assert.deepEqual(records[0].segments,records[1].segments);
+  fs.writeFileSync(`${out}/task-five-edges.json`,JSON.stringify({task:task.id,systemFont:2,orders:records},null,2));
+}
+try{adb("shell","wm","density","320");adb("shell","wm","size","780x1688");await upgrade();await fresh();await font200();await landscapeFont200();await recordTaskFiveEdges();fs.writeFileSync(out+"/passed.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,version:12066,upgrade:true,freshRealTask:true,voluntaryTask2:true,firstInstructionFont200:true,physicalPhone:false,webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));}
 catch(error){shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}

@@ -2404,25 +2404,26 @@ async function hint() {
       (advice.kind === "unknown" && recovery >= 0)
     ) {
       if (recovery >= 0) {
-        const index = recovery;
-        $("recover-task").hidden = false;
-        $("recover-task").textContent = `Вернуться к решаемому полю`;
-        $("recover-task").onclick = () => {
-          session = {
-            rules: 1,
-            current: session.history[index],
-            history: session.history.slice(0, index),
-          };
+        const button = $("recover-task");
+        const count = originalSession.history.length - recovery;
+        const form = new Intl.PluralRules("ru").select(count);
+        button.hidden = false;
+        button.textContent = `Отменить ${count} ${form === "one" ? "ход" : form === "few" ? "хода" : "ходов"}`;
+        button.onclick = () => {
+          if (generation !== hintGeneration || session !== originalSession || busy || paused || dialog.open || lesson >= 0) return;
+          session = {...originalSession, current: originalSession.history[recovery], history: originalSession.history.slice(0, recovery)};
           clearSelection();
           render();
           viewport.scrollTop = session.current.scroll;
-          save();
-          hint();
+          viewport.focus({preventScroll:true});
+          feedback("undo");
+          message("Поле восстановлено. Продолжите сами или нажмите «Подсказка».");
+          void save();
         };
         message(
           advice.kind === "dead"
-            ? "Из этой позиции решения нет. Можно вернуться к решаемому полю."
-            : "Этот путь пока не удалось проверить. Можно вернуться к проверенному решению.",
+            ? "Из этой позиции решения нет. Можно отменить ходы до решаемого поля."
+            : "Пока не удалось проверить, есть ли решение. Можно отменить ходы до проверенного поля.",
         );
       } else message("Из этой позиции решения нет. Начните задачу заново.");
       return;
@@ -2430,8 +2431,8 @@ async function hint() {
     if (advice.kind !== "move") {
       message(
         session.history.length
-          ? "Не удалось найти подсказку. Можно отменить последний ход или продолжить самостоятельно."
-          : "Не удалось найти подсказку. Попробуйте ещё раз или продолжите самостоятельно.",
+          ? "Пока не удалось проверить, есть ли решение. Можно отменить последний ход или продолжить самостоятельно."
+          : "Пока не удалось проверить, есть ли решение. Попробуйте ещё раз или продолжите самостоятельно.",
       );
       return;
     }

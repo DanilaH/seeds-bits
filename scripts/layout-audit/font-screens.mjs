@@ -383,22 +383,79 @@ async function hintOffer() {
 
 function trappedNotebook() {
   const history=[];
-  let board=book[6].board;
-  for (const [a,b] of [[2,22],[7,25],[9,10]]) {
+  let board=book[3].board;
+  for (const [a,b] of [[1,11],[7,16],[10,13]]) {
     history.push(snap(board,history.length));
     const next=board.map((x,i)=>i===a||i===b?0:x);
     board=next.filter((_,i)=>next.slice(Math.floor(i/9)*9,Math.floor(i/9)*9+9).some(Boolean));
   }
-  return {active:book[6].id,board,history};
+  return {active:book[3].id,board,history};
 }
 
 async function recoverNotebook() {
   await ui.tap("#resume");
+  const hintCount = await ui.text("#hint-count");
   await ui.tap("#hint");
   await ui.shown("#recover-task");
+  assert.equal(await ui.text("#recover-task"),"Отменить 1 ход");
   await checkpoint("notebook-recovery");
   await ui.tap("#recover-task");
   await ui.hidden("#recover-task");
+  assert.equal(await ui.text("#remaining"),"6");
+  assert.equal(await ui.text("#hint-count"),hintCount);
+  assert(await ui.evaluate("!document.querySelector('#hint-offer').open && !document.querySelector('#board .hinted')"));
+}
+
+async function classicNotebook() {
+  await ui.tap("#resume");
+  await ui.move(0,1);
+  await ui.shown("#try-notebook");
+  assert.equal(await ui.text("#try-notebook"),"Открыть тетрадь");
+  await checkpoint("classic-open-notebook");
+  await ui.tap("#try-notebook");
+  await ui.until("document.querySelector('#mode').textContent === 'Тетрадь 1 · задача 3'");
+}
+
+async function checkRouteExamples() {
+  const boardOf = entries => Array.from({length:Math.max(...Object.keys(entries).map(Number))+1},(_,i)=>entries[i]??0);
+  for (const [name, ends, occupiedBetween] of [
+    ["diagonal-down-right",[0,30],[10,20]],
+    ["diagonal-down-left",[7,31],[15,23]],
+    ["edge",[7,10],[8,9]],
+  ]) {
+    for (const reverse of [false,true]) {
+      const [a,b] = reverse ? [...ends].reverse() : ends;
+      const tag = `${name}-${reverse?"reverse":"forward"}`;
+      const edge = name === "edge";
+      const pair = {[a]:edge?6:3,[b]:edge?4:3};
+      const blocked = boardOf({...pair,[occupiedBetween[0]]:8,[occupiedBetween[1]]:2});
+      await runSection(`blocked-${tag}`,{board:blocked},async()=>{
+        await ui.tap("#resume");
+        await ui.digit(a);
+        await ui.digit(b);
+        const actual=await ui.evaluate("Array.from(document.querySelectorAll('.pair-blocker'),e=>Number(e.dataset.index))");
+        assert.deepEqual(actual,occupiedBetween);
+        await checkpoint(`blocked-${tag}`);
+        assert.equal(rows.at(-1).coveredCells.length,0);
+      });
+      const open = boardOf(edge ? pair : {...pair,9:1,18:4});
+      await runSection(`trail-${tag}`,{board:open},async()=>{
+        await ui.tap("#resume");
+        await ui.digit(a);
+        await ui.evaluate(`new MutationObserver((_,o)=>{
+          const trace=document.querySelector('#pair-trace');
+          if(trace){window.qaRoute=[...trace.querySelectorAll('path')].map(p=>({d:p.getAttribute('d'),delay:getComputedStyle(p).animationDelay}));o.disconnect();}
+        }).observe(document.querySelector('#app'),{childList:true})`);
+        await ui.digit(b);
+        await ui.until(`document.querySelector('#remaining').textContent === '${edge ? 0 : 2}'`);
+        const segments=await ui.evaluate("window.qaRoute");
+        assert.equal(segments?.length,edge?2:1);
+        assert.deepEqual(segments.map(s=>s.delay),edge?["0s","0.085s"]:["0s"]);
+        await checkpoint(`trail-${tag}`);
+        assert.equal(rows.at(-1).coveredCells.length,0);
+      });
+    }
+  }
 }
 
 async function result(kind) {
@@ -463,10 +520,14 @@ for (size of sizes) for (font of classicOnly ? [2] : [1,1.5,2]) {
     await runSection("daily-result",{active:`daily-v1-${isoDay}`,board:[5,5]},()=>result("daily"));
     await runSection("page-result",{active:"book-v1-6",board:[5,5],done:book.slice(0,5).map(x=>x.id)},()=>result("page"));
     await runSection("book-result",{active:"book-v1-24",board:[5,5],done:book.slice(0,23).map(x=>x.id)},()=>result("book"));
+    if (size === "640x1232" || size === "1136x736") {
+      await runSection("classic-open-notebook",{board:[5,5],done:book.slice(0,2).map(x=>x.id)},classicNotebook);
+      await checkRouteExamples();
+    }
   }
   console.log("FONT_CASE",size,font,rows.filter(r=>r.size===size&&r.font===font).length,failures.filter(r=>r.size===size&&r.font===font).length);
 }
-fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12065,physicalPhone:false,
+fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12066,physicalPhone:false,
     webView:adb("shell","dumpsys","webviewupdate").split("\n").find(line=>line.includes("Current WebView package"))?.trim(),
     apkSha256:createHash("sha256").update(fs.readFileSync(artifact)).digest("hex"),rows,failures},null,2));
 assert.equal(failures.length,0,"Check report.json and failure screenshots");
