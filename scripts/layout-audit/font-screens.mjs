@@ -189,7 +189,9 @@ async function runSection(section, fixture, route) {
 
 async function opening() {
   await ui.shown(".opening-copy");
+  const field = () => ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().toJSON()");
   await checkpoint("first-start", {command:".opening-copy",within:"#page-progress"});
+  const start = await field();
   await ui.digit(4, {scroll:false});
   await checkpoint("first-two-partners", {command:".opening-copy",within:"#page-progress"});
   await ui.digit(4);
@@ -200,6 +202,7 @@ async function opening() {
   await ui.move(9,11);
   assert.match(await ui.text(".opening-copy"), /края/);
   await checkpoint("first-edge", {command:".opening-copy",within:"#page-progress"});
+  assert.deepEqual(await field(), start, "First-task field moved with the explanation");
   await ui.move(14,7);
   await ui.shown("#win");
   assert.match(await ui.text("#win"), /1 из 24/);
@@ -245,9 +248,27 @@ async function navigation() {
   await ui.tap("#dark");
   await checkpoint("dark-settings");
   if (await ui.evaluate("!document.querySelector('#reminder-settings').hidden")) {
-    await ui.tap("label.reminder-toggle");
     await checkpoint("reminder-settings");
-    await ui.tap("label.reminder-toggle");
+    const request = "#notification-permission-request:not([hidden])";
+    if (await ui.evaluate(`!!document.querySelector(${JSON.stringify(request)})`)) {
+      await ui.tap(request);
+      let deny;
+      for (let i=0;i<4 && !deny;i++) {
+        try {
+          adb("shell","uiautomator","dump","/sdcard/seeds-notifications.xml");
+          deny = /resource-id="[^"]*:id\/permission_deny_button"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/.exec(
+            adb("shell","cat","/sdcard/seeds-notifications.xml"),
+          )?.slice(1).map(Number);
+        } catch {}
+        if (!deny) await wait(250);
+      }
+      assert(deny, "Android notification permission dialog did not open");
+      if (font === 2) screenshot(join(dir,"notification-permission.png"));
+      adb("shell","input","tap",String(Math.round((deny[0]+deny[2])/2)),String(Math.round((deny[1]+deny[3])/2)));
+      await ui.until("!document.querySelector('#reminders').checked");
+      await ui.shown("#notification-system-settings");
+      await checkpoint("notification-denied");
+    }
   }
   await ui.tap("#privacy-open");
   await checkpoint("privacy");
@@ -410,7 +431,7 @@ for (size of sizes) for (font of [1,1.5,2]) {
     const crowded = Array(90).fill(1);
     crowded[0]=crowded[1]=5;
     await runSection("save-error",{board:crowded},saveError);
-    await runSection("hint-offer",{board:[5,5,1],meta:{version:2,wallet:0,attempts:{
+    await runSection("hint-offer",{board:[5,5,1],meta:{version:2,wallet:0,since:isoDay,completed:0,unassisted:0,attempts:{
       classic:{id:"font-audit-exhausted",completed:false,hintKeys:["one","two","three"]},
     }}},hintOffer);
     await runSection("notebook-recovery",trappedNotebook(),recoverNotebook);
