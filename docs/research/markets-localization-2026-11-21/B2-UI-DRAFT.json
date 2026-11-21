@@ -1,0 +1,2137 @@
+{
+  "ui.seeds-bits": {
+    "fr": "Seeds Bits",
+    "de": "Seeds Bits",
+    "it": "Seeds Bits",
+    "vi": "Seeds Bits",
+    "id": "Seeds Bits"
+  },
+  "ui.jar-collection": {
+    "fr": "Collection de bocaux",
+    "de": "Gläsersammlung",
+    "it": "Collezione di barattoli",
+    "vi": "Bộ sưu tập lọ",
+    "id": "Koleksi stoples"
+  },
+  "ui.classic-game": {
+    "fr": "Partie classique",
+    "de": "Klassische Partie",
+    "it": "Partita classica",
+    "vi": "Ván cổ điển",
+    "id": "Permainan klasik"
+  },
+  "ui.numbers": {
+    "fr": "chiffres",
+    "de": "Zahlen",
+    "it": "numeri",
+    "vi": "số",
+    "id": "angka"
+  },
+  "ui.vertically-scrollable-board": {
+    "fr": "Grille à défilement vertical",
+    "de": "Vertikal scrollbares Spielfeld",
+    "it": "Griglia a scorrimento verticale",
+    "vi": "Bàn chơi cuộn dọc",
+    "id": "Papan yang dapat digulir vertikal"
+  },
+  "ui.numbers-on-the-board": {
+    "fr": "Chiffres de la grille",
+    "de": "Zahlen auf dem Spielfeld",
+    "it": "Numeri sulla griglia",
+    "vi": "Các số trên bàn chơi",
+    "id": "Angka di papan"
+  },
+  "ui.all-pairs-found": {
+    "fr": "Toutes les paires trouvées",
+    "de": "Alle Paare gefunden",
+    "it": "Tutte le coppie trovate",
+    "vi": "Đã tìm hết các cặp",
+    "id": "Semua pasangan ditemukan"
+  },
+  "ui.game-results": {
+    "fr": "Résultats de la partie",
+    "de": "Spielergebnisse",
+    "it": "Risultati della partita",
+    "vi": "Kết quả ván chơi",
+    "id": "Hasil permainan"
+  },
+  "ui.restart-puzzle": {
+    "fr": "Recommencer la grille",
+    "de": "Rätsel neu starten",
+    "it": "Ricomincia lo schema",
+    "vi": "Chơi lại câu đố",
+    "id": "Mulai ulang teka-teki"
+  },
+  "ui.seeds-bits-menu": {
+    "fr": "Menu de Seeds Bits",
+    "de": "Seeds-Bits-Menü",
+    "it": "Menu di Seeds Bits",
+    "vi": "Menu Seeds Bits",
+    "id": "Menu Seeds Bits"
+  },
+  "ui.seeds-bits-2": {
+    "fr": "Seeds Bits",
+    "de": "Seeds Bits",
+    "it": "Seeds Bits",
+    "vi": "Seeds Bits",
+    "id": "Seeds Bits"
+  },
+  "ui.close-menu": {
+    "fr": "Fermer le menu",
+    "de": "Menü schließen",
+    "it": "Chiudi il menu",
+    "vi": "Đóng menu",
+    "id": "Tutup menu"
+  },
+  "ui.other-days": {
+    "fr": "Autres jours {0}",
+    "de": "Andere Tage {0}",
+    "it": "Altri giorni {0}",
+    "vi": "Ngày khác {0}",
+    "id": "Hari lain {0}"
+  },
+  "ui.back": {
+    "fr": "Retour",
+    "de": "Zurück",
+    "it": "Indietro",
+    "vi": "Quay lại",
+    "id": "Kembali"
+  },
+  "ui.reminder-time": {
+    "fr": "Heure du rappel",
+    "de": "Uhrzeit der Erinnerung",
+    "it": "Ora del promemoria",
+    "vi": "Giờ nhắc",
+    "id": "Waktu pengingat"
+  },
+  "ui.allow-notifications": {
+    "fr": "Autoriser les notifications",
+    "de": "Benachrichtigungen erlauben",
+    "it": "Consenti le notifiche",
+    "vi": "Cho phép thông báo",
+    "id": "Izinkan notifikasi"
+  },
+  "ui.android-notification-settings": {
+    "fr": "Paramètres de notification Android",
+    "de": "Android-Benachrichtigungseinstellungen",
+    "it": "Impostazioni notifiche Android",
+    "vi": "Cài đặt thông báo Android",
+    "id": "Setelan notifikasi Android"
+  },
+  "ui.at-local-time-if-the-puzzle-is-still-unsolved": {
+    "fr": "À l’heure locale si la grille reste à résoudre.",
+    "de": "Zur Ortszeit, wenn das Rätsel noch offen ist.",
+    "it": "All’ora locale, se lo schema non è ancora risolto.",
+    "vi": "Theo giờ địa phương nếu câu đố chưa được giải.",
+    "id": "Pada waktu lokal jika teka-teki belum selesai."
+  },
+  "ui.restart-current-game": {
+    "fr": "Recommencer la partie",
+    "de": "Aktuelle Partie neu starten",
+    "it": "Ricomincia la partita",
+    "vi": "Chơi lại ván hiện tại",
+    "id": "Mulai ulang permainan ini"
+  },
+  "ui.privacy": {
+    "fr": "Confidentialité",
+    "de": "Datenschutz",
+    "it": "Privacy",
+    "vi": "Quyền riêng tư",
+    "id": "Privasi"
+  },
+  "ui.start-a-new-game-the-board-and-undo-history": {
+    "fr": "Commencer une nouvelle partie ? La grille et l’historique seront remplacés.",
+    "de": "Neues Spiel starten? Spielfeld und Zugverlauf werden ersetzt.",
+    "it": "Iniziare una nuova partita? La griglia e la cronologia delle mosse saranno sostituite.",
+    "vi": "Bắt đầu ván mới? Bàn chơi và lịch sử nước đi sẽ được thay thế.",
+    "id": "Mulai permainan baru? Papan dan riwayat langkah akan diganti."
+  },
+  "ui.restart": {
+    "fr": "Recommencer",
+    "de": "Neu starten",
+    "it": "Ricomincia",
+    "vi": "Chơi lại từ đầu",
+    "id": "Mulai ulang"
+  },
+  "ui.keep-current-game": {
+    "fr": "Garder la partie",
+    "de": "Aktuelle Partie behalten",
+    "it": "Mantieni la partita",
+    "vi": "Giữ ván hiện tại",
+    "id": "Pertahankan permainan ini"
+  },
+  "ui.next-game": {
+    "fr": "Partie suivante",
+    "de": "Nächste Partie",
+    "it": "Prossima partita",
+    "vi": "Ván tiếp theo",
+    "id": "Permainan berikutnya"
+  },
+  "ui.easier": {
+    "fr": "Plus facile",
+    "de": "Leichter",
+    "it": "Più facile",
+    "vi": "Dễ hơn",
+    "id": "Lebih mudah"
+  },
+  "ui.harder": {
+    "fr": "Plus difficile",
+    "de": "Schwieriger",
+    "it": "Più difficile",
+    "vi": "Khó hơn",
+    "id": "Lebih sulit"
+  },
+  "ui.continue-playing": {
+    "fr": "Continuer à jouer",
+    "de": "Weiterspielen",
+    "it": "Continua a giocare",
+    "vi": "Chơi tiếp",
+    "id": "Lanjutkan bermain"
+  },
+  "ui.new-game": {
+    "fr": "Nouvelle partie",
+    "de": "Neue Partie",
+    "it": "Nuova partita",
+    "vi": "Ván mới",
+    "id": "Permainan baru"
+  },
+  "ui.new-easier-game": {
+    "fr": "Partie plus facile",
+    "de": "Neue leichtere Partie",
+    "it": "Nuova partita più facile",
+    "vi": "Ván mới dễ hơn",
+    "id": "Permainan baru yang lebih mudah"
+  },
+  "ui.game-modes": {
+    "fr": "Modes de jeu",
+    "de": "Spielmodi",
+    "it": "Modalità di gioco",
+    "vi": "Chế độ chơi",
+    "id": "Mode permainan"
+  },
+  "ui.archived-puzzle": {
+    "fr": "Grille des archives",
+    "de": "Archivrätsel",
+    "it": "Schema d’archivio",
+    "vi": "Câu đố lưu trữ",
+    "id": "Teka-teki arsip"
+  },
+  "ui.second-number-below": {
+    "fr": "↓ Deuxième chiffre en bas",
+    "de": "↓ Zweite Zahl weiter unten",
+    "it": "↓ Secondo numero più in basso",
+    "vi": "↓ Số thứ hai ở dưới",
+    "id": "↓ Angka kedua ada di bawah"
+  },
+  "ui.restart-2": {
+    "fr": "Recommencer ?",
+    "de": "Neu starten?",
+    "it": "Ricominciare?",
+    "vi": "Chơi lại từ đầu?",
+    "id": "Mulai ulang?"
+  },
+  "ui.load-saved-game": {
+    "fr": "Charger la partie sauvegardée",
+    "de": "Gespeicherte Partie laden",
+    "it": "Carica la partita salvata",
+    "vi": "Tải ván đã lưu",
+    "id": "Muat permainan tersimpan"
+  },
+  "ui.got-it": {
+    "fr": "Compris",
+    "de": "Verstanden",
+    "it": "Ho capito",
+    "vi": "Đã hiểu",
+    "id": "Mengerti"
+  },
+  "ui.restore-backup": {
+    "fr": "Restaurer la sauvegarde",
+    "de": "Sicherung wiederherstellen",
+    "it": "Ripristina la copia",
+    "vi": "Khôi phục bản sao",
+    "id": "Pulihkan cadangan"
+  },
+  "ui.the-backup-is-damaged-and-cannot-be-restored-the": {
+    "fr": "La sauvegarde est endommagée et ne peut pas être restaurée. Votre partie est intacte.",
+    "de": "Die Sicherung ist beschädigt und lässt sich nicht wiederherstellen. Dein Spiel bleibt erhalten.",
+    "it": "Il backup è danneggiato e non può essere ripristinato. La partita resta invariata.",
+    "vi": "Bản sao lưu bị hỏng và không thể khôi phục. Ván hiện tại vẫn nguyên vẹn.",
+    "id": "Cadangan rusak dan tidak dapat dipulihkan. Permainan saat ini tetap utuh."
+  },
+  "ui.could-not-save-the-restored-game-the-current-game": {
+    "fr": "Impossible d’enregistrer la partie restaurée. Votre partie est intacte. Réessayez.",
+    "de": "Das wiederhergestellte Spiel konnte nicht gespeichert werden. Dein Spiel bleibt erhalten. Versuche es erneut.",
+    "it": "Impossibile salvare la partita ripristinata. La partita attuale resta invariata. Riprova.",
+    "vi": "Không thể lưu ván đã khôi phục. Ván hiện tại vẫn nguyên vẹn. Hãy thử lại.",
+    "id": "Permainan yang dipulihkan gagal disimpan. Permainan saat ini tetap utuh. Coba lagi."
+  },
+  "ui.could-not-save-the-game-keep-it-open-and": {
+    "fr": "Impossible de sauvegarder la partie. Garde le jeu ouvert et réessaie.",
+    "de": "Partie konnte nicht gespeichert werden. Lass das Spiel geöffnet und versuch es erneut.",
+    "it": "Impossibile salvare la partita. Tieni il gioco aperto e riprova.",
+    "vi": "Không thể lưu ván chơi. Hãy giữ trò chơi mở và thử lại.",
+    "id": "Permainan tidak dapat disimpan. Biarkan permainan terbuka dan coba lagi."
+  },
+  "ui.another-tab-has-a-newer-save-the-newer-save": {
+    "fr": "Un autre onglet a une sauvegarde plus récente. Elle est protégée.",
+    "de": "Ein anderer Tab hat einen neueren Spielstand. Dieser Spielstand ist geschützt.",
+    "it": "Un’altra scheda ha un salvataggio più recente, che è protetto.",
+    "vi": "Tab khác có bản lưu mới hơn. Bản lưu đó được bảo vệ.",
+    "id": "Tab lain memiliki simpanan yang lebih baru. Simpanan itu dilindungi."
+  },
+  "ui.game-saved": {
+    "fr": "Partie sauvegardée",
+    "de": "Partie gespeichert",
+    "it": "Partita salvata",
+    "vi": "Đã lưu ván chơi",
+    "id": "Permainan disimpan"
+  },
+  "ui.second-number-above": {
+    "fr": "↑ Deuxième chiffre en haut",
+    "de": "↑ Zweite Zahl weiter oben",
+    "it": "↑ Secondo numero più in alto",
+    "vi": "↑ Số thứ hai ở trên",
+    "id": "↑ Angka kedua ada di atas"
+  },
+  "ui.numbers-2": {
+    "fr": "chiffres",
+    "de": "Zahlen",
+    "it": "numeri",
+    "vi": "số",
+    "id": "angka"
+  },
+  "ui.number": {
+    "fr": "chiffre",
+    "de": "Zahl",
+    "it": "numero",
+    "vi": "số",
+    "id": "angka"
+  },
+  "ui.more-hints": {
+    "fr": "Plus d’indices",
+    "de": "Mehr Tipps",
+    "it": "Più indizi",
+    "vi": "Thêm gợi ý",
+    "id": "Petunjuk tambahan"
+  },
+  "ui.close-offer": {
+    "fr": "Fermer l’offre",
+    "de": "Angebot schließen",
+    "it": "Chiudi l’offerta",
+    "vi": "Đóng đề nghị",
+    "id": "Tutup penawaran"
+  },
+  "ui.watch-a-video-to-reveal-this-pair-and-get": {
+    "fr": "Regardez une vidéo pour révéler cette paire et obtenir deux indices supplémentaires.",
+    "de": "Sieh ein Video an, um dieses Paar aufzudecken und zwei weitere Tipps zu erhalten.",
+    "it": "Guarda un video per rivelare questa coppia e ottenere altri due suggerimenti.",
+    "vi": "Xem video để hiện cặp này và nhận thêm hai gợi ý.",
+    "id": "Tonton video untuk mengungkap pasangan ini dan mendapat dua petunjuk tambahan."
+  },
+  "ui.how-it-works": {
+    "fr": "Comment ça marche",
+    "de": "So geht’s",
+    "it": "Come funziona",
+    "vi": "Cách hoạt động",
+    "id": "Cara kerjanya"
+  },
+  "ui.watch-video-2-hints": {
+    "fr": "Voir la vidéo · +2 indices",
+    "de": "Video ansehen · +2 Tipps",
+    "it": "Guarda il video · +2 indizi",
+    "vi": "Xem video · +2 gợi ý",
+    "id": "Tonton video · +2 petunjuk"
+  },
+  "ui.continue-without-a-hint": {
+    "fr": "Continuer sans indice",
+    "de": "Ohne Tipp weiterspielen",
+    "it": "Continua senza indizi",
+    "vi": "Tiếp tục không cần gợi ý",
+    "id": "Lanjutkan tanpa petunjuk"
+  },
+  "ui.start-with-a-short-puzzle": {
+    "fr": "Commencer par une énigme courte",
+    "de": "Mit einem kurzen Rätsel beginnen",
+    "it": "Inizia con un rompicapo breve",
+    "vi": "Bắt đầu với một câu đố ngắn",
+    "id": "Mulai dengan teka-teki singkat"
+  },
+  "ui.the-reward-is-saved-on-your-device-but-its": {
+    "fr": "La récompense est enregistrée sur votre appareil dans un format incompatible. Gardez le jeu installé.",
+    "de": "Die Belohnung ist auf deinem Gerät in einem nicht unterstützten Format gespeichert. Lass das Spiel installiert.",
+    "it": "La ricompensa è salvata sul dispositivo in un formato non supportato. Mantieni il gioco installato.",
+    "vi": "Phần thưởng được lưu trên thiết bị ở định dạng không được hỗ trợ. Hãy giữ trò chơi trên máy.",
+    "id": "Hadiah tersimpan di perangkat dalam format yang tidak didukung. Biarkan game tetap terpasang."
+  },
+  "ui.reward-for-watching-the-full-video": {
+    "fr": "Récompense pour la vidéo complète",
+    "de": "Belohnung für das vollständige Video",
+    "it": "Ricompensa per il video completo",
+    "vi": "Phần thưởng khi xem hết video",
+    "id": "Hadiah menonton video sampai selesai"
+  },
+  "ui.not-now": {
+    "fr": "Pas maintenant",
+    "de": "Jetzt nicht",
+    "it": "Non ora",
+    "vi": "Để sau",
+    "id": "Nanti saja"
+  },
+  "ui.step-of": {
+    "fr": "Étape {0} sur {1}",
+    "de": "Schritt {0} von {1}",
+    "it": "Passaggio {0} di {1}",
+    "vi": "Bước {0}/{1}",
+    "id": "Langkah {0} dari {1}"
+  },
+  "ui.reveal-hint": {
+    "fr": "Afficher l’indice",
+    "de": "Tipp anzeigen",
+    "it": "Mostra l’indizio",
+    "vi": "Hiện gợi ý",
+    "id": "Tampilkan petunjuk"
+  },
+  "ui.finish-the-video-to-reveal-this-pair-and-save": {
+    "fr": "Regardez la vidéo jusqu’au bout pour révéler cette paire et garder deux indices. Vous pourrez revoir la paire gratuitement.",
+    "de": "Sieh das Video bis zum Ende an, um dieses Paar aufzudecken und zwei Tipps zu behalten. Das Paar kannst du erneut kostenlos anzeigen.",
+    "it": "Guarda il video fino alla fine per rivelare questa coppia e conservare due suggerimenti. Potrai rivedere la coppia gratis.",
+    "vi": "Xem hết video để hiện cặp này và giữ thêm hai gợi ý. Bạn có thể xem lại cặp này miễn phí.",
+    "id": "Selesaikan video untuk mengungkap pasangan ini dan menyimpan dua petunjuk. Kamu bisa melihat pasangan ini lagi secara gratis."
+  },
+  "ui.1-now": {
+    "fr": "1 maintenant",
+    "de": "1 sofort",
+    "it": "1 subito",
+    "vi": "1 dùng ngay",
+    "id": "1 sekarang"
+  },
+  "ui.2-to-keep": {
+    "fr": "+2 en réserve",
+    "de": "+2 auf Vorrat",
+    "it": "+2 da conservare",
+    "vi": "+2 để dành",
+    "id": "+2 untuk disimpan"
+  },
+  "ui.previously-earned-reward-restored": {
+    "fr": "Récompense précédente récupérée",
+    "de": "Frühere Belohnung wiederhergestellt",
+    "it": "Ricompensa precedente ripristinata",
+    "vi": "Đã khôi phục phần thưởng đã nhận",
+    "id": "Hadiah sebelumnya dipulihkan"
+  },
+  "ui.3-hints-added-to-your-balance": {
+    "fr": "3 indices ajoutés à votre réserve",
+    "de": "3 Tipps zu deinem Vorrat hinzugefügt",
+    "it": "3 suggerimenti aggiunti alla riserva",
+    "vi": "Đã thêm 3 gợi ý vào số dư",
+    "id": "3 petunjuk ditambahkan ke saldo"
+  },
+  "ui.hint-revealed-left": {
+    "fr": "Indice affiché. Il en reste {0}",
+    "de": "Tipp angezeigt. Noch {0}",
+    "it": "Suggerimento mostrato. Ne restano {0}",
+    "vi": "Đã hiện gợi ý. Còn {0}",
+    "id": "Petunjuk ditampilkan. Tersisa {0}"
+  },
+  "ui.ads-are-unavailable-now-try-again-later": {
+    "fr": "Publicités indisponibles. Réessayez plus tard.",
+    "de": "Derzeit keine Werbung verfügbar. Versuche es später erneut.",
+    "it": "Annunci non disponibili. Riprova più tardi.",
+    "vi": "Hiện chưa có quảng cáo. Hãy thử lại sau.",
+    "id": "Iklan belum tersedia. Coba lagi nanti."
+  },
+  "ui.video-closed-no-hints-were-added": {
+    "fr": "Vidéo fermée. Aucun indice ajouté.",
+    "de": "Video geschlossen. Keine Tipps hinzugefügt.",
+    "it": "Video chiuso. Nessun suggerimento aggiunto.",
+    "vi": "Đã đóng video. Không có gợi ý nào được thêm.",
+    "id": "Video ditutup. Tidak ada petunjuk yang ditambahkan."
+  },
+  "ui.the-reward-is-waiting-to-be-saved-keep-the": {
+    "fr": "La récompense est en attente d’enregistrement. Gardez le jeu installé et réessayez de la récupérer plus tard.",
+    "de": "Die Belohnung wartet darauf, gespeichert zu werden. Lass das Spiel installiert und versuche es später erneut.",
+    "it": "La ricompensa è in attesa di salvataggio. Mantieni il gioco installato e riprova a recuperarla più tardi.",
+    "vi": "Phần thưởng đang chờ lưu. Hãy giữ trò chơi trên máy và thử khôi phục sau.",
+    "id": "Hadiah menunggu disimpan. Biarkan game tetap terpasang dan coba pulihkan nanti."
+  },
+  "ui.for": {
+    "fr": "{0} pour {1}",
+    "de": "{0} für {1}",
+    "it": "{0} per {1}",
+    "vi": "{0} cho {1}",
+    "id": "{0} untuk {1}"
+  },
+  "ui.bronze": {
+    "fr": "Bronze",
+    "de": "Bronze",
+    "it": "Bronzo",
+    "vi": "Đồng",
+    "id": "Perunggu"
+  },
+  "ui.silver": {
+    "fr": "Argent",
+    "de": "Silber",
+    "it": "Argento",
+    "vi": "Bạc",
+    "id": "Perak"
+  },
+  "ui.gold": {
+    "fr": "Or",
+    "de": "Gold",
+    "it": "Oro",
+    "vi": "Vàng",
+    "id": "Emas"
+  },
+  "ui.page-complete": {
+    "fr": "Page {0} terminée !",
+    "de": "Seite {0} abgeschlossen!",
+    "it": "Pagina {0} completata!",
+    "vi": "Đã hoàn thành trang {0}!",
+    "id": "Halaman {0} selesai!"
+  },
+  "ui.puzzle-for-solved": {
+    "fr": "Grille du {0} résolue",
+    "de": "Rätsel vom {0} gelöst",
+    "it": "Schema del {0} risolto",
+    "vi": "Đã giải câu đố ngày {0}",
+    "id": "Teka-teki {0} terpecahkan"
+  },
+  "ui.6-of-6-puzzles": {
+    "fr": "6 énigmes sur 6",
+    "de": "6 von 6 Rätseln",
+    "it": "6 rompicapi su 6",
+    "vi": "6 trên 6 câu đố",
+    "id": "6 dari 6 teka-teki"
+  },
+  "ui.all-four-pages-complete": {
+    "fr": "Les quatre pages sont terminées",
+    "de": "Alle vier Seiten geschafft",
+    "it": "Tutte e quattro le pagine completate",
+    "vi": "Đã hoàn thành cả bốn trang",
+    "id": "Keempat halaman selesai"
+  },
+  "ui.todays-puzzle": {
+    "fr": "Grille du jour",
+    "de": "Heutiges Rätsel",
+    "it": "Schema di oggi",
+    "vi": "Câu đố hôm nay",
+    "id": "Teka-teki hari ini"
+  },
+  "ui.all-available-days-complete": {
+    "fr": "Tous les jours disponibles sont terminés",
+    "de": "Alle verfügbaren Tage abgeschlossen",
+    "it": "Tutti i giorni disponibili completati",
+    "vi": "Đã hoàn thành mọi ngày hiện có",
+    "id": "Semua hari yang tersedia selesai"
+  },
+  "ui.into-the-jar": {
+    "fr": "Dans le bocal : +{0} {1}",
+    "de": "Ins Glas: +{0} {1}",
+    "it": "Nel barattolo: +{0} {1}",
+    "vi": "Vào lọ: +{0} {1}",
+    "id": "Ke stoples: +{0} {1}"
+  },
+  "ui.streak-reward": {
+    "fr": "Récompense de série : +{0} {1}",
+    "de": "Serienbelohnung: +{0} {1}",
+    "it": "Premio della serie: +{0} {1}",
+    "vi": "Thưởng chuỗi: +{0} {1}",
+    "id": "Hadiah rentetan: +{0} {1}"
+  },
+  "ui.reward-waiting-to-be-saved": {
+    "fr": "Récompense en attente d’enregistrement",
+    "de": "Belohnung wird noch gespeichert",
+    "it": "Ricompensa in attesa di salvataggio",
+    "vi": "Phần thưởng đang chờ lưu",
+    "id": "Hadiah menunggu disimpan"
+  },
+  "ui.page-of-6": {
+    "fr": "Page {0} · {1} sur 6",
+    "de": "Seite {0} · {1} von 6",
+    "it": "Pagina {0} · {1} su 6",
+    "vi": "Trang {0} · {1} trên 6",
+    "id": "Halaman {0} · {1} dari 6"
+  },
+  "ui.page-complete-2": {
+    "fr": "✓ Page {0} terminée",
+    "de": "✓ Seite {0} geschafft",
+    "it": "✓ Pagina {0} completata",
+    "vi": "✓ Đã xong trang {0}",
+    "id": "✓ Halaman {0} selesai"
+  },
+  "ui.of-days": {
+    "fr": "{0} jours sur {1}",
+    "de": "{0} von {1} Tagen",
+    "it": "{0} giorni su {1}",
+    "vi": "{0} trên {1} ngày",
+    "id": "{0} dari {1} hari"
+  },
+  "ui.difficulty": {
+    "fr": "Difficulté : {0}",
+    "de": "Schwierigkeit: {0}",
+    "it": "Difficoltà: {0}",
+    "vi": "Độ khó: {0}",
+    "id": "Kesulitan: {0}"
+  },
+  "ui.difficulty-highest": {
+    "fr": "Difficulté maximale",
+    "de": "Höchste Schwierigkeit",
+    "it": "Difficoltà massima",
+    "vi": "Độ khó cao nhất",
+    "id": "Kesulitan tertinggi"
+  },
+  "ui.difficulty-lowest": {
+    "fr": "Difficulté minimale",
+    "de": "Niedrigste Schwierigkeit",
+    "it": "Difficoltà minima",
+    "vi": "Độ khó thấp nhất",
+    "id": "Kesulitan terendah"
+  },
+  "ui.start-a-harder-game": {
+    "fr": "Commencer une partie plus difficile",
+    "de": "Schwierigeres Spiel starten",
+    "it": "Inizia una partita più difficile",
+    "vi": "Bắt đầu ván khó hơn",
+    "id": "Mulai permainan yang lebih sulit"
+  },
+  "ui.start-an-easier-game": {
+    "fr": "Commencer une partie plus facile",
+    "de": "Einfacheres Spiel starten",
+    "it": "Inizia una partita più facile",
+    "vi": "Bắt đầu ván dễ hơn",
+    "id": "Mulai permainan yang lebih mudah"
+  },
+  "ui.already-at-the-highest-difficulty": {
+    "fr": "Vous êtes déjà au niveau le plus difficile",
+    "de": "Du spielst schon auf der höchsten Stufe",
+    "it": "Sei già alla difficoltà massima",
+    "vi": "Đã ở độ khó cao nhất",
+    "id": "Sudah pada tingkat tersulit"
+  },
+  "ui.already-at-the-lowest-difficulty": {
+    "fr": "Vous êtes déjà au niveau le plus facile",
+    "de": "Du spielst schon auf der niedrigsten Stufe",
+    "it": "Sei già alla difficoltà minima",
+    "vi": "Đã ở độ khó thấp nhất",
+    "id": "Sudah pada tingkat termudah"
+  },
+  "ui.page": {
+    "fr": "Page {0}",
+    "de": "Seite {0}",
+    "it": "Pagina {0}",
+    "vi": "Trang {0}",
+    "id": "Halaman {0}"
+  },
+  "ui.puzzle-book-page-puzzle-of-6": {
+    "fr": "Carnet {0} · Page {1}, énigme {2} sur 6",
+    "de": "Rätselheft {0} · Seite {1}, Rätsel {2} von 6",
+    "it": "Quaderno {0} · Pagina {1}, rompicapo {2} su 6",
+    "vi": "Sổ câu đố {0} · Trang {1}, câu {2} trên 6",
+    "id": "Buku teka-teki {0} · Halaman {1}, teka-teki {2} dari 6"
+  },
+  "ui.find-the-next-pair": {
+    "fr": "Trouve la paire suivante.",
+    "de": "Finde das nächste Paar.",
+    "it": "Trova la prossima coppia.",
+    "vi": "Tìm cặp tiếp theo.",
+    "id": "Cari pasangan berikutnya."
+  },
+  "ui.hint-left": {
+    "fr": "Indice, encore {0}",
+    "de": "Tipp, noch {0}",
+    "it": "Suggerimento, ne restano {0}",
+    "vi": "Gợi ý, còn {0}",
+    "id": "Petunjuk, tersisa {0}"
+  },
+  "ui.hint-watch-a-video-for-3-hints": {
+    "fr": "Indice : regardez une vidéo pour obtenir 3 indices",
+    "de": "Tipp: Sieh ein Video für 3 Tipps an",
+    "it": "Suggerimento: guarda un video per averne 3",
+    "vi": "Gợi ý: xem video để nhận 3 gợi ý",
+    "id": "Petunjuk: tonton video untuk mendapat 3 petunjuk"
+  },
+  "ui.add": {
+    "fr": "Ajouter {0} {1}",
+    "de": "{0} {1} hinzufügen",
+    "it": "Aggiungi {0} {1}",
+    "vi": "Thêm {0} {1}",
+    "id": "Tambah {0} {1}"
+  },
+  "ui.the-board-is-full-undo-a-move-or-start": {
+    "fr": "La grille est pleine. Annule un coup ou commence une nouvelle partie.",
+    "de": "Das Spielfeld ist voll. Nimm einen Zug zurück oder starte eine neue Partie.",
+    "it": "La griglia è piena. Annulla una mossa o inizia una nuova partita.",
+    "vi": "Bàn chơi đã đầy. Hoàn tác một lượt hoặc bắt đầu ván mới.",
+    "id": "Papan penuh. Urungkan satu langkah atau mulai permainan baru."
+  },
+  "ui.you-can-add-more": {
+    "fr": "Tu peux ajouter {0} {1} de plus.",
+    "de": "Du kannst noch {0} {1} hinzufügen.",
+    "it": "Puoi aggiungere altri {0} {1}.",
+    "vi": "Bạn có thể thêm {0} {1} nữa.",
+    "id": "Kamu bisa menambah {0} {1} lagi."
+  },
+  "ui.copied": {
+    "fr": "copiés",
+    "de": "kopiert",
+    "it": "copiati",
+    "vi": "sao chép",
+    "id": "disalin"
+  },
+  "ui.copied-2": {
+    "fr": "copié",
+    "de": "kopiert",
+    "it": "copiato",
+    "vi": "sao chép",
+    "id": "disalin"
+  },
+  "ui.no-pairs-tap-add-to-copy-to-the-end": {
+    "fr": "Aucune paire. Appuie sur Ajouter pour que {1} {2} soient {0} à la fin de la grille.",
+    "de": "Keine Paare. Tippe auf Hinzufügen. {1} {2} werden ans Ende des Spielfelds {0}.",
+    "it": "Nessuna coppia. Tocca Aggiungi: {1} {2} verranno {0} in fondo alla griglia.",
+    "vi": "Không có cặp. Chạm Thêm để {0} {1} {2} xuống cuối bàn chơi.",
+    "id": "Tidak ada pasangan. Ketuk Tambah agar {1} {2} {0} ke akhir papan."
+  },
+  "ui.no-pairs": {
+    "fr": "Aucune paire. {0}",
+    "de": "Keine Paare. {0}",
+    "it": "Nessuna coppia. {0}",
+    "vi": "Không có cặp. {0}",
+    "id": "Tidak ada pasangan. {0}"
+  },
+  "ui.added-still-no-pairs": {
+    "fr": "{0} {1} ajoutés. Toujours aucune paire. {2}",
+    "de": "{0} {1} hinzugefügt. Noch keine Paare. {2}",
+    "it": "Aggiunti {0} {1}. Ancora nessuna coppia. {2}",
+    "vi": "Đã thêm {0} {1}. Vẫn chưa có cặp. {2}",
+    "id": "{0} {1} ditambahkan. Belum ada pasangan. {2}"
+  },
+  "ui.equal-or-add-up-to-10": {
+    "fr": "Égaux ou dont la somme fait 10",
+    "de": "Gleich oder zusammen 10",
+    "it": "Uguali o con somma 10",
+    "vi": "Giống nhau hoặc có tổng bằng 10",
+    "id": "Sama atau jumlahnya 10"
+  },
+  "ui.match-the-two-highlighted-numbers": {
+    "fr": "Relie les deux chiffres marqués",
+    "de": "Verbinde die beiden markierten Zahlen",
+    "it": "Unisci i due numeri evidenziati",
+    "vi": "Ghép hai số được đánh dấu",
+    "id": "Pasangkan dua angka yang ditandai"
+  },
+  "ui.game-complete": {
+    "fr": "Partie terminée",
+    "de": "Partie beendet",
+    "it": "Partita conclusa",
+    "vi": "Đã hoàn thành ván chơi",
+    "id": "Permainan selesai"
+  },
+  "ui.try-on-a-small-board": {
+    "fr": "Essaie sur une petite grille",
+    "de": "Versuch es auf einem kleinen Spielfeld",
+    "it": "Prova su una griglia piccola",
+    "vi": "Thử trên bàn chơi nhỏ",
+    "id": "Coba di papan kecil"
+  },
+  "ui.something-is-blocking-the-pair": {
+    "fr": "Un chiffre bloque la paire",
+    "de": "Die Verbindung ist blockiert",
+    "it": "Qualcosa blocca la coppia",
+    "vi": "Có ô cản đường nối",
+    "id": "Ada angka yang menghalangi pasangan"
+  },
+  "ui.try-add-first-then-undo": {
+    "fr": "Essayez d’ajouter, puis d’annuler",
+    "de": "Versuche erst Hinzufügen, dann Rückgängig",
+    "it": "Prova prima Aggiungi, poi Annulla",
+    "vi": "Hãy thử Thêm rồi Hoàn tác",
+    "id": "Coba Tambah, lalu Urungkan"
+  },
+  "ui.empty-cells-between-numbers-do-not-block-a-match": {
+    "fr": "Les cases vides entre les chiffres ne bloquent pas une paire.",
+    "de": "Leere Felder zwischen Zahlen blockieren kein Paar.",
+    "it": "Le caselle vuote tra i numeri non bloccano la coppia.",
+    "vi": "Ô trống giữa các số không cản trở việc ghép cặp.",
+    "id": "Sel kosong di antara angka tidak menghalangi pasangan."
+  },
+  "ui.you-can-also-match-diagonally-if-the-cells-in": {
+    "fr": "Vous pouvez aussi former une paire en diagonale si les cases intermédiaires sont vides.",
+    "de": "Du kannst auch diagonal verbinden, wenn die Felder dazwischen leer sind.",
+    "it": "Puoi formare coppie in diagonale se le caselle intermedie sono vuote.",
+    "vi": "Bạn cũng có thể ghép theo đường chéo nếu các ô ở giữa trống.",
+    "id": "Kamu juga bisa memasangkan secara diagonal jika sel di antaranya kosong."
+  },
+  "ui.you-can-match-across-a-row-break-if-the": {
+    "fr": "Vous pouvez former une paire en passant à la ligne suivante si le chemin est libre.",
+    "de": "Du kannst über das Zeilenende verbinden, wenn der Weg frei ist.",
+    "it": "Puoi formare una coppia a cavallo tra due righe se il percorso è libero.",
+    "vi": "Bạn có thể ghép qua mép hàng nếu đường đi thông thoáng.",
+    "id": "Kamu bisa memasangkan melewati ujung baris jika jalurnya bebas."
+  },
+  "ui.well-done": {
+    "fr": "Bravo !",
+    "de": "Gut gemacht!",
+    "it": "Ben fatto!",
+    "vi": "Tốt lắm!",
+    "id": "Bagus!"
+  },
+  "ui.you-cannot-add-numbers-in-a-short-puzzle-undo": {
+    "fr": "Dans une énigme courte, vous ne pouvez pas ajouter de chiffres. Annulez des coups pour retrouver une grille résoluble.",
+    "de": "In einem kurzen Rätsel kannst du keine Zahlen hinzufügen. Mache Züge rückgängig, bis das Feld wieder lösbar ist.",
+    "it": "In un rompicapo breve non si possono aggiungere numeri. Annulla le mosse per tornare a una griglia risolvibile.",
+    "vi": "Bạn không thể thêm số vào câu đố ngắn. Hãy hoàn tác để trở về bàn có lời giải.",
+    "id": "Pada teka-teki singkat, angka tidak bisa ditambahkan. Urungkan langkah hingga papan bisa diselesaikan lagi."
+  },
+  "ui.there-are-still-pairs-you-can-use-a-hint": {
+    "fr": "Il reste des paires. Vous pouvez utiliser un indice.",
+    "de": "Es gibt noch Paare. Du kannst einen Tipp nutzen.",
+    "it": "Ci sono ancora coppie. Puoi usare un suggerimento.",
+    "vi": "Vẫn còn cặp. Bạn có thể dùng gợi ý.",
+    "id": "Masih ada pasangan. Kamu bisa memakai petunjuk."
+  },
+  "ui.numbers-added-now-tap-undo": {
+    "fr": "Chiffres ajoutés. Touchez Annuler.",
+    "de": "Zahlen hinzugefügt. Tippe jetzt auf Rückgängig.",
+    "it": "Numeri aggiunti. Ora tocca Annulla.",
+    "vi": "Đã thêm số. Giờ hãy chạm vào Hoàn tác.",
+    "id": "Angka ditambahkan. Sekarang ketuk Urungkan."
+  },
+  "ui.now-tap-undo": {
+    "fr": "Touchez Annuler",
+    "de": "Tippe jetzt auf Rückgängig",
+    "it": "Ora tocca Annulla",
+    "vi": "Giờ hãy chạm vào Hoàn tác",
+    "id": "Sekarang ketuk Urungkan"
+  },
+  "ui.the-board-is-full-undo-the-last-move-or": {
+    "fr": "La grille est pleine. Annulez le dernier coup ou commencez une nouvelle partie.",
+    "de": "Das Spielfeld ist voll. Mache den letzten Zug rückgängig oder starte ein neues Spiel.",
+    "it": "La griglia è piena. Annulla l’ultima mossa o inizia una nuova partita.",
+    "vi": "Bàn đã đầy. Hãy hoàn tác nước cuối hoặc bắt đầu ván mới.",
+    "id": "Papan penuh. Urungkan langkah terakhir atau mulai permainan baru."
+  },
+  "ui.board-restored-youre-ready": {
+    "fr": "Grille restaurée. À vous de jouer !",
+    "de": "Spielfeld wiederhergestellt. Los geht’s!",
+    "it": "Griglia ripristinata. Puoi giocare!",
+    "vi": "Đã khôi phục bàn. Bạn có thể chơi tiếp!",
+    "id": "Papan dipulihkan. Kamu bisa bermain!"
+  },
+  "ui.looking-for-a-hint": {
+    "fr": "Recherche d’un indice…",
+    "de": "Suche nach einem Tipp…",
+    "it": "Cerco un indizio…",
+    "vi": "Đang tìm gợi ý…",
+    "id": "Mencari petunjuk…"
+  },
+  "ui.there-is-no-solution-from-here-restart-the-puzzle": {
+    "fr": "Pas de solution depuis cette position. Recommence la grille.",
+    "de": "Von hier aus gibt es keine Lösung. Starte das Rätsel neu.",
+    "it": "Da qui non c’è soluzione. Ricomincia lo schema.",
+    "vi": "Vị trí này không có lời giải. Hãy chơi lại câu đố.",
+    "id": "Posisi ini tidak punya solusi. Mulai ulang teka-teki."
+  },
+  "ui.board-restored-continue-on-your-own-or-tap-hint": {
+    "fr": "Grille restaurée. Continue seul ou appuie sur Indice.",
+    "de": "Spielfeld wiederhergestellt. Spiele selbst weiter oder tippe auf Tipp.",
+    "it": "Griglia ripristinata. Continua da solo o tocca Indizio.",
+    "vi": "Đã khôi phục bàn chơi. Tự chơi tiếp hoặc chạm Gợi ý.",
+    "id": "Papan dipulihkan. Lanjutkan sendiri atau ketuk Petunjuk."
+  },
+  "ui.we-could-not-check-whether-there-is-a-solution": {
+    "fr": "Impossible de vérifier s’il y a une solution pour le moment.",
+    "de": "Ob es eine Lösung gibt, ließ sich noch nicht prüfen.",
+    "it": "Non è ancora stato possibile verificare se c’è una soluzione.",
+    "vi": "Chưa thể kiểm tra xem có lời giải hay không.",
+    "id": "Belum dapat dipastikan apakah ada solusi."
+  },
+  "ui.there-is-no-solution-from-here": {
+    "fr": "Pas de solution depuis cette position.",
+    "de": "Von hier aus gibt es keine Lösung.",
+    "it": "Da qui non c’è soluzione.",
+    "vi": "Vị trí này không có lời giải.",
+    "id": "Posisi ini tidak punya solusi."
+  },
+  "ui.we-could-not-check-whether-there-is-a-solution-2": {
+    "fr": "Impossible de vérifier s’il reste une solution. Réessayez ou continuez par vous-même.",
+    "de": "Ob es eine Lösung gibt, ließ sich nicht prüfen. Versuche es erneut oder spiele weiter.",
+    "it": "Non abbiamo potuto verificare se c’è una soluzione. Riprova o continua da solo.",
+    "vi": "Chưa thể kiểm tra bàn có lời giải hay không. Hãy thử lại hoặc tự chơi tiếp.",
+    "id": "Belum dapat memeriksa apakah ada solusi. Coba lagi atau lanjutkan sendiri."
+  },
+  "ui.we-could-not-check-whether-there-is-a-solution-3": {
+    "fr": "Impossible de vérifier s’il reste une solution. Annulez le dernier coup ou continuez par vous-même.",
+    "de": "Ob es eine Lösung gibt, ließ sich nicht prüfen. Mache den letzten Zug rückgängig oder spiele weiter.",
+    "it": "Non abbiamo potuto verificare se c’è una soluzione. Annulla l’ultima mossa o continua da solo.",
+    "vi": "Chưa thể kiểm tra bàn có lời giải hay không. Hãy hoàn tác nước cuối hoặc tự chơi tiếp.",
+    "id": "Belum dapat memeriksa apakah ada solusi. Urungkan langkah terakhir atau lanjutkan sendiri."
+  },
+  "ui.could-not-prepare-a-new-game-try-again": {
+    "fr": "Impossible de préparer une nouvelle partie. Réessayez.",
+    "de": "Das neue Spiel konnte nicht vorbereitet werden. Versuche es erneut.",
+    "it": "Impossibile preparare una nuova partita. Riprova.",
+    "vi": "Không thể chuẩn bị ván mới. Hãy thử lại.",
+    "id": "Gagal menyiapkan permainan baru. Coba lagi."
+  },
+  "ui.new-game-2": {
+    "fr": "Nouvelle partie ?",
+    "de": "Neues Spiel?",
+    "it": "Nuova partita?",
+    "vi": "Ván mới?",
+    "id": "Permainan baru?"
+  },
+  "ui.easier-game": {
+    "fr": "Partie plus facile ?",
+    "de": "Einfacheres Spiel?",
+    "it": "Partita più facile?",
+    "vi": "Ván dễ hơn?",
+    "id": "Permainan yang lebih mudah?"
+  },
+  "ui.restart-this-board-your-undo-history-will-be-cleared": {
+    "fr": "Recommencer cette grille ? L’historique sera effacé. Vous gardez vos graines et récompenses.",
+    "de": "Dieses Spielfeld neu starten? Der Zugverlauf wird gelöscht. Samen und Belohnungen bleiben erhalten.",
+    "it": "Ricominciare questa griglia? La cronologia sarà cancellata. Semi e ricompense restano.",
+    "vi": "Chơi lại bàn này? Lịch sử nước đi sẽ bị xóa. Hạt và phần thưởng vẫn được giữ.",
+    "id": "Ulangi papan ini? Riwayat langkah akan dihapus. Benih dan hadiah tetap tersimpan."
+  },
+  "ui.the-board-and-undo-history-will-be-replaced-seeds": {
+    "fr": "La grille et l’historique seront remplacés. Vous gardez vos graines et récompenses.",
+    "de": "Spielfeld und Zugverlauf werden ersetzt. Samen und Belohnungen bleiben erhalten.",
+    "it": "La griglia e la cronologia saranno sostituite. Semi e ricompense restano.",
+    "vi": "Bàn chơi và lịch sử nước đi sẽ được thay thế. Hạt và phần thưởng vẫn được giữ.",
+    "id": "Papan dan riwayat langkah akan diganti. Benih dan hadiah tetap tersimpan."
+  },
+  "ui.start-a-new-game": {
+    "fr": "Commencer une nouvelle partie",
+    "de": "Neues Spiel starten",
+    "it": "Inizia una nuova partita",
+    "vi": "Bắt đầu ván mới",
+    "id": "Mulai permainan baru"
+  },
+  "ui.about-your-data": {
+    "fr": "À propos de vos données",
+    "de": "Deine Daten",
+    "it": "Informazioni sui tuoi dati",
+    "vi": "Về dữ liệu của bạn",
+    "id": "Tentang datamu"
+  },
+  "ui.games-undo-history-and-settings-are-stored-on-this": {
+    "fr": "Les parties, l’historique et les réglages sont stockés sur cet appareil. Aucun compte n’est requis. Effacer les données de l’application supprime la progression.",
+    "de": "Spiele, Zugverlauf und Einstellungen bleiben auf diesem Gerät. Du brauchst kein Konto. Wenn du die App-Daten löschst, geht der Fortschritt verloren.",
+    "it": "Partite, cronologia e impostazioni sono conservate sul dispositivo. Non serve un account. Cancellare i dati dell’app elimina i progressi.",
+    "vi": "Ván chơi, lịch sử và cài đặt được lưu trên thiết bị này. Không cần tài khoản. Xóa dữ liệu ứng dụng sẽ xóa tiến độ.",
+    "id": "Permainan, riwayat langkah, dan pengaturan disimpan di perangkat ini. Akun tidak diperlukan. Menghapus data aplikasi akan menghapus progres."
+  },
+  "ui.on-android-appmetrica-and-yandex-ads-send-technical-information": {
+    "fr": "Sur Android, AppMetrica et Yandex Ads envoient des informations techniques sur l’appareil, l’installation, les sessions, les plantages et les publicités. Ils peuvent utiliser les adresses IP et les identifiants publicitaires. Les événements d’analyse n’incluent ni le contenu de la grille ni les sauvegardes complètes.",
+    "de": "Auf Android senden AppMetrica und Yandex Ads technische Daten zu Gerät, Installation, Sitzungen, Abstürzen und Werbung. Dabei können sie IP-Adressen und Werbe-IDs verwenden. Inhalte des Spielfelds und vollständige Spielstände werden nicht für die Analyse übertragen.",
+    "it": "Su Android, AppMetrica e Yandex Ads inviano dati tecnici su dispositivo, installazione, sessioni, arresti anomali e annunci. Possono usare indirizzi IP e identificatori pubblicitari. Il contenuto della griglia e i salvataggi completi sono esclusi dagli eventi di analisi.",
+    "vi": "Trên Android, AppMetrica và Yandex Ads gửi thông tin kỹ thuật về thiết bị, cài đặt, phiên chơi, sự cố và quảng cáo. Chúng có thể dùng địa chỉ IP và mã nhận dạng quảng cáo. Các sự kiện phân tích không chứa nội dung bàn hay bản lưu đầy đủ.",
+    "id": "Di Android, AppMetrica dan Yandex Ads mengirim informasi teknis tentang perangkat, instalasi, sesi, gangguan, dan iklan. Keduanya dapat memakai alamat IP dan ID iklan. Isi papan dan simpanan lengkap tidak dicantumkan dalam peristiwa analitik."
+  },
+  "ui.daily-puzzle-reminders-are-on-by-default-and-use": {
+    "fr": "Les rappels quotidiens sont activés par défaut et suivent l’heure locale de l’appareil. Vous pouvez les désactiver dans les réglages du jeu. L’autorisation peut être révoquée dans les paramètres système d’Android.",
+    "de": "Tägliche Erinnerungen sind standardmäßig aktiv und verwenden die Ortszeit des Geräts. Du kannst sie im Spiel ausschalten. Die Berechtigung kannst du in den Android-Systemeinstellungen widerrufen.",
+    "it": "I promemoria giornalieri sono attivi per impostazione predefinita e usano l’ora locale del dispositivo. Puoi disattivarli nel gioco. Puoi revocare l’autorizzazione nelle impostazioni di Android.",
+    "vi": "Lời nhắc câu đố hằng ngày được bật mặc định và dùng giờ địa phương của thiết bị. Bạn có thể tắt trong cài đặt trò chơi hoặc thu hồi quyền trong cài đặt Android.",
+    "id": "Pengingat harian aktif secara bawaan dan mengikuti waktu setempat perangkat. Kamu bisa mematikannya di pengaturan game. Izin Android dapat dicabut di pengaturan sistem."
+  },
+  "ui.rustore-provides-the-review-window-the-game-receives-neither": {
+    "fr": "RuStore fournit la fenêtre d’avis. Le jeu ne reçoit ni l’avis ni la note et n’offre aucune récompense en échange.",
+    "de": "Das Bewertungsfenster stammt von RuStore. Das Spiel erhält weder Rezension noch Bewertung und bietet dafür keine Belohnung.",
+    "it": "La finestra di recensione è fornita da RuStore. Il gioco non riceve recensioni o valutazioni e non offre premi in cambio.",
+    "vi": "RuStore cung cấp cửa sổ đánh giá. Trò chơi không nhận nội dung đánh giá hay điểm số và không thưởng cho việc đánh giá.",
+    "id": "Jendela ulasan disediakan oleh RuStore. Game tidak menerima ulasan atau penilaian dan tidak menawarkan hadiah untuk keduanya."
+  },
+  "ui.the-game-does-not-request-precise-location-camera-microphone": {
+    "fr": "Le jeu ne demande pas l’accès à la position précise, à la caméra, au micro, aux contacts ni aux fichiers. Le suivi de position d’AppMetrica est désactivé.",
+    "de": "Das Spiel fragt nicht nach genauem Standort, Kamera, Mikrofon, Kontakten oder Dateien. Die Standorterfassung von AppMetrica ist deaktiviert.",
+    "it": "Il gioco non richiede posizione precisa, fotocamera, microfono, contatti o file. Il rilevamento della posizione di AppMetrica è disattivato.",
+    "vi": "Trò chơi không yêu cầu quyền truy cập vị trí chính xác, máy ảnh, micrô, danh bạ hay tệp. Theo dõi vị trí của AppMetrica đã tắt.",
+    "id": "Game tidak meminta lokasi presisi, kamera, mikrofon, kontak, atau berkas. Pelacakan lokasi AppMetrica dinonaktifkan."
+  },
+  "ui.full-policy-and-developer-contact": {
+    "fr": "Politique complète et contact du développeur :",
+    "de": "Vollständige Richtlinie und Entwicklerkontakt:",
+    "it": "Informativa completa e contatti dello sviluppatore:",
+    "vi": "Chính sách đầy đủ và cách liên hệ nhà phát triển:",
+    "id": "Kebijakan lengkap dan kontak pengembang:"
+  },
+  "ui.privacy-policy": {
+    "fr": "Politique de confidentialité",
+    "de": "Datenschutzerklärung",
+    "it": "Informativa sulla privacy",
+    "vi": "Chính sách quyền riêng tư",
+    "id": "Kebijakan privasi"
+  },
+  "ui.contact-the-developer": {
+    "fr": "Contacter le développeur",
+    "de": "Entwickler kontaktieren",
+    "it": "Contatta lo sviluppatore",
+    "vi": "Liên hệ nhà phát triển",
+    "id": "Hubungi pengembang"
+  },
+  "ui.seeds": {
+    "fr": "graines",
+    "de": "Samen",
+    "it": "semi",
+    "vi": "hạt",
+    "id": "benih"
+  },
+  "ui.seed": {
+    "fr": "graine",
+    "de": "Samen",
+    "it": "seme",
+    "vi": "hạt",
+    "id": "benih"
+  },
+  "ui.hints": {
+    "fr": "indices",
+    "de": "Tipps",
+    "it": "suggerimenti",
+    "vi": "gợi ý",
+    "id": "petunjuk"
+  },
+  "ui.hints-2": {
+    "fr": "indices",
+    "de": "Tipps",
+    "it": "suggerimenti",
+    "vi": "gợi ý",
+    "id": "petunjuk"
+  },
+  "ui.hint": {
+    "fr": "indice",
+    "de": "Tipp",
+    "it": "suggerimento",
+    "vi": "gợi ý",
+    "id": "petunjuk"
+  },
+  "ui.part-of-the-save-is-damaged-valid-games-and": {
+    "fr": "Une partie de la sauvegarde est endommagée. Les parties et résultats intacts ont été restaurés.",
+    "de": "Ein Teil des Spielstands ist beschädigt. Intakte Spiele und Rätselmarkierungen wurden wiederhergestellt.",
+    "it": "Parte del salvataggio è danneggiata. Le partite e i risultati validi sono stati ripristinati.",
+    "vi": "Một phần bản lưu bị hỏng. Đã khôi phục các ván và dấu hoàn thành hợp lệ.",
+    "id": "Sebagian simpanan rusak. Permainan dan tanda teka-teki yang valid telah dipulihkan."
+  },
+  "ui.could-not-read-the-save-a-new-game-was": {
+    "fr": "Impossible de lire la sauvegarde. Une nouvelle partie a été ouverte.",
+    "de": "Der Spielstand war nicht lesbar. Ein neues Spiel wurde geöffnet.",
+    "it": "Salvataggio illeggibile. È stata aperta una nuova partita.",
+    "vi": "Không thể đọc bản lưu. Đã mở một ván mới.",
+    "id": "Simpanan tidak dapat dibaca. Permainan baru dibuka."
+  },
+  "ui.this-save-is-from-a-newer-version-update-the": {
+    "fr": "Cette sauvegarde vient d’une version plus récente. Mettez le jeu à jour. L’enregistrement est désactivé pour protéger votre progression.",
+    "de": "Dieser Spielstand stammt aus einer neueren Version. Aktualisiere das Spiel. Zum Schutz deines Fortschritts ist das Speichern deaktiviert.",
+    "it": "Questo salvataggio proviene da una versione più recente. Aggiorna il gioco. Il salvataggio è disattivato per proteggere i progressi.",
+    "vi": "Bản lưu này đến từ phiên bản mới hơn. Hãy cập nhật trò chơi. Tính năng lưu đã tắt để bảo vệ tiến độ.",
+    "id": "Simpanan ini berasal dari versi yang lebih baru. Perbarui game. Penyimpanan dimatikan untuk melindungi progres."
+  },
+  "ui.a-backup-is-available-restoring-it-will-replace-your": {
+    "fr": "Une sauvegarde est disponible. La restaurer remplacera votre progression actuelle.",
+    "de": "Eine Sicherung ist verfügbar. Ihre Wiederherstellung ersetzt deinen aktuellen Fortschritt.",
+    "it": "È disponibile un backup. Ripristinarlo sostituirà i progressi attuali.",
+    "vi": "Có bản sao lưu. Khôi phục sẽ thay thế tiến độ hiện tại.",
+    "id": "Cadangan tersedia. Memulihkannya akan mengganti progres saat ini."
+  },
+  "ui.your-saved-board-is-available-to-restore-hints-try": {
+    "fr": "Votre grille est sauvegardée. Pour récupérer les indices, essayez de rouvrir ce carnet.",
+    "de": "Dein Spielfeld ist gespeichert. Um Tipps wiederherzustellen, versuche, dieses Rätselheft erneut zu öffnen.",
+    "it": "La griglia salvata è disponibile. Per recuperare i suggerimenti, prova a riaprire il quaderno.",
+    "vi": "Bàn chơi đã được lưu. Để khôi phục gợi ý, hãy thử mở lại sổ câu đố này.",
+    "id": "Papanmu tersimpan. Untuk memulihkan petunjuk, coba buka kembali buku teka-teki ini."
+  },
+  "ui.qa-test-ads": {
+    "fr": "QA · {0} · pubs de test",
+    "de": "QA · {0} · Testwerbung",
+    "it": "QA · {0} · annunci di prova",
+    "vi": "QA · {0} · quảng cáo thử",
+    "id": "QA · {0} · iklan uji"
+  },
+  "ui.all-features": {
+    "fr": "toutes les fonctions",
+    "de": "alle Funktionen",
+    "it": "tutte le funzioni",
+    "vi": "mọi tính năng",
+    "id": "semua fitur"
+  },
+  "ui.standard-game": {
+    "fr": "partie standard",
+    "de": "Standardspiel",
+    "it": "partita standard",
+    "vi": "ván tiêu chuẩn",
+    "id": "permainan standar"
+  },
+  "ui.first-launch": {
+    "fr": "premier lancement",
+    "de": "erster Start",
+    "it": "primo avvio",
+    "vi": "lần mở đầu tiên",
+    "id": "peluncuran pertama"
+  },
+  "ui.opening-puzzle-book": {
+    "fr": "Ouverture du carnet…",
+    "de": "Rätselheft wird geöffnet…",
+    "it": "Apertura del quaderno…",
+    "vi": "Đang mở sổ câu đố…",
+    "id": "Membuka buku teka-teki…"
+  },
+  "ui.could-not-open-the-puzzle-book-reload-to-try": {
+    "fr": "Impossible d’ouvrir le carnet. Rechargez pour réessayer. Votre partie sera sauvegardée.",
+    "de": "Das Rätselheft ließ sich nicht öffnen. Lade neu, um es erneut zu versuchen. Dein Spiel wird gespeichert.",
+    "it": "Impossibile aprire il quaderno. Ricarica per riprovare. La partita sarà salvata.",
+    "vi": "Không thể mở sổ câu đố. Hãy tải lại để thử lại. Ván hiện tại sẽ được lưu.",
+    "id": "Buku teka-teki tidak dapat dibuka. Muat ulang untuk mencoba lagi. Permainan saat ini akan disimpan."
+  },
+  "ui.save-and-reload": {
+    "fr": "Sauvegarder et recharger",
+    "de": "Speichern und neu laden",
+    "it": "Salva e ricarica",
+    "vi": "Lưu và tải lại",
+    "id": "Simpan dan muat ulang"
+  },
+  "ui.collection": {
+    "fr": "Collection",
+    "de": "Sammlung",
+    "it": "Collezione",
+    "vi": "Bộ sưu tập",
+    "id": "Koleksi"
+  },
+  "ui.collection-section": {
+    "fr": "Section de la collection",
+    "de": "Sammlungsbereich",
+    "it": "Sezione della collezione",
+    "vi": "Mục bộ sưu tập",
+    "id": "Bagian koleksi"
+  },
+  "ui.jars": {
+    "fr": "Bocaux",
+    "de": "Gläser",
+    "it": "Barattoli",
+    "vi": "Lọ",
+    "id": "Stoples"
+  },
+  "ui.monthly-trophies": {
+    "fr": "Trophées du mois",
+    "de": "Monatstrophäen",
+    "it": "Trofei del mese",
+    "vi": "Cúp tháng",
+    "id": "Trofi bulanan"
+  },
+  "ui.collected-seeds": {
+    "fr": "{0} récoltés · {1} graines",
+    "de": "{0} gesammelt · {1} Samen",
+    "it": "{0} raccolti · {1} semi",
+    "vi": "Đã thu {0} · {1} hạt",
+    "id": "Terkumpul {0} · {1} benih"
+  },
+  "ui.earlier": {
+    "fr": "Précédents",
+    "de": "Ältere",
+    "it": "Precedenti",
+    "vi": "Cũ hơn",
+    "id": "Lebih lama"
+  },
+  "ui.newer": {
+    "fr": "Récents",
+    "de": "Neuere",
+    "it": "Recenti",
+    "vi": "Mới hơn",
+    "id": "Lebih baru"
+  },
+  "ui.how-jars-fill-up": {
+    "fr": "Comment remplir les bocaux",
+    "de": "Wie sich Gläser füllen",
+    "it": "Come si riempiono i barattoli",
+    "vi": "Cách làm đầy các lọ",
+    "id": "Cara mengisi stoples"
+  },
+  "ui.earn-two-seeds-for-each-new-move-in-classic": {
+    "fr": "Gagnez deux graines par nouveau coup en mode classique. La première victoire d’une énigme de carnet ou du jour rapporte de 4 à 24 graines selon la taille de la grille. Rejouer ne rapporte rien. Après une annulation en mode classique, dépassez votre nombre de coups précédent pour gagner à nouveau.",
+    "de": "Für jeden neuen Zug im klassischen Modus erhältst du zwei Samen. Der erste Sieg in einem Heft- oder Tagesrätsel bringt je nach Feldgröße 4 bis 24 Samen. Wiederholungen bringen keine. Nach dem Rückgängigmachen musst du deine bisherige Zugzahl übertreffen, um wieder Samen zu verdienen.",
+    "it": "Ottieni due semi per ogni nuova mossa in Classica. La prima vittoria in un rompicapo del quaderno o giornaliero dà da 4 a 24 semi, in base alla griglia. Rigiocare non dà semi. Dopo aver annullato una mossa in Classica, supera il numero di mosse precedente per guadagnarne ancora.",
+    "vi": "Nhận hai hạt cho mỗi nước mới trong chế độ Cổ điển. Lần đầu giải câu đố trong sổ hoặc câu đố hằng ngày nhận từ 4 đến 24 hạt tùy kích thước bàn. Chơi lại không nhận hạt. Sau khi hoàn tác trong Cổ điển, hãy vượt số nước trước đó để nhận tiếp.",
+    "id": "Dapatkan dua benih untuk setiap langkah baru dalam mode Klasik. Kemenangan pertama di teka-teki buku atau harian menghasilkan 4 hingga 24 benih, tergantung ukuran papan. Mengulang tidak menghasilkan benih. Setelah mengurungkan langkah Klasik, lampaui jumlah langkah sebelumnya untuk mendapat benih lagi."
+  },
+  "ui.boards-cleared": {
+    "fr": "Grilles vidées : {0}",
+    "de": "Geleerte Spielfelder: {0}",
+    "it": "Griglie svuotate: {0}",
+    "vi": "Đã dọn sạch {0} bàn chơi",
+    "id": "Papan dikosongkan: {0}"
+  },
+  "ui.nothing-yet": {
+    "fr": "Rien pour l’instant",
+    "de": "Noch leer",
+    "it": "Ancora vuoto",
+    "vi": "Chưa có gì",
+    "id": "Masih kosong"
+  },
+  "ui.clear-5-boards-to-earn-your-first-badge": {
+    "fr": "Videz 5 grilles pour obtenir votre premier badge",
+    "de": "Räume 5 Spielfelder ab und erhalte dein erstes Abzeichen",
+    "it": "Svuota 5 griglie per ottenere il primo distintivo",
+    "vi": "Dọn sạch 5 bàn để nhận huy hiệu đầu tiên",
+    "id": "Kosongkan 5 papan untuk mendapat lencana pertama"
+  },
+  "ui.solid-start-5-boards": {
+    "fr": "Bon départ · 5 grilles",
+    "de": "Guter Start · 5 Spielfelder",
+    "it": "Buon inizio · 5 griglie",
+    "vi": "Khởi đầu vững chắc · 5 bàn",
+    "id": "Awal yang baik · 5 papan"
+  },
+  "ui.expert-25-boards": {
+    "fr": "Expert · 25 grilles",
+    "de": "Profi · 25 Spielfelder",
+    "it": "Esperto · 25 griglie",
+    "vi": "Chuyên gia · 25 bàn",
+    "id": "Ahli · 25 papan"
+  },
+  "ui.master-100-boards": {
+    "fr": "Maître · 100 grilles",
+    "de": "Meister · 100 Spielfelder",
+    "it": "Maestro · 100 griglie",
+    "vi": "Bậc thầy · 100 bàn",
+    "id": "Master · 100 papan"
+  },
+  "ui.bronze-7-puzzles-silver-14-gold-the-whole-month": {
+    "fr": "Bronze : 7 énigmes · Argent : 14 · Or : le mois entier",
+    "de": "Bronze: 7 Rätsel · Silber: 14 · Gold: der ganze Monat",
+    "it": "Bronzo: 7 rompicapi · Argento: 14 · Oro: tutto il mese",
+    "vi": "Đồng: 7 câu đố · Bạc: 14 · Vàng: cả tháng",
+    "id": "Perunggu: 7 teka-teki · Perak: 14 · Emas: sebulan penuh"
+  },
+  "ui.trophy-year": {
+    "fr": "Année des trophées",
+    "de": "Trophäenjahr",
+    "it": "Anno dei trofei",
+    "vi": "Năm của cúp",
+    "id": "Tahun trofi"
+  },
+  "ui.days": {
+    "fr": "{0}/{1} jours",
+    "de": "{0}/{1} Tage",
+    "it": "{0}/{1} giorni",
+    "vi": "{0}/{1} ngày",
+    "id": "{0}/{1} hari"
+  },
+  "ui.previous-month": {
+    "fr": "Mois précédent",
+    "de": "Vorheriger Monat",
+    "it": "Mese precedente",
+    "vi": "Tháng trước",
+    "id": "Bulan sebelumnya"
+  },
+  "ui.choose-month": {
+    "fr": "Choisir le mois",
+    "de": "Monat wählen",
+    "it": "Scegli il mese",
+    "vi": "Chọn tháng",
+    "id": "Pilih bulan"
+  },
+  "ui.next-month": {
+    "fr": "Mois suivant",
+    "de": "Nächster Monat",
+    "it": "Mese successivo",
+    "vi": "Tháng sau",
+    "id": "Bulan berikutnya"
+  },
+  "ui.of-puzzles-solved": {
+    "fr": "{0} grilles sur {1} résolues",
+    "de": "{0} von {1} Rätseln gelöst",
+    "it": "{0} schemi risolti su {1}",
+    "vi": "Đã giải {0}/{1} câu đố",
+    "id": "{0} dari {1} teka-teki terpecahkan"
+  },
+  "ui.you-can-play-past-days-any-time": {
+    "fr": "Tu peux jouer aux grilles passées à tout moment.",
+    "de": "Frühere Tagesrätsel sind jederzeit spielbar.",
+    "it": "Puoi giocare gli schemi passati in qualsiasi momento.",
+    "vi": "Bạn có thể chơi lại các ngày trước bất cứ lúc nào.",
+    "id": "Kamu bisa memainkan teka-teki hari sebelumnya kapan saja."
+  },
+  "ui.how-streaks-work": {
+    "fr": "Comment fonctionnent les séries",
+    "de": "So funktionieren Serien",
+    "it": "Come funzionano le serie",
+    "vi": "Cách tính chuỗi ngày",
+    "id": "Cara kerja rangkaian"
+  },
+  "ui.solve-todays-puzzle-today-archive-puzzles-count-towards-monthly": {
+    "fr": "Résolvez l’énigme du jour aujourd’hui. Les archives comptent pour les trophées du mois. Gagnez 1 indice au 3e jour, puis 3 indices tous les sept jours de suite. Les récompenses rejoignent automatiquement votre réserve commune. Un jour manqué ne vous enlève ni votre record ni vos récompenses. Après minuit, une victoire compte dans les archives sans prolonger la série de la veille.",
+    "de": "Löse das heutige Rätsel noch heute. Archivrätsel zählen für Monatstrophäen. Erhalte 1 Tipp an Tag 3 und 3 Tipps für je sieben Tage in Folge. Belohnungen gehen automatisch in den gemeinsamen Vorrat. Ein verpasster Tag löscht weder den Rekord noch Belohnungen. Nach Mitternacht zählt der Abschluss fürs Archiv, verlängert aber die gestrige Serie nicht.",
+    "it": "Risolvi oggi il rompicapo di oggi. Quelli d’archivio contano per i trofei mensili. Ottieni 1 suggerimento al giorno 3 e 3 suggerimenti ogni sette giorni consecutivi. I premi vanno automaticamente nella riserva comune. Saltare un giorno non cancella il record né i premi. Finire dopo mezzanotte conta per l’archivio, senza prolungare la serie di ieri.",
+    "vi": "Hãy giải câu đố hôm nay trong ngày. Câu đố lưu trữ được tính cho cúp tháng. Nhận 1 gợi ý vào ngày thứ 3 và 3 gợi ý sau mỗi bảy ngày liên tiếp. Phần thưởng tự động vào số dư chung. Bỏ lỡ một ngày vẫn giữ kỷ lục và phần thưởng. Giải sau nửa đêm được tính vào kho lưu trữ nhưng không nối dài chuỗi hôm qua.",
+    "id": "Selesaikan teka-teki hari ini sebelum hari berganti. Teka-teki arsip dihitung untuk trofi bulanan. Dapatkan 1 petunjuk pada hari ke-3 dan 3 petunjuk setiap tujuh hari berturut-turut. Hadiah masuk ke saldo bersama secara otomatis. Melewatkan satu hari tidak menghapus rekor atau hadiah. Menyelesaikan setelah tengah malam dihitung untuk arsip tanpa memperpanjang rentetan kemarin."
+  },
+  "ui.bronze-7-puzzles-silver-14-gold-the-whole-month-2": {
+    "fr": "Bronze : 7 énigmes. Argent : 14. Or : le mois entier.",
+    "de": "Bronze: 7 Rätsel. Silber: 14. Gold: der ganze Monat.",
+    "it": "Bronzo: 7 rompicapi. Argento: 14. Oro: tutto il mese.",
+    "vi": "Đồng: 7 câu đố. Bạc: 14. Vàng: cả tháng.",
+    "id": "Perunggu: 7 teka-teki. Perak: 14. Emas: sebulan penuh."
+  },
+  "ui.play-today": {
+    "fr": "Jouer aujourd’hui",
+    "de": "Heute spielen",
+    "it": "Gioca oggi",
+    "vi": "Chơi hôm nay",
+    "id": "Main hari ini"
+  },
+  "ui.replay-today": {
+    "fr": "Rejouer la grille du jour",
+    "de": "Heutiges Rätsel erneut spielen",
+    "it": "Rigioca lo schema di oggi",
+    "vi": "Chơi lại câu đố hôm nay",
+    "id": "Mainkan ulang hari ini"
+  },
+  "ui.mon": {
+    "fr": "lun.",
+    "de": "Mo",
+    "it": "lun",
+    "vi": "T2",
+    "id": "Sen"
+  },
+  "ui.tue": {
+    "fr": "mar.",
+    "de": "Di",
+    "it": "mar",
+    "vi": "T3",
+    "id": "Sel"
+  },
+  "ui.wed": {
+    "fr": "mer.",
+    "de": "Mi",
+    "it": "mer",
+    "vi": "T4",
+    "id": "Rab"
+  },
+  "ui.thu": {
+    "fr": "jeu.",
+    "de": "Do",
+    "it": "gio",
+    "vi": "T5",
+    "id": "Kam"
+  },
+  "ui.fri": {
+    "fr": "ven.",
+    "de": "Fr",
+    "it": "ven",
+    "vi": "T6",
+    "id": "Jum"
+  },
+  "ui.sat": {
+    "fr": "sam.",
+    "de": "Sa",
+    "it": "sab",
+    "vi": "T7",
+    "id": "Sab"
+  },
+  "ui.sun": {
+    "fr": "dim.",
+    "de": "So",
+    "it": "dom",
+    "vi": "CN",
+    "id": "Min"
+  },
+  "ui.solved": {
+    "fr": ", résolue",
+    "de": ", gelöst",
+    "it": ", risolto",
+    "vi": ", đã giải",
+    "id": ", terpecahkan"
+  },
+  "ui.100-puzzle-books-2-400-puzzles": {
+    "fr": "100 carnets · 2 400 énigmes",
+    "de": "100 Rätselhefte · 2.400 Rätsel",
+    "it": "100 quaderni · 2.400 rompicapi",
+    "vi": "100 sổ câu đố · 2.400 câu đố",
+    "id": "100 buku teka-teki · 2.400 teka-teki"
+  },
+  "ui.section": {
+    "fr": "Section",
+    "de": "Abschnitt",
+    "it": "Sezione",
+    "vi": "Mục",
+    "id": "Bagian"
+  },
+  "ui.show": {
+    "fr": "Afficher",
+    "de": "Anzeigen",
+    "it": "Mostra",
+    "vi": "Hiển thị",
+    "id": "Tampilkan"
+  },
+  "ui.all": {
+    "fr": "Tous",
+    "de": "Alle",
+    "it": "Tutti",
+    "vi": "Tất cả",
+    "id": "Semua"
+  },
+  "ui.not-started": {
+    "fr": "Pas commencé",
+    "de": "Nicht begonnen",
+    "it": "Non iniziati",
+    "vi": "Chưa bắt đầu",
+    "id": "Belum dimulai"
+  },
+  "ui.in-progress": {
+    "fr": "En cours",
+    "de": "In Arbeit",
+    "it": "In corso",
+    "vi": "Đang chơi",
+    "id": "Sedang berlangsung"
+  },
+  "ui.completed": {
+    "fr": "Terminés",
+    "de": "Abgeschlossen",
+    "it": "Completati",
+    "vi": "Đã hoàn thành",
+    "id": "Selesai"
+  },
+  "ui.puzzle-book-of-24": {
+    "fr": "Carnet {0}, {1} sur 24",
+    "de": "Rätselheft {0}, {1} von 24",
+    "it": "Quaderno {0}, {1} su 24",
+    "vi": "Sổ câu đố {0}, {1}/24",
+    "id": "Buku teka-teki {0}, {1} dari 24"
+  },
+  "ui.no-puzzle-books-in-this-section-have-that-status": {
+    "fr": "Aucun carnet de cette section n’a cet état.",
+    "de": "In diesem Abschnitt hat kein Rätselheft diesen Status.",
+    "it": "Nessun quaderno in questa sezione ha questo stato.",
+    "vi": "Không có sổ câu đố nào ở mục này có trạng thái đó.",
+    "id": "Tidak ada buku teka-teki dalam bagian ini dengan status itu."
+  },
+  "ui.show-all-in-this-section": {
+    "fr": "Tout afficher dans cette section",
+    "de": "Alle in diesem Abschnitt anzeigen",
+    "it": "Mostra tutto in questa sezione",
+    "vi": "Hiện tất cả trong mục này",
+    "id": "Tampilkan semua di bagian ini"
+  },
+  "ui.puzzle-book": {
+    "fr": "Carnet {0}",
+    "de": "Rätselheft {0}",
+    "it": "Quaderno {0}",
+    "vi": "Sổ câu đố {0}",
+    "id": "Buku teka-teki {0}"
+  },
+  "ui.puzzle": {
+    "fr": "{0} · Grille {1}",
+    "de": "{0} · Rätsel {1}",
+    "it": "{0} · Schema {1}",
+    "vi": "{0} · Câu đố {1}",
+    "id": "{0} · Teka-teki {1}"
+  },
+  "ui.replay": {
+    "fr": "Rejouer",
+    "de": "Erneut spielen",
+    "it": "Rigioca",
+    "vi": "Chơi lại",
+    "id": "Main lagi"
+  },
+  "ui.puzzle-2": {
+    "fr": "Grille {0}{1}",
+    "de": "Rätsel {0}{1}",
+    "it": "Schema {0}{1}",
+    "vi": "Câu đố {0}{1}",
+    "id": "Teka-teki {0}{1}"
+  },
+  "ui.completed-2": {
+    "fr": "Terminé ✓",
+    "de": "Abgeschlossen ✓",
+    "it": "Completato ✓",
+    "vi": "Đã hoàn thành ✓",
+    "id": "Selesai ✓"
+  },
+  "ui.jars-and-trophies": {
+    "fr": "Bocaux et trophées {0}",
+    "de": "Gläser und Trophäen {0}",
+    "it": "Barattoli e trofei {0}",
+    "vi": "Lọ và cúp {0}",
+    "id": "Stoples dan trofi {0}"
+  },
+  "ui.of-24-puzzles": {
+    "fr": "{0} grilles sur 24",
+    "de": "{0} von 24 Rätseln",
+    "it": "{0} schemi su 24",
+    "vi": "{0}/24 câu đố",
+    "id": "{0} dari 24 teka-teki"
+  },
+  "ui.book-puzzles": {
+    "fr": "Grilles des carnets",
+    "de": "Rätsel aus Heften",
+    "it": "Schemi dei quaderni",
+    "vi": "Câu đố trong sổ",
+    "id": "Teka-teki dalam buku"
+  },
+  "ui.of": {
+    "fr": "{0} sur {1}",
+    "de": "{0} von {1}",
+    "it": "{0} su {1}",
+    "vi": "{0}/{1}",
+    "id": "{0} dari {1}"
+  },
+  "ui.daily-puzzles": {
+    "fr": "Grilles du jour",
+    "de": "Tagesrätsel",
+    "it": "Schemi giornalieri",
+    "vi": "Câu đố hằng ngày",
+    "id": "Teka-teki harian"
+  },
+  "ui.games-completed": {
+    "fr": "Parties terminées",
+    "de": "Abgeschlossene Partien",
+    "it": "Partite completate",
+    "vi": "Số ván đã hoàn thành",
+    "id": "Permainan selesai"
+  },
+  "ui.without-hints": {
+    "fr": "Sans indice",
+    "de": "Ohne Tipps",
+    "it": "Senza indizi",
+    "vi": "Không dùng gợi ý",
+    "id": "Tanpa petunjuk"
+  },
+  "ui.how-progress-is-counted": {
+    "fr": "Calcul de la progression",
+    "de": "So wird Fortschritt gezählt",
+    "it": "Come si calcolano i progressi",
+    "vi": "Cách tính tiến độ",
+    "id": "Cara menghitung progres"
+  },
+  "ui.games-and-wins-without-hints-are-counted-from-earlier": {
+    "fr": "Les parties et victoires sans indice sont comptées depuis le {0}. Les résultats antérieurs sont conservés.",
+    "de": "Spiele und Siege ohne Tipps zählen ab {0}. Frühere Rätselmarkierungen bleiben erhalten.",
+    "it": "Le partite e le vittorie senza suggerimenti si contano dal {0}. I risultati precedenti restano.",
+    "vi": "Tính các ván và chiến thắng không dùng gợi ý từ {0}. Các dấu hoàn thành trước đó vẫn được giữ.",
+    "id": "Permainan dan kemenangan tanpa petunjuk dihitung mulai {0}. Tanda teka-teki sebelumnya tetap tersimpan."
+  },
+  "ui.progress-is-saved-on-this-device": {
+    "fr": "La progression est sauvegardée sur cet appareil.",
+    "de": "Dein Fortschritt wird auf diesem Gerät gespeichert.",
+    "it": "I progressi vengono salvati su questo dispositivo.",
+    "vi": "Tiến độ được lưu trên thiết bị này.",
+    "id": "Kemajuan disimpan di perangkat ini."
+  },
+  "ui.choose-puzzle-book": {
+    "fr": "Choisir un carnet",
+    "de": "Rätselheft wählen",
+    "it": "Scegli un quaderno",
+    "vi": "Chọn sổ câu đố",
+    "id": "Pilih buku teka-teki"
+  },
+  "ui.next-jar": {
+    "fr": "Bocal suivant",
+    "de": "Nächstes Glas",
+    "it": "Prossimo barattolo",
+    "vi": "Lọ tiếp theo",
+    "id": "Stoples berikutnya"
+  },
+  "ui.jar": {
+    "fr": "Bocal {0} · {1}",
+    "de": "Glas {0} · {1}",
+    "it": "Barattolo {0} · {1}",
+    "vi": "Lọ {0} · {1}",
+    "id": "Stoples {0} · {1}"
+  },
+  "ui.of-seeds": {
+    "fr": "{0} graines sur {1}",
+    "de": "{0} von {1} Samen",
+    "it": "{0} semi su {1}",
+    "vi": "{0} trên {1} hạt",
+    "id": "{0} dari {1} benih"
+  },
+  "ui.jar-fill": {
+    "fr": "Niveau du bocal",
+    "de": "Füllstand des Glases",
+    "it": "Riempimento del barattolo",
+    "vi": "Mức đầy của lọ",
+    "id": "Isi stoples"
+  },
+  "ui.to-the-next-jar": {
+    "fr": "Encore {0} pour le prochain bocal",
+    "de": "Noch {0} bis zum nächsten Glas",
+    "it": "Mancano {0} al prossimo barattolo",
+    "vi": "Còn {0} để đến lọ tiếp theo",
+    "id": "{0} lagi ke stoples berikutnya"
+  },
+  "ui.highest": {
+    "fr": "· maximale",
+    "de": "· höchste",
+    "it": "· massima",
+    "vi": "· cao nhất",
+    "id": "· tertinggi"
+  },
+  "ui.lowest": {
+    "fr": "· minimale",
+    "de": "· niedrigste",
+    "it": "· minima",
+    "vi": "· thấp nhất",
+    "id": "· terendah"
+  },
+  "ui.difficulty-2": {
+    "fr": "Difficulté : {0}{1}",
+    "de": "Schwierigkeit: {0}{1}",
+    "it": "Difficoltà: {0}{1}",
+    "vi": "Độ khó: {0}{1}",
+    "id": "Kesulitan: {0}{1}"
+  },
+  "ui.replay-puzzle": {
+    "fr": "Rejouer l’énigme",
+    "de": "Rätsel erneut spielen",
+    "it": "Rigioca il rompicapo",
+    "vi": "Chơi lại câu đố",
+    "id": "Ulangi teka-teki"
+  },
+  "ui.tutorial": {
+    "fr": "Tutoriel",
+    "de": "Tutorial",
+    "it": "Tutorial",
+    "vi": "Hướng dẫn",
+    "id": "Tutorial"
+  },
+  "ui.continue-tutorial": {
+    "fr": "Continuer le tutoriel",
+    "de": "Tutorial fortsetzen",
+    "it": "Continua il tutorial",
+    "vi": "Tiếp tục hướng dẫn",
+    "id": "Lanjutkan tutorial"
+  },
+  "ui.game": {
+    "fr": "Partie",
+    "de": "Spiel",
+    "it": "Partita",
+    "vi": "Ván chơi",
+    "id": "Permainan"
+  },
+  "ui.current-game": {
+    "fr": "Partie en cours",
+    "de": "Aktuelle Partie",
+    "it": "Partita in corso",
+    "vi": "Ván hiện tại",
+    "id": "Permainan saat ini"
+  },
+  "ui.puzzle-3": {
+    "fr": "Énigme {0} · {1} {2}",
+    "de": "Rätsel {0} · {1} {2}",
+    "it": "Rompicapo {0} · {1} {2}",
+    "vi": "Câu đố {0} · {1} {2}",
+    "id": "Teka-teki {0} · {1} {2}"
+  },
+  "ui.on-the-board": {
+    "fr": "{0} {1} sur la grille",
+    "de": "{0} {1} auf dem Spielfeld",
+    "it": "{0} {1} sulla griglia",
+    "vi": "{0} {1} trên bàn",
+    "id": "{0} {1} di papan"
+  },
+  "ui.play": {
+    "fr": "Jouer",
+    "de": "Spielen",
+    "it": "Gioca",
+    "vi": "Chơi",
+    "id": "Main"
+  },
+  "ui.start-classic": {
+    "fr": "Lancer le mode classique",
+    "de": "Klassische Partie starten",
+    "it": "Inizia il classico",
+    "vi": "Bắt đầu chế độ cổ điển",
+    "id": "Mulai mode Klasik"
+  },
+  "ui.resume-puzzle-for": {
+    "fr": "Reprendre la grille du {0}",
+    "de": "Rätsel vom {0} fortsetzen",
+    "it": "Riprendi lo schema del {0}",
+    "vi": "Tiếp tục câu đố ngày {0}",
+    "id": "Lanjutkan teka-teki {0}"
+  },
+  "ui.resume-puzzle": {
+    "fr": "Reprendre la grille {0}",
+    "de": "Rätsel {0} fortsetzen",
+    "it": "Riprendi lo schema {0}",
+    "vi": "Tiếp tục câu đố {0}",
+    "id": "Lanjutkan teka-teki {0}"
+  },
+  "ui.resume-classic": {
+    "fr": "Reprendre la partie classique",
+    "de": "Klassische Partie fortsetzen",
+    "it": "Riprendi la partita classica",
+    "vi": "Tiếp tục ván cổ điển",
+    "id": "Lanjutkan mode Klasik"
+  },
+  "ui.view-results": {
+    "fr": "Voir les résultats",
+    "de": "Ergebnis ansehen",
+    "it": "Vedi i risultati",
+    "vi": "Xem kết quả",
+    "id": "Lihat hasil"
+  },
+  "ui.of-puzzles": {
+    "fr": "{0} énigmes sur {1}",
+    "de": "{0} von {1} Rätseln",
+    "it": "{0} rompicapi su {1}",
+    "vi": "{0} trên {1} câu đố",
+    "id": "{0} dari {1} teka-teki"
+  },
+  "ui.completed-puzzles": {
+    "fr": "Grilles terminées",
+    "de": "Abgeschlossene Rätsel",
+    "it": "Schemi completati",
+    "vi": "Câu đố đã hoàn thành",
+    "id": "Teka-teki selesai"
+  },
+  "ui.jar-2": {
+    "fr": "Bocal {0} · {1} %",
+    "de": "Glas {0} · {1} %",
+    "it": "Barattolo {0} · {1}%",
+    "vi": "Lọ {0} · {1}%",
+    "id": "Stoples {0} · {1}%"
+  },
+  "ui.in-a-row": {
+    "fr": "{0} {1} de suite{2}",
+    "de": "{0} {1} in Folge{2}",
+    "it": "{0} {1} di fila{2}",
+    "vi": "{0} {1} liên tiếp{2}",
+    "id": "{0} {1} berturut-turut{2}"
+  },
+  "ui.until-reward": {
+    "fr": "· encore {0} {1} avant la récompense",
+    "de": "· noch {0} {1} bis zur Belohnung",
+    "it": "· mancano {0} {1} al premio",
+    "vi": "· còn {0} {1} đến phần thưởng",
+    "id": "· {0} {1} lagi hingga hadiah"
+  },
+  "ui.jar-3": {
+    "fr": "Bocal {0}",
+    "de": "Glas {0}",
+    "it": "Barattolo {0}",
+    "vi": "Lọ {0}",
+    "id": "Stoples {0}"
+  },
+  "ui.jar-collected": {
+    "fr": "Bocal rempli",
+    "de": "Glas gefüllt",
+    "it": "Barattolo completato",
+    "vi": "Đã thu thập lọ",
+    "id": "Stoples terkumpul"
+  },
+  "ui.jar-percent-full-of-open-collection": {
+    "fr": "Bocal {0}{1}, rempli à {2} pour cent, {3} sur {4}. Ouvrir la collection",
+    "de": "Glas {0}{1}, zu {2} Prozent gefüllt, {3} von {4}. Sammlung öffnen",
+    "it": "Barattolo {0}{1}, pieno al {2} percento, {3} su {4}. Apri la collezione",
+    "vi": "Lọ {0}{1}, đầy {2} phần trăm, {3} trên {4}. Mở bộ sưu tập",
+    "id": "Stoples {0}{1}, terisi {2} persen, {3} dari {4}. Buka koleksi"
+  },
+  "ui.collected": {
+    "fr": ", récolté",
+    "de": ", gesammelt",
+    "it": ", raccolto",
+    "vi": ", đã thu",
+    "id": ", terkumpul"
+  },
+  "ui.year": {
+    "fr": "Année",
+    "de": "Jahr",
+    "it": "Anno",
+    "vi": "Năm",
+    "id": "Tahun"
+  },
+  "ui.month": {
+    "fr": "Mois",
+    "de": "Monat",
+    "it": "Mese",
+    "vi": "Tháng",
+    "id": "Bulan"
+  },
+  "ui.days-2": {
+    "fr": "jours",
+    "de": "Tage",
+    "it": "giorni",
+    "vi": "ngày",
+    "id": "hari"
+  },
+  "ui.days-3": {
+    "fr": "jours",
+    "de": "Tage",
+    "it": "giorni",
+    "vi": "ngày",
+    "id": "hari"
+  },
+  "ui.day": {
+    "fr": "jour",
+    "de": "Tag",
+    "it": "giorno",
+    "vi": "ngày",
+    "id": "hari"
+  },
+  "ui.daily-streak": {
+    "fr": "Série de jours",
+    "de": "Tagesserie",
+    "it": "Serie giornaliera",
+    "vi": "Chuỗi ngày",
+    "id": "Rangkaian harian"
+  },
+  "ui.best": {
+    "fr": "Record · {0}",
+    "de": "Rekord · {0}",
+    "it": "Record · {0}",
+    "vi": "Kỷ lục · {0}",
+    "id": "Rekor · {0}"
+  },
+  "ui.until-reward-2": {
+    "fr": "Avant la récompense : {0} {1} · +{2} {3}",
+    "de": "Bis zur Belohnung: {0} {1} · +{2} {3}",
+    "it": "Al premio: {0} {1} · +{2} {3}",
+    "vi": "Đến phần thưởng: {0} {1} · +{2} {3}",
+    "id": "Menuju hadiah: {0} {1} · +{2} {3}"
+  },
+  "ui.new-streak": {
+    "fr": "Nouvelle série",
+    "de": "Neue Serie",
+    "it": "Nuova serie",
+    "vi": "Chuỗi mới",
+    "id": "Rangkaian baru"
+  },
+  "ui.in-a-row-2": {
+    "fr": "{0} {1} de suite",
+    "de": "{0} {1} in Folge",
+    "it": "{0} {1} di fila",
+    "vi": "{0} {1} liên tiếp",
+    "id": "{0} {1} berturut-turut"
+  },
+  "ui.day-2": {
+    "fr": "Jour {0}{1}",
+    "de": "Tag {0}{1}",
+    "it": "Giorno {0}{1}",
+    "vi": "Ngày {0}{1}",
+    "id": "Hari {0}{1}"
+  },
+  "ui.counted": {
+    "fr": ", compté",
+    "de": ", gezählt",
+    "it": ", contato",
+    "vi": ", đã tính",
+    "id": ", dihitung"
+  },
+  "ui.android-permission-is-needed-well-ask-after-your-first": {
+    "fr": "L’autorisation Android est requise. Nous vous la demanderons après votre première énigme du jour. Vous pouvez aussi l’accorder maintenant.",
+    "de": "Eine Android-Berechtigung ist nötig. Wir fragen nach deinem ersten Tagesrätsel danach. Du kannst sie auch jetzt erteilen.",
+    "it": "Serve l’autorizzazione di Android. La chiederemo dopo il primo rompicapo giornaliero. Puoi concederla anche adesso.",
+    "vi": "Cần quyền Android. Trò chơi sẽ hỏi sau câu đố hằng ngày đầu tiên. Bạn cũng có thể cấp quyền ngay.",
+    "id": "Izin Android diperlukan. Kami akan memintanya setelah teka-teki harian pertamamu. Kamu juga bisa mengizinkannya sekarang."
+  },
+  "ui.notifications-are-off-in-android-allow-them-in-system": {
+    "fr": "Les notifications sont désactivées dans Android. Autorisez-les dans les paramètres système, puis activez le rappel.",
+    "de": "Benachrichtigungen sind in Android ausgeschaltet. Erlaube sie in den Systemeinstellungen und aktiviere dann die Erinnerung.",
+    "it": "Le notifiche sono disattivate in Android. Consentile nelle impostazioni di sistema, poi attiva il promemoria.",
+    "vi": "Thông báo đang tắt trên Android. Hãy cho phép trong cài đặt hệ thống rồi bật lời nhắc.",
+    "id": "Notifikasi dimatikan di Android. Izinkan di pengaturan sistem, lalu nyalakan pengingat."
+  },
+  "ui.could-not-open-the-android-prompt-try-again-or": {
+    "fr": "Impossible d’ouvrir la demande Android. Réessayez ou autorisez les notifications dans les paramètres système.",
+    "de": "Die Android-Abfrage ließ sich nicht öffnen. Versuche es erneut oder erlaube Benachrichtigungen in den Systemeinstellungen.",
+    "it": "Impossibile aprire la richiesta Android. Riprova o consenti le notifiche nelle impostazioni di sistema.",
+    "vi": "Không thể mở yêu cầu Android. Hãy thử lại hoặc cho phép thông báo trong cài đặt hệ thống.",
+    "id": "Dialog Android tidak dapat dibuka. Coba lagi atau izinkan notifikasi di pengaturan sistem."
+  },
+  "ui.reminder-off": {
+    "fr": "Rappel désactivé.",
+    "de": "Erinnerung aus.",
+    "it": "Promemoria disattivato.",
+    "vi": "Đã tắt lời nhắc.",
+    "id": "Pengingat nonaktif."
+  },
+  "ui.reminder-on": {
+    "fr": "Rappel activé.",
+    "de": "Erinnerung an.",
+    "it": "Promemoria attivo.",
+    "vi": "Đã bật lời nhắc.",
+    "id": "Pengingat aktif."
+  },
+  "ui.waiting-for-android": {
+    "fr": "En attente d’Android…",
+    "de": "Warte auf Android…",
+    "it": "In attesa di Android…",
+    "vi": "Đang chờ Android…",
+    "id": "Menunggu Android…"
+  },
+  "ui.saving-settings": {
+    "fr": "Enregistrement des paramètres…",
+    "de": "Einstellungen werden gespeichert…",
+    "it": "Salvataggio delle impostazioni…",
+    "vi": "Đang lưu cài đặt…",
+    "id": "Menyimpan setelan…"
+  },
+  "ui.try-again": {
+    "fr": "Réessayer",
+    "de": "Erneut versuchen",
+    "it": "Riprova",
+    "vi": "Thử lại",
+    "id": "Coba lagi"
+  },
+  "ui.shared-balance-your-three-free-hints-for-this-game": {
+    "fr": "Réserve commune : {0} {1}. Vos trois indices gratuits de cette partie sont utilisés en premier.",
+    "de": "Gemeinsamer Vorrat: {0} {1}. Die drei kostenlosen Tipps für dieses Spiel werden zuerst verwendet.",
+    "it": "Riserva comune: {0} {1}. I tre suggerimenti gratuiti di questa partita si usano per primi.",
+    "vi": "Số dư chung: {0} {1}. Ba gợi ý miễn phí của ván này được dùng trước.",
+    "id": "Saldo bersama: {0} {1}. Tiga petunjuk gratis untuk permainan ini dipakai lebih dulu."
+  },
+  "ui.first-pages": {
+    "fr": "Premières pages",
+    "de": "Erste Seiten",
+    "it": "Prime pagine",
+    "vi": "Những trang đầu",
+    "id": "Halaman pertama"
+  },
+  "ui.easy-lines": {
+    "fr": "Lignes faciles",
+    "de": "Einfache Linien",
+    "it": "Linee facili",
+    "vi": "Đường nối dễ",
+    "id": "Garis mudah"
+  },
+  "ui.interwoven-paths": {
+    "fr": "Chemins entrelacés",
+    "de": "Verschlungene Wege",
+    "it": "Percorsi intrecciati",
+    "vi": "Đường đan xen",
+    "id": "Jalur berjalin"
+  },
+  "ui.open-spaces": {
+    "fr": "Grands espaces",
+    "de": "Offene Flächen",
+    "it": "Spazi aperti",
+    "vi": "Không gian rộng",
+    "id": "Ruang terbuka"
+  },
+  "ui.long-trails": {
+    "fr": "Longues pistes",
+    "de": "Lange Pfade",
+    "it": "Lunghi sentieri",
+    "vi": "Đường dài",
+    "id": "Jalur panjang"
+  },
+  "ui.big-pages": {
+    "fr": "Grandes pages",
+    "de": "Große Seiten",
+    "it": "Pagine grandi",
+    "vi": "Trang lớn",
+    "id": "Halaman besar"
+  },
+  "ui.depth": {
+    "fr": "Profondeur",
+    "de": "Tiefe",
+    "it": "Profondità",
+    "vi": "Chiều sâu",
+    "id": "Kedalaman"
+  },
+  "ui.faraway-routes": {
+    "fr": "Routes lointaines",
+    "de": "Weite Strecken",
+    "it": "Percorsi lontani",
+    "vi": "Tuyến đường xa",
+    "id": "Rute jauh"
+  },
+  "ui.wide-horizon": {
+    "fr": "Horizon large",
+    "de": "Weiter Horizont",
+    "it": "Ampio orizzonte",
+    "vi": "Chân trời rộng",
+    "id": "Cakrawala luas"
+  },
+  "ui.a-long-journey": {
+    "fr": "Un long voyage",
+    "de": "Eine lange Reise",
+    "it": "Un lungo viaggio",
+    "vi": "Một hành trình dài",
+    "id": "Perjalanan panjang"
+  },
+  "ui.linen": {
+    "fr": "Lin",
+    "de": "Leinen",
+    "it": "Lino",
+    "vi": "Vải lanh",
+    "id": "Linen"
+  },
+  "ui.honey": {
+    "fr": "Miel",
+    "de": "Honig",
+    "it": "Miele",
+    "vi": "Mật ong",
+    "id": "Madu"
+  },
+  "ui.pine": {
+    "fr": "Pin",
+    "de": "Kiefer",
+    "it": "Pino",
+    "vi": "Thông",
+    "id": "Pinus"
+  },
+  "ui.sea": {
+    "fr": "Mer",
+    "de": "Meer",
+    "it": "Mare",
+    "vi": "Biển",
+    "id": "Laut"
+  },
+  "ui.plum": {
+    "fr": "Prune",
+    "de": "Pflaume",
+    "it": "Prugna",
+    "vi": "Mận",
+    "id": "Prem"
+  },
+  "ui.night": {
+    "fr": "Nuit",
+    "de": "Nacht",
+    "it": "Notte",
+    "vi": "Đêm",
+    "id": "Malam"
+  },
+  "ui.bronze-earned": {
+    "fr": "Bronze remporté",
+    "de": "Bronze erreicht",
+    "it": "Bronzo ottenuto",
+    "vi": "Đã đạt huy chương đồng",
+    "id": "Perunggu diraih"
+  },
+  "ui.silver-earned": {
+    "fr": "Argent remporté",
+    "de": "Silber erreicht",
+    "it": "Argento ottenuto",
+    "vi": "Đã đạt huy chương bạc",
+    "id": "Perak diraih"
+  },
+  "ui.gold-earned": {
+    "fr": "Or remporté",
+    "de": "Gold erreicht",
+    "it": "Oro ottenuto",
+    "vi": "Đã đạt huy chương vàng",
+    "id": "Emas diraih"
+  },
+  "ui.bronze-and-silver-earned": {
+    "fr": "Bronze et argent remportés",
+    "de": "Bronze und Silber erreicht",
+    "it": "Bronzo e argento ottenuti",
+    "vi": "Đã đạt huy chương đồng và bạc",
+    "id": "Perunggu dan perak diraih"
+  },
+  "ui.all-monthly-medals-collected": {
+    "fr": "Toutes les médailles du mois sont remportées",
+    "de": "Alle Monatsmedaillen gesammelt",
+    "it": "Tutte le medaglie mensili raccolte",
+    "vi": "Đã thu đủ huy chương tháng",
+    "id": "Semua medali bulanan terkumpul"
+  },
+  "ui.waiting-to-save": {
+    "fr": "En attente d’enregistrement",
+    "de": "Wartet auf Speicherung",
+    "it": "In attesa di salvataggio",
+    "vi": "Đang chờ lưu",
+    "id": "Menunggu disimpan"
+  },
+  "ui.puzzles": {
+    "fr": "énigmes",
+    "de": "Rätsel",
+    "it": "rompicapi",
+    "vi": "câu đố",
+    "id": "teka-teki"
+  },
+  "ui.puzzles-2": {
+    "fr": "énigmes",
+    "de": "Rätsel",
+    "it": "rompicapi",
+    "vi": "câu đố",
+    "id": "teka-teki"
+  },
+  "ui.puzzle-4": {
+    "fr": "énigme",
+    "de": "Rätsel",
+    "it": "rompicapo",
+    "vi": "câu đố",
+    "id": "teka-teki"
+  },
+  "ui.next-medal-to-go": {
+    "fr": "Prochaine médaille : {0}, encore {1} {2}",
+    "de": "Nächste Medaille: {0}, noch {1} {2}",
+    "it": "Prossima medaglia: {0}, mancano {1} {2}",
+    "vi": "Huy chương tiếp theo: {0}, còn {1} {2}",
+    "id": "Medali berikutnya: {0}, kurang {1} {2}"
+  },
+  "ui.to-go": {
+    "fr": "Encore {0} {1}",
+    "de": "Noch {0} {1}",
+    "it": "Mancano {0} {1}",
+    "vi": "Còn {0} {1}",
+    "id": "Kurang {0} {1}"
+  },
+  "ui.coming-up": {
+    "fr": "À suivre",
+    "de": "Als Nächstes",
+    "it": "A seguire",
+    "vi": "Sắp tới",
+    "id": "Segera"
+  },
+  "ui.next": {
+    "fr": "Suivant",
+    "de": "Nächste",
+    "it": "Prossima",
+    "vi": "Tiếp theo",
+    "id": "Berikutnya"
+  },
+  "ui.done": {
+    "fr": "Terminé",
+    "de": "Fertig",
+    "it": "Fatto",
+    "vi": "Xong",
+    "id": "Selesai"
+  },
+  "ui.easy": {
+    "fr": "Facile",
+    "de": "Leicht",
+    "it": "Facile",
+    "vi": "Dễ",
+    "id": "Mudah"
+  },
+  "ui.normal": {
+    "fr": "Normal",
+    "de": "Normal",
+    "it": "Normale",
+    "vi": "Thường",
+    "id": "Normal"
+  },
+  "ui.hard": {
+    "fr": "Difficile",
+    "de": "Schwierig",
+    "it": "Difficile",
+    "vi": "Khó",
+    "id": "Sulit"
+  },
+  "ui.document-title": {
+    "fr": "Seeds Bits — Jeu de chiffres",
+    "de": "Seeds Bits — Zahlenspiel",
+    "it": "Seeds Bits — Gioco di numeri",
+    "vi": "Seeds Bits — Trò chơi ghép số",
+    "id": "Seeds Bits — Permainan angka"
+  },
+  "ui.language-save-error": {
+    "fr": "Impossible d’enregistrer la langue. Réessaie.",
+    "de": "Sprache konnte nicht gespeichert werden. Versuch es erneut.",
+    "it": "Impossibile salvare la lingua. Riprova.",
+    "vi": "Không thể lưu ngôn ngữ. Hãy thử lại.",
+    "id": "Bahasa tidak dapat disimpan. Coba lagi."
+  },
+  "ui.seed-plural": {
+    "fr": "graines",
+    "de": "Samen",
+    "it": "semi",
+    "vi": "hạt",
+    "id": "benih"
+  }
+}

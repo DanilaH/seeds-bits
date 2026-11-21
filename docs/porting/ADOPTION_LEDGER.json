@@ -709,6 +709,45 @@
       ],
       "nextAction": "Повторить оба сценария без устной инструкции. Взять соответствующую правку при наблюдении её условия.",
       "acceptance": "../research/ux-handoff-2026-11-21/ACCEPTANCE.md"
+    },
+    {
+      "id": "markets-localization-b1-20261121",
+      "sourceFeatureIds": [],
+      "scope": "Собственная адаптация для пяти языков интерфейса и напоминаний, атрибуции площадки и отчёта первого игрового опыта.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "implementation": [
+        "src/i18n/index.ts",
+        "src/distribution.ts",
+        "src/platform.ts",
+        "native/android/SeedsInstallStore.java",
+        "native/android/SeedsDailyReminder.java",
+        "scripts/markets/report.mjs"
+      ],
+      "behavior": "Пять локалей B1. Выбор языка работает в текущей партии и оставляет выделение и Undo. Первый магазин, метка APK, веб-портал и дистрибьютор сохраняются отдельными полями. Android-установки и веб-профили разделены в отчёте.",
+      "verification": {
+        "code": "10 целевых сценариев Playwright, 31 тест первого сеанса и 80 контрольных экранов. 46 сценариев на подставных Android API, в том числе магазины, конфликт, APK-файл и перезапуск после обновления.",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED",
+        "apk": "../research/markets-localization-2026-11-21/APK_12067.json",
+        "controlledReport": "../research/markets-localization-2026-11-21/CONTROL_REPORT.json"
+      },
+      "consumerCommit": "2f0cb449e0a15c013e6441c4b27cc9f9db598517",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "acceptance": "../research/markets-localization-2026-11-21/ACCEPTANCE.md",
+      "nextAction": "Подключить тестовые кабинеты RuStore, NashStore и Яндекс Игр, принять нативный 200% и напоминание на телефоне, проверить ОК в реальном размещении GamePush."
+    },
+    {
+      "id": "markets-localization-b2-20261121",
+      "sourceFeatureIds": [],
+      "scope": "Французский, немецкий, итальянский, вьетнамский и индонезийский для следующей сборки.",
+      "status": "DEFERRED",
+      "reason": "В B1 включены пять локалей первой волны. Для B2 подготовлен черновик всех 305 дополнительных ключей, впереди редактура и экранная приёмка.",
+      "dependencies": [
+        "Типографика обеих тем и масштабов, формы множественного числа, TalkBack и нативное напоминание.",
+        "Обновление B1 → B2 с Auto на it-IT и явным EN, первый ход новичка."
+      ],
+      "nextAction": "После редакторской и экранной проверки объединить черновик с пользовательским словарём и открыть локали B2.",
+      "acceptance": "../research/markets-localization-2026-11-21/ACCEPTANCE.md"
     }
   ]
 }

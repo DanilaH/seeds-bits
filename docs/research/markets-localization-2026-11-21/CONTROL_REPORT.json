@@ -1,0 +1,160 @@
+{
+  "syntheticControls": {
+    "from": "2026-11-19",
+    "to": "2026-11-21",
+    "asOf": "2026-11-22",
+    "timezone": "Asia/Yekaterinburg",
+    "includeQA": true,
+    "delayMinutes": 0,
+    "uniqueEvents": 13,
+    "androidInstalls": [
+      {
+        "application_id": "android-control",
+        "confirmedStore": "rustore",
+        "artifactChannel": "rustore",
+        "acquisitionState": "fresh",
+        "evidence": "installer_package",
+        "reinstallation": false,
+        "installs": 1
+      },
+      {
+        "application_id": "android-control",
+        "confirmedStore": "nashstore",
+        "artifactChannel": "nashstore",
+        "acquisitionState": "fresh",
+        "evidence": "installer_package",
+        "reinstallation": false,
+        "installs": 1
+      },
+      {
+        "application_id": "android-control",
+        "confirmedStore": "unknown",
+        "artifactChannel": "rustore",
+        "acquisitionState": "fresh",
+        "evidence": "unavailable",
+        "reinstallation": false,
+        "installs": 1
+      }
+    ],
+    "webSessionOnly": 1,
+    "cohorts": [
+      {
+        "surface": "android",
+        "channel": "rustore",
+        "artifact": "rustore",
+        "newProfiles": 1,
+        "firstPair": 1,
+        "firstPuzzle": 1,
+        "d1Eligible": 1,
+        "d1": 1,
+        "localeMatrix": {
+          "ru-KZ → ru": 1
+        }
+      },
+      {
+        "surface": "android",
+        "channel": "nashstore",
+        "artifact": "nashstore",
+        "newProfiles": 1,
+        "firstPair": 0,
+        "firstPuzzle": 0,
+        "d1Eligible": 1,
+        "d1": 0,
+        "localeMatrix": {
+          "ru-KZ → ru": 1
+        }
+      },
+      {
+        "surface": "android",
+        "channel": "unknown",
+        "artifact": "rustore",
+        "newProfiles": 1,
+        "firstPair": 0,
+        "firstPuzzle": 0,
+        "d1Eligible": 1,
+        "d1": 0,
+        "localeMatrix": {
+          "ru-KZ → ru": 1
+        }
+      },
+      {
+        "surface": "web",
+        "channel": "ok_games",
+        "distributor": "gamepush",
+        "newProfiles": 1,
+        "firstPair": 0,
+        "firstPuzzle": 0,
+        "d1Eligible": 1,
+        "d1": 1,
+        "localeMatrix": {
+          "pt-PT → pt-BR": 1
+        }
+      }
+    ],
+    "languagePicker": [
+      {
+        "surface": "android",
+        "channel": "rustore",
+        "active": 1,
+        "opened": 0,
+        "openings": 0,
+        "changed": 0,
+        "changes": 0,
+        "languageChanges": 0,
+        "modeOnly": 0
+      },
+      {
+        "surface": "web",
+        "channel": "ok_games",
+        "distributor": "gamepush",
+        "active": 1,
+        "opened": 1,
+        "openings": 1,
+        "changed": 1,
+        "changes": 1,
+        "languageChanges": 0,
+        "modeOnly": 1
+      }
+    ]
+  },
+  "browserSDKDouble": {
+    "from": "2026-11-01",
+    "to": "2026-11-30",
+    "asOf": "2026-12-01",
+    "timezone": "Asia/Yekaterinburg",
+    "includeQA": true,
+    "delayMinutes": 0,
+    "uniqueEvents": 17,
+    "androidInstalls": [],
+    "webSessionOnly": 0,
+    "cohorts": [
+      {
+        "surface": "web",
+        "channel": "yandex_games",
+        "distributor": "unknown",
+        "newProfiles": 1,
+        "firstPair": 1,
+        "firstPuzzle": 1,
+        "d1Eligible": 1,
+        "d1": 1,
+        "localeMatrix": {
+          "en → en": 1
+        }
+      }
+    ],
+    "languagePicker": [
+      {
+        "surface": "web",
+        "channel": "yandex_games",
+        "distributor": "unknown",
+        "active": 1,
+        "opened": 1,
+        "openings": 3,
+        "changed": 1,
+        "changes": 2,
+        "languageChanges": 2,
+        "modeOnly": 0
+      }
+    ]
+  }
+}
