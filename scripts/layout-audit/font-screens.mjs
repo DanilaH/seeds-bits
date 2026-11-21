@@ -446,7 +446,7 @@ for (size of sizes) for (font of [1,1.5,2]) {
     await runSection("page-result",{active:"book-v1-6",board:[5,5],done:book.slice(0,5).map(x=>x.id)},()=>result("page"));
     await runSection("book-result",{active:"book-v1-24",board:[5,5],done:book.slice(0,23).map(x=>x.id)},()=>result("book"));
   }
-  fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12064,physicalPhone:false,
+  fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12065,physicalPhone:false,
     webView:adb("shell","dumpsys","webviewupdate").split("\n").find(line=>line.includes("Current WebView package"))?.trim(),
     apkSha256:createHash("sha256").update(fs.readFileSync(artifact)).digest("hex"),rows,failures},null,2));
   console.log("FONT_CASE",size,font,rows.filter(r=>r.size===size&&r.font===font).length,failures.filter(r=>r.size===size&&r.font===font).length);

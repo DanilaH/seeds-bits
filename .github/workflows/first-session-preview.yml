@@ -35,7 +35,7 @@ jobs:
         if: always()
         with: {name: first-session-browser, path: test-results/}
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=964 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=965 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
@@ -44,9 +44,9 @@ jobs:
           fi
       - run: |
           mkdir -p test-results/first-session-apk
-          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/first-session-apk/seeds-first-session-12064-unsigned.apk
-          cp android/app/build/outputs/apk/debug/app-debug.apk test-results/first-session-apk/seeds-first-session-12064-debug.apk
-          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12064,firstSession:true,profile:"baseline",analytics:false},null,2))'
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk test-results/first-session-apk/seeds-first-session-12065-unsigned.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk test-results/first-session-apk/seeds-first-session-12065-debug.apk
+          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:12065,firstSession:true,profile:"baseline",analytics:false},null,2))'
       - uses: actions/upload-artifact@v4
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
       - uses: actions/download-artifact@v4

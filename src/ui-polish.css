@@ -2205,10 +2205,16 @@ header .jar-level {
   font-size: clamp(12px, 0.85em, 15px);
   font-weight: 600;
   line-height: 1.25;
-  overflow-wrap: normal;
+  white-space: normal;
 }
-.result-next.is-classic > button:not(#play-again) {
-  white-space: nowrap;
+.result-next.is-classic .choice-label {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 350px) {
+  .result-next.is-classic {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr);
+  }
 }
 .result-next.is-classic .difficulty-easier {
   color: var(--easier-ink);
