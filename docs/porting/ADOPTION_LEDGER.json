@@ -617,7 +617,8 @@
         "emulator": "Android 35/WebView 124: both courses and hints at 12 size/font combinations on e417397 (44732728904). Final scoped rerun at 320x520/font200 passed on 204b186 (44734430854), including full row at save error, retry/88 digits, privacy/progress. Full matrix not repeated at final SHA.",
         "device": "NOT_VERIFIED",
         "liveAudience": "NOT_VERIFIED",
-        "apk": "../layout-audit-2026-11-20/APK.json"
+        "apk": "../layout-audit-2026-11-20/APK.json",
+        "systemFont12065": "../layout-audit-2026-11-20/SYSTEM_FONT_12065.md"
       },
       "acceptance": "../layout-audit-2026-11-20/FIXES.md",
       "nextAction": "Телефонная приёмка preview 12054 при системном шрифте 100/150/200%; эксперименты и оригиналы отдельно."
@@ -649,10 +650,12 @@
         "apk": "../research/first-session-2026-11-20/implementation/APK.json",
         "followup12061": "25 целевых browser-тестов прошли повторно. Независимый прогон assets/public из optimized CI APK 12061: первая встреча с краем в задаче 5 без инструкции, частичная команда 568×320/200% и устаревший заголовок открытого дня после полуночи. Физическая проверка и плейтест открыты. См. ../research/first-session-2026-11-20/implementation/FOLLOWUP_12061.md.",
         "followup12062": "Финальная ревизия 6d67fea. Три случая исправлены. 30 целевых браузерных сценариев и offline Android 35 прошли в CI 44793614971. Подписанная выдача выполнена в preview 12063.",
-        "apk12063": "../research/first-session-2026-11-20/implementation/APK_12063.json"
+        "apk12063": "../research/first-session-2026-11-20/implementation/APK_12063.json",
+        "systemFont12065": "../layout-audit-2026-11-20/SYSTEM_FONT_12065.md",
+        "apk12065": "../research/first-session-2026-11-20/implementation/APK_12065.json"
       },
       "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
-      "nextAction": "На физическом телефоне проверить preview 12063: самостоятельное соединение через край, альбом при системных 200% и обновление старой партии.",
+      "nextAction": "На физическом телефоне проверить preview 12065: самостоятельное соединение через край, альбом при системных 200% и обновление старой партии.",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26"
     }

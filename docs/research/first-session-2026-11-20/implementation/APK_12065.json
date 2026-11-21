@@ -1,0 +1,203 @@
+{
+  "source_kind": "Signed exact CI release payload, aligned locally; static inspection, no physical installation claim",
+  "package": "com.seedsbits.game.preview",
+  "name": "Семечки · тест",
+  "version_name": "1.1.2",
+  "version_code": 12065,
+  "bytes": 5550573,
+  "sha256": "310b73d5921c3e00b956ea5edbabb85fd72e4f6804da856b8565f8839b2cd61c",
+  "certificate_sha256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+  "v2_v3_signatures_verified": true,
+  "baseline_version_code": 12063,
+  "upgrade_package_and_certificate_match": true,
+  "unsigned_entries_unchanged": 667,
+  "web_assets_match_local_dist": [
+    "assets/advice-worker-6LRsD5M8.js",
+    "assets/esm-BawIAyIW.js",
+    "assets/esm-Ds7uzpot.js",
+    "assets/help-worker-BFAOPEnb.js",
+    "assets/index-BPGtVxpk.css",
+    "assets/index-DkZmnxMC.js",
+    "assets/magnet-example-BHG7KZrk.js",
+    "assets/notebook-extra-B_1ZZVK0.js",
+    "assets/shuffle-lab-ui-DAmSNsZO.js",
+    "assets/shuffle-lab-worker-kD_79-RS.js",
+    "assets/web-CRkPJy6x.js",
+    "assets/web-CfGEb1Dt.js",
+    "assets/web-DOMB5yP2.js",
+    "index.html"
+  ],
+  "no_stale_asset_files": true,
+  "no_development_hooks": true,
+  "native_bridges": {
+    "SeedsFeedbackPlugin": true,
+    "SeedsMonetizationPlugin": true,
+    "SeedsEngagementPlugin": true,
+    "SeedsApplication": true
+  },
+  "analytics_disabled": true,
+  "ads_test_mode": true,
+  "physical_installation_tested": false,
+  "runtime_source": "f72e75f62a13dba5ec447171b6bc054a52979df9",
+  "workflow_run": 44893873241,
+  "unsigned_artifact_id": 14703620193,
+  "unsigned_artifact_zip_sha256": "01d54ec74c0a2c3f6800692d3985fd7cca4f586e1493f7bd75eb4397d4ce3fe9",
+  "unsigned_apk_sha256": "592ce08fec003cf58cdf2992cd55fe3b7f4cfa72724162e028580fd0f37aaf7c",
+  "first_session_enabled": true,
+  "qa_profile": "baseline",
+  "debug_public_assets_equal_release": 16,
+  "android_acceptance": {
+    "run": 44893873241,
+    "artifact": 14703452239,
+    "artifact_zip_sha256": "5b93f9541c8901c1d0205dd3f581c5710c4aaf05033d28991fdb787147c7f865",
+    "general_ci": 44894205838,
+    "result": {
+      "source": "f72e75f62a13dba5ec447171b6bc054a52979df9",
+      "package": "com.seedsbits.game.preview",
+      "version": 12065,
+      "upgrade": true,
+      "freshRealTask": true,
+      "voluntaryTask2": true,
+      "firstInstructionFont200": true,
+      "physicalPhone": false,
+      "webview": "  Current WebView package (name, version): (com.google.android.webview, 124.0.6367.219)"
+    },
+    "portrait_font_200": {
+      "cssViewport": [
+        320,
+        520
+      ],
+      "systemFont": "2.0",
+      "openingInstructionFullyVisible": true,
+      "lessonInstructionFullyVisible": true,
+      "lessonFieldTopStable": true,
+      "openingFieldTop": 216.5,
+      "explicitHintReplacesOldInstruction": true
+    },
+    "landscape_font_200": {
+      "cssViewport": [
+        568,
+        320
+      ],
+      "systemFont": "2",
+      "openingAndTwoOptionAnswerFullyVisible": true,
+      "fieldUnmoved": true,
+      "bothRowsAndMenuReachable": true,
+      "pauseTitleAndCloseShareRow": true
+    },
+    "upgrade": {
+      "baselineVersion": 12063,
+      "candidateVersion": 12065,
+      "package": "com.seedsbits.game.preview",
+      "baselineSha256": "d9ba9b61f4ebfdedadab86b7611bc957c94a07c31e14ce0a41fca54eb40ca74d",
+      "candidateReleaseSha256": "0ac69905cb49799ab4c83e0b3e6e2e8622ae96d739d4741e055dc66e2f37a5a3",
+      "candidateDebugSha256": "aaa56a627d52ab7744ffd63bd427435ca68bdb2366c1aab5e954e3ab78615f55",
+      "method": "Exact old optimized payload upgraded to exact current optimized release payload, then current debug payload for CDP/Undo; all signed with one ephemeral CI certificate; no app-data deletion between installs",
+      "boardHistorySettingsHintsWalletRetained": true,
+      "undoRestoresEight": true,
+      "oldBoard": {
+        "rules": 1,
+        "current": {
+          "board": [
+            0,
+            0,
+            1,
+            1,
+            2,
+            2,
+            9,
+            1
+          ],
+          "scroll": 0,
+          "additions": 0,
+          "moves": 1
+        },
+        "packedHistory": [
+          [
+            0,
+            0,
+            0,
+            [
+              "55112291"
+            ]
+          ]
+        ]
+      }
+    }
+  },
+  "recording": {
+    "sha256": "f7cea79a8cc6e11dd8c99942f31a7365f4f6aa2348fa4e12c5f5f3302e50992b",
+    "durationSeconds": 18.185564,
+    "events": [
+      {
+        "seconds": 5,
+        "state": "Тетрадь 1 · задача 1"
+      },
+      {
+        "seconds": 13,
+        "state": "Решено 1 из 24 · кнопка «К задаче 2»"
+      },
+      {
+        "seconds": 16,
+        "state": "Переход в задачу 2 после касания"
+      }
+    ],
+    "lastFrameHeldSeconds": 2
+  },
+  "system_font_audit": {
+    "run": 44894202341,
+    "qa_source": "2eb37ca048cfd479d7347dfc98c3df1829d9810d",
+    "same_runtime_as_release": true,
+    "android_api": 35,
+    "webview": "com.google.android.webview 124.0.6367.219",
+    "system_font_scales": [
+      1,
+      1.5,
+      2
+    ],
+    "checkpoints": 540,
+    "behavior_failures": 0,
+    "cells_covered": 0,
+    "classic_result_sizes_passing_at_200": 5,
+    "shards": [
+      {
+        "name": "narrow",
+        "css_viewports": [
+          [
+            320,
+            520
+          ],
+          [
+            320,
+            568
+          ]
+        ],
+        "checkpoints": 216,
+        "artifact": 14703705731,
+        "artifact_zip_sha256": "6191796d270cf21b0715dd1f2f46fbc58e3f692ebcd1fee571f5d6de91a177e5",
+        "debug_apk_sha256": "c890f844a418bb91342b0d79aba056222c3117ab90f846055a59209592e7ea20"
+      },
+      {
+        "name": "wide",
+        "css_viewports": [
+          [
+            390,
+            796
+          ],
+          [
+            568,
+            320
+          ],
+          [
+            844,
+            390
+          ]
+        ],
+        "checkpoints": 324,
+        "artifact": 14703790949,
+        "artifact_zip_sha256": "5f533c2dc98a9adb25f6c35c815f16ec0ee1b81d61df4d362dc998dcb6009025",
+        "debug_apk_sha256": "c5dfdbab5759518c0cbc7165a5d08f1014d604d783c04e62e8b0b62e4536680c"
+      }
+    ]
+  }
+}
