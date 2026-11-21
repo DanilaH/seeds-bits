@@ -143,6 +143,22 @@ test("home, archive, progress and play remain readable across portrait, landscap
       await expect(page.locator("#close")).toBeInViewport();
       await expect(page.locator("#resume")).toBeInViewport();
       await capture("pause");
+      if (!dark && width <= 390) {
+        // Simulate enlarged text without changing the viewport or the hit target.
+        const title = page.locator(".home-title h1");
+        const size = await title.evaluate(el => getComputedStyle(el).fontSize);
+        await title.evaluate((el, size) => {el.style.fontSize = (parseFloat(size) * 2) + "px";}, size);
+        const bounds = await title.evaluate(el => {
+          const text = document.createRange();
+          text.selectNodeContents(el);
+          const lines = text.getClientRects();
+          const close = document.getElementById("close")!.getBoundingClientRect();
+          return {lines:lines.length, textRight:text.getBoundingClientRect().right, closeLeft:close.left};
+        });
+        expect(bounds.lines).toBe(1);
+        expect(bounds.textRight).toBeLessThanOrEqual(bounds.closeLeft);
+        await title.evaluate(el => {el.style.fontSize = "";});
+      }
       await page.locator("#progress-open").click();
       await capture("progress");
       report.push({ width, height, dark });

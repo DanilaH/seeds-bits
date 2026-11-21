@@ -788,6 +788,11 @@ progress::-moz-progress-bar {
 #dialog[data-screen="home"][data-entry="root"] #close {
   display: none;
 }
+@media (orientation: portrait) and (max-width: 460px) {
+  #dialog[data-screen="home"][data-entry="pause"] .home-title h1 {
+    font-size: clamp(24px, 8vw, 36px);
+  }
+}
 #menu-content {
   display: flex;
   flex-direction: column;
