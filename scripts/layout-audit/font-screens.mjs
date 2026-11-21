@@ -295,7 +295,8 @@ async function navigation() {
   await checkpoint("jar-collection");
   await ui.tap("#trophies-mode");
   await checkpoint("trophies");
-  await ui.tap(".trophy[data-month]");
+  await ui.tap(".trophy[data-month] .medal-figure");
+  await ui.until("document.querySelector('#dialog').dataset.screen === 'calendar'");
   await checkpoint("archive-calendar");
   await ui.tap("#calendar-picker summary");
   await checkpoint("month-picker");
@@ -416,9 +417,12 @@ async function result(kind) {
     assert(await ui.evaluate(`Array.from(document.querySelectorAll('#result-next button')).every(
       button=>button.scrollWidth <= button.clientWidth + 1
     )`), "Classic result choice label overflows");
+    await ui.until("!document.querySelector('#classic-harder').disabled");
+    await ui.tap("#classic-harder");
+    await ui.hidden("#win");
+  } else {
+    await ui.tap("#play-again");
   }
-  await ui.tap(kind === "classic" ? "#classic-harder" : "#play-again");
-  await ui.hidden("#win");
 }
 
 const commit = process.env.GITHUB_SHA;
