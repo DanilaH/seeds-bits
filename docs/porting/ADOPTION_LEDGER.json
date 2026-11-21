@@ -658,6 +658,57 @@
       "nextAction": "На физическом телефоне проверить preview 12065: самостоятельное соединение через край, альбом при системных 200% и обновление старой партии.",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26"
+    },
+    {
+      "id": "pair-feedback-and-task-rollback-20261121",
+      "sourceFeatureIds": [],
+      "localIssueIds": [
+        "SEEDS-UX-01",
+        "SEEDS-UX-02",
+        "SEEDS-UX-03",
+        "SEEDS-UX-04",
+        "SEEDS-UX-05",
+        "SEEDS-UX-06",
+        "SEEDS-UX-07"
+      ],
+      "scope": "Обратная связь нашей классики, тетради и календаря. Откат в тетради и календаре.",
+      "status": "PRODUCT_IMPLEMENTED",
+      "implementation": [
+        "src/core.ts:checkPair/pairBlockers",
+        "src/main.ts:choose/displayHint/render/hint",
+        "src/hint-explanation.ts",
+        "src/style.css",
+        "src/ui-adaptation.css"
+      ],
+      "behavior": "Показывает препятствия и пройденный маршрут, объясняет «Добавить» и открывает первую нерешённую задачу после победы в классике. Проверенный откат восстанавливает N ходов, поле и прокрутку. Лампочка остаётся самостоятельным действием.",
+      "verification": {
+        "code": "619bbcb5e853d77275f7fc32b26f76ddc22e4ec4. 118 модульных, 355 основных браузерных и 31 проверка первого сеанса.",
+        "emulator": "Android 35 / WebView 124. CI 44911332505 прошёл обновление 12065 → 12066, первый запуск и оба порядка края. 566 состояний на одном runtime покрыты двумя Android-прогонами. В последнем прогоне новый объём прошёл, а шесть состояний после тайм-аута перехода из трофеев подтверждены предыдущим.",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED",
+        "apk": "../research/ux-handoff-2026-11-21/APK_12066.json"
+      },
+      "acceptance": "../research/ux-handoff-2026-11-21/ACCEPTANCE.md",
+      "nextAction": "Повторить задачу № 5, копирование в классике и откат в задаче № 4 на физическом телефоне. Отдельно наблюдать следующий ход новичка.",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "consumerCommit": "619bbcb5e853d77275f7fc32b26f76ddc22e4ec4"
+    },
+    {
+      "id": "selection-and-daily-return-20261121",
+      "sourceFeatureIds": [],
+      "localIssueIds": [
+        "SEEDS-UX-08",
+        "SEEDS-UX-09"
+      ],
+      "scope": "Предложения для классики, тетради и задачи дня по итогам наблюдений.",
+      "status": "DEFERRED",
+      "reason": "Решение отложено до короткого плейтеста с новичками.",
+      "dependencies": [
+        "UX-08. Записать, нажимает ли игрок уже выбранную 3 после промаха 2 → 3.",
+        "UX-09. Записать, ищет ли игрок конкретную прерванную партию после сегодняшней задачи."
+      ],
+      "nextAction": "Повторить оба сценария без устной инструкции. Взять соответствующую правку при наблюдении её условия.",
+      "acceptance": "../research/ux-handoff-2026-11-21/ACCEPTANCE.md"
     }
   ]
 }
