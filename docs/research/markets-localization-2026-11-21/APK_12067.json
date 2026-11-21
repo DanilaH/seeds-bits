@@ -1,16 +1,16 @@
 {
-  "source_kind": "Signed package checked against the final local Vite output and the CI-produced native payload; static inspection",
+  "source_kind": "Signed exact CI release payload, aligned locally; static inspection, no physical installation claim",
   "package": "com.seedsbits.game.preview",
   "name": "\u0421\u0435\u043c\u0435\u0447\u043a\u0438 \u00b7 \u0442\u0435\u0441\u0442",
   "version_name": "1.1.2",
   "version_code": 12067,
-  "bytes": 5587303,
-  "sha256": "db41b283b6a40bd319fe57db62045974bda691039921ec4bcc708b7e35409b4f",
+  "bytes": 5599782,
+  "sha256": "47fe655cd54940dc27b26a8f1dc0a85b877a3dc02786ec7c8811730f8ff939fb",
   "certificate_sha256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
   "v2_v3_signatures_verified": true,
   "baseline_version_code": 12066,
   "upgrade_package_and_certificate_match": true,
-  "unsigned_entries_unchanged": 623,
+  "unsigned_entries_unchanged": 668,
   "web_assets_match_local_dist": [
     "assets/advice-worker-CVT9rZ-V.js",
     "assets/esm-BbpKJUV2.js",
@@ -38,9 +38,6 @@
   "analytics_disabled": true,
   "ads_test_mode": true,
   "physical_installation_tested": false,
-  "runtime_commit": "2f0cb449e0a15c013e6441c4b27cc9f9db598517",
-  "native_ci_commit": "2d45d499f983df7fcf2c2d3bf9150b639dc8dddb",
-  "native_ci_run_id": 44935824897,
   "notification_copy_sha256": "e00cbad6389eeb244f30b3c1b6c5f9a8f9fbceb4570e25809e545ec489ac0e2b",
   "notification_copy_languages": [
     "en",
@@ -49,5 +46,9 @@
     "ru",
     "tr"
   ],
-  "artifact_channel": "rustore"
+  "artifact_channel": "rustore",
+  "runtime_commit": "2f0cb449e0a15c013e6441c4b27cc9f9db598517",
+  "ci_commit": "77de85bea27c543dfdeaa488af52773c71a4dbca",
+  "ci_run_id": 44937298301,
+  "debug_and_release_web_assets_match": true
 }

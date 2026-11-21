@@ -131,7 +131,8 @@ async function showEdge(size,order,video) {
       return Array.from(r.getClientRects()).every(b=>b.top>=box.top-1&&b.bottom<=box.bottom+1&&b.left>=0&&b.right<=innerWidth);
     })()`),"The edge cue does not fit the status area");
     shot("edge-"+size+"-"+order[0]);
-    await ui.tap(digit(order[0]));
+    await ui.tap(digit(order[0]),false);
+    assert.equal(await ui.evaluate("document.querySelector('#viewport').scrollTop"),0);
     assert.deepEqual(await geometry(),before);
     await ui.tap("#menu");
     await ui.tap("#settings-open");
@@ -144,7 +145,8 @@ async function showEdge(size,order,video) {
     await ui.tap("#resume");
     assert(await ui.evaluate(`document.querySelector('${digit(order[0])}').classList.contains('selected')`));
     assert((await ui.evaluate(`document.querySelector('${digit(order[0])}').getAttribute('aria-label')`)).includes("fila"));
-    await ui.tap(digit(order[1]));
+    assert.equal(await ui.evaluate("document.querySelector('#viewport').scrollTop"),0);
+    await ui.tap(digit(order[1]),false);
     await ui.until("!document.querySelector('#win').hidden");
     shot("solved-"+size+"-"+order[0]);
     if(video)await wait(1200);
@@ -175,7 +177,7 @@ try{
   const controls=[];
   for(const size of ["640x1232","1136x736"])
     for(const order of [[8,9],[9,8]])controls.push(await showEdge(size,order,size==="1136x736"&&order[0]===8));
-  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12067,
+  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12068,
     physicalPhone:false,systemFont:2,forwardedFile:file,legacyUpdate:true,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
 }catch(error) {shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}

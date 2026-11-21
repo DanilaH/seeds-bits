@@ -137,19 +137,22 @@ for(const [width,height] of [[320,568],[568,320]])for(const reverse of [false,tr
     });
     expect(statusMetrics.ok,JSON.stringify(statusMetrics)).toBe(true);
     const [first,second]=reverse?[9,8]:[8,9];
-    const box=await digit(page,first).evaluate(el=>{
-      const viewport=document.querySelector("#viewport")!;
-      const rect=el.getBoundingClientRect(), bounds=viewport.getBoundingClientRect();
-      const delta=rect.top<bounds.top?rect.top-bounds.top:Math.max(0,rect.bottom-bounds.bottom);
-      viewport.scrollBy({top:delta,behavior:"instant"});
-      const within=el.getBoundingClientRect();
-      return {x:within.x+within.width/2,y:within.y+within.height/2};
-    });
+    const touch=async(index:number)=>{
+      const box=await digit(page,index).evaluate(el=>{
+        const rect=el.getBoundingClientRect();
+        const x=rect.x+rect.width/2,y=rect.y+rect.height/2;
+        return {x,y,visible:el.contains(document.elementFromPoint(x,y))};
+      });
+      expect(box.visible,JSON.stringify(box)).toBe(true);
+      await page.mouse.click(box.x,box.y);
+    };
+    const scroll=()=>page.locator("#viewport").evaluate(el=>el.scrollTop);
     const view=await page.locator("#viewport").boundingBox();
-    await page.mouse.click(box.x,box.y);
+    await touch(first);
     await expect(digit(page,first)).toHaveClass(/selected/);
     await expect(status).toHaveText("From the right edge, continue at the left of the next row.");
     expect(await page.locator("#viewport").boundingBox()).toEqual(view);
+    expect(await scroll()).toBe(0);
     await openPicker(page);
     await choose(page,"es");
     await page.locator("#language-close").click();
@@ -157,7 +160,8 @@ for(const [width,height] of [[320,568],[568,320]])for(const reverse of [false,tr
     await page.locator("#resume").click();
     await expect(digit(page,first)).toHaveClass(/selected/);
     await expect(digit(page,first)).toHaveAttribute("aria-label",/fila/);
-    await digit(page,second).click();
+    expect(await scroll()).toBe(0);
+    await touch(second);
     await expect(page.locator("#win")).toBeVisible();
   });
 }
