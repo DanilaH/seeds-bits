@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Семечки — пример реакции поля</title><style>html{color-scheme:light dark}body{margin:0;padding:12px 4px;font-family:Arial,sans-serif}.cursor-interaction:not(:disabled){cursor:pointer}</style></head><body>
+<div id="seeds-pair-trail" class="viz-dotted-background">
+  <style>
+    #seeds-pair-trail { padding: 14px 0; color-scheme: light dark; font-family: Arial, sans-serif; color: light-dark(#293c37,#e3eee8); }
+    #seeds-pair-trail .sample { max-width: 450px; margin: auto; padding: 16px 8px; border-radius: 12px; background: light-dark(#fafbf9,#24312e); }
+    #seeds-pair-trail .top, #seeds-pair-trail .feedback { margin: 0 6px; }
+    #seeds-pair-trail .top { display:flex; align-items:center; justify-content:space-between; gap: 6px; font-size: 14px; }
+    #seeds-pair-trail .reset { font: inherit; min-height: 44px; border:0; background:transparent; color:inherit; text-decoration:underline; text-underline-offset:3px; }
+    #seeds-pair-trail .row { position:relative; display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); margin: 12px 0; border: 1px solid light-dark(#c5d2cb,#52635b); }
+    #seeds-pair-trail .tile { appearance:none; position:relative; display:grid; place-items:center; box-sizing:border-box; background: transparent; color:inherit; border:0; border-radius:0; min-width:0; height:54px; padding:0; font: 500 25px/1 Arial,sans-serif; }
+    #seeds-pair-trail .tile + .tile { border-left:1px solid light-dark(#ced9d2,#52635b); }
+    #seeds-pair-trail .tile[aria-pressed=true] { background:light-dark(#dfede8,#3b5650); }
+    #seeds-pair-trail .tile[aria-pressed=true]::after, #seeds-pair-trail .blocked::before { content:""; position:absolute; inset:3px; border:2px solid light-dark(#39766a,#9ac9b9); border-radius:6px; pointer-events:none; }
+    #seeds-pair-trail .blocked::before { inset:5px; border:2px dashed light-dark(#8b5334,#ecc2a1); }
+    #seeds-pair-trail .trail { position:absolute; top:50%; height:3px; background:light-dark(#39766a,#9ac9b9); border-radius:4px; pointer-events:none; }
+    #seeds-pair-trail .feedback { font-size: 14px; line-height:1.4; min-height:2.8em; }
+  </style>
+  <div class="sample">
+    <div class="top"><span>Фрагмент строки</span><button type="button" class="reset cursor-interaction">Сначала</button></div>
+    <div class="row" role="group" aria-label="Цифры в строке"></div>
+    <p class="feedback" role="status" aria-live="polite">Попробуйте снять первую и вторую тройки.</p>
+  </div>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('seeds-pair-trail');
+  const row = root.querySelector('.row');
+  const feedback = root.querySelector('.feedback');
+  const reset = root.querySelector('.reset');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const initial = [3, 0, 0, 3, 8, 2, 3];
+  let values, selected, timer;
+  function clearEffects() {
+    clearTimeout(timer);
+    row.querySelector('.trail')?.remove();
+    row.querySelectorAll('.blocked').forEach(cell => cell.classList.remove('blocked'));
+    row.querySelectorAll('.tile').forEach(cell => cell.getAnimations().forEach(a => a.cancel()));
+  }
+  function paint() {
+    values.forEach((value,index) => {
+      const cell = row.children[index];
+      cell.textContent = value || '';
+      cell.disabled = !value;
+      cell.setAttribute('aria-pressed', String(selected === index));
+      cell.setAttribute('aria-label', value ? value + ', клетка ' + (index+1) : 'Пустая клетка');
+    });
+  }
+  function choose(index) {
+    const value = values[index];
+    if (!value) return;
+    clearEffects();
+    if (selected === index || selected < 0) {
+      selected = selected === index ? -1 : index;
+      paint();
+      feedback.textContent = selected < 0 ? 'Выбор снят.' : 'Выбрана цифра ' + value + '.';
+      return;
+    }
+    const from = selected, first = values[from];
+    const lo = Math.min(from,index), hi = Math.max(from,index);
+    const blockers = [];
+    for (let i=lo+1; i<hi; i++) if (values[i]) blockers.push(i);
+    if ((first !== value && first + value !== 10) || blockers.length) {
+      selected = index;
+      paint();
+      if (first === value || first + value === 10) {
+        blockers.forEach(i => row.children[i].classList.add('blocked'));
+        feedback.textContent = 'На пути ' + blockers.map(i => values[i]).join(', ') + '.';
+        timer = setTimeout(clearEffects, 850);
+      } else {
+        feedback.textContent = 'Теперь выбрана ' + value + '.';
+        if (!reduced.matches) row.children[index].animate([{transform:'scale(.93)'},{transform:'scale(1)'}],{duration:140});
+      }
+      return;
+    }
+    values[from] = values[index] = 0;
+    selected = -1;
+    paint();
+    feedback.textContent = 'Пара снята.';
+    if (hi-lo < 2) return;
+    const trail = document.createElement('span');
+    trail.className = 'trail';
+    trail.setAttribute('aria-hidden','true');
+    trail.style.left = (lo+.5)/values.length*100 + '%';
+    trail.style.width = (hi-lo)/values.length*100 + '%';
+    trail.style.transformOrigin = from===lo ? 'left' : 'right';
+    row.append(trail);
+    if (!reduced.matches) trail.animate([{transform:'scaleX(.04)'},{transform:'scaleX(1)',offset:.42},{opacity:1,offset:.66},{opacity:0}],{duration:430,fill:'forwards'});
+    timer = setTimeout(clearEffects, 450);
+  }
+  function start() {
+    clearEffects();
+    row.replaceChildren();
+    values = initial.slice();
+    selected = -1;
+    values.forEach((_,i) => {
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'tile cursor-interaction';
+      cell.addEventListener('click', () => choose(i));
+      row.append(cell);
+    });
+    paint();
+    feedback.textContent = 'Попробуйте снять первую и вторую тройки.';
+  }
+  reset.addEventListener('click',start);
+  start();
+})();
+</script>
+
+</body></html>
