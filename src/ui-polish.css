@@ -784,13 +784,9 @@ progress::-moz-progress-bar {
     max(20px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)))
     max(24px, var(--safe-area-inset-left, env(safe-area-inset-left, 0px)));
 }
-#dialog[data-screen="home"][data-entry="root"] .dialog-head {
+#dialog[data-screen="home"] .dialog-head,
+#dialog[data-screen="home"][data-entry="root"] #close {
   display: none;
-}
-#dialog[data-screen="home"][data-entry="pause"] .dialog-head {
-  max-width: 1040px;
-  height: 36px;
-  margin: 0 auto 4px;
 }
 #menu-content {
   display: flex;
@@ -801,18 +797,25 @@ progress::-moz-progress-bar {
   min-height: min-content;
   margin: 0 auto;
 }
-#dialog[data-entry="pause"] #menu-content {
-  height: calc(100% - 40px);
-}
 .home-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   flex-shrink: 0;
   padding: 0;
   text-align: left;
 }
 .home-title h1 {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: 44px;
   line-height: 1.1;
   letter-spacing: -2px;
+}
+.home-title #close {
+  flex: 0 0 44px;
+  min-height: 44px;
 }
 .home-layout {
   display: flex;
@@ -1401,13 +1404,6 @@ progress::-moz-progress-bar {
   .home-title h1 {
     font-size: 26px;
   }
-  #dialog[data-screen="home"][data-entry="pause"] .dialog-head {
-    height: 24px;
-    margin: 0;
-  }
-  #dialog[data-entry="pause"] #menu-content {
-    height: calc(100% - 24px);
-  }
   .home-layout {
     padding-block: 8px;
   }
@@ -1454,9 +1450,6 @@ progress::-moz-progress-bar {
   }
 }
 @media (max-height: 420px) and (orientation: landscape) {
-  #dialog[data-entry="pause"] .home-title {
-    display: none;
-  }
   .home-title h1 {
     font-size: 26px;
   }

@@ -136,7 +136,12 @@ test("home, archive, progress and play remain readable across portrait, landscap
       await expect(page.locator("#dialog")).toBeHidden();
       await capture("task");
       await page.locator("#menu").click();
-      await expect(page.locator("#settings-open")).toBeInViewport();
+      const title = await page.locator(".home-title h1").boundingBox();
+      const close = await page.locator("#close").boundingBox();
+      expect(title!.x + title!.width).toBeLessThanOrEqual(close!.x);
+      expect(Math.abs(title!.y + title!.height / 2 - close!.y - close!.height / 2)).toBeLessThan(5);
+      await expect(page.locator("#close")).toBeInViewport();
+      await expect(page.locator("#resume")).toBeInViewport();
       await capture("pause");
       await page.locator("#progress-open").click();
       await capture("progress");

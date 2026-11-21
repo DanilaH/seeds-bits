@@ -87,7 +87,7 @@ async function upgrade(){
   assert.equal(await ui.evaluate("document.querySelector('#mode').textContent"),"Классика");assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"6");shot("upgrade-resumed");
   const now=JSON.parse(readPrefs().values[progress]);assert.deepEqual(now.sessions.classic,old.sessions.classic);assert.equal(now.hints.classic,old.hints.classic);assert.equal(now.meta.wallet,old.meta.wallet);assert.deepEqual(now.meta.help.inventory,old.meta.help.inventory);assert.equal(now.meta.help.install,old.meta.help.install);assert(await ui.evaluate("document.querySelector('#magnet').hidden&&document.querySelector('#plan').hidden"));assert(now.seen.includes("old-profile-upgrade-check"));
   const currentSettings=JSON.parse(readPrefs().values[settings]);for(const k of ["theme","sound","vibration"])assert.equal(currentSettings[k],s[k]);await ui.tap("#undo");await ui.until("document.querySelector('#remaining').textContent==='8'");ui.close();stop();
-  fs.writeFileSync(out+"/upgrade.json",JSON.stringify({baselineVersion:12061,candidateVersion:12062,package:app,baselineSha256:createHash("sha256").update(fs.readFileSync(baseline)).digest("hex"),candidateReleaseSha256:createHash("sha256").update(fs.readFileSync(releaseCandidate)).digest("hex"),candidateDebugSha256:createHash("sha256").update(fs.readFileSync(candidate)).digest("hex"),method:"Exact old optimized payload upgraded to exact current optimized release payload, then current debug payload for CDP/Undo; all signed with one ephemeral CI certificate; no app-data deletion between installs",boardHistorySettingsHintsWalletRetained:true,undoRestoresEight:true,oldBoard:old.sessions.classic},null,2));
+  fs.writeFileSync(out+"/upgrade.json",JSON.stringify({baselineVersion:12061,candidateVersion:12063,package:app,baselineSha256:createHash("sha256").update(fs.readFileSync(baseline)).digest("hex"),candidateReleaseSha256:createHash("sha256").update(fs.readFileSync(releaseCandidate)).digest("hex"),candidateDebugSha256:createHash("sha256").update(fs.readFileSync(candidate)).digest("hex"),method:"Exact old optimized payload upgraded to exact current optimized release payload, then current debug payload for CDP/Undo; all signed with one ephemeral CI certificate; no app-data deletion between installs",boardHistorySettingsHintsWalletRetained:true,undoRestoresEight:true,oldBoard:old.sessions.classic},null,2));
 }
 async function fresh(){
   adb("shell","pm","clear",app);adb("shell","settings","put","system","font_scale","1");adb("shell","wm","size","780x1688");
@@ -134,17 +134,28 @@ async function landscapeFont200() {
     await ui.until("document.querySelector('#remaining').textContent === '6'");
     await ui.tap("#menu");
     await ui.until("document.querySelector('#dialog').open");
+    await ui.fullText(".home-title h1", "#dialog");
+    assert(await ui.evaluate(`(() => {
+      const title = document.querySelector(".home-title h1").getBoundingClientRect();
+      const close = document.querySelector("#close").getBoundingClientRect();
+      return title.right <= close.left && close.width >= 44 && close.height >= 44 &&
+        Math.abs(title.y + title.height / 2 - close.y - close.height / 2) <= 4;
+    })()`));
+    shot("pause-menu-landscape-200");
+    await ui.tap("#close");
+    await ui.until("!document.querySelector('#dialog').open");
     fs.writeFileSync(out + "/font-200-landscape.json", JSON.stringify({
       cssViewport: mode,
       systemFont: adb("shell", "settings", "get", "system", "font_scale"),
       openingAndTwoOptionAnswerFullyVisible: true,
       fieldUnmoved: true,
       bothRowsAndMenuReachable: true,
+      pauseTitleAndCloseShareRow: true,
     }, null, 2));
   } finally {
     ui.close();
     stop();
   }
 }
-try{adb("shell","wm","density","320");adb("shell","wm","size","780x1688");await upgrade();await fresh();await font200();await landscapeFont200();fs.writeFileSync(out+"/passed.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,version:12062,upgrade:true,freshRealTask:true,voluntaryTask2:true,firstInstructionFont200:true,physicalPhone:false,webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));}
+try{adb("shell","wm","density","320");adb("shell","wm","size","780x1688");await upgrade();await fresh();await font200();await landscapeFont200();fs.writeFileSync(out+"/passed.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,version:12063,upgrade:true,freshRealTask:true,voluntaryTask2:true,firstInstructionFont200:true,physicalPhone:false,webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));}
 catch(error){shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}

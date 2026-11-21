@@ -400,6 +400,8 @@ const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
 const dialogHeader = dialog.querySelector<HTMLElement>(".dialog-head")!;
+const homeTitle = dialog.querySelector<HTMLElement>(".home-title")!;
+const closeButton = $<HTMLButtonElement>("close");
 const settingsHeading =
   $("settings-panel").querySelector<HTMLElement>(".screen-heading")!;
 const confirmHeading = document.createElement("div");
@@ -422,6 +424,7 @@ function releaseDialogHeading() {
 }
 function pinDialogHeading(panel: HTMLElement) {
   releaseDialogHeading();
+  dialogHeader.append(closeButton);
   const heading = panel.querySelector<HTMLElement>(".screen-heading");
   if (heading) dialogHeader.prepend(heading);
   dialog.scrollTop = 0;
@@ -2521,6 +2524,7 @@ function openMenu(preserve: unknown = false) {
   if (!busy) render();
   document.body.classList.add("navigation-open");
   dialog.dataset.screen = "home";
+  homeTitle.append(closeButton);
   $("settings-panel").hidden = true;
   renderHomeCurrent();
   $("collection").hidden = true;
@@ -2669,7 +2673,7 @@ $("undo").onclick = undoAction;
 $("hint").onclick = hint;
 $("add").onclick = add;
 $("menu").onclick = openMenu;
-$("close").onclick = closeMenu;
+closeButton.onclick = closeMenu;
 $("resume").onclick = closeMenu;
 $("book-top").onclick = () => openCollection("book");
 let confirmAction: "restart" | "next" = "restart";
