@@ -1114,11 +1114,25 @@
   #app .game.compact-game:not(:has(#lesson:not([hidden]), #page-progress.opening-guide)) #status {
     line-height: 1.2;
   }
+  #app .game.compact-game.short-board:not(:has(#page-progress.opening-guide)) .game-meta {
+    display: grid;
+    justify-items: start;
+    gap: 2px;
+    padding-block: 4px;
+    font-size: 11px;
+  }
+  #app .game.compact-game.short-board:not(:has(#page-progress.opening-guide)) #mode {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   #app .game.compact-game:not(:has(#lesson:not([hidden]), #page-progress.opening-guide))
     .game-actions footer .action {
     flex-direction: row;
     justify-content: center;
     gap: 4px;
+    height: 48px;
   }
 }
 
@@ -1126,5 +1140,8 @@
   /* Leave both rows reachable above the cue and the native banner at 200%. */
   #app .game.compact-game.short-board.docked-actions:not(:has(#page-progress.opening-guide)) #board {
     font-size: 20px;
+  }
+  #app .game.compact-game.short-board.docked-actions:not(:has(#page-progress.opening-guide)) #board-wrap {
+    padding-block: 0;
   }
 }

@@ -621,7 +621,7 @@ test("compact home keeps settings within first viewport and touch targets at lea
       .evaluate((e) => e.getBoundingClientRect().bottom <= innerHeight),
   ).toBe(true);
   expect(
-    await page.locator(".home-links button").evaluateAll((es) =>
+    await page.locator(".home-links button:visible").evaluateAll((es) =>
       // Animated translation may yield 43.999996 for a 44 CSS-pixel target.
       es.every(
         (e) => Math.round(e.getBoundingClientRect().height * 100) / 100 >= 44,

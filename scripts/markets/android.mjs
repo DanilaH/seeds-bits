@@ -180,7 +180,7 @@ try{
   const controls=[];
   for(const size of ["640x1232","1136x736"])
     for(const order of [[8,9],[9,8]])controls.push(await showEdge(size,order,size==="1136x736"&&order[0]===8));
-  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12068,
+  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12069,
     physicalPhone:false,systemFont:2,forwardedFile:file,legacyUpdate:true,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
 }catch(error) {shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}
