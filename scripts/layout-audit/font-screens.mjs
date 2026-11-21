@@ -445,13 +445,16 @@ async function checkRouteExamples() {
         await ui.digit(a);
         await ui.evaluate(`new MutationObserver((_,o)=>{
           const trace=document.querySelector('#pair-trace');
-          if(trace){window.qaRoute=[...trace.querySelectorAll('path')].map(p=>({d:p.getAttribute('d'),delay:getComputedStyle(p).animationDelay}));o.disconnect();}
+          if(trace){window.qaRoute={pointerEvents:getComputedStyle(trace).pointerEvents,
+            segments:[...trace.querySelectorAll('path')].map(p=>({d:p.getAttribute('d'),delay:getComputedStyle(p).animationDelay}))};o.disconnect();}
         }).observe(document.querySelector('#app'),{childList:true})`);
         await ui.digit(b);
         await ui.until(`document.querySelector('#remaining').textContent === '${edge ? 0 : 2}'`);
-        const segments=await ui.evaluate("window.qaRoute");
+        const {pointerEvents,segments}=await ui.evaluate("window.qaRoute");
+        assert.equal(pointerEvents,"none");
         assert.equal(segments?.length,edge?2:1);
         assert.deepEqual(segments.map(s=>s.delay),edge?["0s","0.085s"]:["0s"]);
+        await ui.until(`document.querySelector('#board').getAnimations({subtree:true}).every(a=>a.playState!=='running')`);
         await checkpoint(`trail-${tag}`);
         assert.equal(rows.at(-1).coveredCells.length,0);
       });
