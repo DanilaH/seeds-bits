@@ -300,7 +300,8 @@ function fitResultLabels() {
     range.selectNodeContents(label);
     const width = range.getBoundingClientRect().width;
     if (width > available && available > 0)
-      label.style.fontSize = `${Math.max(10, (parseFloat(getComputedStyle(label).fontSize) * available) / width)}px`;
+      // Keep the CSS size relative to its source. WebView applies text zoom to it.
+      label.style.fontSize = `max(10px, calc(${base || "1em"} * ${available / width}))`;
     choiceFits.set(label, { base, fitted: label.style.fontSize });
   }
 }

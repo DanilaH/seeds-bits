@@ -39,6 +39,7 @@ function setProfile({active = "classic", board = [5,5,1,1], history = [], done =
   // The test app already created this file. Overwrite in place while stopped to keep owner and label.
   const escape = s => s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
   let xml = adb("shell", "cat", prefs);
+  xml = xml.replace(/<string name="seeds-bits\.progress\.v2\.(?:recovery|damaged)">[\s\S]*?<\/string>/g, "");
   for (const [key, value] of Object.entries(entries)) {
     const pattern = new RegExp(`<string name="${key.replaceAll(".","\\.")}">[\\s\\S]*?</string>`);
     const tag = `<string name="${key}">${escape(JSON.stringify(value))}</string>`;
@@ -405,6 +406,11 @@ async function result(kind) {
     return e.scrollWidth <= e.clientWidth + 1;
   })()`);
   assert(headingFits, "Result heading overflows");
+  if (kind === "classic") {
+    assert(await ui.evaluate(`Array.from(document.querySelectorAll('#result-next button')).every(
+      button=>button.scrollWidth <= button.clientWidth + 1
+    )`), "Classic result choice label overflows");
+  }
   await ui.tap("#play-again");
 }
 
