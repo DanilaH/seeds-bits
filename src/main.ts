@@ -543,7 +543,7 @@ function needsNotebookEdge(available: readonly Connection[]) {
 function dailyFieldTitle(id: string, currentDate = today()) {
   const day = id.slice(9);
   const mode = day === currentDate ? t("notification.channel") : t("ui.archived-puzzle");
-  return `${mode} · ${taskDate(day)}`;
+  return `${mode} · ${taskDate(day, day.slice(0, 4) !== currentDate.slice(0, 4))}`;
 }
 document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
 const noPairsTitle = document.createElement("strong");
@@ -3931,6 +3931,10 @@ function renderHomeCurrent() {
   }
   $("classic-mode").hidden = classicMode;
   const isBook = progress.active.startsWith("book");
+  const activeDay = progress.active.startsWith("daily-v1-") ? progress.active.slice(9) : "";
+  const dateLabel = activeDay
+    ? taskDate(activeDay, activeDay.slice(0, 4) !== today().slice(0, 4))
+    : "";
   $("home-current-art").innerHTML = classicMode
     ? jarPicture(jarState(jars(progress).meter))
     : isBook
@@ -3945,21 +3949,21 @@ function renderHomeCurrent() {
     ? t("home.classic")
     : progress.active.startsWith("book")
       ? t("ui.puzzle-book", { "0": volumeOf(progress.active) + 1 })
-      : progress.active.slice(9) === today() ? t("notification.channel") : t("home.daily.date", { "date": taskDate(progress.active.slice(9)) });
+      : progress.active.slice(9) === today() ? t("notification.channel") : t("home.daily.date", { "date": dateLabel });
   $("resume-context").textContent = classicMode
     ? t("ui.on-the-board", { "0": count, "1": digitWord(count) })
     : progress.active.startsWith("book")
       ? t("ui.puzzle-3", { "0": puzzleNumberInVolume(progress.active), "1": count, "2": digitWord(count) })
-      : `${taskDate(progress.active.slice(9))} · ${count} ${digitWord(count)}`;
+      : `${dateLabel} · ${count} ${digitWord(count)}`;
   $("resume").textContent = !count
     ? t("ui.view-results")
     : session.history.length || dialog.dataset.entry === "pause"
-      ? classicMode ? t("ui.resume-classic") : progress.active.startsWith("book") ? t("ui.resume-puzzle", { "0": puzzleNumberInVolume(progress.active) }) : progress.active.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for", { "0": taskDate(progress.active.slice(9)) })
+      ? classicMode ? t("ui.resume-classic") : progress.active.startsWith("book") ? t("ui.resume-puzzle", { "0": puzzleNumberInVolume(progress.active) }) : progress.active.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for", { "0": dateLabel })
       : classicMode
         ? t("ui.start-classic")
         : t("ui.play");
   if (progress.active.startsWith("daily-v1-") && progress.active.slice(9) !== today())
-    $("resume").textContent = t("ui.resume-puzzle-for", { "0": taskDate(progress.active.slice(9)) });
+    $("resume").textContent = t("ui.resume-puzzle-for", { "0": dateLabel });
   if (classicMode) {
     const j = jarState(jars(progress).meter);
     homeGoal.innerHTML = `${jarPicture(j)}<div><strong>${t("ui.jar-2", { "0": j.index + 1, "1": j.percent })}</strong><span>${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</span><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress></div>`;
