@@ -63,6 +63,8 @@ jobs:
           node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk"
       - uses: actions/upload-artifact@v4
         if: always()
-        with: {name: markets-android, path: |
+        with:
+          name: markets-android
+          path: |
             test-results/markets-android/
-            test-results/first-session-android/emulator.log}
+            test-results/first-session-android/emulator.log
