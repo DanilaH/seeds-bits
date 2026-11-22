@@ -749,6 +749,22 @@
       ],
       "nextAction": "После редакторской и экранной проверки объединить черновик с пользовательским словарём и открыть локали B2.",
       "acceptance": "../research/markets-localization-2026-11-21/ACCEPTANCE.md"
+    },
+    {
+      "id": "seeds-screen-audit-12070-20261122",
+      "sourceFeatureIds": [],
+      "scope": "Независимая экранная проверка собственного preview 12070 на пяти локалях. A01–A05 описывают локальные дефекты интерфейса.",
+      "status": "RESEARCHED",
+      "consumerCommit": "3248f3ae2d84b0db4a0c80b7d554d558365fb495",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "acceptance": "../research/screen-audit-2026-11-22/README.md",
+      "verification": {
+        "controlled": "../research/screen-audit-2026-11-22/evidence.json",
+        "apk": "../research/markets-localization-2026-11-21/APK_12070.json",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED"
+      },
+      "nextAction": "Сначала A01 и A02, затем A03–A05. Повтор на физическом телефоне с системным шрифтом 200%, TalkBack и самостоятельным возвратом новичка в тетрадь."
     }
   ]
 }

@@ -1,0 +1,4414 @@
+{
+ "apkSha256": "53934bc1298d39165ec8e060f5f4d552d011699bdfe524684b9d71d9e368a942",
+ "repositoryHead": "3248f3ae2d84b0db4a0c80b7d554d558365fb495",
+ "browser": "141.0.7390.37",
+ "date": "2026-11-22",
+ "timezone": "Asia/Yekaterinburg",
+ "routesCompleted": 35,
+ "statesObserved": 106,
+ "pageErrors": [],
+ "driverErrors": [],
+ "repositoryTests": {
+  "unitPassed": 121,
+  "unitFiles": 26,
+  "browserGroups": [
+   {
+    "group": "e2e",
+    "passed": 76,
+    "files": [
+     "game.spec.ts",
+     "help-baseline.spec.ts",
+     "meta.spec.ts",
+     "monetization060.spec.ts",
+     "product-audit.spec.ts",
+     "progression.spec.ts",
+     "repairs.spec.ts",
+     "repairs041.spec.ts",
+     "result-transition.spec.ts",
+     "task-rollback.spec.ts"
+    ]
+   },
+   {
+    "group": "controls-extra",
+    "passed": 73,
+    "files": [
+     "expansion050.spec.ts",
+     "layout-repair.spec.ts",
+     "pair-feedback.spec.ts",
+     "porting-classic-add.spec.ts",
+     "result-feedback.spec.ts",
+     "ux111.spec.ts"
+    ]
+   },
+   {
+    "group": "first-session",
+    "passed": 31,
+    "files": [
+     "first-session.spec.ts"
+    ]
+   },
+   {
+    "group": "markets",
+    "passed": 10,
+    "files": [
+     "markets.spec.ts"
+    ]
+   },
+   {
+    "group": "edge-cases",
+    "passed": 40,
+    "files": [
+     "audit-fixes.spec.ts",
+     "banner-adaptation.spec.ts",
+     "calm-layout.spec.ts",
+     "classic-variety.spec.ts",
+     "hardening.spec.ts",
+     "store-release.spec.ts"
+    ]
+   }
+  ]
+ },
+ "checkpoints": {
+  "first-en": [
+   "first",
+   "mismatch",
+   "hint",
+   "gap",
+   "edge",
+   "result",
+   "resumed"
+  ],
+  "first-ru": [
+   "first",
+   "mismatch",
+   "hint",
+   "gap",
+   "edge",
+   "result",
+   "resumed"
+  ],
+  "hub-ru": [
+   "pause",
+   "settings",
+   "privacy",
+   "languages",
+   "progress",
+   "jars",
+   "trophies",
+   "calendar",
+   "calendar-rules",
+   "books",
+   "empty-filter",
+   "book2",
+   "opened-book2",
+   "daily",
+   "archive"
+  ],
+  "hub-en": [
+   "pause",
+   "settings",
+   "privacy",
+   "languages",
+   "progress",
+   "jars",
+   "trophies",
+   "calendar",
+   "calendar-rules",
+   "books",
+   "empty-filter",
+   "book2",
+   "opened-book2",
+   "daily",
+   "archive"
+  ],
+  "full-course": [
+   "lesson-1",
+   "lesson-2",
+   "lesson-3",
+   "lesson-4",
+   "lesson-5",
+   "lesson-6",
+   "course-end"
+  ],
+  "restart": [
+   "confirm",
+   "after-restart"
+  ],
+  "daily-en": [
+   "daily-result",
+   "streak",
+   "replay-today"
+  ],
+  "classic-win": [
+   "result",
+   "to-book"
+  ],
+  "large-ru-RU": [
+   "edge",
+   "win"
+  ],
+  "large-en-US": [
+   "edge",
+   "win"
+  ],
+  "large-es-ES": [
+   "edge",
+   "win"
+  ],
+  "large-tr-TR": [
+   "edge",
+   "win"
+  ],
+  "copy-en-US": [
+   "home",
+   "calendar"
+  ],
+  "large-pt-BR": [
+   "edge",
+   "win"
+  ],
+  "copy-es-ES": [
+   "home",
+   "calendar"
+  ],
+  "copy-tr-TR": [
+   "home",
+   "calendar"
+  ],
+  "copy-pt-BR": [
+   "home",
+   "calendar"
+  ],
+  "hint-resume": [
+   "after"
+  ],
+  "classic-play": [
+   "board",
+   "add",
+   "hint"
+  ],
+  "late-book": [
+   "load-error",
+   "recovered"
+  ],
+  "end-book-6": [
+   "completion",
+   "next"
+  ],
+  "end-book-24": [
+   "completion",
+   "next"
+  ],
+  "dead-end": [
+   "dead-end",
+   "undo"
+  ],
+  "end-archive": [
+   "completion",
+   "next"
+  ],
+  "hint-no-native": [
+   "hint-no-native",
+   "returned"
+  ],
+  "menu200-ru-RU": [
+   "daily"
+  ],
+  "menu200-es-ES": [
+   "daily",
+   "daily"
+  ],
+  "menu200-en-US": [
+   "daily"
+  ],
+  "menu200-pt-BR": [
+   "daily",
+   "daily"
+  ],
+  "menu200-tr-TR": [
+   "daily"
+  ],
+  "direct-en-US": [
+   "today"
+  ],
+  "direct-ru-RU": [
+   "today"
+  ],
+  "direct-tr-TR": [
+   "today"
+  ],
+  "direct-es-ES": [
+   "today",
+   "archive",
+   "book2"
+  ],
+  "direct-pt-BR": [
+   "today"
+  ]
+ },
+ "observations": [
+  {
+   "scenario": "first-ru",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "first-en",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "hub",
+   "check": "policy link",
+   "value": [
+    "https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md",
+    "https://github.com/DanilaH/seeds-bits/issues"
+   ]
+  },
+  {
+   "scenario": "hub",
+   "check": "policy link",
+   "value": [
+    "https://github.com/DanilaH/seeds-bits/blob/main/store/PRIVACY.md",
+    "https://github.com/DanilaH/seeds-bits/issues"
+   ]
+  },
+  {
+   "scenario": "hub",
+   "check": "lang en",
+   "value": "en"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang en",
+   "value": "en"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang es",
+   "value": "es"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang es",
+   "value": "es"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang tr",
+   "value": "tr"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang tr",
+   "value": "tr"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang pt-BR",
+   "value": "pt-BR"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang pt-BR",
+   "value": "pt-BR"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang ru",
+   "value": "ru"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang ru",
+   "value": "ru"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang auto",
+   "value": "en"
+  },
+  {
+   "scenario": "hub",
+   "check": "lang auto",
+   "value": "ru"
+  },
+  {
+   "scenario": "hub",
+   "check": "book2 button and name",
+   "value": [
+    "1",
+    "Задача 25"
+   ]
+  },
+  {
+   "scenario": "hub",
+   "check": "book2 button and name",
+   "value": [
+    "1",
+    "Puzzle 25"
+   ]
+  },
+  {
+   "scenario": "hub-ru",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "hub-en",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "restart",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "full-course",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "classic-win",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "daily",
+   "check": "checked streak accessible name",
+   "value": "Day 1, засчитан"
+  },
+  {
+   "scenario": "daily-en",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "large-ru",
+   "check": "start",
+   "value": {
+    "copy": "Нажмите любую цифру.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-en",
+   "check": "start",
+   "value": {
+    "copy": "Tap any number.",
+    "top": 260,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-ru",
+   "check": "first-tap",
+   "value": {
+    "copy": "Найдите ещё одну 3.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-en",
+   "check": "first-tap",
+   "value": {
+    "copy": "Find another 3.",
+    "top": 260,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-ru",
+   "check": "error",
+   "value": {
+    "copy": "Эти цифры разные и не дают 10 в сумме.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-en",
+   "check": "error",
+   "value": {
+    "copy": "These numbers are different and don’t add up to 10.",
+    "top": 260,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-ru",
+   "check": "gap",
+   "value": {
+    "copy": "Пустые клетки можно пропускать.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-en",
+   "check": "gap",
+   "value": {
+    "copy": "You can skip empty cells.",
+    "top": 260,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-ru",
+   "check": "edge",
+   "value": {
+    "copy": "От правого края — в начало строки ниже.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-en",
+   "check": "edge",
+   "value": {
+    "copy": "From the right edge, continue at the left of the next row.",
+    "top": 260,
+    "clipDown": 16,
+    "clipSide": 0,
+    "scrollRange": 30,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-ru-RU",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "large-en-US",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "large-es",
+   "check": "start",
+   "value": {
+    "copy": "Toca cualquier número.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-tr",
+   "check": "start",
+   "value": {
+    "copy": "Herhangi bir sayıya dokun.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-es",
+   "check": "first-tap",
+   "value": {
+    "copy": "Busca otro 3.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-tr",
+   "check": "first-tap",
+   "value": {
+    "copy": "Bir 3 daha bul.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-es",
+   "check": "error",
+   "value": {
+    "copy": "Estos números son distintos y no suman 10.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-tr",
+   "check": "error",
+   "value": {
+    "copy": "Bu sayılar farklı ve toplamları 10 değil.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-es",
+   "check": "gap",
+   "value": {
+    "copy": "Puedes saltar las casillas vacías.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-tr",
+   "check": "gap",
+   "value": {
+    "copy": "Boş kareleri atlayabilirsin.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-es",
+   "check": "edge",
+   "value": {
+    "copy": "Del borde derecho al inicio de la fila inferior.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-tr",
+   "check": "edge",
+   "value": {
+    "copy": "Sağ kenardan bir alt satırın sol başına geç.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-es-ES",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "large-tr-TR",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "copy-en",
+   "check": "home",
+   "value": {
+    "visible": [
+     "Другие дни"
+    ],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "large-pt-BR",
+   "check": "start",
+   "value": {
+    "copy": "Toque em qualquer número.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "large-pt-BR",
+   "check": "first-tap",
+   "value": {
+    "copy": "Encontre outro 3.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "books",
+   "value": {
+    "visible": [],
+    "labels": [
+     "Puzzle 1, решена"
+    ]
+   }
+  },
+  {
+   "scenario": "large-pt-BR",
+   "check": "error",
+   "value": {
+    "copy": "Esses números são diferentes e não somam 10.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "4",
+      true
+     ],
+     [
+      "5",
+      true
+     ],
+     [
+      "7",
+      true
+     ],
+     [
+      "8",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ],
+     [
+      "17",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "book2",
+   "value": {
+    "visible": [],
+    "labels": [
+     "Puzzle 25, решена"
+    ]
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "calendar",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "medal",
+   "value": "21 puzzle to go"
+  },
+  {
+   "scenario": "large-pt-BR",
+   "check": "gap",
+   "value": {
+    "copy": "Você pode pular as casas vazias.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "9",
+      true
+     ],
+     [
+      "11",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-1",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "large-pt-BR",
+   "check": "edge",
+   "value": {
+    "copy": "Da borda direita ao início da próxima linha.",
+    "top": 229,
+    "clipDown": 0,
+    "clipSide": 0,
+    "scrollRange": 0,
+    "cells": [
+     [
+      "7",
+      true
+     ],
+     [
+      "14",
+      true
+     ]
+    ]
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-success-1",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-2",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-success-2",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-3",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-success-3",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-4",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-success-4",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "large-pt-BR",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-5",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-success-5",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-6",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en",
+   "check": "lesson-success-6",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-en-US",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "copy-es",
+   "check": "home",
+   "value": {
+    "visible": [
+     "Другие дни"
+    ],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "home",
+   "value": {
+    "visible": [
+     "Другие дни"
+    ],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "books",
+   "value": {
+    "visible": [],
+    "labels": [
+     "Reto 1, решена"
+    ]
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "books",
+   "value": {
+    "visible": [],
+    "labels": [
+     "Bulmaca 1, решена"
+    ]
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "book2",
+   "value": {
+    "visible": [],
+    "labels": [
+     "Reto 25, решена"
+    ]
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "book2",
+   "value": {
+    "visible": [],
+    "labels": [
+     "Bulmaca 25, решена"
+    ]
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "calendar",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "medal",
+   "value": "Faltan 21 reto"
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "calendar",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "medal",
+   "value": "21 bulmaca kaldı"
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-1",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-1",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-success-1",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-success-1",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-2",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-2",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-success-2",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-success-2",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-3",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-3",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-success-3",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-success-3",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-4",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-4",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-success-4",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-success-4",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-5",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-5",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-success-5",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-success-5",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-6",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-6",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-tr",
+   "check": "lesson-success-6",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es",
+   "check": "lesson-success-6",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-es-ES",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "copy-tr-TR",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "home",
+   "value": {
+    "visible": [
+     "Другие дни"
+    ],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "hint",
+   "check": "before",
+   "value": {
+    "marks": [
+     "8",
+     "17"
+    ],
+    "copy": "6 + 4 = 10 · vertically"
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "books",
+   "value": {
+    "visible": [],
+    "labels": [
+     "Desafio 1, решена"
+    ]
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "book2",
+   "value": {
+    "visible": [],
+    "labels": [
+     "Desafio 25, решена"
+    ]
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "calendar",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "medal",
+   "value": "Faltam 21 desafio"
+  },
+  {
+   "scenario": "hint",
+   "check": "after",
+   "value": {
+    "marks": [
+     "8",
+     "17"
+    ],
+    "copy": "6 + 4 = 10 · en vertical"
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-1",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "hint-resume",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-success-1",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-2",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-success-2",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-3",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-success-3",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-4",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-success-4",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-5",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-success-5",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-6",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "lesson-success-6",
+   "value": {
+    "visible": [],
+    "labels": []
+   }
+  },
+  {
+   "scenario": "copy-pt-BR",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "classic-play",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "late-book",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "book-v1-24",
+   "check": "next",
+   "value": "Следующая тетрадь"
+  },
+  {
+   "scenario": "book-v1-6",
+   "check": "next",
+   "value": "Следующая страница"
+  },
+  {
+   "scenario": "end-book-6",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "end-book-24",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "daily-v1-2026-11-21",
+   "check": "next",
+   "value": "Сегодняшняя задача"
+  },
+  {
+   "scenario": "dead-end",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "end-archive",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "hint-no-native",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "home",
+   "value": [
+    {
+     "s": "#resume",
+     "hit": true,
+     "hitElement": "resume",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#classic-mode",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#book-mode",
+     "hit": true,
+     "hitElement": "book-count",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#daily-mode",
+     "hit": true,
+     "hitElement": "daily-state",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-open",
+     "hit": true,
+     "hitElement": "calendar-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#settings-open",
+     "hit": true,
+     "hitElement": "settings-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "settings",
+   "value": [
+    {
+     "s": "#settings-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#language-open",
+     "hit": true,
+     "hitElement": "language-current",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#privacy-open",
+     "hit": true,
+     "hitElement": "privacy-open",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "privacy",
+   "value": [
+    {
+     "s": "#privacy-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#collection a",
+     "hit": true,
+     "hitElement": "A",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "languages",
+   "value": [
+    {
+     "s": "#language-close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-language=\"pt-BR\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "books",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#continue-book",
+     "hit": true,
+     "hitElement": "continue-book",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-volume=\"9\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"book-v1-24\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "progress",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-book",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-trophies",
+     "hit": true,
+     "hitElement": "progress-trophies",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "jars",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#jar-play",
+     "hit": true,
+     "hitElement": "jar-play",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "trophies",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-month=\"2026-11\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "calendar",
+   "value": [
+    {
+     "s": "#today-task",
+     "hit": true,
+     "hitElement": "today-task",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#prev-month",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-picker summary",
+     "hit": true,
+     "hitElement": "SUMMARY",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"daily-v1-2026-11-22\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru",
+   "check": "daily",
+   "value": [
+    {
+     "s": "#menu",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#book-top",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#undo",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#hint",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#board button[data-index]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-ru-RU",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "home",
+   "value": [
+    {
+     "s": "#resume",
+     "hit": true,
+     "hitElement": "resume",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#classic-mode",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#book-mode",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#daily-mode",
+     "hit": true,
+     "hitElement": "daily-state",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-open",
+     "hit": true,
+     "hitElement": "calendar-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#settings-open",
+     "hit": true,
+     "hitElement": "settings-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "home",
+   "value": [
+    {
+     "s": "#resume",
+     "hit": true,
+     "hitElement": "resume",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#classic-mode",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#book-mode",
+     "hit": true,
+     "hitElement": "book-count",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#daily-mode",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-open",
+     "hit": true,
+     "hitElement": "calendar-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#settings-open",
+     "hit": true,
+     "hitElement": "settings-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "settings",
+   "value": [
+    {
+     "s": "#settings-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#language-open",
+     "hit": true,
+     "hitElement": "language-current",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#privacy-open",
+     "hit": true,
+     "hitElement": "privacy-open",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "settings",
+   "value": [
+    {
+     "s": "#settings-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#language-open",
+     "hit": true,
+     "hitElement": "language-current",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#privacy-open",
+     "hit": true,
+     "hitElement": "privacy-open",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "privacy",
+   "value": [
+    {
+     "s": "#privacy-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#collection a",
+     "hit": true,
+     "hitElement": "A",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "privacy",
+   "value": [
+    {
+     "s": "#privacy-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#collection a",
+     "hit": true,
+     "hitElement": "A",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "languages",
+   "value": [
+    {
+     "s": "#language-close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-language=\"pt-BR\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "languages",
+   "value": [
+    {
+     "s": "#language-close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-language=\"pt-BR\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "books",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#continue-book",
+     "hit": true,
+     "hitElement": "continue-book",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-volume=\"9\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"book-v1-24\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "books",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#continue-book",
+     "hit": true,
+     "hitElement": "continue-book",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-volume=\"9\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"book-v1-24\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "progress",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-book",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-trophies",
+     "hit": true,
+     "hitElement": "progress-trophies",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "progress",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-book",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-trophies",
+     "hit": true,
+     "hitElement": "progress-trophies",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "jars",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#jar-play",
+     "hit": true,
+     "hitElement": "jar-play",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "jars",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#jar-play",
+     "hit": true,
+     "hitElement": "jar-play",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "trophies",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-month=\"2026-11\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "trophies",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-month=\"2026-11\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "calendar",
+   "value": [
+    {
+     "s": "#today-task",
+     "hit": true,
+     "hitElement": "today-task",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#prev-month",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-picker summary",
+     "hit": true,
+     "hitElement": "SUMMARY",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"daily-v1-2026-11-22\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "calendar",
+   "value": [
+    {
+     "s": "#today-task",
+     "hit": true,
+     "hitElement": "today-task",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#prev-month",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-picker summary",
+     "hit": true,
+     "hitElement": "SUMMARY",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"daily-v1-2026-11-22\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es",
+   "check": "daily",
+   "value": [
+    {
+     "s": "#menu",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 47,
+     "spill": []
+    },
+    {
+     "s": "#book-top",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 47,
+     "spill": []
+    },
+    {
+     "s": "#undo",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 47,
+     "spill": [
+      "Deshacer"
+     ]
+    },
+    {
+     "s": "#hint",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 47,
+     "spill": []
+    },
+    {
+     "s": "#board button[data-index]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 47,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-es-ES",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "menu200-en",
+   "check": "daily",
+   "value": [
+    {
+     "s": "#menu",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 23,
+     "spill": []
+    },
+    {
+     "s": "#book-top",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 23,
+     "spill": []
+    },
+    {
+     "s": "#undo",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 23,
+     "spill": []
+    },
+    {
+     "s": "#hint",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 23,
+     "spill": []
+    },
+    {
+     "s": "#board button[data-index]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 23,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-en-US",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "home",
+   "value": [
+    {
+     "s": "#resume",
+     "hit": true,
+     "hitElement": "resume",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#classic-mode",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#book-mode",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#daily-mode",
+     "hit": true,
+     "hitElement": "daily-state",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-open",
+     "hit": true,
+     "hitElement": "calendar-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#settings-open",
+     "hit": true,
+     "hitElement": "settings-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "home",
+   "value": [
+    {
+     "s": "#resume",
+     "hit": true,
+     "hitElement": "resume",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#classic-mode",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#book-mode",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#daily-mode",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-open",
+     "hit": true,
+     "hitElement": "calendar-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#settings-open",
+     "hit": true,
+     "hitElement": "settings-open",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "settings",
+   "value": [
+    {
+     "s": "#settings-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#language-open",
+     "hit": true,
+     "hitElement": "language-current",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#privacy-open",
+     "hit": true,
+     "hitElement": "privacy-open",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "settings",
+   "value": [
+    {
+     "s": "#settings-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#language-open",
+     "hit": true,
+     "hitElement": "language-current",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#privacy-open",
+     "hit": true,
+     "hitElement": "privacy-open",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "privacy",
+   "value": [
+    {
+     "s": "#privacy-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#collection a",
+     "hit": true,
+     "hitElement": "A",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "privacy",
+   "value": [
+    {
+     "s": "#privacy-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#collection a",
+     "hit": true,
+     "hitElement": "A",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "languages",
+   "value": [
+    {
+     "s": "#language-close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-language=\"pt-BR\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "languages",
+   "value": [
+    {
+     "s": "#language-close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-language=\"pt-BR\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "books",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#continue-book",
+     "hit": true,
+     "hitElement": "continue-book",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-volume=\"9\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"book-v1-24\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "books",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#close",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#continue-book",
+     "hit": true,
+     "hitElement": "continue-book",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-volume=\"9\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"book-v1-24\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "progress",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-book",
+     "hit": true,
+     "hitElement": "SMALL",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-trophies",
+     "hit": true,
+     "hitElement": "progress-trophies",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "progress",
+   "value": [
+    {
+     "s": "#collection-back",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-book",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#progress-trophies",
+     "hit": true,
+     "hitElement": "progress-trophies",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "jars",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#jar-play",
+     "hit": true,
+     "hitElement": "jar-play",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "jars",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#jar-play",
+     "hit": true,
+     "hitElement": "jar-play",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "trophies",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-month=\"2026-11\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "trophies",
+   "value": [
+    {
+     "s": "#jars-tab",
+     "hit": true,
+     "hitElement": "jars-tab",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#trophies-mode",
+     "hit": true,
+     "hitElement": "trophies-mode",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-month=\"2026-11\"]",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "calendar",
+   "value": [
+    {
+     "s": "#today-task",
+     "hit": true,
+     "hitElement": "today-task",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#prev-month",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-picker summary",
+     "hit": true,
+     "hitElement": "SUMMARY",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"daily-v1-2026-11-22\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "calendar",
+   "value": [
+    {
+     "s": "#today-task",
+     "hit": true,
+     "hitElement": "today-task",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#prev-month",
+     "hit": true,
+     "hitElement": "svg",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "#calendar-picker summary",
+     "hit": true,
+     "hitElement": "SUMMARY",
+     "overflowX": 0,
+     "spill": []
+    },
+    {
+     "s": "[data-game=\"daily-v1-2026-11-22\"]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 0,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "daily",
+   "value": [
+    {
+     "s": "#menu",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 81,
+     "spill": []
+    },
+    {
+     "s": "#book-top",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 81,
+     "spill": []
+    },
+    {
+     "s": "#undo",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 81,
+     "spill": [
+      "Desfazer"
+     ]
+    },
+    {
+     "s": "#hint",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 81,
+     "spill": []
+    },
+    {
+     "s": "#board button[data-index]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 81,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-tr",
+   "check": "daily",
+   "value": [
+    {
+     "s": "#menu",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 41,
+     "spill": []
+    },
+    {
+     "s": "#book-top",
+     "hit": true,
+     "hitElement": "path",
+     "overflowX": 41,
+     "spill": []
+    },
+    {
+     "s": "#undo",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 41,
+     "spill": []
+    },
+    {
+     "s": "#hint",
+     "hit": true,
+     "hitElement": "SPAN",
+     "overflowX": 41,
+     "spill": []
+    },
+    {
+     "s": "#board button[data-index]",
+     "hit": true,
+     "hitElement": "BUTTON",
+     "overflowX": 41,
+     "spill": []
+    }
+   ]
+  },
+  {
+   "scenario": "menu200-pt-BR",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "menu200-tr-TR",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "direct-en",
+   "check": "today",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 294,
+     "font": "22px",
+     "text": "Daily puzzle · November 22",
+     "textRight": 294,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 139,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 269,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-ru",
+   "check": "today",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 264,
+     "font": "22px",
+     "text": "Задача дня · 22 ноября",
+     "textRight": 264,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 294,
+     "font": "28px",
+     "textRight": 225,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 26,
+     "right": 294,
+     "font": "28px",
+     "textRight": 199,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-ru",
+   "check": "archive",
+   "value": {
+    "width": 320,
+    "documentWidth": 327,
+    "mode": {
+     "left": 24,
+     "right": 327,
+     "font": "22px",
+     "text": "Задача из архива · 13 ноября",
+     "textRight": 327,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 294,
+     "font": "28px",
+     "textRight": 225,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 26,
+     "right": 294,
+     "font": "28px",
+     "textRight": 199,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-en",
+   "check": "archive",
+   "value": {
+    "width": 320,
+    "documentWidth": 331,
+    "mode": {
+     "left": 24,
+     "right": 331,
+     "font": "22px",
+     "text": "Archived puzzle · November 13",
+     "textRight": 331,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 139,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 269,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-ru",
+   "check": "book2",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 233,
+     "font": "22px",
+     "text": "Тетрадь 2 · задача 1",
+     "textRight": 233,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 294,
+     "font": "28px",
+     "textRight": 225,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 26,
+     "right": 294,
+     "font": "28px",
+     "textRight": 199,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-ru-RU",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "direct-en",
+   "check": "book2",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 266,
+     "font": "22px",
+     "text": "Puzzle book 2 · Puzzle 1",
+     "textRight": 266,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 139,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 269,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-en-US",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "direct-tr",
+   "check": "today",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 309,
+     "font": "22px",
+     "text": "Günün bulmacası · 22 Kasım",
+     "textRight": 309,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 147,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 278,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-es",
+   "check": "today",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 314,
+     "font": "22px",
+     "text": "Reto diario · 22 de noviembre",
+     "textRight": 314,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 166,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 275,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-tr",
+   "check": "archive",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 292,
+     "font": "22px",
+     "text": "Arşiv bulmacası · 13 Kasım",
+     "textRight": 292,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 147,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 278,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-es",
+   "check": "archive",
+   "value": {
+    "width": 320,
+    "documentWidth": 366,
+    "mode": {
+     "left": 24,
+     "right": 366,
+     "font": "22px",
+     "text": "Reto del archivo · 13 de noviembre",
+     "textRight": 366,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 166,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 275,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-tr",
+   "check": "book2",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 226,
+     "font": "22px",
+     "text": "Defter 2 · Bulmaca 1",
+     "textRight": 226,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 147,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 278,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-tr-TR",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "direct-es",
+   "check": "book2",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 223,
+     "font": "22px",
+     "text": "Cuaderno 2 · Reto 1",
+     "textRight": 223,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 166,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 275,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-es-ES",
+   "check": "route",
+   "value": "completed"
+  },
+  {
+   "scenario": "direct-pt-BR",
+   "check": "today",
+   "value": {
+    "width": 320,
+    "documentWidth": 343,
+    "mode": {
+     "left": 24,
+     "right": 343,
+     "font": "22px",
+     "text": "Desafio do dia · 22 de novembro",
+     "textRight": 343,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 162,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 272,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-pt-BR",
+   "check": "archive",
+   "value": {
+    "width": 320,
+    "documentWidth": 386,
+    "mode": {
+     "left": 24,
+     "right": 386,
+     "font": "22px",
+     "text": "Desafio do arquivo · 13 de novembro",
+     "textRight": 386,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 162,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 272,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-pt-BR",
+   "check": "book2",
+   "value": {
+    "width": 320,
+    "documentWidth": 320,
+    "mode": {
+     "left": 24,
+     "right": 239,
+     "font": "22px",
+     "text": "Caderno 2 · Desafio 1",
+     "textRight": 239,
+     "whiteSpace": "nowrap"
+    },
+    "board": {
+     "left": 22,
+     "right": 298,
+     "font": "44px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    },
+    "undo": {
+     "left": 26,
+     "right": 156,
+     "font": "28px",
+     "textRight": 162,
+     "whiteSpace": "normal"
+    },
+    "hint": {
+     "left": 164,
+     "right": 294,
+     "font": "28px",
+     "textRight": 272,
+     "whiteSpace": "normal"
+    },
+    "viewport": {
+     "left": 22,
+     "right": 298,
+     "font": "32px",
+     "textRight": 298,
+     "whiteSpace": "normal"
+    }
+   }
+  },
+  {
+   "scenario": "direct-pt-BR",
+   "check": "route",
+   "value": "completed"
+  }
+ ],
+ "examples": [
+  {
+   "scenario": "first-en",
+   "name": "edge",
+   "lang": "en",
+   "text": "Puzzle book 1 · Puzzle 1\nFrom the right edge, continue at the left of the next row.\n1\n9\nUndo\nHint"
+  },
+  {
+   "scenario": "hub-en",
+   "name": "pause",
+   "lang": "en",
+   "text": "Seeds Bits\nPuzzle book 1\n\nPuzzle 1 · 8 numbers\n\nPlay\nRestart puzzle\nClassic\nWhen you run out of pairs, add more numbers\nPuzzle books\n24 puzzles per book · Solved: 0\nDaily puzzle\nA new board every day\nДругие дни\nProgress\nHow to play\nSettings\nQA · first launch · test ads"
+  },
+  {
+   "scenario": "hub-en",
+   "name": "book2",
+   "lang": "en",
+   "text": "Puzzle books\nPuzzle book 2\n0/24\nStart · Puzzle 1\n\n100 puzzle books · 2,400 puzzles\n\nSection\n1. First pages\n2. Easy lines\n3. Interwoven paths\n4. Open spaces\n5. Long trails\n6. Big pages\n7. Depth\n8. Faraway routes\n9. Wide horizon\n10. A long journey\nShow\nAll\nNot started\nIn progress\nCompleted\n1\n0/24\n2\n0/24\n3\n0/24\n4\n0/24\n5\n0/24\n6\n0/24\n7\n0/24\n8\n0/24\n9\n0/24\n10\n0/24\nPage 1\n0/6\n1\n2\n3\n4\n5\n6\nPage 2\n0/6\n7\n8\n9\n10\n11\n12\nPage 3\n0/6\n13\n14\n15\n16\n17\n18\nPage 4\n0/6\n19\n20\n21\n22\n23\n24"
+  },
+  {
+   "scenario": "hub-en",
+   "name": "opened-book2",
+   "lang": "en",
+   "text": "Jar 1\n0%\nPuzzle book 2 · Puzzle 1\n16 numbers\nPage 1\n5\n3\n7\n3\n6\n6\n7\n7\n6\n9\n4\n1\n7\n7\n5\n7\n\nEqual or add up to 10\n\nUndo\nHint"
+  },
+  {
+   "scenario": "daily-en",
+   "name": "replay-today",
+   "lang": "en",
+   "text": "Jar 1\n16%\nDaily puzzle · November 22\n28 numbers\n7\n8\n8\n9\n7\n8\n2\n2\n7\n4\n5\n3\n8\n1\n1\n4\n4\n9\n1\n4\n3\n9\n5\n9\n9\n7\n3\n3\n\nEqual or add up to 10\n\nUndo\nHint"
+  },
+  {
+   "scenario": "end-book-24",
+   "name": "completion",
+   "lang": "ru",
+   "text": "Баночка 1\n16%\n24/24\nТетрадь 1 пройдена!\n\nВсе четыре страницы готовы\n\n1\nПары\n0\nПодсказки\n\nВ баночку: +4 семечка\n\nСледующая тетрадь"
+  },
+  {
+   "scenario": "end-archive",
+   "name": "completion",
+   "lang": "ru",
+   "text": "Баночка 1\n16%\nЗадача за 21 ноября решена\n\n21.11.2026\n\n1\nПары\n0\nПодсказки\n\nНоябрь 2026 Г.\n1 из 30 дней\nБронза\n1 из 7 дней\nСледом\nСеребро\nЕщё 13 задач\n\nВ баночку: +4 семечка\n\nСегодняшняя задача"
+  }
+ ]
+}
