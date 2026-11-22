@@ -54,7 +54,7 @@
     "open.edge": {
       "source": "src/first-session.ts",
       "ru": "От правого края — в начало строки ниже.",
-      "en": "From the right edge, continue at the left of the next row.",
+      "en": "At the right edge, go to the next row’s left.",
       "es": "Del borde derecho al inicio de la fila inferior.",
       "tr": "Sağ kenardan bir alt satırın sol başına geç.",
       "pt-BR": "Da borda direita ao início da próxima linha.",
@@ -1602,6 +1602,49 @@
       },
       "id": {
         "other": "Urungkan {count} langkah"
+      }
+    },
+    "trophy.remaining": {
+      "source": "src/trophies.ts",
+      "selector": "count",
+      "ru": {
+        "one": "Ещё {count} задача",
+        "few": "Ещё {count} задачи",
+        "many": "Ещё {count} задач",
+        "other": "Ещё {count} задачи"
+      },
+      "en": {
+        "one": "{count} puzzle to go",
+        "other": "{count} puzzles to go"
+      },
+      "es": {
+        "one": "Falta {count} reto",
+        "other": "Faltan {count} retos"
+      },
+      "tr": {
+        "other": "{count} bulmaca kaldı"
+      },
+      "pt-BR": {
+        "one": "Falta {count} desafio",
+        "other": "Faltam {count} desafios"
+      },
+      "fr": {
+        "one": "Encore {count} énigme",
+        "other": "Encore {count} énigmes"
+      },
+      "de": {
+        "one": "Noch {count} Rätsel",
+        "other": "Noch {count} Rätsel"
+      },
+      "it": {
+        "one": "Manca {count} rompicapo",
+        "other": "Mancano {count} rompicapi"
+      },
+      "vi": {
+        "other": "Còn {count} câu đố"
+      },
+      "id": {
+        "other": "Kurang {count} teka-teki"
       }
     },
     "notification.milestone": {

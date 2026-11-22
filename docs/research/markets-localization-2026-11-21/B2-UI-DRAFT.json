@@ -84,11 +84,11 @@
     "id": "Tutup menu"
   },
   "ui.other-days": {
-    "fr": "Autres jours {0}",
-    "de": "Andere Tage {0}",
-    "it": "Altri giorni {0}",
-    "vi": "Ngày khác {0}",
-    "id": "Hari lain {0}"
+    "fr": "Autres jours",
+    "de": "Andere Tage",
+    "it": "Altri giorni",
+    "vi": "Ngày khác",
+    "id": "Hari lain"
   },
   "ui.back": {
     "fr": "Retour",
@@ -2058,18 +2058,11 @@
     "id": "teka-teki"
   },
   "ui.next-medal-to-go": {
-    "fr": "Prochaine médaille : {0}, encore {1} {2}",
-    "de": "Nächste Medaille: {0}, noch {1} {2}",
-    "it": "Prossima medaglia: {0}, mancano {1} {2}",
-    "vi": "Huy chương tiếp theo: {0}, còn {1} {2}",
-    "id": "Medali berikutnya: {0}, kurang {1} {2}"
-  },
-  "ui.to-go": {
-    "fr": "Encore {0} {1}",
-    "de": "Noch {0} {1}",
-    "it": "Mancano {0} {1}",
-    "vi": "Còn {0} {1}",
-    "id": "Kurang {0} {1}"
+    "fr": "Prochaine médaille : {0}. {1}",
+    "de": "Nächste Medaille: {0}. {1}",
+    "it": "Prossima medaglia: {0}. {1}",
+    "vi": "Huy chương tiếp theo: {0}. {1}",
+    "id": "Medali berikutnya: {0}. {1}"
   },
   "ui.coming-up": {
     "fr": "À suivre",

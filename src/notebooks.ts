@@ -16,6 +16,9 @@ export const chapterNames = [
 export function volumeOf(id: string) {
   return Math.max(0, Math.floor((Number(id.slice(8)) - 1) / VOLUME_SIZE));
 }
+export function puzzleNumberInVolume(id: string) {
+  return (Number(id.slice(8)) - 1) % VOLUME_SIZE + 1;
+}
 export function volumeTasks(volume: number) {
   return notebook.slice(volume * 24, (volume + 1) * 24);
 }

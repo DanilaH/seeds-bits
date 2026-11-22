@@ -32,6 +32,8 @@ describe("distribution and locale contracts",()=>{
       for(const lang of notes.locales) expect((message as Record<string,string>)[lang],id+" "+lang).toBeTruthy();
     for(const [id,message] of Object.entries(ui))
       for(const lang of launchLanguages) expect((message as Record<string,string>)[lang],id+" "+lang).toBeTruthy();
-    expect(Object.keys(notes.plurals)).toHaveLength(2);
+    expect(notes.plurals).toHaveProperty("action.undoCount");
+    expect(notes.plurals).toHaveProperty("notification.milestone");
+    expect(notes.plurals).toHaveProperty("trophy.remaining");
   });
 });

@@ -1,4 +1,4 @@
-import {expect,test,type BrowserContext,type Page} from "@playwright/test";
+import {expect,test,type BrowserContext,type Locator,type Page} from "@playwright/test";
 import fs from "node:fs";
 
 type QAEvent={name:string;data:Record<string,unknown>};
@@ -32,6 +32,39 @@ async function openPicker(page:Page) {
   await page.locator("#settings-open").click();
   await expect(page.locator("#settings-panel .language-row")).toBeVisible();
   await page.locator("#language-open").click();
+}
+async function doubleText(page:Page) {
+  await page.evaluate(()=>{
+    const elements=[...document.querySelectorAll<HTMLElement>("body *")];
+    const sizes=elements.map(e=>parseFloat(getComputedStyle(e).fontSize));
+    elements.forEach((e,i)=>e.style.fontSize=sizes[i]*2+"px");
+  });
+  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+}
+async function expectTextInside(text:Locator, boundary:Locator) {
+  const box=(await boundary.boundingBox())!;
+  const lines=await text.evaluate(el=>{
+    const range=document.createRange();
+    range.selectNodeContents(el);
+    return Array.from(range.getClientRects(),r=>r.toJSON());
+  });
+  expect(lines.length).toBeGreaterThan(0);
+  for(const line of lines) {
+    const details=JSON.stringify({text:await text.textContent(),line,box});
+    expect(line.left,details).toBeGreaterThanOrEqual(box.x-1);
+    expect(line.right,details).toBeLessThanOrEqual(box.x+box.width+1);
+    expect(line.top,details).toBeGreaterThanOrEqual(box.y-1);
+    expect(line.bottom,details).toBeLessThanOrEqual(box.y+box.height+1);
+  }
+}
+async function touchDigit(page:Page,index:number) {
+  const point=await digit(page,index).evaluate(el=>{
+    const rect=el.getBoundingClientRect();
+    const x=rect.x+rect.width/2,y=rect.y+rect.height/2;
+    return {x,y,visible:el.contains(document.elementFromPoint(x,y))};
+  });
+  expect(point.visible,JSON.stringify(point)).toBe(true);
+  await page.mouse.click(point.x,point.y);
 }
 test("portal language before play, two tabs and switching with the same selection and Undo",async({page,context},testInfo)=>{
   const events:QAEvent[]=[];
@@ -120,14 +153,9 @@ for(const [width,height] of [[320,568],[568,320]])for(const reverse of [false,tr
     await page.goto("/");
     await page.locator("#resume").click();
     const status=page.locator("#status");
-    await expect(status).toHaveText("From the right edge, continue at the left of the next row.");
-    await page.evaluate(()=>{
-      document.documentElement.classList.add("has-mobile-ads");
-      const elements=[...document.querySelectorAll<HTMLElement>("body *")];
-      const heights=elements.map(e=>parseFloat(getComputedStyle(e).fontSize));
-      elements.forEach((e,i)=>e.style.fontSize=heights[i]*2+"px");
-    });
-    await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+    await expect(status).toHaveText("At the right edge, go to the next row’s left.");
+    await page.evaluate(()=>document.documentElement.classList.add("has-mobile-ads"));
+    await doubleText(page);
     const statusMetrics=await status.evaluate(el=>{
       const range=document.createRange();range.selectNodeContents(el);
       const box=el.parentElement!.getBoundingClientRect();
@@ -137,20 +165,11 @@ for(const [width,height] of [[320,568],[568,320]])for(const reverse of [false,tr
     });
     expect(statusMetrics.ok,JSON.stringify(statusMetrics)).toBe(true);
     const [first,second]=reverse?[9,8]:[8,9];
-    const touch=async(index:number)=>{
-      const box=await digit(page,index).evaluate(el=>{
-        const rect=el.getBoundingClientRect();
-        const x=rect.x+rect.width/2,y=rect.y+rect.height/2;
-        return {x,y,visible:el.contains(document.elementFromPoint(x,y))};
-      });
-      expect(box.visible,JSON.stringify(box)).toBe(true);
-      await page.mouse.click(box.x,box.y);
-    };
     const scroll=()=>page.locator("#viewport").evaluate(el=>el.scrollTop);
     const view=await page.locator("#viewport").boundingBox();
-    await touch(first);
+    await touchDigit(page,first);
     await expect(digit(page,first)).toHaveClass(/selected/);
-    await expect(status).toHaveText("From the right edge, continue at the left of the next row.");
+    await expect(status).toHaveText("At the right edge, go to the next row’s left.");
     expect(await page.locator("#viewport").boundingBox()).toEqual(view);
     expect(await scroll()).toBe(0);
     await openPicker(page);
@@ -161,7 +180,115 @@ for(const [width,height] of [[320,568],[568,320]])for(const reverse of [false,tr
     await expect(digit(page,first)).toHaveClass(/selected/);
     await expect(digit(page,first)).toHaveAttribute("aria-label",/fila/);
     expect(await scroll()).toBe(0);
-    await touch(second);
+    await touchDigit(page,second);
     await expect(page.locator("#win")).toBeVisible();
   });
 }
+
+for(const [first,second] of [[7,14],[14,7]]) {
+  test(`audit 12070: first notebook edge at 200 percent, ${first} → ${second}`,async({page,context})=>{
+    await setup(context,"en",[]);
+    await page.setViewportSize({width:320,height:568});
+    await page.goto("/");
+    const cue=page.locator(".opening-copy"), rail=page.locator("#page-progress");
+    await expect(cue).toHaveText("Tap any number.");
+    await page.evaluate(()=>document.documentElement.classList.add("has-mobile-ads"));
+    await doubleText(page);
+    for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2]]) {
+      await touchDigit(page,a);
+      await touchDigit(page,b);
+      await expect(page.locator("#remaining")).toHaveText(String(n));
+    }
+    const viewport=page.locator("#viewport"), before=await viewport.boundingBox();
+    await expect(cue).toHaveText("At the right edge, go to the next row’s left.");
+    await expectTextInside(cue,rail);
+    await touchDigit(page,first);
+    await expect(digit(page,first)).toHaveClass(/selected/);
+    await expect(cue).toHaveText(first===7?"Find 9: 1 + 9 = 10.":"Find 1: 9 + 1 = 10.");
+    await expectTextInside(cue,rail);
+    expect(await viewport.boundingBox()).toEqual(before);
+    expect(await viewport.evaluate(el=>el.scrollTop)).toBe(0);
+    await touchDigit(page,second);
+    await expect(page.locator("#win")).toBeVisible();
+  });
+}
+
+for(const [language,otherDays,today,archive,undo] of [
+  ["es","Otros días","Reto diario · 22 de noviembre","Reto del archivo · 13 de noviembre","Deshacer"],
+  ["pt-BR","Outros dias","Desafio do dia · 22 de novembro","Desafio do arquivo · 13 de novembro","Desfazer"],
+]) {
+  test(`audit 12070: readable daily and archive on ${language}`,async({page,context})=>{
+    await setup(context,language,[]);
+    await page.setViewportSize({width:320,height:568});
+    await page.clock.setFixedTime(new Date("2026-11-22T12:00:00+05:00"));
+    await page.goto("/");
+    await page.locator("#menu").click();
+    await expect(page.locator("#calendar-open")).toHaveAccessibleName(otherDays);
+    await page.locator("#daily-mode").click();
+    const mode=page.locator("#mode"), action=page.locator("#undo");
+    for(const label of [today,archive]) {
+      await expect(mode).toHaveText(label);
+      await expect(action).toHaveAccessibleName(undo);
+      await expect(action.locator("span")).toHaveText(undo);
+      await expectTextInside(mode,page.locator(".game-meta"));
+      await expectTextInside(action.locator("span"),action);
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(320);
+      if(label===today) {
+        await doubleText(page);
+        await expectTextInside(mode,page.locator(".game-meta"));
+        await expectTextInside(action.locator("span"),action);
+        await page.locator("#menu").click();
+        await page.locator("#calendar-open").click();
+        await page.locator('[data-game="daily-v1-2026-11-13"]').click();
+      }
+    }
+  });
+}
+
+for(const [language,otherDays] of [
+  ["en","Other days"],["es","Otros días"],["tr","Diğer günler"],["pt-BR","Outros dias"],
+]) {
+  test(`audit 12070: Other days on a clean profile and during play on ${language}`,async({page,context})=>{
+    await setup(context,language,[]);
+    await page.goto("/");
+    await touchDigit(page,8);
+    await openPicker(page);
+    const title=page.locator("#calendar-open");
+    await expect(title).toHaveText(otherDays);
+    await choose(page,"ru");
+    await expect(title).toHaveText("Другие дни");
+    await choose(page,language);
+    await page.locator("#language-close").click();
+    await page.locator("#settings-back").click();
+    await expect(title).toHaveAccessibleName(otherDays);
+    await page.locator("#resume").click();
+    await expect(digit(page,8)).toHaveClass(/selected/);
+  });
+}
+
+test("audit 12070: notebook numbers and completed streak accessible names",async({page,context})=>{
+  await setup(context,"en",[]);
+  await context.addInitScript(()=>{
+    localStorage.setItem("seeds-bits.progress.v2",JSON.stringify({
+      version:3,active:"book-v1-1",done:["book-v1-25"],seen:[],sessions:{},hints:{},
+      meta:{version:2,since:"2026-11-21T00:00:00Z",wallet:0,attempts:{},completed:1,unassisted:1,
+        daily:{lastDay:"2026-11-21",count:1,best:1,reward:0}},
+    }));
+  });
+  await page.clock.setFixedTime(new Date("2026-11-22T12:00:00+05:00"));
+  await page.goto("/");
+  if(!await page.locator("#dialog").evaluate(el=>(el as HTMLDialogElement).open)) {
+    await page.locator("#menu").click();
+  }
+  await page.locator("#book-mode").click();
+  await page.locator('[data-volume="1"]').click();
+  const first=page.locator('[data-game="book-v1-25"]');
+  await expect(first).toHaveText("1✓");
+  await expect(first).toHaveAccessibleName("Puzzle 1, solved");
+  await expect(page.locator('[data-game="book-v1-48"]')).toHaveAccessibleName("Puzzle 24");
+  await first.click();
+  await expect(page.locator("#mode")).toHaveText("Puzzle book 2 · Puzzle 1");
+  await page.locator("#menu").click();
+  await page.locator("#calendar-open").click();
+  await expect(page.locator(".run-days .done")).toHaveAttribute("aria-label","Day 1, counted");
+});

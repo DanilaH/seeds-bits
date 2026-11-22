@@ -53,7 +53,7 @@ import {
   grantReward,
 } from "./hint-budget";
 import { jars, collectPair, jarState, jarNames, jarColors } from "./jars";
-import { volumeOf, volumeTasks, chapterNames } from "./notebooks";
+import { volumeOf, volumeTasks, chapterNames, puzzleNumberInVolume } from "./notebooks";
 import { playSound, suspendSound, blockSound } from "./sound";
 import { SeedFlight } from "./seed-flight";
 import { JarSpill } from "./jar-spill";
@@ -269,7 +269,7 @@ const lessons = [
   },
 ];
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2><button id="close" class="plain" aria-label="${t("ui.close-menu")}">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link">${t("ui.other-days", { "0": icon("arrow") })}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2><button id="close" class="plain" aria-label="${t("ui.close-menu")}">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
 let refreshStaticCopy = () => {};
 const globe = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>';
 const languageSheet = document.createElement("dialog");
@@ -321,6 +321,7 @@ function applyLanguage() {
     platform.isYandex?"yandex_games":undefined, platform.isYandex && !platform.platformLocale());
   useLanguage(localeState.ui);
   refreshStaticCopy();
+  $("calendar-open-label").textContent = t("ui.other-days");
   document.title=t("ui.document-title");
   document.querySelector('meta[name="description"]')?.setAttribute("content",t("store.short"));
   drawLanguage();
@@ -1945,25 +1946,17 @@ function render() {
   const values = board(),
     count = occupied(values),
     available = availablePairs(values);
-  document
-    .querySelector(".game")!
-    .classList.toggle(
-      "compact-game",
-      lesson < 0 && progress.active !== "classic",
-    );
+  const game = viewport.closest<HTMLElement>(".game")!;
+  game.dataset.mode = lesson < 0 ? gameMode() : "lesson";
+  game.classList.toggle("compact-game", lesson < 0 && progress.active !== "classic");
   $("add").hidden = lesson < 0 && progress.active !== "classic";
-  document
-    .querySelector(".game")!
-    .classList.toggle(
-      "short-board",
-      values.length <= 54 && count > 0 && lesson < 0,
-    );
+  game.classList.toggle("short-board", values.length <= 54 && count > 0 && lesson < 0);
   renderJar();
   gameDifficulty.hidden = lesson >= 0 || progress.active !== "classic";
   gameDifficulty.textContent = difficultyLabel();
   gameDifficulty.dataset.level = String(classicDifficulty());
   const ended = count === 0 && lesson < 0;
-  document.querySelector(".game")!.classList.toggle("is-result", ended);
+  game.classList.toggle("is-result", ended);
   resultDock.hidden = !ended;
   const taskIndex = notebook.findIndex((p) => p.id === progress.active);
   const marks = $("page-progress");
@@ -2017,7 +2010,7 @@ function render() {
       : progress.active === "classic"
         ? t("home.classic")
         : progress.active.startsWith("book")
-          ? t("home.book.title", { "book": volumeOf(progress.active) + 1, "puzzle": ((Number(progress.active.slice(8)) - 1) % 24) + 1 })
+          ? t("home.book.title", { "book": volumeOf(progress.active) + 1, "puzzle": puzzleNumberInVolume(progress.active) })
           : dailyFieldTitle(progress.active);
   const plan = lesson < 0 ? currentPlan() : undefined;
   if(!busy){
@@ -3526,11 +3519,15 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ) ??
         tasks.find((p) => !finished.has(p.id)) ??
         tasks[0];
-      html += `<div class="volume-heading"><h3>${t("ui.puzzle-book", { "0": selectedVolume + 1 })}</h3><span>${stats.n}/24</span></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${t("ui.puzzle", { "0": stats.n === 24 ? t("ui.replay") : stats.started ? t("daily.resume") : t("action.start"), "1": Number(continuing.id.slice(8)) - selectedVolume * 24 })}</button>`;
+      html += `<div class="volume-heading"><h3>${t("ui.puzzle-book", { "0": selectedVolume + 1 })}</h3><span>${stats.n}/24</span></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${t("ui.puzzle", { "0": stats.n === 24 ? t("ui.replay") : stats.started ? t("daily.resume") : t("action.start"), "1": puzzleNumberInVolume(continuing.id) })}</button>`;
       for (let page = 0; page < 4; page++) {
         const group = tasks.slice(page * 6, page * 6 + 6),
           n = group.filter((p) => finished.has(p.id)).length;
-        html += `<section class="book-page ${n === 6 ? "page-done" : ""}"><div class="page-heading"><h3>${t("ui.page", { "0": page + 1 })}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((p, i) => `<button class="task ${finished.has(p.id) ? "done" : ""}" data-game="${p.id}" ${p.id === progress.active ? 'aria-current="true"' : ""} aria-label="${t("ui.puzzle-2", { "0": selectedVolume * 24 + page * 6 + i + 1, "1": finished.has(p.id) ? ", решена" : "" })}">${page * 6 + i + 1}${finished.has(p.id) ? "<small>✓</small>" : ""}</button>`).join("")}</div>${n === 6 ? `<p class="stamp">${t("ui.completed-2")}</p>` : ""}</section>`;
+        html += `<section class="book-page ${n === 6 ? "page-done" : ""}"><div class="page-heading"><h3>${t("ui.page", { "0": page + 1 })}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((p) => {
+          const number = puzzleNumberInVolume(p.id);
+          const done = finished.has(p.id);
+          return `<button class="task ${done ? "done" : ""}" data-game="${p.id}" ${p.id === progress.active ? 'aria-current="true"' : ""} aria-label="${t("ui.puzzle-2", { "0": number, "1": done ? t("ui.solved") : "" })}">${number}${done ? "<small>✓</small>" : ""}</button>`;
+        }).join("")}</div>${n === 6 ? `<p class="stamp">${t("ui.completed-2")}</p>` : ""}</section>`;
       }
     } else
       html +=
@@ -3824,12 +3821,12 @@ function renderHomeCurrent() {
   $("resume-context").textContent = classicMode
     ? t("ui.on-the-board", { "0": count, "1": digitWord(count) })
     : progress.active.startsWith("book")
-      ? t("ui.puzzle-3", { "0": ((Number(progress.active.slice(8)) - 1) % 24) + 1, "1": count, "2": digitWord(count) })
+      ? t("ui.puzzle-3", { "0": puzzleNumberInVolume(progress.active), "1": count, "2": digitWord(count) })
       : `${taskDate(progress.active.slice(9))} · ${count} ${digitWord(count)}`;
   $("resume").textContent = !count
     ? t("ui.view-results")
     : session.history.length
-      ? classicMode ? t("ui.resume-classic") : progress.active.startsWith("book") ? t("ui.resume-puzzle", { "0": (Number(progress.active.slice(8)) - 1) % 24 + 1 }) : progress.active.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for", { "0": taskDate(progress.active.slice(9)) })
+      ? classicMode ? t("ui.resume-classic") : progress.active.startsWith("book") ? t("ui.resume-puzzle", { "0": puzzleNumberInVolume(progress.active) }) : progress.active.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for", { "0": taskDate(progress.active.slice(9)) })
       : classicMode
         ? t("ui.start-classic")
         : t("ui.play");
@@ -3974,7 +3971,7 @@ function streakPanel() {
     { length: 7 },
     (_, i) => {
       const n = base + i + 1;
-      return `<span class="${n <= r.count ? "done" : n === r.nextCount ? "next" : ""}" aria-label="${t("ui.day-2", { "0": n, "1": n <= r.count ? ", засчитан" : "" })}">${n <= r.count ? "✓" : n}</span>`;
+      return `<span class="${n <= r.count ? "done" : n === r.nextCount ? "next" : ""}" aria-label="${t("ui.day-2", { "0": n, "1": n <= r.count ? t("ui.counted") : "" })}">${n <= r.count ? "✓" : n}</span>`;
     },
   ).join(
     "",

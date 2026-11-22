@@ -98,6 +98,89 @@ const digit=i=>`#board button[data-index="${i}"]`;
 const saved={rules:1,current:{board,scroll:0,moves:1,additions:0},
   history:[{board:[5,5,0,0,0,0,0,0,6,4],scroll:0,moves:0,additions:0}]};
 const sample={version:3,active:"book-v1-5",done:[],seen:[],hints:{},sessions:{"book-v1-5":saved}};
+const edgeCaption="At the right edge, go to the next row’s left.";
+function assertViewport(ui) {
+  return ui.evaluate("[innerWidth,innerHeight]").then(size=>assert.deepEqual(size,[320,568]));
+}
+function textFits(text,boundary) {
+  return `(()=>{
+    const e=document.querySelector(${JSON.stringify(text)}),r=document.createRange();
+    const box=document.querySelector(${JSON.stringify(boundary)}).getBoundingClientRect();
+    r.selectNodeContents(e);
+    const lines=Array.from(r.getClientRects());
+    return lines.length>0&&lines.every(b=>b.top>=Math.max(0,box.top-1)&&
+      b.bottom<=Math.min(innerHeight,box.bottom+1)&&b.left>=Math.max(0,box.left-1)&&
+      b.right<=Math.min(innerWidth,box.right+1));
+  })()`;
+}
+async function firstNotebookEdge(order) {
+  const ui=await connect();
+  try {
+    await ui.until("document.querySelector('.opening-copy')?.textContent==='Tap any number.'");
+    await assertViewport(ui);
+    for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2]]) {
+      await ui.tap(digit(a),false);
+      await ui.tap(digit(b),false);
+      await ui.until(`document.querySelector('#remaining').textContent==='${n}'`);
+    }
+    const geometry=()=>ui.evaluate(`(()=>{
+      const field=document.querySelector('#viewport');
+      return {box:field.getBoundingClientRect().toJSON(),scroll:field.scrollTop};
+    })()`);
+    const before=await geometry();
+    const copy="document.querySelector('.opening-copy').textContent";
+    assert.equal(await ui.evaluate(copy),edgeCaption);
+    assert(await ui.evaluate(textFits(".opening-copy","#page-progress")),"English opening cue clipped");
+    if(order[0]===7)shot("acceptance-first-en-200");
+    await ui.tap(digit(order[0]),false);
+    assert(await ui.evaluate(`document.querySelector('${digit(order[0])}').classList.contains('selected')`));
+    assert.equal(await ui.evaluate(copy),order[0]===7?"Find 9: 1 + 9 = 10.":"Find 1: 9 + 1 = 10.");
+    assert(await ui.evaluate(textFits(".opening-copy","#page-progress")),"English selection cue clipped");
+    assert.deepEqual(await geometry(),before);
+    await ui.tap(digit(order[1]),false);
+    await ui.until("!document.querySelector('#win').hidden");
+    return {order,solved:true,fieldStayedPut:true,captionFits:true};
+  } finally {
+    ui.close();
+    stop();
+  }
+}
+async function archiveAtLargeFont(language,title,undo) {
+  await fixture({[progress]:sample,[settings]:{tutorialDone:true,languageChoice:language,sound:false,vibration:false}});
+  launch();
+  const ui=await connect();
+  try {
+    await ui.tap("#calendar-open");
+    const day='[data-game="daily-v1-2026-11-13"]';
+    const year=await ui.evaluate("document.querySelector('#calendar-year').value");
+    const month=await ui.evaluate("document.querySelector('#calendar-month').value");
+    if(year!=="2026"||month!=="11") {
+      await ui.tap("#calendar-picker summary");
+      for(const [id,value] of [["calendar-year","2026"],["calendar-month","11"]]) {
+        await ui.evaluate(`(()=>{
+          const select=document.querySelector('#${id}');
+          if(select.value!==${JSON.stringify(value)}) {
+            select.value=${JSON.stringify(value)};
+            select.dispatchEvent(new Event('change',{bubbles:true}));
+          }
+        })()`);
+      }
+    }
+    await ui.tap(day);
+    await ui.until(`document.querySelector('#mode').textContent===${JSON.stringify(title)}`);
+    await assertViewport(ui);
+    assert.equal(await ui.evaluate("document.querySelector('#undo span').textContent"),undo);
+    assert.equal(await ui.evaluate("document.documentElement.scrollWidth"),320);
+    assert(await ui.evaluate(textFits("#mode",".game-meta")),"Archive title clipped");
+    assert(await ui.evaluate(textFits("#undo span","#undo")),"Undo label clipped");
+    assert(await ui.evaluate(textFits("#hint span","#hint")),"Hint label clipped");
+    if(language==="pt-BR")shot("acceptance-archive-pt-br-200");
+    return {language,title,undo,labelsFit:true};
+  } finally {
+    ui.close();
+    stop();
+  }
+}
 function installRecord(){return JSON.parse(adb("shell","cat",`/data/user/0/${app}/no_backup/seeds-first-install.json`));}
 async function update() {
   adb("install",baseline);
@@ -134,9 +217,8 @@ async function showEdge(size,order,video) {
     const geometry=()=>ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().toJSON()");
     const before=await geometry();
     assert.equal(await ui.evaluate("document.documentElement.lang"),"en");
-    const caption="From the right edge, continue at the left of the next row.";
     const status="document.querySelector('#status').textContent";
-    assert.equal(await ui.evaluate(status),caption);
+    assert.equal(await ui.evaluate(status),edgeCaption);
     const cueFits=`(()=>{
       const e=document.querySelector('#status'),r=document.createRange();
       const box=e.parentElement.getBoundingClientRect();r.selectNodeContents(e);
@@ -194,16 +276,23 @@ try{
   await update();
   adb("uninstall",app);
   adb("install",candidate);
-  launch(); const first=await connect();
-  await first.until("!!document.querySelector('.opening-copy')");
-  first.close();await wait(400);stop();
+  adb("shell","wm","size","640x1232");
+  adb("shell","settings","put","system","font_scale","2");
+  launch();
+  const opening=[await firstNotebookEdge([7,14])];
   const file=installRecord();
   assert.equal(file.install_store,"unknown");
   assert.equal(file.artifact_channel,"rustore");
   assert.equal(file.acquisition_state,"fresh");
+  assert.equal(adb("shell","pm","clear",app),"Success");
+  launch();
+  opening.push(await firstNotebookEdge([14,7]));
+  const archives=[];
+  archives.push(await archiveAtLargeFont("es","Reto del archivo · 13 de noviembre","Deshacer"));
+  archives.push(await archiveAtLargeFont("pt-BR","Desafio do arquivo · 13 de novembro","Desfazer"));
   const controls=[];
   for(const order of [[8,9],[9,8]]) controls.push(await showEdge("640x1232",order,order[0]===8));
-  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12070,
-    physicalPhone:false,systemFont:2,forwardedFile:file,updatePreservedSave:true,controls,
+  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12071,
+    physicalPhone:false,systemFont:2,forwardedFile:file,updatePreservedSave:true,opening,archives,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
 }catch(error) {shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}

@@ -84,11 +84,11 @@
     "pt-BR": "Fechar menu"
   },
   "ui.other-days": {
-    "ru": "Другие дни {0}",
-    "en": "Other days {0}",
-    "es": "Otros días {0}",
-    "tr": "Diğer günler {0}",
-    "pt-BR": "Outros dias {0}"
+    "ru": "Другие дни",
+    "en": "Other days",
+    "es": "Otros días",
+    "tr": "Diğer günler",
+    "pt-BR": "Outros dias"
   },
   "ui.back": {
     "ru": "Назад",
@@ -2058,18 +2058,11 @@
     "pt-BR": "desafio"
   },
   "ui.next-medal-to-go": {
-    "ru": "Следующая медаль: {0}, ещё {1} {2}",
-    "en": "Next medal: {0}, {1} {2} to go",
-    "es": "Siguiente medalla: {0}, faltan {1} {2}",
-    "tr": "Sonraki madalya: {0}, {1} {2} kaldı",
-    "pt-BR": "Próxima medalha: {0}, faltam {1} {2}"
-  },
-  "ui.to-go": {
-    "ru": "Ещё {0} {1}",
-    "en": "{0} {1} to go",
-    "es": "Faltan {0} {1}",
-    "tr": "{0} {1} kaldı",
-    "pt-BR": "Faltam {0} {1}"
+    "ru": "Следующая медаль: {0}. {1}",
+    "en": "Next medal: {0}. {1}",
+    "es": "Siguiente medalla: {0}. {1}",
+    "tr": "Sonraki madalya: {0}. {1}",
+    "pt-BR": "Próxima medalha: {0}. {1}"
   },
   "ui.coming-up": {
     "ru": "Следом",

@@ -1116,23 +1116,48 @@
   }
   #app .game.compact-game.short-board:not(:has(#page-progress.opening-guide)) .game-meta {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     justify-items: start;
     gap: 2px;
     padding-block: 4px;
     font-size: 11px;
   }
-  #app .game.compact-game.short-board:not(:has(#page-progress.opening-guide)) #mode {
-    max-width: 100%;
+  #app .game.compact-game.short-board:not([data-mode="daily"]):not(:has(#page-progress.opening-guide)) #mode {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  #app .game.compact-game:not(:has(#lesson:not([hidden]), #page-progress.opening-guide))
+  #app .game.compact-game:not([data-mode="daily"]):not(:has(#lesson:not([hidden]), #page-progress.opening-guide))
     .game-actions footer .action {
     flex-direction: row;
     justify-content: center;
     gap: 4px;
     height: 48px;
+  }
+}
+
+@media (orientation: portrait), (max-width: 539px) {
+  .game[data-mode="daily"] .game-meta {
+    flex-wrap: wrap;
+  }
+  .game[data-mode="daily"] #mode {
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  #app .game[data-mode="daily"] .game-actions footer .action {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    height: auto;
+    min-height: 48px;
+  }
+  .game[data-mode="daily"] .game-actions footer .action-label {
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 
