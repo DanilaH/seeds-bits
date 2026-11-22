@@ -535,6 +535,32 @@
 @media (max-width: 360px) {
   #collection .book-pages .book-page { padding-inline: 2px; }
   #collection .book-pages .task-grid { gap: 2px; }
+  .game:has(#magnet:not([hidden]),#plan:not([hidden])) .game-actions footer .action {
+    min-height: 60px;
+    padding-block: 4px;
+  }
+}
+@media (orientation: portrait) and (min-width: 320px) and (max-width: 360px) {
+  .game.stacked-actions:has(#magnet:not([hidden])):has(#plan:not([hidden])) .game-actions footer {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+}
+@media (orientation: landscape) and (max-height: 420px) {
+  #dialog[data-screen="home"] .home-layout {
+    padding-block: 8px;
+    align-content: start;
+    gap: 12px;
+  }
+  #dialog[data-screen="home"] .home-current {
+    display: block;
+    min-height: 0;
+    padding: 12px;
+  }
+  #home-current-art { display: none; }
+  .game .game-actions #hint-count {
+    font-size: 10px;
+    padding-inline: 2px;
+  }
 }
 
 /* Play tools and dated fields. */
