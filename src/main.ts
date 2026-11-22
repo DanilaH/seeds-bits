@@ -3652,7 +3652,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       { length: shelfEnd - shelfStart },
       (_, n) => {
         const i = shelfStart + n;
-        return `<div class="jar-keepsake" style="--jar-color:${jarColors[i % 6]};--fill:100%">${jarGlass()}<small>${localName(jarNames[i % 6])} · ${i + 1}</small></div>`;
+        return `<div class="jar-keepsake" style="--jar-color:${jarColors[i % 6]};--fill:100%">${jarGlass(undefined, 24)}<small>${localName(jarNames[i % 6])} · ${i + 1}</small></div>`;
       },
     ).join(
       "",
@@ -3886,11 +3886,26 @@ function bookPicture(number?: number) {
 function calendarPicture(day: string) {
   return `<span class="calendar-picture" aria-hidden="true"><span>${Number(day.slice(-2))}</span></span>`;
 }
-function jarGlass(id?: string) {
-  return `<span class="jar-glass"${id ? ` id="${id}"` : ""}><span class="jar-fill"></span><span class="jar-lid"></span></span>`;
+function jarGrains(count: number) {
+  // Small independent seed silhouettes, not a second counter or source of rewards.
+  return Array.from({ length: Math.min(36, Math.max(0, Math.floor(count))) }, (_, i) => {
+    const row = Math.floor(i / 5), col = i % 5;
+    const x = 8 + col * 18 + (row % 2 ? 5 : 0);
+    const tilt = [-34, 16, -13, 28, -7][(i + row) % 5];
+    return `<i style="--grain-x:${x}%;--grain-y:${1 + row * 7}px;--grain-tilt:${tilt}deg"></i>`;
+  }).join("");
+}
+function jarGlass(id?: string, seedCount = 0) {
+  return `<span class="jar-glass"${id ? ` id="${id}"` : ""}><span class="jar-fill"><span class="jar-grains" aria-hidden="true" data-count="${seedCount}">${jarGrains(seedCount)}</span></span><span class="jar-lid"></span></span>`;
+}
+function syncJarGrains(host: HTMLElement, seedCount: number) {
+  const grains = host.querySelector<HTMLElement>(".jar-grains");
+  if (!grains || grains.dataset.count === String(seedCount)) return;
+  grains.dataset.count = String(seedCount);
+  grains.innerHTML = jarGrains(seedCount);
 }
 function jarPicture(j: ReturnType<typeof jarState>) {
-  return `<span class="jar-picture" style="--fill:${j.percent}%;--jar-color:${j.color}" aria-hidden="true">${jarGlass()}</span>`;
+  return `<span class="jar-picture" style="--fill:${j.percent}%;--jar-color:${j.color}" aria-hidden="true">${jarGlass(undefined, j.filled)}</span>`;
 }
 function jarHero(j: ReturnType<typeof jarState>) {
   return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-value">${j.percent}<span>%</span></p><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p></div></section>`;
@@ -4054,6 +4069,7 @@ function renderJar() {
   }
   meter.style.setProperty("--jar-color", j.color);
   meter.style.setProperty("--fill", `${j.percent}%`);
+  syncJarGrains(meter, j.filled);
   $("jar-name").textContent = t("ui.jar-3", { "0": j.index + 1 });
   $("jar-percent").textContent = `${j.percent}%`;
   meter.dataset.full = String(Boolean(celebrating));
@@ -4073,6 +4089,7 @@ function updateResultJar() {
   const j = jarState(resultAwaitingSave === session ? Math.min(displayed, total - earnedSeeds) : displayed);
   resultJarCard.style.setProperty("--jar-color", j.color);
   resultJarCard.style.setProperty("--fill", `${j.percent}%`);
+  syncJarGrains(resultJarCard, j.filled);
   $("result-jar-amount").textContent = `${j.name} · ${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}`;
 }
 $("jar-meter").onclick = () => {
