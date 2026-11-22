@@ -2225,13 +2225,16 @@ function startLesson(short = false) {
 function lessonNextText() {
   return shortLesson && lesson === 1 ? t("action.playClassic") : lesson === 5 ? t("action.startGame") : t("action.next");
 }
+const lessonRules = [
+  "lesson.equal.rule", "lesson.ten.rule", "lesson.gap.rule",
+  "lesson.diagonal.rule", "lesson.edge.rule", "lesson.undo.rule",
+] as const;
 function renderLessonCopy() {
   $("lesson-title").textContent = lessons[lesson].title;
-  $("lesson-detail").textContent =
-    lessons[lesson].text +
-    (shortLesson && lesson === 1
-      ? t("lesson.rule")
-      : "");
+  // Each screen has one action above the field and one distinct, short rule.
+  // The older lesson body repeated the action, obscuring the actual rule.
+  $("lesson-detail").textContent = t(lessonRules[lesson]);
+  $("lesson-feedback").textContent = lessonPhase === 2 ? t("lesson.feedback.done") : "";
   $("lesson-text").textContent = [
     t("lesson.equal.short"), t("lesson.ten.short"), t("lesson.gap.short"),
     t("lesson.diagonal.short"), t("lesson.edge.short"), t("lesson.undo.short"),
@@ -2254,7 +2257,9 @@ function loadLesson() {
   lessonActions.scrollTop = 0;
   viewport.scrollTop = 0;
   render();
-  message(t("ui.try-on-a-small-board"));
+  // The instruction is already in #lesson-text. Keep its feedback rail empty
+  // until the player completes the action, without duplicating that command.
+  message("");
 }
 function finishLesson(outcome: "complete" | "skip" = "skip") {
   if (busy) return;
@@ -2437,6 +2442,7 @@ async function choose(i: number) {
   clearSelection();
   busy = false;
   render();
+  if (lesson >= 0 && lessonPhase === 2) message(t("lesson.feedback.done"));
   if (hadBoardFocus && !$("board").contains(document.activeElement))
     (
       $("board").querySelector<HTMLElement>("button") ??
