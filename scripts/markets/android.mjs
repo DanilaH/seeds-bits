@@ -146,6 +146,8 @@ async function measureGameText(systemScale) {
 }
 async function firstNotebookEdge(order) {
   const ui=await connect();
+  let recorder=null;
+  const recording="/sdcard/calm-first-win-to-task-2.mp4";
   try {
     await ui.until("document.querySelector('.opening-copy')?.textContent==='Tap any number.'");
     await assertViewport(ui);
@@ -162,7 +164,13 @@ async function firstNotebookEdge(order) {
     const copy="document.querySelector('.opening-copy').textContent";
     assert.equal(await ui.evaluate(copy),edgeCaption);
     assert(await ui.evaluate(textFits(".opening-copy","#page-progress")),"English opening cue clipped");
-    if(order[0]===7)shot("acceptance-first-en-200");
+    if(order[0]===7) {
+      shot("acceptance-first-en-200");
+      // Continuous native screen capture starts before the final pair, not after the victory.
+      recorder=spawn("adb",["shell","screenrecord","--bit-rate","1800000","--time-limit","30",recording],{stdio:"ignore"});
+      await wait(750);
+      assert.equal(recorder.exitCode,null,"Android screen recorder exited before the final pair");
+    }
     await ui.tap(digit(order[0]),false);
     assert(await ui.evaluate(`document.querySelector('${digit(order[0])}').classList.contains('selected')`));
     assert.equal(await ui.evaluate(copy),order[0]===7?"Find 9: 1 + 9 = 10.":"Find 1: 9 + 1 = 10.");
@@ -177,6 +185,15 @@ async function firstNotebookEdge(order) {
     if(order[0]===7)shot("calm-first-result");
     await ui.tap("#play-again");
     await ui.until("document.querySelector('#mode').textContent.includes('Puzzle 2')");
+    if(recorder) {
+      // Hold on puzzle 2 so the clip ends at its actual beginning, before any new move.
+      await wait(1300);
+      adb("shell","pkill","-2","screenrecord");
+      await new Promise(resolve=>recorder.exitCode===null?recorder.once("exit",resolve):resolve());
+      adb("pull",recording,out+"/calm-first-win-to-task-2.mp4");
+      assert(fs.statSync(out+"/calm-first-win-to-task-2.mp4").size>15000,"First-win recording is empty");
+      recorder=null;
+    }
     await ui.tap(digit(7),false);
     await ui.tap(digit(15),false);
     await ui.until("document.querySelector('#remaining').textContent==='6'");
@@ -190,6 +207,11 @@ async function firstNotebookEdge(order) {
     assert.equal(await ui.evaluate("document.querySelector('#undo').disabled"),false);
     return {order,solved:true,fieldStayedPut:true,captionFits:true,jarFilled:4,bookSolved:1,continuedTo:2,androidBackResumed:true};
   } finally {
+    if(recorder) {
+      try{adb("shell","pkill","-2","screenrecord");}catch{}
+      await new Promise(resolve=>recorder.exitCode===null?recorder.once("exit",resolve):resolve());
+      try{adb("pull",recording,out+"/calm-first-win-to-task-2-incomplete.mp4");}catch{}
+    }
     ui.close();
     stop();
   }
