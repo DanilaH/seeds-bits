@@ -860,3 +860,40 @@
 @media (orientation: landscape) and (min-width: 740px) {
   #collection .monthly-collection .year-picker { grid-column: 1 / -1; }
 }
+
+/* Seeds live inside the shared jar fill, so progress, collection and result
+   use the same silhouettes. Fill height still comes from saved jar state. */
+.jar-grains {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.jar-grains > i {
+  position: absolute;
+  left: var(--grain-x);
+  bottom: var(--grain-y);
+  width: 5px;
+  height: 8px;
+  border-radius: 68% 22% 65% 22%;
+  transform: translateX(-50%) rotate(var(--grain-tilt));
+  background: linear-gradient(130deg, #f9e2b0, #d5a968 75%, #805b36);
+  box-shadow: inset -1px -1px 0 #795a3499, 0 0 0 .35px #704d2b85;
+}
+:root[data-theme="dark"] .jar-grains > i {
+  background: linear-gradient(130deg, #f0d19c, #be945a 75%, #6c4a29);
+}
+.trophy-mark:not(.earned) .medal-art {
+  filter: grayscale(.9);
+  opacity: .5;
+}
+.metal-goal {
+  display: block;
+  max-width: 100%;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 650;
+  text-align: center;
+}
+.metal-goal:empty { display: none; }
