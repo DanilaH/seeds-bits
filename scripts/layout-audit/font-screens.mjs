@@ -306,7 +306,7 @@ async function navigation() {
   // The redesigned monthly shelf opens the featured month through its explicit action.
   // Do not target the old decorative medal element: it is no longer interactive.
   const featuredMonth = await ui.evaluate("document.querySelector('.month-hero button[data-month]')?.dataset.month");
-  assert.match(featuredMonth, /^\\d{4}-(0[1-9]|1[0-2])$/);
+  assert.match(featuredMonth, /^\d{4}-(0[1-9]|1[0-2])$/);
   await ui.tap(".month-hero button[data-month]");
   await ui.until("document.querySelector('#dialog').dataset.screen === 'calendar'");
   assert.equal(await ui.evaluate("document.querySelector('#calendar-year').value + '-' + document.querySelector('#calendar-month').value"),featuredMonth);
@@ -337,7 +337,7 @@ async function classic() {
   // The calm layout separates the dead-end heading from the copy-count message.
   await ui.shown("#no-pairs-title");
   assert.match(await ui.text("#no-pairs-title"), /Пар нет/);
-  assert.match(await ui.text("#status"), /В конец поля скопируются 2 цифры\\./);
+  assert.match(await ui.text("#status"), /В конец поля скопируются 2 цифры\./);
   assert.deepEqual(rows.at(-1).coveredCells,[]);
   await ui.tap("#add");
   await ui.until("document.querySelector('#remaining').textContent === '4'");
