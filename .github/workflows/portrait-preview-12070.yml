@@ -1,0 +1,68 @@
+name: Portrait preview 12070
+on:
+  push:
+    branches: [qa/portrait-preview-12070]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  portrait:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: 14748886742
+          merge-multiple: true
+          run-id: 45007893930
+          github-token: ${{ github.token }}
+          path: candidate
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: 14721932067
+          merge-multiple: true
+          run-id: 44940993229
+          github-token: ${{ github.token }}
+          path: baseline
+      - run: |
+          echo 'c70152bfd2b90855eb33a008dcb79fb2763fbfcf27a154fd7ddaeaca1fd4e1ce  baseline/seeds-first-session-12069-unsigned.apk' | sha256sum -c -
+          echo '665087ef64ba008ec906909480e8d8800583a898f826f71260b5f8df271029d5  candidate/seeds-first-session-12070-unsigned.apk' | sha256sum -c -
+          echo 'c6a0bbb2d82a28608b0d21f7333b5e9386918409b41c50da60116b1ce039b5a8  candidate/seeds-first-session-12070-debug.apk' | sha256sum -c -
+          keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
+          build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12069-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" candidate/seeds-first-session-12070-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" candidate/seeds-first-session-12070-debug.apk
+      - run: |
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-first-session-avd"
+          mkdir -p "$ANDROID_AVD_HOME" test-results/first-session-android
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
+          echo no | avdmanager create avd --force --name firstsession --package 'system-images;android-35;google_apis;x86_64'
+          sudo chmod 666 /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
+          emulator_pid=$!
+          for attempt in $(seq 1 120); do
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/first-session-android/emulator.log; exit 1; fi
+            if [ "$(timeout 4 adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then break; fi
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          adb root
+          adb wait-for-device
+          adb shell svc wifi disable
+          adb shell svc data disable
+          adb shell iptables -I OUTPUT '!' -o lo -j REJECT
+          adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
+          adb shell input keyevent 82
+          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: markets-android, path: |
+            test-results/markets-android/
+            test-results/first-session-android/emulator.log}
