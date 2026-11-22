@@ -184,3 +184,30 @@ for(const n of [1,2,4,5,11,21]){
     await expect(page.locator(".jar-overview .jar-grains i")).toHaveCount(n);
   });
 }
+
+// The video captures a real app route, not a stitched animation or a model mockup.
+test.describe("progress handoff evidence",()=>{
+  test.use({video:"on"});
+  test("record filtered catalog -> progress -> saved task 2",async({page})=>{
+    await page.setViewportSize({width:390,height:844});
+    await seeded(page);
+    await page.locator("#book-mode").click();
+    await page.locator("#other-books summary").click();
+    await page.locator("#book-filter").selectOption("new");
+    await page.locator("#collection-back").click();
+    await page.locator("#progress-open").click();
+    await page.waitForTimeout(350);
+    await expect(page.locator("#progress-book")).toContainText("Тетрадь 1");
+    await page.locator("#progress-book").click();
+    await expect(page.locator("#continue-book")).toHaveAttribute("data-continue","book-v1-2");
+    await page.waitForTimeout(500);
+    await page.locator("#continue-book").click();
+    await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 2");
+    await expect(page.locator("#undo")).toBeEnabled();
+    await page.waitForTimeout(1100);
+    const video=page.video();
+    expect(video).not.toBeNull();
+    await page.close();
+    await video!.saveAs("test-results/calm-followup/progress-filter-to-task-2.webm");
+  });
+});
