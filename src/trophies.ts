@@ -1,4 +1,4 @@
-import { plural, t } from "./i18n";
+import { plural, t, word } from "./i18n";
 import { icon, monthEmblem } from "./icons";
 
 const ribbon =
@@ -37,7 +37,15 @@ export function trophyMark(
         : !complete && i === 2
           ? t("ui.bronze-and-silver-earned")
           : "";
-  const next = i < 2 ? metals[i + 1] : undefined;
+  const goalLeft = Math.max(0, target - count);
+  const goal = !complete && !pending
+    ? t(`calm.trophy.goal.${["bronze", "silver", "gold"][i]}`, {
+        count: goalLeft,
+        days: word(goalLeft, t("ui.day"), t("ui.days-3"), t("ui.days-2")),
+      })
+    : "";
+  // Do not advertise the following medal before this one is earned.
+  const next = complete && !pending && i < 2 ? metals[i + 1] : undefined;
   const left = [14, total][i] - count;
   const remaining = next ? plural("trophy.remaining", { count: left }) : "";
   const emblem = monthEmblem(Number(month.slice(5)));
@@ -47,7 +55,7 @@ export function trophyMark(
   const id = `medal-${++artworkId}`;
   const fillY = 68 - (48 * filled) / target;
   const fillHeight = (48 * filled) / target;
-  return `<span class="trophy-display${next ? " has-next" : ""}"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light};--metal-ink:${metal.ink}"><span class="medal-figure"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><clipPath id="${id}-ink"><rect class="medal-ink-level" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs>${ribbon}<circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}" fill="url(#${id}-metal)"/><path class="medal-sheen" d="M-36 10h12l78 78H42Z" fill="#fff" opacity="0"/></g>${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g><g clip-path="url(#${id}-ink)"><g class="medal-emblem on-metal" transform="${emblemTransform}">${emblem}</g></g></svg><span class="medal-receipt" aria-hidden="true" ${complete && !pending ? "" : "hidden"}>${icon("check")}</span></span><span class="metal-name">${title}</span><span class="metal-count">${t("ui.of-days", { "0": filled, "1": target })}</span><span class="medal-note">${note}</span></span>${preview}</span>`;
+  return `<span class="trophy-display${next ? " has-next" : ""}"><span class="trophy-mark${complete ? " earned" : ""}" data-tier="${i + 1}" style="--metal:${metal.color};--metal-light:${metal.light};--metal-ink:${metal.ink}"><span class="medal-figure"><svg class="medal-art" viewBox="0 0 64 76" aria-hidden="true" focusable="false"><defs><clipPath id="${id}-clip"><circle cx="32" cy="44" r="24"/></clipPath><clipPath id="${id}-ink"><rect class="medal-ink-level" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}"/></clipPath><linearGradient id="${id}-metal" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="${metal.color}"/><stop offset=".62" stop-color="${metal.light}"/><stop offset="1" stop-color="${metal.color}"/></linearGradient></defs>${ribbon}<circle class="medal-base" cx="32" cy="44" r="24"/><g clip-path="url(#${id}-clip)"><rect class="medal-liquid" data-target="${target}" x="8" y="${fillY}" width="48" height="${fillHeight}" fill="url(#${id}-metal)"/><path class="medal-sheen" d="M-36 10h12l78 78H42Z" fill="#fff" opacity="0"/></g>${rim}<g class="medal-emblem" transform="${emblemTransform}">${emblem}</g><g clip-path="url(#${id}-ink)"><g class="medal-emblem on-metal" transform="${emblemTransform}">${emblem}</g></g></svg><span class="medal-receipt" aria-hidden="true" ${complete && !pending ? "" : "hidden"}>${icon("check")}</span></span><span class="metal-name">${title}</span><span class="metal-count">${t("ui.of-days", { "0": filled, "1": target })}</span><span class="metal-goal">${goal}</span><span class="medal-note">${note}</span></span>${preview}</span>`;
 }
 
 /** A bounded, local burst. It owns no rewards, timers or input and cancels on navigation. */
