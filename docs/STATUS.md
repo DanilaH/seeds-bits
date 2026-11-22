@@ -1,3 +1,11 @@
+# Latest — редизайн 12073: повторная QA-приёмка закрыта, 22 ноября 2026
+
+PR #9: [финальный протокол](research/first-session-2026-11-20/implementation/CALM_SCREENS_12073_FINAL.md). На игровом runtime `bacf41f` (последующие изменения только в QA) общий [CI](https://github.com/DanilaH/seeds-bits/actions/runs/45052405257) и [Android first-session CI](https://github.com/DanilaH/seeds-bits/actions/runs/45052405261) — SUCCESS. Успешный [font-layout audit](https://github.com/DanilaH/seeds-bits/actions/runs/45051338930): 229 + 337 = **566 Android-состояний** при 100/150/200% без падений или текстовых overflow.
+
+Из `markets-android` первого CI извлечён и независимо просмотрен `calm-first-win-to-task-2.mp4`, 2,7877 с / 93 582 байта, SHA256 `df77be463d233695f6a6c8eec2bdb3edd50bbd248e06ed4bb1908d4960689948`: начало — последняя пара задачи 1; конец — **действующее поле задачи 2 с восемью цифрами**. Android 35/ WebView 124 подтвердил обновление 12072→12073, Back и сохранения через CI; подпись выданного 12073 была проверена в предыдущей поставке, исходный подписанный APK сейчас повторно не анализировался. Шесть экспериментальных помощников выключены.
+
+**Не закрыто физической приёмкой:** установка/обновление подписанного APK на реальном телефоне, TalkBack, звук/вибрация, реальные SDK и оценка новичков. Исследовательские результаты и коммерческие метрики не менялись. KIT IMPACT: REUSE / CANDIDATE QA.
+
 # Latest — редизайн игровых экранов, 22 ноября 2026
 
 В [PR №9](https://github.com/DanilaH/seeds-bits/pull/9) реализовано [ТЗ из PR №10](https://github.com/DanilaH/seeds-bits/blob/825b9c1f257d34f34beb2b9944092380e947c508/docs/design/calm-screens-2026-11-22/README.md). Исходник сборки `bacf41ffaebaf2100754111bf731cf68bb960404`. Портретный preview **1.1.2 (12073)**, package `com.seedsbits.game.preview`, SHA256 `e065c6750a13de20853d32a7ce1176f1e9f0d43dca342e1e9a951e22cdb68997`. Проверены подписи v2/v3, совпадение сертификата с 12072 и побайтовое совпадение веб-ресурсов релизной и эмуляторной сборок. Rubik поставлен локально с OFL.
