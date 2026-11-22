@@ -61,6 +61,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           artifact-ids: 14721932067
+          merge-multiple: true
           run-id: 44940993229
           github-token: ${{ github.token }}
           path: baseline
