@@ -299,11 +299,13 @@ test("reduced motion keeps medals, no burst; failed save celebrates only after r
   await expect(page.locator("#save-notice")).toBeVisible();
   await expect(page.locator(".trophy-confetti")).toHaveCount(0);
   await expect(page.locator("#award .medal-receipt")).toBeHidden();
-  await expect(page.locator("#award .next-eyebrow")).toHaveText("Следом");
+  // No earned bronze yet: never advertise silver during a failed durable write.
+  await expect(page.locator("#award .next-medal")).toHaveCount(0);
   await page.evaluate(() => ((window as any).failGold = false));
   await page.locator("#retry-save").click();
   await expect(page.locator(".trophy-confetti")).toHaveCount(1);
   await expect(page.locator("#award .medal-receipt")).toBeVisible();
+  await expect(page.locator("#award .next-eyebrow")).toHaveText("Следующая");
   await page.locator("#menu").click();
   await expect(page.locator(".trophy-confetti")).toHaveCount(0);
 });
