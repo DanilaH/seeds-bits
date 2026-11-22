@@ -405,6 +405,9 @@
   .game.compact-game.short-board:not(:has(.opening-guide)) > .game-actions {
     margin-top: 2px;
   }
+  .game.docked-actions.compact-game.short-board .game-top #page-progress:not(.opening-guide) {
+    padding-block: 0;
+  }
 }
 .game #board {
   background-color: var(--calm-soft);
@@ -528,6 +531,10 @@
   #dialog[data-screen="home"] .mode-link { padding: 8px; }
   #dialog[data-screen="home"] .home-links > button { font-size: 11px; }
   #result-jar-card .jar-glass { width: 48px; height: 60px; }
+}
+@media (max-width: 360px) {
+  #collection .book-pages .book-page { padding-inline: 2px; }
+  #collection .book-pages .task-grid { gap: 2px; }
 }
 
 /* Play tools and dated fields. */

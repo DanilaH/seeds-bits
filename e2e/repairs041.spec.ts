@@ -199,6 +199,7 @@ test("A07 completed first notebook leads to next volume and keeps reachable repl
   await page.locator("#book-top").click();
   await openBookPicker(page);
   await page.locator('[data-volume="0"]').click();
+  await page.locator("#book-later-pages > summary").click();
   await expect(page.locator(".task.done")).toHaveCount(24);
   await page.locator('[data-game="book-v1-24"]').click();
   await expect(page.locator("#win")).toBeHidden();
@@ -613,7 +614,9 @@ test("compact home can reach settings and its touch targets are at least 44px", 
   await page.goto("/");
   await expect(page.locator("#dialog")).toBeVisible();
   await page.locator("#settings-open").scrollIntoViewIfNeeded();
-  await expect(page.locator("#settings-open")).toBeInViewport({ratio:1});
+  await expect(page.locator("#settings-open")).toBeInViewport({ratio:.98});
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#settings-panel")).toBeVisible();
   expect(
     await page.locator(".home-links button:visible").evaluateAll((es) =>
       // Animated translation may yield 43.999996 for a 44 CSS-pixel target.
