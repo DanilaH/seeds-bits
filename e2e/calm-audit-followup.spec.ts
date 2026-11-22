@@ -97,7 +97,7 @@ test("full course uses one action plus one rule; answering does not shift board"
     if(i===2) await page.screenshot({path:"test-results/calm-followup/lesson-3-390x844.jpg",type:"jpeg",quality:90,animations:"disabled"});
     for(const n of moves[i]) await page.locator(`#board button[data-index="${n}"]`).click();
     await expect(page.locator("#lesson-next")).toBeVisible();
-    await expect(page.locator("#lesson-feedback")).toHaveText("Верно! Ход принят.");
+    await expect(page.locator("#lesson-feedback")).toHaveText("Получилось!");
     expect(Math.abs((await boardTop(page))-y)).toBeLessThanOrEqual(1);
     await page.locator("#lesson-next").click();
     expect(Math.abs((await boardTop(page))-y)).toBeLessThanOrEqual(1);
@@ -118,7 +118,7 @@ test("short course has a single instruction and rule in both steps",async({page}
   for(const n of [0,1])await page.locator(`#board button[data-index="${n}"]`).click();
   await page.locator("#lesson-next").click();
   await expect(page.locator("#lesson-text")).toHaveText("Соедините 3 и 7.");
-  await expect(page.locator("#lesson-detail")).toHaveText("Цифры с суммой 10 тоже образуют пару.");
+  await expect(page.locator("#lesson-detail")).toHaveText("Пары с суммой 10 можно соединять через край строки.");
 });
 
 for(const language of ["en","es","tr","pt-BR"]) {
