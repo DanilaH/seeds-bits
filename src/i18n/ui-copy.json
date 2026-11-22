@@ -1120,11 +1120,11 @@
     "pt-BR": "Troféus do mês"
   },
   "ui.collected-seeds": {
-    "ru": "{0} собрано · {1} семечек",
-    "en": "{0} collected · {1} seeds",
-    "es": "{0} de colección · {1} semillas",
-    "tr": "{0} toplandı · {1} tohum",
-    "pt-BR": "{0} coletados · {1} sementes"
+    "ru": "Готовых баночек: {0} · {1} {2}",
+    "en": "Completed jars: {0} · {1} {2}",
+    "es": "Frascos completos: {0} · {1} {2}",
+    "tr": "Dolu kavanoz: {0} · {1} {2}",
+    "pt-BR": "Potes completos: {0} · {1} {2}"
   },
   "ui.earlier": {
     "ru": "Раньше",
@@ -2245,5 +2245,8 @@
   "lesson.diagonal.rule": {"ru":"Соединять пары можно и по диагонали.","en":"Pairs can also be matched diagonally.","es":"También puedes unir parejas en diagonal.","tr":"Sayılar çapraz da eşleştirilebilir.","pt-BR":"Você também pode juntar pares na diagonal."},
   "lesson.edge.rule": {"ru":"Конец строки продолжается в начале следующей.","en":"The end of a row connects to the start of the next.","es":"El final de una fila se une al principio de la siguiente.","tr":"Satır sonu, sonraki satırın başına bağlanır.","pt-BR":"O fim de uma linha se conecta ao começo da próxima."},
   "lesson.undo.rule": {"ru":"«Добавить» копирует цифры, «Отмена» возвращает поле.","en":"Add copies the remaining numbers; Undo restores the board.","es":"Añadir copia los números; Deshacer restaura el tablero.","tr":"Ekle kalan sayıları kopyalar; Geri al tahtayı geri getirir.","pt-BR":"Adicionar copia os números; Desfazer restaura o tabuleiro."},
-  "lesson.feedback.done": {"ru":"Верно! Ход принят.","en":"Correct! Pair matched.","es":"¡Bien! Pareja encontrada.","tr":"Doğru! Çift eşleşti.","pt-BR":"Correto! Par encontrado."}
+  "lesson.feedback.done": {"ru":"Верно! Ход принят.","en":"Correct! Pair matched.","es":"¡Bien! Pareja encontrada.","tr":"Doğru! Çift eşleşti.","pt-BR":"Correto! Par encontrado."},
+  "calm.trophy.goal.bronze": {"ru":"До бронзы — {count} {days}","en":"Until bronze: {count} {days}","es":"Hasta el bronce: {count} {days}","tr":"Bronza {count} {days} kaldı","pt-BR":"Até o bronze: {count} {days}"},
+  "calm.trophy.goal.silver": {"ru":"До серебра — {count} {days}","en":"Until silver: {count} {days}","es":"Hasta la plata: {count} {days}","tr":"Gümüşe {count} {days} kaldı","pt-BR":"Até a prata: {count} {days}"},
+  "calm.trophy.goal.gold": {"ru":"До золота — {count} {days}","en":"Until gold: {count} {days}","es":"Hasta el oro: {count} {days}","tr":"Altına {count} {days} kaldı","pt-BR":"Até o ouro: {count} {days}"}
 }
