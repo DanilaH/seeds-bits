@@ -2,7 +2,7 @@ name: System font screen audit
 on:
   push:
     branches: [research/seeds-first-session-20261120]
-    paths: [src/**, scripts/layout-audit/font-screens.mjs, .github/workflows/system-font-audit.yml]
+    paths: [src/**, scripts/configure-android.mjs, scripts/layout-audit/font-screens.mjs, .github/workflows/system-font-audit.yml]
 permissions:
   contents: read
 concurrency:
@@ -33,7 +33,7 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund && npm run setup:android
-      - run: GITHUB_RUN_NUMBER=966 node scripts/configure-android.mjs && chmod +x android/gradlew && cd android && ./gradlew assembleDebug
+      - run: GITHUB_RUN_NUMBER=970 node scripts/configure-android.mjs && chmod +x android/gradlew && cd android && ./gradlew assembleDebug
       - run: |
           export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-avd"
           mkdir -p "$ANDROID_AVD_HOME"

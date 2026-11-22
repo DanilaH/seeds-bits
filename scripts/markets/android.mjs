@@ -12,6 +12,10 @@ const adb=(...args)=>execFileSync("adb",args,{encoding:"utf8",timeout:26000,maxB
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const launch=()=>adb("shell","am","start","-W","-n",app+"/.MainActivity");
 const stop=()=>adb("shell","am","force-stop",app);
+function lockDeviceRotation(rotation) {
+  adb("shell","wm","user-rotation","lock",String(rotation));
+  assert.equal(adb("shell","settings","get","system","user_rotation"),String(rotation));
+}
 const shot=name=>fs.writeFileSync(`${out}/${name}.png`,execFileSync("adb",["exec-out","screencap","-p"]));
 const decode=s=>s.replaceAll("&quot;",'"').replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&amp;","&");
 const encode=s=>s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
@@ -98,20 +102,25 @@ function installRecord(){return JSON.parse(adb("shell","cat",`/data/user/0/${app
 async function update() {
   adb("install",baseline);
   launch();
-  for(let i=0;i<50;i++){try{if(profiles().values[progress])break;}catch{}await wait(200);}
+  for(let i=0;i<50;i++){try{if(profiles().values[progress]&&installRecord())break;}catch{}await wait(200);}
   await fixture({[progress]:sample,[settings]:{tutorialDone:true,theme:"dark",sound:false,vibration:false}});
-  const before=profiles().values[progress].sessions["book-v1-5"];
+  const before=profiles().values;
+  const source=installRecord();
   adb("install","-r",optimized);
   launch();
-  for(let i=0;i<50;i++){try{if(installRecord())break;}catch{}await wait(200);}
-  assert.equal(installRecord().acquisition_state,"legacy");
-  assert.equal(installRecord().install_store,"unknown");
-  assert.deepEqual(profiles().values[progress].sessions["book-v1-5"].current.board,before.current.board);
+  assert.deepEqual(installRecord(),source);
+  const after=profiles().values;
+  const previousSession=before[progress].sessions["book-v1-5"];
+  const restoredSession=after[progress].sessions["book-v1-5"];
+  assert.deepEqual(restoredSession.current,previousSession.current);
+  assert.equal((restoredSession.packedHistory??restoredSession.history).length,previousSession.history.length);
+  assert.equal(after[settings].theme,"dark");
   shot("updated");
   stop();
 }
 async function showEdge(size,order,video) {
   stop();
+  lockDeviceRotation(video?1:0);
   adb("shell","wm","size",size);
   adb("shell","settings","put","system","font_scale","2");
   await fixture({[progress]:sample,[settings]:{tutorialDone:true,languageChoice:"en",sound:false,vibration:false}});
@@ -119,6 +128,9 @@ async function showEdge(size,order,video) {
   const recorder=video?spawn("adb",["shell","screenrecord","--bit-rate","1800000","--time-limit","40","/sdcard/market-language.mp4"],{stdio:"ignore"}):null;
   try {
     await ui.tap("#resume");
+    const viewSize=()=>ui.evaluate("[innerWidth,innerHeight]");
+    const dimensions=await viewSize();
+    assert(dimensions[0]<dimensions[1],"The game must open in portrait");
     const geometry=()=>ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().toJSON()");
     const before=await geometry();
     assert.equal(await ui.evaluate("document.documentElement.lang"),"en");
@@ -135,6 +147,15 @@ async function showEdge(size,order,video) {
     await ui.tap(digit(order[0]),false);
     assert.equal(await ui.evaluate("document.querySelector('#viewport').scrollTop"),0);
     assert.deepEqual(await geometry(),before);
+    if(video) {
+      for (const rotation of [0,1,3]) {
+        lockDeviceRotation(rotation);
+        await wait(500);
+        assert.deepEqual(await viewSize(),dimensions);
+        assert.deepEqual(await geometry(),before);
+        assert(await ui.evaluate(`document.querySelector('${digit(order[0])}').classList.contains('selected')`));
+      }
+    }
     await ui.tap("#menu");
     await ui.tap("#settings-open");
     await ui.tap("#language-open");
@@ -153,7 +174,8 @@ async function showEdge(size,order,video) {
     await ui.until("!document.querySelector('#win').hidden");
     shot("solved-"+size+"-"+order[0]);
     if(video)await wait(1200);
-    return {viewport:await ui.evaluate("[innerWidth,innerHeight]"),order,languageSwitch:true,selectionPreserved:true,solved:true};
+    return {viewport:dimensions,order,languageSwitch:true,selectionPreserved:true,solved:true,
+      requestedDeviceRotations:video?[1,0,1,3]:[0]};
   } finally {
     ui.close();
     if(recorder) {
@@ -162,11 +184,13 @@ async function showEdge(size,order,video) {
       adb("pull","/sdcard/market-language.mp4",out+"/market-language.mp4");
     }
     stop();
+    lockDeviceRotation(0);
   }
 }
 try{
   adb("shell","wm","density","320");
   adb("shell","wm","size","780x1688");
+  lockDeviceRotation(0);
   await update();
   adb("uninstall",app);
   adb("install",candidate);
@@ -178,9 +202,9 @@ try{
   assert.equal(file.artifact_channel,"rustore");
   assert.equal(file.acquisition_state,"fresh");
   const controls=[];
-  for(const size of ["640x1232","1136x736"])
-    for(const order of [[8,9],[9,8]])controls.push(await showEdge(size,order,size==="1136x736"&&order[0]===8));
-  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12069,
-    physicalPhone:false,systemFont:2,forwardedFile:file,legacyUpdate:true,controls,
+  for(const size of ["640x1232","780x1688"])
+    for(const order of [[8,9],[9,8]])controls.push(await showEdge(size,order,size==="640x1232"&&order[0]===8));
+  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12070,
+    physicalPhone:false,systemFont:2,forwardedFile:file,updatePreservedSave:true,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
 }catch(error) {shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}

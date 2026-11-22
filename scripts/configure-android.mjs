@@ -149,6 +149,19 @@ manifest = manifest.replace(
   'android:allowBackup="true"',
   'android:allowBackup="false"',
 );
+function setAndroidAttribute(tag, name, value) {
+  const attribute = new RegExp(`\\s+android:${name}="[^"]*"`);
+  const declaration = ` android:${name}="${value}"`;
+  return attribute.test(tag)
+    ? tag.replace(attribute, declaration)
+    : tag.replace(/^<\w+/, "$&" + declaration);
+}
+const mainActivity = /<activity\b(?=[^>]*\bandroid:name="\.MainActivity")[^>]*>/;
+if (!mainActivity.test(manifest)) throw Error("Android MainActivity is missing from the manifest");
+manifest = manifest
+  // Android uses the game category when applying large-screen orientation rules.
+  .replace(/<application\b[^>]*>/, tag => setAndroidAttribute(tag, "appCategory", "game"))
+  .replace(mainActivity, tag => setAndroidAttribute(tag, "screenOrientation", "portrait"));
 if (storeRelease && !manifest.includes("android:usesCleartextTraffic="))
   manifest = manifest.replace(
     "<application",

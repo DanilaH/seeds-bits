@@ -20,7 +20,7 @@ const isoDay = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
 const snap = (board, moves = 0) => ({board, scroll:0, moves, additions:0});
 const cases = {
   narrow: ["640x1136", "640x1232"],
-  wide: ["780x1688", "1136x736", "1688x876"],
+  wide: ["736x1136", "780x1688", "876x1688"],
 };
 const sizes = cases[process.env.FONT_SHARD];
 assert(sizes, "Select a FONT_SHARD (narrow or wide)");
@@ -513,7 +513,7 @@ for (size of sizes) for (font of classicOnly ? [2] : [1,1.5,2]) {
     continue;
   }
   await runSection("opening", null, opening);
-  const dark = size === "640x1136" || size === "1136x736";
+  const dark = size === "640x1136" || size === "736x1136";
   await runSection("courses",{settings:{theme:dark?"dark":"light",tutorialDone:false}},courses);
   await runSection("navigation",{settings:{theme:dark?"dark":"light"}},navigation);
   await runSection("classic",{board:[5,5,1,2]},classic);
@@ -532,14 +532,14 @@ for (size of sizes) for (font of classicOnly ? [2] : [1,1.5,2]) {
     await runSection("daily-result",{active:`daily-v1-${isoDay}`,board:[5,5]},()=>result("daily"));
     await runSection("page-result",{active:"book-v1-6",board:[5,5],done:book.slice(0,5).map(x=>x.id)},()=>result("page"));
     await runSection("book-result",{active:"book-v1-24",board:[5,5],done:book.slice(0,23).map(x=>x.id)},()=>result("book"));
-    if (size === "640x1232" || size === "1136x736") {
+    if (size === "640x1232" || size === "736x1136") {
       await runSection("classic-open-notebook",{board:[5,5],done:book.slice(0,2).map(x=>x.id)},classicNotebook);
       await checkRouteExamples();
     }
   }
   console.log("FONT_CASE",size,font,rows.filter(r=>r.size===size&&r.font===font).length,failures.filter(r=>r.size===size&&r.font===font).length);
 }
-fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12066,physicalPhone:false,
+fs.writeFileSync(join(output,"report.json"),JSON.stringify({commit,package:app,versionCode:12070,physicalPhone:false,
     webView:adb("shell","dumpsys","webviewupdate").split("\n").find(line=>line.includes("Current WebView package"))?.trim(),
     apkSha256:createHash("sha256").update(fs.readFileSync(artifact)).digest("hex"),rows,failures},null,2));
 assert.equal(failures.length,0,"Check report.json and failure screenshots");
