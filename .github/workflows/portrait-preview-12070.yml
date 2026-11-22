@@ -53,8 +53,13 @@ jobs:
             sleep 2
           done
           test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
-          adb root
-          adb wait-for-device
+          for attempt in $(seq 1 20); do
+            timeout 10 adb wait-for-device || continue
+            if [ "$(timeout 4 adb shell id -u 2>/dev/null | tr -d '\r')" = 0 ]; then break; fi
+            timeout 4 adb root || true
+            sleep 2
+          done
+          test "$(timeout 5 adb shell id -u | tr -d '\r')" = 0
           adb shell svc wifi disable
           adb shell svc data disable
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
