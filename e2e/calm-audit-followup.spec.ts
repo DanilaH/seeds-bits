@@ -64,8 +64,9 @@ test("pause menu has a 50-70px card gap at 390x844 with footer near bottom",asyn
     const a=document.querySelector(".home-current")!.getBoundingClientRect();
     const b=document.querySelector("#classic-mode")!.getBoundingClientRect();
     const links=document.querySelector(".home-links")!.getBoundingClientRect();
-    const qa=document.querySelector("#qa-profile")?.getBoundingClientRect();
-    return {gap:b.top-a.bottom, linksBottom:links.bottom, qaBottom:qa?.bottom??links.bottom, screen:innerHeight};
+    const qa=document.querySelector("#qa-profile");
+    const qaBox=qa && qa.getClientRects().length ? qa.getBoundingClientRect() : null;
+    return {gap:b.top-a.bottom, linksBottom:links.bottom, qaBottom:qaBox?.bottom??links.bottom, screen:innerHeight};
   });
   expect(measure.gap).toBeGreaterThanOrEqual(50);
   expect(measure.gap).toBeLessThanOrEqual(70);
@@ -156,7 +157,7 @@ test("same-day archive leaves the year out; previous-year archive shows the year
 
 for(const n of [0,6,7,13,14,30]){
   test(`month trophy reflects nearest milestone with ${n} completed days`,async({page})=>{
-    await page.clock.setFixedTime(new Date("2026-11-22T12:00:00+05:00"));
+    await page.clock.setFixedTime(new Date("2026-11-30T12:00:00+05:00"));
     const done=Array.from({length:n},(_,i)=>`daily-v1-2026-11-${String(i+1).padStart(2,"0")}`);
     await seeded(page,{done});
     await page.locator("#progress-open").click();
