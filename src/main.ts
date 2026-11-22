@@ -71,6 +71,7 @@ import { trophyMark, celebrateTrophy } from "./trophies";
 import "./style.css";
 import "./ui-polish.css";
 import "./ui-adaptation.css";
+import "./calm-screens.css";
 import {
   resultKind,
   resultArtwork,
@@ -226,6 +227,7 @@ let boardRevealTimer: ReturnType<typeof setTimeout> | undefined;
 let boardRevealCancel: (() => void) | undefined;
 let pendingResult:
   { session: Session; rects: DOMRect[]; saved: boolean } | undefined;
+let resultAwaitingSave: Session | undefined;
 const removedPairs = new WeakMap<number[], readonly [number, number]>();
 const flights = new SeedFlight();
 const jarSpill = new JarSpill();
@@ -269,7 +271,7 @@ const lessons = [
   },
 ];
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}"><span id="jar-glass" class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2><button id="close" class="plain" aria-label="${t("ui.close-menu")}">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}">${jarGlass("jar-glass")}<span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2><button id="close" class="plain" aria-label="${t("ui.close-menu")}">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
 let refreshStaticCopy = () => {};
 const globe = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>';
 const languageSheet = document.createElement("dialog");
@@ -284,9 +286,8 @@ languageRow.innerHTML=globe+'<span id="language-label"></span><span id="language
 $("settings-panel").querySelector(".settings")!.before(languageRow);
 const pauseLanguage = document.createElement("button");
 pauseLanguage.id="pause-language";
-pauseLanguage.className="plain";
-pauseLanguage.innerHTML=globe;
-pauseLanguage.hidden=true;
+pauseLanguage.className="text-button";
+pauseLanguage.innerHTML=globe+'<span id="pause-language-label"></span>';
 $("menu-content").querySelector(".home-links")!.append(pauseLanguage);
 let languageEntry: "settings" | "pause" = "settings";
 let changingLanguage=false;
@@ -295,6 +296,7 @@ function drawLanguage() {
   $("language-title").textContent=t("language.label");
   $("language-close").setAttribute("aria-label",t("ui.close-menu"));
   pauseLanguage.setAttribute("aria-label",t("language.label"));
+  $("pause-language-label").textContent=t("language.label");
   $("language-current").textContent=settings.languageChoice==="auto"
     ? t("language.autoCurrent",{language:languageNames[localeState.ui]})
     : languageNames[settings.languageChoice];
@@ -304,7 +306,7 @@ function drawLanguage() {
       const button=document.createElement("button");
       button.type="button";
       button.dataset.language=code;
-      button.innerHTML='<span></span><span class="language-check" aria-hidden="true">✓</span>';
+      button.innerHTML='<span class="language-option-copy"><span></span><small hidden></small></span><span class="language-check" aria-hidden="true">✓</span>';
       if(code!=="auto")button.lang=code;
       button.onclick=()=>void changeLanguage(code);
       options.append(button);
@@ -312,7 +314,10 @@ function drawLanguage() {
   }
   for(const button of options.querySelectorAll<HTMLButtonElement>("button")) {
     const code=button.dataset.language as LanguageChoice;
-    button.firstElementChild!.textContent=code==="auto"?t("language.auto"):languageNames[code];
+    button.querySelector(".language-option-copy > span")!.textContent=code==="auto"?t("language.auto"):languageNames[code];
+    const current=button.querySelector("small")!;
+    current.textContent=code==="auto"?t("calm.language.current",{language:languageNames[localeState.ui]}):"";
+    current.hidden=code!=="auto";
     button.setAttribute("aria-pressed",String(code===settings.languageChoice));
   }
 }
@@ -398,11 +403,26 @@ gameDifficulty.id = "game-difficulty";
 const modeDescription = document.createElement("span");
 modeDescription.className = "mode-description";
 $("mode").before(modeDescription);
-modeDescription.append($("mode"), gameDifficulty);
+const fieldDateArt = document.createElement("span");
+fieldDateArt.className = "field-date-art";
+fieldDateArt.hidden = true;
+modeDescription.append(fieldDateArt, $("mode"), gameDifficulty);
 const resultTitle = document.querySelector<HTMLElement>("#win h1")!;
 const resultSubtitle = document.createElement("p");
 resultSubtitle.id = "result-subtitle";
 resultTitle.after(resultSubtitle);
+const resultJarCard = document.createElement("section");
+resultJarCard.id = "result-jar-card";
+resultJarCard.hidden = true;
+resultJarCard.innerHTML = `<div class="jar-picture" aria-hidden="true">${jarGlass("result-jar-glass")}</div><p id="result-jar-amount"></p>`;
+const resultBookCard = document.createElement("div");
+resultBookCard.id = "result-book-card";
+resultBookCard.hidden = true;
+resultSubtitle.after(resultJarCard, resultBookCard);
+const resultDateArt = document.createElement("div");
+resultDateArt.id = "result-date-art";
+resultDateArt.hidden = true;
+resultTitle.before(resultDateArt);
 const choiceFits = new WeakMap<HTMLElement, { base: string; fitted: string }>();
 const choiceObserver = new ResizeObserver(() => scheduleActionLayout());
 function prepareResultLabels() {
@@ -452,7 +472,7 @@ const homeCurrent = document.createElement("section");
 homeCurrent.className = "home-current";
 homeCurrent.setAttribute("aria-labelledby", "home-game-title");
 homeCurrent.innerHTML =
-  '<p class="home-eyebrow" id="home-eyebrow"></p><h2 id="home-game-title"></h2><p id="home-difficulty" hidden></p>';
+  '<div id="home-current-art" aria-hidden="true"></div><p class="home-eyebrow" id="home-eyebrow"></p><h2 id="home-game-title"></h2><p id="home-difficulty" hidden></p>';
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
 $("new").className = "text-button restart-action";
@@ -465,18 +485,41 @@ homeCurrent.append($("resume-context"), homeGoal, $("resume"), classicActions);
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
 homeModes.setAttribute("aria-label", t("ui.game-modes"));
-homeModes.append(document.querySelector(".mode-nav")!, $("calendar-open"));
+const homeCalendar = document.createElement("div");
+homeCalendar.className = "home-calendar";
+homeCalendar.append($("daily-mode"), $("calendar-open"));
+homeModes.append(document.querySelector(".mode-nav")!, homeCalendar);
 homeLayout.append(homeCurrent, homeModes);
 $("menu-content").insertBefore(
   homeLayout,
   document.querySelector(".home-links"),
 );
+for (const [id, art] of [
+  ["classic-mode", '<span class="tile-picture" aria-hidden="true"><i>3</i><i>7</i></span>'],
+  ["book-mode", bookPicture()],
+  ["daily-mode", '<span id="home-today-art" aria-hidden="true"></span>'],
+] as const) {
+  const button = $(id);
+  button.lastElementChild?.remove();
+  button.insertAdjacentHTML("afterbegin", art);
+}
+for (const [id, name] of [["progress-open","progress"],["learn","help"],["settings-open","settings"]] as const)
+  $(id).insertAdjacentHTML("afterbegin", icon(name));
 const settingsBasics = document.createElement("section");
 settingsBasics.className = "settings-basics";
 for (const node of [...$("settings-panel").children])
   if (!node.matches(".screen-heading,#reminder-settings"))
     settingsBasics.append(node);
 $("settings-panel").insertBefore(settingsBasics, $("reminder-settings"));
+const settingsRows = document.createElement("section");
+settingsRows.className = "settings-rows";
+settingsRows.append(languageRow, settingsBasics.querySelector(".settings")!);
+settingsBasics.prepend(settingsRows);
+const hintReserve = document.createElement("section");
+hintReserve.className = "settings-reserve";
+$("hint-wallet").before(hintReserve);
+hintReserve.innerHTML = `<strong id="settings-reserve-title">${t("calm.settings.stock")}</strong>`;
+hintReserve.append($("hint-wallet"));
 for (const id of ["dark", "sound", "vibration", "reminders"])
   $(id).setAttribute("role", "switch");
 let enteredGame = false;
@@ -503,6 +546,10 @@ function dailyFieldTitle(id: string, currentDate = today()) {
   return `${mode} · ${taskDate(day)}`;
 }
 document.querySelector("header")!.insertBefore($("jar-meter"), $("book-top"));
+const noPairsTitle = document.createElement("strong");
+noPairsTitle.id = "no-pairs-title";
+noPairsTitle.hidden = true;
+$("status").before(noPairsTitle);
 const gameTop = document.createElement("div");
 gameTop.className = "game-top";
 gameTop.append(
@@ -540,6 +587,10 @@ $("win-stats").after(resultAssistance);
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
+const calendarActions = document.createElement("div");
+calendarActions.id = "calendar-actions";
+calendarActions.hidden = true;
+dialog.append(calendarActions);
 const dialogHeader = dialog.querySelector<HTMLElement>(".dialog-head")!;
 const homeTitle = dialog.querySelector<HTMLElement>(".home-title")!;
 const closeButton = $<HTMLButtonElement>("close");
@@ -826,6 +877,7 @@ function save(state = progress, game = session) {
         for (const key of Object.keys(patch))
           if (settingsDirty[key] === patch[key]) delete settingsDirty[key];
         applySettings(merged);
+        if (resultAwaitingSave === game) resultAwaitingSave = undefined;
         if (pendingResult?.session === game) pendingResult.saved = true;
         lastStored = bundle;
         // Dispatch only events contained in this successfully written snapshot.
@@ -1021,7 +1073,8 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
     { length: plan.visualTokenCount },
     (_, i) => rects[i % rects.length],
   );
-  flights.fly(tokens, $("jar-glass"), (index, silent) => {
+  const target = result && !resultJarCard.hidden ? $("result-jar-glass") : $("jar-glass");
+  flights.fly(tokens, target, (index, silent) => {
     const quantity =
       valueAfterVisualArrival(plan, index) -
       (index ? valueAfterVisualArrival(plan, index - 1) : 0);
@@ -1083,7 +1136,7 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false) {
     if (full || completedJar) return;
     feedback("land", !result);
     motion(
-      $("jar-glass"),
+      target,
       [
         { transform: "rotate(-3deg) scale(1.05)" },
         { transform: "rotate(2deg)" },
@@ -1738,6 +1791,7 @@ function complete(rects: DOMRect[]) {
     ? trophy(month, progress.done).tier
     : 0;
   const gains = recordCompletion(progress, id);
+  resultAwaitingSave = session;
   pendingResult = { session, rects, saved: false };
   if (gains.hints)
     durableEvent("daily_reward", {
@@ -1774,8 +1828,12 @@ function renderWin() {
   const id = progress.active;
   renderClassicChoices();
   const kind = resultKind(id, progress.done, notebook);
+  const dailyResult = kind === "daily";
+  resultDateArt.hidden = !dailyResult;
+  if (dailyResult) resultDateArt.innerHTML = calendarPicture(id.slice(9));
   $("win").dataset.resultKind = kind;
-  $("win").classList.toggle("opening-win", firstSessionEnabled && id === "book-v1-1" && progress.seen.includes(guideId));
+  const openingWin = firstSessionEnabled && id === "book-v1-1" && progress.seen.includes(guideId);
+  $("win").classList.toggle("opening-win", openingWin);
   $("win").classList.toggle("daily-result", id.startsWith("daily"));
   const index = notebook.findIndex((p) => p.id === id);
   resultTitle.textContent =
@@ -1794,13 +1852,23 @@ function renderWin() {
       : kind === "page"
         ? t("ui.6-of-6-puzzles")
         : kind === "daily"
-          ? id.slice(9).split("-").reverse().join(".")
+          ? taskDate(id.slice(9), true)
           : "";
   if (index >= 0 && kind !== "book" && kind !== "page") {
     const solved = volumeTasks(volumeOf(id)).filter(task => progress.done.includes(task.id)).length;
     resultSubtitle.textContent = t("result.progress", { "book": volumeOf(id) + 1, "solved": solved });
   }
   resultSubtitle.hidden = !resultSubtitle.textContent;
+  resultJarCard.hidden = !openingWin;
+  resultBookCard.hidden = !openingWin;
+  const resultGains = $("result-gains");
+  if (openingWin) {
+    if (resultGains.parentElement !== resultJarCard) $("result-jar-amount").before(resultGains);
+    resultBookCard.innerHTML = `${bookPicture(volumeOf(id) + 1)}<span><strong>${t("ui.puzzle-book", { "0": volumeOf(id) + 1 })}</strong><small>${t("ui.of-24-puzzles", { "0": volumeTasks(volumeOf(id)).filter(task => progress.done.includes(task.id)).length })}</small></span>`;
+    updateResultJar();
+  } else if (resultGains.parentElement === resultJarCard) {
+    $("completion-status").after(resultGains);
+  }
   const symbol = document.querySelector<HTMLElement>(".win-symbol")!;
   if (resultArtKey !== kind) {
     symbol.innerHTML = resultArtwork(kind);
@@ -1820,26 +1888,23 @@ function renderWin() {
     .join("");
   resultAssistance.textContent = !helpPaused && hintAttempt(progress).help?.assisted ? hintAttempt(progress).help?.plan ? hintAttempt(progress).help?.magnet ? "С Планом и Магнитом" : "С помощью Плана" : "С помощью Магнита" : "";
   resultAssistance.hidden = !resultAssistance.textContent;
-  const i = notebook.findIndex((p) => p.id === id);
+  const i = index;
   const next = nextTask(id, progress.done);
-  const archiveNext = id.startsWith("daily") && next?.startsWith("daily");
-  $("play-again").textContent = archiveNext
-    ? next!.slice(9) === today()
+  const nextButton = $("play-again");
+  nextButton.dataset.destination = next ?? "";
+  if (next?.startsWith("daily-v1-")) {
+    const date = next.slice(9);
+    nextButton.textContent = date === today()
       ? t("ui.todays-puzzle")
-      : t("daily.archive", { "date": next!.slice(9).split("-").reverse().join(".") })
-    : next
-      ? i >= 0 && volumeOf(next) !== volumeOf(id)
-        ? t("result.nextBook")
-        : i >= 0 &&
-            Math.floor(notebook.findIndex((p) => p.id === next) / 6) >
-              Math.floor(i / 6)
-          ? t("result.nextPage")
-          : i >= 0 ? t("result.nextTask", { "puzzle": notebook.findIndex(p => p.id === next) % 24 + 1 }) : t("books.nextPuzzle")
-      : i >= 0
-        ? t("books.back")
-        : id.startsWith("daily")
-          ? t("result.calendar")
-          : t("result.again");
+      : t("daily.archive", { date: taskDate(date, date.slice(0, 4) !== today().slice(0, 4)) });
+  } else if (next && i >= 0) {
+    const puzzle = puzzleNumberInVolume(next);
+    nextButton.textContent = volumeOf(next) === volumeOf(id)
+      ? t("result.nextTask", { puzzle })
+      : t("home.book.title", { book: volumeOf(next) + 1, puzzle });
+  } else {
+    nextButton.textContent = i >= 0 ? t("books.back") : dailyResult ? t("result.calendar") : t("result.again");
+  }
   $("completion-status").textContent =
     i >= 0 &&
     volumeTasks(volumeOf(id)).every((p) => progress.done.includes(p.id))
@@ -1862,7 +1927,7 @@ function renderWin() {
     earnedSeeds || earnedHints
       ? `${((earnedSeeds ? 1 : 0) + (earnedHints ? 1 : 0)) * 1.5}em`
       : "";
-  $("result-gains").innerHTML = saveFailed
+  $("result-gains").innerHTML = saveFailed || resultAwaitingSave === session
     ? t("ui.reward-waiting-to-be-saved")
     : [
         earnedSeeds
@@ -1905,6 +1970,7 @@ function classicDifficulty(): ClassicDifficulty {
 function renderClassicChoices() {
   const isClassic = progress.active === "classic";
   const level = classicDifficulty();
+  const blocked = busy || saveFailed || storageConflict || futureSave || resultAwaitingSave === session;
   resultNext.classList.toggle("is-classic", isClassic);
   difficultyCaption.hidden = !isClassic;
   difficultyCaption.textContent =
@@ -1919,7 +1985,7 @@ function renderClassicChoices() {
   ] as const) {
     const button = $<HTMLButtonElement>(id);
     button.hidden = !isClassic;
-    button.disabled = busy || atLimit;
+    button.disabled = blocked || atLimit;
     button.title = atLimit
       ? level === CLASSIC_MIN
         ? t("ui.already-at-the-lowest-difficulty")
@@ -1928,7 +1994,7 @@ function renderClassicChoices() {
         ? t("ui.start-an-easier-game")
         : t("ui.start-a-harder-game");
   }
-  $<HTMLButtonElement>("play-again").disabled = busy;
+  $<HTMLButtonElement>("play-again").disabled = blocked;
 }
 function compactCount(n: number) {
   return n > 999 ? "999+" : String(n);
@@ -2012,6 +2078,11 @@ function render() {
         : progress.active.startsWith("book")
           ? t("home.book.title", { "book": volumeOf(progress.active) + 1, "puzzle": puzzleNumberInVolume(progress.active) })
           : dailyFieldTitle(progress.active);
+  fieldDateArt.hidden = game.dataset.mode !== "daily";
+  if (!fieldDateArt.hidden && fieldDateArt.dataset.day !== progress.active) {
+    fieldDateArt.dataset.day = progress.active;
+    fieldDateArt.innerHTML = calendarPicture(progress.active.slice(9));
+  }
   const plan = lesson < 0 ? currentPlan() : undefined;
   if(!busy){
     if(plan?.pair)highlight=plan.pair;
@@ -2067,10 +2138,11 @@ function render() {
         (lesson < 0 && progress.active !== "classic"),
     ),
   );
-  const addCount =
-    (progress.active === "classic" || lesson >= 0) && !available.length && count
-      ? count
-      : 0;
+  const canAdd = count > 0 && values.length + count <= MAX_CELLS && !available.length;
+  const addCount = (lesson === 5 || (lesson < 0 && progress.active === "classic")) && canAdd ? count : 0;
+  $("add-label").querySelector(".action-label")!.textContent = lesson < 0 && addCount
+    ? t("calm.classic.add", { count: addCount })
+    : t("action.add");
   $("add-count").textContent = addCount ? compactCount(addCount) : "";
   $("add").setAttribute(
     "aria-label",
@@ -2078,10 +2150,11 @@ function render() {
   );
   $("add").classList.toggle(
     "ready",
-    !available.length &&
-      count > 0 &&
-      (progress.active === "classic" || lesson === 5),
+    addCount > 0,
   );
+  $("add").toggleAttribute("data-inline-count", lesson < 0 && addCount > 0);
+  noPairsTitle.hidden = lesson >= 0 || progress.active !== "classic" || !count || !!available.length;
+  noPairsTitle.textContent = t("calm.noPairs");
   const previous = session.history.at(-1);
   const addedCount = previous &&
     session.current.additions === previous.additions + 1 &&
@@ -2112,13 +2185,10 @@ function render() {
                 ? t("ui.added-still-no-pairs", { "0": addedCount, "1": digitWord(addedCount), "2": nextAddMessage })
                 : values.length + count > MAX_CELLS
                   ? t("ui.no-pairs", { "0": nextAddMessage })
-                  : t("ui.no-pairs-tap-add-to-copy-to-the-end", { "0": copied, "1": count, "2": digitWord(count) })
-              : t("game.noMoves"),
+                  : t("calm.classic.copy", { copied, count, digits: digitWord(count) })
+              : t(session.history.length ? "game.noMoves" : "calm.noPairs"),
     );
-  const selectedEdge = !highlight && inOpening() && selected >= 0 &&
-    available.length && available.every(pair => pair.kind === "reading")
-    ? available.find(pair => pair.a === selected || pair.b === selected) : undefined;
-  drawPath(highlight ?? selectedEdge ?? null);
+  drawPath(highlight);
   clipPairTrace();
   if (focusedIndex !== undefined) {
     const target = $("board").querySelector<HTMLElement>(
@@ -2659,6 +2729,7 @@ function displayHint(pair: Connection,quiet=false) {
 type CollectionScreen = "book" | "calendar" | "trophies" | "progress";
 const navigationTrail: { screen: string; scroll: number; focus: string }[] = [];
 let collectionTab: "jars" | "months" = "jars";
+let featuredTrophyMonth = "";
 function rememberNavigation(target: string) {
   const screen = dialog.open ? dialog.dataset.screen || "home" : "game";
   if (screen === target) return;
@@ -2719,8 +2790,8 @@ function navigateBack(native = false): boolean {
   if (busy) return true;
   if (dialog.open) {
     if ($("menu-content").hidden) returnToPrevious();
-    else if (native) return false;
     else if (dialog.dataset.entry === "pause") closeMenu();
+    else if (native) return false;
   } else if (lesson >= 0) finishLesson();
   else openMenu();
   return true;
@@ -2731,12 +2802,13 @@ function openMenu(preserve: unknown = false) {
   if (preserve !== true) navigationTrail.length = 0;
   settlePresentation();
   releaseDialogHeading();
+  calendarActions.replaceChildren();
+  calendarActions.hidden = true;
   updateHome();
   cancelHint();
   if (!busy) render();
   document.body.classList.add("navigation-open");
   dialog.dataset.screen = "home";
-  pauseLanguage.hidden=dialog.dataset.entry!=="pause";
   homeTitle.append(closeButton);
   $("settings-panel").hidden = true;
   renderHomeCurrent();
@@ -2907,7 +2979,7 @@ function requestRestart(
   confirmAction = action;
   confirmDifficulty = level;
   if (
-    (!session.history.length &&
+    (action === "next" && !session.history.length &&
       !session.current.moves &&
       !session.current.additions) ||
     !occupied(session.current.board)
@@ -2999,8 +3071,8 @@ async function prepareResultTransition(route: "next" | "easier" | "harder" | "sh
 async function playNextClassic(delta: -1 | 0 | 1 = 0) {
   const level=classicDifficulty()+delta;
   if(level<CLASSIC_MIN||level>CLASSIC_MAX)return;
+  const next=$("play-again").dataset.destination;
   if(!await prepareResultTransition(delta<0 ? "easier" : delta>0 ? "harder" : "next"))return;
-  const next=nextTask(progress.active,progress.done);
   if(next)await switchGame(next);
   else if(progress.active.startsWith("book"))openCollection("book");
   else if(progress.active.startsWith("daily"))openCollection("calendar");
@@ -3445,6 +3517,9 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   const pickerOpen = (
     document.getElementById("calendar-picker") as HTMLDetailsElement | null
   )?.open;
+  const calendarExtrasOpen = document.querySelector<HTMLDetailsElement>("#calendar-extras")?.open;
+  const bookPickerOpen = document.querySelector<HTMLDetailsElement>("#other-books")?.open;
+  const laterPagesOpen = document.querySelector<HTMLDetailsElement>("#book-later-pages")?.open;
   if (!restoring) rememberNavigation(kind);
   openMenu(true);
   dialog.dataset.screen = kind;
@@ -3466,7 +3541,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     const nextDone = volumeTasks(nextVolume).filter((p) =>
       progress.done.includes(p.id),
     ).length;
-    html += `<h2>${t("home.progress")}</h2>${jarHero(j)}<button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button><button id="progress-book" class="progress-book"><span><strong>${t("ui.puzzle-book", { "0": nextVolume + 1 })}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${t("ui.puzzle-book", { "0": nextVolume + 1 })}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p>`;
+    html += `<h2>${t("home.progress")}</h2>${jarHero(j)}<button id="progress-book" class="progress-book">${bookPicture(nextVolume + 1)}<span><strong>${t("ui.puzzle-book", { "0": nextVolume + 1 })}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${t("ui.puzzle-book", { "0": nextVolume + 1 })}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p><button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button>`;
   } else if (kind === "book") {
     const finished = new Set(progress.done);
     const status = (v: number) => {
@@ -3519,11 +3594,11 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ) ??
         tasks.find((p) => !finished.has(p.id)) ??
         tasks[0];
-      html += `<div class="volume-heading"><h3>${t("ui.puzzle-book", { "0": selectedVolume + 1 })}</h3><span>${stats.n}/24</span></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${t("ui.puzzle", { "0": stats.n === 24 ? t("ui.replay") : stats.started ? t("daily.resume") : t("action.start"), "1": puzzleNumberInVolume(continuing.id) })}</button>`;
+      html += `<div class="volume-heading">${bookPicture(selectedVolume + 1)}<div><small>${t("calm.book.open")}</small><h3>${t("ui.puzzle-book", { "0": selectedVolume + 1 })}</h3><span>${t("ui.of-24-puzzles", { "0": stats.n })}</span></div></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${t("ui.puzzle", { "0": stats.n === 24 ? t("ui.replay") : stats.started ? t("daily.resume") : t("action.start"), "1": puzzleNumberInVolume(continuing.id) })}</button>`;
       for (let page = 0; page < 4; page++) {
         const group = tasks.slice(page * 6, page * 6 + 6),
           n = group.filter((p) => finished.has(p.id)).length;
-        html += `<section class="book-page ${n === 6 ? "page-done" : ""}"><div class="page-heading"><h3>${t("ui.page", { "0": page + 1 })}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((p) => {
+        html += `<section class="book-page ${n === 6 ? "page-done" : ""}" data-page="${page + 1}"><div class="page-heading"><h3>${t("ui.page", { "0": page + 1 })}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((p) => {
           const number = puzzleNumberInVolume(p.id);
           const done = finished.has(p.id);
           return `<button class="task ${done ? "done" : ""}" data-game="${p.id}" ${p.id === progress.active ? 'aria-current="true"' : ""} aria-label="${t("ui.puzzle-2", { "0": number, "1": done ? t("ui.solved") : "" })}">${number}${done ? "<small>✓</small>" : ""}</button>`;
@@ -3535,6 +3610,8 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   } else if (kind === "calendar") {
     if (calendarMonth > today().slice(0, 7))
       calendarMonth = today().slice(0, 7);
+    const date = today(), todayId = `daily-v1-${date}`;
+    const todayAction = progress.done.includes(todayId) ? "replay" : progress.sessions[todayId]?.history.length ? "resume" : "play";
     const monthTrophy = trophy(calendarMonth, progress.done),
       weekday =
         (new Date(
@@ -3544,16 +3621,16 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ).getDay() +
           6) %
         7;
-    html += `<h2>${t("notification.channel")}</h2>${streakPanel()}<button class="primary calendar-today" id="today-task">${progress.done.includes("daily-v1-" + today()) ? t("ui.replay-today") : t("ui.play-today")}</button><div class="month-nav calendar-nav"><button id="prev-month" aria-label="${t("ui.previous-month")}" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>${icon("back")}</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="${t("ui.choose-month")}">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="${t("ui.next-month")}" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>${icon("arrow")}</button></div><div class="calendar">${[t("ui.mon"), t("ui.tue"), t("ui.wed"), t("ui.thu"), t("ui.fri"), t("ui.sat"), t("ui.sun")].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
+    html += `<h2>${t("notification.channel")}</h2><section class="calendar-hero">${calendarPicture(date)}<div><small>${t("calm.calendar.today")}</small><strong>${taskDate(date)}</strong><span>${t(todayAction === "play" ? "daily.tagline" : todayAction === "replay" ? "daily.replay" : "daily.resume")}</span></div></section><div class="month-nav calendar-nav"><button id="prev-month" aria-label="${t("ui.previous-month")}" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>${icon("back")}</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="${t("ui.choose-month")}">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="${t("ui.next-month")}" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>${icon("arrow")}</button></div><div class="calendar">${[t("ui.mon"), t("ui.tue"), t("ui.wed"), t("ui.thu"), t("ui.fri"), t("ui.sat"), t("ui.sun")].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
       calendarMonth,
     )
       .map(
         (d) =>
-          `<button class="task ${progress.done.includes("daily-v1-" + d) ? "done" : ""} ${d === today() ? "today" : ""}" data-game="daily-v1-${d}" ${!availableDay(d) ? "disabled" : ""} aria-label="${d}${progress.done.includes("daily-v1-" + d) ? t("ui.solved") : ""}">${Number(d.slice(-2))}${progress.done.includes("daily-v1-" + d) ? "<small>✓</small>" : ""}</button>`,
+          `<button class="task ${progress.done.includes("daily-v1-" + d) ? "done" : ""} ${d === today() ? "today" : ""}" data-game="daily-v1-${d}" ${!availableDay(d) ? "disabled" : ""} ${d === date ? 'aria-current="date"' : ""} aria-label="${taskDate(d, true)}${progress.done.includes("daily-v1-" + d) ? t("ui.solved") : ""}">${Number(d.slice(-2))}${progress.done.includes("daily-v1-" + d) ? "<small>✓</small>" : ""}</button>`,
       )
       .join(
         "",
-      )}</div><section class="calendar-trophies" aria-label="${t("ui.monthly-trophies")}">${trophyMark(calendarMonth, monthTrophy.count, days(calendarMonth).length)}</section><p>${t("ui.of-puzzles-solved", { "0": monthTrophy.count, "1": days(calendarMonth).length })}</p><p class="fine">${t("ui.you-can-play-past-days-any-time")}</p><details class="explanation"><summary>${t("ui.how-streaks-work")}</summary><p>${t("ui.solve-todays-puzzle-today-archive-puzzles-count-towards-monthly")}</p></details><details class="explanation"><summary>${t("ui.monthly-trophies")}</summary><p>${t("ui.bronze-7-puzzles-silver-14-gold-the-whole-month-2")}</p></details>`;
+      )}</div><p class="fine calendar-note">${t("ui.you-can-play-past-days-any-time")}</p><details id="calendar-extras" ${calendarExtrasOpen ? "open" : ""}><summary>${t("calm.calendar.more")}</summary>${streakPanel()}<section class="calendar-trophies" aria-label="${t("ui.monthly-trophies")}">${trophyMark(calendarMonth, monthTrophy.count, days(calendarMonth).length)}</section><p>${t("ui.of-puzzles-solved", { "0": monthTrophy.count, "1": days(calendarMonth).length })}</p><details class="explanation"><summary>${t("ui.how-streaks-work")}</summary><p>${t("ui.solve-todays-puzzle-today-archive-puzzles-count-towards-monthly")}</p></details><details class="explanation"><summary>${t("ui.monthly-trophies")}</summary><p>${t("ui.bronze-7-puzzles-silver-14-gold-the-whole-month-2")}</p></details></details><button class="primary calendar-today" id="today-task" data-continue="${todayId}">${t("calm.calendar." + todayAction, { date: taskDate(date) })}</button>`;
   } else {
     html += `<h2>${t("ui.collection")}</h2><div class="collection-tabs" role="group" aria-label="${t("ui.collection-section")}"><button id="jars-tab" aria-pressed="${collectionTab === "jars"}">${t("ui.jars")}</button><button id="trophies-mode" aria-pressed="${collectionTab === "months"}">${t("ui.monthly-trophies")}</button></div>`;
     const j = jarState(jars(progress).meter);
@@ -3563,28 +3640,38 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     );
     const shelfEnd = j.index - jarShelfPage * 12,
       shelfStart = Math.max(0, shelfEnd - 12);
-    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}><h3>${t("ui.jars")}</h3><p>${t("ui.collected-seeds", { "0": j.index, "1": jars(progress).seeds })}</p>${jarHero(j)}<div class="jar-shelf">${Array.from(
+    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}>${jarHero(j)}<p class="jar-collected-count">${t("ui.collected-seeds", { "0": j.index, "1": jars(progress).seeds })}</p><div class="jar-shelf">${Array.from(
       { length: shelfEnd - shelfStart },
       (_, n) => {
         const i = shelfStart + n;
-        return `<div class="jar-keepsake" style="--jar-color:${jarColors[i % 6]};--fill:100%"><span class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span><small>${localName(jarNames[i % 6])} · ${i + 1}</small></div>`;
+        return `<div class="jar-keepsake" style="--jar-color:${jarColors[i % 6]};--fill:100%">${jarGlass()}<small>${localName(jarNames[i % 6])} · ${i + 1}</small></div>`;
       },
     ).join(
       "",
-    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>${t("ui.earlier")}</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : t("ui.nothing-yet")}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>${t("ui.newer")}</button></div>${j.index ? "" : `<button id="jar-play" class="primary">${t("action.playClassic")}</button>`}<details class="explanation"><summary>${t("ui.how-jars-fill-up")}</summary><p>${t("ui.earn-two-seeds-for-each-new-move-in-classic")}</p></details><p>${t("ui.boards-cleared", { "0": jars(progress).wins })}</p><p class="fine">${jars(progress).wins >= 100 ? t("ui.master-100-boards") : jars(progress).wins >= 25 ? t("ui.expert-25-boards") : jars(progress).wins >= 5 ? t("ui.solid-start-5-boards") : t("ui.clear-5-boards-to-earn-your-first-badge")}</p></section>`;
+    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>${t("ui.earlier")}</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : t("ui.nothing-yet")}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>${t("ui.newer")}</button></div><details class="explanation"><summary>${t("ui.how-jars-fill-up")}</summary><p>${t("ui.earn-two-seeds-for-each-new-move-in-classic")}</p></details><p>${t("ui.boards-cleared", { "0": jars(progress).wins })}</p><p class="fine">${jars(progress).wins >= 100 ? t("ui.master-100-boards") : jars(progress).wins >= 25 ? t("ui.expert-25-boards") : jars(progress).wins >= 5 ? t("ui.solid-start-5-boards") : t("ui.clear-5-boards-to-earn-your-first-badge")}</p><button id="jar-play" class="secondary">${t("action.playClassic")}</button></section>`;
     html += `<section class="monthly-collection" ${collectionTab !== "months" ? "hidden" : ""}><p class="fine">${t("ui.bronze-7-puzzles-silver-14-gold-the-whole-month")}</p><label class="year-picker">${t("ui.trophy-year")}<select id="trophy-year">${years()
       .map((y) => `<option ${y === trophyYear ? "selected" : ""}>${y}</option>`)
       .join("")}</select></label>`;
-    for (const m of months()
-      .filter((m) => m.startsWith(trophyYear))
-      .reverse()) {
-      const monthTrophy = trophy(m, progress.done);
-      html += `<button class="trophy tier-${monthTrophy.tier}" data-month="${m}"><span class="trophy-heading"><strong>${monthName(m)}</strong><small>${t("ui.days", { "0": monthTrophy.count, "1": days(m).length })}</small></span>${trophyMark(m, monthTrophy.count, days(m).length)}</button>`;
+    const recentMonths = months().reverse();
+    const featured = recentMonths.includes(featuredTrophyMonth) ? featuredTrophyMonth : recentMonths[0];
+    if (featured) {
+      const current = trophy(featured, progress.done);
+      const total = days(featured).length;
+      html += `<section class="month-hero tier-${current.tier}"><div class="trophy-heading"><strong>${monthName(featured)}</strong><small>${t("ui.of-days", { "0": current.count, "1": total })}</small></div>${trophyMark(featured, current.count, total)}<button class="secondary" data-month="${featured}">${t("calm.calendar.openMonth")}</button></section>`;
+    }
+    const past = recentMonths.filter(month => month !== featured);
+    if (past.length) {
+      html += `<section class="past-months"><h3>${t("calm.collection.past")}</h3>${past.map(month => {
+        const mark = trophy(month, progress.done);
+        return `<button class="trophy trophy-row tier-${mark.tier}" data-month="${month}"><strong>${monthName(month)}</strong><small>${t("ui.days", { "0": mark.count, "1": days(month).length })}</small>${icon("arrow")}</button>`;
+      }).join("")}</section>`;
     }
   }
   if (kind === "trophies") html += "</section>";
   panel.innerHTML = html;
   if (kind === "calendar") {
+    calendarActions.append($("today-task"));
+    calendarActions.hidden = false;
     const layout = document.createElement("div");
     layout.className = "calendar-layout";
     const activity = document.createElement("section");
@@ -3593,7 +3680,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     month.className = "calendar-month";
     for (const node of [...panel.children]) {
       if (node.matches(".screen-back,h2")) continue;
-      (node.matches(".daily-run,#today-task") ? activity : month).append(node);
+      (node.matches(".calendar-hero,#calendar-extras") ? activity : month).append(node);
     }
     layout.append(activity, month);
     panel.append(layout);
@@ -3604,7 +3691,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     overview.className = "jar-overview";
     const history = document.createElement("div");
     history.className = "jar-history";
-    const summary = jars.querySelector("p");
+    const summary = jars.querySelector(".jar-collected-count");
     for (const node of [...jars.children])
       (node.matches("h3,.progress-hero") || node === summary
         ? overview
@@ -3621,9 +3708,13 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       resume.append(heading, button);
       panel.append(resume);
     }
-    const browser = document.createElement("section");
+    const browser = document.createElement("details");
+    browser.id = "other-books";
     browser.className = "book-browser";
-    browser.setAttribute("aria-label", t("ui.choose-puzzle-book"));
+    browser.open = Boolean(bookPickerOpen || panel.querySelector(".empty-state"));
+    const summary = document.createElement("summary");
+    summary.textContent = t("calm.book.other", { count: notebook.length / 24 });
+    browser.append(summary);
     for (const selector of [
       ".book-total",
       ".archive-controls",
@@ -3631,11 +3722,22 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     ])
       if (panel.querySelector(selector))
         browser.append(panel.querySelector(selector)!);
-    panel.append(browser);
     const pages = document.createElement("div");
     pages.className = "book-pages";
-    pages.append(...panel.querySelectorAll(".book-page"));
-    panel.append(pages);
+    const groups = [...panel.querySelectorAll<HTMLElement>(".book-page")];
+    if (groups.length) {
+      const heading = document.createElement("div");
+      heading.className = "book-pages-heading";
+      heading.textContent = t("calm.book.pageCount", { pages: groups.length, size: 6 });
+      const later = document.createElement("details");
+      later.id = "book-later-pages";
+      later.open = Boolean(laterPagesOpen || groups.slice(2).some(group=>group.querySelector("[aria-current]")));
+      const summary = document.createElement("summary");
+      summary.textContent = t("calm.book.pages", { first: 3, last: groups.length });
+      later.append(summary, ...groups.slice(2));
+      pages.append(heading, ...groups.slice(0,2), later);
+    }
+    panel.append(pages, browser);
   }
   const screenHeading = document.createElement("div");
   screenHeading.className = "screen-heading";
@@ -3662,6 +3764,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     (b) =>
       (b.onclick = () => {
         calendarMonth = b.dataset.month!;
+        featuredTrophyMonth = calendarMonth;
         openCollection("calendar");
       }),
   );
@@ -3740,7 +3843,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         openCollection("calendar");
       };
     $("today-task").onclick = () => {
-      switchGame(daily(today()).id);
+      switchGame($("today-task").dataset.continue!);
     };
   }
   if (sameScreen) {
@@ -3766,11 +3869,20 @@ function nextBookVolume() {
   const first = notebook.findIndex((p) => !progress.done.includes(p.id));
   return Math.max(0, Math.floor(first / 24));
 }
+function bookPicture(number?: number) {
+  return `<span class="book-picture" aria-hidden="true"><span>${number === undefined ? icon("book") : `№${number}`}</span></span>`;
+}
+function calendarPicture(day: string) {
+  return `<span class="calendar-picture" aria-hidden="true"><span>${Number(day.slice(-2))}</span></span>`;
+}
+function jarGlass(id?: string) {
+  return `<span class="jar-glass"${id ? ` id="${id}"` : ""}><span class="jar-fill"></span><span class="jar-lid"></span></span>`;
+}
 function jarPicture(j: ReturnType<typeof jarState>) {
-  return `<span class="jar-picture" style="--fill:${j.percent}%;--jar-color:${j.color}" aria-hidden="true"><span class="jar-glass"><span class="jar-fill"></span><span class="jar-lid"></span></span></span>`;
+  return `<span class="jar-picture" style="--fill:${j.percent}%;--jar-color:${j.color}" aria-hidden="true">${jarGlass()}</span>`;
 }
 function jarHero(j: ReturnType<typeof jarState>) {
-  return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar", { "0": j.index + 1, "1": j.name })}</span><p class="hero-value">${j.percent}<span>%</span></p><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p></div></section>`;
+  return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-value">${j.percent}<span>%</span></p><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p></div></section>`;
 }
 function difficultyLabel() {
   const level = classicDifficulty();
@@ -3799,6 +3911,7 @@ function renderHomeCurrent() {
       ? t("ui.restart-puzzle")
       : t("ui.replay-puzzle");
   if (lesson >= 0) {
+    $("home-current-art").innerHTML = icon("help");
     $("classic-mode").hidden = false;
     $("home-eyebrow").textContent = t("home.how");
     $("home-game-title").textContent = t("ui.tutorial");
@@ -3808,9 +3921,15 @@ function renderHomeCurrent() {
     return;
   }
   $("classic-mode").hidden = classicMode;
+  const isBook = progress.active.startsWith("book");
+  $("home-current-art").innerHTML = classicMode
+    ? jarPicture(jarState(jars(progress).meter))
+    : isBook
+      ? bookPicture(volumeOf(progress.active) + 1)
+      : calendarPicture(progress.active.slice(9));
   $("home-eyebrow").textContent = !count
     ? t("ui.game-complete")
-    : session.history.length
+    : session.history.length || dialog.dataset.entry === "pause"
       ? t("ui.current-game")
       : t("ui.game");
   $("home-game-title").textContent = classicMode
@@ -3825,7 +3944,7 @@ function renderHomeCurrent() {
       : `${taskDate(progress.active.slice(9))} · ${count} ${digitWord(count)}`;
   $("resume").textContent = !count
     ? t("ui.view-results")
-    : session.history.length
+    : session.history.length || dialog.dataset.entry === "pause"
       ? classicMode ? t("ui.resume-classic") : progress.active.startsWith("book") ? t("ui.resume-puzzle", { "0": puzzleNumberInVolume(progress.active) }) : progress.active.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for", { "0": taskDate(progress.active.slice(9)) })
       : classicMode
         ? t("ui.start-classic")
@@ -3836,15 +3955,15 @@ function renderHomeCurrent() {
     const j = jarState(jars(progress).meter);
     homeGoal.innerHTML = `${jarPicture(j)}<div><strong>${t("ui.jar-2", { "0": j.index + 1, "1": j.percent })}</strong><span>${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</span><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress></div>`;
   } else {
-    const done = progress.active.startsWith("book")
+    const done = isBook
       ? volumeTasks(volumeOf(progress.active)).filter((p) =>
           progress.done.includes(p.id),
         ).length
       : trophy(progress.active.slice(9, 16), progress.done).count;
-    const total = progress.active.startsWith("book")
+    const total = isBook
       ? 24
       : days(progress.active.slice(9, 16)).length;
-    homeGoal.innerHTML = `<div><strong>${t("ui.of-puzzles", { "0": done, "1": total })}</strong><progress max="${total}" value="${done}" aria-label="${t("ui.completed-puzzles")}"></progress></div>`;
+    homeGoal.innerHTML = `<div><progress max="${total}" value="${done}" aria-label="${t(isBook ? "ui.completed-puzzles" : "ui.monthly-trophies")}"></progress><strong>${t(isBook ? "ui.of-puzzles" : "ui.of-days", { "0": done, "1": total })}</strong></div>`;
   }
 }
 function updateHome() {
@@ -3852,6 +3971,7 @@ function updateHome() {
   $("book-count").textContent =
     t("books.progress", { "count": notebook.filter((p) => finished.has(p.id)).length });
   const id = `daily-v1-${today()}`;
+  $("home-today-art").innerHTML = calendarPicture(today());
   const run = dailyRun(progress);
   $("daily-series").hidden = run.count === 0;
   $("daily-series").textContent =
@@ -3929,6 +4049,16 @@ function renderJar() {
     "aria-label",
     t("ui.jar-percent-full-of-open-collection", { "0": j.index + 1, "1": celebrating ? t("ui.collected") : "", "2": j.percent, "3": j.filled, "4": j.capacity }),
   );
+  updateResultJar();
+}
+function updateResultJar() {
+  if (resultJarCard.hidden) return;
+  const total = jars(progress).meter;
+  const displayed = visualSeeds ?? total;
+  const j = jarState(resultAwaitingSave === session ? Math.min(displayed, total - earnedSeeds) : displayed);
+  resultJarCard.style.setProperty("--jar-color", j.color);
+  resultJarCard.style.setProperty("--fill", `${j.percent}%`);
+  $("result-jar-amount").textContent = `${j.name} · ${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}`;
 }
 $("jar-meter").onclick = () => {
   collectionTab = "jars";
@@ -4026,6 +4156,7 @@ function updateReminderSettings() {
   $("notification-system-settings").hidden =
     notificationRequestPending || notificationGranted || (!denied && !failed);
   const wallet = metadata(progress).wallet;
+  $("settings-reserve-title").textContent = t("calm.settings.stock");
   $("hint-wallet").textContent =
     t("ui.shared-balance-your-three-free-hints-for-this-game", { "0": wallet, "1": hintWord(wallet) });
 }

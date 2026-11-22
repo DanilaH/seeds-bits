@@ -170,7 +170,25 @@ async function firstNotebookEdge(order) {
     assert.deepEqual(await geometry(),before);
     await ui.tap(digit(order[1]),false);
     await ui.until("!document.querySelector('#win').hidden");
-    return {order,solved:true,fieldStayedPut:true,captionFits:true};
+    await ui.until("!document.querySelector('#play-again').disabled&&document.querySelector('#result-jar-amount').textContent.includes('4 of 24')");
+    assert.match(await ui.evaluate("document.querySelector('#result-subtitle').textContent"),/1 of 24/);
+    assert.match(await ui.evaluate("document.querySelector('#result-gains').textContent"),/\+4/);
+    assert.match(await ui.evaluate("document.querySelector('#play-again').textContent"),/2/);
+    if(order[0]===7)shot("calm-first-result");
+    await ui.tap("#play-again");
+    await ui.until("document.querySelector('#mode').textContent.includes('Puzzle 2')");
+    await ui.tap(digit(7),false);
+    await ui.tap(digit(15),false);
+    await ui.until("document.querySelector('#remaining').textContent==='6'");
+    await ui.tap("#menu");
+    await ui.until("document.querySelector('#dialog').open");
+    assert.match(await ui.evaluate("document.querySelector('#resume').textContent"),/2/);
+    assert.match(await ui.evaluate("document.querySelector('#home-goal').textContent"),/1 of 24/);
+    if(order[0]===7)shot("calm-menu-task-2");
+    adb("shell","input","keyevent","4");
+    await ui.until("!document.querySelector('#dialog').open");
+    assert.equal(await ui.evaluate("document.querySelector('#undo').disabled"),false);
+    return {order,solved:true,fieldStayedPut:true,captionFits:true,jarFilled:4,bookSolved:1,continuedTo:2,androidBackResumed:true};
   } finally {
     ui.close();
     stop();
@@ -206,6 +224,10 @@ async function archiveAtLargeFont(language,title,undo) {
     assert(await ui.evaluate(textFits("#undo span","#undo")),"Undo label clipped");
     assert(await ui.evaluate(textFits("#hint span","#hint")),"Hint label clipped");
     if(language==="pt-BR")shot("acceptance-archive-pt-br-200");
+    await ui.tap("#menu");
+    assert.match(await ui.evaluate("document.querySelector('#resume').textContent"),/13 de novembro|13 de noviembre/);
+    await ui.tap("#resume");
+    assert.equal(await ui.evaluate("document.querySelector('#mode').textContent"),title);
     return {language,title,undo,labelsFit:true};
   } finally {
     ui.close();
@@ -329,7 +351,7 @@ try{
   archives.push(await archiveAtLargeFont("pt-BR","Desafio do arquivo · 13 de novembro","Desfazer"));
   const controls=[];
   for(const order of [[8,9],[9,8]]) controls.push(await showEdge("640x1232",order,order[0]===8));
-  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12072,
+  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12073,
     physicalPhone:false,systemFont:2,forwardedFile:file,updatePreservedSave:true,opening,archives,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
 }catch(error) {shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}

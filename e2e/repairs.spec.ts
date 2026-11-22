@@ -121,6 +121,7 @@ test("all 24 notebook games finish by following reliable hints", async ({
   for (let n = 1; n <= 24; n++) {
     if (n > 1) await page.locator("#menu").click();
     await page.locator("#book-mode").click();
+    if (n === 13) await page.locator("#book-later-pages > summary").click();
     await page.locator(`[data-game="book-v1-${n}"]`).click();
     await expect(page.locator("#dialog")).not.toBeVisible();
     await expect(page.locator("#mode")).toHaveText(`Тетрадь 1 · задача ${n}`);

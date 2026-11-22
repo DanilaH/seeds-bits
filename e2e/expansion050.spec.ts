@@ -1,3 +1,4 @@
+import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
 async function start(page: any, seeds = 0) {
@@ -127,8 +128,11 @@ test("100 notebooks remain navigable and final huge board has legible digits, wo
   await expect(page.locator('[data-game="book-v1-1"].task')).toHaveClass(
     /done/,
   );
+  await openBookPicker(page);
   await page.locator("#book-chapter").selectOption("9");
+  await openBookPicker(page);
   await page.locator('[data-volume="99"]').click();
+  await page.locator("#book-later-pages > summary").click();
   await page.locator('[data-game="book-v1-2400"]').click();
   await expect(page.locator("#dialog")).toBeHidden();
   const n = Number(await page.locator("#remaining").textContent());

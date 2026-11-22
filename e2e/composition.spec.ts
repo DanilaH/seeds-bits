@@ -1,3 +1,4 @@
+import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 test.use({ screenshot: "only-on-failure" });
@@ -45,6 +46,7 @@ test("notebook continuation precedes selectors, with two page columns on tablets
   await page.goto("/");
   await page.locator("#book-mode").click();
   await expect(page.locator("#continue-book")).toBeInViewport();
+  await openBookPicker(page);
   const c = await page.locator("#continue-book").boundingBox(),
     f = await page.locator("#book-chapter").boundingBox();
   expect(c!.y + c!.height).toBeLessThan(f!.y);
@@ -127,8 +129,9 @@ test("home, archive, progress and play remain readable across portrait, landscap
           animations: "disabled",
         });
       };
-      await expect(page.locator("#settings-open")).toBeInViewport();
       await expect(page.locator("#resume")).toBeInViewport();
+      await page.locator("#settings-open").scrollIntoViewIfNeeded();
+      await expect(page.locator("#settings-open")).toBeInViewport();
       await capture("home");
       await page.locator("#book-mode").click();
       await capture("books");

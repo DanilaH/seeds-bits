@@ -2126,5 +2126,117 @@
     "es": "semillas",
     "tr": "tohum",
     "pt-BR": "sementes"
+  },
+  "calm.book.other": {
+    "ru": "Другие тетради · {count}",
+    "en": "Other puzzle books · {count}",
+    "es": "Otros cuadernos · {count}",
+    "tr": "Diğer defterler · {count}",
+    "pt-BR": "Outros cadernos · {count}"
+  },
+  "calm.book.pages": {
+    "ru": "Страницы {first} и {last}",
+    "en": "Pages {first} and {last}",
+    "es": "Páginas {first} y {last}",
+    "tr": "Sayfa {first} ve {last}",
+    "pt-BR": "Páginas {first} e {last}"
+  },
+  "calm.book.pageCount": {
+    "ru": "{pages} страницы по {size} задач",
+    "en": "{pages} pages of {size} puzzles",
+    "es": "{pages} páginas de {size} retos",
+    "tr": "{pages} sayfa, her biri {size} bulmaca",
+    "pt-BR": "{pages} páginas de {size} desafios"
+  },
+  "calm.book.open": {
+    "ru": "Открытая тетрадь",
+    "en": "Open puzzle book",
+    "es": "Cuaderno abierto",
+    "tr": "Açık defter",
+    "pt-BR": "Caderno aberto"
+  },
+  "calm.calendar.more": {
+    "ru": "Серия и трофеи месяца",
+    "en": "Streak and monthly medals",
+    "es": "Racha y medallas del mes",
+    "tr": "Seri ve ayın madalyaları",
+    "pt-BR": "Sequência e medalhas do mês"
+  },
+  "calm.calendar.openMonth": {
+    "ru": "Открыть календарь",
+    "en": "Open calendar",
+    "es": "Abrir calendario",
+    "tr": "Takvimi aç",
+    "pt-BR": "Abrir calendário"
+  },
+  "calm.calendar.play": {
+    "ru": "Играть сегодня · {date}",
+    "en": "Play today · {date}",
+    "es": "Jugar hoy · {date}",
+    "tr": "Bugün oyna · {date}",
+    "pt-BR": "Jogar hoje · {date}"
+  },
+  "calm.calendar.resume": {
+    "ru": "Продолжить сегодня · {date}",
+    "en": "Continue today · {date}",
+    "es": "Continuar hoy · {date}",
+    "tr": "Bugüne devam et · {date}",
+    "pt-BR": "Continuar hoje · {date}"
+  },
+  "calm.calendar.replay": {
+    "ru": "Повторить сегодня · {date}",
+    "en": "Replay today · {date}",
+    "es": "Repetir hoy · {date}",
+    "tr": "Bugünü yeniden oyna · {date}",
+    "pt-BR": "Jogar hoje novamente · {date}"
+  },
+  "calm.calendar.today": {
+    "ru": "Сегодня",
+    "en": "Today",
+    "es": "Hoy",
+    "tr": "Bugün",
+    "pt-BR": "Hoje"
+  },
+  "calm.noPairs": {
+    "ru": "Пар больше нет",
+    "en": "No pairs left",
+    "es": "No quedan parejas",
+    "tr": "Eşleşme kalmadı",
+    "pt-BR": "Não há mais pares"
+  },
+  "calm.classic.add": {
+    "ru": "Добавить {count}",
+    "en": "Add {count}",
+    "es": "Añadir {count}",
+    "tr": "{count} ekle",
+    "pt-BR": "Adicionar {count}"
+  },
+  "calm.collection.past": {
+    "ru": "Прошлые месяцы",
+    "en": "Past months",
+    "es": "Meses anteriores",
+    "tr": "Önceki aylar",
+    "pt-BR": "Meses anteriores"
+  },
+  "calm.settings.stock": {
+    "ru": "Запас подсказок",
+    "en": "Hint reserve",
+    "es": "Reserva de pistas",
+    "tr": "İpucu stoğu",
+    "pt-BR": "Reserva de dicas"
+  },
+  "calm.language.current": {
+    "ru": "Сейчас — {language}",
+    "en": "Current language — {language}",
+    "es": "Idioma actual — {language}",
+    "tr": "Şu an — {language}",
+    "pt-BR": "Idioma atual — {language}"
+  },
+  "calm.classic.copy": {
+    "ru": "В конец поля {copied} {count} {digits}.",
+    "en": "The next {count} {digits} are copied to the end.",
+    "es": "Se copian {count} {digits} al final del tablero.",
+    "tr": "{count} {digits} tahtanın sonuna kopyalanır.",
+    "pt-BR": "Copia {count} {digits} para o fim do tabuleiro."
   }
 }

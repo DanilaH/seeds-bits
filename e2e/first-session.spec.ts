@@ -35,12 +35,19 @@ test("clean first run is a real saved task, voluntary task 2 and no duplicate re
   await start(page);await expect(page.locator("#dialog")).not.toHaveAttribute("open");await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 1");
   for(const [a,b] of [[8,17],[4,5],[9,11],[7,14]])await move(page,a,b);
   await expect(page.locator("#win")).toBeVisible();await expect(page.locator("#win")).toContainText("1 из 24");await expect(page.locator("#play-again")).toHaveText("К задаче 2");
+  await expect(page.locator("#result-jar-amount")).toContainText("4 из 24");
+  await expect(page.locator("#result-gains")).toContainText("+4");
   await page.waitForTimeout(1700);expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).active,key)).toBe("book-v1-1");
   const before=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).meta.completed,key);
   await page.reload();await page.locator("#resume").click();await expect(page.locator("#win")).toBeVisible();expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).meta.completed,key)).toBe(before);
   await page.locator("#play-again").click();await expect(page.locator("#mode")).toContainText("задача 2");
   const pair=pairs(notebook[1].board)[0];await move(page,pair.a,pair.b);
   const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).sessions["book-v1-2"],key);
+  await page.locator("#menu").click();
+  await expect(page.locator("#home-goal")).toContainText("1 из 24");
+  await expect(page.locator("#resume")).toHaveText("Продолжить задачу 2");
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#undo")).toBeEnabled();
   await page.reload();await page.locator("#resume").click();expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).sessions["book-v1-2"],key)).toEqual(saved);
 });
 for(const i of notebook[0].board.flatMap((v,i)=>v?[i]:[]))test(`first selection ${i} offers only legal partners`,async({page})=>{
@@ -63,9 +70,13 @@ for(const reverse of [false,true])test(`gap cue before the move, explicit hint, 
   await expect(cue(page)).toContainText("3 и 3");await expect(cue(page)).toContainText("по горизонтали");await expect(page.locator("#status")).toHaveText("");
   await move(page,9,11);await expect(cue(page)).toHaveText("От правого края — в начало строки ниже.");
   const a=reverse?14:7,b=reverse?7:14;await digit(page,a);
+  await expect(page.locator("#board .hinted")).toHaveCount(0);
+  expect(await page.locator("#paths").innerHTML()).toBe("");
+  await page.locator("#hint").click();
+  await expect(page.locator("#board .hinted")).toHaveCount(2);
   const svg=await page.locator("#paths").innerHTML();expect(svg).toContain("path");
-  // Same geographic upper-right / lower-left path independent of tap order.
-  await digit(page,a);await digit(page,b);expect(await page.locator("#paths").innerHTML()).toBe(svg);await digit(page,a);
+  expect(await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top)).toBe(top);
+  await move(page,a,b);
   await expect(page.locator("#win")).toBeVisible();
 });
 for(const height of [520,568])test(`first commands fully visible at 320x${height} and 200%`,async({page})=>{
@@ -112,6 +123,28 @@ test("archive date is retained across menu, victory, replay and restart",async({
   await page.locator("#menu").click();await expect(page.locator("#resume")).toHaveText("Продолжить задачу дня");await page.locator("#resume").click();
   for(const step of daily("2026-11-20").solution.slice(1))await move(page,step.a,step.b);
   await expect(page.locator("#win h1")).toHaveText("Задача дня решена");
+});
+
+test("today's completed field names the archived task that the next action opens", async ({page}) => {
+  const todayId = "daily-v1-2026-11-22", target = "daily-v1-2026-11-21";
+  await page.clock.setFixedTime(new Date("2026-11-22T12:00:00+05:00"));
+  await page.addInitScript(({key,settings,todayId})=>{
+    localStorage.setItem(settings,JSON.stringify({tutorialDone:true}));
+    localStorage.setItem(key,JSON.stringify({
+      version:3,active:todayId,done:[],seen:[],hints:{},
+      sessions:{[todayId]:{rules:1,current:{board:[5,5],moves:0,additions:0,scroll:0},history:[]}},
+    }));
+  },{key,settings,todayId});
+  await page.goto("/");
+  await page.locator("#resume").click();
+  await move(page,0,1);
+  await expect(page.locator("#win h1")).toHaveText("Задача дня решена");
+  await expect(page.locator("#award .trophy-heading")).toContainText("1 из 30");
+  const next = page.locator("#play-again");
+  await expect(next).toHaveText("Задача из архива · 21 ноября");
+  await next.click();
+  await expect(page.locator("#mode")).toHaveText("Задача из архива · 21 ноября");
+  await expect.poll(()=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).active,key)).toBe(target);
 });
 
 for(const height of [520,568])test(`returning short course command fully visible at 320x${height} and 200%`,async({page})=>{

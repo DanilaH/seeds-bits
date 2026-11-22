@@ -1,3 +1,4 @@
+import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
 const KEY = "seeds-bits.progress.v2";
 const snapshot = (board: number[]) => ({
@@ -192,10 +193,11 @@ test("A07 completed first notebook leads to next volume and keeps reachable repl
   await page.goto("/");
   await page.locator("#resume").click();
   await pair(page);
-  await expect(page.locator("#play-again")).toHaveText("Следующая тетрадь");
+  await expect(page.locator("#play-again")).toHaveText("Тетрадь 2 · задача 1");
   await page.locator("#play-again").click();
   await expect(page.locator("#mode")).toHaveText("Тетрадь 2 · задача 1");
   await page.locator("#book-top").click();
+  await openBookPicker(page);
   await page.locator('[data-volume="0"]').click();
   await expect(page.locator(".task.done")).toHaveCount(24);
   await page.locator('[data-game="book-v1-24"]').click();
@@ -603,23 +605,15 @@ test("backup recovery is explicit and survives reload", async ({ page }) => {
   expect((await data(page)).done).toEqual(["book-v1-1", "book-v1-2"]);
 });
 
-test("compact home keeps settings within first viewport and touch targets at least 44px", async ({
+test("compact home can reach settings and its touch targets are at least 44px", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await seed(page);
   await page.goto("/");
   await expect(page.locator("#dialog")).toBeVisible();
-  expect(
-    await page
-      .locator("#dialog")
-      .evaluate((e) => e.scrollHeight <= e.clientHeight),
-  ).toBe(true);
-  expect(
-    await page
-      .locator("#settings-open")
-      .evaluate((e) => e.getBoundingClientRect().bottom <= innerHeight),
-  ).toBe(true);
+  await page.locator("#settings-open").scrollIntoViewIfNeeded();
+  await expect(page.locator("#settings-open")).toBeInViewport({ratio:1});
   expect(
     await page.locator(".home-links button:visible").evaluateAll((es) =>
       // Animated translation may yield 43.999996 for a 44 CSS-pixel target.

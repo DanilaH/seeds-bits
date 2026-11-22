@@ -247,6 +247,7 @@ for (const [run, reward] of [
     expect((await stored(page)).meta.wallet).toBe(4 + reward);
     await page.locator("#menu").click();
     await page.locator("#calendar-open").click();
+    await page.locator("#calendar-extras > summary").click();
     await expect(page.locator(".run-heading")).toContainText(`${run + 1}`);
     await page.locator("#today-task").click();
     const solution = await page.evaluate(

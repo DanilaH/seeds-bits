@@ -1,3 +1,4 @@
+import { openBookPicker } from "./book-controls";
 import {expect,test,type BrowserContext,type Locator,type Page} from "@playwright/test";
 import fs from "node:fs";
 
@@ -281,14 +282,17 @@ test("audit 12070: notebook numbers and completed streak accessible names",async
     await page.locator("#menu").click();
   }
   await page.locator("#book-mode").click();
+  await openBookPicker(page);
   await page.locator('[data-volume="1"]').click();
   const first=page.locator('[data-game="book-v1-25"]');
   await expect(first).toHaveText("1✓");
   await expect(first).toHaveAccessibleName("Puzzle 1, solved");
+  await page.locator("#book-later-pages > summary").click();
   await expect(page.locator('[data-game="book-v1-48"]')).toHaveAccessibleName("Puzzle 24");
   await first.click();
   await expect(page.locator("#mode")).toHaveText("Puzzle book 2 · Puzzle 1");
   await page.locator("#menu").click();
   await page.locator("#calendar-open").click();
+  await page.locator("#calendar-extras > summary").click();
   await expect(page.locator(".run-days .done")).toHaveAttribute("aria-label","Day 1, counted");
 });

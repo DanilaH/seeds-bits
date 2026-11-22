@@ -31,8 +31,10 @@ export function requiredRule(available: readonly Connection[]): string | undefin
 }
 
 /** Local calendar date from the active task ID, never from the system's current day. */
-export function taskDate(day: string): string {
+export function taskDate(day: string, includeYear = false): string {
   const [year, month, date] = day.split("-").map(Number);
-  return new Intl.DateTimeFormat(activeLanguage, {day:"numeric", month:"long", timeZone:"UTC"})
+  return new Intl.DateTimeFormat(activeLanguage, {
+    day:"numeric", month:"long", year:includeYear?"numeric":undefined, timeZone:"UTC",
+  })
     .format(new Date(Date.UTC(year, month - 1, date)));
 }

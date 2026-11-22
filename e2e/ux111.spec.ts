@@ -217,7 +217,7 @@ test("today's result names the actual archived destination", async ({
   await page.locator('[data-index="0"]').click();
   await page.locator('[data-index="1"]').click();
   await expect(page.locator("#play-again")).toHaveText(
-    "Задача из архива · 04.11.2026",
+    "Задача из архива · 4 ноября",
   );
   await page.locator("#play-again").click();
   await expect(page.locator("#mode")).toHaveText("Задача из архива · 4 ноября");

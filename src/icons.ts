@@ -9,6 +9,9 @@ const symbols = {
   arrow: '<path d="m8.5 5 7 7-7 7"/>',
   add: '<path d="M12 4v16M4 12h16"/>',
   menu: '<path d="M5 7h14M5 12h14M5 17h14"/>',
+  progress: '<path d="M5 19v-5m5 5V9m5 10v-7m5 7V4"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.5 1.8-2.5 4m0 3h.01"/>',
+  settings: '<path d="M6 3v7m0 4v7m6-18v12m0 4v2m6-18v2m0 4v12M4 10h4v4H4zm6 5h4v4h-4zm6-10h4v4h-4z"/>',
 };
 export function icon(name: keyof typeof symbols) {
   return `<svg class="seed-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${symbols[name]}</svg>`;

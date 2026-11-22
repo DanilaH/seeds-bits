@@ -142,14 +142,14 @@ test("wrong values preserve the new selection and adjacent removal has no trail"
   await digit(page,2).click();
   await expect(page.locator("#remaining")).toHaveText("1");
   await expect(page.locator("#pair-trace")).toHaveCount(0);
-  await expect(page.locator("#status")).toHaveText("Пар нет. Нажмите «Добавить» — в конец поля скопируется 1 цифра.");
+  await expect(page.locator("#status")).toHaveText("В конец поля скопируется 1 цифра.");
 });
 
 test("dead end explains the copy after a successful gap pair",async({page})=>{
   await open(page,[3,0,3,8,5]);
   await digit(page,0).click();
   await digit(page,2).click();
-  await expect(page.locator("#status")).toHaveText("Пар нет. Нажмите «Добавить» — в конец поля скопируются 2 цифры.");
+  await expect(page.locator("#status")).toHaveText("В конец поля скопируются 2 цифры.");
   await page.locator("#add").click();
   await expect.poll(()=>savedBoard(page)).toEqual([0,0,0,8,5,8,5]);
   await expect(page.locator("#status")).toHaveText("Добавлено 2 цифры. Пар пока нет. Можно добавить ещё 4 цифры.");
