@@ -652,10 +652,14 @@
         "followup12062": "Финальная ревизия 6d67fea. Три случая исправлены. 30 целевых браузерных сценариев и offline Android 35 прошли в CI 44793614971. Подписанная выдача выполнена в preview 12063.",
         "apk12063": "../research/first-session-2026-11-20/implementation/APK_12063.json",
         "systemFont12065": "../layout-audit-2026-11-20/SYSTEM_FONT_12065.md",
-        "apk12065": "../research/first-session-2026-11-20/implementation/APK_12065.json"
+        "apk12065": "../research/first-session-2026-11-20/implementation/APK_12065.json",
+        "pr11CalmScreensFollowup": "../research/first-session-2026-11-20/implementation/PR11_FOLLOWUP_20261123.md",
+        "pr11IndependentAudit": "https://github.com/DanilaH/seeds-bits/pull/11",
+        "pr11CodeAndBrowserVerification": "CI 45062012299: 122 unit, 2 model unit, 15 browser regression, 377 browser e2e, Android debug and native regression PASS on b4e005df. Both filters target saved book-v1-2; full/short lessons keep field position, month targets and seed plural validated. Browser video and two 390x844 JPEG in artifact 14770431009.",
+        "pr11PhoneVerification": "NOT_VERIFIED"
       },
       "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
-      "nextAction": "На физическом телефоне проверить preview 12065: самостоятельное соединение через край, альбом при системных 200% и обновление старой партии.",
+      "nextAction": "PR11 UI-аудит закрыт в коде и browser/Android debug CI. Физический телефон остаётся NOT_VERIFIED; для проверки нужен заново подписанный preview из текущего runtime (прежний подписанный 12073 относится к прошлому исходнику), отдельно TalkBack, звук и вибрация. При необходимости повторить native preview после Maven Central HTTP 429.",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26"
     },
