@@ -144,7 +144,7 @@ async function measureGameText(systemScale) {
     stop();
   }
 }
-async function firstNotebookEdge(order) {
+async function firstNotebookEdge(order, {recordVideo=false}={}) {
   const ui=await connect();
   let recorder=null;
   const recording="/sdcard/calm-first-win-to-task-2.mp4";
@@ -164,10 +164,10 @@ async function firstNotebookEdge(order) {
     const copy="document.querySelector('.opening-copy').textContent";
     assert.equal(await ui.evaluate(copy),edgeCaption);
     assert(await ui.evaluate(textFits(".opening-copy","#page-progress")),"English opening cue clipped");
-    if(order[0]===7) {
-      shot("acceptance-first-en-200");
-      // Continuous native screen capture starts before the final pair, not after the victory.
-      recorder=spawn("adb",["shell","screenrecord","--bit-rate","1800000","--time-limit","30",recording],{stdio:"ignore"});
+    if(order[0]===7) shot("acceptance-first-en-200");
+    if(recordVideo) {
+      // Keep optional video evidence isolated from the core Android acceptance route.
+      recorder=spawn("adb",["shell","screenrecord","--size","320x616","--bit-rate","800000","--time-limit","30",recording],{stdio:"ignore"});
       await wait(750);
       assert.equal(recorder.exitCode,null,"Android screen recorder exited before the final pair");
     }
@@ -186,9 +186,9 @@ async function firstNotebookEdge(order) {
     await ui.tap("#play-again");
     await ui.until("document.querySelector('#mode').textContent.includes('Puzzle 2')");
     if(recorder) {
-      // The emulator video encoder can lag behind visible WebView state by seconds.
-      // Hold on puzzle 2 long enough for real frames to reach the MP4 before SIGINT.
-      await wait(6000);
+      // The emulator encoder can lag behind WebView; hold on puzzle 2 while
+      // capturing fewer pixels to avoid destabilizing the Android emulator.
+      await wait(4500);
       adb("shell","pkill","-2","screenrecord");
       await new Promise(resolve=>recorder.exitCode===null?recorder.once("exit",resolve):resolve());
       adb("pull",recording,out+"/calm-first-win-to-task-2.mp4");
@@ -377,4 +377,19 @@ try{
   fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12073,
     physicalPhone:false,systemFont:2,forwardedFile:file,updatePreservedSave:true,opening,archives,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
-}catch(error) {shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}
+  // An optional recording must never turn a passing game regression into a red CI.
+  // Log camera/emulator failures separately so the real acceptance result survives.
+  try {
+    assert.equal(adb("shell","pm","clear",app),"Success");
+    launch();
+    await firstNotebookEdge([7,14],{recordVideo:true});
+    fs.writeFileSync(out+"/video-result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12073,physicalPhone:false,recorded:true},null,2));
+  } catch(videoError) {
+    fs.writeFileSync(out+"/video-failure.txt",String(videoError)+"\n"+videoError.stack);
+    console.warn("ANDROID_VIDEO_CAPTURE_FAILED",String(videoError));
+  }
+}catch(error) {
+  try{shot("failed");}catch(screenshotError){console.warn("ANDROID_FAILURE_SCREENSHOT_UNAVAILABLE",String(screenshotError));}
+  fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);
+  throw error;
+}
