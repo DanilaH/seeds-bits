@@ -3646,7 +3646,9 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     );
     const shelfEnd = j.index - jarShelfPage * 12,
       shelfStart = Math.max(0, shelfEnd - 12);
-    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}>${jarHero(j)}<p class="jar-collected-count">${t("ui.collected-seeds", { "0": j.index, "1": jars(progress).seeds })}</p><div class="jar-shelf">${Array.from(
+    const seedCount = jars(progress).seeds;
+    const seedNoun = word(seedCount, t("ui.seed"), t("ui.seed-plural"), t("ui.seeds"));
+    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}>${jarHero(j)}<p class="jar-collected-count">${t("ui.collected-seeds", { "0": j.index, "1": seedCount, "2": seedNoun })}</p><div class="jar-shelf">${Array.from(
       { length: shelfEnd - shelfStart },
       (_, n) => {
         const i = shelfStart + n;
