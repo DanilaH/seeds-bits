@@ -110,7 +110,7 @@ async function attach() {
   const shown = selector => until(visible(selector));
   const hidden = selector => until(`!${visible(selector)}`);
   const text = selector => evaluate(`document.querySelector(${JSON.stringify(selector)})?.textContent`);
-  async function tap(selector, {scroll = true} = {}) {
+  async function tap(selector, {scroll = true, gesture = "tap"} = {}) {
     await shown(selector);
     const point = await evaluate(`(() => {
       const el = document.querySelector(${JSON.stringify(selector)});
@@ -122,7 +122,10 @@ async function attach() {
       return find();
     })()`);
     assert(point.ok, `Unreachable ${selector} ${JSON.stringify(point)}`);
-    adb("shell","input","tap",String(Math.round(box[0]+point.x*(box[2]-box[0])/point.w)),String(Math.round(box[1]+point.y*(box[3]-box[1])/point.h)));
+    const x=String(Math.round(box[0]+point.x*(box[2]-box[0])/point.w));
+    const y=String(Math.round(box[1]+point.y*(box[3]-box[1])/point.h));
+    if(gesture==="short") adb("shell","input","swipe",x,y,x,y,"45");
+    else adb("shell","input","tap",x,y);
     await wait(170);
   }
   const digit = (i, options) => tap(`#board [data-index="${i}"]`, options);
@@ -308,6 +311,17 @@ async function navigation() {
   const featuredMonth = await ui.evaluate("document.querySelector('.month-hero button[data-month]')?.dataset.month");
   assert.match(featuredMonth, /^\d{4}-(0[1-9]|1[0-2])$/);
   await ui.tap(".month-hero button[data-month]");
+  await wait(300);
+  if(!(await ui.evaluate("document.querySelector('#dialog').dataset.screen === 'calendar'"))) {
+    // A busy Android emulator sometimes treats ADB input tap as a long-press,
+    // opening native text selection instead of dispatching a button click.
+    // Record the anomaly, dismiss selection, retry once with a timed 45 ms touch.
+    const selected = await ui.evaluate("String(window.getSelection() || '')");
+    console.warn("ANDROID_TROPHY_TAP_RETRY",JSON.stringify({size,font,selected}));
+    if(selected) adb("shell","input","keyevent","4");
+    await wait(200);
+    await ui.tap(".month-hero button[data-month]",{gesture:"short"});
+  }
   await ui.until("document.querySelector('#dialog').dataset.screen === 'calendar'");
   assert.equal(await ui.evaluate("document.querySelector('#calendar-year').value + '-' + document.querySelector('#calendar-month').value"),featuredMonth);
   await checkpoint("archive-calendar");
