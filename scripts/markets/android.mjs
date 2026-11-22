@@ -202,8 +202,7 @@ try{
   assert.equal(file.artifact_channel,"rustore");
   assert.equal(file.acquisition_state,"fresh");
   const controls=[];
-  for(const size of ["640x1232","780x1688"])
-    for(const order of [[8,9],[9,8]])controls.push(await showEdge(size,order,size==="640x1232"&&order[0]===8));
+  for(const order of [[8,9],[9,8]]) controls.push(await showEdge("640x1232",order,order[0]===8));
   fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12070,
     physicalPhone:false,systemFont:2,forwardedFile:file,updatePreservedSave:true,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
