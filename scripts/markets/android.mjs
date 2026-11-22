@@ -113,6 +113,37 @@ function textFits(text,boundary) {
       b.right<=Math.min(innerWidth,box.right+1));
   })()`;
 }
+async function measureGameText(systemScale) {
+  adb("shell","settings","put","system","font_scale",String(systemScale));
+  assert.equal(Number(adb("shell","settings","get","system","font_scale")),systemScale);
+  assert.equal(adb("shell","pm","clear",app),"Success");
+  launch();
+  const ui=await connect();
+  try {
+    await ui.until("document.querySelector('.opening-copy')?.textContent==='Tap any number.'");
+    await assertViewport(ui);
+    const measure=async selector=>ui.evaluate(`(async()=>{
+      await document.fonts.ready;
+      const element=document.querySelector(${JSON.stringify(selector)});
+      const range=document.createRange();
+      range.selectNodeContents(element);
+      const {width,height}=range.getBoundingClientRect();
+      return {text:element.textContent,width,height};
+    })()`);
+    const instruction=await measure(".opening-copy");
+    const number=await measure(digit(8)+" .digit");
+    await ui.tap("#menu");
+    await ui.until("document.querySelector('#dialog').open");
+    const menu=await measure("#resume");
+    for (const item of [instruction,number,menu]) {
+      assert(item.text.trim() && item.width>0 && item.height>0,"Expected visible game text");
+    }
+    return {instruction,number,menu};
+  } finally {
+    ui.close();
+    stop();
+  }
+}
 async function firstNotebookEdge(order) {
   const ui=await connect();
   try {
@@ -277,7 +308,13 @@ try{
   adb("uninstall",app);
   adb("install",candidate);
   adb("shell","wm","size","640x1232");
-  adb("shell","settings","put","system","font_scale","2");
+  const gameText={};
+  for (const scale of [1,1.5,2]) {
+    gameText[scale]=await measureGameText(scale);
+    assert.deepEqual(gameText[scale],gameText[1],"Game text changed at system font scale "+scale);
+  }
+  fs.writeFileSync(out+"/fixed-text.json",JSON.stringify(gameText,null,2));
+  assert.equal(adb("shell","pm","clear",app),"Success");
   launch();
   const opening=[await firstNotebookEdge([7,14])];
   const file=installRecord();
@@ -292,7 +329,7 @@ try{
   archives.push(await archiveAtLargeFont("pt-BR","Desafio do arquivo · 13 de novembro","Desfazer"));
   const controls=[];
   for(const order of [[8,9],[9,8]]) controls.push(await showEdge("640x1232",order,order[0]===8));
-  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12071,
+  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12072,
     physicalPhone:false,systemFont:2,forwardedFile:file,updatePreservedSave:true,opening,archives,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
 }catch(error) {shot("failed");fs.writeFileSync(out+"/failure.txt",String(error)+"\n"+error.stack);throw error;}
