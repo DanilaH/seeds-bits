@@ -186,8 +186,9 @@ async function firstNotebookEdge(order) {
     await ui.tap("#play-again");
     await ui.until("document.querySelector('#mode').textContent.includes('Puzzle 2')");
     if(recorder) {
-      // Hold on puzzle 2 so the clip ends at its actual beginning, before any new move.
-      await wait(1300);
+      // The emulator video encoder can lag behind visible WebView state by seconds.
+      // Hold on puzzle 2 long enough for real frames to reach the MP4 before SIGINT.
+      await wait(6000);
       adb("shell","pkill","-2","screenrecord");
       await new Promise(resolve=>recorder.exitCode===null?recorder.once("exit",resolve):resolve());
       adb("pull",recording,out+"/calm-first-win-to-task-2.mp4");
