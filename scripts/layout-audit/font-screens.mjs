@@ -336,7 +336,7 @@ async function classic() {
   await checkpoint("classic-no-pairs");
   // The calm layout separates the dead-end heading from the copy-count message.
   await ui.shown("#no-pairs-title");
-  assert.match(await ui.text("#no-pairs-title"), /Пар нет/);
+  assert.match(await ui.text("#no-pairs-title"), /Пар (?:больше )?нет/);
   assert.match(await ui.text("#status"), /В конец поля скопируются 2 цифры\./);
   assert.deepEqual(rows.at(-1).coveredCells,[]);
   await ui.tap("#add");
