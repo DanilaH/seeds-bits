@@ -98,6 +98,14 @@
   padding-block: 26px 24px;
   justify-content: space-between;
 }
+/* The pause card and mode cards form one visual group on tall phones.
+   Let the free height remain below them, not between them; home links stay docked. */
+@media (orientation: portrait) and (min-width: 361px) and (max-width: 460px) and (min-height: 760px) {
+  #dialog[data-screen="home"] .home-layout {
+    justify-content: flex-start;
+    gap: 60px;
+  }
+}
 #dialog[data-screen="home"] .home-current {
   padding: 20px;
   max-width: none;
