@@ -652,7 +652,8 @@
         "followup12062": "Финальная ревизия 6d67fea. Три случая исправлены. 30 целевых браузерных сценариев и offline Android 35 прошли в CI 44793614971. Подписанная выдача выполнена в preview 12063.",
         "apk12063": "../research/first-session-2026-11-20/implementation/APK_12063.json",
         "systemFont12065": "../layout-audit-2026-11-20/SYSTEM_FONT_12065.md",
-        "apk12065": "../research/first-session-2026-11-20/implementation/APK_12065.json"
+        "apk12065": "../research/first-session-2026-11-20/implementation/APK_12065.json",
+        "independentUiAudit12073": "../research/independent-ui-audit-12073/README.md"
       },
       "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
       "nextAction": "На физическом телефоне проверить preview 12065: самостоятельное соединение через край, альбом при системных 200% и обновление старой партии.",

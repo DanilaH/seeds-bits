@@ -1,0 +1,323 @@
+{
+  "app": "com.seedsbits.game.preview",
+  "version": "1.1.2",
+  "versionCode": 12073,
+  "signedApkSHA256": "e065c6750a13de20853d32a7ce1176f1e9f0d43dca342e1e9a951e22cdb68997",
+  "runtime": "bacf41ffaebaf2100754111bf731cf68bb960404",
+  "testedPR9": "0a4d2842372f19c1a5625769175a463927642376",
+  "browser": "141.0.7390.37",
+  "dateForScenarios": "2026-11-22T12:00:00+05:00",
+  "ordinaryRoutesCompleted": [
+    "first-pt",
+    "first-ru",
+    "hub-en",
+    "hub-ru",
+    "restart",
+    "course",
+    "classic-win",
+    "daily",
+    "dead",
+    "classic",
+    "end-book-6",
+    "end-archive",
+    "end-book-24"
+  ],
+  "observedScreensInOrdinaryRoutes": 69,
+  "pageErrors": [],
+  "routesWithErrors": [],
+  "openingGeometry": {
+    "ru390": {
+      "locale": "ru",
+      "size": [
+        390,
+        844
+      ],
+      "samples": {
+        "start": {
+          "boardY": 243,
+          "viewportY": 231,
+          "testedCells": 8,
+          "coveredCells": []
+        },
+        "gap": {
+          "boardY": 243,
+          "viewportY": 231,
+          "testedCells": 4,
+          "coveredCells": []
+        },
+        "edge": {
+          "boardY": 243,
+          "viewportY": 231,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "selected": {
+          "boardY": 243,
+          "viewportY": 231,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "hint": {
+          "boardY": 243,
+          "viewportY": 231,
+          "testedCells": 2,
+          "coveredCells": []
+        }
+      },
+      "documentWiderThanWindow": [],
+      "doneFilterHasContinueButton": false
+    },
+    "en320": {
+      "locale": "en",
+      "size": [
+        320,
+        568
+      ],
+      "samples": {
+        "start": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 8,
+          "coveredCells": []
+        },
+        "gap": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 4,
+          "coveredCells": []
+        },
+        "edge": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "selected": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "hint": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        }
+      },
+      "documentWiderThanWindow": [],
+      "doneFilterHasContinueButton": false
+    },
+    "es320": {
+      "locale": "es",
+      "size": [
+        320,
+        568
+      ],
+      "samples": {
+        "start": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 8,
+          "coveredCells": []
+        },
+        "gap": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 4,
+          "coveredCells": []
+        },
+        "edge": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "selected": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "hint": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        }
+      },
+      "documentWiderThanWindow": [],
+      "doneFilterHasContinueButton": false
+    },
+    "pt320": {
+      "locale": "pt-BR",
+      "size": [
+        320,
+        568
+      ],
+      "samples": {
+        "start": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 8,
+          "coveredCells": []
+        },
+        "gap": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 4,
+          "coveredCells": []
+        },
+        "edge": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "selected": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "hint": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        }
+      },
+      "documentWiderThanWindow": [],
+      "doneFilterHasContinueButton": false
+    },
+    "tr320": {
+      "locale": "tr",
+      "size": [
+        320,
+        568
+      ],
+      "samples": {
+        "start": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 8,
+          "coveredCells": []
+        },
+        "gap": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 4,
+          "coveredCells": []
+        },
+        "edge": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "selected": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        },
+        "hint": {
+          "boardY": 225,
+          "viewportY": 213,
+          "testedCells": 2,
+          "coveredCells": []
+        }
+      },
+      "documentWiderThanWindow": [],
+      "doneFilterHasContinueButton": false
+    }
+  },
+  "guidedLessonGeometry": {
+    "lesson-pt-BR": {
+      "stepViewportTopCSSpx": [
+        207
+      ],
+      "viewportTopOpeningWith50pxBanner": {
+        "opening": 213,
+        "openingHint": 213,
+        "openingAfter": 213
+      }
+    },
+    "lesson-ru-RU": {
+      "stepViewportTopCSSpx": [
+        248
+      ],
+      "viewportTopOpeningWith50pxBanner": {
+        "opening": 231,
+        "openingHint": 231,
+        "openingAfter": 231
+      }
+    },
+    "lesson-tr-TR": {
+      "stepViewportTopCSSpx": [
+        207
+      ],
+      "viewportTopOpeningWith50pxBanner": {
+        "opening": 213,
+        "openingHint": 213,
+        "openingAfter": 213
+      }
+    }
+  },
+  "menuPauseRU390": {
+    ".home-current": [
+      20,
+      90,
+      350,
+      255
+    ],
+    "#classic-mode": [
+      20,
+      527,
+      170,
+      125
+    ],
+    ".home-links": [
+      20,
+      754,
+      350,
+      53
+    ],
+    "#qa-profile": [
+      20,
+      812,
+      350,
+      12
+    ]
+  },
+  "progressCardWithNewFilter": {
+    "from": "Прогресс\nБаночка 1\nЛьняная\n\n16\n%\n\n4 из 24 семечек\n\nДо следующей — 20\n\n№1\nТетрадь 1\n1 из 24 задач\nЗадачи в тетрадях\n1 из 2400\nЗадачи дня\n0\nЗавершено партий\n1\nБез подсказок\n0\nКак считается прогресс\n\nПрогресс сохраняется на этом устр",
+    "to": "Тетради\n№2\nОткрытая тетрадь\nТетрадь 2\n0 из 24 задач\nНачать · задача 1\n4 страницы по 6 задач\nСтраница 1\n0/6\n1\n2\n3\n4\n5\n6\nСтраница 2\n0/6\n7\n8\n9\n10\n11\n12\nСтраницы 3 и 4\nДругие тетради · 100",
+    "buttonDestination": "book-v1-25",
+    "persistedActiveAfterTap": "book-v1-25"
+  },
+  "progressCardWithDoneFilter": "Тетради\n\nВ этом разделе нет тетрадей с таким статусом.\n\nПоказать все в разделе",
+  "archive2025": {
+    "id": "daily-v1-2025-11-13",
+    "field": "Задача из архива · 13 ноября",
+    "pauseTitle": "Задача за 13 ноября",
+    "text": "семечки\n13\n\nТЕКУЩАЯ ПАРТИЯ\n\nЗадача за 13 ноября\n\n13 ноября · 24 цифры\n\n0 из 30 дней\nПродолжить задачу за 13 ноября\n"
+  },
+  "archive2026": {
+    "id": "daily-v1-2026-11-13",
+    "field": "Задача из архива · 13 ноября",
+    "text": "семечки\n13\n\nТЕКУЩАЯ ПАРТИЯ\n\nЗадача за 13 ноября\n\n13 ноября · 18 цифр\n\n0 из 30 дней\nПродолжить задачу за 13 ноября\n"
+  },
+  "jars": "Коллекция\nБаночки\nТрофеи месяца\nБаночка 1\nЛьняная\n\n16\n%\n\n4 из 24 семечек\n\nДо следующей — 20\n\n0 собрано · 4 семечек\n\n",
+  "trophies": "Коллекция\nБаночки\nТрофеи месяца\n\nБронза — 7 задач · серебро — 14 · золото — весь месяц\n\nГод трофеев\n2025\n2026\nНоябрь 2026 Г.\n0 из 30 дней\nБронза\n0 из 7 дней\nСледом\nСеребро\nЕщё 14 задач\nОткрыть календарь\n",
+  "lesson3RU": "семечки\n\nСоедините две двойки.\n\n3 / 6\nПропустить\nЧерез пустые клетки\n\nПустые клетки не мешают. Соедините две двойки.\n\nПопробуйте на маленьком поле\n\n2\n2",
+  "dailyWin": "Баночка 1\n16%\n22\nЗадача дня решена\n\n22 ноября 2026 г.\n\n1\nПары\n0\nПодсказки\n\nНоябрь 2026 Г.\n1 из 30 дней\nБронза\n1 из 7 дней\nСледом\nСеребро\nЕщё 13 задач\n\nВ баночку: +4 семечка\n\nЗадача из архива · 21 ноября",
+  "checks": {
+    "unit": 122,
+    "pairFeedbackOnPackageAssets": 31,
+    "extraPackageTests": 6,
+    "previewWebBuild": "passed"
+  },
+  "physicalDevice": "UNKNOWN",
+  "liveAudience": "UNKNOWN"
+}
