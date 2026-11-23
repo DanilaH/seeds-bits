@@ -190,7 +190,7 @@ test("a usable recovery copy survives a damaged primary save", async ({
   }, key);
   await page.reload();
   await page.locator("#restore-backup").click();
-  await expect(page.locator("#book-count")).toHaveText("Сборники по 24 задачи · решено 1");
+  await expect(page.locator("#book-count")).toHaveText("1 из 24 задач");
   expect(
     await page.evaluate((k) => localStorage.getItem(k + ".damaged"), key),
   ).toBe("{broken");

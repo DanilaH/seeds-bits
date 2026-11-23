@@ -248,16 +248,8 @@
   background: currentColor;
   box-shadow: 0 .38em currentColor, 0 .76em currentColor, 0 1.14em currentColor;
 }
-.book-cover:empty::after {
-  content: "";
-  width: .59em;
-  height: 1px;
-  background: #789075;
-  box-shadow: 0 .17em #789075, 0 .34em #789075;
-  transform: translateY(-.17em);
-}
 .book-cover-number {
-  font-size: .53em;
+  font-size: .49em;
   font-weight: 650;
   white-space: nowrap;
 }

@@ -163,6 +163,8 @@ test("home mode art sits beside the labels and extends past both card edges", as
   await seeded(page);
   await expect(page.locator("#book-mode .book-picture > .book-cover")).toHaveCount(1);
   await expect(page.locator("#book-mode .book-cover svg")).toHaveCount(0);
+  await expect(page.locator("#book-mode .book-cover-number")).toHaveText("№1");
+  await expect(page.locator("#book-count")).toHaveText("1 из 24 задач");
   await expect(page.locator("#home-current-art .book-cover-number")).toHaveText("№1");
   const dimensions = await page.evaluate(() => {
     return [["#book-mode", "#book-mode .book-picture"], [".home-calendar", "#home-today-art .calendar-picture"]]
@@ -184,6 +186,23 @@ test("home mode art sits beside the labels and extends past both card edges", as
   const [bookInset, dayInset] = dimensions.map(({ cardLeft, labelLeft }) => labelLeft - cardLeft);
   expect(Math.abs(bookInset - dayInset)).toBeLessThanOrEqual(1);
   await expect(page.locator("#calendar-open")).toBeVisible();
+});
+
+test("the Home notebook cover shows progress for the volume it opens", async ({ page }) => {
+  await seeded(page, { done: ["book-v1-1", "book-v1-25", "book-v1-26"] });
+  const card = page.locator("#book-mode");
+  await card.click();
+  await page.locator("#other-books summary").click();
+  await page.locator('#collection .volume-cover[data-volume="1"]').click();
+  await page.locator("#book-filter").selectOption("active");
+  await page.locator("#collection-back").click();
+
+  await expect(card.locator(".book-cover-number")).toHaveText("№2");
+  await expect(card.locator("#book-count")).toHaveText("2 из 24 задач");
+  await expect(card).toHaveAccessibleName("Тетрадь 2, 2 из 24");
+  await card.click();
+  await expect(page.locator(".volume-heading h3")).toHaveText("Тетрадь 2");
+  await expect(page.locator(".volume-heading")).toContainText("2 из 24 задач");
 });
 
 test.describe("month on the home calendar", () => {

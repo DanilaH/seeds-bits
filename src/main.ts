@@ -556,7 +556,7 @@ $("menu-content").insertBefore(
 );
 for (const [id, art] of [
   ["classic-mode", '<span class="tile-picture" aria-hidden="true"><i>3</i><i>7</i></span>'],
-  ["book-mode", bookPicture()],
+  ["book-mode", bookPicture(selectedVolume + 1)],
   ["daily-mode", '<span id="home-today-art" aria-hidden="true"></span>'],
 ] as const) {
   const button = $(id);
@@ -3979,7 +3979,11 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   } else if (!restoring) dialogScroller().scrollTop = 0;
 }
 $("classic-mode").onclick = () => switchGame("classic");
-$("book-mode").onclick = () => openCollection("book");
+$("book-mode").onclick = () => {
+  // The numbered cover on Home points to the selected volume.
+  bookFilter = "all";
+  openCollection("book");
+};
 $("daily-mode").onclick = () => switchGame(daily(today()).id);
 $("calendar-open").onclick = () => {
   calendarMonth = today().slice(0, 7);
@@ -3991,9 +3995,8 @@ function nextBookVolume() {
   const first = notebook.findIndex((p) => !progress.done.includes(p.id));
   return Math.max(0, Math.floor(first / 24));
 }
-function bookPicture(number?: number) {
-  const label = number === undefined ? "" : `<span class="book-cover-number">№${number}</span>`;
-  return `<span class="book-picture" aria-hidden="true"><span class="book-cover">${label}</span></span>`;
+function bookPicture(number: number) {
+  return `<span class="book-picture" aria-hidden="true"><span class="book-cover"><span class="book-cover-number">№${number}</span></span></span>`;
 }
 function calendarPicture(day: string, showMonth = false) {
   const month = showMonth
@@ -4114,8 +4117,12 @@ function renderHomeCurrent() {
 }
 function updateHome() {
   const finished = new Set(progress.done);
-  $("book-count").textContent =
-    t("books.progress", { "count": notebook.filter((p) => finished.has(p.id)).length });
+  const bookNumber = selectedVolume + 1;
+  const solvedInBook = volumeTasks(selectedVolume).filter((task) => finished.has(task.id)).length;
+  const bookMode = $("book-mode");
+  bookMode.querySelector(".book-cover-number")!.textContent = `№${bookNumber}`;
+  $("book-count").textContent = t("ui.of-24-puzzles", { "0": solvedInBook });
+  bookMode.setAttribute("aria-label", t("ui.puzzle-book-of-24", { "0": bookNumber, "1": solvedInBook }));
   const date = today();
   const id = `daily-v1-${date}`;
   $("daily-mode").toggleAttribute("data-daily-pending", !finished.has(id));
