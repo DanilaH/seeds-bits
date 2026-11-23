@@ -1,0 +1,1193 @@
+{
+  "source": {
+    "repo": "DanilaH/seeds-bits",
+    "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+    "files": [
+      {
+        "path": "src/core.ts",
+        "gitBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+        "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+      },
+      {
+        "path": "src/classic-generator.ts",
+        "gitBlob": "a1a74ff68cb625bd962a6739b6a5701ecaf01c05",
+        "sha256": "ac63d56159a395d43b17f72eab0aa646758f5fa34045f773a5f39cb1169461c1"
+      },
+      {
+        "path": "src/classic-catalog.json",
+        "gitBlob": "008ae0def4149c479d4d2eb1947893a3c77d500b",
+        "sha256": "186b6cc6f21b9f3e6441a36c6f4b75e06c150e68ee843106fe55adb8dca96c6a"
+      },
+      {
+        "path": "scripts/classic-variety/proofs.json",
+        "gitBlob": "dd18b518a4d917abb4e3865ebfb3bd3e5c8418bc",
+        "sha256": "46b9c6a9c39d4aaf015e0fb54402daf2b955cab1a6667ba3c48518a25358ed46"
+      },
+      {
+        "path": "scripts/generate-classic.mjs",
+        "gitBlob": "4d9b227ae8464df1b19257157d2294f4120a3544",
+        "sha256": "82b635fa0639feb95f5d2456fb5855a2dbf338954284982b28cf8def7d7d7d0a"
+      },
+      {
+        "path": "docs/classic-variety-2026-11-12/content.json",
+        "gitBlob": "8ec43e749fd8ea274a8aa15be93599a43e484b7b",
+        "sha256": "3686ad862061c595d618fedf4639618de1da322e8218b84f0e46a37b78cf3bd5"
+      },
+      {
+        "path": "tests/classic-generator.test.ts",
+        "gitBlob": "f450386142df440908ce15051191b7c5eecc884e",
+        "sha256": "bbe983a956d2f5fddbad2683da2a8af1f129acff18f134bf46f14cfe0b780768"
+      },
+      {
+        "path": "docs/porting/ADOPTION_LEDGER.json",
+        "gitBlob": "04be0103a73055d09ad55aaaa3b71e4db4f1ce74",
+        "sha256": "cff1f28d46b95c15b7c650af0a7cc8d62eb5708d92aee71ea7ac82863e83ff6e"
+      },
+      {
+        "path": "src/puzzles.ts",
+        "gitBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847",
+        "sha256": "7d5fc94edb634c1012e8b23de19fbc032709fcd785df1aa80001a47f119ef3d0"
+      }
+    ]
+  },
+  "protocolSha256": "8456006bd4535f8d8ac6993438f4b9d27e5b091fdb9011d322ee47a78313b39c",
+  "runnerSha256": "5d9a23406d54b61d5fb4ceeb3ad1e226f0dc9fded00d0154d4b8f73f240a73d2",
+  "examples": [
+    {
+      "id": "dense-45-example-1",
+      "constructionFamily": "reverse-pairs-to-five-digit-tail-one-add",
+      "variant": "padded-verified",
+      "target": 45,
+      "seedText": "feasibility-45-81-v1:illustration-search:padded-verified:45:125",
+      "seed": 1741919257,
+      "kernelId": 30,
+      "board": [
+        5,
+        5,
+        9,
+        4,
+        4,
+        8,
+        8,
+        9,
+        2,
+        3,
+        7,
+        3,
+        7,
+        6,
+        7,
+        1,
+        8,
+        8,
+        4,
+        3,
+        8,
+        8,
+        4,
+        1,
+        8,
+        8,
+        8,
+        1,
+        8,
+        7,
+        1,
+        9,
+        2,
+        1,
+        8,
+        8,
+        3,
+        9,
+        9,
+        9,
+        9,
+        8,
+        2,
+        2,
+        7
+      ],
+      "proof": [
+        [
+          24,
+          25
+        ],
+        [
+          41,
+          42
+        ],
+        [
+          38,
+          39
+        ],
+        [
+          20,
+          28
+        ],
+        [
+          23,
+          31
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          8,
+          17
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          4,
+          22
+        ],
+        [
+          34,
+          35
+        ],
+        [
+          27,
+          37
+        ],
+        [
+          11,
+          29
+        ],
+        [
+          12,
+          36
+        ],
+        [
+          9,
+          19
+        ],
+        [
+          14,
+          44
+        ],
+        [
+          5,
+          32
+        ],
+        [
+          30,
+          40
+        ],
+        [
+          16,
+          43
+        ],
+        [
+          6,
+          26
+        ],
+        null,
+        [
+          10,
+          37
+        ],
+        [
+          9,
+          29
+        ],
+        [
+          12,
+          30
+        ],
+        [
+          2,
+          15
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "boardSha256": "3f2c0a60bd4ceff49ffb6069e51ba3f6aea3a0f549a9df7ee990286c61578de1",
+      "proofSha256": "bc488790c385ccfccf3d48be4bbca4ba5960cf390886054f5a145e4bc1f17319",
+      "shapeSha256": "e66e589f142e6aad6913a7616397b067afcabfabde91009f6d8746c0fb2c4c49",
+      "screen": {
+        "pass": true,
+        "failures": [],
+        "counts": [
+          5,
+          4,
+          4,
+          4,
+          2,
+          1,
+          5,
+          13,
+          7
+        ]
+      },
+      "replay": {
+        "opening": 54,
+        "pairMoves": 25,
+        "adds": 1,
+        "directions": {
+          "horizontal": 6,
+          "diagonal": 11,
+          "vertical": 7,
+          "reading": 1
+        },
+        "distinctDirections": 4,
+        "legacyGapMoves": 12,
+        "actualGapMoves": 12,
+        "crossing": 19,
+        "adjacentIndexMoves": 5,
+        "rowCollapseMoves": 5,
+        "sameRatio": 0.48,
+        "peakCells": 45,
+        "addEvents": [
+          {
+            "proofStep": 20,
+            "afterPairMoves": 20,
+            "beforeOccupied": 5,
+            "beforeCells": 36,
+            "afterCells": 41
+          }
+        ],
+        "trace": [
+          {
+            "step": 0,
+            "action": [
+              24,
+              25
+            ],
+            "legalPairs": 54,
+            "beforeDigest": "3f2c0a60bd4ceff49ffb6069e51ba3f6aea3a0f549a9df7ee990286c61578de1",
+            "afterDigest": "ed1c37264aaea1bcca6d1173a9e9fc3a3d8ad5f9523d61b97af86691567e99e7",
+            "beforeOccupied": 45,
+            "afterOccupied": 43,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 1,
+            "action": [
+              41,
+              42
+            ],
+            "legalPairs": 48,
+            "beforeDigest": "ed1c37264aaea1bcca6d1173a9e9fc3a3d8ad5f9523d61b97af86691567e99e7",
+            "afterDigest": "4e094bc5e04f20b3bef8f37ffc79c4d29cfb57401d6bdb239edd4cbba3ef99d6",
+            "beforeOccupied": 43,
+            "afterOccupied": 41,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 2,
+            "action": [
+              38,
+              39
+            ],
+            "legalPairs": 43,
+            "beforeDigest": "4e094bc5e04f20b3bef8f37ffc79c4d29cfb57401d6bdb239edd4cbba3ef99d6",
+            "afterDigest": "e1443e4a45fd63e72f10ad815c4594f01177026b985a9cd9fa1ac4cc8ef2b532",
+            "beforeOccupied": 41,
+            "afterOccupied": 39,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 3,
+            "action": [
+              20,
+              28
+            ],
+            "legalPairs": 38,
+            "beforeDigest": "e1443e4a45fd63e72f10ad815c4594f01177026b985a9cd9fa1ac4cc8ef2b532",
+            "afterDigest": "21d25e7b321207ff486804fc1cccaf0f2429190476c3a4d05ca6b0aae0635276",
+            "beforeOccupied": 39,
+            "afterOccupied": 37,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 4,
+            "action": [
+              23,
+              31
+            ],
+            "legalPairs": 38,
+            "beforeDigest": "21d25e7b321207ff486804fc1cccaf0f2429190476c3a4d05ca6b0aae0635276",
+            "afterDigest": "8b162a69c02b8569a15211c2a33c2a007bad0e640cfc1b50c7531976edf70e26",
+            "beforeOccupied": 37,
+            "afterOccupied": 35,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 5,
+            "action": [
+              0,
+              1
+            ],
+            "legalPairs": 33,
+            "beforeDigest": "8b162a69c02b8569a15211c2a33c2a007bad0e640cfc1b50c7531976edf70e26",
+            "afterDigest": "d41ca681a0ebef9ee859e142736aaa46bad6298f2f212e3e4e999fc748d4b087",
+            "beforeOccupied": 35,
+            "afterOccupied": 33,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 6,
+            "action": [
+              8,
+              17
+            ],
+            "legalPairs": 32,
+            "beforeDigest": "d41ca681a0ebef9ee859e142736aaa46bad6298f2f212e3e4e999fc748d4b087",
+            "afterDigest": "dbc83609cd9b308f13087b28af1309ebb63e42d74cd8ea5769593e10219a36bb",
+            "beforeOccupied": 33,
+            "afterOccupied": 31,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 7,
+            "action": [
+              7,
+              15
+            ],
+            "legalPairs": 28,
+            "beforeDigest": "dbc83609cd9b308f13087b28af1309ebb63e42d74cd8ea5769593e10219a36bb",
+            "afterDigest": "4ccbcc123df815d39c781106fd16e8b46604b540d30da4336b8762cf7e56207b",
+            "beforeOccupied": 31,
+            "afterOccupied": 29,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 8,
+            "action": [
+              3,
+              13
+            ],
+            "legalPairs": 27,
+            "beforeDigest": "4ccbcc123df815d39c781106fd16e8b46604b540d30da4336b8762cf7e56207b",
+            "afterDigest": "8cac562d6796ca739bbf7a2200c82fb364d5eb0b3ccb0542fa5d19d7b4ec58e2",
+            "beforeOccupied": 29,
+            "afterOccupied": 27,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 9,
+            "action": [
+              4,
+              22
+            ],
+            "legalPairs": 26,
+            "beforeDigest": "8cac562d6796ca739bbf7a2200c82fb364d5eb0b3ccb0542fa5d19d7b4ec58e2",
+            "afterDigest": "26753dde9c4307f58b2daab2050d0e0fe665bcad4c0b5bd2b743e08a8a44df8f",
+            "beforeOccupied": 27,
+            "afterOccupied": 25,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 10,
+            "action": [
+              34,
+              35
+            ],
+            "legalPairs": 26,
+            "beforeDigest": "26753dde9c4307f58b2daab2050d0e0fe665bcad4c0b5bd2b743e08a8a44df8f",
+            "afterDigest": "e1197382a2425182b3858309d010f454380eef2861f8adc897711081c716d572",
+            "beforeOccupied": 25,
+            "afterOccupied": 23,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 11,
+            "action": [
+              27,
+              37
+            ],
+            "legalPairs": 21,
+            "beforeDigest": "e1197382a2425182b3858309d010f454380eef2861f8adc897711081c716d572",
+            "afterDigest": "bba8baaf9d41a0f1852b6555d77c9916d65c0fffec419dd1b1f5c3bba0fa4a76",
+            "beforeOccupied": 23,
+            "afterOccupied": 21,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 12,
+            "action": [
+              11,
+              29
+            ],
+            "legalPairs": 19,
+            "beforeDigest": "bba8baaf9d41a0f1852b6555d77c9916d65c0fffec419dd1b1f5c3bba0fa4a76",
+            "afterDigest": "c0376cb33f9e85f7bdec60fa1af894a6734a10ddf554294d776dbb0f4ea00e9c",
+            "beforeOccupied": 21,
+            "afterOccupied": 19,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 13,
+            "action": [
+              12,
+              36
+            ],
+            "legalPairs": 15,
+            "beforeDigest": "c0376cb33f9e85f7bdec60fa1af894a6734a10ddf554294d776dbb0f4ea00e9c",
+            "afterDigest": "c0b44d89a5ab35e4885f92f3aef6daf0bd3953fd3fdbe096251842f6d3bffb36",
+            "beforeOccupied": 19,
+            "afterOccupied": 17,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 14,
+            "action": [
+              9,
+              19
+            ],
+            "legalPairs": 14,
+            "beforeDigest": "c0b44d89a5ab35e4885f92f3aef6daf0bd3953fd3fdbe096251842f6d3bffb36",
+            "afterDigest": "0d88c8f287c5bd24575fa78dabed43f4ee639f2719455386b672ab3bcacf27cb",
+            "beforeOccupied": 17,
+            "afterOccupied": 15,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 15,
+            "action": [
+              14,
+              44
+            ],
+            "legalPairs": 11,
+            "beforeDigest": "0d88c8f287c5bd24575fa78dabed43f4ee639f2719455386b672ab3bcacf27cb",
+            "afterDigest": "c0b27a79d5fb678a511fb4b108d840f2fef44ca9cd50b1b7c385f205bdd68369",
+            "beforeOccupied": 15,
+            "afterOccupied": 13,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 16,
+            "action": [
+              5,
+              32
+            ],
+            "legalPairs": 10,
+            "beforeDigest": "c0b27a79d5fb678a511fb4b108d840f2fef44ca9cd50b1b7c385f205bdd68369",
+            "afterDigest": "ac7d697fdfba633e88a40dfab225c426e17e5391d02ca126f4c8bc48fa0492e6",
+            "beforeOccupied": 13,
+            "afterOccupied": 11,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 17,
+            "action": [
+              30,
+              40
+            ],
+            "legalPairs": 7,
+            "beforeDigest": "ac7d697fdfba633e88a40dfab225c426e17e5391d02ca126f4c8bc48fa0492e6",
+            "afterDigest": "17c43a6de61584a973484aa7f2e6eeeb1616dd441c03c9e7aeb1ee3784601450",
+            "beforeOccupied": 11,
+            "afterOccupied": 9,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 18,
+            "action": [
+              16,
+              43
+            ],
+            "legalPairs": 4,
+            "beforeDigest": "17c43a6de61584a973484aa7f2e6eeeb1616dd441c03c9e7aeb1ee3784601450",
+            "afterDigest": "647237d8dad540d30b3f91254468c46298a86fe43413337156297591f3cf3ef1",
+            "beforeOccupied": 9,
+            "afterOccupied": 7,
+            "beforeLength": 45,
+            "afterLength": 36
+          },
+          {
+            "step": 19,
+            "action": [
+              6,
+              26
+            ],
+            "legalPairs": 2,
+            "beforeDigest": "647237d8dad540d30b3f91254468c46298a86fe43413337156297591f3cf3ef1",
+            "afterDigest": "18a6586d709cd32214172864beda818f2f2e743d44e586741810e3aa69e67149",
+            "beforeOccupied": 7,
+            "afterOccupied": 5,
+            "beforeLength": 36,
+            "afterLength": 36
+          },
+          {
+            "step": 20,
+            "action": null,
+            "legalPairs": 0,
+            "beforeDigest": "18a6586d709cd32214172864beda818f2f2e743d44e586741810e3aa69e67149",
+            "afterDigest": "ebd04a247a2f5b458afe818bf6df38b35c8546b0bb8cb684eb3ba9674adcd530",
+            "beforeOccupied": 5,
+            "afterOccupied": 10,
+            "beforeLength": 36,
+            "afterLength": 41
+          },
+          {
+            "step": 21,
+            "action": [
+              10,
+              37
+            ],
+            "legalPairs": 4,
+            "beforeDigest": "ebd04a247a2f5b458afe818bf6df38b35c8546b0bb8cb684eb3ba9674adcd530",
+            "afterDigest": "00574291df1ab648c566e77e64640d659c6ec148fd2f3d7beb1dd8982a21e844",
+            "beforeOccupied": 10,
+            "afterOccupied": 8,
+            "beforeLength": 41,
+            "afterLength": 32
+          },
+          {
+            "step": 22,
+            "action": [
+              9,
+              29
+            ],
+            "legalPairs": 3,
+            "beforeDigest": "00574291df1ab648c566e77e64640d659c6ec148fd2f3d7beb1dd8982a21e844",
+            "afterDigest": "ad4ef96b91321f96928510fe89c871ae4c0c5d1a02ee1fa96656b1192859b7b3",
+            "beforeOccupied": 8,
+            "afterOccupied": 6,
+            "beforeLength": 32,
+            "afterLength": 32
+          },
+          {
+            "step": 23,
+            "action": [
+              12,
+              30
+            ],
+            "legalPairs": 2,
+            "beforeDigest": "ad4ef96b91321f96928510fe89c871ae4c0c5d1a02ee1fa96656b1192859b7b3",
+            "afterDigest": "fe245b16a95365b7175b03806646b956398a159cbb6fbbf7322a40b1f6acb799",
+            "beforeOccupied": 6,
+            "afterOccupied": 4,
+            "beforeLength": 32,
+            "afterLength": 23
+          },
+          {
+            "step": 24,
+            "action": [
+              2,
+              15
+            ],
+            "legalPairs": 5,
+            "beforeDigest": "fe245b16a95365b7175b03806646b956398a159cbb6fbbf7322a40b1f6acb799",
+            "afterDigest": "f604b8341097f04817e65664ac9850e931071b2b92142476ea797a63ec84eed0",
+            "beforeOccupied": 4,
+            "afterOccupied": 2,
+            "beforeLength": 23,
+            "afterLength": 5
+          },
+          {
+            "step": 25,
+            "action": [
+              0,
+              4
+            ],
+            "legalPairs": 1,
+            "beforeDigest": "f604b8341097f04817e65664ac9850e931071b2b92142476ea797a63ec84eed0",
+            "afterDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "beforeOccupied": 2,
+            "afterOccupied": 0,
+            "beforeLength": 5,
+            "afterLength": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "dense-45-example-2",
+      "constructionFamily": "reverse-pairs-to-five-digit-tail-one-add",
+      "variant": "padded-verified",
+      "target": 45,
+      "seedText": "feasibility-45-81-v1:illustration-search:padded-verified:45:251",
+      "seed": 786017839,
+      "kernelId": 63,
+      "board": [
+        4,
+        4,
+        4,
+        6,
+        6,
+        4,
+        4,
+        3,
+        4,
+        6,
+        9,
+        5,
+        5,
+        5,
+        9,
+        2,
+        7,
+        8,
+        6,
+        6,
+        2,
+        4,
+        7,
+        4,
+        6,
+        1,
+        4,
+        7,
+        7,
+        4,
+        7,
+        2,
+        3,
+        6,
+        9,
+        9,
+        6,
+        6,
+        6,
+        2,
+        2,
+        7,
+        8,
+        2,
+        9
+      ],
+      "proof": [
+        [
+          5,
+          6
+        ],
+        [
+          42,
+          43
+        ],
+        [
+          23,
+          24
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          27,
+          28
+        ],
+        [
+          12,
+          13
+        ],
+        [
+          22,
+          30
+        ],
+        [
+          7,
+          16
+        ],
+        [
+          19,
+          37
+        ],
+        [
+          3,
+          21
+        ],
+        [
+          34,
+          35
+        ],
+        [
+          32,
+          41
+        ],
+        [
+          18,
+          38
+        ],
+        [
+          14,
+          44
+        ],
+        [
+          20,
+          40
+        ],
+        [
+          15,
+          17
+        ],
+        [
+          0,
+          36
+        ],
+        [
+          26,
+          29
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          31,
+          39
+        ],
+        null,
+        [
+          8,
+          40
+        ],
+        [
+          1,
+          28
+        ],
+        [
+          2,
+          29
+        ],
+        [
+          15,
+          18
+        ],
+        [
+          7,
+          12
+        ]
+      ],
+      "boardSha256": "3573543e14ee92bcfa42906311f6f8e9ccd9e5509c8c96d125e2fb91bada94b1",
+      "proofSha256": "77ec0475d513156ed22db4262a79306d4d32b07319d9113e0e4d0a386838e934",
+      "shapeSha256": "507983ba6ba641b63573bdf092c7cd1d0c872f0dc01b7325e295359a8d283b36",
+      "screen": {
+        "pass": true,
+        "failures": [],
+        "counts": [
+          1,
+          6,
+          2,
+          10,
+          3,
+          10,
+          6,
+          2,
+          5
+        ]
+      },
+      "replay": {
+        "opening": 37,
+        "pairMoves": 25,
+        "adds": 1,
+        "directions": {
+          "horizontal": 8,
+          "diagonal": 7,
+          "vertical": 7,
+          "reading": 3
+        },
+        "distinctDirections": 4,
+        "legacyGapMoves": 14,
+        "actualGapMoves": 14,
+        "crossing": 17,
+        "adjacentIndexMoves": 6,
+        "rowCollapseMoves": 5,
+        "sameRatio": 0.56,
+        "peakCells": 45,
+        "addEvents": [
+          {
+            "proofStep": 20,
+            "afterPairMoves": 20,
+            "beforeOccupied": 5,
+            "beforeCells": 36,
+            "afterCells": 41
+          }
+        ],
+        "trace": [
+          {
+            "step": 0,
+            "action": [
+              5,
+              6
+            ],
+            "legalPairs": 37,
+            "beforeDigest": "3573543e14ee92bcfa42906311f6f8e9ccd9e5509c8c96d125e2fb91bada94b1",
+            "afterDigest": "84d4b48cd24a6692cecb4d77bdc75c4bef55d4815d38f9a386923d65213d7732",
+            "beforeOccupied": 45,
+            "afterOccupied": 43,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 1,
+            "action": [
+              42,
+              43
+            ],
+            "legalPairs": 35,
+            "beforeDigest": "84d4b48cd24a6692cecb4d77bdc75c4bef55d4815d38f9a386923d65213d7732",
+            "afterDigest": "e473305dcf09df49c7208740e0705d0ca739c38303a7dcdb548ab83b783a069a",
+            "beforeOccupied": 43,
+            "afterOccupied": 41,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 2,
+            "action": [
+              23,
+              24
+            ],
+            "legalPairs": 34,
+            "beforeDigest": "e473305dcf09df49c7208740e0705d0ca739c38303a7dcdb548ab83b783a069a",
+            "afterDigest": "aea771063db072b43df6f1c37d4ecba21ce25b82bfbdd1404c9a9ce1f5371b4d",
+            "beforeOccupied": 41,
+            "afterOccupied": 39,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 3,
+            "action": [
+              1,
+              9
+            ],
+            "legalPairs": 34,
+            "beforeDigest": "aea771063db072b43df6f1c37d4ecba21ce25b82bfbdd1404c9a9ce1f5371b4d",
+            "afterDigest": "473e3bd1faf8d3cd648acdbe6f1b6497ffbe4d0ecf54f5d369417e87a3452b97",
+            "beforeOccupied": 39,
+            "afterOccupied": 37,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 4,
+            "action": [
+              27,
+              28
+            ],
+            "legalPairs": 29,
+            "beforeDigest": "473e3bd1faf8d3cd648acdbe6f1b6497ffbe4d0ecf54f5d369417e87a3452b97",
+            "afterDigest": "39b0aa6fd77ef7426367320e0a5b385296c5fcef2b6a8cdf9cc3e2a6c611a15a",
+            "beforeOccupied": 37,
+            "afterOccupied": 35,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 5,
+            "action": [
+              12,
+              13
+            ],
+            "legalPairs": 32,
+            "beforeDigest": "39b0aa6fd77ef7426367320e0a5b385296c5fcef2b6a8cdf9cc3e2a6c611a15a",
+            "afterDigest": "34cf1a3c60c0e158aac0892de0de207e186f226a3900f9ff687d99075d4eefa9",
+            "beforeOccupied": 35,
+            "afterOccupied": 33,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 6,
+            "action": [
+              22,
+              30
+            ],
+            "legalPairs": 32,
+            "beforeDigest": "34cf1a3c60c0e158aac0892de0de207e186f226a3900f9ff687d99075d4eefa9",
+            "afterDigest": "7aa7d4a21e9281ce4bd742d21890e43e610d88d7e68c1bf0c871804ed82fc112",
+            "beforeOccupied": 33,
+            "afterOccupied": 31,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 7,
+            "action": [
+              7,
+              16
+            ],
+            "legalPairs": 31,
+            "beforeDigest": "7aa7d4a21e9281ce4bd742d21890e43e610d88d7e68c1bf0c871804ed82fc112",
+            "afterDigest": "7f9939f3be4df55a48084f053efc9735ff5b3c19f42bd90f804be7eb27c12e1b",
+            "beforeOccupied": 31,
+            "afterOccupied": 29,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 8,
+            "action": [
+              19,
+              37
+            ],
+            "legalPairs": 31,
+            "beforeDigest": "7f9939f3be4df55a48084f053efc9735ff5b3c19f42bd90f804be7eb27c12e1b",
+            "afterDigest": "46dbd2f776a7737a7e28f9acbdb82c78534d4a3ce8f1bf34bb9bd6d0eb071b46",
+            "beforeOccupied": 29,
+            "afterOccupied": 27,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 9,
+            "action": [
+              3,
+              21
+            ],
+            "legalPairs": 26,
+            "beforeDigest": "46dbd2f776a7737a7e28f9acbdb82c78534d4a3ce8f1bf34bb9bd6d0eb071b46",
+            "afterDigest": "c0bfbba6ebced9278cf372722f34e921ef2a1d89513e3b5f318ab703d978120d",
+            "beforeOccupied": 27,
+            "afterOccupied": 25,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 10,
+            "action": [
+              34,
+              35
+            ],
+            "legalPairs": 22,
+            "beforeDigest": "c0bfbba6ebced9278cf372722f34e921ef2a1d89513e3b5f318ab703d978120d",
+            "afterDigest": "dc48851f8b9de3bc5d2128b3e68f76d7c4eddddcc126b6a7f168f1b47f9cd9ee",
+            "beforeOccupied": 25,
+            "afterOccupied": 23,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 11,
+            "action": [
+              32,
+              41
+            ],
+            "legalPairs": 18,
+            "beforeDigest": "dc48851f8b9de3bc5d2128b3e68f76d7c4eddddcc126b6a7f168f1b47f9cd9ee",
+            "afterDigest": "eff964dc959c70793eec1e75e5a94343d25ecd83431e1596fdb6e21050bde6ab",
+            "beforeOccupied": 23,
+            "afterOccupied": 21,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 12,
+            "action": [
+              18,
+              38
+            ],
+            "legalPairs": 17,
+            "beforeDigest": "eff964dc959c70793eec1e75e5a94343d25ecd83431e1596fdb6e21050bde6ab",
+            "afterDigest": "eab3d84e0b6f030f5a85feea630a92fbe4442ccceb57a20a1b9e1a6b7ebcb960",
+            "beforeOccupied": 21,
+            "afterOccupied": 19,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 13,
+            "action": [
+              14,
+              44
+            ],
+            "legalPairs": 14,
+            "beforeDigest": "eab3d84e0b6f030f5a85feea630a92fbe4442ccceb57a20a1b9e1a6b7ebcb960",
+            "afterDigest": "61038a2b7bfdfe93aeed453d21b294ac243177da4ab22d23f488959ca6849787",
+            "beforeOccupied": 19,
+            "afterOccupied": 17,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 14,
+            "action": [
+              20,
+              40
+            ],
+            "legalPairs": 13,
+            "beforeDigest": "61038a2b7bfdfe93aeed453d21b294ac243177da4ab22d23f488959ca6849787",
+            "afterDigest": "833d6bd440df32ce1ed234d1650a9fc58fbd9522b872557a554c08335d587282",
+            "beforeOccupied": 17,
+            "afterOccupied": 15,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 15,
+            "action": [
+              15,
+              17
+            ],
+            "legalPairs": 10,
+            "beforeDigest": "833d6bd440df32ce1ed234d1650a9fc58fbd9522b872557a554c08335d587282",
+            "afterDigest": "388e8195ff8e31f9c1ef43ffb292f6909a619fb05bfbfa7f1784f8e97dfeeb6a",
+            "beforeOccupied": 15,
+            "afterOccupied": 13,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 16,
+            "action": [
+              0,
+              36
+            ],
+            "legalPairs": 9,
+            "beforeDigest": "388e8195ff8e31f9c1ef43ffb292f6909a619fb05bfbfa7f1784f8e97dfeeb6a",
+            "afterDigest": "652e09423297353ba5615ec2d4d32e49918ba1f6fa2d6b72b24891497cae1181",
+            "beforeOccupied": 13,
+            "afterOccupied": 11,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 17,
+            "action": [
+              26,
+              29
+            ],
+            "legalPairs": 5,
+            "beforeDigest": "652e09423297353ba5615ec2d4d32e49918ba1f6fa2d6b72b24891497cae1181",
+            "afterDigest": "e8f395452f86e64ce935214effaf287aa8cdf806c6c8db23248fd060cc55ce7f",
+            "beforeOccupied": 11,
+            "afterOccupied": 9,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 18,
+            "action": [
+              2,
+              4
+            ],
+            "legalPairs": 3,
+            "beforeDigest": "e8f395452f86e64ce935214effaf287aa8cdf806c6c8db23248fd060cc55ce7f",
+            "afterDigest": "45bd07bdf4733aa6065cf52cc7398f51490ce1e01287abca1853bd877dca714b",
+            "beforeOccupied": 9,
+            "afterOccupied": 7,
+            "beforeLength": 45,
+            "afterLength": 45
+          },
+          {
+            "step": 19,
+            "action": [
+              31,
+              39
+            ],
+            "legalPairs": 1,
+            "beforeDigest": "45bd07bdf4733aa6065cf52cc7398f51490ce1e01287abca1853bd877dca714b",
+            "afterDigest": "65e39b9874e7049586f8b282f4e87b5ba3525cbf0642e2b39f85793bb972ef57",
+            "beforeOccupied": 7,
+            "afterOccupied": 5,
+            "beforeLength": 45,
+            "afterLength": 36
+          },
+          {
+            "step": 20,
+            "action": null,
+            "legalPairs": 0,
+            "beforeDigest": "65e39b9874e7049586f8b282f4e87b5ba3525cbf0642e2b39f85793bb972ef57",
+            "afterDigest": "5d830121b956237cf796db9433543933fb9a32d49ff1a5f332642015f15b08fc",
+            "beforeOccupied": 5,
+            "afterOccupied": 10,
+            "beforeLength": 36,
+            "afterLength": 41
+          },
+          {
+            "step": 21,
+            "action": [
+              8,
+              40
+            ],
+            "legalPairs": 4,
+            "beforeDigest": "5d830121b956237cf796db9433543933fb9a32d49ff1a5f332642015f15b08fc",
+            "afterDigest": "4e6b6945ad05acd5f0245804991394559e021b40b5600b4c7cf47a91724be9af",
+            "beforeOccupied": 10,
+            "afterOccupied": 8,
+            "beforeLength": 41,
+            "afterLength": 32
+          },
+          {
+            "step": 22,
+            "action": [
+              1,
+              28
+            ],
+            "legalPairs": 3,
+            "beforeDigest": "4e6b6945ad05acd5f0245804991394559e021b40b5600b4c7cf47a91724be9af",
+            "afterDigest": "412acab79a10050d0f84da955dedb7350530f818deed3f7b282261d510088113",
+            "beforeOccupied": 8,
+            "afterOccupied": 6,
+            "beforeLength": 32,
+            "afterLength": 32
+          },
+          {
+            "step": 23,
+            "action": [
+              2,
+              29
+            ],
+            "legalPairs": 2,
+            "beforeDigest": "412acab79a10050d0f84da955dedb7350530f818deed3f7b282261d510088113",
+            "afterDigest": "90423fffb0bbc736bd0fd0ce44b18c33fe1610d72abb8a8e6513a5aed6b0388d",
+            "beforeOccupied": 6,
+            "afterOccupied": 4,
+            "beforeLength": 32,
+            "afterLength": 23
+          },
+          {
+            "step": 24,
+            "action": [
+              15,
+              18
+            ],
+            "legalPairs": 1,
+            "beforeDigest": "90423fffb0bbc736bd0fd0ce44b18c33fe1610d72abb8a8e6513a5aed6b0388d",
+            "afterDigest": "a4a6d36ad7b0628f3622a0f0ca7506d9453d166a813976bab3903899669a1fbf",
+            "beforeOccupied": 4,
+            "afterOccupied": 2,
+            "beforeLength": 23,
+            "afterLength": 14
+          },
+          {
+            "step": 25,
+            "action": [
+              7,
+              12
+            ],
+            "legalPairs": 1,
+            "beforeDigest": "a4a6d36ad7b0628f3622a0f0ca7506d9453d166a813976bab3903899669a1fbf",
+            "afterDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "beforeOccupied": 2,
+            "afterOccupied": 0,
+            "beforeLength": 14,
+            "afterLength": 0
+          }
+        ]
+      }
+    }
+  ]
+}

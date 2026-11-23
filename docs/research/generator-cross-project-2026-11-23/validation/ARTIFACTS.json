@@ -1,0 +1,203 @@
+{
+  "schema": "seeds-research-artifacts-v1",
+  "sourceCommit": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+  "files": [
+    {
+      "path": "docs/porting/2026-11-20/ROADMAP.md",
+      "bytes": 12619,
+      "sha256": "26c75221b6029ebc103165750877bf8d79232cac82c7ac4999a3cadb91b74b8e",
+      "gitBlob": "6029847337fcd307f24d40527e73aaf6bd65b382",
+      "binary": false
+    },
+    {
+      "path": "docs/porting/ADOPTION_LEDGER.json",
+      "bytes": 65606,
+      "sha256": "94c838fc30ba382737656bbf6f59b3d3b6f5e07f0ec336161cf54c90952d5f56",
+      "gitBlob": "f1e067384a730e478df6ad15f90d3cd8cb0560f4",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/FINDINGS.json",
+      "bytes": 28087,
+      "sha256": "34fc615626c2f3adbe646d6a6d1fa167a4598ffdc9dcd4a9ba04ade7cf3cdd24",
+      "gitBlob": "ecc0bcc0967da5a81a1131bfe4a221688b9d6100",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/README.md",
+      "bytes": 45462,
+      "sha256": "548f36f101edfd52fbb6a66f3d3aa64a2ba44e0a722d31c0bd54405d9e8f2808",
+      "gitBlob": "d13d9f53e7234d51faf2b8bb06a1ec488117eeb9",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/README.md",
+      "bytes": 32822,
+      "sha256": "cf5865804e825e1291cb589a1054bdf0dd7b58912557a55095e10a2b66111a98",
+      "gitBlob": "d0588fdc79030c978e5e995e7a4eaec62fdc171a",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/baseline-audit.mjs",
+      "bytes": 26199,
+      "sha256": "63d29557866318eacfd1388eb21be535b5c7ca0a19d150d3b0c02ab1a1550d62",
+      "gitBlob": "3aaa7d51b3416bd8e3691155a546273570913642",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/baseline-summary.json",
+      "bytes": 66195,
+      "sha256": "89770287b8fda80cb8ea56bf4050621345dc60861eb2128cb077db66a0e44723",
+      "gitBlob": "271d297e654cd39c411b86e2ac6c3d25bc0ceb37",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/choice-findings.md",
+      "bytes": 18691,
+      "sha256": "63d96fc8f0aa6b260f406000432f4633ace6c8a5eb667070a3b510a9d5727856",
+      "gitBlob": "538ada3acaea9b0a4701e7161e5ed0dcd59a2c46",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/choice-fixtures.json",
+      "bytes": 27037,
+      "sha256": "86def778217b0199f0bdc4f3ece4c5eff8198d01ce604e4593eafee76afa66e7",
+      "gitBlob": "008283d8097ced8a6917267c213733675af44c0a",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/choice-probe.mjs",
+      "bytes": 23263,
+      "sha256": "aa6a2aba115a5980bcb182d6c7772e273deb45b798fe355782b4cbcca6177f73",
+      "gitBlob": "c31a9556e8b2026027baf8ce23fc910130014e7d",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/choice-summary.json",
+      "bytes": 14653,
+      "sha256": "2a29e8d221464c4cca519c30d96290c36191e84efacc4e8b1a37dcccf6acdcf8",
+      "gitBlob": "c669dc980be432042f784aeb28cb983a726d23c9",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/comparison.png",
+      "bytes": 118017,
+      "sha256": "551c86887ae870136fc3f5a45a5b0e1567a13342035bedd0c2853c72e4691139",
+      "gitBlob": "d0d20b3660a8d79ba1b59427f58649fc5f2907aa",
+      "binary": true
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/comparison.svg",
+      "bytes": 11476,
+      "sha256": "79430c1960805de8ffe24d34b7a52fa6bd13dc95e74b7f8eee3d811a79e4bb6e",
+      "gitBlob": "05c708064b5b7b9adfa210b8491555a2bffb54b5",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/feasibility-examples.json",
+      "bytes": 33128,
+      "sha256": "ebf42c83c9f82c3833e9f4aeba34705bf522ca75b5d02aa3f9c4b3db1b088faf",
+      "gitBlob": "5723561cb9551ecd781f79d13a415116b475dd2f",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/feasibility-protocol.md",
+      "bytes": 3982,
+      "sha256": "8456006bd4535f8d8ac6993438f4b9d27e5b091fdb9011d322ee47a78313b39c",
+      "gitBlob": "40e5f08c3d8a21a44dc750797524d64a4d386ece",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/feasibility-run.mjs",
+      "bytes": 16351,
+      "sha256": "5d9a23406d54b61d5fb4ceeb3ad1e226f0dc9fded00d0154d4b8f73f240a73d2",
+      "gitBlob": "95f100765122f2d1a5f6ee433b54a68c444a7a0a",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/feasibility-summary.json",
+      "bytes": 44680,
+      "sha256": "f47654814f7c18f148f80f893156ffcf26963f5b6caecaeb2842054838900196",
+      "gitBlob": "5b360e5ba98dc0c97fbdded7d9463347303c30ab",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/feasibility-verification.json",
+      "bytes": 1081,
+      "sha256": "2f30bbec64b5b26b6c535d69e721f8a776d364ff3f64192a0b14c5eb0a215176",
+      "gitBlob": "1656f7d36eca01b0112d86e3b351a9655ec9ede6",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/feasibility-verify.mjs",
+      "bytes": 2367,
+      "sha256": "35e9c607a3a1da06d0a351068c52c5410b8c7a4fc772e833ab4263fd7fb29959",
+      "gitBlob": "a6a23f3f9a5118e45c9c74f21b04b6997b4c2714",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/load-product.mjs",
+      "bytes": 1911,
+      "sha256": "5c77425ea0691b7e2f0c0f9b6b7ee1e447a8c92871d9e5808820c7fe8a124e3f",
+      "gitBlob": "66c344bd6d5c438a94da29084a6b959d66f2ecff",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/matched-fixtures.json",
+      "bytes": 38200,
+      "sha256": "f9aabea261e8dbd3a2860b67d517f6cf86ee90415f5fd009ec5c2232aba63cec",
+      "gitBlob": "b37a0a7888ea70b3abe7b7fb637c8f7d08659f80",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/pack-evidence.py",
+      "bytes": 2373,
+      "sha256": "2d69753b21e6b273ad0683673c03c791ed1e9b2b5703bf45e5d8a9745f09412e",
+      "gitBlob": "134efb5a64963de6591d47e3606025bda0d94fae",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/policy-control.mjs",
+      "bytes": 4112,
+      "sha256": "6e2c37c566a64139f2b9f181dd9d85472393fbfb78324fbc783ff14de0c59cfb",
+      "gitBlob": "1f3b9e17f59f3c9449dd861ef12a3113f62af7fa",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/policy-design.json",
+      "bytes": 1207,
+      "sha256": "eba53ccb95a230247b2fa6d4986a833e8f9e915913b51f99e5f2991204b29e1f",
+      "gitBlob": "82584b1a1811a7d9935bcde24a203e2bfb5351b9",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/policy-summary.json",
+      "bytes": 100266,
+      "sha256": "ea136aad956141432ca2e3cfe8c037b8bb6d4e5ffa868220e9378039afc62bf6",
+      "gitBlob": "d727c91a776446ff033112a3adeea79b1c2c932a",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/render-comparison.py",
+      "bytes": 3338,
+      "sha256": "69d79488d91ae37831ec7be1143ac1b57d614aa8bfe942e951cfcb08fbd146aa",
+      "gitBlob": "0c0032aa505ed9f0151b45bef23222d9a302154c",
+      "binary": false
+    },
+    {
+      "path": "docs/research/generator-cross-project-2026-11-23/validation/snapshot-manifest.json",
+      "bytes": 1924,
+      "sha256": "0ee28ab0ea0624224936ae05b5f11448751b7fe30ce077d1c20e650b8ad75b4c",
+      "gitBlob": "e220f7be08437c9bd0b074177e16004a298762be",
+      "binary": false
+    }
+  ],
+  "omittedReproducibleRawOutputs": [
+    "baseline-fields.json",
+    "baseline-legacy.json",
+    "baseline-matched.json",
+    "choice-results.json",
+    "feasibility-results.json",
+    "policy-results.json"
+  ]
+}

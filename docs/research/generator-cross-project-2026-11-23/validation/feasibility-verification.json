@@ -1,0 +1,32 @@
+{
+  "kind": "ACTUAL_CORE_SAVED_CERTIFICATE_REPLAY",
+  "source": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+  "exampleCount": 2,
+  "results": [
+    {
+      "id": "dense-45-example-1",
+      "boardSha256": "3f2c0a60bd4ceff49ffb6069e51ba3f6aea3a0f549a9df7ee990286c61578de1",
+      "proofSha256": "bc488790c385ccfccf3d48be4bbca4ba5960cf390886054f5a145e4bc1f17319",
+      "dense": true,
+      "legal": true,
+      "terminalEmpty": true,
+      "moves": 25,
+      "adds": 1,
+      "peakCells": 45,
+      "stateDigestTraceMatches": true
+    },
+    {
+      "id": "dense-45-example-2",
+      "boardSha256": "3573543e14ee92bcfa42906311f6f8e9ccd9e5509c8c96d125e2fb91bada94b1",
+      "proofSha256": "77ec0475d513156ed22db4262a79306d4d32b07319d9113e0e4d0a386838e934",
+      "dense": true,
+      "legal": true,
+      "terminalEmpty": true,
+      "moves": 25,
+      "adds": 1,
+      "peakCells": 45,
+      "stateDigestTraceMatches": true
+    }
+  ],
+  "limitations": "Certifies this route only; does not imply all choices win, runtime generation reliability, phone timing, or human difficulty."
+}

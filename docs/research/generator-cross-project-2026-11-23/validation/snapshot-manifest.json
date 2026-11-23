@@ -1,0 +1,51 @@
+{
+  "repo": "DanilaH/seeds-bits",
+  "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+  "files": [
+    {
+      "path": "src/core.ts",
+      "gitBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+      "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+    },
+    {
+      "path": "src/classic-generator.ts",
+      "gitBlob": "a1a74ff68cb625bd962a6739b6a5701ecaf01c05",
+      "sha256": "ac63d56159a395d43b17f72eab0aa646758f5fa34045f773a5f39cb1169461c1"
+    },
+    {
+      "path": "src/classic-catalog.json",
+      "gitBlob": "008ae0def4149c479d4d2eb1947893a3c77d500b",
+      "sha256": "186b6cc6f21b9f3e6441a36c6f4b75e06c150e68ee843106fe55adb8dca96c6a"
+    },
+    {
+      "path": "scripts/classic-variety/proofs.json",
+      "gitBlob": "dd18b518a4d917abb4e3865ebfb3bd3e5c8418bc",
+      "sha256": "46b9c6a9c39d4aaf015e0fb54402daf2b955cab1a6667ba3c48518a25358ed46"
+    },
+    {
+      "path": "scripts/generate-classic.mjs",
+      "gitBlob": "4d9b227ae8464df1b19257157d2294f4120a3544",
+      "sha256": "82b635fa0639feb95f5d2456fb5855a2dbf338954284982b28cf8def7d7d7d0a"
+    },
+    {
+      "path": "docs/classic-variety-2026-11-12/content.json",
+      "gitBlob": "8ec43e749fd8ea274a8aa15be93599a43e484b7b",
+      "sha256": "3686ad862061c595d618fedf4639618de1da322e8218b84f0e46a37b78cf3bd5"
+    },
+    {
+      "path": "tests/classic-generator.test.ts",
+      "gitBlob": "f450386142df440908ce15051191b7c5eecc884e",
+      "sha256": "bbe983a956d2f5fddbad2683da2a8af1f129acff18f134bf46f14cfe0b780768"
+    },
+    {
+      "path": "docs/porting/ADOPTION_LEDGER.json",
+      "gitBlob": "04be0103a73055d09ad55aaaa3b71e4db4f1ce74",
+      "sha256": "cff1f28d46b95c15b7c650af0a7cc8d62eb5708d92aee71ea7ac82863e83ff6e"
+    },
+    {
+      "path": "src/puzzles.ts",
+      "gitBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847",
+      "sha256": "7d5fc94edb634c1012e8b23de19fbc032709fcd785df1aa80001a47f119ef3d0"
+    }
+  ]
+}

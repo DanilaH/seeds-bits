@@ -1,0 +1,30 @@
+{
+  "sourceRef": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+  "kind": "ACTUAL_PRODUCT_TS_EXECUTION_WITH_RESEARCH_POLICIES",
+  "runtime": "v24.22.3",
+  "seeds": {
+    "from": 10000,
+    "through": 10099,
+    "freshRunPerSeedAndLevel": true
+  },
+  "levels": [
+    0,
+    1,
+    2
+  ],
+  "policies": [
+    "first_legal",
+    "last_legal",
+    "deterministic_random_legal"
+  ],
+  "maximumAdds": 2,
+  "randomPolicy": "xorshift32, initial state = (seed XOR ((level+1)*0x9e3779b9)) unsigned; choose state modulo legal pair count",
+  "hypothesis": "Check whether dependence on move order persists outside seeds 0..999 and whether one greedy policy can stand for all play.",
+  "limitations": [
+    "Seeds were not used to select the contrast fixtures or tune generation; there is no new generator treatment to validate.",
+    "Three order policies are not human player segments or increasing skill levels.",
+    "A block after two Adds is a policy outcome within this audit budget, not a proof of game loss or unsolvability.",
+    "Random policy uses one deterministic trajectory per board, not a distribution over all orders.",
+    "Node execution does not measure Android latency or human completion time."
+  ]
+}

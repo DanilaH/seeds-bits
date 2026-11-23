@@ -1,0 +1,450 @@
+{
+  "schema": "seeds-cross-project-research-v1",
+  "date": "2026-11-23",
+  "consumer": "DanilaH/seeds-bits",
+  "consumerCommit": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+  "scope": "Cross-project methods plus reproducible Seeds source execution and bounded offline construction; own proposals, no game implementation or new original APK run.",
+  "sources": {
+    "S01": {
+      "label": "Seeds: текущий генератор",
+      "repo": "DanilaH/seeds-bits",
+      "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+      "path": "src/classic-generator.ts",
+      "level": "CODE_VERIFIED",
+      "scope": "generateClassic/baseNumbers/readClassicRun; первый прошедший кандидат, размеры, recent8, fallback",
+      "url": "https://github.com/DanilaH/seeds-bits/blob/0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc/src/classic-generator.ts"
+    },
+    "S02": {
+      "label": "Seeds: исторический генератор семейств",
+      "repo": "DanilaH/seeds-bits",
+      "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+      "path": "scripts/generate-classic.mjs",
+      "level": "CODE_VERIFIED",
+      "scope": "construct/canonical/shape/measure/specs; исторический offline authoring, не нынешняя выдача",
+      "url": "https://github.com/DanilaH/seeds-bits/blob/0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc/scripts/generate-classic.mjs"
+    },
+    "S03": {
+      "label": "Seeds: историческая приёмка 128 полей",
+      "repo": "DanilaH/seeds-bits",
+      "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+      "path": "docs/classic-variety-2026-11-12/README.md",
+      "level": "HISTORICAL_PRODUCT_REPORT",
+      "scope": "128 полей, четыре семейства, ротация и сохранения; прежние тесты сейчас не перезапускались",
+      "url": "https://github.com/DanilaH/seeds-bits/blob/0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc/docs/classic-variety-2026-11-12/README.md"
+    },
+    "S04": {
+      "label": "Crossmath: собственный content-v2",
+      "repo": "DanilaH/crossmath-game",
+      "ref": "0919721e7026802d1b740919847d38c1de8e4c0b",
+      "path": "docs/spec/product/content_v2/README.md",
+      "level": "PRODUCT_CODE_AND_RECORDED_MEASUREMENTS",
+      "scope": "275 полей; наличие первого single-gap хода; Short/Long отдельно от полного single-gap решения",
+      "url": "https://github.com/DanilaH/crossmath-game/blob/0919721e7026802d1b740919847d38c1de8e4c0b/docs/spec/product/content_v2/README.md"
+    },
+    "S05": {
+      "label": "Guru: одинаковое поле, разные маски",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "bda6a9b8f02d08160dc44a50a896dc66468419a1",
+      "path": "research/games/crossmath/porting/guru-mask-matched-20261123/README.md",
+      "level": "BUNDLED_DB_RECORDED",
+      "scope": "§2–4: 233 одинакового размера маски с разным stored stuck; формула и human difficulty UNKNOWN",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/bda6a9b8f02d08160dc44a50a896dc66468419a1/research/games/crossmath/porting/guru-mask-matched-20261123/README.md"
+    },
+    "S06": {
+      "label": "Guru: профили и структурная история",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "bda6a9b8f02d08160dc44a50a896dc66468419a1",
+      "path": "research/games/crossmath/porting/guru-profile-pool-20261123/README.md",
+      "level": "BUNDLED_DB_AND_PRIOR_CLIENT_TRACE",
+      "scope": "§A: состав default/easy1; §C: исключение holes; активный remote filter UNKNOWN",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/bda6a9b8f02d08160dc44a50a896dc66468419a1/research/games/crossmath/porting/guru-profile-pool-20261123/README.md"
+    },
+    "S07": {
+      "label": "Hitapps: выбор кандидатов Priority",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "b9ed5e0871941d1c5ebba43b575a5caaa1e30972",
+      "path": "research/games/association-solitaire/2026-11-18-hitapps-candidate-selection/README.md",
+      "level": "NATIVE_STATIC_RECORDED",
+      "scope": "Только Priority=0: успешный результат бота, близость к target, budget/tolerance; Equality не имеет этой гарантии",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/b9ed5e0871941d1c5ebba43b575a5caaa1e30972/research/games/association-solitaire/2026-11-18-hitapps-candidate-selection/README.md"
+    },
+    "S08": {
+      "label": "Солитёр: проверка разнообразия состояний P33",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "8499706e9527a46821365148f728ab9238c88ebe",
+      "path": "research/games/association-solitaire/2026-11-22-c8-p33-choice-quality/STATE_REPLAY_2026-11-22.md",
+      "level": "OWN_PRODUCT_LIMITED_MODEL_RECORDED",
+      "scope": "§Results: 27 разных состояний при похожих командах; не оригинальный runtime и не human acceptance",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/8499706e9527a46821365148f728ab9238c88ebe/research/games/association-solitaire/2026-11-22-c8-p33-choice-quality/STATE_REPLAY_2026-11-22.md"
+    },
+    "S09": {
+      "label": "Blocky D102: недостающий репертуар",
+      "repo": "DanilaH/blocky-block-puzzle",
+      "ref": "58fffe1a2dc49d89f8bcdc287e2c33f4ed7426bf",
+      "path": "docs/qa/REFERENCE_SHAPES_0.74_2026-11-18.md",
+      "level": "PRODUCT_CODE_AND_RECORDED_MODEL",
+      "scope": "10 добавленных геометрий; ручной кандидат, технические проверки не отменяют предшествующие HOLD",
+      "url": "https://github.com/DanilaH/blocky-block-puzzle/blob/58fffe1a2dc49d89f8bcdc287e2c33f4ed7426bf/docs/qa/REFERENCE_SHAPES_0.74_2026-11-18.md"
+    },
+    "S10": {
+      "label": "Blocky D95: семантические старты и история",
+      "repo": "DanilaH/blocky-block-puzzle",
+      "ref": "58fffe1a2dc49d89f8bcdc287e2c33f4ed7426bf",
+      "path": "docs/qa/CHALLENGE_CONTENT_0.70_2026-11-16.md",
+      "level": "PRODUCT_CODE_AND_RECORDED_MODEL",
+      "scope": "Восемь стартов/шесть задач первого решения; structural history; overall HOLD/manual",
+      "url": "https://github.com/DanilaH/blocky-block-puzzle/blob/58fffe1a2dc49d89f8bcdc287e2c33f4ed7426bf/docs/qa/CHALLENGE_CONTENT_0.70_2026-11-16.md"
+    },
+    "S11": {
+      "label": "Blocky D101: чрезмерный приоритет очистки",
+      "repo": "DanilaH/blocky-block-puzzle",
+      "ref": "58fffe1a2dc49d89f8bcdc287e2c33f4ed7426bf",
+      "path": "docs/qa/SPARSE_BUILD_0.73_2026-11-17.md",
+      "level": "OWNER_TRACE_ANALYSIS_AND_RECORDED_MODEL",
+      "scope": "11/11 empty имели witness, фактически 1/11 full-clear; кандидат исправил симптом, но провалил 2/24 style guards",
+      "url": "https://github.com/DanilaH/blocky-block-puzzle/blob/58fffe1a2dc49d89f8bcdc287e2c33f4ed7426bf/docs/qa/SPARSE_BUILD_0.73_2026-11-17.md"
+    },
+    "S12": {
+      "label": "Hue: исторический аудит структуры 0.4.12",
+      "repo": "DanilaH/hue-gradients",
+      "ref": "ef1438c39a73ddbf5df3f5df552ad23644d47d47",
+      "path": "docs/porting/AUDIT_0_4_12.md",
+      "level": "HISTORICAL_PRODUCT_AUDIT",
+      "scope": "Все 60 стартов были одним циклом; это датированная находка, не утверждение о нынешнем Hue",
+      "url": "https://github.com/DanilaH/hue-gradients/blob/ef1438c39a73ddbf5df3f5df552ad23644d47d47/docs/porting/AUDIT_0_4_12.md"
+    },
+    "S13": {
+      "label": "Crossmath: простая ротация семейств",
+      "repo": "DanilaH/crossmath-game",
+      "ref": "0919721e7026802d1b740919847d38c1de8e4c0b",
+      "path": "src/content/rotation.ts",
+      "level": "CODE_VERIFIED",
+      "scope": "rotations/bucketTurn/bankIndex, Relax/Challenge; период не переносится как универсальный",
+      "url": "https://github.com/DanilaH/crossmath-game/blob/0919721e7026802d1b740919847d38c1de8e4c0b/src/content/rotation.ts"
+    },
+    "S14": {
+      "label": "AZUR: конечные структуры поздней кампании",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "b9ed5e0871941d1c5ebba43b575a5caaa1e30972",
+      "path": "research/games/association-solitaire/2026-11-16-azur-static/BUDGET_MODEL.md",
+      "level": "ASSET_VERIFIED_RECORDED",
+      "scope": "§1: уровни551–2000, четыре структурных кортежа, семипозиционная последовательность; не live порядок",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/b9ed5e0871941d1c5ebba43b575a5caaa1e30972/research/games/association-solitaire/2026-11-16-azur-static/BUDGET_MODEL.md"
+    },
+    "S15": {
+      "label": "Kit: уровни доказательства выбора P1–P6",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "5cac32b0851c80bdff1d61069b8524b9e42170e1",
+      "path": "docs/agent-workflows/PLAYABILITY_CHOICE_EVIDENCE_LADDER.md",
+      "level": "METHODOLOGY",
+      "scope": "Раздельные legal/winning/stratified/human gates; UNKNOWN не UNSOLVABLE",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/5cac32b0851c80bdff1d61069b8524b9e42170e1/docs/agent-workflows/PLAYABILITY_CHOICE_EVIDENCE_LADDER.md"
+    },
+    "S16": {
+      "label": "Kit: Content Quality",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "5cac32b0851c80bdff1d61069b8524b9e42170e1",
+      "path": "docs/content-quality/README.md",
+      "level": "METHODOLOGY",
+      "scope": "§3–6: сигнатуры, контрастный отбор, разнообразие решений, редакторский ритм",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/5cac32b0851c80bdff1d61069b8524b9e42170e1/docs/content-quality/README.md"
+    },
+    "S17": {
+      "label": "Kit: независимая критика Content Quality",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "5cac32b0851c80bdff1d61069b8524b9e42170e1",
+      "path": "docs/content-quality/INDEPENDENT_AUDIT_2026-11-12.md",
+      "level": "METHODOLOGY_AUDIT",
+      "scope": "Повторение может быть желанным; proxy/human, budget UNKNOWN, leakage и цена сопровождения",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/5cac32b0851c80bdff1d61069b8524b9e42170e1/docs/content-quality/INDEPENDENT_AUDIT_2026-11-12.md"
+    },
+    "S18": {
+      "label": "Seeds: правила поля",
+      "repo": "DanilaH/seeds-bits",
+      "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+      "path": "src/core.ts",
+      "level": "CODE_VERIFIED",
+      "scope": "checkPair/pairs/removePair/addNumbers: reading-order, диагонали, удаление пустых строк, Add только при нуле пар",
+      "url": "https://github.com/DanilaH/seeds-bits/blob/0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc/src/core.ts"
+    },
+    "S19": {
+      "label": "Солитёр: собственный банк сертифицированных вариантов",
+      "repo": "DanilaH/asoc-solitair",
+      "ref": "2233581c33f5acc01fb4dc74596b72c23f03fc78",
+      "path": "docs/qa/content-v8/HITAPPS_GENERATION_ACCEPTANCE_2026-11-22.md",
+      "level": "PRODUCT_CODE_AND_RECORDED_ACCEPTANCE",
+      "scope": "116 вариантов53уровней, fallback и сохранение старых Deal ID; phone/live отдельно",
+      "url": "https://github.com/DanilaH/asoc-solitair/blob/2233581c33f5acc01fb4dc74596b72c23f03fc78/docs/qa/content-v8/HITAPPS_GENERATION_ACCEPTANCE_2026-11-22.md"
+    },
+    "S20": {
+      "label": "Hue: параметрический контент и границы сигнатур",
+      "repo": "DanilaH/mini-games-kit",
+      "ref": "cf7cffc48b4925a897c6613949c771d3325713bb",
+      "path": "research/games/hue/2026-11-16-apk-audit/CONTENT_EDITOR_SPEC_0_1.md",
+      "level": "OWN_CANDIDATE_DATA_AND_PROPOSAL",
+      "scope": "§2: 36 геометрических сигнатур не равны36стратегиям; роли задач пока авторские",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/cf7cffc48b4925a897c6613949c771d3325713bb/research/games/hue/2026-11-16-apk-audit/CONTENT_EDITOR_SPEC_0_1.md"
+    }
+  },
+  "findings": [
+    {
+      "id": "seeds-xproj-difficulty-axes",
+      "status": "RESEARCHED",
+      "sourceRefs": [
+        "S04",
+        "S05",
+        "S12",
+        "S17"
+      ],
+      "existingSourceFeatureIds": [
+        "easy-six-relax",
+        "easy-six-challenge",
+        "guru-seed-mask-variants",
+        "guru-stuck-mask-topology",
+        "cp-fixed-start",
+        "h2-cycles"
+      ],
+      "sourceScope": "Собственный Crossmath content-v2; каталоги Guru; исторический Hue0.4.12",
+      "finding": "Количество элементов, способ решения и цена ошибки должны измеряться отдельно.",
+      "seedsGap": "PARTIAL: runtime classic различает длину/openings/proofAdd, но не имеет профиля цепочек раскрытия/разнообразия состояний.",
+      "proposal": "Описать четыре явные сложности отдельными профилями длины, поиска, порядка и восстановления; 18/28 сохранить по существующему контракту,45/81 остаются пилотом.",
+      "nextCheck": "Сравнить контрастные собственные раскладки одинакового размера и состава цифр; физический плейтест проверяет различимость, не длительность одного бота.",
+      "cost": "LOW_TO_MEDIUM",
+      "limits": [
+        "stored stuck не человеческий рейтинг",
+        "размеры81/45 не утверждённая субъективная трудность"
+      ],
+      "validationStatus": "SUPPORTED_STRUCTURAL_DIFFERENCE; NOT_HUMAN_CALIBRATED",
+      "validationEvidenceRefs": [
+        "validation/baseline-summary.json",
+        "validation/matched-fixtures.json",
+        "validation/choice-fixtures.json"
+      ],
+      "validationResult": "Controlled Normal28 examples differ in continuation while size, digit multiset, opening count and selected witness length are held equal. Human difficulty remains UNKNOWN."
+    },
+    {
+      "id": "seeds-xproj-recipe-repertoire",
+      "status": "RESEARCHED",
+      "sourceRefs": [
+        "S02",
+        "S03",
+        "S09",
+        "S10",
+        "S20"
+      ],
+      "existingSourceFeatureIds": [],
+      "existingStudyIds": [
+        "D95",
+        "D102"
+      ],
+      "sourceScope": "Собственный Blocky manual classic; исторические семейства Seeds; собственные кандидаты Hue",
+      "finding": "Сначала нужен репертуар различимых ситуаций; настройка весов не создаёт отсутствующий тип.",
+      "seedsGap": "PARTIAL: compact/dense/bridges/addition и reverse construction есть в legacy tooling, текущие старты плотные.",
+      "proposal": "Использовать существующие правила для тегов прямого снятия, раскрытия связей, края строки и стадий Add; теги могут пересекаться. Сначала диагностировать и переиспользовать методы, не включать прежний банк целиком.",
+      "nextCheck": "На принятых полях показать точные before/action/after и witness для заявленных тегов; отдельно оценить разреженные initial boards, если их вообще предлагать.",
+      "cost": "MEDIUM",
+      "limits": [
+        "Никаких новых правил или скрытых чисел",
+        "пустоты в развитии плотного поля не равны разрешению на разреженный старт"
+      ],
+      "validationStatus": "PARTIAL_45; METHOD_BLOCKED_81",
+      "validationEvidenceRefs": [
+        "validation/feasibility-summary.json",
+        "validation/feasibility-examples.json"
+      ],
+      "validationResult": "Two screened dense45 examples certified in one five-digit-tail family; no dense81 within fixed search. Literal legacy constructor ignores target length with kernel; padding changes tail and invalidates old proof indices."
+    },
+    {
+      "id": "seeds-xproj-candidate-selection",
+      "status": "RESEARCHED",
+      "sourceRefs": [
+        "S01",
+        "S07",
+        "S19"
+      ],
+      "existingSourceFeatureIds": [
+        "hitapps-candidate-priority"
+      ],
+      "sourceScope": "Hitapps simulation Priority=0; собственный C8 test bank; текущий Seeds",
+      "finding": "Проверка решаемости и отбор подходящего кандидата — разные задачи.",
+      "seedsGap": "PARTIAL: текущий generateClassic возвращает первый прошедший openings+proof кандидат, максимум64 случайных попытки.",
+      "proposal": "Сравнить baseline с выбором среди нескольких сертифицированных кандидатов по диапазонам профиля и разнообразию, сохраняя конечный бюджет. Offline bank/fallback — запасной вариант после замера.",
+      "nextCheck": "Одинаковые исходные условия и фиксированные бюджеты; сравнение final digests/proofs/fallback/Android latency, затем контрастные человеческие примеры.",
+      "cost": "MEDIUM",
+      "limits": [
+        "Не переносить Equality/near-loss/paywall",
+        "не копировать100кандидатов/веса/targets",
+        "не объявлять шаги бота мерой удовольствия"
+      ],
+      "validationStatus": "BASELINE_VERIFIED; TREATMENT_NOT_IMPLEMENTED",
+      "validationEvidenceRefs": [
+        "validation/baseline-summary.json",
+        "validation/policy-summary.json"
+      ],
+      "validationResult": "Actual baseline reproduces audit14. No new selection policy, runtime latency or improved human result tested."
+    },
+    {
+      "id": "seeds-xproj-structural-history",
+      "status": "RESEARCHED",
+      "sourceRefs": [
+        "S01",
+        "S02",
+        "S06",
+        "S10",
+        "S13"
+      ],
+      "existingSourceFeatureIds": [
+        "guru-mask-history"
+      ],
+      "existingStudyIds": [
+        "D95"
+      ],
+      "sourceScope": "Guru normal selection; Blocky authored openings; собственный Crossmath rotation",
+      "finding": "Новый seed или массив цифр может повторять тот же тип конструкции.",
+      "seedsGap": "PARTIAL: runtime recent8 отсеивает точный board string; legacy имеет более богатый shape-фильтр.",
+      "proposal": "Сначала считать структурные повторы и последовательность тегов, затем мягко разнообразить их внутри выбранной сложности.",
+      "nextCheck": "Проверить ограниченное окно нескольких партий, разные последовательности после рестарта, budget/fallback и атомарность сохранения; не переносить300масок или D4 буквально.",
+      "cost": "LOW_TO_MEDIUM",
+      "limits": [
+        "Reading-order ломает наивную эквивалентность отражений",
+        "нельзя незаявленно переключать выбранную сложность",
+        "антиповтор может обеднить допустимый пул"
+      ],
+      "validationStatus": "CANONICALIZATION_CONSTRAINTS_VERIFIED; HISTORY_NOT_TESTED",
+      "validationEvidenceRefs": [
+        "validation/choice-fixtures.json"
+      ],
+      "validationResult": "Concrete counterexamples forbid zero-stripping and blanket row reflection/D4 as exact gameplay equivalence. Persisted sequence/restart/soft-history behavior remains to test."
+    },
+    {
+      "id": "seeds-xproj-choice-state-evidence",
+      "status": "RESEARCHED",
+      "sourceRefs": [
+        "S08",
+        "S15",
+        "S18"
+      ],
+      "existingSourceFeatureIds": [],
+      "existingStudyIds": [
+        "P33-state-replay",
+        "P1-P6-choice-ladder"
+      ],
+      "sourceScope": "Собственный C8 Rules3; методыкита; Seeds rules",
+      "finding": "Разные команды/пары и разные содержательные решения не эквивалентны.",
+      "seedsGap": "PARTIAL: есть полный witness, прежний аудит преимущественно первых ходов; mid/late покрытие и цена расхождения требуют диагностики.",
+      "proposal": "Сравнивать before/after матрицы с нулями, ремап индексов, новые связи, сжатие, сходимость веток и подтверждённые продолжения; стратифицировать early/mid/late.",
+      "nextCheck": "Для нескольких альтернатив зафиксировать FOUND/UNKNOWN/NO_WIN_PROVEN и число дополнительной работы; не повышать STATE_DIFFERENCE до HUMAN_MEANINGFUL.",
+      "cost": "MEDIUM",
+      "limits": [
+        "Нельзя удалить нули при нормализации",
+        "UNKNOWN не тупик",
+        "не ставить целью больше проигрышных ходов"
+      ],
+      "validationStatus": "LOCAL_STRUCTURAL_AND_WINNING_BRANCHES_VERIFIED",
+      "validationEvidenceRefs": [
+        "validation/choice-summary.json",
+        "validation/choice-fixtures.json"
+      ],
+      "validationResult": "596 bounded probes give582 replayed FOUND and14 UNKNOWN. Disjoint noncommuting pairs and index-remap false-new edges are demonstrated. NO_WIN_PROVEN only for explicit zero-further-Add exhaustive model."
+    },
+    {
+      "id": "seeds-xproj-notebook-cadence",
+      "status": "RESEARCHED",
+      "sourceRefs": [
+        "S13",
+        "S14",
+        "S16"
+      ],
+      "existingSourceFeatureIds": [
+        "easy-six-relax",
+        "easy-six-challenge",
+        "azur-structured-long-campaign"
+      ],
+      "sourceScope": "Crossmath Relax/Challenge; AZUR packaged late campaign",
+      "finding": "Развитие кампании возможно через конечный набор структур и чередование нагрузки.",
+      "seedsGap": "PARTIAL: собственные тетради есть, аудит14 обнаружил сильный рост объёма; человеческая оценка остаётся открытой.",
+      "proposal": "Для будущего контента исследовать освоение → комбинацию → передышку → контраст; не задавать постоянный рост цифр как единственную прогрессию.",
+      "nextCheck": "Телефонные контрольные задачи из14; новые версии/назначения только после отдельного решения, старые ID и даты сохраняются.",
+      "cost": "MEDIUM_LATER",
+      "limits": [
+        "Периоды5/6/7 не универсальны",
+        "волны кампании не разрешают менять выбранную классическую сложность",
+        "старые2400задач не перегенерируются"
+      ],
+      "validationStatus": "NOT_TESTED_IN_CLASSIC_VALIDATION",
+      "validationEvidenceRefs": [
+        "validation/README.md"
+      ],
+      "validationResult": "Current pass addresses classic generation only. Notebook cadence, immutable assignments and versioning remain separate."
+    },
+    {
+      "id": "seeds-xproj-proxy-and-factor-control",
+      "status": "RESEARCHED",
+      "sourceRefs": [
+        "S11",
+        "S15",
+        "S17"
+      ],
+      "existingSourceFeatureIds": [],
+      "existingStudyIds": [
+        "D101"
+      ],
+      "sourceScope": "Собственный Blocky0.72trace/0.73manual; QAметодика",
+      "finding": "Оптимизация одного показателя может убрать развитие поля и ухудшить другие стили игры.",
+      "seedsGap": "PARTIAL: первая допустимая пара уже измерялась, но не является достаточным профилем игроков или причиной сложности.",
+      "proposal": "Разделить влияние размера, структуры и смеси; использовать несколько прозрачных политик с простыми контролями и держать неиспользованный наборseed для итоговой проверки.",
+      "nextCheck": "Сначала контролы ботов; сохранить отрицательные результаты; затем телефонный тест характера4ступеней. Seeds/minute измерять у людей отдельно от числа ходов.",
+      "cost": "LOW_TO_MEDIUM",
+      "limits": [
+        "Не переносить occupied16/65%или0.70",
+        "низкая доля побед не самостоятельная цель",
+        "боты не люди; ходы не минуты"
+      ],
+      "validationStatus": "MOVE_ORDER_DEPENDENCE_VERIFIED",
+      "validationEvidenceRefs": [
+        "validation/policy-design.json",
+        "validation/policy-summary.json"
+      ],
+      "validationResult": "Held-aside seeds10000..10099: easy first/last/random clear100/95/90 of100 within audit2Add. Policies are order controls, not player skill or human-win estimates."
+    }
+  ],
+  "validation": {
+    "date": "2026-11-23",
+    "consumerCommit": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+    "report": "validation/README.md",
+    "evidenceLevels": [
+      "ACTUAL_PRODUCT_TS_EXECUTION",
+      "PRODUCT_EXECUTION_WITH_RESEARCH_ORACLE",
+      "MODEL_EXECUTION_OFFLINE_RESEARCH"
+    ],
+    "runtimeChanged": false,
+    "deviceVerified": false,
+    "audienceVerified": false,
+    "baseline": {
+      "generatedProofs": 3000,
+      "legacyProofs": 128
+    },
+    "policyControl": {
+      "boards": 300,
+      "trajectories": 900,
+      "seedRange": [
+        10000,
+        10099
+      ]
+    },
+    "choice": {
+      "boards": 48,
+      "states": 144,
+      "branches": 596,
+      "FOUND": 582,
+      "UNKNOWN": 14
+    },
+    "denseFeasibility": {
+      "attempts": 608,
+      "dense45Certificates": 3,
+      "screened45Examples": 2,
+      "dense81Certificates": 0,
+      "limits": "One reconstruction family and fixed budgets; zero81 is not an impossibility proof."
+    }
+  }
+}

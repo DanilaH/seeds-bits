@@ -822,6 +822,39 @@
       },
       "nextAction": "Разработчик issue #13 сначала меряет исходные качества/стоимость на 1000 seeds × 4 и моделирует seeds/minute, сохраняет 27-digit legacy High, затем пилот 45/81. Отдельно issue #14: телефонный аудит поздних тетрадей, пауза/награда, lazy data и дневная кривая. Не включать шесть приостановленных экспериментов.",
       "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes."
+    },
+    {
+      "id": "generator-cross-project-profile-20261123",
+      "status": "RESEARCHED",
+      "scope": "Cross-project methods for four explicit Classic difficulties and future notebook pacing; own proposals, not new Number Match source findings.",
+      "consumerCommit": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+      "currentImplementation": "src/classic-generator.ts: three bands18/28/27, first accepted certified candidate and recent8. scripts/generate-classic.mjs: legacy four families, reverse construction, structural/route diagnostics. Four-band45/81 remains issue13.",
+      "proposalIds": [
+        "seeds-xproj-difficulty-axes",
+        "seeds-xproj-recipe-repertoire",
+        "seeds-xproj-candidate-selection",
+        "seeds-xproj-structural-history",
+        "seeds-xproj-choice-state-evidence",
+        "seeds-xproj-notebook-cadence",
+        "seeds-xproj-proxy-and-factor-control"
+      ],
+      "evidenceRef": [
+        "../research/generator-cross-project-2026-11-23/README.md",
+        "../research/generator-cross-project-2026-11-23/FINDINGS.json",
+        "https://github.com/DanilaH/seeds-bits/issues/13",
+        "https://github.com/DanilaH/seeds-bits/issues/14",
+        "../research/generator-cross-project-2026-11-23/validation/README.md"
+      ],
+      "nextAction": "Implement reviewable diagnostics using committed exact fixtures; separately solve dense45/81 construction under fixed budgets before selecting/rotating families. Require board.length===occupied===target and renewed proof after geometry changes. Then compare candidates and12contrast games on phone. Preserve18/28, legacy27 save, dense-start contracts and paused help; notebooks/daily separate.",
+      "sourceParity": "NOT_CLAIMED: cross-project design methods, no new original Number Match observation.",
+      "acceptanceEvidence": "Executed exact product TS in Node:3000 generated+128 legacy proof;300 held-aside fields/900 move-order trajectories;144 states/596 branch probes(582 FOUND,14 UNKNOWN). Offline reconstruction608attempts:3dense45 certificates/2screened examples in one family;0dense81. No Android, human or audience acceptance. proposals remain RESEARCHED.",
+      "validationStatus": {
+        "structuralDifference": "VERIFIED_IN_PRODUCT_EXECUTION",
+        "dense45": "PARTIAL_SINGLE_FAMILY",
+        "dense81": "BLOCKED_FOR_TESTED_METHOD",
+        "humanDifficulty": "UNKNOWN",
+        "returnCondition": "Reliable dense candidates with replay and bounded failure accounting, then contrasting phone playtest."
+      }
     }
   ]
 }

@@ -1,0 +1,671 @@
+{
+  "source": {
+    "repo": "DanilaH/seeds-bits",
+    "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+    "execution": "Exact SHA-verified TypeScript source stripped by node:module; no product changes",
+    "loader": "load-product.mjs"
+  },
+  "config": {
+    "normalSeeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "hardSeeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "legacyIndices": [
+      0,
+      31,
+      32,
+      63,
+      64,
+      95,
+      96,
+      127
+    ],
+    "phaseFractions": [
+      0,
+      0.5,
+      0.8
+    ],
+    "branchBudget": 5000,
+    "branchLimit": 6,
+    "oracleMaxOccupied": 12,
+    "oracleAdditions": 0
+  },
+  "coverage": {
+    "boards": 48,
+    "states": 144,
+    "productBranchCalls": 596,
+    "branchFOUND": 582,
+    "branchUNKNOWN": 14,
+    "oracleStates": 74,
+    "oracleStatesEvaluated": 753,
+    "oracleZeroAddFOUND": 44,
+    "oracleZeroAddNO_WIN_PROVEN": 30,
+    "additionalOraclePanel": {
+      "states": 64,
+      "FOUND": 4,
+      "NO_WIN_PROVEN": 60,
+      "evaluated": 293
+    }
+  },
+  "groups": {
+    "Normal/early": {
+      "states": 20,
+      "pairs": {
+        "min": 18,
+        "median": 23,
+        "max": 26,
+        "mean": 22.85
+      },
+      "sharedEndpointComparisons": 813,
+      "commutingComparisons": 4228,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 1,
+        "max": 4,
+        "mean": 0.9015317286652079
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 120,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "Normal/mid": {
+      "states": 20,
+      "pairs": {
+        "min": 0,
+        "median": 3,
+        "max": 12,
+        "mean": 4.35
+      },
+      "sharedEndpointComparisons": 65,
+      "commutingComparisons": 219,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 3,
+        "mean": 0.6781609195402298
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 68,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 12,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 12
+      }
+    },
+    "Normal/late": {
+      "states": 20,
+      "pairs": {
+        "min": 0,
+        "median": 3,
+        "max": 7,
+        "mean": 3
+      },
+      "sharedEndpointComparisons": 19,
+      "commutingComparisons": 70,
+      "disjointNoncommutingComparisons": 1,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 1,
+        "max": 3,
+        "mean": 0.7833333333333333
+      },
+      "survivingEdgesLost": 1,
+      "boundedBranches": {
+        "FOUND": 57,
+        "UNKNOWN": 2
+      },
+      "zeroAddOracle": {
+        "states": 20,
+        "FOUND": 19,
+        "NO_WIN_PROVEN": 1
+      }
+    },
+    "Hard/early": {
+      "states": 20,
+      "pairs": {
+        "min": 14,
+        "median": 16,
+        "max": 17,
+        "mean": 16
+      },
+      "sharedEndpointComparisons": 441,
+      "commutingComparisons": 1968,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 1,
+        "max": 5,
+        "mean": 0.915625
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 120,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "Hard/mid": {
+      "states": 20,
+      "pairs": {
+        "min": 0,
+        "median": 3,
+        "max": 9,
+        "mean": 2.9
+      },
+      "sharedEndpointComparisons": 13,
+      "commutingComparisons": 104,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 3,
+        "mean": 0.5689655172413793
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 53,
+        "UNKNOWN": 1
+      },
+      "zeroAddOracle": {
+        "states": 12,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 12
+      }
+    },
+    "Hard/late": {
+      "states": 20,
+      "pairs": {
+        "min": 0,
+        "median": 3,
+        "max": 7,
+        "mean": 2.65
+      },
+      "sharedEndpointComparisons": 20,
+      "commutingComparisons": 59,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 5,
+        "mean": 0.5849056603773585
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 41,
+        "UNKNOWN": 11
+      },
+      "zeroAddOracle": {
+        "states": 20,
+        "FOUND": 15,
+        "NO_WIN_PROVEN": 5
+      }
+    },
+    "legacy/compact/early": {
+      "states": 2,
+      "pairs": {
+        "min": 21,
+        "median": 21.5,
+        "max": 22,
+        "mean": 21.5
+      },
+      "sharedEndpointComparisons": 61,
+      "commutingComparisons": 380,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 2,
+        "mean": 0.5581395348837209
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 12,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/compact/mid": {
+      "states": 2,
+      "pairs": {
+        "min": 9,
+        "median": 10,
+        "max": 11,
+        "mean": 10
+      },
+      "sharedEndpointComparisons": 23,
+      "commutingComparisons": 68,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 2,
+        "mean": 0.3
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 12,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 2,
+        "FOUND": 2,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/compact/late": {
+      "states": 2,
+      "pairs": {
+        "min": 3,
+        "median": 4,
+        "max": 5,
+        "mean": 4
+      },
+      "sharedEndpointComparisons": 5,
+      "commutingComparisons": 8,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 1,
+        "mean": 0.25
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 8,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 2,
+        "FOUND": 2,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/dense/early": {
+      "states": 2,
+      "pairs": {
+        "min": 23,
+        "median": 25,
+        "max": 27,
+        "mean": 25
+      },
+      "sharedEndpointComparisons": 55,
+      "commutingComparisons": 549,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 1,
+        "max": 4,
+        "mean": 1.14
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 12,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/dense/mid": {
+      "states": 2,
+      "pairs": {
+        "min": 12,
+        "median": 13.5,
+        "max": 15,
+        "mean": 13.5
+      },
+      "sharedEndpointComparisons": 24,
+      "commutingComparisons": 147,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 2,
+        "mean": 0.5185185185185185
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 12,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/dense/late": {
+      "states": 2,
+      "pairs": {
+        "min": 3,
+        "median": 3.5,
+        "max": 4,
+        "mean": 3.5
+      },
+      "sharedEndpointComparisons": 0,
+      "commutingComparisons": 9,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 1,
+        "mean": 0.14285714285714285
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 7,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 2,
+        "FOUND": 2,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/bridges/early": {
+      "states": 2,
+      "pairs": {
+        "min": 22,
+        "median": 22,
+        "max": 22,
+        "mean": 22
+      },
+      "sharedEndpointComparisons": 41,
+      "commutingComparisons": 421,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 2,
+        "mean": 0.5
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 12,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/bridges/mid": {
+      "states": 2,
+      "pairs": {
+        "min": 9,
+        "median": 13,
+        "max": 17,
+        "mean": 13
+      },
+      "sharedEndpointComparisons": 30,
+      "commutingComparisons": 142,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 2,
+        "mean": 0.4230769230769231
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 12,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/bridges/late": {
+      "states": 2,
+      "pairs": {
+        "min": 4,
+        "median": 5,
+        "max": 6,
+        "mean": 5
+      },
+      "sharedEndpointComparisons": 6,
+      "commutingComparisons": 15,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 2,
+        "mean": 0.3
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 10,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 2,
+        "FOUND": 2,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/addition/early": {
+      "states": 2,
+      "pairs": {
+        "min": 22,
+        "median": 23,
+        "max": 24,
+        "mean": 23
+      },
+      "sharedEndpointComparisons": 34,
+      "commutingComparisons": 473,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0.5,
+        "max": 4,
+        "mean": 0.8913043478260869
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 12,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/addition/mid": {
+      "states": 2,
+      "pairs": {
+        "min": 5,
+        "median": 6.5,
+        "max": 8,
+        "mean": 6.5
+      },
+      "sharedEndpointComparisons": 5,
+      "commutingComparisons": 33,
+      "disjointNoncommutingComparisons": 0,
+      "newPairsPerAction": {
+        "min": 0,
+        "median": 0,
+        "max": 3,
+        "mean": 0.6153846153846154
+      },
+      "survivingEdgesLost": 0,
+      "boundedBranches": {
+        "FOUND": 11,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 0,
+        "FOUND": 0,
+        "NO_WIN_PROVEN": 0
+      }
+    },
+    "legacy/addition/late": {
+      "states": 2,
+      "pairs": {
+        "min": 1,
+        "median": 1.5,
+        "max": 2,
+        "mean": 1.5
+      },
+      "sharedEndpointComparisons": 0,
+      "commutingComparisons": 0,
+      "disjointNoncommutingComparisons": 1,
+      "newPairsPerAction": {
+        "min": 1,
+        "median": 2,
+        "max": 3,
+        "mean": 2
+      },
+      "survivingEdgesLost": 1,
+      "boundedBranches": {
+        "FOUND": 3,
+        "UNKNOWN": 0
+      },
+      "zeroAddOracle": {
+        "states": 2,
+        "FOUND": 2,
+        "NO_WIN_PROVEN": 0
+      }
+    }
+  },
+  "controlledNormalComparison": [
+    {
+      "id": "Normal-6",
+      "opening": 23,
+      "openingSharedEndpointComparisons": 27,
+      "openingCommutingComparisons": 226,
+      "afterSeven": {
+        "occupied": 14,
+        "cells": 28,
+        "pairs": 8,
+        "participatingCells": 9,
+        "immediateGeometryStates": 8,
+        "pairOfActions": {
+          "SHARED_ENDPOINT": 8,
+          "COMMUTING": 20,
+          "DISJOINT_NONCOMMUTING": 0
+        },
+        "newPairs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "newPairsMean": 0,
+        "survivingEdgesLost": 0,
+        "rowCompressingActions": 1
+      },
+      "additionsAlreadySpent": 0
+    },
+    {
+      "id": "Normal-13",
+      "opening": 23,
+      "openingSharedEndpointComparisons": 43,
+      "openingCommutingComparisons": 210,
+      "afterSeven": {
+        "occupied": 14,
+        "cells": 28,
+        "pairs": 3,
+        "participatingCells": 6,
+        "immediateGeometryStates": 3,
+        "pairOfActions": {
+          "SHARED_ENDPOINT": 0,
+          "COMMUTING": 3,
+          "DISJOINT_NONCOMMUTING": 0
+        },
+        "newPairs": [
+          1,
+          1,
+          1
+        ],
+        "newPairsMean": 1,
+        "survivingEdgesLost": 0,
+        "rowCompressingActions": 0
+      },
+      "additionsAlreadySpent": 0
+    }
+  ],
+  "files": {
+    "allStates": "choice-results.json",
+    "fixtures": "choice-fixtures.json",
+    "reproducer": "choice-probe.mjs"
+  },
+  "limits": [
+    "Seeds 1..20 are a fixed illustrative sample, not population estimates.",
+    "Early/mid/late are offsets on one generator/catalog proof, not all possible human play paths.",
+    "At most six deterministic branches per sampled state; FOUND replays to empty through actual core, UNKNOWN is a bounded miss and never a trap label.",
+    "No-add oracle negative results exclude only clearing without Add; ordinary gameplay allows Add at zero pairs.",
+    "Shared-endpoint and disjoint-noncommuting counts are local structural observations, not independent meaningful-choice counts or human difficulty.",
+    "One-step new-edge counts cannot quantify deep planning; compression may create and destroy surviving-cell edges.",
+    "No phone/UI/player validation."
+  ]
+}
