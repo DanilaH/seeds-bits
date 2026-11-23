@@ -59,6 +59,9 @@
   justify-items: start;
   padding-inline: 0;
 }
+.game-top header > #menu svg {
+  transform: translateX(-2px);
+}
 .game-top header > #book-top {
   justify-items: end;
   padding-inline: 0;

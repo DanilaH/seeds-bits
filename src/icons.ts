@@ -8,7 +8,7 @@ const symbols = {
   book: '<rect x="5.5" y="3" width="14.5" height="18" rx="1.6"/><path d="M9 3v18M3.5 7h4M3.5 12h4M3.5 17h4M12 8h5M12 12h4"/>',
   arrow: '<path d="m8.5 5 7 7-7 7"/>',
   add: '<path d="M12 4v16M4 12h16"/>',
-  menu: '<path d="M1 7h18M1 12h18M1 17h18"/>',
+  menu: '<path d="M3 7h18M3 12h18M3 17h18"/>',
   progress: '<path d="M5 19v-5m5 5V9m5 10v-7m5 7V4"/>',
   help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.5 1.8-2.5 4m0 3h.01"/>',
   settings: '<path d="M6 3v7m0 4v7m6-18v12m0 4v2m6-18v2m0 4v12M4 10h4v4H4zm6 5h4v4h-4zm6-10h4v4h-4z"/>',

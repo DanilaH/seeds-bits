@@ -235,8 +235,8 @@ test("unsaved completion stays quiet, successful retry celebrates once", async (
   await removePair(page);
   await page.waitForTimeout(300);
   expect(
-    (await pulses(page)).filter(
-      (x: any) => Array.isArray(x) && x.join(",") === "18,35,24",
+    (await pulses(page)).filter((x: any) =>
+      ["18,35,24", fullPattern].includes(String(x)),
     ),
   ).toEqual([]);
   await expect(page.locator("#seed-flights i")).toHaveCount(0);
@@ -246,11 +246,12 @@ test("unsaved completion stays quiet, successful retry celebrates once", async (
     .poll(
       async () =>
         (await pulses(page)).filter(
-          (x: any) => Array.isArray(x) && x.length === 5,
+          (x: any) => String(x) === fullPattern,
         ).length,
     )
     .toBe(1);
   const amount = (await saved(page)).jars.seeds;
+  expect(amount).toBe(344);
   await page.waitForTimeout(800);
   expect((await saved(page)).jars.seeds).toBe(amount);
 });
