@@ -24,6 +24,7 @@ test("home separates saved Continue and New Classic with three real levels",asyn
   await expect(page.locator("#next-classic")).toHaveText("Новая классика");
   await page.locator("#next-classic").click();
   await expect(page.locator("#classic-new-sheet")).toBeVisible();
+  await page.screenshot({path:"test-results/classic-new-sheet/390x844-light.jpg",type:"jpeg",quality:88,animations:"disabled"});
   await expect(page.locator(".classic-difficulty-option")).toHaveCount(3);
   await expect(choice(page,0)).toContainText("18 цифр");
   await expect(choice(page,1)).toContainText("28 цифр");
@@ -118,6 +119,7 @@ test("bottom sheet is tappable on short phones and localized in English",async({
   await page.setViewportSize({width:320,height:568});
   await menu(page,"en");
   await page.locator("#next-classic").click();
+  await page.screenshot({path:"test-results/classic-new-sheet/320x568-english.jpg",type:"jpeg",quality:88,animations:"disabled"});
   await expect(page.locator("#classic-new-title")).toHaveText("New Game");
   for(const item of await page.locator(".classic-difficulty-option").all()){
     const r=await item.boundingBox();expect(r).not.toBeNull();
