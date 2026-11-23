@@ -116,6 +116,21 @@ test("full course uses one action plus one rule; answering does not shift board"
   expect(Math.abs(endSlot!.height - originalSlot!.height)).toBeLessThanOrEqual(1);
 });
 
+test("entering a lesson in landscape excludes the game hint dock on the first layout", async ({page}) => {
+  await page.setViewportSize({ width: 568, height: 320 });
+  await seeded(page);
+  await page.locator("#resume").click();
+  const dock = page.locator("#hint-dock");
+  await expect(dock).not.toHaveAttribute("hidden", "");
+  await page.locator("#menu").click();
+  const firstLayout = await page.locator("#learn").evaluate((button: HTMLElement) => {
+    button.click();
+    return document.querySelector("#hint-dock")!.getBoundingClientRect().height;
+  });
+  expect(firstLayout).toBe(0);
+  await expect(page.locator("#lesson")).toBeVisible();
+});
+
 test("field header follows the grid and the compact language rows keep their markers", async ({page}) => {
   await page.setViewportSize({width:320,height:568});
   await seeded(page);

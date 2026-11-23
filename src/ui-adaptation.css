@@ -794,6 +794,7 @@
 }
 .game:has(#lesson:not([hidden])) .status-wrap:not(:has(#save-notice:not([hidden]), #read-notice:not([hidden]))),
 .game:has(#lesson:not([hidden])) #status,
+.game:has(#lesson:not([hidden])) #hint-dock,
 .game:has(#lesson:not([hidden])) #hint-jump,
 .game:has(#lesson:not([hidden])):not([data-lesson="5"]) footer,
 .game:has(#lesson:not([hidden])):has(#lesson-next:not([hidden])) footer {
