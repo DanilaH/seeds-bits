@@ -126,6 +126,7 @@ test("field header follows the grid and the compact language rows keep their mar
   expect(menu!.width).toBeGreaterThanOrEqual(44);
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
+  expect(await page.locator("#language-open").evaluate(el=>getComputedStyle(el).borderInlineStartWidth)).toBe("0px");
   await page.locator("#language-open").click();
   await expect(page.locator('#language-options [data-language="auto"] .language-mark svg')).toBeVisible();
   await expect(page.locator('#language-options button:not([data-language="auto"]) .language-mark svg')).toHaveCount(5);

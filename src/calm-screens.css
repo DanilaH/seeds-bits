@@ -861,6 +861,10 @@
 }
 #settings-panel .language-row {
   grid-template-columns: 20px minmax(min-content,1.2fr) minmax(0,1fr);
+  border: 0;
+  border-block-end: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
 }
 #settings-panel .language-row svg { width: 20px; }
 #settings-panel .settings-reserve {
