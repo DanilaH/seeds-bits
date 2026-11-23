@@ -286,6 +286,56 @@ languageSheet.id="language-sheet";
 languageSheet.setAttribute("aria-labelledby","language-title");
 languageSheet.innerHTML='<div class="language-heading"><h2 id="language-title"></h2><button id="language-close" class="plain" type="button">'+icon("close")+'</button></div><div id="language-options" role="group"></div><p id="language-save-error" role="status" hidden></p>';
 $("app").append(languageSheet);
+// Own bottom sheet, layered above (but not replacing) the current-party menu.
+const classicNewSheet = document.createElement("dialog");
+classicNewSheet.id = "classic-new-sheet";
+classicNewSheet.setAttribute("aria-labelledby", "classic-new-title");
+classicNewSheet.innerHTML =
+  '<div class="classic-sheet-head"><h2 id="classic-new-title"></h2><button type="button" id="classic-new-close" class="plain" aria-label="'+t("ui.close-menu")+'">'+icon("close")+'</button></div>'+
+  '<p id="classic-new-help" class="classic-sheet-help"></p>'+
+  '<div id="classic-difficulty-list" class="classic-difficulty-list" role="group"></div>';
+$("app").append(classicNewSheet);
+const classicNewOptions = $("classic-difficulty-list");
+for (const level of [CLASSIC_MIN, CLASSIC_DEFAULT, CLASSIC_MAX] as const) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "classic-difficulty-option";
+  button.dataset.classicLevel = String(level);
+  button.innerHTML = '<span class="classic-level-mark" aria-hidden="true">'+(level+1)+'</span>'+
+    '<span class="classic-level-copy"><strong></strong><small></small></span>'+
+    '<span class="classic-level-current" hidden></span>';
+  classicNewOptions.append(button);
+}
+function renderClassicNewSheet() {
+  $("classic-new-title").textContent = t("calm.classic.choose");
+  $("classic-new-close").setAttribute("aria-label", t("ui.close-menu"));
+  $("classic-new-help").textContent = progress.active === "classic" &&
+    occupied(session.current.board) && (session.current.moves > 0 || session.history.length > 0)
+    ? t("calm.classic.confirmNote")
+    : t("calm.classic.startNote");
+  for (const button of classicNewOptions.querySelectorAll<HTMLButtonElement>("button")) {
+    const level = Number(button.dataset.classicLevel) as ClassicDifficulty;
+    button.querySelector("strong")!.textContent = localName(classicDifficultyNames[level]);
+    button.querySelector("small")!.textContent = t(["calm.classic.easyDetail","calm.classic.normalDetail","calm.classic.hardDetail"][level]);
+    const current = button.querySelector<HTMLElement>(".classic-level-current")!;
+    current.hidden = level !== classicDifficulty();
+    current.textContent = t("calm.classic.current");
+    button.setAttribute("aria-label", button.querySelector(".classic-level-copy")!.textContent!.trim()+
+      (current.hidden ? "" : " · "+current.textContent));
+  }
+}
+function openClassicNewSheet() {
+  if (classicNewSheet.open || !dialog.open || dialog.dataset.screen !== "home" ||
+      busy || saveFailed || futureSave || storageConflict || adActive || rewardRequest ||
+      engagementActive || lesson >= 0) return;
+  renderClassicNewSheet();
+  classicNewSheet.showModal();
+  classicNewOptions.querySelector<HTMLButtonElement>('button[data-classic-level="'+classicDifficulty()+'"]')?.focus({preventScroll:true});
+}
+$("classic-new-close").onclick = () => classicNewSheet.close();
+classicNewSheet.addEventListener("click", (event) => {
+  if (event.target === classicNewSheet) classicNewSheet.close();
+});
 const languageRow = document.createElement("button");
 languageRow.id="language-open";
 languageRow.className="language-row";
@@ -487,7 +537,7 @@ $("new").className = "text-button restart-action";
 const classicActions = document.createElement("div");
 classicActions.className = "classic-actions";
 classicActions.innerHTML =
-  `<button id="next-classic" class="text-button" hidden>${t("ui.new-game")}</button><button id="menu-easier" class="text-button" hidden>${t("ui.new-easier-game")}</button>`;
+  `<button id="next-classic" class="text-button classic-new-trigger" hidden>${t("calm.classic.new")}</button><button id="menu-easier" class="text-button" hidden>${t("ui.new-easier-game")}</button>`;
 classicActions.prepend($("new"));
 homeCurrent.append($("resume-context"), homeGoal, $("resume"), classicActions);
 const homeModes = document.createElement("section");
@@ -2826,6 +2876,7 @@ function closeMenu() {
   fieldActivity();
 }
 function navigateBack(native = false): boolean {
+  if(classicNewSheet.open) {classicNewSheet.close();return true;}
   if(languageSheet.open) {languageSheet.close();return true;}
   if(closeHelpLab())return true;
   if (adActive || rewardRequest || engagementActive) return true;
@@ -2922,6 +2973,12 @@ async function beginClassic(
     },
     jars: { ...jars(progress) },
   };
+  // Starting Classic from a notebook or daily puzzle must retain that party,
+  // including its last scroll position and Undo, exactly as switchGame does.
+  if (progress.active !== "classic") {
+    session.current.scroll = viewport.scrollTop;
+    candidate.sessions[progress.active] = session;
+  }
   const m = metadata(candidate);
   const previousAttempt = m.attempts.classic?.id ?? "";
   let next: Session | undefined;
@@ -3055,7 +3112,16 @@ function requestRestart(
   $("confirm-back").focus({ preventScroll: true });
 }
 $("new").onclick = () => requestRestart();
-$("next-classic").onclick = () => requestRestart("next");
+$("next-classic").onclick = openClassicNewSheet;
+classicNewOptions.addEventListener("click", (event) => {
+  const button = (event.target as HTMLElement).closest<HTMLButtonElement>("button[data-classic-level]");
+  if (!button || !classicNewSheet.open) return;
+  const level = Number(button.dataset.classicLevel);
+  if (![CLASSIC_MIN,CLASSIC_DEFAULT,CLASSIC_MAX].includes(level)) return;
+  classicNewSheet.close();
+  if (progress.active === "classic") requestRestart("next", level as ClassicDifficulty);
+  else void beginClassic("next", level as ClassicDifficulty);
+});
 $("menu-easier").onclick = () => {
   const level = classicDifficulty();
   if (level > CLASSIC_MIN)
@@ -3964,7 +4030,8 @@ function renderHomeCurrent() {
   $("home-difficulty").textContent =
     t("ui.difficulty-2", { "0": localName(classicDifficultyNames[classicDifficulty()]), "1": classicDifficulty() === CLASSIC_MIN ? " "+t("ui.lowest") : classicDifficulty() === CLASSIC_MAX ? " "+t("ui.highest") : "" });
   homeGoal.hidden = lesson >= 0;
-  $("next-classic").hidden = !classicMode || lesson >= 0;
+  $("next-classic").hidden = lesson >= 0;
+  $("next-classic").textContent = t("calm.classic.new");
   $("menu-easier").hidden = !classicMode || lesson >= 0 || !count;
   $<HTMLButtonElement>("menu-easier").disabled =
     classicDifficulty() === CLASSIC_MIN;
