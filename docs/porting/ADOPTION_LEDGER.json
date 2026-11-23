@@ -788,14 +788,14 @@
         "referenceVideo": "OBSERVED first 00:00-00:09; unobserved reference generation, audio and live economy UNKNOWN"
       },
       "excluded": {
-        "fourTiers": "DEFERRED: three validated Classic algorithms currently exist, Expert requires owner approval and balance proof",
+        "fourTiers": "HISTORICAL DEFERRAL at 5de066f, superseded for the local Seeds pilot by owner issue #13 and classic-generator-pilot-20261123. Four18/28/45/81 tiers are implemented; human balance remains UNKNOWN. No new Cross Math generator observation.",
         "gameTimer": "INTENTIONAL_DIFFERENCE: Seeds Classic has no timer; do not add an extra Play gate",
         "liveEvents": "DEFERRED: dated event/timed currency not copied from unrelated genre"
       },
       "acceptance": "../research/classic-new-game-reference-2026-11-23/README.md",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "consumerCommit": "5de066f39ad839b32dad3a21802f6c34147e0fe8",
-      "nextAction": "Evaluate bottom sheet and Android Back on the exact new APK on physical phone; keep saved-party confirmation and all six help experiments paused. No change to classic balance or economy.",
+      "nextAction": "Evaluate bottom sheet and Android Back on the exact new APK on physical phone; preserve saved-party confirmation and paused help. Four-tier local generator acceptance is tracked separately in classic-generator-pilot-20261123.",
       "kitImpact": "REUSE"
     },
     {
@@ -803,7 +803,7 @@
       "sourceFeatureIds": [],
       "scope": "Локальный аудит Seed Bits: три сложности классики, 2400 precomputed задач тетради и seeded daily, без нового наблюдения Number Match Easybrain/NADO.",
       "status": "DEFERRED",
-      "reason": "Нужен сначала read-only game-quality анализ и плейтест; изменения ядра/экономики требуют отдельного решения владельца. Пилот четырёх уровней остаётся активным по issue #13.",
+      "reason": "Исторический аудит трёх уровней сохранён как baseline. Классический пилот четырёх уровней реализован отдельной записью classic-generator-pilot-20261123; открытая часть №14 — плейтест тетрадей/дневной кривой и семечки в минуту. Изменение экономики требует отдельного решения владельца.",
       "evidence": {
         "report": "https://github.com/DanilaH/seeds-bits/issues/14",
         "difficultyTask": "https://github.com/DanilaH/seeds-bits/issues/13",
@@ -818,9 +818,10 @@
           "device": "NOT_VERIFIED",
           "liveAudience": "NOT_VERIFIED",
           "reference": "NOT_APPLICABLE"
-        }
+        },
+        "implementationAudit": "../research/generator-audit-2026-11-23/README.md"
       },
-      "nextAction": "Разработчик issue #13 сначала меряет исходные качества/стоимость на 1000 seeds × 4 и моделирует seeds/minute, сохраняет 27-digit legacy High, затем пилот 45/81. Отдельно issue #14: телефонный аудит поздних тетрадей, пауза/награда, lazy data и дневная кривая. Не включать шесть приостановленных экспериментов.",
+      "nextAction": "Закрыть замечания независимого аудита генератора GA-01..GA-03, затем телефонный плейтест Классики. Отдельно продолжить №14 по поздним тетрадям, дневной кривой и seeds/minute до любых изменений наград. Сохранять immutable задания и все шесть экспериментов на паузе.",
       "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes."
     },
     {
@@ -842,16 +843,47 @@
         "research": "https://github.com/DanilaH/seeds-bits/pull/15",
         "report": "../classic-difficulty-2026-11-12/PILOT_12081.md",
         "android": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14841601829",
-        "comparison": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14840781761"
+        "comparison": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14840781761",
+        "independentAudit": "../research/generator-audit-2026-11-23/README.md",
+        "independentAuditHead": "7f8ac0e05a338d4101d10f680720343b6881ba9a"
       },
       "verification": {
-        "code": "128 unit and 399 local Chromium scenarios; 14000 exact old/new witnesses and 60 early/mid/late alternative branch probes.",
-        "emulator": "Android API 35 / 12081 / preserved 12080 save and legacy High 27 with Undo, lower-pair taps and generator timings.",
+        "code": "Implemented. CI on runtime d450a618: 128 unit + 2 model + 15 regression PASS; 396 main browser PASS / 3 FAIL. Exact audit HEAD 7f8ac0e has no workflow runs. Developer reports local 399 and 14000 witnesses; only the first 7000 witnesses are backed by the attached CI artifact.",
+        "emulator": "Android API35/WebView124: optimized 12080→12081 migration with temporary CI signing identity; debug UI bottom taps, Undo and scroll47→47 with real banner reserve. Signed/unsigned 670 entries and debug/release18 webassets match. Not a full signed-APK physical-phone run.",
         "physicalPhone": "UNKNOWN",
-        "liveAudience": "UNKNOWN"
+        "liveAudience": "UNKNOWN",
+        "independentNode": "PASS on exact 7f8ac0e: 4000 fresh seeds30000..30999, 400 serialized sequential deals, 36 forced fallback cases and 9 integration roundtrips; Node24.22.3. Actual TS with pinned Git blobs. No physical input or human difficulty conclusion.",
+        "technicalAcceptance": "OPEN: no green final-head general CI; scroll50→48 cause UNKNOWN; actual recipe/core repetition and complete distributions need explicit serial acceptance.",
+        "developerReportedAdditionalControl": "PILOT reports seeds20000..20999 and100 serialized games per level. Reproducible command/raw report absent from attached CI artifact at audit time; not asserted false."
       },
-      "nextAction": "Сопоставить контрастные партии на физическом телефоне. Владелец утверждает размеры и баланс после игры. Отдельный открытый риск из №14 — оценить семечки за минуту и длинные тетради до предложения менять награды.",
-      "kitImpact": "REUSE: Playability Choice Evidence Ladder; сохранены границы FOUND/UNKNOWN, без изменения карты оригиналов."
+      "nextAction": "Close GA-01 actual recipe/central motif serial evidence and GA-02/GA-03 final-head CI plus reproducible per-deal distributions; then physical-phone contrast/serial playtest and seeds per minute. Keep final human balance and remaining notebook/daily work open.",
+      "kitImpact": "REUSE: Playability Choice Evidence Ladder; сохранены границы FOUND/UNKNOWN, без изменения карты оригиналов.",
+      "auditFindings": [
+        {
+          "id": "SEEDS-GEN-AUDIT-01",
+          "status": "OPEN",
+          "priority": "P2",
+          "reason": "Requested preference can differ from selected recipe; identical certified central motif can occur in consecutive High45 deals.",
+          "returnCondition": "Actual serial recipe/motif measured; repeats prevented by selected policy or explicitly quantified as an accepted pilot limitation.",
+          "reference": "../research/generator-audit-2026-11-23/README.md#3-ga-01--p2--история-предпочтений-не-отражает-фактические-повторения"
+        },
+        {
+          "id": "SEEDS-GEN-AUDIT-02",
+          "status": "OPEN",
+          "priority": "ACCEPTANCE_GATE",
+          "reason": "Latest runtime general CI is red; final HEAD has no runs. Scroll50→48 has no captured maxScroll geometry.",
+          "returnCondition": "Green general CI on final SHA and stable-layout scroll/board/Undo evidence.",
+          "reference": "../research/generator-audit-2026-11-23/README.md"
+        },
+        {
+          "id": "SEEDS-GEN-AUDIT-03",
+          "status": "OPEN",
+          "priority": "P2",
+          "reason": "Per-deal distributions/serial history and provenance of additional reported control not attached to developer CI artifact.",
+          "returnCondition": "Seed-range and serial mode command with raw rows, histograms and SHA manifest reproduces report.",
+          "reference": "../research/generator-audit-2026-11-23/README.md"
+        }
+      ]
     }
   ]
 }

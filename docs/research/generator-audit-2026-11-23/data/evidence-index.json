@@ -1,0 +1,169 @@
+{
+  "checkedAt": "2026-11-23",
+  "scope": "Seeds Classic evidence inspection; no new original-game observations. Values frozen before research-only publication.",
+  "head": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+  "runtime": "d450a61893923b61115dd2ac5dbc7c4f2c8fff9a",
+  "baseline": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+  "sources": [
+    {
+      "path": "docs/classic-difficulty-2026-11-12/PILOT_12081.md",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "076909ef0231995abf046799c3726fe0509bb5db",
+      "length": 10490
+    },
+    {
+      "path": "scripts/classic-pilot.mjs",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "c96c18d4b195d942e1f35c3d583decd92e1f3965",
+      "length": 9230
+    },
+    {
+      "path": "scripts/markets/android.mjs",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "df7d6aeb3a13e26898d86ad397ee6b18bb768ed6",
+      "length": 32033
+    },
+    {
+      "path": ".github/workflows/first-session-preview.yml",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "8cd5c077fc52b598aa607fa833f93c8c2919f325",
+      "length": 12027
+    },
+    {
+      "path": "tests/classic-generator.test.ts",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "413f9739bcad9b00120176f459f545be0aef8b38",
+      "length": 6375
+    },
+    {
+      "path": "e2e/classic-variety.spec.ts",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "427e0c911d13f5394986d6648b08746c332d33e9",
+      "length": 13859
+    },
+    {
+      "path": "src/classic-profile.ts",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "27f418686fe79ed66f9045f0e3f3f8e3881499fc",
+      "length": 5439
+    },
+    {
+      "path": "src/style.css",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "cc05841772fe86467bb835c8603965af3e546c8d",
+      "length": 35229
+    },
+    {
+      "path": "src/board-view.ts",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "16d0350cc8a0d5ef5fa6407348ffd05343180cbb",
+      "length": 6003
+    },
+    {
+      "path": "src/calm-screens.css",
+      "ref": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+      "blobSha": "4ea70c0a5090062b2a4778a703c9bca077aa1f7c",
+      "length": 30016
+    }
+  ],
+  "exactHeadRuns": 0,
+  "workflows": [
+    {
+      "id": 45220134722,
+      "event": "push",
+      "name": "Check and build",
+      "head": "d450a61893923b61115dd2ac5dbc7c4f2c8fff9a",
+      "conclusion": "failure",
+      "webJob": 137851842656,
+      "unit": 128,
+      "model": 2,
+      "regressionBrowser": 15,
+      "mainBrowser": {
+        "passed": 396,
+        "failed": 3
+      }
+    },
+    {
+      "id": 45220149240,
+      "event": "pull_request",
+      "name": "Check and build",
+      "head": "d450a61893923b61115dd2ac5dbc7c4f2c8fff9a",
+      "conclusion": "failure",
+      "webJob": 137852086277,
+      "unit": 128,
+      "model": 2,
+      "regressionBrowser": 15,
+      "mainBrowser": {
+        "passed": 396,
+        "failed": 3
+      }
+    },
+    {
+      "id": 45220134550,
+      "name": "First session preview",
+      "head": "d450a61893923b61115dd2ac5dbc7c4f2c8fff9a",
+      "conclusion": "success",
+      "previewJob": 137851994460,
+      "signingJob": 137859328051
+    },
+    {
+      "id": 45220134529,
+      "name": "System font screen audit",
+      "head": "d450a61893923b61115dd2ac5dbc7c4f2c8fff9a",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 14840781761,
+      "name": "classic-pilot-comparison",
+      "zipSha256": "136d25aa44095515865258f0641b1b0c5d5a63cd065319c8844eb291df87cb3d",
+      "files": 3
+    },
+    {
+      "id": 14841601829,
+      "name": "markets-android",
+      "zipSha256": "35adb60c73c00499030c149617eeb45226f549cbacfc869d60c6103c42e9d059"
+    },
+    {
+      "id": 14839369991,
+      "name": "first-session-preview-signed",
+      "zipSha256": "089958d6f3e24e97e640927524b02e64279604e51bb5e5fa646d8cef1df09257"
+    },
+    {
+      "id": 14841301141,
+      "name": "first-session-preview-unsigned",
+      "zipSha256": "a5ac4236ef01d3d00b86e6ba2776d0eba6bf8b691819840371cedcdb93cfe7d8"
+    },
+    {
+      "id": 14840034107,
+      "name": "browser-checks",
+      "run": 45220134722,
+      "zipSha256": "52191e9ee1313d844c679abbe57760478171e8ddce2e0c67e6437a28e657ec8f"
+    }
+  ],
+  "apk": {
+    "package": "com.seedsbits.game.preview",
+    "versionName": "1.1.2",
+    "versionCode": 12081,
+    "manifestReadFromActualApk": true,
+    "signedSha256": "2b23afd13ca0c5c8a4b4e8accbb5e61ab50158a862056c46805fdc259a165fae",
+    "unsignedSha256": "aa2c9d0c44cf88f9d19ac7153f0ed97fce2d78bb767f62a57525c14ded59f4a5",
+    "debugSha256": "9e236ef2b9c0e70f61f561444e1fcb900fa88e0542a74e0d544e18a244c09387",
+    "signedUnsignedEntryNamesAndContentsEqual": true,
+    "zipEntries": 670,
+    "debugReleaseWebAssetContentEqual": true,
+    "webAssetEntries": 18,
+    "certificateSha256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+    "certificateVerificationSource": "apksigner output in signing job 137859328051, v2 true v3 true; no local cryptographic signature verifier used"
+  },
+  "evidenceLevels": {
+    "node": "7000 proof replays current+baseline seeds10000..10999 at runtime; 12 selected fixtures; 60 branch probes 48FOUND12UNKNOWN",
+    "browser": "128unit/2model/15regression pass,396main pass3fail on runtime;399/399 latestlocal claimed but no runartifact",
+    "emulator": "Android35 x86_64 WebView124.0.6367.219; debug UI/new games/bottom tap/Undo/resume, optimized release data migration with CI ephemeral certificate",
+    "physicalPhone": "UNKNOWN",
+    "liveAudience": "UNKNOWN"
+  },
+  "timingLimits": "Separate current-source IIFE injected into debug WebView; 32 fresh empty-history seeds/level after4warmup; excludes main app navigation/save/render; no fullhistory/end-to-end/physicalphone bound",
+  "scrollFailure": "50->48 has no captured scrollHeight/clientHeight/saved scroll at failure. Correct clamp vs wrong restoration UNKNOWN; do not call product defect from this alone."
+}

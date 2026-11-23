@@ -1,0 +1,139 @@
+{
+  "head": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+  "old": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+  "evidence": "ACTUAL_SOURCE_NODE",
+  "runtime": "v24.22.3",
+  "cases": [
+    {
+      "name": "legacy_generated_27_move_roundtrip_and_undo",
+      "result": "PASS",
+      "seed": 3384638011,
+      "initial": [
+        6,
+        3,
+        1,
+        9,
+        1,
+        5,
+        1,
+        5,
+        8,
+        1,
+        7,
+        4,
+        2,
+        2,
+        1,
+        3,
+        1,
+        6,
+        1,
+        7,
+        1,
+        1,
+        8,
+        9,
+        4,
+        1,
+        1
+      ],
+      "occupied": 25,
+      "scroll": 19
+    },
+    {
+      "name": "cross_mode_wallet_daily_jar_and_paused_entitlement_roundtrip",
+      "result": "PASS",
+      "wallet": 7,
+      "inventory": {
+        "magnet": 3,
+        "plan": 2
+      },
+      "bookUndo": 1,
+      "dailyUndo": 1,
+      "heldPlan": true,
+      "confirmedGrant": true
+    },
+    {
+      "name": "legacy_27_current_stays_restartable_next_high_uses_45",
+      "result": "PASS",
+      "nextSize": 45,
+      "oldRestartInitial": 27
+    },
+    {
+      "name": "legacy_27_add_roundtrip_and_undo",
+      "result": "PASS",
+      "movesBeforeAdd": 9,
+      "afterAddCells": 36
+    },
+    {
+      "name": "expert_81_add_roundtrip_and_undo",
+      "result": "PASS",
+      "seed": 73,
+      "movesBeforeAdd": 40,
+      "afterAddCells": 10,
+      "scroll": 47
+    },
+    {
+      "name": "four_level_mixed_sequence_serializes_seed_recent_current_rotation",
+      "result": "PASS",
+      "games": 24,
+      "recentLength": 8,
+      "rotation": {
+        "0": [
+          "gaps",
+          "stock"
+        ],
+        "1": [
+          "stock",
+          "open"
+        ],
+        "2": [
+          "open",
+          "stock"
+        ],
+        "3": [
+          "gaps",
+          "stock"
+        ]
+      }
+    },
+    {
+      "name": "invalid_optional_rotation_does_not_drop_legacy_current_or_undo",
+      "result": "PASS"
+    },
+    {
+      "name": "future_progress_help_and_entitlement_data_remain_protected",
+      "result": "PASS",
+      "formats": 3
+    },
+    {
+      "name": "expert_name_and_size_description_in_all_launch_locales",
+      "result": "PASS",
+      "translations": {
+        "ru": {
+          "label": "Эксперт",
+          "detail": "81 цифра · 9 рядов"
+        },
+        "en": {
+          "label": "Expert",
+          "detail": "81 numbers · 9 rows"
+        },
+        "es": {
+          "label": "Experto",
+          "detail": "81 números · 9 filas"
+        },
+        "tr": {
+          "label": "Uzman",
+          "detail": "81 sayı · 9 sıra"
+        },
+        "pt-BR": {
+          "label": "Especialista",
+          "detail": "81 números · 9 linhas"
+        }
+      }
+    }
+  ],
+  "result": "PASS",
+  "caseCount": 9,
+  "recoveries": 0
+}
