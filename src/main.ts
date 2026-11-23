@@ -16,6 +16,8 @@ import {
   CLASSIC_DEFAULT,
   CLASSIC_MIN,
   CLASSIC_MAX,
+  CLASSIC_LEVELS,
+  isClassicDifficulty,
   classicDifficultyNames,
   newClassicRun,
   readClassicRun,
@@ -296,7 +298,7 @@ classicNewSheet.innerHTML =
   '<div id="classic-difficulty-list" class="classic-difficulty-list" role="group"></div>';
 $("app").append(classicNewSheet);
 const classicNewOptions = $("classic-difficulty-list");
-for (const level of [CLASSIC_MIN, CLASSIC_DEFAULT, CLASSIC_MAX] as const) {
+for (const level of CLASSIC_LEVELS) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "classic-difficulty-option";
@@ -316,7 +318,7 @@ function renderClassicNewSheet() {
   for (const button of classicNewOptions.querySelectorAll<HTMLButtonElement>("button")) {
     const level = Number(button.dataset.classicLevel) as ClassicDifficulty;
     const name = localName(classicDifficultyNames[level]);
-    const detail = t(["calm.classic.easyDetail","calm.classic.normalDetail","calm.classic.hardDetail"][level]);
+    const detail = t(["calm.classic.easyDetail","calm.classic.normalDetail","calm.classic.hardDetail","calm.classic.expertDetail"][level]);
     button.querySelector("strong")!.textContent = name;
     button.querySelector("small")!.textContent = detail;
     const current = button.querySelector<HTMLElement>(".classic-level-current")!;
@@ -3119,10 +3121,10 @@ classicNewOptions.addEventListener("click", (event) => {
   const button = (event.target as HTMLElement).closest<HTMLButtonElement>("button[data-classic-level]");
   if (!button || !classicNewSheet.open) return;
   const level = Number(button.dataset.classicLevel);
-  if (![CLASSIC_MIN,CLASSIC_DEFAULT,CLASSIC_MAX].includes(level)) return;
+  if (!isClassicDifficulty(level)) return;
   classicNewSheet.close();
-  if (progress.active === "classic") requestRestart("next", level as ClassicDifficulty);
-  else void beginClassic("next", level as ClassicDifficulty);
+  if (progress.active === "classic") requestRestart("next", level);
+  else void beginClassic("next", level);
 });
 $("menu-easier").onclick = () => {
   const level = classicDifficulty();

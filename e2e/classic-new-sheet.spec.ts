@@ -16,7 +16,7 @@ async function menu(page:import("@playwright/test").Page,lang="ru"){
 const choice=(page:import("@playwright/test").Page,level:number)=>
   page.locator(`#classic-new-sheet [data-classic-level="${level}"]`);
 
-test("home separates saved Continue and New Classic with three real levels",async({page})=>{
+test("home separates saved Continue and New Classic with four real levels",async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await menu(page);
   const before=await state(page);
@@ -25,16 +25,17 @@ test("home separates saved Continue and New Classic with three real levels",asyn
   await page.locator("#next-classic").click();
   await expect(page.locator("#classic-new-sheet")).toBeVisible();
   await page.screenshot({path:"test-results/classic-new-sheet/390x844-light.jpg",type:"jpeg",quality:88,animations:"disabled"});
-  await expect(page.locator(".classic-difficulty-option")).toHaveCount(3);
+  await expect(page.locator(".classic-difficulty-option")).toHaveCount(4);
   await expect(choice(page,0)).toContainText("18 цифр");
   await expect(choice(page,1)).toContainText("28 цифр");
-  await expect(choice(page,2)).toContainText("27 цифр");
+  await expect(choice(page,2)).toContainText("45 цифр");
+  await expect(choice(page,3)).toContainText("81 цифра");
   await expect(page.locator("#classic-new-sheet")).toContainText("Обычная");
   const {width,height,bottom}=await page.locator("#classic-new-sheet").evaluate(e=>{
     const r=e.getBoundingClientRect();return{width:r.width,height:r.height,bottom:r.bottom};
   });
   expect(width).toBeLessThanOrEqual(390);
-  // Unlike the old full-screen dialog the chooser must hug its three rows.
+  // Unlike the old full-screen dialog the chooser must hug its four rows.
   expect(height).toBeGreaterThan(270);
   expect(height).toBeLessThan(470);
   expect(844-bottom).toBeLessThanOrEqual(1);
@@ -46,7 +47,7 @@ test("home separates saved Continue and New Classic with three real levels",asyn
   await expect(page.locator("#board")).toBeVisible();
 });
 
-for(const [level,count] of [[0,18],[1,28],[2,27]] as const){
+for(const [level,count] of [[0,18],[1,28],[2,45],[3,81]] as const){
   test(`fresh Classic starts ${count} numbers after one level choice ${level}`,async({page})=>{
     await menu(page);
     await page.locator("#next-classic").click();
@@ -86,7 +87,7 @@ test("an unfinished Classic game is replaced only after confirmation",async({pag
   await page.locator("#next-classic").click();
   await choice(page,2).click();
   await page.locator("#confirm-new").click();
-  await expect(page.locator("#remaining")).toHaveText("27");
+  await expect(page.locator("#remaining")).toHaveText("45");
   expect((await state(page)).meta.classicRun.difficulty).toBe(2);
 });
 

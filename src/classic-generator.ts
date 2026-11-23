@@ -2,29 +2,40 @@ import {
   addNumbers,
   classic,
   newSession,
+  occupied,
   pairs,
   removePair,
   type Session,
 } from "./core";
 
+import { clearInReadingOrder, constructDense, denseFallback } from "./classic-dense";
+import {
+  CLASSIC_STYLES, classicStructure, measureClassic, openingEdges, openingSimilarity,
+  tryClassicOrder, type ClassicProof, type ClassicStyle,
+} from "./classic-profile";
+export type { ClassicProof } from "./classic-profile";
+
 export const CLASSIC_MIN = 0;
 export const CLASSIC_DEFAULT = 1;
-export const CLASSIC_MAX = 2;
-export type ClassicDifficulty = 0 | 1 | 2;
-export const classicDifficultyNames = ["Лёгкая", "Обычная", "Высокая"];
-export type ClassicProof = ([number, number] | null)[];
+export const CLASSIC_MAX = 3;
+export const CLASSIC_SIZES = [18, 28, 45, 81] as const;
+export const CLASSIC_LEVELS = [0, 1, 2, 3] as const;
+export type ClassicDifficulty = (typeof CLASSIC_LEVELS)[number];
+export const classicDifficultyNames = ["Лёгкая", "Обычная", "Высокая", "Эксперт"];
+type Rotation = Partial<Record<ClassicDifficulty, ClassicStyle[]>>;
 export type ClassicRun = {
   version: 1;
   seed: number;
   difficulty: ClassicDifficulty;
   recent: string[];
+  rotation?: Rotation;
   current?: { attempt: string; board: number[] };
 };
-const isDifficulty = (v: unknown): v is ClassicDifficulty =>
+export const isClassicDifficulty = (v: unknown): v is ClassicDifficulty =>
   Number.isInteger(v) && Number(v) >= CLASSIC_MIN && Number(v) <= CLASSIC_MAX;
 const isBoard = (v: unknown): v is number[] =>
   Array.isArray(v) &&
-  [18, 27, 28].includes(v.length) &&
+  [18, 27, 28, 45, 81].includes(v.length) &&
   v.every((n) => Number.isInteger(n) && n >= 1 && n <= 9);
 
 export function readClassicRun(value: unknown): ClassicRun | undefined {
@@ -35,11 +46,11 @@ export function readClassicRun(value: unknown): ClassicRun | undefined {
     !Number.isInteger(v.seed) ||
     v.seed < 0 ||
     v.seed > 0xffffffff ||
-    !isDifficulty(v.difficulty) ||
+    !isClassicDifficulty(v.difficulty) ||
     !Array.isArray(v.recent) ||
     v.recent.length > 8 ||
     !v.recent.every(
-      (b) => typeof b === "string" && /^(?:[1-9]{18}|[1-9]{27,28})$/.test(b),
+      (b) => typeof b === "string" && /^(?:[1-9]{18}|[1-9]{27,28}|[1-9]{45}|[1-9]{81})$/.test(b),
     ) ||
     new Set(v.recent).size !== v.recent.length ||
     (v.current !== undefined &&
@@ -47,14 +58,24 @@ export function readClassicRun(value: unknown): ClassicRun | undefined {
         !v.current.attempt.length ||
         v.current.attempt.length > 100 ||
         !isBoard(v.current.board) ||
-        v.current.board.length !== [18, 28, 27][v.difficulty]))
+        (v.current.board.length !== CLASSIC_SIZES[v.difficulty] &&
+          !(v.difficulty === 2 && v.current.board.length === 27))))
   )
     return;
+  // Repair optional rotation independently of the saved deal and Undo.
+  const rotation: Rotation = {};
+  for (const level of CLASSIC_LEVELS) {
+    const styles = v.rotation?.[level];
+    if (Array.isArray(styles) && styles.length <= 2 &&
+        styles.every(style => CLASSIC_STYLES.includes(style)))
+      rotation[level] = [...styles];
+  }
   return {
     version: 1,
     seed: v.seed,
     difficulty: v.difficulty,
     recent: [...v.recent],
+    ...(Object.keys(rotation).length ? { rotation } : {}),
     ...(v.current
       ? { current: { attempt: v.current.attempt, board: [...v.current.board] } }
       : {}),
@@ -91,6 +112,7 @@ export function solveClassic(
   initial: readonly number[],
   additions: number,
   budget = 600,
+  onVisit?: () => void,
 ): ClassicProof | undefined {
   const dead = new Set<string>();
   let visits = 0;
@@ -100,6 +122,7 @@ export function solveClassic(
   ): ClassicProof | undefined {
     if (!board.some(Boolean)) return [];
     if (++visits > budget) return;
+    onVisit?.();
     const key = board.join("") + ":" + left;
     if (dead.has(key)) return;
     const moves = pairs(board);
@@ -128,57 +151,120 @@ function easyNumbers(state: ClassicRun) {
   }
   return values;
 }
-function baseNumbers(level: ClassicDifficulty, state: ClassicRun) {
-  const values = level === 0 ? easyNumbers(state) : classic();
-  // Odd length guarantees at least one legal addition is needed on hard.
-  if (level === 2) values.splice(values.indexOf(1), 1);
-  return values;
+const MAX_ATTEMPTS = 40;
+
+type Deal = { board: number[]; proof: ClassicProof };
+type Candidate = Deal & {
+  profile: ReturnType<typeof measureClassic>;
+  similarity: number;
+  recipe: ClassicStyle | null;
+};
+type PolicyBudget = { attempts?: number; visits?: number };
+
+function smallCandidate(level: 0 | 1, state: ClassicRun, visits: number, onVisit: () => void): Deal | undefined {
+  const board = shuffle(level === 0 ? easyNumbers(state) : classic(), state);
+  if (new Set(board).size < 6) return;
+  const opening = pairs(board).length;
+  if (level === 0 && opening < 11 || level === 1 && (opening < 18 || opening > 26)) return;
+  if (level === 0) {
+    const first = tryClassicOrder(board, "first", 0, visits);
+    return first.outcome === "FOUND" ? { board, proof: first.proof } : undefined;
+  }
+  const proof = solveClassic(board, 2, visits, onVisit);
+  return proof && { board, proof };
 }
 
-/** Runtime generation, with fixed work limits and a constructive fallback. */
-export function generateClassic(state: ClassicRun, level: ClassicDifficulty) {
-  const original = classic().join("");
-  const unseen = (board: number[]) =>
-    !state.recent.includes(board.join("")) && board.join("") !== original;
-  for (let n = 0; n < 64; n++) {
-    const board = shuffle(baseNumbers(level, state), state);
-    if (!unseen(board) || new Set(board).size < 6) continue;
-    const opening = pairs(board).length;
-    if (
-      (level === 0 && opening < 11) ||
-      (level === 1 && (opening < 18 || opening > 26)) ||
-      (level === 2 && (opening < 6 || opening > 17))
-    )
-      continue;
-    // On easy, the first available pair must keep working all the way to a
-    // clear. A hidden no-add solution alone would still demand foresight.
-    const proof = solveClassic(
-      board,
-      level === 0 ? 0 : 2,
-      level === 0 ? 10 : 600,
-    );
-    if (proof) return { board, proof, fallback: false };
+function smallFallback(level: 0 | 1, state: ClassicRun): Deal {
+  return level === 0
+    ? Array.from({ length: 9 }, (_, i) => [i + 1, random(state) < 0.5 ? i + 1 : 9 - i])
+    : [
+      ...Array.from({ length: 6 }, () => [1, 1]),
+      ...Array.from({ length: 8 }, (_, i) => [i + 2, i + 2]),
+    ];
+}
+
+function styleScore(candidate: Candidate, style: ClassicStyle, level: ClassicDifficulty) {
+  const { profile } = candidate;
+  switch (style) {
+    case "open":
+      return profile.opening * 2 - 7 * profile.additions;
+    case "gaps":
+      return 3 * profile.gapMoves + profile.newPairs - (level === 1 ? 6 * profile.additions : 0);
+    case "stock":
+      return level === 0
+        ? 3 * profile.newPairs + profile.diagonalMoves
+        : 2 * profile.newPairs + 4 * profile.compressionChanges +
+          (profile.firstAdd === null ? 0 : (CLASSIC_SIZES[level] - 2 * profile.firstAdd) * 4);
   }
-  // Pair blocks are generated afresh, not drawn from a fixed catalog. Their
-  // adjacent clear route remains valid when empty rows are removed.
-  for (let n = 0; n < 64; n++) {
-    let blocks: number[][];
-    if (level === 0) {
-      const values = easyNumbers(state);
-      blocks = Array.from({ length: 9 }, (_, i) =>
-        values.slice(i * 2, i * 2 + 2),
-      );
-    } else {
-      blocks = [
-        ...Array.from({ length: level === 2 ? 5 : 6 }, () => [1, 1]),
-        ...Array.from({ length: 8 }, (_, i) => [i + 2, i + 2]),
-      ];
-    }
-    const board = shuffle(blocks, state).flat();
-    if (level === 2) board.push(1);
-    if (!unseen(board) || new Set(board).size < 6) continue;
-    const proof = solveClassic(board, level === 2 ? 1 : 0, 1000);
-    if (proof) return { board, proof, fallback: true };
+}
+
+/** Compare a bounded pool within the chosen level, with a certified fallback. */
+export function generateClassic(state: ClassicRun, level: ClassicDifficulty, options: PolicyBudget = {}) {
+  const size = CLASSIC_SIZES[level];
+  const nextInt = (max: number) => Math.floor(random(state) * max);
+  const recent = state.recent.filter(board => board.length === size).map(board => [...board].map(Number));
+  const structures = new Set(recent.map(classicStructure));
+  const previousEdges = recent.map(openingEdges);
+  const original = classic().join("");
+  const history = state.rotation?.[level] ?? [];
+  const styleOrder = shuffle([...CLASSIC_STYLES], state)
+    .sort((a, b) => history.lastIndexOf(a) - history.lastIndexOf(b));
+  const style = styleOrder[0];
+  const diagnostics = { attempts: 0, candidates: 0, solverVisits: 0, fallbackAttempts: 0 };
+  const pool: Candidate[] = [];
+  const qualify = (deal: Deal | undefined, recipe: ClassicStyle | null, fallback = false): Candidate | undefined => {
+    if (!deal || deal.board.length !== size || occupied(deal.board) !== size ||
+        new Set(deal.board).size < 6) return;
+    const key = deal.board.join("");
+    if (key === original || state.recent.includes(key)) return;
+    const structure = classicStructure(deal.board);
+    if (!fallback && structures.has(structure)) return;
+    const currentEdges = openingEdges(deal.board);
+    const similarity = Math.max(0, ...previousEdges.map(edges => openingSimilarity(currentEdges, edges)));
+    const profile = measureClassic(deal.board, deal.proof);
+    if (!profile.opening) return;
+    structures.add(structure);
+    return { ...deal, similarity, profile, recipe };
+  };
+  const dense = size === 45 || size === 81;
+  const maxCandidates = dense ? 4 : 3;
+  const recipes = [style, ...styleOrder];
+  const attemptLimit = Math.min(MAX_ATTEMPTS, options.attempts ?? (level === 0 ? MAX_ATTEMPTS : level === 1 ? 16 : recipes.length));
+  const visits = Math.min(600, options.visits ?? (level === 0 ? 9 : 600));
+  while (diagnostics.attempts < attemptLimit && pool.length < maxCandidates) {
+    const recipe = recipes[diagnostics.attempts % recipes.length];
+    diagnostics.attempts++;
+    const deal = size === 45 || size === 81
+      ? constructDense(size, recipe, nextInt)
+      : smallCandidate(level as 0 | 1, state, visits, () => diagnostics.solverVisits++);
+    const candidate = qualify(deal, dense ? recipe : null);
+    if (candidate) pool.push(candidate);
+  }
+  diagnostics.candidates = pool.length;
+  function score(candidate: Candidate) {
+    // Prefer a structurally fresh opening, with the route metrics as tie-breakers
+    // for distant candidates. Do not use digit count as a proxy for the style.
+    const recipeBonus = candidate.recipe === style ? size * .6 : 0;
+    return recipeBonus + styleScore(candidate, style, level) - candidate.similarity * 70;
+  }
+  pool.sort((a, b) => score(b) - score(a));
+  if (pool.length) return { ...pool[0], style, fallback: false, diagnostics };
+
+  const { blocks, last } = size === 45 || size === 81
+    ? denseFallback(size, nextInt)
+    : { blocks: smallFallback(level as 0 | 1, state), last: undefined };
+  shuffle(blocks, state);
+  const distinct = new Set<number>();
+  for (const [index, block] of blocks.entries()) {
+    if (distinct.has(block[0])) continue;
+    distinct.add(block[0]);
+    diagnostics.fallbackAttempts++;
+    // Distinct first digits guarantee at least nine different rotations.
+    // At most eight exact boards are in history.
+    const board = [...blocks.slice(index), ...blocks.slice(0, index)].flat();
+    if (last !== undefined) board.push(last);
+    const candidate = qualify({ board, proof: clearInReadingOrder(board, last !== undefined) }, null, true);
+    if (candidate) return { ...candidate, style: "open" as const, fallback: true, diagnostics };
   }
   throw new Error("Cannot prepare a fresh classic game");
 }
@@ -189,11 +275,15 @@ export function takeGeneratedClassic(
   attempt: string,
   level = state.difficulty,
 ): Session {
-  if (!isDifficulty(level)) throw new Error("Invalid classic difficulty");
-  const { board } = generateClassic(state, level);
+  if (!isClassicDifficulty(level)) throw new Error("Invalid classic difficulty");
+  const { board, style, fallback } = generateClassic(state, level);
   state.difficulty = level;
   state.recent = [...state.recent, board.join("")].slice(-8);
   state.current = { attempt, board: [...board] };
+  if (!fallback) {
+    state.rotation ??= {};
+    state.rotation[level] = [...(state.rotation[level] ?? []), style].slice(-2);
+  }
   const game = newSession();
   game.current.board = board;
   return game;

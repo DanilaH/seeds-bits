@@ -2,7 +2,7 @@ import {test,expect} from "@playwright/test";
 
 // Video belongs to the real DOM game, not a mocked illustration.
 // Store a short proof that New Classic opens a genuine sheet and starts a
-// normal field, with the same rules and three proven difficulty bands.
+// normal field, with the same rules and four difficulty bands.
 test.use({video:"on"});
 test("New Classic: home -> difficulty sheet -> ordinary board -> resume",async({page})=>{
   await page.setViewportSize({width:390,height:844});
@@ -17,7 +17,7 @@ test("New Classic: home -> difficulty sheet -> ordinary board -> resume",async({
   await page.waitForTimeout(350);
   await page.locator("#next-classic").click();
   await expect(page.locator("#classic-new-sheet")).toBeVisible();
-  await expect(page.locator(".classic-difficulty-option")).toHaveCount(3);
+  await expect(page.locator(".classic-difficulty-option")).toHaveCount(4);
   await page.waitForTimeout(650);
   await page.locator('[data-classic-level="1"]').click();
   await expect(page.locator("#classic-new-sheet")).toBeHidden();

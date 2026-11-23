@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 
 const app="com.seedsbits.game.preview", out="test-results/markets-android";
 fs.mkdirSync(out,{recursive:true});
-const [candidate,baseline,optimized]=process.argv.slice(2);
+const [candidate,baseline,optimized,classicBundle]=process.argv.slice(2);
 const prefs=`/data/user/0/${app}/shared_prefs/CapacitorStorage.xml`;
 const progress="seeds-bits.progress.v2", settings="seeds-bits.settings.v1";
 const adb=(...args)=>execFileSync("adb",args,{encoding:"utf8",timeout:26000,maxBuffer:8e6}).trim();
@@ -93,7 +93,18 @@ async function connect() {
       String(Math.round(bounds[1]+p.y*(bounds[3]-bounds[1])/p.h)));
     await wait(200);
   }
-  return {evaluate,until,tap,close:()=>ws.close()};
+  async function swipeBoardUp() {
+    const p=await evaluate(`(()=>{
+      const r=document.querySelector("#viewport").getBoundingClientRect();
+      return {x:r.x+r.width*.5,from:r.y+r.height*.8,to:r.y+r.height*.25,w:innerWidth,h:innerHeight};
+    })()`);
+    const x=String(Math.round(bounds[0]+p.x*(bounds[2]-bounds[0])/p.w));
+    const y=point=>String(Math.round(bounds[1]+point*(bounds[3]-bounds[1])/p.h));
+    adb("shell","input","swipe",x,y(p.from),x,y(p.to),"330");
+    await wait(350);
+  }
+  return {evaluate,until,tap,swipeBoardUp,close:()=>ws.close()};
+
 }
 const board=[0,0,0,0,0,0,0,0,6,4];
 const digit=i=>`#board button[data-index="${i}"]`;
@@ -270,7 +281,9 @@ async function update() {
   const from=installedVersionCode();
   launch();
   for(let i=0;i<50;i++){try{if(profiles().values[progress]&&installRecord())break;}catch{}await wait(200);}
-  await fixture({[progress]:sample,[settings]:{tutorialDone:true,theme:"dark",sound:false,vibration:false}});
+  const upgradeFixture=classicBundle ? {...sample, sessions:{...sample.sessions, classic:oldHighSession},
+    meta:oldHighMeta, jars:oldHighJars} : sample;
+  await fixture({[progress]:upgradeFixture,[settings]:{tutorialDone:true,theme:"dark",sound:false,vibration:false}});
   const before=profiles().values;
   const source=installRecord();
   adb("install","-r",optimized);
@@ -284,9 +297,16 @@ async function update() {
   assert.deepEqual(restoredSession.current,previousSession.current);
   assert.equal((restoredSession.packedHistory??restoredSession.history).length,previousSession.history.length);
   assert.equal(after[settings].theme,"dark");
+  if (classicBundle) {
+    assert.deepEqual(after[progress].sessions.classic.current,oldHighSession.current);
+    assert.equal((after[progress].sessions.classic.packedHistory??after[progress].sessions.classic.history).length,1);
+    assert.deepEqual(after[progress].meta.classicRun,oldHighMeta.classicRun);
+    assert.equal(after[progress].meta.wallet,oldHighMeta.wallet);
+    assert.equal(after[progress].jars.seeds,oldHighJars.seeds);
+  }
   shot("updated");
   stop();
-  return {from,to};
+  return {from,to,...(classicBundle?{legacyHigh27:true}:{})};
 }
 async function showEdge(size,order,video) {
   stop();
@@ -421,6 +441,109 @@ async function verifyReport78Taps() {
     adb("shell","wm","size","640x1232");
   }
 }
+// Exact old generator seed 73, with its legal first pair [0,9] removed.
+const oldHighBoard=[1,6,1,5,1,5,6,1,4,1,8,1,9,8,7,1,7,1,2,1,4,3,1,3,1,9,2];
+const oldHighCurrent=oldHighBoard.map((digit,i)=>i===0||i===9?0:digit);
+const oldHighSession={rules:1,current:{board:oldHighCurrent,scroll:0,moves:1,additions:0},
+  history:[{board:oldHighBoard,scroll:0,moves:0,additions:0}]};
+const oldHighMeta={version:2,wallet:7,since:"2026-11-23T00:00:00.000Z",completed:0,unassisted:0,
+  attempts:{classic:{id:"legacy27",completed:false},"book-v1-5":{id:"old-book",completed:false}},
+  classicRun:{version:1,difficulty:2,seed:3384638011,recent:[oldHighBoard.join("")],current:{attempt:"legacy27",board:oldHighBoard}}};
+const oldHighJars={version:2,seeds:74,meter:74,wins:0,highWater:1,attempt:"legacy27"};
+async function classicPilot() {
+  await fixture({[progress]:{...sample,active:"classic",sessions:{classic:oldHighSession},meta:oldHighMeta,jars:oldHighJars},
+    [settings]:{tutorialDone:true,theme:"dark",languageChoice:"ru",sound:false,vibration:false}});
+  adb("shell","wm","size","640x1232");
+  adb("shell","settings","put","system","font_scale","1");
+  launch();
+  const ui=await connect();
+  const source=fs.readFileSync(classicBundle,"utf8");
+  const withGenerator=code=>`(()=>{${source}
+return (${code})(SeedsClassicQA);})()`;
+  const left=n=>`document.querySelector("#remaining").textContent==="${n}"`;
+  const depth=()=>ui.evaluate(`(()=>{const v=document.querySelector("#viewport");
+    return {w:innerWidth,h:innerHeight,clientHeight:v.clientHeight,scrollHeight:v.scrollHeight,scroll:v.scrollTop};})()`);
+  const timing=[];
+  let geometry;
+  try {
+    assertViewportResult(await depth());
+    await ui.tap("#resume");
+    await ui.until(left(25));
+    await ui.tap("#undo");
+    await ui.until(left(27));
+    assert.deepEqual(profiles().values[progress].sessions.classic.current.board,oldHighBoard);
+    await ui.tap("#menu");
+    const levels=[[2,45],[0,18],[1,28],[3,81]];
+    for(const [level,count] of levels) {
+      await ui.tap("#next-classic");
+      if(level===2) shot("classic-four-difficulties-320-dark");
+      await ui.tap(`[data-classic-level="${level}"]`);
+      await ui.until(left(count)+" && !document.querySelector('#dialog').open");
+      shot(`classic-${count}-320-dark`);
+      if(level!==3)await ui.tap("#menu");
+    }
+    const natural=await depth();
+    const savedExpert=profiles().values[progress].sessions.classic.current.board;
+    assert.equal(savedExpert.length,81);
+    const reservesBanner=await ui.evaluate("document.documentElement.classList.contains('has-mobile-ads')");
+    if (!reservesBanner) {
+      await ui.evaluate("document.documentElement.classList.add('has-mobile-ads')");
+    }
+    const reserved=await depth();
+    geometry={natural,reserved,realBannerReserve:reservesBanner};
+    assert(reserved.scrollHeight>reserved.clientHeight,`Expert is not scrollable with the short reserved viewport: ${JSON.stringify(reserved)}`);
+    await ui.swipeBoardUp();
+    await ui.until("document.querySelector('#viewport').scrollTop>0");
+    const bottomPair=await ui.evaluate(withGenerator(`({pairs}) => pairs(${JSON.stringify(savedExpert)})
+      .reverse().find(({a,b})=> a>=54 && [a,b].every(i=>{
+        const r=document.querySelector('#board button[data-index="'+i+'"]').getBoundingClientRect();
+        const v=document.querySelector('#viewport').getBoundingClientRect();
+        return r.top>=v.top-1&&r.bottom<=v.bottom+1;
+      }))`));
+    assert(bottomPair,"No bottom pair in visible Expert rows");
+    await ui.tap(digit(bottomPair.a),false);
+    await ui.tap(digit(bottomPair.b),false);
+    await ui.until(left(79));
+    await ui.tap("#undo");
+    await ui.until(left(81));
+    assert.deepEqual(profiles().values[progress].sessions.classic.current.board,savedExpert);
+    shot("classic-expert-bottom-320-dark");
+    if (!reservesBanner)
+      await ui.evaluate("document.documentElement.classList.remove('has-mobile-ads')");
+    for(const level of [0,1,2,3]){
+      timing.push(await ui.evaluate(withGenerator(`({generateClassic,newClassicRun})=>{
+        for(let seed=9996;seed<10000;seed++)generateClassic(newClassicRun(seed),${level});
+        const data=[];
+        for(let seed=10000;seed<10032;seed++){
+          const start=performance.now();
+          const game=generateClassic(newClassicRun(seed),${level});
+          data.push({seed,ms:performance.now()-start,...game.diagnostics,fallback:game.fallback});
+        }
+        const start=performance.now();
+        const forced=generateClassic(newClassicRun(12081),${level},{attempts:0});
+        const forcedFallback={ms:performance.now()-start,fallback:forced.fallback,size:forced.board.length,
+          proofActions:forced.proof.length,...forced.diagnostics};
+        const times=data.map(d=>d.ms).sort((a,b)=>a-b);
+        return {level:${level},data,forcedFallback,p50:times[15],p95:times[30],max:times.at(-1)};
+      }`)));
+    }
+    assert(timing.every((result,i)=>result.forcedFallback.fallback&&result.forcedFallback.size===[18,28,45,81][i]));
+    await ui.tap("#menu");
+    assert.equal(profiles().values[progress].meta.wallet,7);
+  } finally { ui.close(); stop(); }
+  launch();
+  const resumed=await connect();
+  try{
+    await resumed.tap("#resume");
+    await resumed.until(left(81));
+    return {timing,geometry,physicalPhone:false,viewport320:true,legacy27Undo:true,legacyWallet:7,
+      bottomTouch:true,undo:true,restartAndContinue:true,
+      webview:adb("shell","dumpsys","webviewupdate") .split("\n").find(x=>x.includes("Current WebView package"))};
+  } finally {resumed.close();stop();}
+}
+function assertViewportResult(view) {
+  assert.deepEqual([view.w,view.h],[320,568]);
+}
 try{
   adb("shell","wm","density","320");
   adb("shell","wm","size","780x1688");
@@ -458,6 +581,10 @@ try{
   // The player report requires a native touch regression, separate from solver proof.
   const report78=await verifyReport78Taps();
   fs.writeFileSync(out+"/book78-taps.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode, ...report78},null,2));
+  if (classicBundle) {
+    const pilot=await classicPilot();
+    fs.writeFileSync(out+"/classic-pilot-android.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,...pilot},null,2));
+  }
   // An optional recording must never turn a passing game regression into a red CI.
   // Log camera/emulator failures separately so the real acceptance result survives.
   try {

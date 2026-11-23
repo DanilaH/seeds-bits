@@ -2106,6 +2106,7 @@
     "tr": "Zor",
     "pt-BR": "Difícil"
   },
+  "ui.expert": {"ru":"Эксперт","en":"Expert","es":"Experto","tr":"Uzman","pt-BR":"Especialista"},
   "ui.document-title": {
     "ru": "Семечки — игра с числами",
     "en": "Seeds Bits — Number Match",
@@ -2256,5 +2257,6 @@
   "calm.classic.current": {"ru":"Сейчас","en":"Current","es":"Actual","tr":"Şu an","pt-BR":"Atual"},
   "calm.classic.easyDetail": {"ru":"18 цифр · доступный старт","en":"18 numbers · gentler start","es":"18 números · inicio sencillo","tr":"18 sayı · kolay başlangıç","pt-BR":"18 números · início mais fácil"},
   "calm.classic.normalDetail": {"ru":"28 цифр · стандартный набор","en":"28 numbers · standard set","es":"28 números · conjunto estándar","tr":"28 sayı · standart dizilim","pt-BR":"28 números · conjunto padrão"},
-  "calm.classic.hardDetail": {"ru":"27 цифр · меньше стартовых пар","en":"27 numbers · fewer starting pairs","es":"27 números · menos parejas al inicio","tr":"27 sayı · başlangıçta daha az çift","pt-BR":"27 números · menos pares no início"}
+  "calm.classic.hardDetail": {"ru":"45 цифр · 5 рядов","en":"45 numbers · 5 rows","es":"45 números · 5 filas","tr":"45 sayı · 5 sıra","pt-BR":"45 números · 5 linhas"},
+  "calm.classic.expertDetail": {"ru":"81 цифра · 9 рядов","en":"81 numbers · 9 rows","es":"81 números · 9 filas","tr":"81 sayı · 9 sıra","pt-BR":"81 números · 9 linhas"}
 }
