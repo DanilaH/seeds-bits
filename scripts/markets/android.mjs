@@ -354,6 +354,71 @@ async function showEdge(size,order,video) {
     lockDeviceRotation(0);
   }
 }
+// Reproduce the exact 23-Nov phone screenshot through physical ADB taps,
+// not DOM dispatch. The starting board is the shipped book-v1-78.
+const report78Board=[..."000200060600070060006000000085700500064000000"].map(Number);
+const report78Witness=[[16,20],[13,21],[3,19],[28,29],[20,24],[7,9]];
+async function verifyReport78Taps() {
+  stop();
+  adb("shell","wm","size","640x1136");
+  adb("shell","settings","put","system","font_scale","1");
+  const snapshot={rules:1,current:{board:report78Board,scroll:0,moves:0,additions:0},history:[]};
+  const savedGame={version:3,active:"book-v1-78",done:Array.from({length:5},(_,i)=>`book-v1-${73+i}`),
+    seen:[],hints:{},sessions:{"book-v1-78":snapshot}};
+  await fixture({[progress]:savedGame,[settings]:{tutorialDone:true,languageChoice:"ru",sound:false,vibration:false}});
+  launch();
+  let ui=await connect();
+  const left=n=>`document.querySelector('#remaining').textContent==='${n}'`;
+  const press=async(a,b,remaining)=>{
+    await ui.tap(digit(a));
+    assert(await ui.evaluate(`document.querySelector('${digit(a)}').getAttribute('aria-pressed')==='true'`),
+      "Tap must select a real board button "+a);
+    await ui.tap(digit(b));
+    await ui.until(left(remaining));
+  };
+  try {
+    await ui.tap("#resume");
+    await ui.until(left(12));
+    assert.match(await ui.evaluate("document.querySelector('#mode').textContent"),/Тетрадь 4.*задача 6/);
+    const values=await ui.evaluate("Array.from(document.querySelectorAll('#board button')).map(b=>[Number(b.dataset.index),Number(b.textContent)])");
+    assert.deepEqual(values,report78Board.flatMap((v,i)=>v?[[i,v]]:[]),"Exact screenshot board");
+    assert.equal(await ui.evaluate("document.querySelector('#app').inert"),false);
+    assert.equal(await ui.evaluate("document.querySelector('#undo').disabled"),true);
+    shot("book78-report-before-taps");
+    // Upper highlighted 6+6 is legal, though it is a losing branch.
+    await press(7,16,10);
+    assert.equal(await ui.evaluate("document.querySelector('#undo').disabled"),false);
+    await ui.tap("#undo");
+    await ui.until(left(12));
+    // Lower highlighted 6+4 also must click.
+    await press(37,38,10);
+    await ui.tap("#undo");
+    await ui.until(left(12));
+    // Simulate going to another Android app and returning to this exact board.
+    ui.close();
+    adb("shell","input","keyevent","3");
+    await wait(650);
+    launch();
+    ui=await connect();
+    if(await ui.evaluate("document.querySelector('#dialog').open"))await ui.tap("#resume");
+    await ui.until("!document.querySelector('#app').inert && !document.hidden && "+left(12));
+    // The shipped witness is a complete six-move winning sequence.
+    for(let i=0;i<report78Witness.length;i++) {
+      const [a,b]=report78Witness[i];
+      await press(a,b,12-2*(i+1));
+    }
+    await ui.until("!document.querySelector('#win').hidden");
+    shot("book78-report-solved-after-resume");
+    return {package:app,task:"book-v1-78",source:"shipped notebook-extra.json",
+      board:report78Board.join(""),testedSize:"640x1136 at density 320",
+      nativeInput:"ADB shell input tap",verticalSixesAccepted:true,bottomSixAndFourAccepted:true,
+      undoRestoredBoard:true,homeAndResume:true,solvedWithShippedSixMoveWitness:true,physicalPhone:false};
+  } finally {
+    ui.close();
+    stop();
+    adb("shell","wm","size","640x1232");
+  }
+}
 try{
   adb("shell","wm","density","320");
   adb("shell","wm","size","780x1688");
@@ -388,6 +453,9 @@ try{
   fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode,
     physicalPhone:false,systemFont:2,forwardedFile:file,upgrade,updatePreservedSave:true,opening,archives,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
+  // The player report requires a native touch regression, separate from solver proof.
+  const report78=await verifyReport78Taps();
+  fs.writeFileSync(out+"/book78-taps.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode, ...report78},null,2));
   // An optional recording must never turn a passing game regression into a red CI.
   // Log camera/emulator failures separately so the real acceptance result survives.
   try {
