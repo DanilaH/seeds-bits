@@ -2239,130 +2239,22 @@
     "tr": "{count} {digits} tahtanın sonuna kopyalanır.",
     "pt-BR": "Copia {count} {digits} para o fim do tabuleiro."
   },
-  "lesson.equal.rule": {
-    "ru": "Одинаковые цифры образуют пару.",
-    "en": "Identical numbers make a pair.",
-    "es": "Los números iguales forman pareja.",
-    "tr": "Aynı sayılar bir çift oluşturur.",
-    "pt-BR": "Números iguais formam um par."
-  },
-  "lesson.ten-short.rule": {
-    "ru": "Пары с суммой 10 можно соединять через край строки.",
-    "en": "Pairs totaling 10 can connect across row edges.",
-    "es": "Los pares que suman 10 pueden unirse entre filas.",
-    "tr": "Toplamı 10 olan çiftler satır sonundan bağlanabilir.",
-    "pt-BR": "Pares que somam 10 podem se unir entre linhas."
-  },
-  "lesson.ten.rule": {
-    "ru": "Цифры с суммой 10 тоже образуют пару.",
-    "en": "Numbers that add up to 10 also make a pair.",
-    "es": "Los números que suman 10 también forman pareja.",
-    "tr": "Toplamı 10 olan sayılar da eşleşir.",
-    "pt-BR": "Números que somam 10 também formam um par."
-  },
-  "lesson.gap.rule": {
-    "ru": "Пустые клетки между цифрами можно пропускать.",
-    "en": "Empty cells between numbers can be skipped.",
-    "es": "Puedes saltar las casillas vacías entre números.",
-    "tr": "Sayıların arasındaki boş kareler atlanabilir.",
-    "pt-BR": "Você pode pular as casas vazias entre os números."
-  },
-  "lesson.diagonal.rule": {
-    "ru": "Соединять пары можно и по диагонали.",
-    "en": "Pairs can also be matched diagonally.",
-    "es": "También puedes unir parejas en diagonal.",
-    "tr": "Sayılar çapraz da eşleştirilebilir.",
-    "pt-BR": "Você também pode juntar pares na diagonal."
-  },
-  "lesson.edge.rule": {
-    "ru": "Конец строки продолжается в начале следующей.",
-    "en": "The end of a row connects to the start of the next.",
-    "es": "El final de una fila se une al principio de la siguiente.",
-    "tr": "Satır sonu, sonraki satırın başına bağlanır.",
-    "pt-BR": "O fim de uma linha se conecta ao começo da próxima."
-  },
-  "lesson.undo.rule": {
-    "ru": "«Добавить» копирует цифры, «Отмена» возвращает поле.",
-    "en": "Add copies the remaining numbers; Undo restores the board.",
-    "es": "Añadir copia los números; Deshacer restaura el tablero.",
-    "tr": "Ekle kalan sayıları kopyalar; Geri al tahtayı geri getirir.",
-    "pt-BR": "Adicionar copia os números; Desfazer restaura o tabuleiro."
-  },
-  "calm.trophy.goal.bronze": {
-    "ru": "До бронзы — {count} {days}",
-    "en": "Until bronze: {count} {days}",
-    "es": "Hasta el bronce: {count} {days}",
-    "tr": "Bronza {count} {days} kaldı",
-    "pt-BR": "Até o bronze: {count} {days}"
-  },
-  "calm.trophy.goal.silver": {
-    "ru": "До серебра — {count} {days}",
-    "en": "Until silver: {count} {days}",
-    "es": "Hasta la plata: {count} {days}",
-    "tr": "Gümüşe {count} {days} kaldı",
-    "pt-BR": "Até a prata: {count} {days}"
-  },
-  "calm.trophy.goal.gold": {
-    "ru": "До золота — {count} {days}",
-    "en": "Until gold: {count} {days}",
-    "es": "Hasta el oro: {count} {days}",
-    "tr": "Altına {count} {days} kaldı",
-    "pt-BR": "Até o ouro: {count} {days}"
-  },
-  "calm.classic.new": {
-    "ru": "Новая классика",
-    "en": "New Classic Game",
-    "es": "Nueva partida clásica",
-    "tr": "Yeni Klasik Oyun",
-    "pt-BR": "Novo jogo clássico"
-  },
-  "calm.classic.choose": {
-    "ru": "Новая игра",
-    "en": "New Game",
-    "es": "Nueva partida",
-    "tr": "Yeni oyun",
-    "pt-BR": "Novo jogo"
-  },
-  "calm.classic.startNote": {
-    "ru": "Выберите сложность — партия начнётся сразу.",
-    "en": "Choose a difficulty to start a new game.",
-    "es": "Elige una dificultad para empezar.",
-    "tr": "Başlamak için zorluk seçin.",
-    "pt-BR": "Escolha uma dificuldade para começar."
-  },
-  "calm.classic.confirmNote": {
-    "ru": "Начатая классика заменится только после подтверждения.",
-    "en": "Your current Classic game will be replaced only after you confirm.",
-    "es": "Tu partida actual solo se sustituirá si lo confirmas.",
-    "tr": "Mevcut Klasik oyun yalnızca onaylarsanız değişir.",
-    "pt-BR": "O jogo clássico atual só será substituído após a confirmação."
-  },
-  "calm.classic.current": {
-    "ru": "Сейчас",
-    "en": "Current",
-    "es": "Actual",
-    "tr": "Şu an",
-    "pt-BR": "Atual"
-  },
-  "calm.classic.easyDetail": {
-    "ru": "18 цифр · доступный старт",
-    "en": "18 numbers · gentler start",
-    "es": "18 números · inicio sencillo",
-    "tr": "18 sayı · kolay başlangıç",
-    "pt-BR": "18 números · início mais fácil"
-  },
-  "calm.classic.normalDetail": {
-    "ru": "28 цифр · стандартный набор",
-    "en": "28 numbers · standard set",
-    "es": "28 números · conjunto estándar",
-    "tr": "28 sayı · standart dizilim",
-    "pt-BR": "28 números · conjunto padrão"
-  },
-  "calm.classic.hardDetail": {
-    "ru": "27 цифр · меньше стартовых пар",
-    "en": "27 numbers · fewer starting pairs",
-    "es": "27 números · menos parejas al inicio",
-    "tr": "27 sayı · başlangıçta daha az çift",
-    "pt-BR": "27 números · menos pares no início"
-  }
+  "lesson.equal.rule": {"ru":"Одинаковые цифры образуют пару.","en":"Identical numbers make a pair.","es":"Los números iguales forman pareja.","tr":"Aynı sayılar bir çift oluşturur.","pt-BR":"Números iguais formam um par."},
+  "lesson.ten-short.rule": {"ru":"Пары с суммой 10 можно соединять через край строки.","en":"Pairs totaling 10 can connect across row edges.","es":"Los pares que suman 10 pueden unirse entre filas.","tr":"Toplamı 10 olan çiftler satır sonundan bağlanabilir.","pt-BR":"Pares que somam 10 podem se unir entre linhas."},
+  "lesson.ten.rule": {"ru":"Цифры с суммой 10 тоже образуют пару.","en":"Numbers that add up to 10 also make a pair.","es":"Los números que suman 10 también forman pareja.","tr":"Toplamı 10 olan sayılar da eşleşir.","pt-BR":"Números que somam 10 também formam um par."},
+  "lesson.gap.rule": {"ru":"Пустые клетки между цифрами можно пропускать.","en":"Empty cells between numbers can be skipped.","es":"Puedes saltar las casillas vacías entre números.","tr":"Sayıların arasındaki boş kareler atlanabilir.","pt-BR":"Você pode pular as casas vazias entre os números."},
+  "lesson.diagonal.rule": {"ru":"Соединять пары можно и по диагонали.","en":"Pairs can also be matched diagonally.","es":"También puedes unir parejas en diagonal.","tr":"Sayılar çapraz da eşleştirilebilir.","pt-BR":"Você também pode juntar pares na diagonal."},
+  "lesson.edge.rule": {"ru":"Конец строки продолжается в начале следующей.","en":"The end of a row connects to the start of the next.","es":"El final de una fila se une al principio de la siguiente.","tr":"Satır sonu, sonraki satırın başına bağlanır.","pt-BR":"O fim de uma linha se conecta ao começo da próxima."},
+  "lesson.undo.rule": {"ru":"«Добавить» копирует цифры, «Отмена» возвращает поле.","en":"Add copies the remaining numbers; Undo restores the board.","es":"Añadir copia los números; Deshacer restaura el tablero.","tr":"Ekle kalan sayıları kopyalar; Geri al tahtayı geri getirir.","pt-BR":"Adicionar copia os números; Desfazer restaura o tabuleiro."},
+  "calm.trophy.goal.bronze": {"ru":"До бронзы — {count} {days}","en":"Until bronze: {count} {days}","es":"Hasta el bronce: {count} {days}","tr":"Bronza {count} {days} kaldı","pt-BR":"Até o bronze: {count} {days}"},
+  "calm.trophy.goal.silver": {"ru":"До серебра — {count} {days}","en":"Until silver: {count} {days}","es":"Hasta la plata: {count} {days}","tr":"Gümüşe {count} {days} kaldı","pt-BR":"Até a prata: {count} {days}"},
+  "calm.trophy.goal.gold": {"ru":"До золота — {count} {days}","en":"Until gold: {count} {days}","es":"Hasta el oro: {count} {days}","tr":"Altına {count} {days} kaldı","pt-BR":"Até o ouro: {count} {days}"},
+  "calm.classic.new": {"ru":"Новая классика","en":"New Classic Game","es":"Nueva partida clásica","tr":"Yeni Klasik Oyun","pt-BR":"Novo jogo clássico"},
+  "calm.classic.choose": {"ru":"Новая игра","en":"New Game","es":"Nueva partida","tr":"Yeni oyun","pt-BR":"Novo jogo"},
+  "calm.classic.startNote": {"ru":"Выберите сложность — партия начнётся сразу.","en":"Choose a difficulty to start a new game.","es":"Elige una dificultad para empezar.","tr":"Başlamak için zorluk seçin.","pt-BR":"Escolha uma dificuldade para começar."},
+  "calm.classic.confirmNote": {"ru":"Начатая классика заменится только после подтверждения.","en":"Your current Classic game will be replaced only after you confirm.","es":"Tu partida actual solo se sustituirá si lo confirmas.","tr":"Mevcut Klasik oyun yalnızca onaylarsanız değişir.","pt-BR":"O jogo clássico atual só será substituído após a confirmação."},
+  "calm.classic.current": {"ru":"Сейчас","en":"Current","es":"Actual","tr":"Şu an","pt-BR":"Atual"},
+  "calm.classic.easyDetail": {"ru":"18 цифр · доступный старт","en":"18 numbers · gentler start","es":"18 números · inicio sencillo","tr":"18 sayı · kolay başlangıç","pt-BR":"18 números · início mais fácil"},
+  "calm.classic.normalDetail": {"ru":"28 цифр · стандартный набор","en":"28 numbers · standard set","es":"28 números · conjunto estándar","tr":"28 sayı · standart dizilim","pt-BR":"28 números · conjunto padrão"},
+  "calm.classic.hardDetail": {"ru":"27 цифр · меньше стартовых пар","en":"27 numbers · fewer starting pairs","es":"27 números · menos parejas al inicio","tr":"27 sayı · başlangıçta daha az çift","pt-BR":"27 números · menos pares no início"}
 }
