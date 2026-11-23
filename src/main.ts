@@ -315,13 +315,15 @@ function renderClassicNewSheet() {
     : t("calm.classic.startNote");
   for (const button of classicNewOptions.querySelectorAll<HTMLButtonElement>("button")) {
     const level = Number(button.dataset.classicLevel) as ClassicDifficulty;
-    button.querySelector("strong")!.textContent = localName(classicDifficultyNames[level]);
-    button.querySelector("small")!.textContent = t(["calm.classic.easyDetail","calm.classic.normalDetail","calm.classic.hardDetail"][level]);
+    const name = localName(classicDifficultyNames[level]);
+    const detail = t(["calm.classic.easyDetail","calm.classic.normalDetail","calm.classic.hardDetail"][level]);
+    button.querySelector("strong")!.textContent = name;
+    button.querySelector("small")!.textContent = detail;
     const current = button.querySelector<HTMLElement>(".classic-level-current")!;
     current.hidden = level !== classicDifficulty();
     current.textContent = t("calm.classic.current");
-    button.setAttribute("aria-label", button.querySelector(".classic-level-copy")!.textContent!.trim()+
-      (current.hidden ? "" : " · "+current.textContent));
+    button.setAttribute("aria-label", name+". "+detail+
+      (current.hidden ? "" : ". "+current.textContent));
   }
 }
 function openClassicNewSheet() {
