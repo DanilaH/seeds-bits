@@ -657,10 +657,11 @@
         "pr11IndependentAudit": "https://github.com/DanilaH/seeds-bits/pull/11",
         "pr11CodeAndBrowserVerification": "CI 45062012299: 122 unit, 2 model unit, 15 browser regression, 377 browser e2e, Android debug and native regression PASS on b4e005df. Both filters target saved book-v1-2; full/short lessons keep field position, month targets and seed plural validated. Browser video and two 390x844 JPEG in artifact 14770431009.",
         "pr11AndroidEmulatorVerification": "CI 45122643720 on 49a49f5: Android 35 / WebView 124. Upgrade from exact delivered 12073 payload to optimized 12074 with ephemeral CI certificate preserved board, history length and theme. Both last-pair orders, Back and continuation to puzzle 2 passed.",
-        "pr11PhoneVerification": "NOT_VERIFIED"
+        "pr11PhoneVerification": "NOT_VERIFIED",
+        "preview12075": "PR #9, код 2a81f5c70213bdfbfae93f542e4107c870f857d1. Флаги языков, направляющая кнопки меню, подсветка нерешённого дня, устойчивое поле уроков, перезапуск в тупике и появление цифр с тремя импульсами. CI 45138046652: 125 unit, 2 model, 15 browser regression, 382 e2e и Android debug. CI 45138046651: Android 35 / WebView 124, обновление 12074 → 12075 с восстановлением игры, оба порядка последней пары, Back, задача 2 и архив ES/PT-BR. Подписанный портретный APK 1.1.2 / 12075, com.seedsbits.game.preview, SHA256 89b3d12fa83a186bbcc515e0b4dfd6ff3a202c691ea6945f9a793ede95d5766d. Проверка на физическом телефоне открыта."
       },
       "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
-      "nextAction": "Подписанный прежним ключом preview 12074 выдан владельцу. Проверить обновление на физическом телефоне, TalkBack, звук и вибрацию. Отдельно наблюдать, сможет ли новичок после первой победы найти задачу дня и вернуться в начатую тетрадь.",
+      "nextAction": "Подписанный прежним ключом preview 12075 выдан владельцу. Проверить обновление, TalkBack, звук и три импульса при появлении цифр на физическом телефоне. Отдельно наблюдать, сможет ли новичок после первой победы найти задачу дня и вернуться в начатую тетрадь.",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26"
     },

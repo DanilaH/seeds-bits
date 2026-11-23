@@ -358,13 +358,20 @@ async function classic() {
   await checkpoint("classic-after-add");
   await ui.tap("#undo");
   await ui.until("document.querySelector('#remaining').textContent === '2'");
+  await ui.tap("#undo");
+  await ui.until("document.querySelector('#remaining').textContent === '4'");
   await ui.tap("#menu");
   await ui.tap("#new");
   await checkpoint("restart-confirm");
   await ui.tap("#cancel-new");
   await ui.tap("#close");
-  await ui.tap("#undo");
+  await ui.move(0,1);
+  await ui.tap("#menu");
+  await ui.tap("#new");
+  await ui.hidden("#dialog");
   await ui.until("document.querySelector('#remaining').textContent === '4'");
+  assert(await ui.evaluate("document.querySelector('#undo').disabled"));
+  await checkpoint("restart-immediate");
 }
 
 async function longHint() {
