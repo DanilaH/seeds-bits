@@ -108,6 +108,8 @@ jobs:
     needs: preview
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    env:
+      SIGNING_BUILD_TOOLS: '36.0.0'
     steps:
       - name: Check preview signing configuration
         id: signing
@@ -130,6 +132,9 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
         if: steps.signing.outputs.configured == 'true'
+      - name: Install the signing build tools
+        if: steps.signing.outputs.configured == 'true'
+        run: sdkmanager "build-tools;$SIGNING_BUILD_TOOLS"
       - uses: actions/download-artifact@v4
         if: steps.signing.outputs.configured == 'true'
         with: {name: first-session-preview-unsigned, path: unsigned-preview/}
@@ -150,13 +155,19 @@ jobs:
           ')
           unsigned="unsigned-preview/seeds-first-session-${version_code}-unsigned.apk"
           signed="signed-preview/seeds-preview-${version_code}-portrait.apk"
-          apksigner=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
+          build_tools="$ANDROID_HOME/build-tools/$SIGNING_BUILD_TOOLS"
+          apksigner="$build_tools/apksigner"
           test -x "$apksigner"
-          build_tools=$(dirname "$apksigner")
-          "$build_tools/zipalign" -c -P 16 4 "$unsigned"
+          if ! "$build_tools/zipalign" -c -P 16 4 "$unsigned"; then
+            echo "::error::The tested unsigned APK failed zip alignment verification."
+            exit 1
+          fi
           manifest=$("$build_tools/aapt" dump badging "$unsigned")
           package_line="package: name='com.seedsbits.game.preview' versionCode='$version_code'"
-          [[ "$manifest" == "$package_line"* ]]
+          if [[ "$manifest" != "$package_line"* ]]; then
+            echo "::error::The APK package or version does not match the preview manifest."
+            exit 1
+          fi
 
           umask 077
           signing_dir=$(mktemp -d "$RUNNER_TEMP/seeds-preview-signing.XXXXXX")
@@ -174,8 +185,11 @@ jobs:
           "$apksigner" sign --ks "$signing_dir/preview.p12" --ks-key-alias "$SEEDS_PREVIEW_KEY_ALIAS" \
             --ks-pass "file:$signing_dir/password" --v1-signing-enabled false --v2-signing-enabled true \
             --v3-signing-enabled true --v4-signing-enabled false --out "$signed" "$unsigned"
-          "$build_tools/zipalign" -c -P 16 4 "$signed"
-          "$apksigner" verify --verbose --print-certs "$signed" > "$signing_dir/verification.txt"
+          if ! "$build_tools/zipalign" -c -P 16 4 "$signed"; then
+            echo "::error::The signed APK failed zip alignment verification."
+            exit 1
+          fi
+          "$apksigner" verify --verbose --print-certs "$signed" | tee "$signing_dir/verification.txt"
           grep -Fxq "Signer #1 certificate SHA-256 digest: $expected_certificate" "$signing_dir/verification.txt"
           grep -Fqx 'Verified using v2 scheme (APK Signature Scheme v2): true' "$signing_dir/verification.txt"
           grep -Fqx 'Verified using v3 scheme (APK Signature Scheme v3): true' "$signing_dir/verification.txt"
