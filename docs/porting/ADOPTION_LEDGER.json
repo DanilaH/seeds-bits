@@ -842,11 +842,19 @@
         "../research/generator-cross-project-2026-11-23/README.md",
         "../research/generator-cross-project-2026-11-23/FINDINGS.json",
         "https://github.com/DanilaH/seeds-bits/issues/13",
-        "https://github.com/DanilaH/seeds-bits/issues/14"
+        "https://github.com/DanilaH/seeds-bits/issues/14",
+        "../research/generator-cross-project-2026-11-23/validation/README.md"
       ],
-      "nextAction": "Use issue14 diagnostics to compare length/search/order/recovery and same-size candidate structures; show a small contrasting set for the four issue13 bands. Preserve18/28 contracts, legacy27 session, dense-start/save assumptions and paused help. Owner selects balance after physical playtest; future notebook/daily versioning separate.",
+      "nextAction": "Implement reviewable diagnostics using committed exact fixtures; separately solve dense45/81 construction under fixed budgets before selecting/rotating families. Require board.length===occupied===target and renewed proof after geometry changes. Then compare candidates and12contrast games on phone. Preserve18/28, legacy27 save, dense-start contracts and paused help; notebooks/daily separate.",
       "sourceParity": "NOT_CLAIMED: cross-project design methods, no new original Number Match observation.",
-      "acceptanceEvidence": "Research source/code review only. No new model runs, device acceptance or audience result."
+      "acceptanceEvidence": "Executed exact product TS in Node:3000 generated+128 legacy proof;300 held-aside fields/900 move-order trajectories;144 states/596 branch probes(582 FOUND,14 UNKNOWN). Offline reconstruction608attempts:3dense45 certificates/2screened examples in one family;0dense81. No Android, human or audience acceptance. proposals remain RESEARCHED.",
+      "validationStatus": {
+        "structuralDifference": "VERIFIED_IN_PRODUCT_EXECUTION",
+        "dense45": "PARTIAL_SINGLE_FAMILY",
+        "dense81": "BLOCKED_FOR_TESTED_METHOD",
+        "humanDifficulty": "UNKNOWN",
+        "returnCondition": "Reliable dense candidates with replay and bounded failure accounting, then contrasting phone playtest."
+      }
     }
   ]
 }

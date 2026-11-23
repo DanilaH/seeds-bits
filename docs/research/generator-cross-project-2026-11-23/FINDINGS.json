@@ -3,7 +3,7 @@
   "date": "2026-11-23",
   "consumer": "DanilaH/seeds-bits",
   "consumerCommit": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
-  "scope": "Read existing cross-project research for Seeds generation and explicit difficulty. Proposals, no game implementation or new original APK run.",
+  "scope": "Cross-project methods plus reproducible Seeds source execution and bounded offline construction; own proposals, no game implementation or new original APK run.",
   "sources": {
     "S01": {
       "label": "Seeds: текущий генератор",
@@ -213,7 +213,14 @@
       "limits": [
         "stored stuck не человеческий рейтинг",
         "размеры81/45 не утверждённая субъективная трудность"
-      ]
+      ],
+      "validationStatus": "SUPPORTED_STRUCTURAL_DIFFERENCE; NOT_HUMAN_CALIBRATED",
+      "validationEvidenceRefs": [
+        "validation/baseline-summary.json",
+        "validation/matched-fixtures.json",
+        "validation/choice-fixtures.json"
+      ],
+      "validationResult": "Controlled Normal28 examples differ in continuation while size, digit multiset, opening count and selected witness length are held equal. Human difficulty remains UNKNOWN."
     },
     {
       "id": "seeds-xproj-recipe-repertoire",
@@ -239,7 +246,13 @@
       "limits": [
         "Никаких новых правил или скрытых чисел",
         "пустоты в развитии плотного поля не равны разрешению на разреженный старт"
-      ]
+      ],
+      "validationStatus": "PARTIAL_45; METHOD_BLOCKED_81",
+      "validationEvidenceRefs": [
+        "validation/feasibility-summary.json",
+        "validation/feasibility-examples.json"
+      ],
+      "validationResult": "Two screened dense45 examples certified in one five-digit-tail family; no dense81 within fixed search. Literal legacy constructor ignores target length with kernel; padding changes tail and invalidates old proof indices."
     },
     {
       "id": "seeds-xproj-candidate-selection",
@@ -262,7 +275,13 @@
         "Не переносить Equality/near-loss/paywall",
         "не копировать100кандидатов/веса/targets",
         "не объявлять шаги бота мерой удовольствия"
-      ]
+      ],
+      "validationStatus": "BASELINE_VERIFIED; TREATMENT_NOT_IMPLEMENTED",
+      "validationEvidenceRefs": [
+        "validation/baseline-summary.json",
+        "validation/policy-summary.json"
+      ],
+      "validationResult": "Actual baseline reproduces audit14. No new selection policy, runtime latency or improved human result tested."
     },
     {
       "id": "seeds-xproj-structural-history",
@@ -290,7 +309,12 @@
         "Reading-order ломает наивную эквивалентность отражений",
         "нельзя незаявленно переключать выбранную сложность",
         "антиповтор может обеднить допустимый пул"
-      ]
+      ],
+      "validationStatus": "CANONICALIZATION_CONSTRAINTS_VERIFIED; HISTORY_NOT_TESTED",
+      "validationEvidenceRefs": [
+        "validation/choice-fixtures.json"
+      ],
+      "validationResult": "Concrete counterexamples forbid zero-stripping and blanket row reflection/D4 as exact gameplay equivalence. Persisted sequence/restart/soft-history behavior remains to test."
     },
     {
       "id": "seeds-xproj-choice-state-evidence",
@@ -315,7 +339,13 @@
         "Нельзя удалить нули при нормализации",
         "UNKNOWN не тупик",
         "не ставить целью больше проигрышных ходов"
-      ]
+      ],
+      "validationStatus": "LOCAL_STRUCTURAL_AND_WINNING_BRANCHES_VERIFIED",
+      "validationEvidenceRefs": [
+        "validation/choice-summary.json",
+        "validation/choice-fixtures.json"
+      ],
+      "validationResult": "596 bounded probes give582 replayed FOUND and14 UNKNOWN. Disjoint noncommuting pairs and index-remap false-new edges are demonstrated. NO_WIN_PROVEN only for explicit zero-further-Add exhaustive model."
     },
     {
       "id": "seeds-xproj-notebook-cadence",
@@ -340,7 +370,12 @@
         "Периоды5/6/7 не универсальны",
         "волны кампании не разрешают менять выбранную классическую сложность",
         "старые2400задач не перегенерируются"
-      ]
+      ],
+      "validationStatus": "NOT_TESTED_IN_CLASSIC_VALIDATION",
+      "validationEvidenceRefs": [
+        "validation/README.md"
+      ],
+      "validationResult": "Current pass addresses classic generation only. Notebook cadence, immutable assignments and versioning remain separate."
     },
     {
       "id": "seeds-xproj-proxy-and-factor-control",
@@ -364,7 +399,52 @@
         "Не переносить occupied16/65%или0.70",
         "низкая доля побед не самостоятельная цель",
         "боты не люди; ходы не минуты"
-      ]
+      ],
+      "validationStatus": "MOVE_ORDER_DEPENDENCE_VERIFIED",
+      "validationEvidenceRefs": [
+        "validation/policy-design.json",
+        "validation/policy-summary.json"
+      ],
+      "validationResult": "Held-aside seeds10000..10099: easy first/last/random clear100/95/90 of100 within audit2Add. Policies are order controls, not player skill or human-win estimates."
     }
-  ]
+  ],
+  "validation": {
+    "date": "2026-11-23",
+    "consumerCommit": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+    "report": "validation/README.md",
+    "evidenceLevels": [
+      "ACTUAL_PRODUCT_TS_EXECUTION",
+      "PRODUCT_EXECUTION_WITH_RESEARCH_ORACLE",
+      "MODEL_EXECUTION_OFFLINE_RESEARCH"
+    ],
+    "runtimeChanged": false,
+    "deviceVerified": false,
+    "audienceVerified": false,
+    "baseline": {
+      "generatedProofs": 3000,
+      "legacyProofs": 128
+    },
+    "policyControl": {
+      "boards": 300,
+      "trajectories": 900,
+      "seedRange": [
+        10000,
+        10099
+      ]
+    },
+    "choice": {
+      "boards": 48,
+      "states": 144,
+      "branches": 596,
+      "FOUND": 582,
+      "UNKNOWN": 14
+    },
+    "denseFeasibility": {
+      "attempts": 608,
+      "dense45Certificates": 3,
+      "screened45Examples": 2,
+      "dense81Certificates": 0,
+      "limits": "One reconstruction family and fixed budgets; zero81 is not an impossibility proof."
+    }
+  }
 }

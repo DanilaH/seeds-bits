@@ -1,0 +1,1674 @@
+{
+  "kind": "MODEL_EXECUTION_OFFLINE_RESEARCH",
+  "createdAt": "2026-11-23T15:26:03.170Z",
+  "protocol": {
+    "wallBudgetMs": 120000,
+    "kernelTarget": 64,
+    "kernelAttemptCap": 99999,
+    "smallSolverVisits": 5000,
+    "fixedSeedsPerVariantAndSize": 16,
+    "illustrationExtraAttemptsPerSize": 256,
+    "illustrationTargetPerSize": 4,
+    "targets": [
+      45,
+      81
+    ],
+    "variants": [
+      "literal",
+      "padded-unfiltered",
+      "padded-verified"
+    ],
+    "seedNamespace": "feasibility-45-81-v1"
+  },
+  "source": {
+    "repo": "DanilaH/seeds-bits",
+    "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+    "files": [
+      {
+        "path": "src/core.ts",
+        "gitBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+        "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+      },
+      {
+        "path": "src/classic-generator.ts",
+        "gitBlob": "a1a74ff68cb625bd962a6739b6a5701ecaf01c05",
+        "sha256": "ac63d56159a395d43b17f72eab0aa646758f5fa34045f773a5f39cb1169461c1"
+      },
+      {
+        "path": "src/classic-catalog.json",
+        "gitBlob": "008ae0def4149c479d4d2eb1947893a3c77d500b",
+        "sha256": "186b6cc6f21b9f3e6441a36c6f4b75e06c150e68ee843106fe55adb8dca96c6a"
+      },
+      {
+        "path": "scripts/classic-variety/proofs.json",
+        "gitBlob": "dd18b518a4d917abb4e3865ebfb3bd3e5c8418bc",
+        "sha256": "46b9c6a9c39d4aaf015e0fb54402daf2b955cab1a6667ba3c48518a25358ed46"
+      },
+      {
+        "path": "scripts/generate-classic.mjs",
+        "gitBlob": "4d9b227ae8464df1b19257157d2294f4120a3544",
+        "sha256": "82b635fa0639feb95f5d2456fb5855a2dbf338954284982b28cf8def7d7d7d0a"
+      },
+      {
+        "path": "docs/classic-variety-2026-11-12/content.json",
+        "gitBlob": "8ec43e749fd8ea274a8aa15be93599a43e484b7b",
+        "sha256": "3686ad862061c595d618fedf4639618de1da322e8218b84f0e46a37b78cf3bd5"
+      },
+      {
+        "path": "tests/classic-generator.test.ts",
+        "gitBlob": "f450386142df440908ce15051191b7c5eecc884e",
+        "sha256": "bbe983a956d2f5fddbad2683da2a8af1f129acff18f134bf46f14cfe0b780768"
+      },
+      {
+        "path": "docs/porting/ADOPTION_LEDGER.json",
+        "gitBlob": "04be0103a73055d09ad55aaaa3b71e4db4f1ce74",
+        "sha256": "cff1f28d46b95c15b7c650af0a7cc8d62eb5708d92aee71ea7ac82863e83ff6e"
+      },
+      {
+        "path": "src/puzzles.ts",
+        "gitBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847",
+        "sha256": "7d5fc94edb634c1012e8b23de19fbc032709fcd785df1aa80001a47f119ef3d0"
+      }
+    ]
+  },
+  "sourceBoundary": {
+    "core": "Actual TS executed after type stripping",
+    "constructor": "Research reproduction of source reverse insertion; zero padding and verified kernel selection are explicit variants",
+    "hash": "FNV1a body checked against byte-verified src/puzzles.ts",
+    "nativeViteScriptExecuted": false
+  },
+  "protocolSha256": "8456006bd4535f8d8ac6993438f4b9d27e5b091fdb9011d322ee47a78313b39c",
+  "timings": {
+    "kernelDiscoveryAndPaddingMs": 61.450909999999965,
+    "fixedSamplesMs": 303.116632,
+    "illustrationSearchMs": 1199.134842,
+    "referenceReplayMs": 32.04876800000011
+  },
+  "completed": true,
+  "elapsedMs": 1601.664331,
+  "summaries": [
+    {
+      "category": "fixed",
+      "variant": "literal",
+      "target": 45,
+      "attempts": 16,
+      "fullyDense": 0,
+      "certifiedDense": 0,
+      "screenPass": 0,
+      "occupied": {
+        "n": 16,
+        "min": 31,
+        "p50": 31,
+        "p90": 33,
+        "max": 33,
+        "mean": 31.75
+      },
+      "logicalCells": {
+        "n": 16,
+        "min": 35,
+        "p50": 35,
+        "p90": 35,
+        "max": 35,
+        "mean": 35
+      },
+      "elapsedMs": {
+        "n": 16,
+        "min": 0.31983299999996007,
+        "p50": 0.6800959999999918,
+        "p90": 1.0317869999999516,
+        "max": 2.6295410000000174,
+        "mean": 0.8534654374999988
+      },
+      "totalElapsedMs": 13.655446999999981,
+      "candidateChecks": {
+        "n": 16,
+        "min": 29,
+        "p50": 58,
+        "p90": 67,
+        "max": 79,
+        "mean": 57.8125
+      },
+      "reasons": {
+        "certified-partial-or-full": 16
+      },
+      "denseMetrics": {
+        "opening": null,
+        "distinctDirections": null,
+        "legacyGapMoves": null,
+        "actualGapMoves": null,
+        "crossing": null,
+        "adjacentIndexMoves": null,
+        "rowCollapseMoves": null,
+        "sameRatio": null,
+        "adds": null
+      }
+    },
+    {
+      "category": "fixed",
+      "variant": "literal",
+      "target": 81,
+      "attempts": 16,
+      "fullyDense": 0,
+      "certifiedDense": 0,
+      "screenPass": 0,
+      "occupied": {
+        "n": 16,
+        "min": 29,
+        "p50": 31,
+        "p90": 33,
+        "max": 33,
+        "mean": 31.375
+      },
+      "logicalCells": {
+        "n": 16,
+        "min": 35,
+        "p50": 35,
+        "p90": 35,
+        "max": 35,
+        "mean": 35
+      },
+      "elapsedMs": {
+        "n": 16,
+        "min": 0.18002599999999802,
+        "p50": 0.3808440000000246,
+        "p90": 1.156661999999983,
+        "max": 3.88260200000002,
+        "mean": 0.750727125000008
+      },
+      "totalElapsedMs": 12.011634000000129,
+      "candidateChecks": {
+        "n": 16,
+        "min": 35,
+        "p50": 52,
+        "p90": 74,
+        "max": 79,
+        "mean": 57.5625
+      },
+      "reasons": {
+        "certified-partial-or-full": 16
+      },
+      "denseMetrics": {
+        "opening": null,
+        "distinctDirections": null,
+        "legacyGapMoves": null,
+        "actualGapMoves": null,
+        "crossing": null,
+        "adjacentIndexMoves": null,
+        "rowCollapseMoves": null,
+        "sameRatio": null,
+        "adds": null
+      }
+    },
+    {
+      "category": "fixed",
+      "variant": "padded-unfiltered",
+      "target": 45,
+      "attempts": 16,
+      "fullyDense": 0,
+      "certifiedDense": 0,
+      "screenPass": 0,
+      "occupied": {
+        "n": 16,
+        "min": 37,
+        "p50": 41,
+        "p90": 41,
+        "max": 43,
+        "mean": 40.5
+      },
+      "logicalCells": {
+        "n": 16,
+        "min": 45,
+        "p50": 45,
+        "p90": 45,
+        "max": 45,
+        "mean": 45
+      },
+      "elapsedMs": {
+        "n": 16,
+        "min": 0.6377130000000193,
+        "p50": 1.2121040000000107,
+        "p90": 1.626737999999989,
+        "max": 3.000069999999994,
+        "mean": 1.2865229375000062
+      },
+      "totalElapsedMs": 20.5843670000001,
+      "candidateChecks": {
+        "n": 16,
+        "min": 65,
+        "p50": 88,
+        "p90": 101,
+        "max": 186,
+        "mean": 92.125
+      },
+      "reasons": {
+        "certified-partial-or-full": 10,
+        "kernel-no-winning-route-found": 6
+      },
+      "denseMetrics": {
+        "opening": null,
+        "distinctDirections": null,
+        "legacyGapMoves": null,
+        "actualGapMoves": null,
+        "crossing": null,
+        "adjacentIndexMoves": null,
+        "rowCollapseMoves": null,
+        "sameRatio": null,
+        "adds": null
+      }
+    },
+    {
+      "category": "fixed",
+      "variant": "padded-unfiltered",
+      "target": 81,
+      "attempts": 16,
+      "fullyDense": 0,
+      "certifiedDense": 0,
+      "screenPass": 0,
+      "occupied": {
+        "n": 16,
+        "min": 71,
+        "p50": 73,
+        "p90": 77,
+        "max": 77,
+        "mean": 74.375
+      },
+      "logicalCells": {
+        "n": 16,
+        "min": 81,
+        "p50": 81,
+        "p90": 81,
+        "max": 81,
+        "mean": 81
+      },
+      "elapsedMs": {
+        "n": 16,
+        "min": 2.942965000000015,
+        "p50": 4.107718999999975,
+        "p90": 4.765572999999961,
+        "max": 12.26181600000001,
+        "mean": 4.455898687500003
+      },
+      "totalElapsedMs": 71.29437900000005,
+      "candidateChecks": {
+        "n": 16,
+        "min": 219,
+        "p50": 277,
+        "p90": 325,
+        "max": 377,
+        "mean": 278.5
+      },
+      "reasons": {
+        "certified-partial-or-full": 10,
+        "kernel-no-winning-route-found": 6
+      },
+      "denseMetrics": {
+        "opening": null,
+        "distinctDirections": null,
+        "legacyGapMoves": null,
+        "actualGapMoves": null,
+        "crossing": null,
+        "adjacentIndexMoves": null,
+        "rowCollapseMoves": null,
+        "sameRatio": null,
+        "adds": null
+      }
+    },
+    {
+      "category": "fixed",
+      "variant": "padded-verified",
+      "target": 45,
+      "attempts": 16,
+      "fullyDense": 0,
+      "certifiedDense": 0,
+      "screenPass": 0,
+      "occupied": {
+        "n": 16,
+        "min": 39,
+        "p50": 41,
+        "p90": 43,
+        "max": 43,
+        "mean": 40.875
+      },
+      "logicalCells": {
+        "n": 16,
+        "min": 45,
+        "p50": 45,
+        "p90": 45,
+        "max": 45,
+        "mean": 45
+      },
+      "elapsedMs": {
+        "n": 16,
+        "min": 0.47817699999995966,
+        "p50": 0.7681569999999738,
+        "p90": 1.247776999999985,
+        "max": 2.2484019999999987,
+        "mean": 0.9255857499999998
+      },
+      "totalElapsedMs": 14.809371999999996,
+      "candidateChecks": {
+        "n": 16,
+        "min": 57,
+        "p50": 94,
+        "p90": 126,
+        "max": 151,
+        "mean": 97.1875
+      },
+      "reasons": {
+        "certified-partial-or-full": 16
+      },
+      "denseMetrics": {
+        "opening": null,
+        "distinctDirections": null,
+        "legacyGapMoves": null,
+        "actualGapMoves": null,
+        "crossing": null,
+        "adjacentIndexMoves": null,
+        "rowCollapseMoves": null,
+        "sameRatio": null,
+        "adds": null
+      }
+    },
+    {
+      "category": "fixed",
+      "variant": "padded-verified",
+      "target": 81,
+      "attempts": 16,
+      "fullyDense": 0,
+      "certifiedDense": 0,
+      "screenPass": 0,
+      "occupied": {
+        "n": 16,
+        "min": 69,
+        "p50": 75,
+        "p90": 75,
+        "max": 77,
+        "mean": 74
+      },
+      "logicalCells": {
+        "n": 16,
+        "min": 81,
+        "p50": 81,
+        "p90": 81,
+        "max": 81,
+        "mean": 81
+      },
+      "elapsedMs": {
+        "n": 16,
+        "min": 2.5552920000000086,
+        "p50": 3.382265000000075,
+        "p90": 6.248576999999955,
+        "max": 18.31539500000008,
+        "mean": 4.916717375000019
+      },
+      "totalElapsedMs": 78.6674780000003,
+      "candidateChecks": {
+        "n": 16,
+        "min": 212,
+        "p50": 252,
+        "p90": 379,
+        "max": 409,
+        "mean": 284
+      },
+      "reasons": {
+        "certified-partial-or-full": 16
+      },
+      "denseMetrics": {
+        "opening": null,
+        "distinctDirections": null,
+        "legacyGapMoves": null,
+        "actualGapMoves": null,
+        "crossing": null,
+        "adjacentIndexMoves": null,
+        "rowCollapseMoves": null,
+        "sameRatio": null,
+        "adds": null
+      }
+    },
+    {
+      "category": "illustration-search",
+      "variant": "padded-verified",
+      "target": 45,
+      "attempts": 256,
+      "fullyDense": 3,
+      "certifiedDense": 3,
+      "screenPass": 2,
+      "occupied": {
+        "n": 256,
+        "min": 35,
+        "p50": 41,
+        "p90": 43,
+        "max": 45,
+        "mean": 40.84375
+      },
+      "logicalCells": {
+        "n": 256,
+        "min": 45,
+        "p50": 45,
+        "p90": 45,
+        "max": 45,
+        "mean": 45
+      },
+      "elapsedMs": {
+        "n": 256,
+        "min": 0.24477199999989807,
+        "p50": 0.5859379999999419,
+        "p90": 0.9890639999999848,
+        "max": 1.7291989999999942,
+        "mean": 0.6275464999999989
+      },
+      "totalElapsedMs": 160.65190399999972,
+      "candidateChecks": {
+        "n": 256,
+        "min": 57,
+        "p50": 97,
+        "p90": 128,
+        "max": 199,
+        "mean": 98.921875
+      },
+      "reasons": {
+        "certified-partial-or-full": 256
+      },
+      "denseMetrics": {
+        "opening": {
+          "n": 3,
+          "min": 37,
+          "p50": 37,
+          "p90": 37,
+          "max": 54,
+          "mean": 42.666666666666664
+        },
+        "distinctDirections": {
+          "n": 3,
+          "min": 4,
+          "p50": 4,
+          "p90": 4,
+          "max": 4,
+          "mean": 4
+        },
+        "legacyGapMoves": {
+          "n": 3,
+          "min": 10,
+          "p50": 12,
+          "p90": 12,
+          "max": 14,
+          "mean": 12
+        },
+        "actualGapMoves": {
+          "n": 3,
+          "min": 10,
+          "p50": 12,
+          "p90": 12,
+          "max": 14,
+          "mean": 12
+        },
+        "crossing": {
+          "n": 3,
+          "min": 17,
+          "p50": 18,
+          "p90": 18,
+          "max": 19,
+          "mean": 18
+        },
+        "adjacentIndexMoves": {
+          "n": 3,
+          "min": 5,
+          "p50": 6,
+          "p90": 6,
+          "max": 6,
+          "mean": 5.666666666666667
+        },
+        "rowCollapseMoves": {
+          "n": 3,
+          "min": 5,
+          "p50": 5,
+          "p90": 5,
+          "max": 5,
+          "mean": 5
+        },
+        "sameRatio": {
+          "n": 3,
+          "min": 0.48,
+          "p50": 0.56,
+          "p90": 0.56,
+          "max": 0.84,
+          "mean": 0.6266666666666666
+        },
+        "adds": {
+          "n": 3,
+          "min": 1,
+          "p50": 1,
+          "p90": 1,
+          "max": 1,
+          "mean": 1
+        }
+      }
+    },
+    {
+      "category": "illustration-search",
+      "variant": "padded-verified",
+      "target": 81,
+      "attempts": 256,
+      "fullyDense": 0,
+      "certifiedDense": 0,
+      "screenPass": 0,
+      "occupied": {
+        "n": 256,
+        "min": 67,
+        "p50": 75,
+        "p90": 77,
+        "max": 79,
+        "mean": 74.0390625
+      },
+      "logicalCells": {
+        "n": 256,
+        "min": 81,
+        "p50": 81,
+        "p90": 81,
+        "max": 81,
+        "mean": 81
+      },
+      "elapsedMs": {
+        "n": 256,
+        "min": 1.2926320000001397,
+        "p50": 2.183131000000003,
+        "p90": 2.7473459999998795,
+        "max": 6.701107000000093,
+        "mean": 2.225954429687499
+      },
+      "totalElapsedMs": 569.8443339999998,
+      "candidateChecks": {
+        "n": 256,
+        "min": 173,
+        "p50": 293,
+        "p90": 364,
+        "max": 571,
+        "mean": 298.55859375
+      },
+      "reasons": {
+        "certified-partial-or-full": 256
+      },
+      "denseMetrics": {
+        "opening": null,
+        "distinctDirections": null,
+        "legacyGapMoves": null,
+        "actualGapMoves": null,
+        "crossing": null,
+        "adjacentIndexMoves": null,
+        "rowCollapseMoves": null,
+        "sameRatio": null,
+        "adds": null
+      }
+    }
+  ],
+  "referenceSummary": [
+    {
+      "family": "dense",
+      "boards": 32,
+      "metrics": {
+        "opening": {
+          "n": 32,
+          "min": 18,
+          "p50": 26,
+          "p90": 28,
+          "max": 28,
+          "mean": 25.65625
+        },
+        "distinctDirections": {
+          "n": 32,
+          "min": 3,
+          "p50": 4,
+          "p90": 4,
+          "max": 4,
+          "mean": 3.90625
+        },
+        "legacyGapMoves": {
+          "n": 32,
+          "min": 4,
+          "p50": 6,
+          "p90": 8,
+          "max": 10,
+          "mean": 6.6875
+        },
+        "actualGapMoves": {
+          "n": 32,
+          "min": 4,
+          "p50": 6,
+          "p90": 8,
+          "max": 9,
+          "mean": 6.21875
+        },
+        "crossing": {
+          "n": 32,
+          "min": 7,
+          "p50": 11,
+          "p90": 15,
+          "max": 16,
+          "mean": 12.15625
+        },
+        "adjacentIndexMoves": {
+          "n": 32,
+          "min": 0,
+          "p50": 4,
+          "p90": 7,
+          "max": 8,
+          "mean": 4.125
+        },
+        "rowCollapseMoves": {
+          "n": 32,
+          "min": 2,
+          "p50": 3,
+          "p90": 3,
+          "max": 4,
+          "mean": 3
+        },
+        "sameRatio": {
+          "n": 32,
+          "min": 0.2777777777777778,
+          "p50": 0.5555555555555556,
+          "p90": 0.6666666666666666,
+          "max": 0.7222222222222222,
+          "mean": 0.5624999999999998
+        },
+        "adds": {
+          "n": 32,
+          "min": 0,
+          "p50": 0,
+          "p90": 0,
+          "max": 0,
+          "mean": 0
+        }
+      }
+    },
+    {
+      "family": "bridges",
+      "boards": 32,
+      "metrics": {
+        "opening": {
+          "n": 32,
+          "min": 18,
+          "p50": 21,
+          "p90": 22,
+          "max": 22,
+          "mean": 21.03125
+        },
+        "distinctDirections": {
+          "n": 32,
+          "min": 3,
+          "p50": 4,
+          "p90": 4,
+          "max": 4,
+          "mean": 3.90625
+        },
+        "legacyGapMoves": {
+          "n": 32,
+          "min": 4,
+          "p50": 8,
+          "p90": 9,
+          "max": 12,
+          "mean": 7.625
+        },
+        "actualGapMoves": {
+          "n": 32,
+          "min": 3,
+          "p50": 8,
+          "p90": 9,
+          "max": 12,
+          "mean": 7.46875
+        },
+        "crossing": {
+          "n": 32,
+          "min": 7,
+          "p50": 12,
+          "p90": 13,
+          "max": 14,
+          "mean": 11.5625
+        },
+        "adjacentIndexMoves": {
+          "n": 32,
+          "min": 0,
+          "p50": 2,
+          "p90": 4,
+          "max": 6,
+          "mean": 2.28125
+        },
+        "rowCollapseMoves": {
+          "n": 32,
+          "min": 3,
+          "p50": 4,
+          "p90": 4,
+          "max": 4,
+          "mean": 3.75
+        },
+        "sameRatio": {
+          "n": 32,
+          "min": 0.4375,
+          "p50": 0.5625,
+          "p90": 0.6875,
+          "max": 0.75,
+          "mean": 0.576171875
+        },
+        "adds": {
+          "n": 32,
+          "min": 0,
+          "p50": 0,
+          "p90": 0,
+          "max": 0,
+          "mean": 0
+        }
+      }
+    },
+    {
+      "family": "addition",
+      "boards": 32,
+      "metrics": {
+        "opening": {
+          "n": 32,
+          "min": 19,
+          "p50": 24,
+          "p90": 26,
+          "max": 26,
+          "mean": 23.71875
+        },
+        "distinctDirections": {
+          "n": 32,
+          "min": 3,
+          "p50": 4,
+          "p90": 4,
+          "max": 4,
+          "mean": 3.96875
+        },
+        "legacyGapMoves": {
+          "n": 32,
+          "min": 7,
+          "p50": 9,
+          "p90": 12,
+          "max": 13,
+          "mean": 9.0625
+        },
+        "actualGapMoves": {
+          "n": 32,
+          "min": 6,
+          "p50": 8,
+          "p90": 11,
+          "max": 13,
+          "mean": 8.625
+        },
+        "crossing": {
+          "n": 32,
+          "min": 10,
+          "p50": 15,
+          "p90": 16,
+          "max": 17,
+          "mean": 14.6875
+        },
+        "adjacentIndexMoves": {
+          "n": 32,
+          "min": 1,
+          "p50": 4,
+          "p90": 5,
+          "max": 7,
+          "mean": 3.5
+        },
+        "rowCollapseMoves": {
+          "n": 32,
+          "min": 3,
+          "p50": 4,
+          "p90": 4,
+          "max": 5,
+          "mean": 3.84375
+        },
+        "sameRatio": {
+          "n": 32,
+          "min": 0.35,
+          "p50": 0.6,
+          "p90": 0.65,
+          "max": 0.8,
+          "mean": 0.5890624999999999
+        },
+        "adds": {
+          "n": 32,
+          "min": 1,
+          "p50": 1,
+          "p90": 1,
+          "max": 1,
+          "mean": 1
+        }
+      }
+    }
+  ],
+  "runnerSha256": "5d9a23406d54b61d5fb4ceeb3ad1e226f0dc9fded00d0154d4b8f73f240a73d2",
+  "kernels": {
+    "attempts": 727,
+    "verifiedFullRow": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      9,
+      13,
+      14,
+      16,
+      18,
+      20,
+      22,
+      23,
+      24,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      34,
+      35,
+      36,
+      37,
+      39,
+      44,
+      45,
+      46,
+      49,
+      50,
+      51,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      63
+    ],
+    "paddingChanges": [
+      {
+        "kernelId": 0,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 12,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 1,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 6,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 2,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 3,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 4,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 5,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 6,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 2,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 7,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 1,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 8,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 7,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 9,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 7,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 10,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 3,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 11,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 8,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 12,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 8,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 13,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 14,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 15,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 1,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 16,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 8,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 17,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 1,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 18,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 7,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 19,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 2,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 20,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 21,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 4,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 22,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 23,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 24,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 25,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 3,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 26,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 27,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 28,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 29,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 30,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 31,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 32,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 33,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 2,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 34,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 35,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 36,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 37,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 7,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 38,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 1,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 39,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 40,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 2,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 41,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 1,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 42,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 11,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 43,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 7,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 44,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 45,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 46,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 47,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 3,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 48,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 2,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 49,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 50,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 51,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 52,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 7,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 53,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 2,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 54,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 55,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 56,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 7,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 57,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 6,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 58,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 59,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 60,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 9,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 61,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 62,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": false,
+        "solverVisits": 3,
+        "solverExhausted": false
+      },
+      {
+        "kernelId": 63,
+        "originalLength": 35,
+        "paddedSurvivingLength": 36,
+        "pairs": 0,
+        "source35ProofReplays": true,
+        "unchangedOldProofReplays": false,
+        "unchangedOldProofError": "Illegal certificate move",
+        "hasReplayedFreshAddProof": true,
+        "solverVisits": 5,
+        "solverExhausted": false
+      }
+    ],
+    "originalCount": 64
+  },
+  "attemptCount": 608,
+  "referenceFieldsReplayed": 96,
+  "examples": [
+    {
+      "id": "dense-45-example-1",
+      "target": 45,
+      "boardSha256": "3f2c0a60bd4ceff49ffb6069e51ba3f6aea3a0f549a9df7ee990286c61578de1",
+      "proofSha256": "bc488790c385ccfccf3d48be4bbca4ba5960cf390886054f5a145e4bc1f17319"
+    },
+    {
+      "id": "dense-45-example-2",
+      "target": 45,
+      "boardSha256": "3573543e14ee92bcfa42906311f6f8e9ccd9e5509c8c96d125e2fb91bada94b1",
+      "proofSha256": "77ec0475d513156ed22db4262a79306d4d32b07319d9113e0e4d0a386838e934"
+    }
+  ],
+  "reproduceFullAttempts": "node feasibility-run.mjs creates feasibility-results.json with all attempts, kernels and route metrics"
+}

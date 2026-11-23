@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="700" viewBox="0 0 1160 700">
+<rect width="1160" height="700" fill="#f5f2ea"/>
+<style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#25372d} .muted{fill:#5a6a60} .num{font-size:25px;font-weight:600}</style>
+<text x="44" y="49" font-size="27" font-weight="700">28 цифр и 22 пары на старте. Два разных развития.</text>
+<text x="44" y="80" font-size="18" class="muted">Обычная классика · одинаковый состав цифр · реальные поля текущего генератора</text>
+<rect x="44" y="111" width="518" height="478" rx="18" fill="#fffefa"/>
+<text x="68" y="149" font-size="23" font-weight="700">Seed 24</text>
+<text x="68" y="177" font-size="15" class="muted">Проверенный путь: 17 снятий пар + 1 «Добавить»</text>
+<rect x="68" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="91" y="235" font-size="25" text-anchor="middle" font-weight="600">3</text>
+<rect x="119" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="142" y="235" font-size="25" text-anchor="middle" font-weight="600">7</text>
+<rect x="170" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="193" y="235" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="221" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="244" y="235" font-size="25" text-anchor="middle" font-weight="600">8</text>
+<rect x="272" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="295" y="235" font-size="25" text-anchor="middle" font-weight="600">4</text>
+<rect x="323" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="346" y="235" font-size="25" text-anchor="middle" font-weight="600">2</text>
+<rect x="374" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="397" y="235" font-size="25" text-anchor="middle" font-weight="600">9</text>
+<rect x="425" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="448" y="235" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="476" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="499" y="235" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="68" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="91" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="119" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="142" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="170" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="193" y="286" font-size="25" text-anchor="middle" font-weight="600">5</text>
+<rect x="221" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="244" y="286" font-size="25" text-anchor="middle" font-weight="600">5</text>
+<rect x="272" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="295" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="323" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="346" y="286" font-size="25" text-anchor="middle" font-weight="600">7</text>
+<rect x="374" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="397" y="286" font-size="25" text-anchor="middle" font-weight="600">2</text>
+<rect x="425" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="448" y="286" font-size="25" text-anchor="middle" font-weight="600">6</text>
+<rect x="476" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="499" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="68" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="91" y="337" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="119" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="142" y="337" font-size="25" text-anchor="middle" font-weight="600">4</text>
+<rect x="170" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="193" y="337" font-size="25" text-anchor="middle" font-weight="600">9</text>
+<rect x="221" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="244" y="337" font-size="25" text-anchor="middle" font-weight="600">6</text>
+<rect x="272" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="295" y="337" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="323" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="346" y="337" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="374" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="397" y="337" font-size="25" text-anchor="middle" font-weight="600">3</text>
+<rect x="425" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="448" y="337" font-size="25" text-anchor="middle" font-weight="600">8</text>
+<rect x="476" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="499" y="337" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="68" y="356" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="91" y="388" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<path d="M68,426 H538" stroke="#dcded3"/>
+<text x="68" y="460" font-size="18" >Новые пары после снятий</text>
+<text x="516" y="464" font-size="30" text-anchor="end" font-weight="700" fill="#315e4b">2</text>
+<text x="68" y="505" font-size="18" >Ходы через пустые клетки</text>
+<text x="516" y="509" font-size="30" text-anchor="end" font-weight="700" fill="#315e4b">3</text>
+<text x="68" y="553" font-size="15" class="muted">«Добавить» после 11-го снятия в обоих полях</text>
+<rect x="598" y="111" width="518" height="478" rx="18" fill="#fffefa"/>
+<text x="622" y="149" font-size="23" font-weight="700">Seed 371</text>
+<text x="622" y="177" font-size="15" class="muted">Проверенный путь: 17 снятий пар + 1 «Добавить»</text>
+<rect x="622" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="645" y="235" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="673" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="696" y="235" font-size="25" text-anchor="middle" font-weight="600">5</text>
+<rect x="724" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="747" y="235" font-size="25" text-anchor="middle" font-weight="600">2</text>
+<rect x="775" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="798" y="235" font-size="25" text-anchor="middle" font-weight="600">4</text>
+<rect x="826" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="849" y="235" font-size="25" text-anchor="middle" font-weight="600">3</text>
+<rect x="877" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="900" y="235" font-size="25" text-anchor="middle" font-weight="600">4</text>
+<rect x="928" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="951" y="235" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="979" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="1002" y="235" font-size="25" text-anchor="middle" font-weight="600">2</text>
+<rect x="1030" y="203" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="1053" y="235" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="622" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="645" y="286" font-size="25" text-anchor="middle" font-weight="600">6</text>
+<rect x="673" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="696" y="286" font-size="25" text-anchor="middle" font-weight="600">7</text>
+<rect x="724" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="747" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="775" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="798" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="826" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="849" y="286" font-size="25" text-anchor="middle" font-weight="600">9</text>
+<rect x="877" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="900" y="286" font-size="25" text-anchor="middle" font-weight="600">6</text>
+<rect x="928" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="951" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="979" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="1002" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="1030" y="254" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="1053" y="286" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="622" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="645" y="337" font-size="25" text-anchor="middle" font-weight="600">7</text>
+<rect x="673" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="696" y="337" font-size="25" text-anchor="middle" font-weight="600">9</text>
+<rect x="724" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="747" y="337" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="775" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="798" y="337" font-size="25" text-anchor="middle" font-weight="600">5</text>
+<rect x="826" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="849" y="337" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="877" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="900" y="337" font-size="25" text-anchor="middle" font-weight="600">8</text>
+<rect x="928" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="951" y="337" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="979" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="1002" y="337" font-size="25" text-anchor="middle" font-weight="600">1</text>
+<rect x="1030" y="305" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="1053" y="337" font-size="25" text-anchor="middle" font-weight="600">3</text>
+<rect x="622" y="356" width="46" height="46" rx="8" fill="#eeefe5"/>
+<text x="645" y="388" font-size="25" text-anchor="middle" font-weight="600">8</text>
+<path d="M622,426 H1092" stroke="#dcded3"/>
+<text x="622" y="460" font-size="18" >Новые пары после снятий</text>
+<text x="1070" y="464" font-size="30" text-anchor="end" font-weight="700" fill="#775434">15</text>
+<text x="622" y="505" font-size="18" >Ходы через пустые клетки</text>
+<text x="1070" y="509" font-size="30" text-anchor="end" font-weight="700" fill="#775434">10</text>
+<text x="622" y="553" font-size="15" class="muted">«Добавить» после 11-го снятия в обоих полях</text>
+<text x="44" y="624" font-size="17" >Считаем появление связей на одном проверенном пути, сохраняя ID клеток при сжатии.</text>
+<text x="44" y="650" font-size="17" >Это различие структуры. Как оно ощущается игроком, ещё предстоит проверить.</text>
+<text x="44" y="679" font-size="14" class="muted">Исследовательская схема, не скриншот игры · seeds-bits @ 0c8fbba · 23 ноября 2026</text>
+</svg>

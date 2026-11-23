@@ -1,0 +1,2626 @@
+{
+  "schemaVersion": 1,
+  "kind": "ACTUAL_PRODUCT_TS_EXECUTION",
+  "source": {
+    "repo": "DanilaH/seeds-bits",
+    "ref": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+    "files": [
+      {
+        "path": "src/core.ts",
+        "gitBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+        "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+      },
+      {
+        "path": "src/classic-generator.ts",
+        "gitBlob": "a1a74ff68cb625bd962a6739b6a5701ecaf01c05",
+        "sha256": "ac63d56159a395d43b17f72eab0aa646758f5fa34045f773a5f39cb1169461c1"
+      },
+      {
+        "path": "src/classic-catalog.json",
+        "gitBlob": "008ae0def4149c479d4d2eb1947893a3c77d500b",
+        "sha256": "186b6cc6f21b9f3e6441a36c6f4b75e06c150e68ee843106fe55adb8dca96c6a"
+      },
+      {
+        "path": "scripts/classic-variety/proofs.json",
+        "gitBlob": "dd18b518a4d917abb4e3865ebfb3bd3e5c8418bc",
+        "sha256": "46b9c6a9c39d4aaf015e0fb54402daf2b955cab1a6667ba3c48518a25358ed46"
+      },
+      {
+        "path": "scripts/generate-classic.mjs",
+        "gitBlob": "4d9b227ae8464df1b19257157d2294f4120a3544",
+        "sha256": "82b635fa0639feb95f5d2456fb5855a2dbf338954284982b28cf8def7d7d7d0a"
+      },
+      {
+        "path": "docs/classic-variety-2026-11-12/content.json",
+        "gitBlob": "8ec43e749fd8ea274a8aa15be93599a43e484b7b",
+        "sha256": "3686ad862061c595d618fedf4639618de1da322e8218b84f0e46a37b78cf3bd5"
+      },
+      {
+        "path": "tests/classic-generator.test.ts",
+        "gitBlob": "f450386142df440908ce15051191b7c5eecc884e",
+        "sha256": "bbe983a956d2f5fddbad2683da2a8af1f129acff18f134bf46f14cfe0b780768"
+      },
+      {
+        "path": "docs/porting/ADOPTION_LEDGER.json",
+        "gitBlob": "04be0103a73055d09ad55aaaa3b71e4db4f1ce74",
+        "sha256": "cff1f28d46b95c15b7c650af0a7cc8d62eb5708d92aee71ea7ac82863e83ff6e"
+      },
+      {
+        "path": "src/puzzles.ts",
+        "gitBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847",
+        "sha256": "7d5fc94edb634c1012e8b23de19fbc032709fcd785df1aa80001a47f119ef3d0"
+      }
+    ]
+  },
+  "runtime": "v24.22.3",
+  "width": 9,
+  "seeds": {
+    "from": 0,
+    "through": 999,
+    "freshRunPerSeedAndLevel": true
+  },
+  "definitions": {
+    "openingPairs": "core.pairs(initialBoard).length; excludes no pair known to actual enumerator",
+    "openingPairsPerOccupied": "Number of legal pairs divided by occupied digit count; a descriptive normalization, not probability or human difficulty.",
+    "openingPairsAmongAllUnorderedDigits": "Number of legal pairs divided by n*(n-1)/2; a descriptive edge density.",
+    "witness": "The actual generator-returned winning proof, not a shortest route and not proof of minimum required Adds.",
+    "newlyEnabledPairsAfterRemoval": "After actual removal and row compression, stable endpoint-ID pair edges absent before the removal. Counts event occurrences, so an edge can count again if lost and re-enabled later.",
+    "newlyEnabledPairsBeforeCompression": "Edges newly legal after zeroing the two digits, before compression; these may disappear again during compression.",
+    "newlyEnabledPairsByCompression": "Edges after compression absent in the zeroed but uncompressed intermediate state.",
+    "pairIdentity": "Persistent ID per logical cell; whole removed rows delete IDs; appended clones receive fresh IDs. Reconstructed row filtering is asserted equal to actual removePair output at every action.",
+    "gapMoves": "Exact legacy content.json metric retained for comparison: max(abs(dr),abs(dc)) > 1 OR reading-order index distance > 1. It also counts reading-order adjacent row-boundary pairs with no intervening logical cells.",
+    "throughEmptyCellsMoves": "Number of removals with at least one intermediate empty logical cell on the legal path selected by actual checkPair; for reading path, abs(b-a)-1; for straight path, max(abs(dr),abs(dc))-1.",
+    "readingBoundaryAdjacentMoves": "Reading-order pairs with abs(b-a) == 1. These explain every extra legacy gapMoves count over throughEmptyCellsMoves in this audit.",
+    "singleLegalRemovalRun": "Consecutive witness removals whose actual pre-state has exactly one legal pair; interrupted by Add or a state with more than one legal pair. No claim of human obviousness.",
+    "greedyFailure": "This deterministic first-pair policy is blocked after at most two Adds; it is not a proof of board unsolvability.",
+    "fixtureSelection": "Extremal controlled examples selected from the sample; not population-effect estimates or independently randomized A/B tests.",
+    "compressionCounts": "Include final board clear and removal of a partial final row.",
+    "compressionTopologyChange": "At least one surviving endpoint-ID legal pair appears or disappears when empty rows are removed, compared with the same zeroed digits before compression; deleting the selected pair alone does not count."
+  },
+  "byLevel": {
+    "easy18": {
+      "count": 1000,
+      "verifiedProofs": 1000,
+      "uniqueBoards": 1000,
+      "cells": {
+        "18": 1000
+      },
+      "fallback": 0,
+      "openingPairs": {
+        "min": 11,
+        "p10": 11,
+        "median": 13,
+        "mean": 13.764,
+        "p90": 17,
+        "max": 28
+      },
+      "openingPairsHistogram": {
+        "11": 200,
+        "12": 190,
+        "13": 165,
+        "14": 136,
+        "15": 87,
+        "16": 89,
+        "17": 48,
+        "18": 29,
+        "19": 15,
+        "20": 14,
+        "21": 12,
+        "22": 7,
+        "23": 3,
+        "24": 1,
+        "25": 2,
+        "26": 1,
+        "28": 1
+      },
+      "openingPairsPerOccupied": {
+        "min": 0.6111111111111112,
+        "p10": 0.6111111111111112,
+        "median": 0.7222222222222222,
+        "mean": 0.7646666666666682,
+        "p90": 0.9444444444444444,
+        "max": 1.5555555555555556
+      },
+      "openingPairsAmongAllUnorderedDigits": {
+        "min": 0.0718954248366013,
+        "p10": 0.0718954248366013,
+        "median": 0.08496732026143791,
+        "mean": 0.08996078431372638,
+        "p90": 0.1111111111111111,
+        "max": 0.1830065359477124
+      },
+      "proofAdditionsHistogram": {
+        "0": 1000
+      },
+      "fieldsWithCompressionTopologyChange": 0,
+      "fractionWithCompressionTopologyChange": 0,
+      "fieldsWithCompressionEnablingPairs": 0,
+      "fieldsWithCompressionLosingPairs": 0,
+      "greedy": {
+        "policy": "pairs(board)[0], Add only at zero legal pairs, maximum two Adds",
+        "outcomes": {
+          "cleared": 1000
+        },
+        "addsHistogram": {
+          "0": 1000
+        }
+      },
+      "metrics": {
+        "proofSteps": {
+          "min": 9,
+          "p10": 9,
+          "median": 9,
+          "mean": 9,
+          "p90": 9,
+          "max": 9
+        },
+        "pairMoves": {
+          "min": 9,
+          "p10": 9,
+          "median": 9,
+          "mean": 9,
+          "p90": 9,
+          "max": 9
+        },
+        "gapMoves": {
+          "min": 0,
+          "p10": 1,
+          "median": 3,
+          "mean": 2.63,
+          "p90": 4,
+          "max": 5
+        },
+        "gapMoveRatio": {
+          "min": 0,
+          "p10": 0.1111111111111111,
+          "median": 0.3333333333333333,
+          "mean": 0.29222222222222605,
+          "p90": 0.4444444444444444,
+          "max": 0.5555555555555556
+        },
+        "throughEmptyCellsMoves": {
+          "min": 0,
+          "p10": 1,
+          "median": 3,
+          "mean": 2.482,
+          "p90": 4,
+          "max": 5
+        },
+        "throughEmptyCellsMoveRatio": {
+          "min": 0,
+          "p10": 0.1111111111111111,
+          "median": 0.3333333333333333,
+          "mean": 0.2757777777777816,
+          "p90": 0.4444444444444444,
+          "max": 0.5555555555555556
+        },
+        "emptyCellsTraversed": {
+          "min": 0,
+          "p10": 3,
+          "median": 8,
+          "mean": 9.371,
+          "p90": 18,
+          "max": 36
+        },
+        "readingBoundaryAdjacentMoves": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0.148,
+          "p90": 1,
+          "max": 1
+        },
+        "rowCompressionEvents": {
+          "min": 1,
+          "p10": 1,
+          "median": 2,
+          "mean": 1.825,
+          "p90": 2,
+          "max": 2
+        },
+        "rowsRemoved": {
+          "min": 2,
+          "p10": 2,
+          "median": 2,
+          "mean": 2,
+          "p90": 2,
+          "max": 2
+        },
+        "newlyEnabledPairsAfterRemoval": {
+          "min": 0,
+          "p10": 2,
+          "median": 3,
+          "mean": 2.902,
+          "p90": 4,
+          "max": 6
+        },
+        "newlyEnabledPairsBeforeCompression": {
+          "min": 0,
+          "p10": 2,
+          "median": 3,
+          "mean": 2.902,
+          "p90": 4,
+          "max": 6
+        },
+        "newlyEnabledPairsByCompression": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "pairsLostByCompression": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "newlyEnabledPairsAfterAdd": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0,
+          "p90": 0,
+          "max": 0
+        },
+        "newPairsPerRemoval": {
+          "min": 0,
+          "p10": 0.2222222222222222,
+          "median": 0.3333333333333333,
+          "mean": 0.3224444444444473,
+          "p90": 0.4444444444444444,
+          "max": 0.6666666666666666
+        },
+        "noNewPairRemovalRatio": {
+          "min": 0.3333333333333333,
+          "p10": 0.5555555555555556,
+          "median": 0.6666666666666666,
+          "mean": 0.7043333333333419,
+          "p90": 0.8888888888888888,
+          "max": 1
+        },
+        "singleLegalRemovalStates": {
+          "min": 1,
+          "p10": 1,
+          "median": 1,
+          "mean": 1.596,
+          "p90": 3,
+          "max": 4
+        },
+        "longestSingleLegalRemovalRun": {
+          "min": 1,
+          "p10": 1,
+          "median": 1,
+          "mean": 1.593,
+          "p90": 3,
+          "max": 4
+        },
+        "singleLegalRemovalTail": {
+          "min": 1,
+          "p10": 1,
+          "median": 1,
+          "mean": 1.593,
+          "p90": 3,
+          "max": 4
+        },
+        "directionKinds": {
+          "min": 2,
+          "p10": 2,
+          "median": 3,
+          "mean": 3.193,
+          "p90": 4,
+          "max": 4
+        },
+        "peakLogicalCells": {
+          "min": 18,
+          "p10": 18,
+          "median": 18,
+          "mean": 18,
+          "p90": 18,
+          "max": 18
+        },
+        "peakOccupied": {
+          "min": 18,
+          "p10": 18,
+          "median": 18,
+          "mean": 18,
+          "p90": 18,
+          "max": 18
+        }
+      },
+      "directionTotals": {
+        "horizontal": 4936,
+        "vertical": 1160,
+        "diagonal": 2063,
+        "reading": 841
+      }
+    },
+    "normal28": {
+      "count": 1000,
+      "verifiedProofs": 1000,
+      "uniqueBoards": 1000,
+      "cells": {
+        "28": 1000
+      },
+      "fallback": 0,
+      "openingPairs": {
+        "min": 18,
+        "p10": 19,
+        "median": 22,
+        "mean": 22.409,
+        "p90": 25,
+        "max": 26
+      },
+      "openingPairsHistogram": {
+        "18": 45,
+        "19": 68,
+        "20": 104,
+        "21": 135,
+        "22": 150,
+        "23": 155,
+        "24": 140,
+        "25": 111,
+        "26": 92
+      },
+      "openingPairsPerOccupied": {
+        "min": 0.6428571428571429,
+        "p10": 0.6785714285714286,
+        "median": 0.7857142857142857,
+        "mean": 0.8003214285714262,
+        "p90": 0.8928571428571429,
+        "max": 0.9285714285714286
+      },
+      "openingPairsAmongAllUnorderedDigits": {
+        "min": 0.047619047619047616,
+        "p10": 0.05026455026455026,
+        "median": 0.0582010582010582,
+        "mean": 0.05928306878306845,
+        "p90": 0.06613756613756613,
+        "max": 0.06878306878306878
+      },
+      "proofAdditionsHistogram": {
+        "0": 175,
+        "1": 339,
+        "2": 486
+      },
+      "fieldsWithCompressionTopologyChange": 406,
+      "fractionWithCompressionTopologyChange": 0.406,
+      "fieldsWithCompressionEnablingPairs": 388,
+      "fieldsWithCompressionLosingPairs": 55,
+      "greedy": {
+        "policy": "pairs(board)[0], Add only at zero legal pairs, maximum two Adds",
+        "outcomes": {
+          "blocked_after_two_adds": 286,
+          "cleared": 714
+        },
+        "addsHistogram": {
+          "0": 171,
+          "1": 299,
+          "2": 530
+        }
+      },
+      "metrics": {
+        "proofSteps": {
+          "min": 14,
+          "p10": 14,
+          "median": 20,
+          "mean": 20.081,
+          "p90": 25.100000000000023,
+          "max": 32
+        },
+        "pairMoves": {
+          "min": 14,
+          "p10": 14,
+          "median": 18,
+          "mean": 18.77,
+          "p90": 23.100000000000023,
+          "max": 30
+        },
+        "gapMoves": {
+          "min": 2,
+          "p10": 5,
+          "median": 7,
+          "mean": 7.689,
+          "p90": 11,
+          "max": 19
+        },
+        "gapMoveRatio": {
+          "min": 0.1,
+          "p10": 0.2857142857142857,
+          "median": 0.4117647058823529,
+          "mean": 0.40597000720178933,
+          "p90": 0.5294117647058824,
+          "max": 0.7142857142857143
+        },
+        "throughEmptyCellsMoves": {
+          "min": 1,
+          "p10": 4,
+          "median": 7,
+          "mean": 7.174,
+          "p90": 11,
+          "max": 18
+        },
+        "throughEmptyCellsMoveRatio": {
+          "min": 0.07142857142857142,
+          "p10": 0.24880952380952387,
+          "median": 0.375,
+          "mean": 0.3770038089455428,
+          "p90": 0.5,
+          "max": 0.6428571428571429
+        },
+        "emptyCellsTraversed": {
+          "min": 1,
+          "p10": 9,
+          "median": 20,
+          "mean": 21.764,
+          "p90": 35,
+          "max": 75
+        },
+        "readingBoundaryAdjacentMoves": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0.515,
+          "p90": 1,
+          "max": 3
+        },
+        "rowCompressionEvents": {
+          "min": 2,
+          "p10": 3,
+          "median": 4,
+          "mean": 4.166,
+          "p90": 5,
+          "max": 8
+        },
+        "rowsRemoved": {
+          "min": 4,
+          "p10": 4,
+          "median": 5,
+          "mean": 4.978,
+          "p90": 6,
+          "max": 8
+        },
+        "newlyEnabledPairsAfterRemoval": {
+          "min": 2,
+          "p10": 5,
+          "median": 8,
+          "mean": 8.507,
+          "p90": 12,
+          "max": 26
+        },
+        "newlyEnabledPairsBeforeCompression": {
+          "min": 2,
+          "p10": 5,
+          "median": 8,
+          "mean": 7.89,
+          "p90": 11,
+          "max": 22
+        },
+        "newlyEnabledPairsByCompression": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0.651,
+          "p90": 2,
+          "max": 8
+        },
+        "pairsLostByCompression": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0.06,
+          "p90": 0,
+          "max": 2
+        },
+        "newlyEnabledPairsAfterAdd": {
+          "min": 0,
+          "p10": 0,
+          "median": 6,
+          "mean": 5.942,
+          "p90": 12,
+          "max": 22
+        },
+        "newPairsPerRemoval": {
+          "min": 0.1,
+          "p10": 0.29411764705882354,
+          "median": 0.4444444444444444,
+          "mean": 0.44923367168528194,
+          "p90": 0.5909090909090909,
+          "max": 0.8823529411764706
+        },
+        "noNewPairRemovalRatio": {
+          "min": 0.3125,
+          "p10": 0.5291021671826626,
+          "median": 0.6428571428571429,
+          "mean": 0.6381048510423494,
+          "p90": 0.75,
+          "max": 0.9
+        },
+        "singleLegalRemovalStates": {
+          "min": 1,
+          "p10": 1,
+          "median": 3,
+          "mean": 3.137,
+          "p90": 5,
+          "max": 8
+        },
+        "longestSingleLegalRemovalRun": {
+          "min": 1,
+          "p10": 1,
+          "median": 2,
+          "mean": 2.028,
+          "p90": 3,
+          "max": 6
+        },
+        "singleLegalRemovalTail": {
+          "min": 1,
+          "p10": 1,
+          "median": 2,
+          "mean": 1.927,
+          "p90": 3,
+          "max": 6
+        },
+        "directionKinds": {
+          "min": 2,
+          "p10": 4,
+          "median": 4,
+          "mean": 3.915,
+          "p90": 4,
+          "max": 4
+        },
+        "peakLogicalCells": {
+          "min": 28,
+          "p10": 28,
+          "median": 31,
+          "mean": 33.223,
+          "p90": 42,
+          "max": 60
+        },
+        "peakOccupied": {
+          "min": 28,
+          "p10": 28,
+          "median": 28,
+          "mean": 28.1,
+          "p90": 28,
+          "max": 36
+        }
+      },
+      "directionTotals": {
+        "horizontal": 6376,
+        "vertical": 3243,
+        "diagonal": 6328,
+        "reading": 2823
+      }
+    },
+    "hard27": {
+      "count": 1000,
+      "verifiedProofs": 1000,
+      "uniqueBoards": 1000,
+      "cells": {
+        "27": 1000
+      },
+      "fallback": 0,
+      "openingPairs": {
+        "min": 10,
+        "p10": 14,
+        "median": 16,
+        "mean": 15.975,
+        "p90": 17,
+        "max": 17
+      },
+      "openingPairsHistogram": {
+        "10": 1,
+        "11": 5,
+        "12": 19,
+        "13": 31,
+        "14": 72,
+        "15": 139,
+        "16": 275,
+        "17": 458
+      },
+      "openingPairsPerOccupied": {
+        "min": 0.37037037037037035,
+        "p10": 0.5185185185185185,
+        "median": 0.5925925925925926,
+        "mean": 0.591666666666668,
+        "p90": 0.6296296296296297,
+        "max": 0.6296296296296297
+      },
+      "openingPairsAmongAllUnorderedDigits": {
+        "min": 0.02849002849002849,
+        "p10": 0.039886039886039885,
+        "median": 0.045584045584045586,
+        "mean": 0.04551282051281994,
+        "p90": 0.04843304843304843,
+        "max": 0.04843304843304843
+      },
+      "proofAdditionsHistogram": {
+        "1": 439,
+        "2": 561
+      },
+      "fieldsWithCompressionTopologyChange": 465,
+      "fractionWithCompressionTopologyChange": 0.465,
+      "fieldsWithCompressionEnablingPairs": 445,
+      "fieldsWithCompressionLosingPairs": 77,
+      "greedy": {
+        "policy": "pairs(board)[0], Add only at zero legal pairs, maximum two Adds",
+        "outcomes": {
+          "blocked_after_two_adds": 416,
+          "cleared": 584
+        },
+        "addsHistogram": {
+          "1": 387,
+          "2": 613
+        }
+      },
+      "metrics": {
+        "proofSteps": {
+          "min": 15,
+          "p10": 15,
+          "median": 21,
+          "mean": 20.942,
+          "p90": 26,
+          "max": 34
+        },
+        "pairMoves": {
+          "min": 14,
+          "p10": 14,
+          "median": 19,
+          "mean": 19.381,
+          "p90": 24,
+          "max": 32
+        },
+        "gapMoves": {
+          "min": 3,
+          "p10": 6,
+          "median": 9,
+          "mean": 8.847,
+          "p90": 13,
+          "max": 20
+        },
+        "gapMoveRatio": {
+          "min": 0.13636363636363635,
+          "p10": 0.3333333333333333,
+          "median": 0.45,
+          "mean": 0.45311452090438864,
+          "p90": 0.5789473684210527,
+          "max": 0.7142857142857143
+        },
+        "throughEmptyCellsMoves": {
+          "min": 2,
+          "p10": 5,
+          "median": 8,
+          "mean": 8.453,
+          "p90": 12,
+          "max": 20
+        },
+        "throughEmptyCellsMoveRatio": {
+          "min": 0.13636363636363635,
+          "p10": 0.29411764705882354,
+          "median": 0.43614130434782605,
+          "mean": 0.4309775899123546,
+          "p90": 0.5555555555555556,
+          "max": 0.7142857142857143
+        },
+        "emptyCellsTraversed": {
+          "min": 3,
+          "p10": 12,
+          "median": 23,
+          "mean": 24.58,
+          "p90": 39,
+          "max": 71
+        },
+        "readingBoundaryAdjacentMoves": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0.394,
+          "p90": 1,
+          "max": 3
+        },
+        "rowCompressionEvents": {
+          "min": 2,
+          "p10": 3,
+          "median": 4,
+          "mean": 3.926,
+          "p90": 5,
+          "max": 7
+        },
+        "rowsRemoved": {
+          "min": 4,
+          "p10": 4,
+          "median": 5,
+          "mean": 4.78,
+          "p90": 6,
+          "max": 8
+        },
+        "newlyEnabledPairsAfterRemoval": {
+          "min": 2,
+          "p10": 6,
+          "median": 9,
+          "mean": 9.516,
+          "p90": 14,
+          "max": 24
+        },
+        "newlyEnabledPairsBeforeCompression": {
+          "min": 2,
+          "p10": 5,
+          "median": 8,
+          "mean": 8.711,
+          "p90": 13,
+          "max": 21
+        },
+        "newlyEnabledPairsByCompression": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0.851,
+          "p90": 3,
+          "max": 6
+        },
+        "pairsLostByCompression": {
+          "min": 0,
+          "p10": 0,
+          "median": 0,
+          "mean": 0.09,
+          "p90": 0,
+          "max": 2
+        },
+        "newlyEnabledPairsAfterAdd": {
+          "min": 1,
+          "p10": 1,
+          "median": 7,
+          "mean": 7.111,
+          "p90": 12.100000000000023,
+          "max": 25
+        },
+        "newPairsPerRemoval": {
+          "min": 0.11764705882352941,
+          "p10": 0.3333333333333333,
+          "median": 0.5,
+          "mean": 0.4850625013150619,
+          "p90": 0.6320574162679427,
+          "max": 0.9545454545454546
+        },
+        "noNewPairRemovalRatio": {
+          "min": 0.3684210526315789,
+          "p10": 0.5,
+          "median": 0.625,
+          "mean": 0.6232855017530995,
+          "p90": 0.7370709382151029,
+          "max": 0.8888888888888888
+        },
+        "singleLegalRemovalStates": {
+          "min": 1,
+          "p10": 2,
+          "median": 3,
+          "mean": 3.393,
+          "p90": 5,
+          "max": 9
+        },
+        "longestSingleLegalRemovalRun": {
+          "min": 1,
+          "p10": 1,
+          "median": 2,
+          "mean": 2.068,
+          "p90": 3,
+          "max": 8
+        },
+        "singleLegalRemovalTail": {
+          "min": 1,
+          "p10": 1,
+          "median": 2,
+          "mean": 1.912,
+          "p90": 3,
+          "max": 8
+        },
+        "directionKinds": {
+          "min": 3,
+          "p10": 4,
+          "median": 4,
+          "mean": 3.943,
+          "p90": 4,
+          "max": 4
+        },
+        "peakLogicalCells": {
+          "min": 27,
+          "p10": 27,
+          "median": 34,
+          "mean": 35.052,
+          "p90": 47.10000000000002,
+          "max": 64
+        },
+        "peakOccupied": {
+          "min": 27,
+          "p10": 27,
+          "median": 27,
+          "mean": 27.292,
+          "p90": 27,
+          "max": 44
+        }
+      },
+      "directionTotals": {
+        "horizontal": 5991,
+        "vertical": 4234,
+        "diagonal": 6174,
+        "reading": 2982
+      }
+    }
+  },
+  "replayValidation": {
+    "generatedProofs": 3000,
+    "legacyProofs": 128,
+    "generatedRemovalsVerifiedAgainstActualCore": 47151,
+    "legacyRemovalsVerifiedAgainstActualCore": 2122,
+    "generatedAddPreconditionsVerifiedAgainstActualCore": 2872,
+    "legacyAddPreconditionsVerifiedAgainstActualCore": 32,
+    "legacyFieldsWithGapMetricBoundaryOvercount": 37,
+    "legacyGapMetricBoundaryOvercount": 47
+  },
+  "normalMatchedOpeningGroups": {
+    "18": {
+      "count": 45,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "blocked_after_two_adds": 12,
+        "cleared": 33
+      },
+      "proofAdditions": {
+        "0": 7,
+        "1": 16,
+        "2": 22
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 19,
+        "mean": 19.133333333333333,
+        "p90": 24,
+        "max": 28
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 4,
+        "p10": 6,
+        "median": 9,
+        "mean": 9.533333333333333,
+        "p90": 13,
+        "max": 19
+      }
+    },
+    "19": {
+      "count": 68,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "blocked_after_two_adds": 21,
+        "cleared": 47
+      },
+      "proofAdditions": {
+        "0": 8,
+        "1": 32,
+        "2": 28
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 19,
+        "mean": 18.764705882352942,
+        "p90": 23,
+        "max": 27
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 4,
+        "p10": 6,
+        "median": 8,
+        "mean": 8.735294117647058,
+        "p90": 12,
+        "max": 17
+      }
+    },
+    "20": {
+      "count": 104,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "cleared": 67,
+        "blocked_after_two_adds": 37
+      },
+      "proofAdditions": {
+        "0": 14,
+        "1": 34,
+        "2": 56
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 19,
+        "mean": 19.35576923076923,
+        "p90": 25,
+        "max": 28
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 4,
+        "p10": 6,
+        "median": 8.5,
+        "mean": 9.134615384615385,
+        "p90": 14,
+        "max": 18
+      }
+    },
+    "21": {
+      "count": 135,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "blocked_after_two_adds": 40,
+        "cleared": 95
+      },
+      "proofAdditions": {
+        "0": 16,
+        "1": 43,
+        "2": 76
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 20,
+        "mean": 19.59259259259259,
+        "p90": 24,
+        "max": 29
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 5,
+        "p10": 6,
+        "median": 9,
+        "mean": 9.214814814814815,
+        "p90": 13,
+        "max": 23
+      }
+    },
+    "22": {
+      "count": 150,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "cleared": 112,
+        "blocked_after_two_adds": 38
+      },
+      "proofAdditions": {
+        "0": 25,
+        "1": 50,
+        "2": 75
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 18.5,
+        "mean": 18.866666666666667,
+        "p90": 23,
+        "max": 30
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 2,
+        "p10": 5,
+        "median": 8,
+        "mean": 8.78,
+        "p90": 13,
+        "max": 26
+      }
+    },
+    "23": {
+      "count": 155,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "cleared": 107,
+        "blocked_after_two_adds": 48
+      },
+      "proofAdditions": {
+        "0": 32,
+        "1": 46,
+        "2": 77
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 18,
+        "mean": 18.509677419354837,
+        "p90": 23,
+        "max": 28
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 3,
+        "p10": 5,
+        "median": 8,
+        "mean": 8.341935483870968,
+        "p90": 12.599999999999994,
+        "max": 17
+      }
+    },
+    "24": {
+      "count": 140,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "cleared": 101,
+        "blocked_after_two_adds": 39
+      },
+      "proofAdditions": {
+        "0": 25,
+        "1": 47,
+        "2": 68
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 18.5,
+        "mean": 18.47142857142857,
+        "p90": 22,
+        "max": 27
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 4,
+        "p10": 5,
+        "median": 8,
+        "mean": 8.135714285714286,
+        "p90": 11.100000000000009,
+        "max": 16
+      }
+    },
+    "25": {
+      "count": 111,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "blocked_after_two_adds": 30,
+        "cleared": 81
+      },
+      "proofAdditions": {
+        "0": 29,
+        "1": 37,
+        "2": 45
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 18,
+        "mean": 18.135135135135137,
+        "p90": 23,
+        "max": 26
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 2,
+        "p10": 5,
+        "median": 7,
+        "mean": 7.63063063063063,
+        "p90": 11,
+        "max": 20
+      }
+    },
+    "26": {
+      "count": 92,
+      "distinctMultisets": 1,
+      "greedyOutcomes": {
+        "blocked_after_two_adds": 21,
+        "cleared": 71
+      },
+      "proofAdditions": {
+        "0": 19,
+        "1": 34,
+        "2": 39
+      },
+      "proofPairMoves": {
+        "min": 14,
+        "p10": 14,
+        "median": 18,
+        "mean": 18.22826086956522,
+        "p90": 23,
+        "max": 27
+      },
+      "newlyEnabledPairsAfterRemoval": {
+        "min": 2,
+        "p10": 4.1,
+        "median": 7,
+        "mean": 7.543478260869565,
+        "p90": 11,
+        "max": 19
+      }
+    }
+  },
+  "normal22StrictControlledGroups": {
+    "controls": "Exact cell count, digit multiset, opening count 22, witness Add count and witness pair-removal count.",
+    "fields": 150,
+    "totalGroups": 17,
+    "groupsWithAtLeastTwoFields": 14,
+    "groupsWithDifferentGreedyOutcomes": 13,
+    "fieldsInGroupsWithDifferentGreedyOutcomes": 144,
+    "oppositeOutcomeFieldPairs": 318,
+    "groups": [
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 0,
+        "witnessPairMoves": 14,
+        "count": 25,
+        "cleared": 22,
+        "blockedAfterTwoAdds": 3,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 66,
+        "seeds": [
+          128,
+          129,
+          160,
+          169,
+          187,
+          196,
+          366,
+          377,
+          378,
+          387,
+          445,
+          460,
+          464,
+          660,
+          675,
+          686,
+          708,
+          805,
+          827,
+          832,
+          870,
+          914,
+          955,
+          991,
+          993
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 1,
+        "witnessPairMoves": 16,
+        "count": 14,
+        "cleared": 12,
+        "blockedAfterTwoAdds": 2,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 24,
+        "seeds": [
+          26,
+          63,
+          102,
+          208,
+          220,
+          242,
+          349,
+          360,
+          470,
+          479,
+          661,
+          707,
+          747,
+          767
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 1,
+        "witnessPairMoves": 17,
+        "count": 15,
+        "cleared": 14,
+        "blockedAfterTwoAdds": 1,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 14,
+        "seeds": [
+          24,
+          162,
+          290,
+          294,
+          371,
+          408,
+          428,
+          477,
+          524,
+          594,
+          624,
+          713,
+          960,
+          964,
+          997
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 1,
+        "witnessPairMoves": 18,
+        "count": 17,
+        "cleared": 16,
+        "blockedAfterTwoAdds": 1,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 16,
+        "seeds": [
+          72,
+          89,
+          117,
+          173,
+          200,
+          221,
+          375,
+          450,
+          458,
+          501,
+          559,
+          668,
+          784,
+          807,
+          831,
+          852,
+          905
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 1,
+        "witnessPairMoves": 19,
+        "count": 3,
+        "cleared": 3,
+        "blockedAfterTwoAdds": 0,
+        "hasDifferentGreedyOutcomes": false,
+        "oppositeOutcomeFieldPairs": 0,
+        "seeds": [
+          266,
+          318,
+          729
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 1,
+        "witnessPairMoves": 20,
+        "count": 1,
+        "cleared": 1,
+        "blockedAfterTwoAdds": 0,
+        "hasDifferentGreedyOutcomes": false,
+        "oppositeOutcomeFieldPairs": 0,
+        "seeds": [
+          586
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 18,
+        "count": 4,
+        "cleared": 2,
+        "blockedAfterTwoAdds": 2,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 4,
+        "seeds": [
+          137,
+          800,
+          860,
+          963
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 19,
+        "count": 6,
+        "cleared": 5,
+        "blockedAfterTwoAdds": 1,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 5,
+        "seeds": [
+          224,
+          270,
+          421,
+          665,
+          845,
+          936
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 20,
+        "count": 22,
+        "cleared": 16,
+        "blockedAfterTwoAdds": 6,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 96,
+        "seeds": [
+          29,
+          32,
+          78,
+          323,
+          379,
+          430,
+          436,
+          487,
+          620,
+          636,
+          688,
+          693,
+          702,
+          758,
+          759,
+          782,
+          829,
+          838,
+          868,
+          917,
+          941,
+          977
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 21,
+        "count": 12,
+        "cleared": 8,
+        "blockedAfterTwoAdds": 4,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 32,
+        "seeds": [
+          18,
+          161,
+          215,
+          372,
+          439,
+          442,
+          622,
+          644,
+          897,
+          903,
+          950,
+          989
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 22,
+        "count": 14,
+        "cleared": 8,
+        "blockedAfterTwoAdds": 6,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 48,
+        "seeds": [
+          65,
+          163,
+          165,
+          429,
+          432,
+          454,
+          507,
+          592,
+          600,
+          655,
+          726,
+          731,
+          780,
+          823
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 23,
+        "count": 3,
+        "cleared": 1,
+        "blockedAfterTwoAdds": 2,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 2,
+        "seeds": [
+          138,
+          216,
+          802
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 24,
+        "count": 3,
+        "cleared": 1,
+        "blockedAfterTwoAdds": 2,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 2,
+        "seeds": [
+          202,
+          621,
+          659
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 25,
+        "count": 4,
+        "cleared": 1,
+        "blockedAfterTwoAdds": 3,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 3,
+        "seeds": [
+          9,
+          424,
+          481,
+          484
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 26,
+        "count": 1,
+        "cleared": 0,
+        "blockedAfterTwoAdds": 1,
+        "hasDifferentGreedyOutcomes": false,
+        "oppositeOutcomeFieldPairs": 0,
+        "seeds": [
+          386
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 27,
+        "count": 5,
+        "cleared": 2,
+        "blockedAfterTwoAdds": 3,
+        "hasDifferentGreedyOutcomes": true,
+        "oppositeOutcomeFieldPairs": 6,
+        "seeds": [
+          8,
+          272,
+          548,
+          908,
+          915
+        ]
+      },
+      {
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22,
+        "witnessAdds": 2,
+        "witnessPairMoves": 30,
+        "count": 1,
+        "cleared": 0,
+        "blockedAfterTwoAdds": 1,
+        "hasDifferentGreedyOutcomes": false,
+        "oppositeOutcomeFieldPairs": 0,
+        "seeds": [
+          811
+        ]
+      }
+    ]
+  },
+  "legacy": {
+    "verifiedProofs": 128,
+    "recordedMetricMismatches": [],
+    "byFamily": {
+      "compact": {
+        "count": 32,
+        "verifiedProofs": 32,
+        "uniqueBoards": 32,
+        "cells": {
+          "24": 27,
+          "28": 5
+        },
+        "fallback": 0,
+        "openingPairs": {
+          "min": 11,
+          "p10": 15,
+          "median": 18,
+          "mean": 18,
+          "p90": 22,
+          "max": 22
+        },
+        "openingPairsHistogram": {
+          "11": 1,
+          "13": 1,
+          "15": 5,
+          "16": 2,
+          "17": 6,
+          "18": 2,
+          "19": 5,
+          "20": 3,
+          "21": 2,
+          "22": 5
+        },
+        "openingPairsPerOccupied": {
+          "min": 0.4583333333333333,
+          "p10": 0.5767857142857142,
+          "median": 0.7291666666666667,
+          "mean": 0.732514880952381,
+          "p90": 0.875,
+          "max": 0.9166666666666666
+        },
+        "openingPairsAmongAllUnorderedDigits": {
+          "min": 0.03968253968253968,
+          "p10": 0.04741775937428112,
+          "median": 0.06159420289855073,
+          "mean": 0.06234543938348289,
+          "p90": 0.07608695652173914,
+          "max": 0.07971014492753623
+        },
+        "proofAdditionsHistogram": {
+          "0": 32
+        },
+        "fieldsWithCompressionTopologyChange": 1,
+        "fractionWithCompressionTopologyChange": 0.03125,
+        "fieldsWithCompressionEnablingPairs": 1,
+        "fieldsWithCompressionLosingPairs": 1,
+        "greedy": {
+          "policy": "pairs(board)[0], Add only at zero legal pairs, maximum two Adds",
+          "outcomes": {
+            "cleared": 25,
+            "blocked_after_two_adds": 7
+          },
+          "addsHistogram": {
+            "0": 17,
+            "1": 7,
+            "2": 8
+          }
+        },
+        "metrics": {
+          "proofSteps": {
+            "min": 12,
+            "p10": 12,
+            "median": 12,
+            "mean": 12.3125,
+            "p90": 14,
+            "max": 14
+          },
+          "pairMoves": {
+            "min": 12,
+            "p10": 12,
+            "median": 12,
+            "mean": 12.3125,
+            "p90": 14,
+            "max": 14
+          },
+          "gapMoves": {
+            "min": 2,
+            "p10": 2,
+            "median": 4,
+            "mean": 4.09375,
+            "p90": 5,
+            "max": 7
+          },
+          "gapMoveRatio": {
+            "min": 0.14285714285714285,
+            "p10": 0.16666666666666666,
+            "median": 0.3333333333333333,
+            "mean": 0.33221726190476186,
+            "p90": 0.4166666666666667,
+            "max": 0.5
+          },
+          "throughEmptyCellsMoves": {
+            "min": 2,
+            "p10": 2,
+            "median": 4,
+            "mean": 3.6875,
+            "p90": 5,
+            "max": 6
+          },
+          "throughEmptyCellsMoveRatio": {
+            "min": 0.14285714285714285,
+            "p10": 0.16666666666666666,
+            "median": 0.3333333333333333,
+            "mean": 0.2994791666666665,
+            "p90": 0.41071428571428586,
+            "max": 0.5
+          },
+          "emptyCellsTraversed": {
+            "min": 2,
+            "p10": 4.2,
+            "median": 10,
+            "mean": 11.125,
+            "p90": 22.400000000000013,
+            "max": 30
+          },
+          "readingBoundaryAdjacentMoves": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.40625,
+            "p90": 1,
+            "max": 3
+          },
+          "rowCompressionEvents": {
+            "min": 2,
+            "p10": 2,
+            "median": 2,
+            "mean": 2.40625,
+            "p90": 3,
+            "max": 3
+          },
+          "rowsRemoved": {
+            "min": 3,
+            "p10": 3,
+            "median": 3,
+            "mean": 3.15625,
+            "p90": 4,
+            "max": 4
+          },
+          "newlyEnabledPairsAfterRemoval": {
+            "min": 3,
+            "p10": 4,
+            "median": 6,
+            "mean": 6.4375,
+            "p90": 9,
+            "max": 12
+          },
+          "newlyEnabledPairsBeforeCompression": {
+            "min": 3,
+            "p10": 4,
+            "median": 6,
+            "mean": 6.3125,
+            "p90": 9,
+            "max": 10
+          },
+          "newlyEnabledPairsByCompression": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.125,
+            "p90": 0,
+            "max": 4
+          },
+          "pairsLostByCompression": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.0625,
+            "p90": 0,
+            "max": 2
+          },
+          "newlyEnabledPairsAfterAdd": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0,
+            "p90": 0,
+            "max": 0
+          },
+          "newPairsPerRemoval": {
+            "min": 0.25,
+            "p10": 0.3333333333333333,
+            "median": 0.5,
+            "mean": 0.5219494047619048,
+            "p90": 0.7464285714285716,
+            "max": 1
+          },
+          "noNewPairRemovalRatio": {
+            "min": 0.4166666666666667,
+            "p10": 0.41785714285714287,
+            "median": 0.5833333333333334,
+            "mean": 0.5736607142857142,
+            "p90": 0.7464285714285716,
+            "max": 0.8333333333333334
+          },
+          "singleLegalRemovalStates": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.28125,
+            "p90": 2,
+            "max": 3
+          },
+          "longestSingleLegalRemovalRun": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.28125,
+            "p90": 2,
+            "max": 3
+          },
+          "singleLegalRemovalTail": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.28125,
+            "p90": 2,
+            "max": 3
+          },
+          "directionKinds": {
+            "min": 2,
+            "p10": 3,
+            "median": 4,
+            "mean": 3.5625,
+            "p90": 4,
+            "max": 4
+          },
+          "peakLogicalCells": {
+            "min": 24,
+            "p10": 24,
+            "median": 24,
+            "mean": 24.625,
+            "p90": 28,
+            "max": 28
+          },
+          "peakOccupied": {
+            "min": 24,
+            "p10": 24,
+            "median": 24,
+            "mean": 24.625,
+            "p90": 28,
+            "max": 28
+          }
+        },
+        "directionTotals": {
+          "horizontal": 140,
+          "vertical": 76,
+          "diagonal": 128,
+          "reading": 50
+        }
+      },
+      "dense": {
+        "count": 32,
+        "verifiedProofs": 32,
+        "uniqueBoards": 32,
+        "cells": {
+          "36": 32
+        },
+        "fallback": 0,
+        "openingPairs": {
+          "min": 18,
+          "p10": 23,
+          "median": 26,
+          "mean": 25.65625,
+          "p90": 28,
+          "max": 28
+        },
+        "openingPairsHistogram": {
+          "18": 1,
+          "22": 2,
+          "23": 3,
+          "24": 3,
+          "25": 3,
+          "26": 5,
+          "27": 7,
+          "28": 8
+        },
+        "openingPairsPerOccupied": {
+          "min": 0.5,
+          "p10": 0.6388888888888888,
+          "median": 0.7222222222222222,
+          "mean": 0.7126736111111112,
+          "p90": 0.7777777777777778,
+          "max": 0.7777777777777778
+        },
+        "openingPairsAmongAllUnorderedDigits": {
+          "min": 0.02857142857142857,
+          "p10": 0.03650793650793651,
+          "median": 0.04126984126984127,
+          "mean": 0.04072420634920634,
+          "p90": 0.044444444444444446,
+          "max": 0.044444444444444446
+        },
+        "proofAdditionsHistogram": {
+          "0": 32
+        },
+        "fieldsWithCompressionTopologyChange": 7,
+        "fractionWithCompressionTopologyChange": 0.21875,
+        "fieldsWithCompressionEnablingPairs": 5,
+        "fieldsWithCompressionLosingPairs": 3,
+        "greedy": {
+          "policy": "pairs(board)[0], Add only at zero legal pairs, maximum two Adds",
+          "outcomes": {
+            "cleared": 23,
+            "blocked_after_two_adds": 9
+          },
+          "addsHistogram": {
+            "0": 14,
+            "1": 4,
+            "2": 14
+          }
+        },
+        "metrics": {
+          "proofSteps": {
+            "min": 18,
+            "p10": 18,
+            "median": 18,
+            "mean": 18,
+            "p90": 18,
+            "max": 18
+          },
+          "pairMoves": {
+            "min": 18,
+            "p10": 18,
+            "median": 18,
+            "mean": 18,
+            "p90": 18,
+            "max": 18
+          },
+          "gapMoves": {
+            "min": 4,
+            "p10": 5,
+            "median": 6,
+            "mean": 6.6875,
+            "p90": 8.900000000000002,
+            "max": 10
+          },
+          "gapMoveRatio": {
+            "min": 0.2222222222222222,
+            "p10": 0.2777777777777778,
+            "median": 0.3333333333333333,
+            "mean": 0.37152777777777785,
+            "p90": 0.4944444444444446,
+            "max": 0.5555555555555556
+          },
+          "throughEmptyCellsMoves": {
+            "min": 4,
+            "p10": 4.1,
+            "median": 6,
+            "mean": 6.21875,
+            "p90": 8,
+            "max": 9
+          },
+          "throughEmptyCellsMoveRatio": {
+            "min": 0.2222222222222222,
+            "p10": 0.22777777777777777,
+            "median": 0.3333333333333333,
+            "mean": 0.34548611111111116,
+            "p90": 0.4444444444444444,
+            "max": 0.5
+          },
+          "emptyCellsTraversed": {
+            "min": 5,
+            "p10": 10.1,
+            "median": 17,
+            "mean": 18.46875,
+            "p90": 28.800000000000004,
+            "max": 48
+          },
+          "readingBoundaryAdjacentMoves": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.46875,
+            "p90": 1.9000000000000021,
+            "max": 2
+          },
+          "rowCompressionEvents": {
+            "min": 2,
+            "p10": 2.1,
+            "median": 3,
+            "mean": 3,
+            "p90": 3.900000000000002,
+            "max": 4
+          },
+          "rowsRemoved": {
+            "min": 4,
+            "p10": 4,
+            "median": 4,
+            "mean": 4,
+            "p90": 4,
+            "max": 4
+          },
+          "newlyEnabledPairsAfterRemoval": {
+            "min": 6,
+            "p10": 10,
+            "median": 13,
+            "mean": 13.78125,
+            "p90": 18,
+            "max": 23
+          },
+          "newlyEnabledPairsBeforeCompression": {
+            "min": 6,
+            "p10": 10,
+            "median": 12.5,
+            "mean": 13.625,
+            "p90": 18,
+            "max": 22
+          },
+          "newlyEnabledPairsByCompression": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.15625,
+            "p90": 1,
+            "max": 1
+          },
+          "pairsLostByCompression": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.125,
+            "p90": 0,
+            "max": 2
+          },
+          "newlyEnabledPairsAfterAdd": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0,
+            "p90": 0,
+            "max": 0
+          },
+          "newPairsPerRemoval": {
+            "min": 0.3333333333333333,
+            "p10": 0.5555555555555556,
+            "median": 0.7222222222222222,
+            "mean": 0.765625,
+            "p90": 1,
+            "max": 1.2777777777777777
+          },
+          "noNewPairRemovalRatio": {
+            "min": 0.2222222222222222,
+            "p10": 0.3333333333333333,
+            "median": 0.4444444444444444,
+            "mean": 0.4618055555555556,
+            "p90": 0.6055555555555557,
+            "max": 0.7777777777777778
+          },
+          "singleLegalRemovalStates": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.28125,
+            "p90": 2,
+            "max": 3
+          },
+          "longestSingleLegalRemovalRun": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.28125,
+            "p90": 2,
+            "max": 3
+          },
+          "singleLegalRemovalTail": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.28125,
+            "p90": 2,
+            "max": 3
+          },
+          "directionKinds": {
+            "min": 3,
+            "p10": 4,
+            "median": 4,
+            "mean": 3.90625,
+            "p90": 4,
+            "max": 4
+          },
+          "peakLogicalCells": {
+            "min": 36,
+            "p10": 36,
+            "median": 36,
+            "mean": 36,
+            "p90": 36,
+            "max": 36
+          },
+          "peakOccupied": {
+            "min": 36,
+            "p10": 36,
+            "median": 36,
+            "mean": 36,
+            "p90": 36,
+            "max": 36
+          }
+        },
+        "directionTotals": {
+          "horizontal": 187,
+          "vertical": 133,
+          "diagonal": 180,
+          "reading": 76
+        }
+      },
+      "bridges": {
+        "count": 32,
+        "verifiedProofs": 32,
+        "uniqueBoards": 32,
+        "cells": {
+          "45": 32
+        },
+        "fallback": 0,
+        "openingPairs": {
+          "min": 18,
+          "p10": 19.1,
+          "median": 21,
+          "mean": 21.03125,
+          "p90": 22,
+          "max": 22
+        },
+        "openingPairsHistogram": {
+          "18": 1,
+          "19": 3,
+          "20": 2,
+          "21": 14,
+          "22": 12
+        },
+        "openingPairsPerOccupied": {
+          "min": 0.5625,
+          "p10": 0.596875,
+          "median": 0.65625,
+          "mean": 0.6572265625,
+          "p90": 0.6875,
+          "max": 0.6875
+        },
+        "openingPairsAmongAllUnorderedDigits": {
+          "min": 0.036290322580645164,
+          "p10": 0.03850806451612903,
+          "median": 0.04233870967741935,
+          "mean": 0.04240171370967744,
+          "p90": 0.04435483870967742,
+          "max": 0.04435483870967742
+        },
+        "proofAdditionsHistogram": {
+          "0": 32
+        },
+        "fieldsWithCompressionTopologyChange": 17,
+        "fractionWithCompressionTopologyChange": 0.53125,
+        "fieldsWithCompressionEnablingPairs": 14,
+        "fieldsWithCompressionLosingPairs": 8,
+        "greedy": {
+          "policy": "pairs(board)[0], Add only at zero legal pairs, maximum two Adds",
+          "outcomes": {
+            "cleared": 29,
+            "blocked_after_two_adds": 3
+          },
+          "addsHistogram": {
+            "0": 17,
+            "1": 11,
+            "2": 4
+          }
+        },
+        "metrics": {
+          "proofSteps": {
+            "min": 16,
+            "p10": 16,
+            "median": 16,
+            "mean": 16,
+            "p90": 16,
+            "max": 16
+          },
+          "pairMoves": {
+            "min": 16,
+            "p10": 16,
+            "median": 16,
+            "mean": 16,
+            "p90": 16,
+            "max": 16
+          },
+          "gapMoves": {
+            "min": 4,
+            "p10": 5.1,
+            "median": 8,
+            "mean": 7.625,
+            "p90": 9.900000000000002,
+            "max": 12
+          },
+          "gapMoveRatio": {
+            "min": 0.25,
+            "p10": 0.31875,
+            "median": 0.5,
+            "mean": 0.4765625,
+            "p90": 0.6187500000000001,
+            "max": 0.75
+          },
+          "throughEmptyCellsMoves": {
+            "min": 3,
+            "p10": 5,
+            "median": 8,
+            "mean": 7.46875,
+            "p90": 9.900000000000002,
+            "max": 12
+          },
+          "throughEmptyCellsMoveRatio": {
+            "min": 0.1875,
+            "p10": 0.3125,
+            "median": 0.5,
+            "mean": 0.466796875,
+            "p90": 0.6187500000000001,
+            "max": 0.75
+          },
+          "emptyCellsTraversed": {
+            "min": 5,
+            "p10": 11,
+            "median": 19.5,
+            "mean": 21.625,
+            "p90": 35.7,
+            "max": 45
+          },
+          "readingBoundaryAdjacentMoves": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.15625,
+            "p90": 0.9000000000000021,
+            "max": 2
+          },
+          "rowCompressionEvents": {
+            "min": 3,
+            "p10": 3,
+            "median": 4,
+            "mean": 3.75,
+            "p90": 4,
+            "max": 4
+          },
+          "rowsRemoved": {
+            "min": 5,
+            "p10": 5,
+            "median": 5,
+            "mean": 5,
+            "p90": 5,
+            "max": 5
+          },
+          "newlyEnabledPairsAfterRemoval": {
+            "min": 6,
+            "p10": 7.1,
+            "median": 11,
+            "mean": 10.84375,
+            "p90": 14.900000000000002,
+            "max": 18
+          },
+          "newlyEnabledPairsBeforeCompression": {
+            "min": 5,
+            "p10": 6.1,
+            "median": 10.5,
+            "mean": 10.25,
+            "p90": 14.800000000000004,
+            "max": 16
+          },
+          "newlyEnabledPairsByCompression": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.65625,
+            "p90": 1.9000000000000021,
+            "max": 4
+          },
+          "pairsLostByCompression": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.46875,
+            "p90": 1.9000000000000021,
+            "max": 4
+          },
+          "newlyEnabledPairsAfterAdd": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0,
+            "p90": 0,
+            "max": 0
+          },
+          "newPairsPerRemoval": {
+            "min": 0.375,
+            "p10": 0.44375,
+            "median": 0.6875,
+            "mean": 0.677734375,
+            "p90": 0.9312500000000001,
+            "max": 1.125
+          },
+          "noNewPairRemovalRatio": {
+            "min": 0.3125,
+            "p10": 0.375,
+            "median": 0.5,
+            "mean": 0.513671875,
+            "p90": 0.625,
+            "max": 0.75
+          },
+          "singleLegalRemovalStates": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.21875,
+            "p90": 2,
+            "max": 2
+          },
+          "longestSingleLegalRemovalRun": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.21875,
+            "p90": 2,
+            "max": 2
+          },
+          "singleLegalRemovalTail": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.21875,
+            "p90": 2,
+            "max": 2
+          },
+          "directionKinds": {
+            "min": 3,
+            "p10": 4,
+            "median": 4,
+            "mean": 3.90625,
+            "p90": 4,
+            "max": 4
+          },
+          "peakLogicalCells": {
+            "min": 45,
+            "p10": 45,
+            "median": 45,
+            "mean": 45,
+            "p90": 45,
+            "max": 45
+          },
+          "peakOccupied": {
+            "min": 32,
+            "p10": 32,
+            "median": 32,
+            "mean": 32,
+            "p90": 32,
+            "max": 32
+          }
+        },
+        "directionTotals": {
+          "horizontal": 142,
+          "vertical": 113,
+          "diagonal": 179,
+          "reading": 78
+        }
+      },
+      "addition": {
+        "count": 32,
+        "verifiedProofs": 32,
+        "uniqueBoards": 32,
+        "cells": {
+          "35": 32
+        },
+        "fallback": 0,
+        "openingPairs": {
+          "min": 19,
+          "p10": 21.1,
+          "median": 24,
+          "mean": 23.71875,
+          "p90": 26,
+          "max": 26
+        },
+        "openingPairsHistogram": {
+          "19": 1,
+          "20": 1,
+          "21": 2,
+          "22": 4,
+          "23": 5,
+          "24": 6,
+          "25": 7,
+          "26": 6
+        },
+        "openingPairsPerOccupied": {
+          "min": 0.5428571428571428,
+          "p10": 0.6028571428571429,
+          "median": 0.6857142857142857,
+          "mean": 0.6776785714285715,
+          "p90": 0.7428571428571429,
+          "max": 0.7428571428571429
+        },
+        "openingPairsAmongAllUnorderedDigits": {
+          "min": 0.031932773109243695,
+          "p10": 0.03546218487394958,
+          "median": 0.040336134453781515,
+          "mean": 0.03986344537815126,
+          "p90": 0.043697478991596636,
+          "max": 0.043697478991596636
+        },
+        "proofAdditionsHistogram": {
+          "1": 32
+        },
+        "fieldsWithCompressionTopologyChange": 18,
+        "fractionWithCompressionTopologyChange": 0.5625,
+        "fieldsWithCompressionEnablingPairs": 18,
+        "fieldsWithCompressionLosingPairs": 5,
+        "greedy": {
+          "policy": "pairs(board)[0], Add only at zero legal pairs, maximum two Adds",
+          "outcomes": {
+            "blocked_after_two_adds": 14,
+            "cleared": 18
+          },
+          "addsHistogram": {
+            "1": 12,
+            "2": 20
+          }
+        },
+        "metrics": {
+          "proofSteps": {
+            "min": 21,
+            "p10": 21,
+            "median": 21,
+            "mean": 21,
+            "p90": 21,
+            "max": 21
+          },
+          "pairMoves": {
+            "min": 20,
+            "p10": 20,
+            "median": 20,
+            "mean": 20,
+            "p90": 20,
+            "max": 20
+          },
+          "gapMoves": {
+            "min": 7,
+            "p10": 7,
+            "median": 9,
+            "mean": 9.0625,
+            "p90": 12,
+            "max": 13
+          },
+          "gapMoveRatio": {
+            "min": 0.35,
+            "p10": 0.35,
+            "median": 0.45,
+            "mean": 0.45312500000000006,
+            "p90": 0.6,
+            "max": 0.65
+          },
+          "throughEmptyCellsMoves": {
+            "min": 6,
+            "p10": 7,
+            "median": 8,
+            "mean": 8.625,
+            "p90": 11,
+            "max": 13
+          },
+          "throughEmptyCellsMoveRatio": {
+            "min": 0.3,
+            "p10": 0.35,
+            "median": 0.4,
+            "mean": 0.4312500000000001,
+            "p90": 0.55,
+            "max": 0.65
+          },
+          "emptyCellsTraversed": {
+            "min": 10,
+            "p10": 12.1,
+            "median": 20.5,
+            "mean": 20.9375,
+            "p90": 31,
+            "max": 39
+          },
+          "readingBoundaryAdjacentMoves": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.4375,
+            "p90": 1,
+            "max": 2
+          },
+          "rowCompressionEvents": {
+            "min": 3,
+            "p10": 3,
+            "median": 4,
+            "mean": 3.84375,
+            "p90": 4.900000000000002,
+            "max": 5
+          },
+          "rowsRemoved": {
+            "min": 5,
+            "p10": 5,
+            "median": 5,
+            "mean": 5,
+            "p90": 5,
+            "max": 5
+          },
+          "newlyEnabledPairsAfterRemoval": {
+            "min": 9,
+            "p10": 11.1,
+            "median": 13,
+            "mean": 14.03125,
+            "p90": 17.900000000000002,
+            "max": 22
+          },
+          "newlyEnabledPairsBeforeCompression": {
+            "min": 8,
+            "p10": 10,
+            "median": 13,
+            "mean": 13.28125,
+            "p90": 17,
+            "max": 22
+          },
+          "newlyEnabledPairsByCompression": {
+            "min": 0,
+            "p10": 0,
+            "median": 1,
+            "mean": 0.84375,
+            "p90": 2,
+            "max": 2
+          },
+          "pairsLostByCompression": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "mean": 0.15625,
+            "p90": 1,
+            "max": 1
+          },
+          "newlyEnabledPairsAfterAdd": {
+            "min": 1,
+            "p10": 1.1,
+            "median": 2.5,
+            "mean": 2.65625,
+            "p90": 4,
+            "max": 5
+          },
+          "newPairsPerRemoval": {
+            "min": 0.45,
+            "p10": 0.555,
+            "median": 0.65,
+            "mean": 0.7015625000000001,
+            "p90": 0.8950000000000001,
+            "max": 1.1
+          },
+          "noNewPairRemovalRatio": {
+            "min": 0.4,
+            "p10": 0.45,
+            "median": 0.525,
+            "mean": 0.5187500000000003,
+            "p90": 0.5950000000000001,
+            "max": 0.65
+          },
+          "singleLegalRemovalStates": {
+            "min": 1,
+            "p10": 1,
+            "median": 2,
+            "mean": 2.5,
+            "p90": 3.900000000000002,
+            "max": 5
+          },
+          "longestSingleLegalRemovalRun": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.59375,
+            "p90": 2.900000000000002,
+            "max": 3
+          },
+          "singleLegalRemovalTail": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "mean": 1.4375,
+            "p90": 2,
+            "max": 3
+          },
+          "directionKinds": {
+            "min": 3,
+            "p10": 4,
+            "median": 4,
+            "mean": 3.96875,
+            "p90": 4,
+            "max": 4
+          },
+          "peakLogicalCells": {
+            "min": 40,
+            "p10": 40,
+            "median": 40,
+            "mean": 40,
+            "p90": 40,
+            "max": 40
+          },
+          "peakOccupied": {
+            "min": 35,
+            "p10": 35,
+            "median": 35,
+            "mean": 35,
+            "p90": 35,
+            "max": 35
+          }
+        },
+        "directionTotals": {
+          "horizontal": 170,
+          "vertical": 119,
+          "diagonal": 265,
+          "reading": 86
+        }
+      }
+    }
+  },
+  "priorAudit14Comparison": {
+    "easy18": {
+      "expected": {
+        "median": 13,
+        "adds": [
+          1000,
+          0,
+          0
+        ],
+        "greedyWins": 1000,
+        "fallback": 0
+      },
+      "actual": {
+        "median": 13,
+        "adds": [
+          1000,
+          0,
+          0
+        ],
+        "greedyWins": 1000,
+        "fallback": 0
+      },
+      "matches": true
+    },
+    "normal28": {
+      "expected": {
+        "median": 22,
+        "adds": [
+          175,
+          339,
+          486
+        ],
+        "greedyWins": 714,
+        "fallback": 0
+      },
+      "actual": {
+        "median": 22,
+        "adds": [
+          175,
+          339,
+          486
+        ],
+        "greedyWins": 714,
+        "fallback": 0
+      },
+      "matches": true
+    },
+    "hard27": {
+      "expected": {
+        "median": 16,
+        "adds": [
+          0,
+          439,
+          561
+        ],
+        "greedyWins": 584,
+        "fallback": 0
+      },
+      "actual": {
+        "median": 16,
+        "adds": [
+          0,
+          439,
+          561
+        ],
+        "greedyWins": 584,
+        "fallback": 0
+      },
+      "matches": true
+    }
+  },
+  "limits": [
+    "Node execution of exact source, not a measured phone or production-user result.",
+    "Each seed starts with an empty recent-history list; this does not validate long persisted sessions.",
+    "A single chosen witness and one fixed greedy policy describe continuation behavior, not universal difficulty.",
+    "No human playtest, completion-time estimate, minimum-Adds proof or exhaustive solution-tree census is claimed.",
+    "Zero fallbacks in 1000 starts per level does not prove zero fallback probability.",
+    "Legacy catalog is audited as reference content; this does not assert it is the current runtime source of starts."
+  ],
+  "elapsedSeconds": 4.181755923
+}

@@ -1,0 +1,2093 @@
+{
+  "sourceRef": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+  "definitions": {
+    "openingPairs": "core.pairs(initialBoard).length; excludes no pair known to actual enumerator",
+    "openingPairsPerOccupied": "Number of legal pairs divided by occupied digit count; a descriptive normalization, not probability or human difficulty.",
+    "openingPairsAmongAllUnorderedDigits": "Number of legal pairs divided by n*(n-1)/2; a descriptive edge density.",
+    "witness": "The actual generator-returned winning proof, not a shortest route and not proof of minimum required Adds.",
+    "newlyEnabledPairsAfterRemoval": "After actual removal and row compression, stable endpoint-ID pair edges absent before the removal. Counts event occurrences, so an edge can count again if lost and re-enabled later.",
+    "newlyEnabledPairsBeforeCompression": "Edges newly legal after zeroing the two digits, before compression; these may disappear again during compression.",
+    "newlyEnabledPairsByCompression": "Edges after compression absent in the zeroed but uncompressed intermediate state.",
+    "pairIdentity": "Persistent ID per logical cell; whole removed rows delete IDs; appended clones receive fresh IDs. Reconstructed row filtering is asserted equal to actual removePair output at every action.",
+    "gapMoves": "Exact legacy content.json metric retained for comparison: max(abs(dr),abs(dc)) > 1 OR reading-order index distance > 1. It also counts reading-order adjacent row-boundary pairs with no intervening logical cells.",
+    "throughEmptyCellsMoves": "Number of removals with at least one intermediate empty logical cell on the legal path selected by actual checkPair; for reading path, abs(b-a)-1; for straight path, max(abs(dr),abs(dc))-1.",
+    "readingBoundaryAdjacentMoves": "Reading-order pairs with abs(b-a) == 1. These explain every extra legacy gapMoves count over throughEmptyCellsMoves in this audit.",
+    "singleLegalRemovalRun": "Consecutive witness removals whose actual pre-state has exactly one legal pair; interrupted by Add or a state with more than one legal pair. No claim of human obviousness.",
+    "greedyFailure": "This deterministic first-pair policy is blocked after at most two Adds; it is not a proof of board unsolvability.",
+    "fixtureSelection": "Extremal controlled examples selected from the sample; not population-effect estimates or independently randomized A/B tests.",
+    "compressionCounts": "Include final board clear and removal of a partial final row.",
+    "compressionTopologyChange": "At least one surviving endpoint-ID legal pair appears or disappears when empty rows are removed, compared with the same zeroed digits before compression; deleting the selected pair alone does not count."
+  },
+  "matches": [
+    {
+      "name": "same_start_and_witness_length_different_greedy_outcome",
+      "selection": "Among opening-22 Normal fields with equal witness Add count and pair-removal count but opposite greedy outcome, maximum difference in newly enabled pairs after removals; first seed pair breaks ties.",
+      "score": 7,
+      "controls": {
+        "level": 1,
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22
+      },
+      "seeds": [
+        8,
+        272
+      ]
+    },
+    {
+      "name": "same_start_different_witness_length",
+      "selection": "Among opening-22 Normal fields, maximum difference in witness pair-removal count; first seed pair breaks ties.",
+      "score": 16,
+      "controls": {
+        "level": 1,
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22
+      },
+      "seeds": [
+        128,
+        811
+      ]
+    },
+    {
+      "name": "same_start_and_witness_length_different_reveal",
+      "selection": "Among opening-22 Normal fields with equal witness Add count, pair-removal count and greedy outcome, maximum difference in newly enabled pairs after removals; first seed pair breaks ties.",
+      "score": 13,
+      "controls": {
+        "level": 1,
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22
+      },
+      "seeds": [
+        24,
+        371
+      ]
+    },
+    {
+      "name": "same_start_and_witness_length_different_empty_cell_paths",
+      "selection": "Among opening-22 Normal fields with equal witness Add count, pair-removal count and greedy outcome, maximum difference in moves whose selected legal path has at least one intermediate empty cell; first seed pair breaks ties.",
+      "score": 8,
+      "controls": {
+        "level": 1,
+        "cells": 28,
+        "digitMultiset": "1111111111112233445566778899",
+        "openingPairs": 22
+      },
+      "seeds": [
+        290,
+        371
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "id": "normal28-seed-8",
+      "level": 1,
+      "seed": 8,
+      "seedAfterGeneration": 2207636703,
+      "board": [
+        2,
+        1,
+        3,
+        1,
+        7,
+        8,
+        7,
+        9,
+        1,
+        5,
+        1,
+        9,
+        1,
+        3,
+        4,
+        1,
+        6,
+        1,
+        2,
+        1,
+        6,
+        1,
+        1,
+        1,
+        4,
+        8,
+        1,
+        5
+      ],
+      "boardSha256": "333ad8e85407f92ac6e964c73c18be42996a3624832b6c5bcebcb4355a056538",
+      "digitMultiset": "1111111111112233445566778899",
+      "proof": [
+        [
+          1,
+          10
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          12,
+          21
+        ],
+        [
+          14,
+          24
+        ],
+        [
+          15,
+          23
+        ],
+        [
+          17,
+          26
+        ],
+        null,
+        [
+          27,
+          37
+        ],
+        [
+          18,
+          36
+        ],
+        null,
+        [
+          28,
+          36
+        ],
+        [
+          9,
+          45
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          20,
+          28
+        ],
+        [
+          21,
+          29
+        ],
+        [
+          11,
+          38
+        ],
+        [
+          10,
+          13
+        ],
+        [
+          22,
+          30
+        ],
+        [
+          16,
+          23
+        ],
+        [
+          7,
+          16
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          8,
+          10
+        ],
+        [
+          7,
+          12
+        ]
+      ],
+      "fallback": false,
+      "openingPairs": 22,
+      "openingPairsPerOccupied": 0.7857142857142857,
+      "openingPairsAmongAllUnorderedDigits": 0.0582010582010582,
+      "metrics": {
+        "proofSteps": 29,
+        "pairMoves": 27,
+        "additions": 2,
+        "directions": {
+          "horizontal": 5,
+          "vertical": 10,
+          "diagonal": 8,
+          "reading": 4
+        },
+        "gapMoves": 11,
+        "throughEmptyCellsMoves": 11,
+        "emptyCellsTraversed": 31,
+        "readingBoundaryAdjacentMoves": 0,
+        "crossingRowMoves": 22,
+        "equalValueMoves": 18,
+        "rowCompressionEvents": 6,
+        "rowsRemoved": 7,
+        "logicalCellsRemovedByCompression": 54,
+        "newlyEnabledPairsAfterRemoval": 13,
+        "newlyEnabledPairsBeforeCompression": 13,
+        "newlyEnabledPairsByCompression": 0,
+        "pairsLostByCompression": 0,
+        "newlyEnabledPairsAfterAdd": 16,
+        "removalsEnablingNoNewPairs": 16,
+        "singleLegalRemovalStates": 4,
+        "longestSingleLegalRemovalRun": 2,
+        "singleLegalRemovalTail": 2,
+        "minLegalPairsBeforeRemoval": 1,
+        "maxLegalPairsBeforeRemoval": 22,
+        "peakLogicalCells": 52,
+        "peakOccupied": 32,
+        "legalPairCountsBeforeRemoval": [
+          22,
+          18,
+          14,
+          13,
+          12,
+          8,
+          5,
+          3,
+          1,
+          2,
+          1,
+          14,
+          12,
+          12,
+          11,
+          10,
+          9,
+          8,
+          7,
+          7,
+          7,
+          7,
+          4,
+          3,
+          2,
+          1,
+          1
+        ],
+        "addAtPairMoves": [
+          9,
+          11
+        ],
+        "equalValueRatio": 0.6666666666666666,
+        "gapMoveRatio": 0.4074074074074074,
+        "throughEmptyCellsMoveRatio": 0.4074074074074074,
+        "newPairsPerRemoval": 0.48148148148148145,
+        "noNewPairRemovalRatio": 0.5925925925925926,
+        "directionKinds": 4,
+        "cleared": true,
+        "finalLogicalCells": 0,
+        "finalOccupied": 0
+      },
+      "greedy": {
+        "outcome": "cleared",
+        "additions": 2,
+        "pairMoves": 27,
+        "remainingDigits": 0,
+        "finalLogicalCells": 0
+      },
+      "greedyRoute": [
+        [
+          1,
+          10
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          12,
+          21
+        ],
+        [
+          14,
+          24
+        ],
+        [
+          15,
+          23
+        ],
+        [
+          17,
+          26
+        ],
+        null,
+        [
+          27,
+          37
+        ],
+        [
+          18,
+          36
+        ],
+        null,
+        [
+          28,
+          36
+        ],
+        [
+          9,
+          45
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          20,
+          28
+        ],
+        [
+          21,
+          29
+        ],
+        [
+          11,
+          38
+        ],
+        [
+          10,
+          13
+        ],
+        [
+          22,
+          30
+        ],
+        [
+          16,
+          23
+        ],
+        [
+          7,
+          16
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          8,
+          10
+        ],
+        [
+          7,
+          12
+        ]
+      ]
+    },
+    {
+      "id": "normal28-seed-24",
+      "level": 1,
+      "seed": 24,
+      "seedAfterGeneration": 2207636719,
+      "board": [
+        3,
+        7,
+        1,
+        8,
+        4,
+        2,
+        9,
+        1,
+        1,
+        1,
+        1,
+        5,
+        5,
+        1,
+        7,
+        2,
+        6,
+        1,
+        1,
+        4,
+        9,
+        6,
+        1,
+        1,
+        3,
+        8,
+        1,
+        1
+      ],
+      "boardSha256": "65832a976235b75458826482a45d13dbc63f82b4dba3ddaa1ed0f4f798180d0b",
+      "digitMultiset": "1111111111112233445566778899",
+      "proof": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          13,
+          22
+        ],
+        [
+          14,
+          24
+        ],
+        [
+          4,
+          16
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          17,
+          18
+        ],
+        null,
+        [
+          3,
+          23
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          7,
+          9
+        ]
+      ],
+      "fallback": false,
+      "openingPairs": 22,
+      "openingPairsPerOccupied": 0.7857142857142857,
+      "openingPairsAmongAllUnorderedDigits": 0.0582010582010582,
+      "metrics": {
+        "proofSteps": 18,
+        "pairMoves": 17,
+        "additions": 1,
+        "directions": {
+          "horizontal": 3,
+          "vertical": 4,
+          "diagonal": 5,
+          "reading": 5
+        },
+        "gapMoves": 6,
+        "throughEmptyCellsMoves": 3,
+        "emptyCellsTraversed": 13,
+        "readingBoundaryAdjacentMoves": 3,
+        "crossingRowMoves": 14,
+        "equalValueMoves": 13,
+        "rowCompressionEvents": 4,
+        "rowsRemoved": 5,
+        "logicalCellsRemovedByCompression": 34,
+        "newlyEnabledPairsAfterRemoval": 2,
+        "newlyEnabledPairsBeforeCompression": 2,
+        "newlyEnabledPairsByCompression": 0,
+        "pairsLostByCompression": 0,
+        "newlyEnabledPairsAfterAdd": 6,
+        "removalsEnablingNoNewPairs": 15,
+        "singleLegalRemovalStates": 2,
+        "longestSingleLegalRemovalRun": 1,
+        "singleLegalRemovalTail": 1,
+        "minLegalPairsBeforeRemoval": 1,
+        "maxLegalPairsBeforeRemoval": 22,
+        "peakLogicalCells": 28,
+        "peakOccupied": 28,
+        "legalPairCountsBeforeRemoval": [
+          22,
+          21,
+          17,
+          16,
+          12,
+          9,
+          8,
+          5,
+          5,
+          4,
+          1,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        "addAtPairMoves": [
+          11
+        ],
+        "equalValueRatio": 0.7647058823529411,
+        "gapMoveRatio": 0.35294117647058826,
+        "throughEmptyCellsMoveRatio": 0.17647058823529413,
+        "newPairsPerRemoval": 0.11764705882352941,
+        "noNewPairRemovalRatio": 0.8823529411764706,
+        "directionKinds": 4,
+        "cleared": true,
+        "finalLogicalCells": 0,
+        "finalOccupied": 0
+      },
+      "greedy": {
+        "outcome": "cleared",
+        "additions": 1,
+        "pairMoves": 17,
+        "remainingDigits": 0,
+        "finalLogicalCells": 0
+      },
+      "greedyRoute": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          13,
+          22
+        ],
+        [
+          14,
+          24
+        ],
+        [
+          4,
+          16
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          17,
+          18
+        ],
+        null,
+        [
+          3,
+          23
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          7,
+          9
+        ]
+      ]
+    },
+    {
+      "id": "normal28-seed-128",
+      "level": 1,
+      "seed": 128,
+      "seedAfterGeneration": 2207636823,
+      "board": [
+        1,
+        9,
+        1,
+        7,
+        8,
+        2,
+        1,
+        1,
+        4,
+        5,
+        1,
+        2,
+        7,
+        8,
+        1,
+        1,
+        5,
+        3,
+        1,
+        3,
+        9,
+        1,
+        6,
+        4,
+        1,
+        6,
+        1,
+        1
+      ],
+      "boardSha256": "bc0eac0069fdf46e3cdb6b3e499765dc5a21ae1de68998efceb356fbff7b1154",
+      "digitMultiset": "1111111111112233445566778899",
+      "proof": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          11,
+          13
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          9,
+          16
+        ],
+        [
+          18,
+          27
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          8,
+          16
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          6,
+          8
+        ]
+      ],
+      "fallback": false,
+      "openingPairs": 22,
+      "openingPairsPerOccupied": 0.7857142857142857,
+      "openingPairsAmongAllUnorderedDigits": 0.0582010582010582,
+      "metrics": {
+        "proofSteps": 14,
+        "pairMoves": 14,
+        "additions": 0,
+        "directions": {
+          "horizontal": 9,
+          "vertical": 2,
+          "diagonal": 2,
+          "reading": 1
+        },
+        "gapMoves": 4,
+        "throughEmptyCellsMoves": 4,
+        "emptyCellsTraversed": 9,
+        "readingBoundaryAdjacentMoves": 0,
+        "crossingRowMoves": 5,
+        "equalValueMoves": 8,
+        "rowCompressionEvents": 4,
+        "rowsRemoved": 4,
+        "logicalCellsRemovedByCompression": 28,
+        "newlyEnabledPairsAfterRemoval": 5,
+        "newlyEnabledPairsBeforeCompression": 4,
+        "newlyEnabledPairsByCompression": 1,
+        "pairsLostByCompression": 0,
+        "newlyEnabledPairsAfterAdd": 0,
+        "removalsEnablingNoNewPairs": 9,
+        "singleLegalRemovalStates": 1,
+        "longestSingleLegalRemovalRun": 1,
+        "singleLegalRemovalTail": 1,
+        "minLegalPairsBeforeRemoval": 1,
+        "maxLegalPairsBeforeRemoval": 22,
+        "peakLogicalCells": 28,
+        "peakOccupied": 28,
+        "legalPairCountsBeforeRemoval": [
+          22,
+          18,
+          15,
+          15,
+          12,
+          8,
+          7,
+          5,
+          4,
+          3,
+          3,
+          3,
+          2,
+          1
+        ],
+        "addAtPairMoves": [],
+        "equalValueRatio": 0.5714285714285714,
+        "gapMoveRatio": 0.2857142857142857,
+        "throughEmptyCellsMoveRatio": 0.2857142857142857,
+        "newPairsPerRemoval": 0.35714285714285715,
+        "noNewPairRemovalRatio": 0.6428571428571429,
+        "directionKinds": 4,
+        "cleared": true,
+        "finalLogicalCells": 0,
+        "finalOccupied": 0
+      },
+      "greedy": {
+        "outcome": "cleared",
+        "additions": 0,
+        "pairMoves": 14,
+        "remainingDigits": 0,
+        "finalLogicalCells": 0
+      },
+      "greedyRoute": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          11,
+          13
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          9,
+          16
+        ],
+        [
+          18,
+          27
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          8,
+          16
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          6,
+          8
+        ]
+      ]
+    },
+    {
+      "id": "normal28-seed-272",
+      "level": 1,
+      "seed": 272,
+      "seedAfterGeneration": 120306366,
+      "board": [
+        8,
+        3,
+        5,
+        4,
+        1,
+        1,
+        2,
+        1,
+        1,
+        5,
+        9,
+        9,
+        1,
+        3,
+        1,
+        1,
+        1,
+        6,
+        1,
+        8,
+        4,
+        7,
+        6,
+        1,
+        1,
+        2,
+        1,
+        7
+      ],
+      "boardSha256": "4d1ddd5c3453891581c8069167f6aa942fc0068d1f58c48b6242e6cf6b2f9c9f",
+      "digitMultiset": "1111111111112233445566778899",
+      "proof": [
+        [
+          4,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          10,
+          11
+        ],
+        [
+          1,
+          21
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          16,
+          24
+        ],
+        [
+          20,
+          22
+        ],
+        null,
+        [
+          2,
+          29
+        ],
+        [
+          19,
+          28
+        ],
+        [
+          12,
+          36
+        ],
+        [
+          3,
+          30
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          9,
+          14
+        ],
+        [
+          22,
+          30
+        ],
+        [
+          29,
+          31
+        ],
+        null,
+        [
+          23,
+          33
+        ],
+        [
+          25,
+          34
+        ],
+        [
+          16,
+          43
+        ],
+        [
+          26,
+          35
+        ],
+        [
+          28,
+          36
+        ],
+        [
+          18,
+          38
+        ],
+        [
+          32,
+          41
+        ],
+        [
+          0,
+          30
+        ],
+        [
+          17,
+          24
+        ],
+        [
+          10,
+          13
+        ],
+        [
+          8,
+          15
+        ],
+        [
+          4,
+          17
+        ]
+      ],
+      "fallback": false,
+      "openingPairs": 22,
+      "openingPairsPerOccupied": 0.7857142857142857,
+      "openingPairsAmongAllUnorderedDigits": 0.0582010582010582,
+      "metrics": {
+        "proofSteps": 29,
+        "pairMoves": 27,
+        "additions": 2,
+        "directions": {
+          "horizontal": 9,
+          "vertical": 7,
+          "diagonal": 8,
+          "reading": 3
+        },
+        "gapMoves": 15,
+        "throughEmptyCellsMoves": 15,
+        "emptyCellsTraversed": 49,
+        "readingBoundaryAdjacentMoves": 0,
+        "crossingRowMoves": 18,
+        "equalValueMoves": 20,
+        "rowCompressionEvents": 4,
+        "rowsRemoved": 6,
+        "logicalCellsRemovedByCompression": 54,
+        "newlyEnabledPairsAfterRemoval": 20,
+        "newlyEnabledPairsBeforeCompression": 20,
+        "newlyEnabledPairsByCompression": 1,
+        "pairsLostByCompression": 1,
+        "newlyEnabledPairsAfterAdd": 12,
+        "removalsEnablingNoNewPairs": 12,
+        "singleLegalRemovalStates": 6,
+        "longestSingleLegalRemovalRun": 3,
+        "singleLegalRemovalTail": 3,
+        "minLegalPairsBeforeRemoval": 1,
+        "maxLegalPairsBeforeRemoval": 22,
+        "peakLogicalCells": 45,
+        "peakOccupied": 28,
+        "legalPairCountsBeforeRemoval": [
+          22,
+          17,
+          13,
+          11,
+          10,
+          4,
+          1,
+          5,
+          5,
+          5,
+          5,
+          5,
+          4,
+          1,
+          1,
+          7,
+          7,
+          5,
+          4,
+          2,
+          2,
+          2,
+          3,
+          3,
+          1,
+          1,
+          1
+        ],
+        "addAtPairMoves": [
+          7,
+          15
+        ],
+        "equalValueRatio": 0.7407407407407407,
+        "gapMoveRatio": 0.5555555555555556,
+        "throughEmptyCellsMoveRatio": 0.5555555555555556,
+        "newPairsPerRemoval": 0.7407407407407407,
+        "noNewPairRemovalRatio": 0.4444444444444444,
+        "directionKinds": 4,
+        "cleared": true,
+        "finalLogicalCells": 0,
+        "finalOccupied": 0
+      },
+      "greedy": {
+        "outcome": "blocked_after_two_adds",
+        "additions": 2,
+        "pairMoves": 23,
+        "remainingDigits": 8,
+        "finalLogicalCells": 18
+      },
+      "greedyRoute": [
+        [
+          4,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          10,
+          11
+        ],
+        [
+          1,
+          21
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          16,
+          24
+        ],
+        [
+          20,
+          22
+        ],
+        null,
+        [
+          2,
+          29
+        ],
+        [
+          19,
+          28
+        ],
+        [
+          12,
+          36
+        ],
+        [
+          3,
+          30
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          9,
+          14
+        ],
+        [
+          22,
+          30
+        ],
+        [
+          29,
+          31
+        ],
+        null,
+        [
+          23,
+          33
+        ],
+        [
+          25,
+          34
+        ],
+        [
+          16,
+          43
+        ],
+        [
+          26,
+          35
+        ],
+        [
+          28,
+          36
+        ],
+        [
+          18,
+          38
+        ],
+        [
+          17,
+          24
+        ],
+        [
+          4,
+          14
+        ]
+      ]
+    },
+    {
+      "id": "normal28-seed-290",
+      "level": 1,
+      "seed": 290,
+      "seedAfterGeneration": 2207636985,
+      "board": [
+        8,
+        1,
+        3,
+        7,
+        1,
+        1,
+        8,
+        1,
+        9,
+        2,
+        1,
+        4,
+        4,
+        1,
+        1,
+        3,
+        1,
+        2,
+        6,
+        1,
+        9,
+        5,
+        1,
+        5,
+        6,
+        7,
+        1,
+        1
+      ],
+      "boardSha256": "5d13b65f22eb4fb36df28d1e5ac06fae5b4340f0cd47a987c95ead0a281caa1a",
+      "digitMultiset": "1111111111112233445566778899",
+      "proof": [
+        [
+          0,
+          9
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          13,
+          14
+        ],
+        [
+          15,
+          25
+        ],
+        [
+          16,
+          26
+        ],
+        [
+          6,
+          17
+        ],
+        [
+          1,
+          2
+        ],
+        null,
+        [
+          0,
+          10
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          0,
+          6
+        ]
+      ],
+      "fallback": false,
+      "openingPairs": 22,
+      "openingPairsPerOccupied": 0.7857142857142857,
+      "openingPairsAmongAllUnorderedDigits": 0.0582010582010582,
+      "metrics": {
+        "proofSteps": 18,
+        "pairMoves": 17,
+        "additions": 1,
+        "directions": {
+          "horizontal": 7,
+          "vertical": 2,
+          "diagonal": 7,
+          "reading": 1
+        },
+        "gapMoves": 2,
+        "throughEmptyCellsMoves": 2,
+        "emptyCellsTraversed": 15,
+        "readingBoundaryAdjacentMoves": 0,
+        "crossingRowMoves": 10,
+        "equalValueMoves": 11,
+        "rowCompressionEvents": 3,
+        "rowsRemoved": 4,
+        "logicalCellsRemovedByCompression": 34,
+        "newlyEnabledPairsAfterRemoval": 4,
+        "newlyEnabledPairsBeforeCompression": 4,
+        "newlyEnabledPairsByCompression": 0,
+        "pairsLostByCompression": 0,
+        "newlyEnabledPairsAfterAdd": 6,
+        "removalsEnablingNoNewPairs": 13,
+        "singleLegalRemovalStates": 2,
+        "longestSingleLegalRemovalRun": 2,
+        "singleLegalRemovalTail": 2,
+        "minLegalPairsBeforeRemoval": 1,
+        "maxLegalPairsBeforeRemoval": 22,
+        "peakLogicalCells": 28,
+        "peakOccupied": 28,
+        "legalPairCountsBeforeRemoval": [
+          22,
+          22,
+          18,
+          17,
+          12,
+          9,
+          8,
+          5,
+          4,
+          3,
+          2,
+          6,
+          5,
+          4,
+          2,
+          1,
+          1
+        ],
+        "addAtPairMoves": [
+          11
+        ],
+        "equalValueRatio": 0.6470588235294118,
+        "gapMoveRatio": 0.11764705882352941,
+        "throughEmptyCellsMoveRatio": 0.11764705882352941,
+        "newPairsPerRemoval": 0.23529411764705882,
+        "noNewPairRemovalRatio": 0.7647058823529411,
+        "directionKinds": 4,
+        "cleared": true,
+        "finalLogicalCells": 0,
+        "finalOccupied": 0
+      },
+      "greedy": {
+        "outcome": "cleared",
+        "additions": 1,
+        "pairMoves": 17,
+        "remainingDigits": 0,
+        "finalLogicalCells": 0
+      },
+      "greedyRoute": [
+        [
+          0,
+          9
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          13,
+          14
+        ],
+        [
+          15,
+          25
+        ],
+        [
+          16,
+          26
+        ],
+        [
+          6,
+          17
+        ],
+        [
+          1,
+          2
+        ],
+        null,
+        [
+          0,
+          10
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          0,
+          6
+        ]
+      ]
+    },
+    {
+      "id": "normal28-seed-371",
+      "level": 1,
+      "seed": 371,
+      "seedAfterGeneration": 2207637066,
+      "board": [
+        1,
+        5,
+        2,
+        4,
+        3,
+        4,
+        1,
+        2,
+        1,
+        6,
+        7,
+        1,
+        1,
+        9,
+        6,
+        1,
+        1,
+        1,
+        7,
+        9,
+        1,
+        5,
+        1,
+        8,
+        1,
+        1,
+        3,
+        8
+      ],
+      "boardSha256": "0a6b4833eb9ac54d482192a1576ef2f49ab41f9d1bef2cee985695648b61d4e5",
+      "digitMultiset": "1111111111112233445566778899",
+      "proof": [
+        [
+          5,
+          14
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          7,
+          23
+        ],
+        [
+          8,
+          16
+        ],
+        [
+          10,
+          18
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          1,
+          21
+        ],
+        [
+          13,
+          17
+        ],
+        [
+          19,
+          22
+        ],
+        [
+          24,
+          25
+        ],
+        null,
+        [
+          9,
+          29
+        ],
+        [
+          2,
+          18
+        ],
+        [
+          4,
+          17
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "fallback": false,
+      "openingPairs": 22,
+      "openingPairsPerOccupied": 0.7857142857142857,
+      "openingPairsAmongAllUnorderedDigits": 0.0582010582010582,
+      "metrics": {
+        "proofSteps": 18,
+        "pairMoves": 17,
+        "additions": 1,
+        "directions": {
+          "horizontal": 6,
+          "vertical": 2,
+          "diagonal": 8,
+          "reading": 1
+        },
+        "gapMoves": 10,
+        "throughEmptyCellsMoves": 10,
+        "emptyCellsTraversed": 27,
+        "readingBoundaryAdjacentMoves": 0,
+        "crossingRowMoves": 11,
+        "equalValueMoves": 9,
+        "rowCompressionEvents": 4,
+        "rowsRemoved": 4,
+        "logicalCellsRemovedByCompression": 34,
+        "newlyEnabledPairsAfterRemoval": 15,
+        "newlyEnabledPairsBeforeCompression": 13,
+        "newlyEnabledPairsByCompression": 2,
+        "pairsLostByCompression": 0,
+        "newlyEnabledPairsAfterAdd": 2,
+        "removalsEnablingNoNewPairs": 6,
+        "singleLegalRemovalStates": 5,
+        "longestSingleLegalRemovalRun": 4,
+        "singleLegalRemovalTail": 4,
+        "minLegalPairsBeforeRemoval": 1,
+        "maxLegalPairsBeforeRemoval": 23,
+        "peakLogicalCells": 34,
+        "peakOccupied": 28,
+        "legalPairCountsBeforeRemoval": [
+          22,
+          23,
+          18,
+          18,
+          13,
+          14,
+          10,
+          7,
+          7,
+          3,
+          1,
+          2,
+          3,
+          1,
+          1,
+          1,
+          1
+        ],
+        "addAtPairMoves": [
+          11
+        ],
+        "equalValueRatio": 0.5294117647058824,
+        "gapMoveRatio": 0.5882352941176471,
+        "throughEmptyCellsMoveRatio": 0.5882352941176471,
+        "newPairsPerRemoval": 0.8823529411764706,
+        "noNewPairRemovalRatio": 0.35294117647058826,
+        "directionKinds": 4,
+        "cleared": true,
+        "finalLogicalCells": 0,
+        "finalOccupied": 0
+      },
+      "greedy": {
+        "outcome": "cleared",
+        "additions": 1,
+        "pairMoves": 17,
+        "remainingDigits": 0,
+        "finalLogicalCells": 0
+      },
+      "greedyRoute": [
+        [
+          5,
+          14
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          7,
+          23
+        ],
+        [
+          8,
+          16
+        ],
+        [
+          10,
+          18
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          1,
+          21
+        ],
+        [
+          13,
+          17
+        ],
+        [
+          19,
+          22
+        ],
+        [
+          24,
+          25
+        ],
+        null,
+        [
+          9,
+          29
+        ],
+        [
+          2,
+          18
+        ],
+        [
+          4,
+          17
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          1,
+          6
+        ]
+      ]
+    },
+    {
+      "id": "normal28-seed-811",
+      "level": 1,
+      "seed": 811,
+      "seedAfterGeneration": 2207637506,
+      "board": [
+        6,
+        7,
+        2,
+        1,
+        1,
+        9,
+        4,
+        2,
+        1,
+        1,
+        1,
+        5,
+        6,
+        5,
+        1,
+        1,
+        1,
+        3,
+        1,
+        4,
+        1,
+        3,
+        9,
+        1,
+        1,
+        8,
+        8,
+        7
+      ],
+      "boardSha256": "8f244d82f69f978a6f8d92ddc956f2399cbfe28cc92880f03dc031e73c399a58",
+      "digitMultiset": "1111111111112233445566778899",
+      "proof": [
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          10,
+          18
+        ],
+        [
+          15,
+          16
+        ],
+        [
+          7,
+          25
+        ],
+        [
+          22,
+          23
+        ],
+        null,
+        [
+          19,
+          28
+        ],
+        [
+          27,
+          29
+        ],
+        [
+          0,
+          36
+        ],
+        [
+          26,
+          30
+        ],
+        [
+          17,
+          35
+        ],
+        null,
+        [
+          39,
+          48
+        ],
+        [
+          41,
+          42
+        ],
+        [
+          31,
+          51
+        ],
+        [
+          40,
+          43
+        ],
+        [
+          20,
+          50
+        ],
+        [
+          33,
+          53
+        ],
+        [
+          32,
+          34
+        ],
+        [
+          13,
+          43
+        ],
+        [
+          21,
+          29
+        ],
+        [
+          11,
+          38
+        ],
+        [
+          6,
+          12
+        ],
+        [
+          1,
+          31
+        ],
+        [
+          15,
+          39
+        ],
+        [
+          18,
+          27
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          2,
+          22
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "fallback": false,
+      "openingPairs": 22,
+      "openingPairsPerOccupied": 0.7857142857142857,
+      "openingPairsAmongAllUnorderedDigits": 0.0582010582010582,
+      "metrics": {
+        "proofSteps": 32,
+        "pairMoves": 30,
+        "additions": 2,
+        "directions": {
+          "horizontal": 8,
+          "vertical": 9,
+          "diagonal": 9,
+          "reading": 4
+        },
+        "gapMoves": 19,
+        "throughEmptyCellsMoves": 18,
+        "emptyCellsTraversed": 33,
+        "readingBoundaryAdjacentMoves": 1,
+        "crossingRowMoves": 22,
+        "equalValueMoves": 18,
+        "rowCompressionEvents": 7,
+        "rowsRemoved": 7,
+        "logicalCellsRemovedByCompression": 60,
+        "newlyEnabledPairsAfterRemoval": 26,
+        "newlyEnabledPairsBeforeCompression": 22,
+        "newlyEnabledPairsByCompression": 4,
+        "pairsLostByCompression": 0,
+        "newlyEnabledPairsAfterAdd": 12,
+        "removalsEnablingNoNewPairs": 15,
+        "singleLegalRemovalStates": 4,
+        "longestSingleLegalRemovalRun": 2,
+        "singleLegalRemovalTail": 1,
+        "minLegalPairsBeforeRemoval": 1,
+        "maxLegalPairsBeforeRemoval": 22,
+        "peakLogicalCells": 60,
+        "peakOccupied": 36,
+        "legalPairCountsBeforeRemoval": [
+          22,
+          19,
+          13,
+          9,
+          7,
+          4,
+          2,
+          5,
+          4,
+          3,
+          2,
+          1,
+          7,
+          5,
+          7,
+          5,
+          7,
+          6,
+          6,
+          6,
+          4,
+          4,
+          5,
+          5,
+          4,
+          1,
+          1,
+          2,
+          2,
+          1
+        ],
+        "addAtPairMoves": [
+          7,
+          12
+        ],
+        "equalValueRatio": 0.6,
+        "gapMoveRatio": 0.6333333333333333,
+        "throughEmptyCellsMoveRatio": 0.6,
+        "newPairsPerRemoval": 0.8666666666666667,
+        "noNewPairRemovalRatio": 0.5,
+        "directionKinds": 4,
+        "cleared": true,
+        "finalLogicalCells": 0,
+        "finalOccupied": 0
+      },
+      "greedy": {
+        "outcome": "blocked_after_two_adds",
+        "additions": 2,
+        "pairMoves": 21,
+        "remainingDigits": 4,
+        "finalLogicalCells": 9
+      },
+      "greedyRoute": [
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          10,
+          18
+        ],
+        [
+          15,
+          16
+        ],
+        [
+          7,
+          25
+        ],
+        [
+          22,
+          23
+        ],
+        null,
+        [
+          19,
+          28
+        ],
+        [
+          21,
+          29
+        ],
+        [
+          20,
+          24
+        ],
+        [
+          6,
+          33
+        ],
+        [
+          12,
+          36
+        ],
+        [
+          11,
+          13
+        ],
+        [
+          17,
+          41
+        ],
+        [
+          2,
+          17
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          12,
+          22
+        ],
+        [
+          0,
+          13
+        ],
+        [
+          5,
+          7
+        ],
+        null,
+        [
+          8,
+          17
+        ],
+        [
+          1,
+          9
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3429 @@
+{
+  "design": {
+    "sourceRef": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+    "kind": "ACTUAL_PRODUCT_TS_EXECUTION_WITH_RESEARCH_POLICIES",
+    "runtime": "v24.22.3",
+    "seeds": {
+      "from": 10000,
+      "through": 10099,
+      "freshRunPerSeedAndLevel": true
+    },
+    "levels": [
+      0,
+      1,
+      2
+    ],
+    "policies": [
+      "first_legal",
+      "last_legal",
+      "deterministic_random_legal"
+    ],
+    "maximumAdds": 2,
+    "randomPolicy": "xorshift32, initial state = (seed XOR ((level+1)*0x9e3779b9)) unsigned; choose state modulo legal pair count",
+    "hypothesis": "Check whether dependence on move order persists outside seeds 0..999 and whether one greedy policy can stand for all play.",
+    "limitations": [
+      "Seeds were not used to select the contrast fixtures or tune generation; there is no new generator treatment to validate.",
+      "Three order policies are not human player segments or increasing skill levels.",
+      "A block after two Adds is a policy outcome within this audit budget, not a proof of game loss or unsolvability.",
+      "Random policy uses one deterministic trajectory per board, not a distribution over all orders.",
+      "Node execution does not measure Android latency or human completion time."
+    ]
+  },
+  "summary": {
+    "easy18": {
+      "boards": 100,
+      "witnessVerified": 100,
+      "fallback": 0,
+      "policies": {
+        "first_legal": {
+          "outcomes": {
+            "cleared": 100
+          },
+          "clearedWithoutAdd": 100
+        },
+        "last_legal": {
+          "outcomes": {
+            "blocked_after_two_adds": 5,
+            "cleared": 95
+          },
+          "clearedWithoutAdd": 54
+        },
+        "deterministic_random_legal": {
+          "outcomes": {
+            "blocked_after_two_adds": 10,
+            "cleared": 90
+          },
+          "clearedWithoutAdd": 64
+        }
+      },
+      "allThreeClear": 87,
+      "noneOfThreeClear": 0,
+      "mixedOutcomes": 13
+    },
+    "normal28": {
+      "boards": 100,
+      "witnessVerified": 100,
+      "fallback": 0,
+      "policies": {
+        "first_legal": {
+          "outcomes": {
+            "cleared": 73,
+            "blocked_after_two_adds": 27
+          },
+          "clearedWithoutAdd": 24
+        },
+        "last_legal": {
+          "outcomes": {
+            "cleared": 66,
+            "blocked_after_two_adds": 34
+          },
+          "clearedWithoutAdd": 15
+        },
+        "deterministic_random_legal": {
+          "outcomes": {
+            "cleared": 54,
+            "blocked_after_two_adds": 46
+          },
+          "clearedWithoutAdd": 15
+        }
+      },
+      "allThreeClear": 34,
+      "noneOfThreeClear": 8,
+      "mixedOutcomes": 58
+    },
+    "hard27": {
+      "boards": 100,
+      "witnessVerified": 100,
+      "fallback": 0,
+      "policies": {
+        "first_legal": {
+          "outcomes": {
+            "cleared": 67,
+            "blocked_after_two_adds": 33
+          },
+          "clearedWithoutAdd": 0
+        },
+        "last_legal": {
+          "outcomes": {
+            "cleared": 54,
+            "blocked_after_two_adds": 46
+          },
+          "clearedWithoutAdd": 0
+        },
+        "deterministic_random_legal": {
+          "outcomes": {
+            "cleared": 58,
+            "blocked_after_two_adds": 42
+          },
+          "clearedWithoutAdd": 0
+        }
+      },
+      "allThreeClear": 22,
+      "noneOfThreeClear": 4,
+      "mixedOutcomes": 74
+    }
+  },
+  "reproduceFullRows": "node policy-control.mjs creates policy-results.json with all 300 boards and 900 outcomes",
+  "rows": [
+    {
+      "level": 0,
+      "seed": 10000,
+      "boardSha256": "39708311898fb6d6711edf3bddf1ddd66dd4302ff65b9040ba25155d40e3a047",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10001,
+      "boardSha256": "de40a455782e826341636fadeb2ad3058daec3581e38d35463af3c89bb124859",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10002,
+      "boardSha256": "4483f5164e15e8830b75bfad2a54bacf605123a75b9afb2ebc4ec5ff555da1ac",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10003,
+      "boardSha256": "c51a52a3eb9106c8a4510a94ca0c847e53ca086f52a506067e88de31d752e8cc",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10004,
+      "boardSha256": "97815d2b1143499c3c19e8f622dc521eeefa98999e423c28d49e07200b67b023",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10005,
+      "boardSha256": "f714ee21389674f1d893c1e63ec533bbeff342f03752facdc8cfcb38e519cdc0",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10006,
+      "boardSha256": "9c024c7cc1c690ca719caf02a05840237d5142ece953a51329e3bb246ab8e975",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10007,
+      "boardSha256": "5ac37a7b35d9d6ffdab4a168961851d472191268e9b3ca3a33a4ed536fbe1612",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10008,
+      "boardSha256": "6ead4687780310f0c130c7c5cd6c9369e63d46e7c44ae56eb72e11870880fdf9",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10009,
+      "boardSha256": "51eca752d36d9cb131d9bc7b97fcaa4ddb48c8d49cfd30eb2363b2d2f89685d0",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10010,
+      "boardSha256": "bf3feb0e574a0a5ce84eb8dfaa058a9d3fece1859e3106ad30ef197fff698f06",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10011,
+      "boardSha256": "b34e08317be86cd0fc53179fade848efd3d2aa87bb37be76128f22a8f05fd96d",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10012,
+      "boardSha256": "b491df5fe1c8eb1797212c6386d5fd27a8ac7956bc535a1e77e847b6e2fcd036",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10013,
+      "boardSha256": "e1a9b44c170fefae0fed4daa4ea2bf4a749fafb5f7b341f731e8e817f25ffe34",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10014,
+      "boardSha256": "489af7813779144826feb8f2e9c3ccb8adb3826f6c1d88b7c1f1dad097cc5ae6",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10015,
+      "boardSha256": "424b7881947b322c3af01be28ec5fead53dc47556de91566efbfd6077dee65c5",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10016,
+      "boardSha256": "6809a697a1cbe3accb2e69b5d98e72e20bde123af86c8617918cd529f208cc54",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10017,
+      "boardSha256": "4a5c23805c70fef167de18df489dfa8b4f382d8d43fffbfb9828656bee6892de",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10018,
+      "boardSha256": "b11cca023ca8903c67540993fbeaed4dd26276cb83169a3bd8e85a1f6d5821e1",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10019,
+      "boardSha256": "53d1995e8edcd1bb98d6ebe89ac54d9e6165a63db153bbb6737bf8fe79f155ec",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10020,
+      "boardSha256": "aa22c41e3f5f359d68cd688af9ea92a32c62c9d733544facac77cee7749b2476",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10021,
+      "boardSha256": "97fbf95125ea4ec72f6ef9b7a59af1e9201a2b16f47fef95052cd987f4ad5a84",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10022,
+      "boardSha256": "987c071f83a89dcacdaa1fefa2c62544ad45583bc8ed4a13e92bc6006c968d63",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10023,
+      "boardSha256": "1de1b463c6dd90acda887e646c571e5ab2fef93b239a15d20d5b6191245a0fa2",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10024,
+      "boardSha256": "acfa6c5de58b15310f5777e3fadc5057a82316bd9ebe0583bf2d0c60d697e9b6",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10025,
+      "boardSha256": "1a198cd174589951e8bcf9f99c6f13203c7b56dfb81c04e76163009c5fde70f3",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10026,
+      "boardSha256": "74f44238b27e39eae02266045c04a91dd73241015b0e6c7faea2123a19e22bea",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10027,
+      "boardSha256": "8a33ddf5539033219bafc6d59bd8376335ce231a9f2178e71f6e7da104de1fb6",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10028,
+      "boardSha256": "778f46cbd8b295b2df101e42a98efe1489ad15af9f9e4a1f2d202ac6d7f937f3",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10029,
+      "boardSha256": "d5b83623e2654b700b146dcfb394e35712e1b3c8ff659914f9a8ce15634fd27a",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10030,
+      "boardSha256": "1e8b9cd8d27858a6589e96d4946858a9e83c183dc0bd75b96a1fbc75a902c279",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10031,
+      "boardSha256": "633a3011d8a0af544893bd2e43012a24e44c802864e9c77051dbb2eaa87eed7a",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10032,
+      "boardSha256": "c9fdc2b33788f09a89dc24b0dec821d0794a261ebc83fbe2d26c6afb2f6af9d9",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10033,
+      "boardSha256": "f5a38d90195ac62c901add3a8dbb58209365845a0285a98016b48a252422cbac",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10034,
+      "boardSha256": "b7a475393afe3435e3c38485f5728916a9750e9c29eaab4cde83ad8bb2e15ff9",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10035,
+      "boardSha256": "27630544dca169facbd42fc3c74546739e6cf2221e87e4624f9e99c38a8b33af",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10036,
+      "boardSha256": "5c61e4dad5934b0f38e00b88bd44c9cd357dba7e707d53189c1d8ac98fb6dd9f",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10037,
+      "boardSha256": "5f143a1705c8e0e2bcdd6ef0cf81613a141b1bcf00cd12349b21075b7cacb1fb",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10038,
+      "boardSha256": "ea0e19e4c5457217887d435131b2bcbbe1e62cf95a9a04c878a0c851d12c6c8f",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10039,
+      "boardSha256": "1abd345d321773ba9a3376f14c3d5c454503111000059d64de86a52e0b7f5b98",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10040,
+      "boardSha256": "c53f8d75c75fee5ce292c7c78163a1a6e11e1c83aef6724f92b638346d239f72",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10041,
+      "boardSha256": "1fa5f0bbab28b2134f8893c103b3bcd32c3c98ae51277a19b79e19d65eb2d061",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10042,
+      "boardSha256": "fb22be34e35c3c75f0501341bdc05d1bd33a546ecad13f935b282328a99ec35b",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10043,
+      "boardSha256": "80d7014f96530db75be19792723b4efde2d43c0ad3864a48e874d49d4063a4ee",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10044,
+      "boardSha256": "682382999bf95be5afa8b5e6a1b5126a6503bddfd182de2dbacebae4204ee991",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10045,
+      "boardSha256": "518e4914a988e9b89b8ff7aaf5d0b4007a387e1f510d10cdafdd7b1731321ca8",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10046,
+      "boardSha256": "f8ba47dbc35807a16dc64f550bd115f1c0e6b72aecb43da128286dde59fecfff",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10047,
+      "boardSha256": "32d3603e2649ce3187f8bf9035cfcc15abca9ef8679d47f81c97f95bc68e38b4",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10048,
+      "boardSha256": "000adc5001899db4217687e27c093d26ad134463f5edc5aaa23053c4517aa185",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10049,
+      "boardSha256": "423e8d99207852cbeb90f74801458e9aacb79f54f3d79ca69bdfdda4c624bbe6",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10050,
+      "boardSha256": "3f8c31a1d4e3d8af70aa4965a92e390b6db428db66943e798000dd2c197a81aa",
+      "openingPairs": 18,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10051,
+      "boardSha256": "5d62511e45e2a964294edb66418da342d2ebcc9f67d5dcc0841e1bfb758b5c2a",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10052,
+      "boardSha256": "84f526c308f8e41378033e50c0dc5bafc27c4d8e95af653872a79b282ced9eaa",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10053,
+      "boardSha256": "5e578b6402cc2912c2b290cf239ab25e643f42827770549d6fcddf0954d09e2e",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10054,
+      "boardSha256": "ac678ee66a7c6a82b9ce94ce23ef35f73bab1fb9bee661aeb3ed3451684e06f7",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10055,
+      "boardSha256": "64ce0910e8faf590ece58ba78b7dd45484b858b006ca55122143d2a0ed64b9e9",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10056,
+      "boardSha256": "2e802e4099c0780109477121c4d9e9b9dae03b7c612ad0d530d98187c56be9d0",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10057,
+      "boardSha256": "5563053efdb754acdbd6b3eed172d7c0deee59429fc7f8473ac70296cfb195db",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10058,
+      "boardSha256": "dd93673729ffa25cf6bede95d1f262da29b391664d06ea05dfca804a2d3f8432",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10059,
+      "boardSha256": "117e38899cccd79361b3fc96e8c3e2056ca08e97f6857b44c2dcfbd84b8cbf22",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10060,
+      "boardSha256": "a706b5465e77970b26ed33a5cb467efa317537b4e05a624cd5059fcbd4a27376",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10061,
+      "boardSha256": "3729c1520a70f83fbdbe916d75238385f8c9f2158c14e5f7894e1ce25f07a424",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10062,
+      "boardSha256": "aac9548f0255b594ba4f69631a45f1e9967a658e2f072ed03eed0e172a69369a",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10063,
+      "boardSha256": "73ba1c9a8697a3222bc97de0cae56c356e0fba5699a633b411651f2a1a555a97",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10064,
+      "boardSha256": "4191176d31c78fbb5bbe479c0e44d4c2e71b2f1a5d0f1a183642c2cf21ec2fb9",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10065,
+      "boardSha256": "4295ef1b485a981a46b2292672e2a060646149f82dfcb80bc7c876c70194112b",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10066,
+      "boardSha256": "f02540e19ddcf4fec59ac9587e0b97d3525b2b07aa5459d3511910081ae77446",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10067,
+      "boardSha256": "fc4541abafb9fcc713546aed6b9b46120ce08425b4eaa7b33ba15a02dd3ba660",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10068,
+      "boardSha256": "e4a3780ea286f2906ca5d3362d828ed241455fdadb98219d8c9ecba1f9fc009d",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10069,
+      "boardSha256": "3fc25aad2fdf761794219ca9c08aa9e115a8a85a3702e45a19f09b9bbcf10fcf",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10070,
+      "boardSha256": "58d7dd7b62923998bae7abde3e195522cc8b194c250e3fa442f51d3f29ae240b",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10071,
+      "boardSha256": "9656d167dce65a21137d955c677de02230bb1ab08ac8d0e706f7aabc01967fe2",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10072,
+      "boardSha256": "84b115b4f15877222aa45f9c89812477a686553ed76548f34d7abfe34abbdb8f",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10073,
+      "boardSha256": "ffa6b9c7665ed8beb9b2b79565ea7f011fa9866fc5a25decd5844968badb3490",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10074,
+      "boardSha256": "8357d796ae4270eb759104873ed8d5629a2547338159f911acfac441a8c0d0e9",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10075,
+      "boardSha256": "ef7fbb03c2572e49d685f4c545ad199eaca9e6c06502cbda28385fef984b36f9",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10076,
+      "boardSha256": "1c9405260ad92cfbb0dd8993bac053592aaa1fcc16d150c1fcc18a6ff2d71e98",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10077,
+      "boardSha256": "e7ef340ef6f0ce934c687662ab4541f4e06b714be1ae3cb01137c61e385f59cd",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10078,
+      "boardSha256": "85dc5fb5fddb6dd8e71715a8ddd5f651b9440d9b82efca526a2d8427fb3b3993",
+      "openingPairs": 18,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10079,
+      "boardSha256": "1659bc3852461826cc9c03dc3fff4212d9e4a15c78efcee1789820919cbc3fd4",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10080,
+      "boardSha256": "fc4fe85879b01aad338ba72e5e3cf82e1f64e25092ecfe255a54f65599ed176c",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10081,
+      "boardSha256": "d969850cbbbda7ce956f2a526557635393c86dfbb1d77e2a7d4f94155b5f2efa",
+      "openingPairs": 18,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10082,
+      "boardSha256": "a223e5e3c5685da88e52f44992db4c90b03c5bcc14b5598dc5bc2de39c722ad2",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10083,
+      "boardSha256": "61aac9f8459ba6f215dea4ea0f5abcc3e7414c6e8dd03a988fb941ff74bd86f3",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10084,
+      "boardSha256": "c3dacb24b89b7df87df69c832b4f783d4b81b027725dd8e7083ea0b46fe5d088",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10085,
+      "boardSha256": "33a5cb1edfb61e7b4ee22a535a9547b15ebf628f5fee7302ad9796fcb9f9320c",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10086,
+      "boardSha256": "9a0a574c89d7c8a02dec8c30376f7b448472229d920c664d4add896e249559b2",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10087,
+      "boardSha256": "6b30f06dda7963ee1f31bb8bf567b69b386002ab6e50f5814cf064836096587e",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10088,
+      "boardSha256": "7abbc83fa04a2a7f9adef4537d4a4d32e3243e9a287b4446cf4d797e211cdcf4",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10089,
+      "boardSha256": "319e2e3991e37f4cda22c228162a1700ccc13f5be00744802222282dab3d4286",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10090,
+      "boardSha256": "46638dc078aadca9980cf860578c7697dd6e72a26f490fe2c42bc56c0ad923e9",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10091,
+      "boardSha256": "a1acc0ae076053bf34ebf33e4bbfe3b6b66f115950ea6da05c98c57a52411013",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10092,
+      "boardSha256": "1602b06c074c42fe6ec6cbf5b9fda95f8db557f250799fd0bccd90e63c346d80",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10093,
+      "boardSha256": "016eca1a78d3c8bb069c8eaac15d4db8ab0625f954de052ee3da38b1ff17c393",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10094,
+      "boardSha256": "5882a37b8fd11ddfa2738e29099a0c3ceb4fa0cc212c98ae9f320937de5a4de1",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10095,
+      "boardSha256": "392e35b3c15e74f12473b160f232762e7738339fc44b0ff95cd1ab1b496749ac",
+      "openingPairs": 11,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10096,
+      "boardSha256": "099f7b42ffd29617e121b762ff7a48c4fdd016b4b7136e1f17a3029be64750cd",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10097,
+      "boardSha256": "35b21e92dad08f819d30eda2b3119677e7a9b9ef3d6f84fe2013013165dda8e9",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10098,
+      "boardSha256": "4fa3b5dfbefd90c42b6f166abb762eb599f04fb0fc9e83e870d972c744e5a226",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 0,
+      "seed": 10099,
+      "boardSha256": "ad5ca9335210c2e48b8e72bace6c0779813beead3f942a1a7557143d474b05a0",
+      "openingPairs": 18,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10000,
+      "boardSha256": "c92f16d0d0b2653ae6d9d1a8bc340ac35bd4a8cc03360d5822dc3edcac118ce3",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10001,
+      "boardSha256": "cb0c0e0c5b7e9c13beacca2434866026b375e152e3a54dd0dccdec542ea275eb",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10002,
+      "boardSha256": "872c745c48bf1ad0cb518523c928999ecb4cf63f94ae8ae8e0810d981d73b610",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10003,
+      "boardSha256": "d71849ff8de84822a17544ea339f7b00420bee2c7da4e021f41d171d5c3f1fad",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10004,
+      "boardSha256": "e7476564f2b9eeac0107f75502a518c87fb6dbf887a1f4f966d3c424a75320b0",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10005,
+      "boardSha256": "134205257539cf0bbdd8e794a6547abb035455d28f273bc400866df232d478a7",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10006,
+      "boardSha256": "32c3e0b320e5b6f0152cd27b57325c528b18ee8c8a681e651c44886e8fed897d",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10007,
+      "boardSha256": "853ddf7726c5bc6c745cc2c054a7fc7c78ccf862c07b12ee48e8ffdf749f7bd2",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10008,
+      "boardSha256": "ea12d4f80cd21dc8db20c59735a924eab82cce5133bbc996be707865db64e6f7",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10009,
+      "boardSha256": "cb3f0b3c90906ed92bcfd6c25fb87f046352a2e557dfc9cca6f6c4901dc53f61",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10010,
+      "boardSha256": "8c473ed930fb8ad3a151c5029e8e636137d4c383267b9e2556f1b16f3d191c03",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10011,
+      "boardSha256": "b22004ec681ccdf8596b3644fad0e6fb6712fe358face621a8aee626f48d145a",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10012,
+      "boardSha256": "448a91c8df5e979be55ea9695b707be691e07965fb0621cee6d9ee351164cb4d",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10013,
+      "boardSha256": "1f4f8d0711a0c907af7676a1fff38d55f5959f03e88629b79abe936b12e41c2d",
+      "openingPairs": 26,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10014,
+      "boardSha256": "c927930f0e180303b9d122bb1f9f4c135eb0fd3ea976ade7cd2806ac3a1ae89c",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10015,
+      "boardSha256": "330b917bfd361615819b6a3879f9c691eeb0bc8395f160581d65e40d0764e1c4",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10016,
+      "boardSha256": "c4cda9bcba179e24e6c6d6e42f6aeb01087e83294eb2e1d3505a75fbb25acffe",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10017,
+      "boardSha256": "76f332aac551a07e8c0c8d42f4321a144567b67da6bdfca0158d95f5de8bf829",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10018,
+      "boardSha256": "ab88c8a19a802c656f4354f4f8535374e5e8f8914f8921394ee337a3a14ca9d0",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10019,
+      "boardSha256": "1d791835a50273e4a994a780299d5974f950cabc0142230886d0e2bafa3b76a3",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10020,
+      "boardSha256": "5a88bdff227ca265d0027e59e9bb5d98616f5c8015567f4894f1466794cffd2e",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10021,
+      "boardSha256": "652b9ea2bbaf341ce99767c6c1d650b84e3eae0886ea674db2511195a9a600a3",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10022,
+      "boardSha256": "42efc081b81232e7ebb151b6201adcf2793e30037d03cea391ac641454ab1692",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10023,
+      "boardSha256": "7008f4e55aac06f06b559abb415634f80337dc626cef26fec386dc583359f61a",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10024,
+      "boardSha256": "c1e5214672339dc3ccecc816121ad6c52605e50f480d41cc9e20f9327347f7d5",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10025,
+      "boardSha256": "a64c45a69b8bec72b8ca6d1d71c96bc79b41453c093aa40b7413ddb541827cf7",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10026,
+      "boardSha256": "4408fddc6674cea70fa4954d1d447ceca0d923c460c0dbf867ba26a0d019f6c0",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10027,
+      "boardSha256": "e9d15a05f35dbb10f09d6f0f34c59e2e66990b9c28acbf6919262435d676fb7e",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10028,
+      "boardSha256": "981a8f581b8c03ef1f3b9a7dcd96e3f1753df46cd8198dd4f116886070de4e3f",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10029,
+      "boardSha256": "5497359ddc749f8cd21d26b4a11f1f7d26c226d36ca17961c9e90c94c3dd79b1",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10030,
+      "boardSha256": "15a1ce38f0c506f7ef7962181435bdbdada71f1be61f26a59add4d5e49c09cc2",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10031,
+      "boardSha256": "a760625ee0fd1c7842539d0ba1a34162a716593b9ee990e2a021327994ef0b44",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10032,
+      "boardSha256": "8d90e70a8c45891c1d0d912a6f945da738d1218ffc5fc45ca250cec5f3cd002f",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10033,
+      "boardSha256": "a13737d915c46b1300c5bb9f19040a7670080a65ea87a1f5e80db9bb71cadef3",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10034,
+      "boardSha256": "a4cfd29c2fc4f4f72d01b1e93a09b9376216e7e0c5f7313e6507bef364307f7f",
+      "openingPairs": 26,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10035,
+      "boardSha256": "d7fca81df2509bdf9f1c6a738c20d2c46998adcf5d6e2d8fedfae635c348b17b",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10036,
+      "boardSha256": "827c6638a522e34145b3af8ba834d235e19f9994ff9fdfa5c3ed170b804607eb",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10037,
+      "boardSha256": "ea685e948aa1f4bceeee7d2fd7655925f6424d481c569bfb6af416cdbdb948b4",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10038,
+      "boardSha256": "cfbe91b5e757ea5c7e1a749e8694ac8a2eee7d4e9209e32b9f072df15c01a213",
+      "openingPairs": 26,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10039,
+      "boardSha256": "709dbc15c493da5f6a24e499940ed8a3f899e06ae197b8b4c24a2a19fc835292",
+      "openingPairs": 26,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10040,
+      "boardSha256": "1c1f46f2129602f9dd91aba2e9bbac965d7178168f828c15f5ddbe6b760a574d",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10041,
+      "boardSha256": "093c9c01e42202790f38017dd01ce385a3992fb3b48b2a0681efcbede9e916ce",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10042,
+      "boardSha256": "fb49d47bc8c538875839a8fd159afe539d844be8dcaedf695ecd1339f08cb515",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10043,
+      "boardSha256": "94ed07fc8c508398be9c66b30cc4da022ab64c5c651db39ee3ce3516ff7e4042",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10044,
+      "boardSha256": "35077a8cf923aeb9316c2ec1875ab2bdcbf46f75e021a8d1a7c3c42cb14ef19b",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10045,
+      "boardSha256": "b4818971970b7942c037ec053c2046fb51f273610ed1c9a893346e30e8952404",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10046,
+      "boardSha256": "1405880804e73e63ce10f07c189ff89cc65293c68940ec2e2ae74a26a3b924a4",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10047,
+      "boardSha256": "095e4de5217c3eb937208af5e8663ccc1012b88f3069ea11713d02de686a820f",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10048,
+      "boardSha256": "9249623ac367c5968aef149072fc7ab39cf4f5b6ce4b601a9e292d24e1256c76",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10049,
+      "boardSha256": "dfcc5c8fd3da6c27d48c2815baeafe4e066471dd895360cf0a5d08a23ab1a9f6",
+      "openingPairs": 18,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10050,
+      "boardSha256": "4e2baeb3e3ce53ccedc615d85b96f78c47b7168aacc9912bb1814f96e541d2e0",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10051,
+      "boardSha256": "ff271b07af3ba24486c7b46cdcaeb4ab1a2eecca2df014e09ff30af4b05d3ab9",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10052,
+      "boardSha256": "eef48933ce98951ed5aa2614f1e583ebe33806a7aa4b345c95b4f1e5c64f3bfa",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10053,
+      "boardSha256": "dae3bf5699286cf14c8bf88b83c91f5be71289b33c541f59d34aa67a7328c57f",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10054,
+      "boardSha256": "70e145e3c3f7d2c40541e6c42f012cf7d56ff3f68e42947aa1f7584012b55e10",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10055,
+      "boardSha256": "ccda1839c5b2481688642be0952e71f58fa7438bc7a4411b6ce8445250097d49",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10056,
+      "boardSha256": "fc30590d1d5eab8c72156db0749bb9d80764c8470f32272278c0de53b714d028",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10057,
+      "boardSha256": "11b730c40d73335739b69ab3210b2e21847fb227b3e29f4e83c6b5c3ce45ef73",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10058,
+      "boardSha256": "57c830d96d683c52ceff3b120fe7fb508369d3596092c7d8a9b8770593ae5f26",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10059,
+      "boardSha256": "78f85206ffbde57c4b8866c97af90e9992b667d3512d9d52a631d64201528e7e",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10060,
+      "boardSha256": "d6dfabbabaa07ec340977ce6cb2d9f1bf663c70dc2b79ebddba54d3848aa0481",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10061,
+      "boardSha256": "fccd9eddbba69ce9cf254b7d1af9f05c9f79a91fed23c80f38b0b56256e28b1d",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10062,
+      "boardSha256": "3f2368ce555ed6e66e69da69c77f9579fd6253f62f7846a91d6022a9ccf5c65b",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10063,
+      "boardSha256": "1b86e820d3dce741d0a1599fe82049687cb6fc6f2c24351f6ffd3a08ddbab206",
+      "openingPairs": 18,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10064,
+      "boardSha256": "d85d83dc10ba24e0ea9a417e7985e3c10fee048b96ff0dd6f307d87c9a59ed34",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10065,
+      "boardSha256": "0a76235dc82afa1d506430565e6b71de1d2d278565e3cad1c6ded503387a08af",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10066,
+      "boardSha256": "3b1ee4442afa34339fcffc14b23df4180c53a388290efe9b9f9d9fb5c981a8f8",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10067,
+      "boardSha256": "6d6600a83739af3c10de55b656ac72250cdb4ffb4997e4d85c6890453464c7d9",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10068,
+      "boardSha256": "c998064e4f4dde80a3e65969b16cfe4c2bddb90e3f54990240ae5515c1d8c903",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10069,
+      "boardSha256": "3223b43d92ff1a74f54acfa2a96d6c877e5cd650595b51819c1b6de3068387fe",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10070,
+      "boardSha256": "bf481442fe26b96290fdc408ee4f4fbb0982688551f7bdc279f1a10d0e3df80b",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10071,
+      "boardSha256": "ac27e8be9bfce6b918a742482ed809f4212b36f72033e394ae33e7d973758b77",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10072,
+      "boardSha256": "ca61a76e066cdc58c81fa2a9d53431292997452c68ef378b412bdfa2e1738e1e",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10073,
+      "boardSha256": "0a2631c81afbdf1cd5092f9b17f6b7a0a7901e1185d569bad90427c48dff1d01",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10074,
+      "boardSha256": "d85092be9fab130855c5d6b26b19d2c2caa374b6cc27052347247d97aea04a92",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10075,
+      "boardSha256": "d22cdbb91525acf1446413cfdd812c660f7299b5812736bcea4649be7825df97",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10076,
+      "boardSha256": "c8fc6ef2606201792400fe41e102ffca7389e15d88588e503dbd9b0d7f74b5e3",
+      "openingPairs": 26,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10077,
+      "boardSha256": "6bd3c0a00e832b72c8a8fadaf05efe3ffe5c8e8c569afede28f350896dc8f8ad",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10078,
+      "boardSha256": "769fcbf68e9bb50023ca8fde7347aed801af440259637c5f49abf42c0370ebb6",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10079,
+      "boardSha256": "85e9eb80738ff5701abea24f674c2110cb46ded74cd67a16dd47276815c2f719",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10080,
+      "boardSha256": "8510f5c00c20e50f8a482f5ce4b8221b31c36b869dd29339a5c7bee1b5249838",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10081,
+      "boardSha256": "11d39482cfddd396a4359c1165c81a4447755cc7d0da91ae5452f53b6ad18b92",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10082,
+      "boardSha256": "f76187f22be9dd13c2f6678dfa0354adc9a05973d99ba1dc759a5f2d8f0009fb",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10083,
+      "boardSha256": "86348a2f1d59e9ac8624b761a24eb46013360a032576d8763b34f582d7390014",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10084,
+      "boardSha256": "2c7dabb4a40dfc2a09aa2215126385bdb3d7320ae4573bfa13f8d30ab5878a60",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10085,
+      "boardSha256": "00b0ab40bf94db7f8db554493cbdf5b137566b59c51d90cb7639cae0c7637bb7",
+      "openingPairs": 23,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10086,
+      "boardSha256": "f34e23e8a0e5bf8f3b562568025505370a3a50b6b75d7ea1f4b2970d87f7a266",
+      "openingPairs": 19,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10087,
+      "boardSha256": "4345a250e97481bd2cfb2ce17ba924eb5788c2838dca3f21ff965752fbd0a423",
+      "openingPairs": 24,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10088,
+      "boardSha256": "87a1aa972b9503c7b293b0afa22b339dd3935ee22a439719da896767f391b5ed",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10089,
+      "boardSha256": "1cf88befcea94b142015fd3149a9407875723e08bf67fe693d73224a8cf77a65",
+      "openingPairs": 26,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10090,
+      "boardSha256": "45c56a92c41c99f3f8a953438d972c41443725f4ae8f86937c59f55427a15820",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10091,
+      "boardSha256": "130744051977c452f2ed5c6f521e281f6e1bc80d95d05b302f51ce61e66ca2b1",
+      "openingPairs": 20,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10092,
+      "boardSha256": "522d6901b05b0245f205c0875c18c63f6f4f8aa4d214824fab07cae2fdcad95d",
+      "openingPairs": 26,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10093,
+      "boardSha256": "1bb6ccb967ea9f3101eaaf55ebc3eec3243e12b5c6edf8348caa986d063fbfa8",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10094,
+      "boardSha256": "06bceaed8239aeea322cf1c578fb972647d323e5aa52bf4b65a120868da9a191",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10095,
+      "boardSha256": "4926308a0ae68b30981f1b599970e911a078ca4f68690022d8c1c526269fe1b9",
+      "openingPairs": 26,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10096,
+      "boardSha256": "b9551e7f3e4c9abc964b80f8c4285470fba9fec3162e558147245de58c02e09e",
+      "openingPairs": 18,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10097,
+      "boardSha256": "1b690bbdbd3a6f1e6e7a19002045f9ef534b20c0d93c61cc95b705280af7aa73",
+      "openingPairs": 22,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10098,
+      "boardSha256": "1728aa8183327c042cb158baac53f3b8f921aab18480845081c54c189af96f76",
+      "openingPairs": 25,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 1,
+      "seed": 10099,
+      "boardSha256": "1c329377671a8abe00bf2e2649d80d17d3b3e675b139d22c584ad5dddda76a8c",
+      "openingPairs": 21,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10000,
+      "boardSha256": "d8f0206c5b381bf9f299799e0cdd8f797d546f27b172fcb5019d66dbd0adcdf4",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10001,
+      "boardSha256": "26536b1414b8e40328d71a28a1248064f781279e2ba54b5f5c78e56a237ed1d2",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10002,
+      "boardSha256": "1dabddd3fa6419def2bd6460177ae3ca4555ff0d8ef660bb755fcc4db6317151",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10003,
+      "boardSha256": "78194a5d378ecbbcf7987ce93fcfdb54700da2c4148eb166cd5bac64ec9d7add",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10004,
+      "boardSha256": "0511868e42665ed3c970cfb584fad5af24f930c6b860e084f80387d83e5b6dc7",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10005,
+      "boardSha256": "b1f5d62495062ffbc7d2cc436d8b5d1f325df512755effdded36343a04e54ee3",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10006,
+      "boardSha256": "1ef3439bbad9f2653f6fd559118a075e33ff82544b8ea02279cf986261543e86",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10007,
+      "boardSha256": "3a31eecb5d0f6798d91b083d960611f69673b243b534e9545953643736db2ff3",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10008,
+      "boardSha256": "800ccecd6835294af17aea89611f28d9ba95d838ffc6719f8fbfdbb813dc3fa4",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10009,
+      "boardSha256": "eda3588dac1c747c790e9a8bde4c3cb44743eec3c8c1830440e93b3bceeb6307",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10010,
+      "boardSha256": "2efb3b38dae8c4e115a3ee9029772dfa61b1bf850055f3784508e2d2f7aaef2e",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10011,
+      "boardSha256": "56d48862c091176bb29019ae2c08fe2a1fd2ddd79750a27ca646d0de5df1c0d3",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10012,
+      "boardSha256": "d755c154087f48e539b81d1fa08fb8fac065ccc46f36e9e513f144d44f1a65d9",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10013,
+      "boardSha256": "4910f2eb623fa1a0e0da67f2d69a62c16bd8c4849d1a7a9a89ab21529f191025",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10014,
+      "boardSha256": "b4e95ce581b5da14d360bcb17f3bf294145a97c2d0740cbafc3272ed9a3f004c",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10015,
+      "boardSha256": "c44c9aaa5b610ec0d42e7d7b29c4d904b51e6c962ad4fff5ab7ba4a8425d3c1c",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10016,
+      "boardSha256": "0329b1554e081e3de1edb41d62db69822ebef4b6c904b22df8474a839d2785d4",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10017,
+      "boardSha256": "8b3995890cd10f2f64045da3579927add6f9ac7e943df40c47ffd5d797c54acd",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10018,
+      "boardSha256": "9332e761f5ba455f0926a38f865aa1a137b49ccac99e59cd3435f80fd93338f7",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10019,
+      "boardSha256": "f219ece01ebe7cb186346c31392756cd6baa71897307bdbba21f0e6b04ce9613",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10020,
+      "boardSha256": "74771a3659c4fd3ce28e67086d5c912334f349831db23e96c80b9c2657cbc32d",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10021,
+      "boardSha256": "808c00271ab42b339ed03e210a24dc443363ee18f0e93740f83cba6c004b3662",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10022,
+      "boardSha256": "9c20942c4940157922b9de270f7d6ca3d08aa668d38d695707448fc95aed9a1e",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10023,
+      "boardSha256": "f6b0e64ea1f78c84eb1437eb9cb7bf3b1a9008dcf2a88a00096edf6220a768b4",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10024,
+      "boardSha256": "a5771c1df5b4bbf136a69f88b4c5ff9c46d6f2c251203bf951250786f44f1bb8",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10025,
+      "boardSha256": "5ce2efb9e86492e010bc12b99dd86b9dec1f2cdd4e9e10f7767f604f2f69cdcb",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10026,
+      "boardSha256": "91d600aad11ec2f2397678d355b621abc00f520b35ec12a92e6b109b44a7ac16",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10027,
+      "boardSha256": "4aac6dc319a9d80e240f45748abe6ad5f93136035c8a759bc80e2070b7ee57bd",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10028,
+      "boardSha256": "520417e9a2e8b129a304f08858e6e58b0e2f0cbd80c153b150a5eabbd02b897b",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10029,
+      "boardSha256": "1c29269d7db5aa3caeee73010755a401cc714d48e70c9da8ca8e001cda95fc97",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10030,
+      "boardSha256": "af38d74e65a7b625afc9452ee388c32cb6d72563a3e408415e84519cb48a91cb",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10031,
+      "boardSha256": "810237f5af0d971dbd25e36289ac98a8ffe03f06f4d0d8b19a4d744fbbebf210",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10032,
+      "boardSha256": "ce48f9bd8e6b41e00c3f74cf609f0157d244e7af44f3a433d7f8bc94c655f6a5",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10033,
+      "boardSha256": "e0c7d7b7a36e022a35870169ac3c9c0f453244600c481325f4490b993d10f605",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10034,
+      "boardSha256": "0d3cc78c04526f32bde750d4c943217046f639965edc14a2a45a2e75da5f040c",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10035,
+      "boardSha256": "c3ccc61ac14e1e5f62ff4cef6c55704060fe8c93868aa7c476d74d5e1d82b31c",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10036,
+      "boardSha256": "e225699d74ae75a887448517e9cdaded4c479baf2aa518f5269f1f9ea441de6a",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10037,
+      "boardSha256": "d5b98e0163e1c11b76965f591ff3fb7c930014b0149a0b2a1feec9a8a0d6dc1a",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10038,
+      "boardSha256": "132de6642dfc9cc7c1df9fbe3af501fd4b8885b05953b29b4badf05e49d5a0ac",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10039,
+      "boardSha256": "3ca7508f5f4bba3e30127e7f54835fff27e5a3b8a58bff07a8bd9e71720c7c3e",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10040,
+      "boardSha256": "8449df9b27f56eb1b3b73bc9ac97c055a6369df032d7bfe0e5c1cefe419d4df8",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10041,
+      "boardSha256": "0ce6af708b7a763337c52e3079e54ffe5470ac698530c7b38834a0a4869c802e",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10042,
+      "boardSha256": "81c02174ba24382fe33c87304f8f243ab63f43b0b75325ff442c8401e9769ad3",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10043,
+      "boardSha256": "5b2a9134dbb85cb26e3f4008dcc4225f265ba11cbde6520991264e4b07b7e95e",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10044,
+      "boardSha256": "20d7b7b9d702bbd86124f3f014f3a6db81c717d151c34012d0c1b5285c9a220a",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10045,
+      "boardSha256": "97a07274eae0928b1e33b407560e2aa89a1377e8fc06106583addcb4fa087a1e",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10046,
+      "boardSha256": "813db6d3a77f2ce05b331e54963e3f27b84dd11e829d1778221ffa6744c116c5",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10047,
+      "boardSha256": "18d701d89363b9e44aa0041945c57863eaa8e3095c5f0e168005d703bf1e868c",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10048,
+      "boardSha256": "83a4ad30fd65f7f1bd5dd7a093190bb67bb841575c067ed2b16dd13c19b30a39",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10049,
+      "boardSha256": "d9bc4425a2471e79ca9073fc129754acc05010f9051dcc6882334777baa8fa44",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10050,
+      "boardSha256": "f70c90dacf5c97d31972b096cc5562c38321cc31bb06130208268e8d23f13f7c",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10051,
+      "boardSha256": "8d1f2635857920228551bc5840b3b883ce508269521f9bc11fb926a5d052d883",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10052,
+      "boardSha256": "c188d82365e77e7d6e77f4924a2311df0b98a0733f378be7d712e8cc3551feed",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10053,
+      "boardSha256": "53c0d9369d6508682935db1ea15aa970ccc9403cb483ea1c1099b501a8c19127",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10054,
+      "boardSha256": "1a88f38929498fe3fddc8a5abe490a580f0419d2d0f71ca9e4c1fb889404f979",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10055,
+      "boardSha256": "35b7f21ee09be0757f40acbaa4396f7e3b6db76a0d205e5c39c2115d7393e09e",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10056,
+      "boardSha256": "e17538c82b9608becc0d21b1b4ccf04c638b5c9fed260eb695a7992f9c207ac7",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10057,
+      "boardSha256": "ec2bf9c9e098b86a351b612d67559e6a673473b986a99cc689d54d6a7d5123b8",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10058,
+      "boardSha256": "bcf3c1b602c0c01ac91b69b88297397c6782d8802ea903d291bd5a90475686e8",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10059,
+      "boardSha256": "a525b0e03f0dd09ba3bf06b1b1d248fc7c162472bcdd6e440713e67a09a34474",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10060,
+      "boardSha256": "dc074eeaef09643ec497c0a91435382467396bba85703696009421fe2b857713",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10061,
+      "boardSha256": "f92fce389aa40a841aa621795507ddcdcf0e584f769d96d9cc92bbc51e475705",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10062,
+      "boardSha256": "8dfdca8d18c3c72dd00c9a42b26c02022c48640fa4c88aedf178d9cca65c24bd",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10063,
+      "boardSha256": "7f88f3f9a3d3d6829f62aaa5ccba1c537a86a12a87db815be80e1da599fc9329",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10064,
+      "boardSha256": "124463a9bacd9f6957024f372091882168172026763defd8fc085b5886e87ea3",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10065,
+      "boardSha256": "ecc4bd38e56f406258fd0632154a694d654cc98910902f79b06766a450129cef",
+      "openingPairs": 12,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10066,
+      "boardSha256": "76aa863688d395b5a2bc20e4736a450f5b3be79d469446e75b710dee8caeb06d",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10067,
+      "boardSha256": "85de98bac26447c40f5575dae1d161bdcd59741b9000d718ccf6dd17fe91d3a4",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10068,
+      "boardSha256": "5725f6419644061a9cb6edd9cf8b6d3205b04dfcf29b1962d4a6744d663f52a1",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10069,
+      "boardSha256": "204dbeff1f61239c9b49a9783c20242dedf53c92541c308c3d2d04e4ea52c5c8",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10070,
+      "boardSha256": "64b2ab966c7e044c7256e106ce56825437ecb2959e3ad1f649772d926fe677df",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10071,
+      "boardSha256": "be0da09e38afd4826ede3150e9ebff3c3ab3c2091d05dc254fc72a18fd885fe8",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10072,
+      "boardSha256": "75edb882aab0eb1aeebf7c4752e529bb492c557c5b6e0764fda3168a22a71d4d",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10073,
+      "boardSha256": "2e9ab32d5acd6c9d168781efeffc930f52eca57ddd83881e7dfa36b83536a0e2",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10074,
+      "boardSha256": "c8809d84762ac1473671edd4c177cf15acaa3259552fca31eba03d9698672eff",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10075,
+      "boardSha256": "04ba8fce29a86e6bd81fdee63c62b5fbd0d9fad302b5111d9533b705acccd161",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10076,
+      "boardSha256": "438a1050bcc0d32cd65a25184dce72482325884718f08fd8708bc034ddf1f221",
+      "openingPairs": 15,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10077,
+      "boardSha256": "05b58e728900a950b93a29b4434829676d8f4e51306e01368e0b2de1a2d4f817",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10078,
+      "boardSha256": "a4de21e47dfe3602d0b3637cde24cf71cfe86bc249e96364e4e36b05d7f46fc8",
+      "openingPairs": 14,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10079,
+      "boardSha256": "4bfba9cb3fec53b2d9d02411d6719635cdeb4b30a09b258a923459db7457b1ed",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10080,
+      "boardSha256": "39e29ddb764fc8d207b0a62dd42c842d4d19bc6464254bbc815317dbdd33ca52",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10081,
+      "boardSha256": "5c28326c92a637b49fc82b0a66032bb7fa957592e2e47fa8e7b68d2a8e44b9a0",
+      "openingPairs": 13,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10082,
+      "boardSha256": "5e9327b721c450dc085a5402989845cad0e1ed943d5d5b13aa2e1770b5731798",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10083,
+      "boardSha256": "8236b052f097de0647be49e0895444aec52657c5c51853546bc942bd2c413625",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10084,
+      "boardSha256": "560497a537bf21357ceb91fbb58211414de1285086bef85cee7963b16162f5b7",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10085,
+      "boardSha256": "436831261c0f87722272149e6bd032696f89aa45c19069679b1e088a8b298622",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10086,
+      "boardSha256": "b9bac54fbd153b2687b64fe9d11539b048236bea2f81aaad81d8f68fa02f35b6",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10087,
+      "boardSha256": "f16899aa4310a425d12b738f534e66969188d7a53669bc56e27e06e675da51a7",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10088,
+      "boardSha256": "39e9ca7eb23e9e410baafbb2e88dba99bc059af72b18ba3e302e44247fd2959f",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10089,
+      "boardSha256": "a1c4ab69d57c6a7139dfda02e176127be8f6afdef8c963479fd089627897a365",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10090,
+      "boardSha256": "d86726359824e554d98ff708f7ae46ccffe00494621589a713af75409c43fcbd",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10091,
+      "boardSha256": "18b75506f77c0ea0b44fb1c45dca13f4c44da0f625054a95c1669f389207b9fa",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10092,
+      "boardSha256": "390c8b4195f2fa07be76b6054ef28e7cf0cc91ef14c2cd008dd9f6e9a2666ce6",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10093,
+      "boardSha256": "bc3829114b2d4c7716efab8637470e7c11a1d6fa7a90931b116c246e59590d9e",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10094,
+      "boardSha256": "df3eedd3dfb7c6b051c3681e5ac0bd4890d26171a7e9a073d29047df8c19f8a0",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10095,
+      "boardSha256": "e593c675469d4260e00a2cc289b0a6dd24c0c545670e5d456c5ffa474a333cad",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10096,
+      "boardSha256": "39e8a86adab9d9cc3dcaebe6c55ec04898062c9478de68f2036e5d5138db660c",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "blocked_after_two_adds",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10097,
+      "boardSha256": "c1436c7b2525c9470eaa0f8d32f6483442712b418c3b77f0406b820925c3ba02",
+      "openingPairs": 17,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10098,
+      "boardSha256": "42288edbb46809fc5c8362a245a7ce3d14f6c774afdc70fa42a5c8f1f6cbb9d4",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "blocked_after_two_adds",
+        "deterministic_random_legal": "cleared"
+      }
+    },
+    {
+      "level": 2,
+      "seed": 10099,
+      "boardSha256": "42ae6479ee70d1bf79c28d13b1d509a7c65d5f9f545727508a0e799b3028f430",
+      "openingPairs": 16,
+      "outcomes": {
+        "first_legal": "cleared",
+        "last_legal": "cleared",
+        "deterministic_random_legal": "blocked_after_two_adds"
+      }
+    }
+  ]
+}
