@@ -852,6 +852,35 @@
       },
       "nextAction": "Сопоставить контрастные партии на физическом телефоне. Владелец утверждает размеры и баланс после игры. Отдельный открытый риск из №14 — оценить семечки за минуту и длинные тетради до предложения менять награды.",
       "kitImpact": "REUSE: Playability Choice Evidence Ladder; сохранены границы FOUND/UNKNOWN, без изменения карты оригиналов."
+    },
+    {
+      "id": "classic-series-actual-scenarios-20261123",
+      "sourceFeatureIds": [],
+      "scope": "Классика «Семечек». GA-01 и GA-03 из независимого аудита №16.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "eae2bcbeaaa1a5c76872dddc7a7f79844988b60e",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "implementation": [
+        "src/classic-generator.ts",
+        "src/classic-profile.ts",
+        "scripts/classic-series.mjs"
+      ],
+      "evidence": {
+        "audit": "https://github.com/DanilaH/seeds-bits/pull/16",
+        "report": "../classic-difficulty-2026-11-12/SERIES_12082.md",
+        "data": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/artifacts/14849741823",
+        "preview": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420",
+        "android": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/artifacts/14848964860",
+        "ci": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845364"
+      },
+      "verification": {
+        "code": "18408 verified paths, deterministic paired fresh/control and filled-history series. High adjacent central repeat 12/276 to 0/276.",
+        "emulator": "Android API35, signed preview 12082, 12081 upgrade and legacy High27 Undo verified.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "nextAction": "Телефонный плейтест ощущения сложности и серии, замер семечек в минуту.",
+      "kitImpact": "REUSE: applied the evidence ladder to selected recipes, canonical motifs and serial acceptance."
     }
   ]
 }
