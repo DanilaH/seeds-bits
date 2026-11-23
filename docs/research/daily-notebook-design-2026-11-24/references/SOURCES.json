@@ -1,0 +1,317 @@
+{
+  "schema": "seeds-daily-notebook-reference-patterns-v1",
+  "date": "2026-11-24",
+  "consumer": "DanilaH/seeds-bits",
+  "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "kitMain": "5cac32b0851c80bdff1d61069b8524b9e42170e1",
+  "methodology": [
+    "RESEARCHER_CHAT_BOOTSTRAP",
+    "REFERENCE_PROTOCOL",
+    "REFERENCE_PORTING_FRAMEWORK"
+  ],
+  "sourceInventory": {
+    "url": "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/porting/SOURCE_FEATURES.json",
+    "ref": "0e4cb526883a30ab52f42067669665a31c1ee587",
+    "gitBlob": "aed088ee977dfea25cfddab119e518c454f884ec",
+    "count": 36,
+    "newOriginalFeatures": 0,
+    "mutation": "NONE"
+  },
+  "sources": [
+    {
+      "id": "S01",
+      "key": "firstsession",
+      "game": "Number Match / Easybrain",
+      "mode": "Ежедневные испытания; тексты основного обучения",
+      "evidenceLevel": "PRIOR_ASSET_VERIFIED_REPORT",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
+      "gitBlob": "e8424c0aa6f5931052213bd92e11672c9ebc0784",
+      "boundary": "Строки 3–13; три RU-ресурсных feature ID. Содержание текста, без подтверждения времени показа и действующей календарной policy."
+    },
+    {
+      "id": "S02",
+      "key": "firstevidence",
+      "game": "Number Match / Easybrain",
+      "mode": "Паспорт базового APK и контрольные суммы RU",
+      "evidenceLevel": "PRIOR_ASSET_PASSPORT",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/evidence.json",
+      "gitBlob": "34a82c202d5b40144364c5914653e60f59f2daf5",
+      "boundary": "Все поля JSON: package/version/baseApkSHA256 и hashes трёх tutorial строк плюс dc_tutorial_2."
+    },
+    {
+      "id": "S03",
+      "key": "seedsource",
+      "game": "Number Match / NADO и Easybrain",
+      "mode": "NADO: обычные этапы; Easybrain: основной режим",
+      "evidenceLevel": "PRIOR_PUBLISHER_SCREENSHOT_AND_REVIEW_REPORT",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-classic-add/README.md",
+      "gitBlob": "59cc4fd6b13be7923e82e631015b27a35d993366",
+      "boundary": "§Происхождение и таблица: NADO APK не получен, daily не подтверждён; магазинная версия не привязана к изображениям."
+    },
+    {
+      "id": "S04",
+      "key": "crosscontent",
+      "game": "Наш Crossmath",
+      "mode": "content-v2: Campaign / Free / Daily",
+      "evidenceLevel": "PRODUCT_CODE_AND_RECORDED_MEASUREMENTS",
+      "url": "https://github.com/DanilaH/crossmath-game/blob/0919721e7026802d1b740919847d38c1de8e4c0b/docs/spec/product/content_v2/README.md",
+      "gitBlob": "47d9afdb9a0608c0abe7cc4c981a383b8c767910",
+      "boundary": "Таблица Short/Long, single-gap определения; правила назначения версии/ID и сохранения ранних кампаний. Новый запуск проверок в этом проходе не выполнялся."
+    },
+    {
+      "id": "S05",
+      "key": "crossrotation",
+      "game": "Наш Crossmath",
+      "mode": "Free Relax / Challenge",
+      "evidenceLevel": "CODE_READ",
+      "url": "https://github.com/DanilaH/crossmath-game/blob/0919721e7026802d1b740919847d38c1de8e4c0b/src/content/rotation.ts",
+      "gitBlob": "dd87b7fa7f84c5be34d93282a9d8c08cfec425b5",
+      "boundary": "rotations, bucketTurn и bankIndex, строки 1–29. Только эта закреплённая реализация; не заявляется текущее человеческое принятие."
+    },
+    {
+      "id": "S06",
+      "key": "hueeditor",
+      "game": "Наш Hue",
+      "mode": "Авторский проект кампании и daily 0.1",
+      "evidenceLevel": "OWN_CANDIDATE_DATA_AND_PROPOSAL",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/cf7cffc48b4925a897c6613949c771d3325713bb/research/games/hue/2026-11-16-apk-audit/CONTENT_EDITOR_SPEC_0_1.md",
+      "gitBlob": "3d5eadb52d38d2d1cd744ff4a66bea685d9addf8",
+      "boundary": "§2–3 и §6/8: роли задач, кандидаты без дат, версии/допуск. Это проектный контракт, не измеренная трудность/удержание и не реализованный редактор."
+    },
+    {
+      "id": "S07",
+      "key": "azurbudget",
+      "game": "AZUR Word Solitaire",
+      "mode": "Упакованная поздняя кампания 551–2000",
+      "evidenceLevel": "PRIOR_ASSET_VERIFIED_REPORT",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/b9ed5e0871941d1c5ebba43b575a5caaa1e30972/research/games/association-solitaire/2026-11-16-azur-static/BUDGET_MODEL.md",
+      "gitBlob": "259b583e508e196848ae80959d1d71745eb7fcd8",
+      "boundary": "§1 и §3: четыре структурных кортежа и период7. Не конкретные раскладки, не live-назначения, не подтверждённый human pacing."
+    },
+    {
+      "id": "S08",
+      "key": "blocky",
+      "game": "Наш Blocky",
+      "mode": "Ручной кандидат D102 / preview0.74",
+      "evidenceLevel": "PRODUCT_CODE_AND_RECORDED_MODEL",
+      "url": "https://github.com/DanilaH/blocky-block-puzzle/blob/58fffe1a2dc49d89f8bcdc287e2c33f4ed7426bf/docs/qa/REFERENCE_SHAPES_0.74_2026-11-18.md",
+      "gitBlob": "5a6a54b5ef3f804e889b8e8b6a0d6d257b745698",
+      "boundary": "§Недостающие формы и §Результаты: +10 геометрий, все встречены в зафиксированном прогоне. Не запуск модели здесь и не принятие основного баланса."
+    },
+    {
+      "id": "S09",
+      "key": "quality",
+      "game": "mini-games-kit",
+      "mode": "Методология fixed-bank content quality",
+      "evidenceLevel": "METHODOLOGY_PROPOSAL",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/5cac32b0851c80bdff1d61069b8524b9e42170e1/docs/content-quality/README.md",
+      "gitBlob": "7a2d95691a60e5441174bc2b903d0d39b4634778",
+      "boundary": "Прочитаны §3 (gates) и §6 (редакторские роли/соседство); это инструменты процесса, не проверенный универсальный цикл."
+    },
+    {
+      "id": "S10",
+      "key": "seedsPuzzles",
+      "game": "Наши Семечки",
+      "mode": "Daily, архив, месячный трофей",
+      "evidenceLevel": "CODE_READ",
+      "url": "https://github.com/DanilaH/seeds-bits/blob/df9ff5c3df8b017803e2ff924c2812a5efc530ac/src/puzzles.ts",
+      "gitBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847",
+      "boundary": "Строки124–160: daily-v1 по hash, доступные даты и trophy7/14/all. Полный code snapshot совпадает с предыдущим аудитом."
+    },
+    {
+      "id": "S11",
+      "key": "seedsNotebooks",
+      "game": "Наши Семечки",
+      "mode": "Тетради",
+      "evidenceLevel": "CODE_READ",
+      "url": "https://github.com/DanilaH/seeds-bits/blob/df9ff5c3df8b017803e2ff924c2812a5efc530ac/src/notebooks.ts",
+      "gitBlob": "6cddee5f130bfce3b091c0e3f4fc4c5fb6f408cf",
+      "boundary": "24задачи×100томов, названия глав и прямые slicesID; семантических ролей задач этот модуль не задаёт."
+    },
+    {
+      "id": "S12",
+      "key": "inventory",
+      "game": "Number Match Easybrain / NADO",
+      "mode": "Первый source inventory",
+      "evidenceLevel": "REGISTRY_READ",
+      "url": "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/porting/SOURCE_FEATURES.json",
+      "gitBlob": "aed088ee977dfea25cfddab119e518c454f884ec",
+      "boundary": "Все36строк; единственная daily/calendar/month строка eb-daily-intro-monthly-cup-copy. Это не полная карта возможностей оригиналов."
+    },
+    {
+      "id": "S13",
+      "key": "seedsPages",
+      "game": "Наши Семечки",
+      "mode": "Тетради: каталог и страницы",
+      "evidenceLevel": "CODE_READ",
+      "url": "https://github.com/DanilaH/seeds-bits/blob/df9ff5c3df8b017803e2ff924c2812a5efc530ac/src/main.ts#L3663-L3726",
+      "gitBlob": "4d49c5f35e63ae12043a1f6f2909483109a53a44",
+      "boundary": "Прочитан точный диапазон3663–3726: свободный каталог/фильтры и4страницыпо6задач; не UI/phone run."
+    }
+  ],
+  "patterns": [
+    {
+      "localResearchId": "seeds-content-volume-decision-20261124",
+      "name": "Раздельные объём и характер решения",
+      "sourceIds": [
+        "S04"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "current": "Размеры и сертификаты есть; содержание тетради и daily не выбирается по двум независимым осям.",
+      "proposed": "Подбирать matched-size контрасты и хранить объём отдельно от эпизода/последствий выбора.",
+      "acceptance": "Две точные доски одного объёма, replay и конкретные различные before/action/after; обязательность приёма не выводить из одного witness.",
+      "cost": "LOW для отбора/паспортов, MEDIUM для новых конструкций.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-content-sequence-20261124",
+      "name": "Редакторский ритм конечного репертуара",
+      "sourceIds": [
+        "S05",
+        "S07"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "MISSING",
+      "current": "daily hash не задаёт недельной кривой; notebooks в основном нарастают по объёму.",
+      "proposed": "Последовательность разных ситуаций/коротких повторений знакомого; поздние задачи не требуют непрерывного роста цифр.",
+      "acceptance": "Проверяется соседняя подборка; роль каждого перехода объяснена; конкретный период доноров не принимается за оптимум.",
+      "cost": "LOW для расписания, MEDIUM для совместимости календаря.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-notebook-theme-sequence-20261124",
+      "name": "Тематическая страница с переносом приёма",
+      "sourceIds": [
+        "S06",
+        "S09",
+        "S11",
+        "S13"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "current": "Тома/страницы/названия и свободный выбор есть; редакционная роль каждой задачи в данных не задана.",
+      "proposed": "Небольшие дуги внутри существующей структуры страниц: приём, варианты, сочетание, знакомое завершение.",
+      "acceptance": "Для роли есть точный эпизод и контраст с соседями; тема не обещает доказанную необходимость без проверки всех путей.",
+      "cost": "LOW–MEDIUM для подборок существующих ID; MEDIUM для дополнительных задач.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-content-repertoire-20261124",
+      "name": "Сначала новые конструкции, затем частоты",
+      "sourceIds": [
+        "S08",
+        "S09"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "UNKNOWN",
+      "current": "Дефицит конкретного игрового семейства устанавливают параллельные измерения, не названия шаблонов.",
+      "proposed": "Добавлять собственные шаблоны под недостающий эпизод, затем распределять их по набору/неделе.",
+      "acceptance": "Два контрастных поля семейства, replay, ключевое действие, bounded альтернативы и отличие от ближайшего старого поля.",
+      "cost": "MEDIUM; offline authoring прежде runtime director.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-content-authoring-assignment-20261124",
+      "name": "Кандидат → принятый банк → закреплённое назначение",
+      "sourceIds": [
+        "S04",
+        "S06",
+        "S10"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "current": "Есть фиксированныеbook-v1 и детерминированныеdaily-v1; shared editorial pool/versioned explicit assignments ещё проектируются.",
+      "proposed": "Общий offline паспорт, отдельные списки назначения, точные опубликованные версии/доски. Reward identity отдельно от fingerprint.",
+      "acceptance": "Старые назначения/restart/Undo сохраняются; существующий book-ID в подборке не платит заново; daily сохраняет текущую календарную единицу награды.",
+      "cost": "LOW–MEDIUM для инструмента; MEDIUM для сохранений/валидаторов.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-daily-goal-continuity-20261124",
+      "name": "Сохранить конечную цель календаря",
+      "sourceIds": [
+        "S01",
+        "S02",
+        "S10"
+      ],
+      "sourceFeatureIds": [
+        "eb-daily-intro-monthly-cup-copy"
+      ],
+      "consumerGap": "PARTIAL",
+      "current": "У нас есть trophy7/14/all; у Easybrain проверен только текст о monthly cup/all stars, полный original UI parity неизвестен.",
+      "proposed": "Разнообразить сами дни, сохранить трофеи/архив/серию и текущую выдачу наград.",
+      "acceptance": "Старый completed-day/month и сегодняшняя серия сохраняются; повторный вход не выдаёт повторную награду.",
+      "cost": "LOW для сохранения существующей меты; новая экономика вне пакета.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    }
+  ],
+  "originalBuilds": [
+    {
+      "game": "Number Match / Easybrain",
+      "package": "com.easybrain.number.puzzle.game",
+      "versionName": "2.1.0",
+      "versionCode": 20100015,
+      "artifactKind": "base APK",
+      "sha256": "50087c675cbc9ce10ac4e7fefab053b3061e0574a875866339e0903bee682545",
+      "sourceIds": [
+        "S01",
+        "S02"
+      ],
+      "newApkInspection": false
+    },
+    {
+      "game": "Number Match / NADO",
+      "package": "pro.nado.numbers",
+      "versionName": "1.1.60",
+      "versionCode": 60,
+      "versionScope": "Store metadata in prior2026-11-20report; screenshot/APKversion not established",
+      "artifactKind": "APK unavailable in prior report",
+      "sha256": null,
+      "sourceIds": [
+        "S03"
+      ],
+      "newApkInspection": false
+    },
+    {
+      "game": "AZUR Word Solitaire",
+      "package": "com.solitaire.match.words",
+      "versionName": "1.3.3.8",
+      "versionCode": 244,
+      "artifactKind": "XAPK",
+      "sha256": "4990fa1a5d8dd2974e1105cf4c54fa28fad13a6f5cb197b562dfc10426cb83e4",
+      "sourceIds": [
+        "S07"
+      ],
+      "newApkInspection": false
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "easybrain-daily-live-sequence",
+      "test": "Record exact build: first calendar entry, solve a day and return; several adjacent dates and counters; then separate monthly reward condition."
+    },
+    {
+      "id": "nado-daily-presence-and-sequence",
+      "test": "Establish available modes in an authenticated specific build; if calendar/campaign exists, record adjacent tasks. Existing ordinary-stage screenshots are insufficient."
+    },
+    {
+      "id": "human-content-distinctness",
+      "test": "Compare matched-volume tasks and their sequence on physical phones; collect decisions, duration, help and desire to continue without exposing witnesses."
+    }
+  ],
+  "kitImpact": "REUSE",
+  "scope": "Read existing research and exact code; no new APK/video/model runs, no new vendor feature IDs, no code or GitHub mutations."
+}

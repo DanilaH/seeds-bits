@@ -1,0 +1,76 @@
+{
+  "source": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "level": "ACTUAL_SOURCE_NODE",
+  "scope": "Controlled hypothetical future IDs against unchanged existing product; no implementation",
+  "cases": [
+    {
+      "case": "future-id-in-inactive-records",
+      "id": "book-v2-links-1",
+      "wire": 6,
+      "sessionPreserved": false,
+      "hintPreserved": false,
+      "donePreserved": false,
+      "attemptPreserved": false,
+      "recoveries": 1
+    },
+    {
+      "case": "future-id-active",
+      "id": "book-v2-links-1",
+      "error": "Invalid progress",
+      "futureProgress": false
+    },
+    {
+      "case": "future-wire-guard",
+      "id": "book-v2-links-1",
+      "error": "Newer save format",
+      "futureProgress": true
+    },
+    {
+      "case": "future-id-in-inactive-records",
+      "id": "daily-v2-2026-11-24",
+      "wire": 6,
+      "sessionPreserved": false,
+      "hintPreserved": false,
+      "donePreserved": false,
+      "attemptPreserved": false,
+      "recoveries": 1
+    },
+    {
+      "case": "future-id-active",
+      "id": "daily-v2-2026-11-24",
+      "error": "Invalid progress",
+      "futureProgress": false
+    },
+    {
+      "case": "future-wire-guard",
+      "id": "daily-v2-2026-11-24",
+      "error": "Newer save format",
+      "futureProgress": true
+    },
+    {
+      "case": "today-streak-hardcoded-v1",
+      "day": "2026-11-24",
+      "v1Reward": 1,
+      "v2Reward": 0,
+      "v1Count": 3,
+      "v2Count": 2
+    },
+    {
+      "case": "monthly-trophy-hardcoded-v1",
+      "v1": {
+        "count": 7,
+        "tier": 1
+      },
+      "v2": {
+        "count": 0,
+        "tier": 0
+      }
+    },
+    {
+      "case": "next-and-notebook-number-hardcoded",
+      "v2DailyNext": null,
+      "v2BookVolume": "NaN"
+    }
+  ],
+  "interpretation": "Adding a new prefix without a content/save migration loses inactive entries, rejects an active task, and misses streak/trophy/next-task. Existing wire7 guard already refuses future saves as FutureProgress. These are compatibility requirements, not bugs in currently supported v1 content."
+}

@@ -1,0 +1,118 @@
+{
+  "schema": "seeds-content-design-source-v1",
+  "repository": "DanilaH/seeds-bits",
+  "ref": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "files": [
+    {
+      "path": "src/core.ts",
+      "gitBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+      "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+    },
+    {
+      "path": "src/classic-profile.ts",
+      "gitBlob": "3f8edf6f286cd65a703f83918f129d4df3222487",
+      "sha256": "6c03aa06497052117431cbc3105a9c1f770224d0ddf08d22bb6dcf7ef37cc154"
+    },
+    {
+      "path": "src/classic-dense.ts",
+      "gitBlob": "dbdfb1f9da795067f6c9940d748a86755070d50f",
+      "sha256": "c1744b6c6f3eff0c06ad1ad1ae40360365b991ba6319c4319c1ed4cced0379ce"
+    },
+    {
+      "path": "src/classic-generator.ts",
+      "gitBlob": "78f3fad7b270d1a5c2d9f64ed75bcff96200a9c6",
+      "sha256": "a443435e268bd78406b8e1387b8d4e2ead007da116303129920f7c55f5ebb2fd"
+    },
+    {
+      "path": "src/classic-deals.ts",
+      "gitBlob": "568ca0a23e2176846a70f50fce83bb210844d179",
+      "sha256": "2056a70332c0beab0f946abd2bef74abff56af79e25bf6289720cc41644080e8"
+    },
+    {
+      "path": "src/progress.ts",
+      "gitBlob": "af0c82991101dd793317f2569d063d401273652a",
+      "sha256": "6a801b5241b06ae8ef3394e3ce3e51f299cd35cd3f46f431653020fc4c3c2801"
+    },
+    {
+      "path": "src/history-codec.ts",
+      "gitBlob": "b84c2a230b99dc8d771e48d3a4a43f4a3fc60c6e",
+      "sha256": "bdc4cbbafa8854046bdd1221fd8686452e23db799c1d6068d737485ee6bba17a"
+    },
+    {
+      "path": "src/hint-key.ts",
+      "gitBlob": "a8de88b871e8b980776cd1e97dd68d1d45bd129f",
+      "sha256": "391a30ce15450fe36009ed25ccba3c51ac98d4f58ecb6b736d6c9d8b4d3c4761"
+    },
+    {
+      "path": "src/analytics.ts",
+      "gitBlob": "5a928fcb3f4cb5054212b69d4d3e40d411bda263",
+      "sha256": "132b4f572c23f2177a44b571f6a80c4bf96e16cf8adce05fb486bd16d542da05"
+    },
+    {
+      "path": "src/jars.ts",
+      "gitBlob": "69a560c35958265ca98389b00f0f37e8eca7e665",
+      "sha256": "dabd5d3361d90af12799bb6c70935faf7548708c59288fa3f1109bbf55492ac0"
+    },
+    {
+      "path": "src/calendar.ts",
+      "gitBlob": "b836708545670699c776d4645aeecd4ae77d5003",
+      "sha256": "c342de7da79599bba2f153d37917382e5326f6bdfc0decc9c384b9fb1986a63b"
+    },
+    {
+      "path": "src/daily-run.ts",
+      "gitBlob": "24ba676d016f80caaece0c1f988f6a82b23f2e9a",
+      "sha256": "8ce54b42b2420c54f76cba6e747780834693b0d31c0bd85215034c5db0a07094"
+    },
+    {
+      "path": "src/help-contract.ts",
+      "gitBlob": "8e234f6a9610d0f4c2f1552f45a3f34ec94703b2",
+      "sha256": "22b33a58e4ad517f5739b9a48d0bb65bd9e0482f357bde8af5a2819822bce65d"
+    },
+    {
+      "path": "src/i18n/index.ts",
+      "gitBlob": "ef697b8ca5f24328390218113c513acd4cec67d8",
+      "sha256": "3cb99432d13dfda78f7572ee3585f580e3eea6a31286464b2ec7b50024968295"
+    },
+    {
+      "path": "src/puzzles.ts",
+      "gitBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847",
+      "sha256": "7d5fc94edb634c1012e8b23de19fbc032709fcd785df1aa80001a47f119ef3d0"
+    },
+    {
+      "path": "src/notebooks.ts",
+      "gitBlob": "6cddee5f130bfce3b091c0e3f4fc4c5fb6f408cf",
+      "sha256": "7a0e257e7593052218860bab28ab4281eb89abd25c04e2cba7b12968d9ee406d"
+    },
+    {
+      "path": "src/solver.ts",
+      "gitBlob": "711b0866fb20bc8ecaaea9890120c1421c8dff59",
+      "sha256": "351122e55243cacfd2f17749064975001762ad9e6c9bf4844ca83672d4421686"
+    },
+    {
+      "path": "src/classic-catalog.json",
+      "gitBlob": "008ae0def4149c479d4d2eb1947893a3c77d500b",
+      "sha256": "186b6cc6f21b9f3e6441a36c6f4b75e06c150e68ee843106fe55adb8dca96c6a"
+    },
+    {
+      "path": "src/i18n/launch-copy.json",
+      "gitBlob": "81b17a6fb42eabd415ae12a611c0b341c7ef0d20",
+      "sha256": "60d0e36f82f497d1b14f9de4a6b828acd6400b6bcc5f21e569379e1b26a39153"
+    },
+    {
+      "path": "src/i18n/ui-copy.json",
+      "gitBlob": "50910b4422ffa0bf9d30b543e16be844e8d7ce08",
+      "sha256": "e5f7520406822b83b14bf481a779e5351159f621ba2250c6ccaaee61f21528e1"
+    },
+    {
+      "path": "src/notebook.json",
+      "gitBlob": "ef77d106e87cd0320ef6887c4b4e39809abc1d93",
+      "sha256": "83f1e5af127d0647c112309d365e90b0cd91f7d4e9f96fefb590d87e1c2d0634"
+    },
+    {
+      "path": "src/notebook-extra.json",
+      "gitBlob": "6e81195773e4d1e9c13d2bf9ea2aafd6a59d8c7a",
+      "sha256": "a9148fd8e99cf6a615748402a039017cf5e310b726d756d876d561c7ae555456"
+    }
+  ],
+  "execution": "Hash-verified snapshot used in this pass; git-show mode supplied for reproducibility."
+}

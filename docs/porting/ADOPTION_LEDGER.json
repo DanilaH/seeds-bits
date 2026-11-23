@@ -953,21 +953,36 @@
       "evidence": {
         "report": "../research/daily-notebook-baseline-2026-11-23/README.md",
         "results": "../research/daily-notebook-baseline-2026-11-23/results.json",
-        "task": "https://github.com/DanilaH/seeds-bits/issues/14"
+        "task": "https://github.com/DanilaH/seeds-bits/issues/14",
+        "design": "../research/daily-notebook-design-2026-11-24/notebook/README.md",
+        "fixtures": "../research/daily-notebook-design-2026-11-24/notebook/data/fixtures.json",
+        "referenceSelection": "../research/daily-notebook-design-2026-11-24/notebook/data/pilot-reference-sets.json",
+        "developerSpec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md"
       },
       "verification": {
         "data": "All2400boards counted; no exact duplicates. Median uses mean of middle two,vol100513.",
-        "actualSourceNode": "10selected notebook proofs replayed; actual Progress migration and reward contracts checked. Not all2400proofs replayed in this pass.",
+        "actualSourceNode": "24Nov: 336 selected short witnesses replayed out of2400 catalogue;33states/208alternatives:205FOUND,3NO_WIN_PROVEN,0UNKNOWN. No all2400proof assertion. Equal-volume book70/73 contrast verified.",
         "physicalPhone": "UNKNOWN",
         "liveAudience": "UNKNOWN"
       },
-      "nextAction": "Фиксированные book1,78,240,480,960,1440,1920,2380: длительность/Undo/Hint/scroll и объяснение выбора на телефоне; на длинной задаче отклониться от witness и проверить подсказку. Сравнить одинаковый объём с разной структурой. Паспорта дешевле переавторства каталога.",
+      "nextAction": "Авторить 2×24 новых поля, четыре страницы по6; эталоны48старыхID не считать новым контентом. Реализовать совместимость коллекций/wire7 по ТЗ. После PR проверить банк/миграцию/телефон раздельно; длительность длинных старых задач остаётся UNKNOWN.",
       "constraints": [
         "Сохранить все существующие book-v1 ID, поля и порядокextra.",
         "Сохранить sessions/Undo/done и одноразовые награды; изменение экономики отдельно.",
         "Не включать шесть приостановленных экспериментов."
       ],
-      "kitImpact": "REUSE: choice evidence and stable identity; no source parity changes."
+      "kitImpact": "REUSE: choice evidence and stable identity; no source parity changes.",
+      "proposal": {
+        "status": "RESEARCH_PROPOSAL_NOT_IMPLEMENTED",
+        "titles": [
+          "Новые связи",
+          "Поле меняется"
+        ],
+        "newBoards": 48,
+        "cost": "MEDIUM",
+        "existingReferenceBoards": 48
+      },
+      "compatibility": "../research/daily-notebook-design-2026-11-24/COMPATIBILITY.md"
     },
     {
       "id": "seeds-daily-rhythm-20261123",
@@ -986,20 +1001,443 @@
       "evidence": {
         "report": "../research/daily-notebook-baseline-2026-11-23/README.md",
         "results": "../research/daily-notebook-baseline-2026-11-23/results.json",
-        "task": "https://github.com/DanilaH/seeds-bits/issues/14"
+        "task": "https://github.com/DanilaH/seeds-bits/issues/14",
+        "design": "../research/daily-notebook-design-2026-11-24/daily/README.md",
+        "fixtures": "../research/daily-notebook-design-2026-11-24/daily/results/fixtures.json",
+        "alternatives": "../research/daily-notebook-design-2026-11-24/daily/results/choice-probes.json",
+        "developerSpec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md"
       },
       "verification": {
-        "actualSourceNode": "365unique daily boards and365proof replays PASS; median24digits/19openingpairs; first-legal policy withoutAdd273/365. Not a player win rate.",
+        "actualSourceNode": "365unique daily boards and365proof replays PASS; median24digits/19openingpairs; first-legal policy withoutAdd273/365. Not a player win rate. 24Nov:18states/195alternatives:193FOUND,2NO_WIN_PROVEN,0UNKNOWN; both negative graphs independently closed. Seven matched-volume references selected exploratorily, not held-out.",
         "physicalPhone": "UNKNOWN",
         "liveAudience": "UNKNOWN"
       },
-      "nextAction": "Отобрать контрастные задачи одинаковых16/24/32цифр и семидневную подборку, сравнить с фиксированной текущей неделей. Измерить длительность/выбор/Undo/понимание. До продуктового ввода определить будущую дату и совместимую версию; малая–средняя стоимость отбора, средняя для ввода/миграции.",
+      "nextAction": "Авторить28новых frozen daily,5ведущихприёмов; первая7×24цифры, дальнейшаяволна16–32предложена. Сначала совместимость first-assignment,calendarDay-award/trophy/today-series; назначить будущую дату после приёмки. Офлайн v1 fallback после окна не заменять позднимбанком.",
       "constraints": [
         "Не менять задним числом daily-v1-поля и сохранённые назначения.",
         "Сохранить archive/today distinction, sessions/Undo, трофеи и уникальность наград.",
         "Новая неделя не разрешает изменение экономики или возврат paused help."
       ],
-      "kitImpact": "REUSE: structural contrast and evidence ladder; no source parity changes."
+      "kitImpact": "REUSE: structural contrast and evidence ladder; no source parity changes.",
+      "proposal": {
+        "status": "RESEARCH_PROPOSAL_NOT_IMPLEMENTED",
+        "newBoards": 28,
+        "activationDate": null,
+        "cost": "MEDIUM"
+      },
+      "compatibility": "../research/daily-notebook-design-2026-11-24/COMPATIBILITY.md"
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-volume-decision-20261124",
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "behavior": "Размеры и сертификаты есть; содержание тетради и daily не выбирается по двум независимым осям.",
+      "proposal": "Подбирать matched-size контрасты и хранить объём отдельно от эпизода/последствий выбора.",
+      "acceptance": "Две точные доски одного объёма, replay и конкретные различные before/action/after; обязательность приёма не выводить из одного witness.",
+      "cost": "LOW для отбора/паспортов, MEDIUM для новых конструкций.",
+      "sourceIds": [
+        "S04"
+      ],
+      "nextAction": "Выполнить соответствующий раздел DEVELOPER_SPEC и COMPATIBILITY; проверить diff/банк/сохранения после продуктового PR. Данные телефона/аудитории закрывать отдельно."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-sequence-20261124",
+      "sourceFeatureIds": [],
+      "consumerGap": "MISSING",
+      "behavior": "daily hash не задаёт недельной кривой; notebooks в основном нарастают по объёму.",
+      "proposal": "Последовательность разных ситуаций/коротких повторений знакомого; поздние задачи не требуют непрерывного роста цифр.",
+      "acceptance": "Проверяется соседняя подборка; роль каждого перехода объяснена; конкретный период доноров не принимается за оптимум.",
+      "cost": "LOW для расписания, MEDIUM для совместимости календаря.",
+      "sourceIds": [
+        "S05",
+        "S07"
+      ],
+      "nextAction": "Выполнить соответствующий раздел DEVELOPER_SPEC и COMPATIBILITY; проверить diff/банк/сохранения после продуктового PR. Данные телефона/аудитории закрывать отдельно."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-notebook-theme-sequence-20261124",
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "behavior": "Тома/страницы/названия и свободный выбор есть; редакционная роль каждой задачи в данных не задана.",
+      "proposal": "Небольшие дуги внутри существующей структуры страниц: приём, варианты, сочетание, знакомое завершение.",
+      "acceptance": "Для роли есть точный эпизод и контраст с соседями; тема не обещает доказанную необходимость без проверки всех путей.",
+      "cost": "LOW–MEDIUM для подборок существующих ID; MEDIUM для дополнительных задач.",
+      "sourceIds": [
+        "S06",
+        "S09",
+        "S11",
+        "S13"
+      ],
+      "nextAction": "Выполнить соответствующий раздел DEVELOPER_SPEC и COMPATIBILITY; проверить diff/банк/сохранения после продуктового PR. Данные телефона/аудитории закрывать отдельно."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-repertoire-20261124",
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "behavior": "Пять ситуаций подтверждены в текущих коротких полях; отдельного нового редакторского банка 48+28 пока нет. Конкретные дефициты следующих конструкций определит авторинг.",
+      "proposal": "Добавлять собственные шаблоны под недостающий эпизод, затем распределять их по набору/неделе.",
+      "acceptance": "Два контрастных поля семейства, replay, ключевое действие, bounded альтернативы и отличие от ближайшего старого поля.",
+      "cost": "MEDIUM; offline authoring прежде runtime director.",
+      "sourceIds": [
+        "S08",
+        "S09"
+      ],
+      "nextAction": "Выполнить соответствующий раздел DEVELOPER_SPEC и COMPATIBILITY; проверить diff/банк/сохранения после продуктового PR. Данные телефона/аудитории закрывать отдельно."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-authoring-assignment-20261124",
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "behavior": "Есть фиксированныеbook-v1 и детерминированныеdaily-v1; shared editorial pool/versioned explicit assignments ещё проектируются.",
+      "proposal": "Общий offline паспорт, отдельные списки назначения, точные опубликованные версии/доски. Reward identity отдельно от fingerprint.",
+      "acceptance": "Старые назначения/restart/Undo сохраняются; существующий book-ID в подборке не платит заново; daily сохраняет текущую календарную единицу награды.",
+      "cost": "LOW–MEDIUM для инструмента; MEDIUM для сохранений/валидаторов.",
+      "sourceIds": [
+        "S04",
+        "S06",
+        "S10"
+      ],
+      "nextAction": "Выполнить соответствующий раздел DEVELOPER_SPEC и COMPATIBILITY; проверить diff/банк/сохранения после продуктового PR. Данные телефона/аудитории закрывать отдельно."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-daily-goal-continuity-20261124",
+      "sourceFeatureIds": [
+        "eb-daily-intro-monthly-cup-copy"
+      ],
+      "consumerGap": "PARTIAL",
+      "behavior": "У нас есть trophy7/14/all; у Easybrain проверен только текст о monthly cup/all stars, полный original UI parity неизвестен.",
+      "proposal": "Разнообразить сами дни, сохранить трофеи/архив/серию и текущую выдачу наград.",
+      "acceptance": "Старый completed-day/month и сегодняшняя серия сохраняются; повторный вход не выдаёт повторную награду.",
+      "cost": "LOW для сохранения существующей меты; новая экономика вне пакета.",
+      "sourceIds": [
+        "S01",
+        "S02",
+        "S10"
+      ],
+      "nextAction": "Выполнить соответствующий раздел DEVELOPER_SPEC и COMPATIBILITY; проверить diff/банк/сохранения после продуктового PR. Данные телефона/аудитории закрывать отдельно."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-flow",
+      "sourceFeatureIds": [],
+      "relatedLocalResearchIds": [
+        "seeds-daily-flow"
+      ],
+      "consumerGap": "PARTIAL",
+      "behavior": "Приём встречается в существующих полях; специальные новые коллекции/редакторский daily-банк ещё не реализованы.",
+      "proposal": "Спокойная зачистка",
+      "criterion": "Несколько подтверждённых продолжений после первых действий; простое продвижение.",
+      "implementation": [
+        "src/puzzles.ts",
+        "src/core.ts",
+        "src/solver.ts"
+      ],
+      "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
+      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-reveal",
+      "sourceFeatureIds": [],
+      "relatedLocalResearchIds": [
+        "seeds-daily-reveal",
+        "seeds-nb-open-links-20261124"
+      ],
+      "consumerGap": "PARTIAL",
+      "behavior": "Приём встречается в существующих полях; специальные новые коллекции/редакторский daily-банк ещё не реализованы.",
+      "proposal": "Новые связи",
+      "criterion": "Причинное открытие связи между прежними клетками без сжатия.",
+      "implementation": [
+        "src/puzzles.ts",
+        "src/core.ts",
+        "src/solver.ts"
+      ],
+      "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
+      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-reading",
+      "sourceFeatureIds": [],
+      "relatedLocalResearchIds": [
+        "seeds-daily-reading",
+        "seeds-nb-reading-edge-20261124"
+      ],
+      "consumerGap": "PARTIAL",
+      "behavior": "Приём встречается в существующих полях; специальные новые коллекции/редакторский daily-банк ещё не реализованы.",
+      "proposal": "Край строки",
+      "criterion": "Подтверждённый reading-эпизод внутри пути, без заявления обязательности во всех решениях.",
+      "implementation": [
+        "src/puzzles.ts",
+        "src/core.ts",
+        "src/solver.ts"
+      ],
+      "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
+      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-compression",
+      "sourceFeatureIds": [],
+      "relatedLocalResearchIds": [
+        "seeds-daily-compression",
+        "seeds-nb-row-shift-20261124"
+      ],
+      "consumerGap": "PARTIAL",
+      "behavior": "Приём встречается в существующих полях; специальные новые коллекции/редакторский daily-банк ещё не реализованы.",
+      "proposal": "Поле меняется",
+      "criterion": "Связь появляется или исчезает именно из-за удаления строки; контроль без сжатия.",
+      "implementation": [
+        "src/puzzles.ts",
+        "src/core.ts",
+        "src/solver.ts"
+      ],
+      "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
+      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "RESEARCHED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-order",
+      "sourceFeatureIds": [],
+      "relatedLocalResearchIds": [
+        "seeds-daily-order",
+        "seeds-nb-order-choice-20261124"
+      ],
+      "consumerGap": "PARTIAL",
+      "behavior": "Приём встречается в существующих полях; специальные новые коллекции/редакторский daily-банк ещё не реализованы.",
+      "proposal": "Порядок",
+      "criterion": "Содержательно разные связи общих оставшихся цифр, доступность следующего приёма либо возможность полного завершения; stable cell IDs, обе ветки и влияние на план. Разные снятые клетки сами по себе недостаточны; проигрышная ветка необязательна.",
+      "implementation": [
+        "src/puzzles.ts",
+        "src/core.ts",
+        "src/solver.ts"
+      ],
+      "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
+      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "DEFERRED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-combinations-next",
+      "sourceFeatureIds": [],
+      "stage": "После первого нового банка48+28",
+      "behavior": "Dedicated edge/order collections, two-step openings and mixed constructions",
+      "consumerGap": "MISSING",
+      "reason": "First bounded 76-board bank and its actual deficits not implemented yet.",
+      "returnCondition": "First bank delivered; report identifies missing arrangements or combinations; commission next frozen pack.",
+      "nextAction": "First bank delivered; report identifies missing arrangements or combinations; commission next frozen pack.",
+      "cost": "MEDIUM"
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "DEFERRED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-long-optional-next",
+      "sourceFeatureIds": [],
+      "stage": "После первого нового банка48+28",
+      "behavior": "Long optional thematic tasks with separate volume label",
+      "consumerGap": "MISSING",
+      "reason": "First release targets short varied situations; long-task phone duration/hint/scroll remains unknown.",
+      "returnCondition": "Owner requests long-format expansion and physical session establishes usable volume and reward/time evidence.",
+      "nextAction": "Owner requests long-format expansion and physical session establishes usable volume and reward/time evidence.",
+      "cost": "MEDIUM"
+    },
+    {
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "status": "DEFERRED",
+      "scope": "Семечки, daily/тетради; собственная исследовательская адаптация, новый банк/runtime пока отсутствуют.",
+      "evidence": {
+        "report": "../research/daily-notebook-design-2026-11-24/README.md",
+        "spec": "../research/daily-notebook-design-2026-11-24/DEVELOPER_SPEC.md",
+        "sources": "../research/daily-notebook-design-2026-11-24/references/SOURCES.json"
+      },
+      "verification": {
+        "actualSourceNode": "Exploratory pinned-source research, see manifests; no new original runtime observation.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "kitImpact": "REUSE / CANDIDATE QA; source parity statuses unchanged.",
+      "id": "seeds-content-calendar-editions-next",
+      "sourceFeatureIds": [],
+      "stage": "После первого нового банка48+28",
+      "behavior": "New themed weeks or seasonal editorial sets using same rules/rewards",
+      "consumerGap": "MISSING",
+      "reason": "Need first accepted bank and immutable assignment contract; no evidence for new event economy.",
+      "returnCondition": "Schedule next future pack before existing bank expires; first-assignment and fallback contract passes.",
+      "nextAction": "Schedule next future pack before existing bank expires; first-assignment and fallback contract passes.",
+      "cost": "LOW_MEDIUM"
     }
   ]
 }

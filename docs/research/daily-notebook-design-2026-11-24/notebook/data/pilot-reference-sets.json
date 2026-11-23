@@ -1,0 +1,990 @@
+{
+  "source": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "status": "RESEARCH_REFERENCE_SELECTION_NOT_NEW_PRODUCT_CONTENT",
+  "meaning": "48 existing immutable tasks demonstrate two 24-slot thematic notebooks. These are reference/QA selections, not48 new task IDs or new rewards. Theme tags describe verified certificates, not mandatory paths for every player.",
+  "implementationOptions": {
+    "recommended": "Use these references to author the first two new short thematic notebooks, with independent content IDs and fixed published boards. A separate compatibility design must preserve all old IDs.",
+    "lowCostQA": "A QA-only collection may link these existing IDs; solved state and one-time task reward remain shared with the legacy catalogue."
+  },
+  "caps": {
+    "occupied": 32,
+    "logicalCells": 54,
+    "pagesPerBook": 4,
+    "tasksPerPage": 6
+  },
+  "uniqueExistingTasks": 48,
+  "collections": [
+    {
+      "id": "seeds-notebook-links-pilot-20261124",
+      "title": "Новые связи",
+      "pages": [
+        {
+          "title": "Освободи линию",
+          "goal": "Снятие открывает новые пары; несколько направлений и короткая передышка.",
+          "tasks": [
+            {
+              "position": 1,
+              "page": 1,
+              "taskId": "book-v1-6",
+              "sourceOrdinal": 6,
+              "boardSha256": "4f7472182db03636991ab452e7b67508d98a2c66808311bfda8702c4a6e3bb36",
+              "occupied": 12,
+              "logicalCells": 18,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 2,
+              "page": 1,
+              "taskId": "book-v1-8",
+              "sourceOrdinal": 8,
+              "boardSha256": "e18e7d00a10b9517562d1ba17f1cee71c4a621c2448f83dd9f2eef916e55af82",
+              "occupied": 14,
+              "logicalCells": 27,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 3,
+              "page": 1,
+              "taskId": "book-v1-89",
+              "sourceOrdinal": 89,
+              "boardSha256": "3b8d3542dbd28aa9e8bf9a51f327f2c24fb8e51d8ca77c40db6f4b350dfc6349",
+              "occupied": 12,
+              "logicalCells": 36,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 4,
+              "page": 1,
+              "taskId": "book-v1-137",
+              "sourceOrdinal": 137,
+              "boardSha256": "39ccf9d7b4172faef3aa3951720cb7eeaf225765a6e98a75bdd382f8dcf1e517",
+              "occupied": 14,
+              "logicalCells": 36,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 2,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 5,
+              "page": 1,
+              "taskId": "book-v1-184",
+              "sourceOrdinal": 184,
+              "boardSha256": "669298b1a771bfbd261c5701e8024412ed8347ad4a31457b867281a9f90d0371",
+              "occupied": 16,
+              "logicalCells": 36,
+              "witnessMoves": 8,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 6,
+              "page": 1,
+              "taskId": "book-v1-84",
+              "sourceOrdinal": 84,
+              "boardSha256": "29f214780172a02ccfe08e5212c45ba11fbe2f91adfd104741c0f6776e94eec1",
+              "occupied": 24,
+              "logicalCells": 27,
+              "witnessMoves": 12,
+              "observedEpisodes": {
+                "openTwoOrMore": 3,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            }
+          ]
+        },
+        {
+          "title": "За край строки",
+          "goal": "Узнать и применить связь по порядку чтения в разных конфигурациях.",
+          "tasks": [
+            {
+              "position": 7,
+              "page": 2,
+              "taskId": "book-v1-105",
+              "sourceOrdinal": 105,
+              "boardSha256": "aefed0c581c1e9372582ea1084a2abb182d62b86ca0f4892dbcb6b0730b6a08c",
+              "occupied": 12,
+              "logicalCells": 27,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 8,
+              "page": 2,
+              "taskId": "book-v1-133",
+              "sourceOrdinal": 133,
+              "boardSha256": "9dbf1e9df62501169b89aadf2e4bdb4bf3c1bdf9af61d3c9defc87f0f97290ac",
+              "occupied": 14,
+              "logicalCells": 36,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 9,
+              "page": 2,
+              "taskId": "book-v1-111",
+              "sourceOrdinal": 111,
+              "boardSha256": "d51b2035881e73cd1abc238ad717aacb57b56d5bc253f5488307619ece2d1938",
+              "occupied": 12,
+              "logicalCells": 36,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 10,
+              "page": 2,
+              "taskId": "book-v1-180",
+              "sourceOrdinal": 180,
+              "boardSha256": "4d54958dcc54f051e0d70584ed629ff2de2b6ffbd2166f5462a0e135e94473ba",
+              "occupied": 14,
+              "logicalCells": 27,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 11,
+              "page": 2,
+              "taskId": "book-v1-214",
+              "sourceOrdinal": 214,
+              "boardSha256": "55e42f547c08dc08c24b4ec3eb33928163ffa6a53142bab32752f45d6edb9c9f",
+              "occupied": 16,
+              "logicalCells": 36,
+              "witnessMoves": 8,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 12,
+              "page": 2,
+              "taskId": "book-v1-241",
+              "sourceOrdinal": 241,
+              "boardSha256": "284c2a20f02d3d2c707f0cb54d503578b4f9e73e4f00e18e2114ca15e657644b",
+              "occupied": 14,
+              "logicalCells": 36,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 3
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            }
+          ]
+        },
+        {
+          "title": "Смена приёма",
+          "goal": "Чередовать раскрытие и чтение края без монотонного роста размера.",
+          "tasks": [
+            {
+              "position": 13,
+              "page": 3,
+              "taskId": "book-v1-46",
+              "sourceOrdinal": 46,
+              "boardSha256": "bdedb965f60aec7b24c456c280c7add33e5f6cd6b7a84b260a7a467003612eb1",
+              "occupied": 12,
+              "logicalCells": 45,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 14,
+              "page": 3,
+              "taskId": "book-v1-212",
+              "sourceOrdinal": 212,
+              "boardSha256": "19471c7fce6bddff2223a6d68431c08069fcb75ff97c92f6c255df05138fb9c8",
+              "occupied": 12,
+              "logicalCells": 54,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 15,
+              "page": 3,
+              "taskId": "book-v1-256",
+              "sourceOrdinal": 256,
+              "boardSha256": "ea5fc243e164fcd2fd41bb40db91f03c2b990bbd4fd4cdcac28e15529f84f654",
+              "occupied": 14,
+              "logicalCells": 36,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 16,
+              "page": 3,
+              "taskId": "book-v1-119",
+              "sourceOrdinal": 119,
+              "boardSha256": "55a6846972dc31ef538cbae81232df5af96d42e20d2267019953a75379dff0ba",
+              "occupied": 12,
+              "logicalCells": 36,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 17,
+              "page": 3,
+              "taskId": "book-v1-235",
+              "sourceOrdinal": 235,
+              "boardSha256": "376fc8201eb9963fd7fd9a432788aaf51a81457fef9d98defa30fe867df98c7d",
+              "occupied": 16,
+              "logicalCells": 45,
+              "witnessMoves": 8,
+              "observedEpisodes": {
+                "openTwoOrMore": 2,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 18,
+              "page": 3,
+              "taskId": "book-v1-173",
+              "sourceOrdinal": 173,
+              "boardSha256": "5805e80ef4e7285b270f35abfcb0df2db45409b3b683be03c8da494af5cb0cbc",
+              "occupied": 24,
+              "logicalCells": 36,
+              "witnessMoves": 12,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            }
+          ]
+        },
+        {
+          "title": "Связи вместе",
+          "goal": "Соединить знакомые эпизоды; последние поля компактны, но богаче связями.",
+          "tasks": [
+            {
+              "position": 19,
+              "page": 4,
+              "taskId": "book-v1-52",
+              "sourceOrdinal": 52,
+              "boardSha256": "58699dbdee8ea19e91411a2d1dbed1ac499055c69c7ffbe0602cd8ff27881687",
+              "occupied": 14,
+              "logicalCells": 54,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 20,
+              "page": 4,
+              "taskId": "book-v1-63",
+              "sourceOrdinal": 63,
+              "boardSha256": "6070c546322111886873a27be124ef7cc069443fb8f6e856ecf9d835421520d2",
+              "occupied": 14,
+              "logicalCells": 36,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 21,
+              "page": 4,
+              "taskId": "book-v1-100",
+              "sourceOrdinal": 100,
+              "boardSha256": "86a6f30c0768fa7952735572c7defc0c3c8b4ed8a199b3df4dc70e68fa266a0d",
+              "occupied": 16,
+              "logicalCells": 54,
+              "witnessMoves": 8,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 22,
+              "page": 4,
+              "taskId": "book-v1-148",
+              "sourceOrdinal": 148,
+              "boardSha256": "89e892e503b181137ef8c29cc6923a48dc4d9ee3c94d82811788f1ee067aa256",
+              "occupied": 12,
+              "logicalCells": 27,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 23,
+              "page": 4,
+              "taskId": "book-v1-103",
+              "sourceOrdinal": 103,
+              "boardSha256": "6b3a84832aa837354f08a9aabad61f2c614598cde1c6b5549701177f4f60a4c9",
+              "occupied": 24,
+              "logicalCells": 45,
+              "witnessMoves": 12,
+              "observedEpisodes": {
+                "openTwoOrMore": 3,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 24,
+              "page": 4,
+              "taskId": "book-v1-45",
+              "sourceOrdinal": 45,
+              "boardSha256": "4ce474eac2c5ca2b7afa9065ccf32407e1878211b03f7ba4cbc7e8012202907a",
+              "occupied": 26,
+              "logicalCells": 36,
+              "witnessMoves": 13,
+              "observedEpisodes": {
+                "openTwoOrMore": 4,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seeds-notebook-order-pilot-20261124",
+      "title": "Поле меняется",
+      "pages": [
+        {
+          "title": "Строка исчезает",
+          "goal": "Заметить, какие новые связи создаёт реальное сжатие строки.",
+          "tasks": [
+            {
+              "position": 1,
+              "page": 1,
+              "taskId": "book-v1-216",
+              "sourceOrdinal": 216,
+              "boardSha256": "20c933235153dae7d59b79098f0057e9b50f09625ddef34826219a0b61ab3407",
+              "occupied": 12,
+              "logicalCells": 54,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 2,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 2,
+              "page": 1,
+              "taskId": "book-v1-206",
+              "sourceOrdinal": 206,
+              "boardSha256": "ef426a1f58f1f7223413879e1abcdef57b4ea89a5b62a7867a7b804be08f2170",
+              "occupied": 12,
+              "logicalCells": 36,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 3,
+              "page": 1,
+              "taskId": "book-v1-42",
+              "sourceOrdinal": 42,
+              "boardSha256": "698f9f01d2c810659422ef4a668bc49bf971724b64923181660cce90cdc29273",
+              "occupied": 14,
+              "logicalCells": 45,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 4,
+              "page": 1,
+              "taskId": "book-v1-64",
+              "sourceOrdinal": 64,
+              "boardSha256": "47ae7e72581c8c4d136febe0c3370af4d110cf14317c3283d91f94a03785ebc6",
+              "occupied": 14,
+              "logicalCells": 45,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 5,
+              "page": 1,
+              "taskId": "book-v1-115",
+              "sourceOrdinal": 115,
+              "boardSha256": "77e60d6be73dc8a4613f80ce4fc91fee5ffe7eeecd1a95925cfcfab9eea1efa1",
+              "occupied": 16,
+              "logicalCells": 36,
+              "witnessMoves": 8,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 6,
+              "page": 1,
+              "taskId": "book-v1-175",
+              "sourceOrdinal": 175,
+              "boardSha256": "58750d31ac5b84977d6332456b88dcc9188840726de4c82facfc6ef4ba90f7b5",
+              "occupied": 20,
+              "logicalCells": 54,
+              "witnessMoves": 10,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 2,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            }
+          ]
+        },
+        {
+          "title": "Новая геометрия",
+          "goal": "Разные места сжатия и последствия в более насыщенных коротких полях.",
+          "tasks": [
+            {
+              "position": 7,
+              "page": 2,
+              "taskId": "book-v1-318",
+              "sourceOrdinal": 318,
+              "boardSha256": "0c162253436605816dcb68bfc9cf2a391b282e6b49514935fa1d00a28560f85d",
+              "occupied": 12,
+              "logicalCells": 45,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 8,
+              "page": 2,
+              "taskId": "book-v1-134",
+              "sourceOrdinal": 134,
+              "boardSha256": "284421822067f50dd583ec821b3ac220ef0ebae83bcaaaf5257e56cfa05a69f3",
+              "occupied": 14,
+              "logicalCells": 45,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 9,
+              "page": 2,
+              "taskId": "book-v1-202",
+              "sourceOrdinal": 202,
+              "boardSha256": "dc71678e4666e8dce5f971c3dab8b6b383363abf743a4d59ea6c3c68318e9e37",
+              "occupied": 14,
+              "logicalCells": 36,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 10,
+              "page": 2,
+              "taskId": "book-v1-310",
+              "sourceOrdinal": 310,
+              "boardSha256": "63b8748f241cac4869d0cde9a247d907fb8815fd2f0323a80708e647308debb3",
+              "occupied": 14,
+              "logicalCells": 36,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 11,
+              "page": 2,
+              "taskId": "book-v1-260",
+              "sourceOrdinal": 260,
+              "boardSha256": "c8ab33afc3e33efb93b7c05cffc9f0d9ba587c787b66feed41a7af5b1fd7ba33",
+              "occupied": 22,
+              "logicalCells": 54,
+              "witnessMoves": 11,
+              "observedEpisodes": {
+                "openTwoOrMore": 2,
+                "compressionNewPair": 2,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 12,
+              "page": 2,
+              "taskId": "book-v1-107",
+              "sourceOrdinal": 107,
+              "boardSha256": "0f6d61c6c715b86df4621cb28c01e7bcb4812677b0900188d83296e7970ba7ce",
+              "occupied": 30,
+              "logicalCells": 45,
+              "witnessMoves": 15,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 2,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            }
+          ]
+        },
+        {
+          "title": "Порядок имеет значение",
+          "goal": "Сопоставить варианты и использовать Undo; финальная пара70/73 контролирует объём и число стартовых пар.",
+          "tasks": [
+            {
+              "position": 13,
+              "page": 3,
+              "taskId": "book-v1-33",
+              "sourceOrdinal": 33,
+              "boardSha256": "eb5cbaf7ed2d224791caaa14244dfcf287da9af8a533c351b55794785e390c41",
+              "occupied": 12,
+              "logicalCells": 27,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": false,
+                "lastClears": false
+              }
+            },
+            {
+              "position": 14,
+              "page": 3,
+              "taskId": "book-v1-78",
+              "sourceOrdinal": 78,
+              "boardSha256": "6303130952581993ed87385bbcdc3d765c1c38b88bdc111a9ea6c89da164aece",
+              "occupied": 12,
+              "logicalCells": 45,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 15,
+              "page": 3,
+              "taskId": "book-v1-181",
+              "sourceOrdinal": 181,
+              "boardSha256": "75b7e7f25d31b481bd11a81195343b817728b08f7f0039a6b807b70600182534",
+              "occupied": 12,
+              "logicalCells": 27,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": false,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 16,
+              "page": 3,
+              "taskId": "book-v1-189",
+              "sourceOrdinal": 189,
+              "boardSha256": "77c0999dd0463309e6a517f71391aff5b3c54794af0ac783992415657bae5100",
+              "occupied": 12,
+              "logicalCells": 27,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": false,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 17,
+              "page": 3,
+              "taskId": "book-v1-70",
+              "sourceOrdinal": 70,
+              "boardSha256": "ac310f25450d1e03ea2228ad031240c6f33fff2368fa0b741e186cda7deb4144",
+              "occupied": 24,
+              "logicalCells": 27,
+              "witnessMoves": 12,
+              "observedEpisodes": {
+                "openTwoOrMore": 2,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": false,
+                "lastClears": false
+              }
+            },
+            {
+              "position": 18,
+              "page": 3,
+              "taskId": "book-v1-73",
+              "sourceOrdinal": 73,
+              "boardSha256": "7f1f2d53d3c6af660a4f202b9e4e634658aede64a38b9197c30e4a40961875f0",
+              "occupied": 24,
+              "logicalCells": 27,
+              "witnessMoves": 12,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": true
+              }
+            }
+          ]
+        },
+        {
+          "title": "Комбинации",
+          "goal": "Пары приёмов, короткий контраст и 1–2 финальных сочетания раскрытия, края и сжатия; не все три в каждой задаче.",
+          "tasks": [
+            {
+              "position": 19,
+              "page": 4,
+              "taskId": "book-v1-102",
+              "sourceOrdinal": 102,
+              "boardSha256": "dcdd21d9ef2c2bab1696798d8a09f5e376cd6c3e6f6307280b67a76fd1596f43",
+              "occupied": 16,
+              "logicalCells": 54,
+              "witnessMoves": 8,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 0,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": false,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 20,
+              "page": 4,
+              "taskId": "book-v1-161",
+              "sourceOrdinal": 161,
+              "boardSha256": "557ae7881b232fe5b62d2b9626041b01a7c95c42e951ce0c5edc3eb8ca2c05a1",
+              "occupied": 14,
+              "logicalCells": 45,
+              "witnessMoves": 7,
+              "observedEpisodes": {
+                "openTwoOrMore": 1,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": false
+              }
+            },
+            {
+              "position": 21,
+              "page": 4,
+              "taskId": "book-v1-322",
+              "sourceOrdinal": 322,
+              "boardSha256": "52746b3f9cdffc9bd279291b81893380cfd21f27db95bc870373eb534282b7c9",
+              "occupied": 12,
+              "logicalCells": 54,
+              "witnessMoves": 6,
+              "observedEpisodes": {
+                "openTwoOrMore": 0,
+                "compressionNewPair": 2,
+                "readingBeforeLastQuarter": 1
+              },
+              "policyDiagnostics": {
+                "firstClears": false,
+                "lastClears": true
+              }
+            },
+            {
+              "position": 22,
+              "page": 4,
+              "taskId": "book-v1-317",
+              "sourceOrdinal": 317,
+              "boardSha256": "11d53c15187fe3c73c73134d2892c16b0215355e6927d5ec1b0460cb70da108b",
+              "occupied": 22,
+              "logicalCells": 36,
+              "witnessMoves": 11,
+              "observedEpisodes": {
+                "openTwoOrMore": 4,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 0
+              },
+              "policyDiagnostics": {
+                "firstClears": true,
+                "lastClears": false
+              }
+            },
+            {
+              "position": 23,
+              "page": 4,
+              "taskId": "book-v1-164",
+              "sourceOrdinal": 164,
+              "boardSha256": "50e1565951cde4b84e7ede761edc8c6d7240faf74eaca77a983ba55dab2a59d3",
+              "occupied": 24,
+              "logicalCells": 54,
+              "witnessMoves": 12,
+              "observedEpisodes": {
+                "openTwoOrMore": 2,
+                "compressionNewPair": 1,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": false,
+                "lastClears": false
+              }
+            },
+            {
+              "position": 24,
+              "page": 4,
+              "taskId": "book-v1-171",
+              "sourceOrdinal": 171,
+              "boardSha256": "c3f64e457be0d0ff2cb4cb7af370c2a27ed8aa94b591d37a0ac09b48a773332a",
+              "occupied": 32,
+              "logicalCells": 54,
+              "witnessMoves": 16,
+              "observedEpisodes": {
+                "openTwoOrMore": 4,
+                "compressionNewPair": 2,
+                "readingBeforeLastQuarter": 2
+              },
+              "policyDiagnostics": {
+                "firstClears": false,
+                "lastClears": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

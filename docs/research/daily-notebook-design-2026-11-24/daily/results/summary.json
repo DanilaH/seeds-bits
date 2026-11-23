@@ -1,0 +1,350 @@
+{
+  "source": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "runtime": "v24.22.3",
+  "scope": "Own Seeds daily; actual-source calendar sample, not live users; one chosen witness per board; no original APK observations",
+  "dates": 365,
+  "allDailyWitnessesPassed": 365,
+  "selectedFixtures": 12,
+  "selectionMethod": "Researcher selected examples after inspecting all365 profiles; these dates are exploratory, not a held-out quality estimate",
+  "constantVolumeWeek": [
+    {
+      "id": "daily-proposal-flow-24",
+      "originDay": "2026-02-25",
+      "weekDay": "Пн",
+      "role": "Свободная зачистка",
+      "occupied": 24,
+      "logical": 36,
+      "opening": 24,
+      "profiles": {
+        "opening": 24,
+        "openingInFirstFourRows": 24,
+        "removals": 12,
+        "additions": 0,
+        "firstAdd": null,
+        "gapMoves": 3,
+        "readingMoves": 1,
+        "diagonalMoves": 5,
+        "newPairs": 4,
+        "compressionChanges": 0,
+        "maxDigits": 24,
+        "peakLength": 36,
+        "motif": {
+          "stage": "midpoint",
+          "structure": "109000000005020000005839300000289000"
+        }
+      },
+      "policies": [
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "daily-proposal-reveal-24",
+      "originDay": "2026-06-17",
+      "weekDay": "Вт",
+      "role": "Открывающиеся связи",
+      "occupied": 24,
+      "logical": 45,
+      "opening": 19,
+      "profiles": {
+        "opening": 19,
+        "openingInFirstFourRows": 17,
+        "removals": 12,
+        "additions": 0,
+        "firstAdd": null,
+        "gapMoves": 6,
+        "readingMoves": 1,
+        "diagonalMoves": 2,
+        "newPairs": 9,
+        "compressionChanges": 0,
+        "maxDigits": 24,
+        "peakLength": 45,
+        "motif": {
+          "stage": "midpoint",
+          "structure": "100000020100203380910000000800000000500000005"
+        }
+      },
+      "policies": [
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "daily-proposal-reading-24",
+      "originDay": "2026-10-21",
+      "weekDay": "Ср",
+      "role": "Переход через край строки",
+      "occupied": 24,
+      "logical": 45,
+      "opening": 21,
+      "profiles": {
+        "opening": 21,
+        "openingInFirstFourRows": 16,
+        "removals": 12,
+        "additions": 0,
+        "firstAdd": null,
+        "gapMoves": 6,
+        "readingMoves": 3,
+        "diagonalMoves": 3,
+        "newPairs": 7,
+        "compressionChanges": 0,
+        "maxDigits": 24,
+        "peakLength": 45,
+        "motif": {
+          "stage": "midpoint",
+          "structure": "005000100000010000090200009000203008080070005"
+        }
+      },
+      "policies": [
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "daily-proposal-reset-24",
+      "originDay": "2026-02-03",
+      "weekDay": "Чт",
+      "role": "Спокойная середина недели",
+      "occupied": 24,
+      "logical": 36,
+      "opening": 18,
+      "profiles": {
+        "opening": 18,
+        "openingInFirstFourRows": 18,
+        "removals": 12,
+        "additions": 0,
+        "firstAdd": null,
+        "gapMoves": 4,
+        "readingMoves": 2,
+        "diagonalMoves": 6,
+        "newPairs": 4,
+        "compressionChanges": 0,
+        "maxDigits": 24,
+        "peakLength": 36,
+        "motif": {
+          "stage": "midpoint",
+          "structure": "000500010100020020005330000300070406"
+        }
+      },
+      "policies": [
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "daily-proposal-order-24",
+      "originDay": "2026-03-06",
+      "weekDay": "Пт",
+      "role": "Порядок снятия",
+      "occupied": 24,
+      "logical": 36,
+      "opening": 14,
+      "profiles": {
+        "opening": 14,
+        "openingInFirstFourRows": 14,
+        "removals": 12,
+        "additions": 0,
+        "firstAdd": null,
+        "gapMoves": 10,
+        "readingMoves": 4,
+        "diagonalMoves": 4,
+        "newPairs": 9,
+        "compressionChanges": 0,
+        "maxDigits": 24,
+        "peakLength": 36,
+        "motif": {
+          "stage": "midpoint",
+          "structure": "120090000009003904040000060000326000"
+        }
+      },
+      "policies": [
+        {
+          "outcome": "UNKNOWN",
+          "remaining": 6
+        },
+        {
+          "outcome": "UNKNOWN",
+          "remaining": 4
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "daily-proposal-mix-24",
+      "originDay": "2026-05-12",
+      "weekDay": "Сб",
+      "role": "Сочетание приёмов",
+      "occupied": 24,
+      "logical": 45,
+      "opening": 19,
+      "profiles": {
+        "opening": 19,
+        "openingInFirstFourRows": 15,
+        "removals": 12,
+        "additions": 0,
+        "firstAdd": null,
+        "gapMoves": 5,
+        "readingMoves": 1,
+        "diagonalMoves": 8,
+        "newPairs": 12,
+        "compressionChanges": 3,
+        "maxDigits": 24,
+        "peakLength": 45,
+        "motif": {
+          "stage": "midpoint",
+          "structure": "000000190000000100020000882500900000502000080"
+        }
+      },
+      "policies": [
+        {
+          "outcome": "UNKNOWN",
+          "remaining": 4
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "daily-proposal-compression-24",
+      "originDay": "2026-03-30",
+      "weekDay": "Вс",
+      "role": "Сжатие меняет связи",
+      "occupied": 24,
+      "logical": 45,
+      "opening": 17,
+      "profiles": {
+        "opening": 17,
+        "openingInFirstFourRows": 13,
+        "removals": 12,
+        "additions": 0,
+        "firstAdd": null,
+        "gapMoves": 6,
+        "readingMoves": 2,
+        "diagonalMoves": 4,
+        "newPairs": 13,
+        "compressionChanges": 4,
+        "maxDigits": 24,
+        "peakLength": 45,
+        "motif": {
+          "stage": "midpoint",
+          "structure": "010001100000000050909020008000001000002005008"
+        }
+      },
+      "policies": [
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        },
+        {
+          "outcome": "FOUND",
+          "remaining": 0
+        }
+      ]
+    }
+  ],
+  "volumeRhythmProposal": [
+    16,
+    24,
+    24,
+    16,
+    24,
+    32,
+    24
+  ],
+  "matchedPair": [
+    "2026-03-30",
+    "2026-09-18"
+  ],
+  "probeStates": 18,
+  "probeBranches": 195,
+  "probeOutcomes": {
+    "FOUND": 193,
+    "NO_WIN_PROVEN": 2
+  },
+  "independentClosedGraphs": [
+    {
+      "fixtureId": "daily-proposal-order-24",
+      "day": "2026-03-06",
+      "stage": "middle",
+      "pair": {
+        "a": 19,
+        "b": 25,
+        "kind": "straight"
+      },
+      "outcome": "NO_WIN_PROVEN",
+      "reachableStates": 8,
+      "transitions": 12,
+      "nonemptyTerminalStates": 1
+    },
+    {
+      "fixtureId": "daily-negative-reading-start",
+      "day": "2026-10-16",
+      "stage": "early",
+      "pair": {
+        "a": 5,
+        "b": 15,
+        "kind": "straight"
+      },
+      "outcome": "NO_WIN_PROVEN",
+      "reachableStates": 3940,
+      "transitions": 20176,
+      "nonemptyTerminalStates": 24
+    }
+  ],
+  "perBranchBudget": 5000,
+  "phone": "UNKNOWN",
+  "liveAudience": "UNKNOWN"
+}

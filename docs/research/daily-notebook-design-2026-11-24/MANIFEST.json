@@ -1,0 +1,206 @@
+{
+  "schema": "seeds-content-design-delivery-v1",
+  "date": "2026-11-24",
+  "timezone": "Asia/Yekaterinburg",
+  "productRevision": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "researchBase": "861e669484a4a29968a9dc25168b37dc62f6f57e",
+  "scope": "Docs and research scripts only; new 48+28 product boards are proposed, not authored or deployed.",
+  "verification": {
+    "jsonParsed": 18,
+    "gzipJsonParsed": 2,
+    "nodeSyntaxFiles": 8,
+    "localMarkdownTargetsChecked": 42,
+    "nestedManifests": "PASS",
+    "integrationPortableReplay": "9 archived hypothetical future-ID cases identical under pinned snapshot",
+    "sourceFeatureRowsUnchanged": 36,
+    "localAdaptations": 27,
+    "image": "Rendered exact board fixtures with Pillow and visually inspected; not app screenshot",
+    "review": "Independent notebook/daily/reference review; Undo, replay, daily award, order contrast and last-task/free-choice wording corrected.",
+    "physicalPhone": "UNKNOWN",
+    "liveAudience": "UNKNOWN",
+    "runtimeChanged": false
+  },
+  "executionBoundary": "Actual research runs use Git blob/SHA256 verified snapshots. Portable git-show mode supplied, full checkout execution not claimed.",
+  "files": [
+    {
+      "path": "COMPATIBILITY.md",
+      "bytes": 18480,
+      "sha256": "7e405a888aac3811ab90a956bba56ab4b868318ead275458d99f03e579cbca25"
+    },
+    {
+      "path": "DESIGN_FEATURES.json",
+      "bytes": 16163,
+      "sha256": "7d64b03d1762aa09ba8514fece7d1fa7de50ee4b1e6110983882400d7349879b"
+    },
+    {
+      "path": "DEVELOPER_SPEC.md",
+      "bytes": 25526,
+      "sha256": "3902f0c96f431d81141a19478ec4362239795fae3d124ed8ec3134d73ed922cb"
+    },
+    {
+      "path": "README.md",
+      "bytes": 15029,
+      "sha256": "35752120c2aa69769bf694d8fa7d769990dfc8e72733dd557145756ae93679f4"
+    },
+    {
+      "path": "SOURCE_CAPTURE.json",
+      "bytes": 5444,
+      "sha256": "bd401717ab374646759e723418c070b36189e4ec8173965f8bd745abc7634c9b"
+    },
+    {
+      "path": "daily/MANIFEST.json",
+      "bytes": 2855,
+      "sha256": "30dc80aec9936451da1cdb61027b8a85287229dc58913392a1e288827a991372"
+    },
+    {
+      "path": "daily/README.md",
+      "bytes": 31142,
+      "sha256": "5cdc81fd512c2d8e2dc2d6f91f6027032c3525fbf2e00acb684c364aa209f023"
+    },
+    {
+      "path": "daily/research.mjs",
+      "bytes": 8968,
+      "sha256": "369abc318b02ae1aec96dcbbc1bd02bb449a099bb889552e6b02c33464e2194c"
+    },
+    {
+      "path": "daily/results/choice-probes.json",
+      "bytes": 241240,
+      "sha256": "fbe8002dd45aef3861ce6739375a2ec9f03880009fcc945c9d68ca9c29bde116"
+    },
+    {
+      "path": "daily/results/episodes.json",
+      "bytes": 7450,
+      "sha256": "81c8407e5805b002f3802bc62f0b8c64b573cc8e118ec0c555cf7f74d4706e7d"
+    },
+    {
+      "path": "daily/results/fixtures.json",
+      "bytes": 234816,
+      "sha256": "0625a74f5798459f0633fd475aaacaee0e86d220b98691069cfc615671dc7ea6"
+    },
+    {
+      "path": "daily/results/no-win-graph-checks.json",
+      "bytes": 593,
+      "sha256": "7d1c74510899bb57a5b575cb585afbddff7d70feef9bd015f1bfe38a68ffd803"
+    },
+    {
+      "path": "daily/results/profiles.json.gz",
+      "bytes": 30306,
+      "sha256": "142f40483f839b74a9f1ff58e1a56f2e11a866e42045f5dc92439e173f5ad3aa"
+    },
+    {
+      "path": "daily/results/summary.json",
+      "bytes": 8233,
+      "sha256": "2a3d64dee462e53a67d6d06a1a63d3062a9f3de41bf7f77588e007142bc48133"
+    },
+    {
+      "path": "daily/source-manifest.json",
+      "bytes": 1253,
+      "sha256": "8f2e46c4be473734c83515a20b59add4304417a4578f3b2df774b6a99c651b9f"
+    },
+    {
+      "path": "daily/source.mjs",
+      "bytes": 1849,
+      "sha256": "d290f111acc4ded81d768f64bf9ff6affba1a4e7e6bb6626eed9a160a58bf7d3"
+    },
+    {
+      "path": "figures/make-contrast.py",
+      "bytes": 3211,
+      "sha256": "adf4c82f905f3dd666645fcbf624868062b5d364bc7cad94679b378c251df5e4"
+    },
+    {
+      "path": "figures/notebook-contrast.png",
+      "bytes": 76669,
+      "sha256": "1cbc1d5d2d351137cbd3de7fca7b8e134e8f742343caa37a8d131fdf82a3978d"
+    },
+    {
+      "path": "integration-probe.json",
+      "bytes": 2084,
+      "sha256": "0ab31f57c9c98382d65e8e40de0792cb64db51f8b9cfb8cd1a32368eebb597a6"
+    },
+    {
+      "path": "integration-probe.mjs",
+      "bytes": 3490,
+      "sha256": "7f80a81fc6c9e1182e957fa2e00986d7363744c76ab835b1bf9b68cd0a118423"
+    },
+    {
+      "path": "integration-source-manifest.json",
+      "bytes": 4506,
+      "sha256": "2b8019c629186127459f2f1c8c4bf17f4f3d1de200d1b1561dfa5abf85ba1c45"
+    },
+    {
+      "path": "integration-source.mjs",
+      "bytes": 2180,
+      "sha256": "0f6501e23e698074a4d87024b4b3ae7a783d8954d89df10fc9567ac8ce9b9019"
+    },
+    {
+      "path": "notebook/FINDINGS.json",
+      "bytes": 5306,
+      "sha256": "8f56a408bf085350ceee109d064cbd792ddb0e4eacac769d750c46c53cdcebc2"
+    },
+    {
+      "path": "notebook/MANIFEST.json",
+      "bytes": 2358,
+      "sha256": "7ea56d052b3ef02564374d6c1720cde4b08ef720210f770778c98c36e6930a3e"
+    },
+    {
+      "path": "notebook/README.md",
+      "bytes": 28650,
+      "sha256": "a69ad80eda420d06072bdb14206a79c1d03c98490387522238938fcd9424d46e"
+    },
+    {
+      "path": "notebook/SOURCES.json",
+      "bytes": 1088,
+      "sha256": "7997ef1c4d0f7f12f375f00b54b413466bebbe1f1e2b03f02014bb8aa75ab970"
+    },
+    {
+      "path": "notebook/curate.mjs",
+      "bytes": 4262,
+      "sha256": "78c616dcfbc64b1568b7b5298e329eeda02f8cc1279539d96a5d6c246978c475"
+    },
+    {
+      "path": "notebook/data/fixtures.json",
+      "bytes": 457446,
+      "sha256": "d09f2c97cc14b0f37e48172ad17c159b84d72547870ad3af758e26c6aa288593"
+    },
+    {
+      "path": "notebook/data/pilot-reference-sets.json",
+      "bytes": 34678,
+      "sha256": "5e4b59aa41a81db2fbdc5abbba306de4545734c98992d9e04d2ba830fbfa1236"
+    },
+    {
+      "path": "notebook/data/profiles-full.json.gz",
+      "bytes": 130968,
+      "sha256": "23551ebfb57f4a8551c2b841ac167abe5b2e54bd3cd2de88da9b4f1740055b3b"
+    },
+    {
+      "path": "notebook/data/scan.json",
+      "bytes": 169014,
+      "sha256": "8ae787b502f5fd43eae1d683feb4406571c1c91fcf12b8ec0b389efbd4f87603"
+    },
+    {
+      "path": "notebook/measure.mjs",
+      "bytes": 4883,
+      "sha256": "7916feaa523a96d9a59d1a086b41d302cedfedbdbc55910cf3d1d54cb6cf4b60"
+    },
+    {
+      "path": "notebook/probe.mjs",
+      "bytes": 3037,
+      "sha256": "c49f691dc76389c6e59530898abf9755981c672fbe1cbfd846a528a4315efae3"
+    },
+    {
+      "path": "notebook/source.mjs",
+      "bytes": 1899,
+      "sha256": "5fcd5eada28a514738e8fff2a8f833eb1deeeb3f13bad1623a1bc8e39b77f9b1"
+    },
+    {
+      "path": "references/README.md",
+      "bytes": 24154,
+      "sha256": "e0eeda6de2744627cf987db80d52b10a266f4f055bd8e3e62b011b1a0df4035b"
+    },
+    {
+      "path": "references/SOURCES.json",
+      "bytes": 18465,
+      "sha256": "10a46d30c7301d71f968a9dcc1ab78b2d416e944970080152ffab2fa6c7a4c95"
+    }
+  ]
+}

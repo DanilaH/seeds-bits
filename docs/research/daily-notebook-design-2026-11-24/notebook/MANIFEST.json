@@ -1,0 +1,75 @@
+{
+  "scope": "Notebook content design20261124; research only",
+  "sourceRevision": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "node": "v24.22.3",
+  "verification": {
+    "shortCertificateReplays": 336,
+    "boundedStates": 33,
+    "boundedAlternatives": 208,
+    "found": 205,
+    "noWinProven": 3,
+    "unknown": 0,
+    "referenceTasks": 48,
+    "productChanges": false,
+    "physicalPhone": "UNKNOWN",
+    "liveAudience": "UNKNOWN",
+    "packaging": "AllJSONparsed;gzipdecoded;4researchscriptsnodesyntaxPASS;4familyfixturesmatchmeasureddata. OutputpackagingchangedtoGZIPwithoutchangingmeasurementlogic. Fullcheckoutexecutionnotobserved;actualrunsusedhash-verifiedsnapshots."
+  },
+  "files": [
+    {
+      "path": "FINDINGS.json",
+      "bytes": 5306,
+      "sha256": "8f56a408bf085350ceee109d064cbd792ddb0e4eacac769d750c46c53cdcebc2"
+    },
+    {
+      "path": "README.md",
+      "bytes": 28650,
+      "sha256": "a69ad80eda420d06072bdb14206a79c1d03c98490387522238938fcd9424d46e"
+    },
+    {
+      "path": "SOURCES.json",
+      "bytes": 1088,
+      "sha256": "7997ef1c4d0f7f12f375f00b54b413466bebbe1f1e2b03f02014bb8aa75ab970"
+    },
+    {
+      "path": "curate.mjs",
+      "bytes": 4262,
+      "sha256": "78c616dcfbc64b1568b7b5298e329eeda02f8cc1279539d96a5d6c246978c475"
+    },
+    {
+      "path": "data/fixtures.json",
+      "bytes": 457446,
+      "sha256": "d09f2c97cc14b0f37e48172ad17c159b84d72547870ad3af758e26c6aa288593"
+    },
+    {
+      "path": "data/pilot-reference-sets.json",
+      "bytes": 34678,
+      "sha256": "5e4b59aa41a81db2fbdc5abbba306de4545734c98992d9e04d2ba830fbfa1236"
+    },
+    {
+      "path": "data/profiles-full.json.gz",
+      "bytes": 130968,
+      "sha256": "23551ebfb57f4a8551c2b841ac167abe5b2e54bd3cd2de88da9b4f1740055b3b"
+    },
+    {
+      "path": "data/scan.json",
+      "bytes": 169014,
+      "sha256": "8ae787b502f5fd43eae1d683feb4406571c1c91fcf12b8ec0b389efbd4f87603"
+    },
+    {
+      "path": "measure.mjs",
+      "bytes": 4883,
+      "sha256": "7916feaa523a96d9a59d1a086b41d302cedfedbdbc55910cf3d1d54cb6cf4b60"
+    },
+    {
+      "path": "probe.mjs",
+      "bytes": 3037,
+      "sha256": "c49f691dc76389c6e59530898abf9755981c672fbe1cbfd846a528a4315efae3"
+    },
+    {
+      "path": "source.mjs",
+      "bytes": 1899,
+      "sha256": "5fcd5eada28a514738e8fff2a8f833eb1deeeb3f13bad1623a1bc8e39b77f9b1"
+    }
+  ]
+}
