@@ -183,6 +183,31 @@ test("home mode art sits beside the labels and extends past both card edges", as
   await expect(page.locator("#calendar-open")).toBeVisible();
 });
 
+test.describe("month on the home calendar", () => {
+  test.use({ timezoneId: "America/Los_Angeles" });
+
+  test("tracks the game language and rolls over to the next month", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.clock.setFixedTime(new Date("2026-11-30T20:00:00Z"));
+    await seeded(page);
+    const calendar = page.locator("#home-today-art .calendar-picture");
+    const day = calendar.locator("span").first();
+    const month = calendar.locator(".calendar-picture-month");
+    await expect(day).toHaveText("30");
+    await expect(month).toHaveText("нояб.");
+
+    await page.locator("#pause-language").click();
+    await page.locator('#language-options [data-language="en"]').click();
+    await page.locator("#language-close").click();
+    await expect(month).toHaveText("Nov");
+
+    await page.clock.setFixedTime(new Date("2026-12-01T20:00:00Z"));
+    await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+    await expect(day).toHaveText("1");
+    await expect(month).toHaveText("Dec");
+  });
+});
+
 test("today is emphasized until its puzzle is completed", async ({page}) => {
   await page.clock.setFixedTime(new Date("2026-11-23T12:00:00+05:00"));
   const id = "daily-v1-2026-11-23";

@@ -277,6 +277,17 @@
   font-weight: 700;
   line-height: 1;
 }
+.calendar-picture-with-month {
+  align-content: center;
+  row-gap: .07em;
+}
+.calendar-picture-with-month > span:first-child {
+  font-size: .8em;
+}
+.calendar-picture-with-month > .calendar-picture-month {
+  font-size: .38em;
+  font-weight: 650;
+}
 .tile-picture {
   display: flex;
   padding: 4px;

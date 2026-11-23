@@ -44,7 +44,7 @@ jobs:
         if: always()
         with: {name: markets-browser-controls, path: test-results/markets/}
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=977 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=978 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
@@ -62,16 +62,16 @@ jobs:
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
       - uses: actions/download-artifact@v4
         with:
-          artifact-ids: 14804190068
+          artifact-ids: 14809661312
           merge-multiple: true
-          run-id: 45143906924
+          run-id: 45157028396
           github-token: ${{ github.token }}
           path: baseline
       - run: |
-          echo '8efbd577d52d6c9fa0dcb57856e5aecaf7fd8bffce9b022a1cfdc2f60033c0b0  baseline/seeds-first-session-12076-unsigned.apk' | sha256sum -c -
+          echo 'c28d40f6c8adb1b0e48a184b0d64fd7890e8d0bc4ab1f22b1a83781b6703e48d  baseline/seeds-first-session-12077-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
           build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12076-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12077-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" android/app/build/outputs/apk/release/app-release-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
       - run: |

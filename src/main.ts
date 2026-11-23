@@ -3992,8 +3992,11 @@ function nextBookVolume() {
 function bookPicture(number?: number) {
   return `<span class="book-picture" aria-hidden="true"><span>${number === undefined ? icon("book") : `№${number}`}</span></span>`;
 }
-function calendarPicture(day: string) {
-  return `<span class="calendar-picture" aria-hidden="true"><span>${Number(day.slice(-2))}</span></span>`;
+function calendarPicture(day: string, showMonth = false) {
+  const month = showMonth
+    ? new Date(day).toLocaleDateString(activeLanguage, { month: "short", timeZone: "UTC" })
+    : "";
+  return `<span class="calendar-picture${showMonth ? " calendar-picture-with-month" : ""}" aria-hidden="true"><span>${Number(day.slice(-2))}</span>${showMonth ? `<span class="calendar-picture-month">${month}</span>` : ""}</span>`;
 }
 function jarGrains(count: number) {
   // Small independent seed silhouettes, not a second counter or source of rewards.
@@ -4110,9 +4113,10 @@ function updateHome() {
   const finished = new Set(progress.done);
   $("book-count").textContent =
     t("books.progress", { "count": notebook.filter((p) => finished.has(p.id)).length });
-  const id = `daily-v1-${today()}`;
+  const date = today();
+  const id = `daily-v1-${date}`;
   $("daily-mode").toggleAttribute("data-daily-pending", !finished.has(id));
-  $("home-today-art").innerHTML = calendarPicture(today());
+  $("home-today-art").innerHTML = calendarPicture(date, true);
   const run = dailyRun(progress);
   $("daily-series").hidden = run.count === 0;
   $("daily-series").textContent =
