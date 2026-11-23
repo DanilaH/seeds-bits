@@ -822,6 +822,31 @@
       },
       "nextAction": "Разработчик issue #13 сначала меряет исходные качества/стоимость на 1000 seeds × 4 и моделирует seeds/minute, сохраняет 27-digit legacy High, затем пилот 45/81. Отдельно issue #14: телефонный аудит поздних тетрадей, пауза/награда, lazy data и дневная кривая. Не включать шесть приостановленных экспериментов.",
       "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes."
+    },
+    {
+      "id": "generator-cross-project-profile-20261123",
+      "status": "RESEARCHED",
+      "scope": "Cross-project methods for four explicit Classic difficulties and future notebook pacing; own proposals, not new Number Match source findings.",
+      "consumerCommit": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+      "currentImplementation": "src/classic-generator.ts: three bands18/28/27, first accepted certified candidate and recent8. scripts/generate-classic.mjs: legacy four families, reverse construction, structural/route diagnostics. Four-band45/81 remains issue13.",
+      "proposalIds": [
+        "seeds-xproj-difficulty-axes",
+        "seeds-xproj-recipe-repertoire",
+        "seeds-xproj-candidate-selection",
+        "seeds-xproj-structural-history",
+        "seeds-xproj-choice-state-evidence",
+        "seeds-xproj-notebook-cadence",
+        "seeds-xproj-proxy-and-factor-control"
+      ],
+      "evidenceRef": [
+        "../research/generator-cross-project-2026-11-23/README.md",
+        "../research/generator-cross-project-2026-11-23/FINDINGS.json",
+        "https://github.com/DanilaH/seeds-bits/issues/13",
+        "https://github.com/DanilaH/seeds-bits/issues/14"
+      ],
+      "nextAction": "Use issue14 diagnostics to compare length/search/order/recovery and same-size candidate structures; show a small contrasting set for the four issue13 bands. Preserve18/28 contracts, legacy27 session, dense-start/save assumptions and paused help. Owner selects balance after physical playtest; future notebook/daily versioning separate.",
+      "sourceParity": "NOT_CLAIMED: cross-project design methods, no new original Number Match observation.",
+      "acceptanceEvidence": "Research source/code review only. No new model runs, device acceptance or audience result."
     }
   ]
 }
