@@ -757,6 +757,46 @@
       ],
       "nextAction": "После редакторской и экранной проверки объединить черновик с пользовательским словарём и открыть локали B2.",
       "acceptance": "../research/markets-localization-2026-11-21/ACCEPTANCE.md"
+    },
+    {
+      "id": "crossmath-classic-new-game-chooser-20261123",
+      "sourceFeatureIds": [
+        "xcm-home-continue-new-separation",
+        "xcm-new-game-bottom-sheet",
+        "xcm-new-game-enter-field",
+        "xcm-home-daily-status"
+      ],
+      "scope": "Кросс-жанровый UI-референс Cross Math (Main → New Game), не оригинал Number Match Easybrain/NADO. В нашу Классику перенесён выбор уровня как локальная адаптация.",
+      "source": "Attached video_2026-11-23_17-27-21.mp4, sha256 99a2e7891f191e00c59250c1b58e9ec5e5e92abba5c2aa67602173bf9cac63cf; 576x1280, 31.629s; relevant 00:00-00:09; package/version UNKNOWN.",
+      "parity": "PARTIAL",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "implementation": [
+        "src/main.ts:classicNewSheet/renderClassicNewSheet/openClassicNewSheet",
+        "src/main.ts:beginClassic/requestRestart",
+        "src/calm-screens.css:#classic-new-sheet",
+        "src/i18n/ui-copy.json",
+        "e2e/classic-new-sheet.spec.ts",
+        "e2e/classic-new-video.spec.ts"
+      ],
+      "behavior": "Раздельные Продолжить и Новая классика; нижняя модальная панель с тремя реальными уровнями 18/28/27 цифр, один тап для новой партии, подтверждение замены незаконченной классики; при переходе из тетради сохранены поле и Undo. Четвёртая Expert и таймер не добавлены, иной дизайн оригинален.",
+      "verification": {
+        "code": "PASS: CI 45179150418, 125 unit + 2 model unit, 15 browser regression, 393 browser e2e, Android debug + native harness and web/Yandex builds",
+        "ui": "PASS Chromium 390x844 (height 270-470px) and 320x568 short portrait, English; two actual JPEG and real browser video in artifact 14818734487",
+        "android": "DEBUG_BUILD_ONLY: no direct native touch verification of the new bottom sheet",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED",
+        "referenceVideo": "OBSERVED first 00:00-00:09; unobserved reference generation, audio and live economy UNKNOWN"
+      },
+      "excluded": {
+        "fourTiers": "DEFERRED: three validated Classic algorithms currently exist, Expert requires owner approval and balance proof",
+        "gameTimer": "INTENTIONAL_DIFFERENCE: Seeds Classic has no timer; do not add an extra Play gate",
+        "liveEvents": "DEFERRED: dated event/timed currency not copied from unrelated genre"
+      },
+      "acceptance": "../research/classic-new-game-reference-2026-11-23/README.md",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "consumerCommit": "5de066f39ad839b32dad3a21802f6c34147e0fe8",
+      "nextAction": "Evaluate bottom sheet and Android Back on the exact new APK on physical phone; keep saved-party confirmation and all six help experiments paused. No change to classic balance or economy.",
+      "kitImpact": "REUSE"
     }
   ]
 }
