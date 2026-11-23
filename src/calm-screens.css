@@ -52,6 +52,17 @@
 .game {
   background: var(--paper);
 }
+.game .game-top > header {
+  padding-inline: 0;
+}
+.game-top header > #menu {
+  justify-items: start;
+  padding-inline: 0;
+}
+.game-top header > #book-top {
+  justify-items: end;
+  padding-inline: 0;
+}
 #dialog[data-screen="home"] {
   padding: max(20px, env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px))
     max(20px, env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
@@ -354,6 +365,43 @@
   margin: 0;
   font-size: 12px;
   overflow-wrap: anywhere;
+}
+#home-today-art {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+}
+#daily-mode[data-daily-pending] .calendar-picture {
+  background: var(--calm-action);
+  color: var(--calm-action-ink);
+}
+#daily-mode[data-daily-pending] #home-today-art::after,
+#today-task[data-daily-pending]::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: -2px;
+  border: 1px solid color-mix(in srgb, var(--accent) 64%, transparent);
+  border-radius: 5px;
+  opacity: .45;
+}
+#today-task[data-daily-pending] {
+  position: relative;
+}
+#today-task[data-daily-pending]::after {
+  inset: 3px;
+  border-radius: inherit;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #daily-mode[data-daily-pending] #home-today-art::after,
+  #today-task[data-daily-pending]::after {
+    animation: today-glow 3.4s ease-out infinite;
+  }
+}
+@keyframes today-glow {
+  0%, 100% { opacity: .2; }
+  28% { opacity: .8; }
+  65% { opacity: .2; }
 }
 #dialog[data-screen="home"] .home-links {
   display: grid;
@@ -824,16 +872,46 @@
 #settings-panel #privacy-open { min-height: 44px; }
 #language-sheet .language-heading {
   color: var(--ink);
-  border-color: var(--line);
+  padding: 2px 2px 8px;
+  border: 0;
 }
 #language-options {
-  border: 1px solid var(--line);
-  padding: 0 10px;
-  border-radius: 14px;
-  background: var(--calm-surface);
+  display: grid;
+  gap: 4px;
+  padding: 4px 2px 8px;
 }
-#language-options button { gap: 9px; }
+#language-options button {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 22px;
+  justify-content: stretch;
+  gap: 12px;
+  min-height: 54px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 12px;
+}
+#language-options button[aria-pressed="true"],
+#language-options button:hover {
+  background: var(--calm-soft);
+}
+.language-mark,
+.language-check {
+  display: grid;
+  place-items: center;
+}
+.language-mark svg {
+  display: block;
+  width: 28px;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.language-mark svg[viewBox="0 0 24 24"],
+.language-check svg {
+  width: 20px;
+  height: 20px;
+}
 #language-options .language-option-copy > :is(span,small) { display: block; }
+#language-options .language-option-copy { min-width: 0; overflow-wrap: anywhere; }
 #language-options .language-option-copy small {
   color: var(--muted);
   margin-top: 2px;

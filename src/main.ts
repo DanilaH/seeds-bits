@@ -1,4 +1,4 @@
-import { t, plural, choice, localName, word, activeLanguage, languages, languageNames, resolveLocale, useLanguage, staticCopy, type LanguageChoice } from "./i18n";
+import { t, plural, choice, localName, word, activeLanguage, launchLanguages, languageNames, resolveLocale, useLanguage, staticCopy, type LanguageChoice } from "./i18n";
 import { WebAcquisition, activityDate, type InstallContext } from "./distribution";
 import type { EventData } from "./analytics";
 import {firstSessionEnabled, firstGuideId as guideId, openingGoal, edgeCue, acrossGap, openingSelection, requiredRule, taskDate} from "./first-session";
@@ -274,6 +274,13 @@ $("app").innerHTML =
   `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}">${jarGlass("jar-glass")}<span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2><button id="close" class="plain" aria-label="${t("ui.close-menu")}">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
 let refreshStaticCopy = () => {};
 const globe = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>';
+const languageFlags: Record<(typeof launchLanguages)[number], string> = {
+  ru: '<path fill="#fff" d="M0 0h30v20H0z"/><path fill="#2853a0" d="M0 6.67h30v6.66H0z"/><path fill="#d5363b" d="M0 13.33h30V20H0z"/>',
+  en: '<path fill="#253c72" d="M0 0h30v20H0z"/><path stroke="#fff" stroke-width="4.5" d="m0 0 30 20m0-20L0 20"/><path stroke="#c82145" stroke-width="1.7" d="m0 0 30 20m0-20L0 20"/><path stroke="#fff" stroke-width="7" d="M15 0v20M0 10h30"/><path stroke="#c82145" stroke-width="4" d="M15 0v20M0 10h30"/>',
+  es: '<path fill="#bc2833" d="M0 0h30v20H0z"/><path fill="#f4c748" d="M0 5h30v10H0z"/><path fill="#b3323c" d="M8 8h4v3c0 1.2-.8 2-2 2s-2-.8-2-2z"/><path fill="#fff0b5" d="M9 8.5h1v3H9z"/>',
+  tr: '<path fill="#dc293a" d="M0 0h30v20H0z"/><path fill="#fff" d="M14.4 6a4.7 4.7 0 1 0 0 8 4 4 0 1 1 0-8zm4.6 4.1 1.8 1.2-2.2.1-.7 2.1-.8-2.1-2.2.1 1.7-1.4-.7-2.1 1.8 1.2 1.7-1.4z"/>',
+  "pt-BR": '<path fill="#25854e" d="M0 0h30v20H0z"/><path fill="#f2cc55" d="m15 2.7 12 7.3L15 17.3 3 10z"/><circle cx="15" cy="10" r="4.5" fill="#2a4389"/><path fill="none" stroke="#fff" stroke-width=".9" d="M10.9 9.1a10 10 0 0 1 8.2 3.1"/>',
+};
 const languageSheet = document.createElement("dialog");
 languageSheet.id="language-sheet";
 languageSheet.setAttribute("aria-labelledby","language-title");
@@ -302,11 +309,12 @@ function drawLanguage() {
     : languageNames[settings.languageChoice];
   const options=$("language-options");
   if(!options.childElementCount) {
-    for(const code of ["auto",...languages] as const) {
+    for(const code of ["auto",...launchLanguages] as const) {
       const button=document.createElement("button");
       button.type="button";
       button.dataset.language=code;
-      button.innerHTML='<span class="language-option-copy"><span></span><small hidden></small></span><span class="language-check" aria-hidden="true">✓</span>';
+      const mark = code === "auto" ? globe : '<svg viewBox="0 0 30 20" aria-hidden="true">'+languageFlags[code]+'</svg>';
+      button.innerHTML='<span class="language-mark" aria-hidden="true">'+mark+'</span><span class="language-option-copy"><span></span><small hidden></small></span><span class="language-check" aria-hidden="true">'+icon("check")+'</span>';
       if(code!=="auto")button.lang=code;
       button.onclick=()=>void changeLanguage(code);
       options.append(button);
@@ -552,12 +560,17 @@ noPairsTitle.hidden = true;
 $("status").before(noPairsTitle);
 const gameTop = document.createElement("div");
 gameTop.className = "game-top";
+const lessonToolbar = document.querySelector<HTMLElement>(".lesson-top")!;
+lessonToolbar.hidden = true;
 gameTop.append(
   document.querySelector("header")!,
   document.querySelector(".game-meta")!,
   $("page-progress"),
+  lessonToolbar,
 );
-document.querySelector(".game")!.insertBefore(gameTop, $("lesson"));
+const gameScreen = document.querySelector(".game")!;
+gameScreen.insertBefore(gameTop, $("viewport"));
+$("viewport").after($("lesson"));
 const gameActions = document.createElement("div");
 gameActions.className = "game-actions";
 gameActions.append(
@@ -994,7 +1007,7 @@ function setTheme(dark: boolean) {
   feedback("button");
   save();
 }
-function feedback(kind: HapticCue | "add" = "pair", tactile = true) {
+function feedback(kind: Exclude<HapticCue, "deal"> | "add" = "pair", tactile = true) {
   if (paused || document.hidden) return;
   if (settings.vibration && tactile)
     void platform.haptic(kind === "add" ? "button" : kind).catch(() => {});
@@ -2000,6 +2013,7 @@ function compactCount(n: number) {
   return n > 999 ? "999+" : String(n);
 }
 function render() {
+  lessonToolbar.hidden = lesson < 0;
   lessonActions.hidden = lesson < 0;
   lessonActions.dataset.short = String(shortLesson);
   document.querySelector<HTMLElement>(".game")!.dataset.lesson = String(lesson);
@@ -2231,8 +2245,7 @@ const lessonRules = [
 ] as const;
 function renderLessonCopy() {
   $("lesson-title").textContent = lessons[lesson].title;
-  // Each screen has one action above the field and one distinct, short rule.
-  // The older lesson body repeated the action, obscuring the actual rule.
+  // Keep one command and one rule in the space below the field.
   $("lesson-detail").textContent = t(shortLesson && lesson === 1 ? "lesson.ten-short.rule" : lessonRules[lesson]);
   $("lesson-feedback").textContent = "";
   $("lesson-text").textContent = [
@@ -2774,11 +2787,32 @@ function returnToPrevious() {
     target?.focus({ preventScroll: true });
   }
 }
+const revealedAttempts = new Set<string>();
+function playBoardEntrance() {
+  const current = session.current;
+  if (lesson >= 0 || paused || document.hidden || !occupied(current.board) ||
+      current.moves || current.additions || session.history.length) return;
+  const attempt = hintAttempt(progress).id;
+  if (revealedAttempts.has(attempt)) return;
+  revealedAttempts.add(attempt);
+  if (!reduced()) {
+    const digits = [...$("board").querySelectorAll(".digit")].slice(0, 36);
+    for (const [index, digit] of digits.entries()) {
+      const animation = ownedDomMotion.animate(digit, [
+        { opacity: 0.2, transform: "translateY(-6px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ], { duration: 165, delay: index * 2, easing: "ease-out", fill: "backwards" });
+      if (animation) animation.id = "board-entrance";
+    }
+  }
+  if (settings.vibration) void platform.haptic("deal").catch(() => {});
+}
 function closeMenu() {
   if (lesson < 0) enteredGame = true;
   navigationTrail.length = 0;
   dialog.close();
   render();
+  playBoardEntrance();
   showSaveState();
   document.body.classList.remove("navigation-open");
   platform.gameplay(!paused && occupied(board()) > 0);
@@ -2987,7 +3021,8 @@ function requestRestart(
     (action === "next" && !session.history.length &&
       !session.current.moves &&
       !session.current.additions) ||
-    !occupied(session.current.board)
+    !occupied(session.current.board) ||
+    (action === "restart" && !availablePairs(session.current.board).length)
   ) {
     if (action === "next") void beginClassic("next", level);
     else reset();
@@ -3677,7 +3712,9 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   if (kind === "trophies") html += "</section>";
   panel.innerHTML = html;
   if (kind === "calendar") {
-    calendarActions.append($("today-task"));
+    const todayTask = $("today-task");
+    todayTask.toggleAttribute("data-daily-pending", !progress.done.includes(todayTask.dataset.continue!));
+    calendarActions.append(todayTask);
     calendarActions.hidden = false;
     const layout = document.createElement("div");
     layout.className = "calendar-layout";
@@ -4000,6 +4037,7 @@ function updateHome() {
   $("book-count").textContent =
     t("books.progress", { "count": notebook.filter((p) => finished.has(p.id)).length });
   const id = `daily-v1-${today()}`;
+  $("daily-mode").toggleAttribute("data-daily-pending", !finished.has(id));
   $("home-today-art").innerHTML = calendarPicture(today());
   const run = dailyRun(progress);
   $("daily-series").hidden = run.count === 0;

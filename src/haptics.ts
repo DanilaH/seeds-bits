@@ -9,6 +9,7 @@ export type HapticCue =
   | "hint"
   | "reject"
   | "land"
+  | "deal"
   | "full"
   | "win"
   | "task"
@@ -42,6 +43,7 @@ const profiles: Record<
   hint: { pattern: [16, 20, 18], priority: 2 },
   reject: { pattern: [18, 24, 18], priority: 2 },
   land: { pattern: 10, priority: 0 },
+  deal: { pattern: [10, 20, 14, 24, 18], priority: 3 },
   full: { pattern: [26, 64, 30, 46, 18], priority: 3, hold: 240 },
   task: { pattern: [18, 35, 24], priority: 4, hold: 150 },
   page: { pattern: [26, 38, 42], priority: 4, hold: 250 },

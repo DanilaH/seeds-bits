@@ -78,6 +78,10 @@ test("full course uses one action plus one rule; answering does not shift board"
   await page.setViewportSize({width:390,height:844});
   await seeded(page);
   await page.locator("#learn").click();
+  const field = page.locator("#viewport");
+  const originalSlot = await field.boundingBox();
+  const command = await page.locator("#lesson-text").boundingBox();
+  expect(command!.y).toBeGreaterThanOrEqual(originalSlot!.y + originalSlot!.height);
   const moves:[[number,number],[number,number],[number,number],[number,number],[number,number]]=[
     [0,1],[0,1],[0,3],[0,20],[8,9],
   ];
@@ -107,6 +111,78 @@ test("full course uses one action plus one rule; answering does not shift board"
   await page.locator("#add").click();
   await page.locator("#undo").click();
   await expect(page.locator("#lesson-next")).toBeVisible();
+  const endSlot = await field.boundingBox();
+  expect(Math.abs(endSlot!.y - originalSlot!.y)).toBeLessThanOrEqual(1);
+  expect(Math.abs(endSlot!.height - originalSlot!.height)).toBeLessThanOrEqual(1);
+});
+
+test("field header follows the grid and the compact language rows keep their markers", async ({page}) => {
+  await page.setViewportSize({width:320,height:568});
+  await seeded(page);
+  await page.locator("#resume").click();
+  const menu = await page.locator("#menu").boundingBox();
+  const board = await page.locator("#board").boundingBox();
+  expect(Math.abs(menu!.x - board!.x)).toBeLessThanOrEqual(1);
+  expect(menu!.width).toBeGreaterThanOrEqual(44);
+  await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
+  await page.locator("#language-open").click();
+  await expect(page.locator('#language-options [data-language="auto"] .language-mark svg')).toBeVisible();
+  await expect(page.locator('#language-options button:not([data-language="auto"]) .language-mark svg')).toHaveCount(5);
+  await page.locator('#language-options [data-language="pt-BR"]').click();
+  await expect(page.locator('#language-options [data-language="pt-BR"]')).toHaveAttribute("aria-pressed","true");
+  expect(await page.locator("#language-options").evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+});
+
+test("today is emphasized until its puzzle is completed", async ({page}) => {
+  await page.clock.setFixedTime(new Date("2026-11-23T12:00:00+05:00"));
+  const id = "daily-v1-2026-11-23";
+  await seeded(page,{active:id,done:["daily-v1-2026-11-22"]});
+  const daily = page.locator("#daily-mode");
+  const icon = daily.locator("#home-today-art");
+  await expect(daily).toHaveAttribute("data-daily-pending","");
+  expect(await icon.evaluate(el=>getComputedStyle(el,"::after").animationName)).toBe("today-glow");
+  await page.emulateMedia({reducedMotion:"reduce"});
+  expect(await icon.evaluate(el=>getComputedStyle(el,"::after").animationName)).toBe("none");
+  await page.locator("#calendar-open").click();
+  await expect(page.locator("#today-task")).toHaveAttribute("data-daily-pending","");
+  await page.locator("#today-task").click();
+  await page.locator('#board button[data-index="0"]').click();
+  await page.locator('#board button[data-index="1"]').click();
+  await expect(page.locator("#win")).toBeVisible();
+  await page.locator("#menu").click();
+  await expect(daily).not.toHaveAttribute("data-daily-pending","");
+});
+
+test("a fresh field deals once without locking input or shaking on resume", async ({page}) => {
+  await page.addInitScript((key) => {
+    localStorage.setItem(key,JSON.stringify({tutorialDone:true,languageChoice:"ru",sound:false,vibration:true}));
+    Object.defineProperty(navigator,"vibrate",{value:(pattern:number|number[])=>{
+      if(Array.isArray(pattern) && pattern.join(",")==="10,20,14,24,18") {
+        const state = document.documentElement.dataset;
+        state.deals = String(Number(state.deals ?? "0") + 1);
+      }
+      return true;
+    }});
+  },settingsKey);
+  await page.goto("/");
+  await page.locator("#resume").evaluate((button) => {
+    button.addEventListener("click",()=>{
+      const board = document.querySelector("#board")!;
+      board.setAttribute("data-entrances",String(board.getAnimations({subtree:true}).filter(frame=>frame.id==="board-entrance").length));
+    });
+  });
+  await page.locator("#resume").click();
+  const board = page.locator("#board");
+  await expect(board).toHaveAttribute("data-entrances",/^[1-9]\d*$/);
+  await expect(page.locator("html")).toHaveAttribute("data-deals","1");
+  const first = board.locator("button").first();
+  await first.click();
+  await expect(first).toHaveAttribute("aria-pressed","true");
+  await page.locator("#menu").click();
+  await page.locator("#resume").click();
+  await expect(board).toHaveAttribute("data-entrances","0");
+  await expect(page.locator("html")).toHaveAttribute("data-deals","1");
 });
 
 test("short course has a single instruction and rule in both steps",async({page})=>{
