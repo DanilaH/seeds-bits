@@ -797,6 +797,31 @@
       "consumerCommit": "5de066f39ad839b32dad3a21802f6c34147e0fe8",
       "nextAction": "Evaluate bottom sheet and Android Back on the exact new APK on physical phone; keep saved-party confirmation and all six help experiments paused. No change to classic balance or economy.",
       "kitImpact": "REUSE"
+    },
+    {
+      "id": "generator-quality-evidence-20261123",
+      "sourceFeatureIds": [],
+      "scope": "Локальный аудит Seed Bits: три сложности классики, 2400 precomputed задач тетради и seeded daily, без нового наблюдения Number Match Easybrain/NADO.",
+      "status": "DEFERRED",
+      "reason": "Нужен сначала read-only game-quality анализ и плейтест; изменения ядра/экономики требуют отдельного решения владельца. Пилот четырёх уровней остаётся активным по issue #13.",
+      "evidence": {
+        "report": "https://github.com/DanilaH/seeds-bits/issues/14",
+        "difficultyTask": "https://github.com/DanilaH/seeds-bits/issues/13",
+        "staticCode": "PR #9 d22a70886c759b5a1a74f2773411c3684138221c: src/classic-generator.ts,src/core.ts,src/puzzles.ts,src/jars.ts,src/progress.ts,src/notebook.json,src/notebook-extra.json",
+        "model": "Independent JS rule/generator port, seeds 0..999 per current Classic level. Exact match on first 512 greedy no-Add outcomes to docs/porting/2026-11-20/ROADMAP.md (86 clear/426 stuck). Current fallback 0/1000 per level; start-pair median 13/22/16. Greedy ≤2 Add solved 1000/714/584 per 1000.",
+        "precomputed": "All 2400 notebook task boards: volume 100 median 512 occupied, 1670/2400 already at reward cap 24. First 240 notebooks 4028 legal opening actions: 3971 independently winning, 52 dead, 5 unknown under 50k search cap.",
+        "seededDaily": "2026 seeded model 365 dates: median 24 occupied, 19 legal starting pairs, 273 greedily cleared without Add; unchanged past date content.",
+        "economics": "collectPair pays 2 seeds/pair; existing modeled proof medians 18/36/38 per Easy/Normal/Hard, proposed odd 45/81 min 46/82 seeds per cleared game; seeds/minute on device UNKNOWN.",
+        "verification": {
+          "code": "INSPECTED",
+          "model": "MODEL_REPLAY",
+          "device": "NOT_VERIFIED",
+          "liveAudience": "NOT_VERIFIED",
+          "reference": "NOT_APPLICABLE"
+        }
+      },
+      "nextAction": "Разработчик issue #13 сначала меряет исходные качества/стоимость на 1000 seeds × 4 и моделирует seeds/minute, сохраняет 27-digit legacy High, затем пилот 45/81. Отдельно issue #14: телефонный аудит поздних тетрадей, пауза/награда, lazy data и дневная кривая. Не включать шесть приостановленных экспериментов.",
+      "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes."
     }
   ]
 }
