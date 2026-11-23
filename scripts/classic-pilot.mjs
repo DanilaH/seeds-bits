@@ -37,7 +37,7 @@ if (process.argv[2] === "--bundle") {
     },
     load(id) {
       if (id !== "\0classic-qa") return;
-      return `export { generateClassic, newClassicRun } from ${JSON.stringify(entry)};
+      return `export { CLASSIC_START_COUNTS, CLASSIC_START_HOLES, generateClassic, newClassicRun } from ${JSON.stringify(entry)};
         export { classic, pairs, removePair } from ${JSON.stringify(resolve("src/core.ts"))};`;
     },
   }]);
@@ -81,7 +81,7 @@ if (process.argv[2] === "--bundle") {
       const result = api.generateClassic(api.newClassicRun(seed), level);
       const ms = performance.now() - start;
       validate(result.board, result.proof);
-      assert.equal(result.board.length, result.board.filter(Boolean).length);
+      if (result.choice) validate(result.board, [...result.proof.slice(0, result.choice.at), ...result.choice.alternative]);
       const metrics = profile.measureClassic(result.board, result.proof);
       const policies = Object.fromEntries(["first", "last", "random"].map(order => {
         const { proof, ...stats } = profile.tryClassicOrder(result.board, order, 2, 180, seed);

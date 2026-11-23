@@ -17,6 +17,7 @@ import {
   CLASSIC_MIN,
   CLASSIC_MAX,
   CLASSIC_LEVELS,
+  CLASSIC_START_COUNTS,
   isClassicDifficulty,
   classicDifficultyNames,
   newClassicRun,
@@ -318,7 +319,8 @@ function renderClassicNewSheet() {
   for (const button of classicNewOptions.querySelectorAll<HTMLButtonElement>("button")) {
     const level = Number(button.dataset.classicLevel) as ClassicDifficulty;
     const name = localName(classicDifficultyNames[level]);
-    const detail = t(["calm.classic.easyDetail","calm.classic.normalDetail","calm.classic.hardDetail","calm.classic.expertDetail"][level]);
+    const counts = CLASSIC_START_COUNTS[level];
+    const detail = t("calm.classic.startRange", { "0": counts[0], "1": counts[2] });
     button.querySelector("strong")!.textContent = name;
     button.querySelector("small")!.textContent = detail;
     const current = button.querySelector<HTMLElement>(".classic-level-current")!;

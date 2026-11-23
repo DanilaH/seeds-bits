@@ -464,7 +464,8 @@ return (${code})(SeedsClassicQA);})()`;
   const depth=()=>ui.evaluate(`(()=>{const v=document.querySelector("#viewport");
     return {w:innerWidth,h:innerHeight,clientHeight:v.clientHeight,scrollHeight:v.scrollHeight,scroll:v.scrollTop};})()`);
   const timing=[];
-  let geometry, savedScroll;
+  let geometry, savedScroll, expertCount;
+  const generated = [];
   try {
     assertViewportResult(await depth());
     await ui.tap("#resume");
@@ -473,18 +474,37 @@ return (${code})(SeedsClassicQA);})()`;
     await ui.until(left(27));
     assert.deepEqual(profiles().values[progress].sessions.classic.current.board,oldHighBoard);
     await ui.tap("#menu");
-    const levels=[[2,45],[0,18],[1,28],[3,81]];
-    for(const [level,count] of levels) {
-      await ui.tap("#next-classic");
-      if(level===2) shot("classic-four-difficulties-320-dark");
-      await ui.tap(`[data-classic-level="${level}"]`);
-      await ui.until(left(count)+" && !document.querySelector('#dialog').open");
-      shot(`classic-${count}-320-dark`);
-      if(level!==3)await ui.tap("#menu");
+    const { counts, holes } = await ui.evaluate(withGenerator(
+      "({CLASSIC_START_COUNTS, CLASSIC_START_HOLES}) => ({counts:CLASSIC_START_COUNTS, holes:CLASSIC_START_HOLES})",
+    ));
+    for (const level of [2,0,1,3]) {
+      const seen = new Set();
+      let count;
+      for (let n=0; n<3 || (level===3 && count<81); n++) {
+        await ui.tap("#next-classic");
+        if (level===2 && n===0) shot("classic-four-difficulties-320-dark");
+        await ui.tap(`[data-classic-level="${level}"]`);
+        await ui.until("!document.querySelector('#classic-new-sheet').open && !document.querySelector('#dialog').open");
+        const board=profiles().values[progress].sessions.classic.current.board;
+        count=board.filter(Boolean).length;
+        assert(counts[level].includes(count));
+        assert([0,holes[level]].includes(board.length-count));
+        await ui.until(left(count));
+        if (!seen.has(count)) {
+          await ui.until("!document.getAnimations().some(a=>a.id==='board-entrance'&&a.playState==='running')");
+          shot(`classic-${count}-320-dark`);
+          generated.push({ level, count, holes: board.length-count });
+        }
+        seen.add(count);
+        if (level!==3 || n<2 || count<81) await ui.tap("#menu");
+        assert(n<4,"Could not select a full Expert test");
+      }
+      assert.deepEqual([...seen].sort((a,b)=>a-b), counts[level]);
+      if (level===3) expertCount=count;
     }
     const natural=await depth();
     const savedExpert=profiles().values[progress].sessions.classic.current.board;
-    assert.equal(savedExpert.length,81);
+    assert.equal(savedExpert.filter(Boolean).length,expertCount);
     const reservesBanner=await ui.evaluate("document.documentElement.classList.contains('has-mobile-ads')");
     if (!reservesBanner) {
       await ui.evaluate("document.documentElement.classList.add('has-mobile-ads')");
@@ -503,14 +523,14 @@ return (${code})(SeedsClassicQA);})()`;
     assert(bottomPair,"No bottom pair in visible Expert rows");
     await ui.tap(digit(bottomPair.a),false);
     await ui.tap(digit(bottomPair.b),false);
-    await ui.until(left(79));
+    await ui.until(left(expertCount-2));
     await ui.tap("#undo");
-    await ui.until(left(81));
+    await ui.until(left(expertCount));
     assert.deepEqual(profiles().values[progress].sessions.classic.current.board,savedExpert);
     shot("classic-expert-bottom-320-dark");
     await ui.tap(digit(bottomPair.a));
     await ui.tap(digit(bottomPair.b));
-    await ui.until(left(79));
+    await ui.until(left(expertCount-2));
     savedScroll=(await depth()).scroll;
     for(const level of [0,1,2,3]){
       timing.push(await ui.evaluate(withGenerator(`({generateClassic,newClassicRun})=>{
@@ -519,17 +539,18 @@ return (${code})(SeedsClassicQA);})()`;
         for(let seed=10000;seed<10032;seed++){
           const start=performance.now();
           const game=generateClassic(newClassicRun(seed),${level});
-          data.push({seed,ms:performance.now()-start,...game.diagnostics,fallback:game.fallback});
+          const size=game.board.filter(Boolean).length;
+          data.push({seed,ms:performance.now()-start,size,holes:game.board.length-size,...game.diagnostics,fallback:game.fallback});
         }
         const start=performance.now();
         const forced=generateClassic(newClassicRun(12081),${level},{attempts:0});
-        const forcedFallback={ms:performance.now()-start,fallback:forced.fallback,size:forced.board.length,
+        const forcedFallback={ms:performance.now()-start,fallback:forced.fallback,size:forced.board.filter(Boolean).length,
           proofActions:forced.proof.length,...forced.diagnostics};
         const times=data.map(d=>d.ms).sort((a,b)=>a-b);
         return {level:${level},data,forcedFallback,p50:times[15],p95:times[30],max:times.at(-1)};
       }`)));
     }
-    assert(timing.every((result,i)=>result.forcedFallback.fallback&&result.forcedFallback.size===[18,28,45,81][i]));
+    assert(timing.every((result,i)=>result.forcedFallback.fallback&&counts[i].includes(result.forcedFallback.size)));
     await ui.tap("#menu");
     assert.equal(profiles().values[progress].meta.wallet,7);
   } finally { ui.close(); stop(); }
@@ -537,12 +558,12 @@ return (${code})(SeedsClassicQA);})()`;
   const resumed=await connect();
   try{
     await resumed.tap("#resume");
-    await resumed.until(left(79));
+    await resumed.until(left(expertCount-2));
     const restoredScroll=await resumed.evaluate("document.querySelector('#viewport').scrollTop");
     if(geometry.realBannerReserve)assert(Math.abs(restoredScroll-savedScroll)<=1,"Lost Expert scroll after restart");
     await resumed.tap("#undo");
-    await resumed.until(left(81));
-    return {timing,geometry,scrollRestore:{before:savedScroll,after:restoredScroll,realReserve:geometry.realBannerReserve},
+    await resumed.until(left(expertCount));
+    return {timing,generated,geometry,scrollRestore:{before:savedScroll,after:restoredScroll,realReserve:geometry.realBannerReserve},
       physicalPhone:false,viewport320:true,legacy27Undo:true,legacyWallet:7,
       bottomTouch:true,undo:true,restartAndContinue:true,
       webview:adb("shell","dumpsys","webviewupdate") .split("\n").find(x=>x.includes("Current WebView package"))};

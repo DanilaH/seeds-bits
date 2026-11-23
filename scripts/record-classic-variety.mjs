@@ -11,7 +11,7 @@ const vite = await createServer({
 await vite.listen();
 const { fresh, metadata, startAttempt } =
   await vite.ssrLoadModule("/src/progress.ts");
-const { CLASSIC_LEVELS, CLASSIC_SIZES, newClassicRun, takeGeneratedClassic } = await vite.ssrLoadModule(
+const { CLASSIC_LEVELS, CLASSIC_START_COUNTS, newClassicRun, takeGeneratedClassic } = await vite.ssrLoadModule(
   "/src/classic-generator.ts",
 );
 const key = "seeds-bits.progress.v2";
@@ -77,7 +77,7 @@ try {
       await page.locator("#play-again").click();
       await expect(page.locator("#win")).toBeHidden();
       await expect(page.locator("#remaining")).toHaveText(
-        String(CLASSIC_SIZES[level]),
+        new RegExp("^(" + CLASSIC_START_COUNTS[level].join("|") + ")$"),
       );
       const game = `${name}-game-${level}.png`;
       await page.screenshot({ path: path.join(out, game) });

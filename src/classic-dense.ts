@@ -1,4 +1,4 @@
-import { WIDTH, addNumbers, pairs, removePair } from "./core";
+import { WIDTH, addNumbers, occupied, pairs, removePair } from "./core";
 import { crossesEmptyCell, remainingIds, type ClassicProof, type ClassicStyle } from "./classic-profile";
 
 // Pair-free prefixes stranding more digits earlier. Moves are in the geometry
@@ -15,15 +15,38 @@ const stockKernels: { digits: string; afterAdd: ClassicProof }[] = [
  * to its saved endpoints. The protected row starts at the left edge and
  * survives at its original width, so Add copies it directly beneath itself.
  */
+export function classicShape(size: number, holes: number, reserved: number, nextInt: (max: number) => number) {
+  const shape = Array<number>(size + holes).fill(1);
+  const positions = shape.flatMap((_, i) =>
+    i >= reserved && i % WIDTH !== 0 && i < shape.length - 1 ? [i] : [],
+  );
+  // Keep the first cell in each row occupied, so no initial row collapses.
+  for (let n = 0; n < holes; n++) {
+    const selected = nextInt(positions.length);
+    shape[positions[selected]] = 0;
+    const last = positions.pop()!;
+    if (selected < positions.length) positions[selected] = last;
+  }
+  return shape;
+}
+
+export function spreadClassic(values: readonly number[], holes: number, nextInt: (max: number) => number) {
+  let next = 0;
+  return classicShape(values.length, holes, 0, nextInt).map(cell => cell ? values[next++] : 0);
+}
+
 export function constructDense(
-  size: 45 | 81, style: ClassicStyle, nextInt: (max: number) => number,
+  size: number, holes: number, style: ClassicStyle, nextInt: (max: number) => number,
 ) {
-  const board = Array<number>(size).fill(0);
-  const kernel = style === "stock" ? stockKernels[size === 45 ? nextInt(2) : 1 + nextInt(3)] : undefined;
-  const reserved = kernel?.digits.length ?? (style === "open" ? 1 : 5);
+  const odd = size % 2 === 1;
+  const kernel = style === "stock" && odd
+    ? stockKernels[size < 60 ? nextInt(2) : 1 + nextInt(3)]
+    : undefined;
+  const reserved = kernel?.digits.length ?? (odd ? (style === "open" ? 1 : 5) : (style === "stock" ? 6 : 0));
   const protectedId = (id: number) => id > 0 && id <= reserved;
-  let shapes = Array<number>(size).fill(1);
-  let ids = shapes.map((_, index) => index + 1);
+  let shapes = classicShape(size, holes, reserved, nextInt);
+  const board = shapes.map(() => 0);
+  let ids = shapes.map((cell, index) => cell ? index + 1 : 0);
   let left = size;
   const proof: ClassicProof = [];
   const classes = [1, 2, 3, 4];
@@ -54,32 +77,33 @@ export function constructDense(
     ids = remainingIds(ids, a, b);
     left -= 2;
   }
-  proof.push(null);
-  if (kernel) proof.push(...kernel.afterAdd);
-  else for (let i = 0; i < reserved; i++) proof.push([i, i + WIDTH]);
+  if (reserved) {
+    proof.push(null);
+    if (kernel) proof.push(...kernel.afterAdd);
+    else for (let i = 0; i < reserved; i++) proof.push([i, i + WIDTH]);
+  }
   return { board, proof };
 }
 
 /** Certified budget fallback: reserve the last digit and clear pair blocks in reading order. */
-export function denseFallback(size: 45 | 81, nextInt: (max: number) => number) {
+export function denseFallback(size: number, nextInt: (max: number) => number) {
   // Blocks always include every pair class, even on an unlucky draw.
-  const blocks = Array.from({ length: (size - 1) / 2 }, (_, i) => {
+  const blocks = Array.from({ length: Math.floor(size / 2) }, (_, i) => {
     const value = i < 9 ? i + 1 : nextInt(9) + 1;
     return [value, nextInt(2) ? value : 10 - value];
   });
-  return { blocks, last: nextInt(9) + 1 };
+  return { blocks, last: size % 2 ? nextInt(9) + 1 : undefined };
 }
 
-export function clearInReadingOrder(initial: readonly number[], addLast = false) {
+export function clearInReadingOrder(initial: readonly number[]) {
   const proof: ClassicProof = [];
   let board = initial;
   while (board.length) {
     const a = board.findIndex(Boolean);
     const b = board.findIndex((digit, index) => index > a && digit > 0);
-    if (b === -1 && addLast) {
+    if (b === -1 && occupied(board) === 1) {
       board = addNumbers(board);
       proof.push(null);
-      addLast = false;
     } else {
       board = removePair(board, a, b);
       proof.push([a, b]);

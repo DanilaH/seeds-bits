@@ -73,20 +73,29 @@ try {
     const candidateState = api.readClassicRun(input);
     const selected = api.generateClassic(candidateState, level, options);
     const profile = measureClassic(selected.board, selected.proof);
-    assert.equal(selected.board.length, sizes[level]);
-    assert.equal(core.occupied(selected.board), sizes[level]);
-    assert(selected.board.every(digit => Number.isInteger(digit) && digit >= 1 && digit <= 9));
+    const size = core.occupied(selected.board);
+    const counts = api.CLASSIC_START_COUNTS?.[level] ?? [sizes[level]];
+    const holes = selected.board.length - size;
+    assert(counts.includes(size), "Wrong digit count");
+    assert([0, api.CLASSIC_START_HOLES?.[level] ?? 0].includes(holes), "Wrong starting geometry");
+    assert(selected.board.every(digit => Number.isInteger(digit) && digit >= 0 && digit <= 9));
     assert(!input.recent.includes(selected.board.join("")));
-    if (level === 0) assert.equal(tryClassicOrder(selected.board, "first", 0, 9).outcome, "FOUND");
-    if (level === 1) assert.deepEqual([...selected.board].sort(), core.classic().sort());
-    if (level >= 2) assert(profile.additions > 0);
+    if (level === 0) assert.equal(tryClassicOrder(selected.board, "first", 0, size / 2).outcome, "FOUND");
+    if (level === 1 && size === 28) assert.deepEqual(selected.board.filter(Boolean).sort(), core.classic().sort());
+    if (size % 2) assert(profile.additions > 0);
+    if (selected.choice) {
+      const { at, alternative } = selected.choice;
+      assert(alternative[0].some(index => selected.proof[at].includes(index)));
+      assert.notDeepEqual(alternative[0], selected.proof[at]);
+      measureClassic(selected.board, [...selected.proof.slice(0, at), ...alternative]);
+    }
     const recipe = selected.recipe ?? (selected.fallback ? "fallback" : "shuffle");
     const row = {
-      variant, mode, level, size: sizes[level], index, seriesSeed, seed: input.seed,
+      variant, mode, level, size, holes, index, seriesSeed, seed: input.seed,
       seedAfter: candidateState.seed, stateSha256: hash(JSON.stringify(input)), recentCount: input.recent.length,
       requestedStyle: selected.style, actualRecipe: recipe,
       board: selected.board.join(""), structure: classicStructure(selected.board), proof: selected.proof,
-      profile, openingSimilarity: selected.similarity, diagnostics: selected.diagnostics,
+      profile, ...(selected.choice ? { choice: selected.choice } : {}), openingSimilarity: selected.similarity, diagnostics: selected.diagnostics,
       budget: selected.budget ?? {
         attemptLimit: options.attempts ?? [40, 16, 4, 4][level],
         maxCandidates: level < 2 ? 3 : 4,
@@ -119,7 +128,8 @@ try {
     const fields = ["opening", "openingInFirstFourRows", "removals", "additions", "firstAdd",
       "gapMoves", "readingMoves", "diagonalMoves", "newPairs", "compressionChanges", "maxDigits", "peakLength"];
     const distributions = Object.fromEntries([...fields, "attempts", "candidates", "solverVisits", "fallbackAttempts"].map(k => [k, {}]));
-    let fallback = 0;
+    let fallback = 0, certifiedChoices = 0;
+    const startCounts = {}, startHoles = {};
     for (let i = start; i < group.length; i++) {
       const row = group[i], previous = group[i - 1];
       const motif = row.profile.motif;
@@ -132,6 +142,9 @@ try {
       for (const name of fields) increment(distributions[name], row.profile[name]);
       for (const [name, count] of Object.entries(row.diagnostics)) increment(distributions[name], count);
       if (row.fallback) fallback++;
+      if (row.choice) certifiedChoices++;
+      increment(startCounts, row.size);
+      increment(startHoles, row.holes);
       if (previous) {
         adjacentComparisons++;
         const similarity = classicMotifSimilarity(motif, previous.profile.motif);
@@ -145,7 +158,7 @@ try {
       repeats.recent8Board += Number(lastBoards.some(prev => row.board === prev.board));
       repeats.recent8Structure += Number(lastBoards.some(prev => row.structure === prev.structure));
     }
-    return { count: group.length - start, adjacentComparisons, fallback, requested, recipes, requestedToActual,
+    return { count: group.length - start, adjacentComparisons, fallback, certifiedChoices, startCounts, startHoles, requested, recipes, requestedToActual,
       motifs, repeats, distributions };
   }
 
@@ -185,12 +198,29 @@ try {
     assert.equal(a.profile.motif.structure, "151592342327634151695000000");
     assert.deepEqual(a.profile.motif,b.profile.motif);
   }
+  const pilot = after.api.CLASSIC_START_COUNTS;
+  const examples = pilot?.flatMap((counts, level) => counts.map((size, position) => {
+    const eligible = rows.filter(row => row.variant === "after" && row.mode === "fresh" &&
+      row.level === level && row.size === size && !row.fallback);
+    const preference = [
+      row => row.profile.opening - row.profile.gapMoves,
+      row => row.profile.gapMoves + row.profile.newPairs,
+      row => row.profile.compressionChanges + (row.profile.firstAdd === null ? 0 : row.size - 2 * row.profile.firstAdd),
+    ][position];
+    // Show visible contrast and an independently replayable competing pair.
+    eligible.sort((a, b) => Number(Boolean(b.choice)) - Number(Boolean(a.choice)) ||
+      Number(Boolean(b.holes) === (position === 1)) - Number(Boolean(a.holes) === (position === 1)) ||
+      preference(b) - preference(a));
+    assert(eligible[0], `Missing example for level ${level} size ${size}`);
+    return eligible[0];
+  }));
   const output = resolve(args.out);
   mkdirSync(output, { recursive:true });
   const artifacts = {
     "deals.jsonl.gz": gzipSync(rows.map(row => JSON.stringify(row)).join("\n") + "\n"),
     "summary.json": JSON.stringify(summary,null,2) + "\n",
     "audit-29-30.json": JSON.stringify(reproduction,null,2) + "\n",
+    ...(examples ? { "pilot-examples.json": JSON.stringify(examples, null, 2) + "\n" } : {}),
   };
   const manifest = {
     node: process.version, before: before.sha, after: after.sha, sources: {before:before.files, after:after.files},

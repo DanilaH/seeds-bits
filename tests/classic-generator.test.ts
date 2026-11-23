@@ -1,7 +1,8 @@
 import { test, expect } from "vitest";
 import {
   CLASSIC_DEFAULT,
-  CLASSIC_SIZES,
+  CLASSIC_START_COUNTS,
+  CLASSIC_START_HOLES,
   CLASSIC_SCENARIO_HISTORY,
   generateClassic,
   newClassicRun,
@@ -22,16 +23,22 @@ import {
 test("four bands generate new, playable fields; normal retains the original digit multiset", () => {
   for (const level of [0, 1, 2, 3] as ClassicDifficulty[]) {
     const fields = new Set<string>();
+    const counts = new Set<number>();
+    const densities = new Set<number>();
+    let choices = 0;
     for (let seed = 0; seed < 160; seed++) {
       const state = newClassicRun(seed);
-      const { board: initial, proof } = generateClassic(state, level);
+      const { board: initial, proof, choice } = generateClassic(state, level);
+      const size = occupied(initial);
+      counts.add(size);
+      densities.add(initial.length - size);
       fields.add(initial.join(""));
-      expect(initial).toHaveLength(CLASSIC_SIZES[level]);
-      expect(occupied(initial)).toBe(CLASSIC_SIZES[level]);
+      expect(CLASSIC_START_COUNTS[level]).toContain(size);
+      expect([0, CLASSIC_START_HOLES[level]]).toContain(initial.length - size);
       expect(initial.join("")).not.toBe(classic().join(""));
       expect(new Set(initial).size).toBeGreaterThanOrEqual(6);
       expect(pairs(initial).length).toBeGreaterThan(0);
-      if (level === 1) expect([...initial].sort()).toEqual(classic().sort());
+      if (level === 1 && size === 28) expect(initial.filter(Boolean).sort()).toEqual(classic().sort());
       let board = initial;
       let additions = 0;
       for (const move of proof) {
@@ -45,17 +52,21 @@ test("four bands generate new, playable fields; normal retains the original digi
       expect(occupied(board), `level ${level}, seed ${seed}`).toBe(0);
       if (level === 0) {
         expect(additions).toBe(0);
-        let simple = initial;
-        for (let move = 0; move < 9; move++) {
-          const pair = pairs(simple)[0];
-          expect(pair).toBeDefined();
-          simple = removePair(simple, pair.a, pair.b);
-        }
-        expect(occupied(simple)).toBe(0);
+        expect(tryClassicOrder(initial, "first", 0, size / 2).outcome).toBe("FOUND");
       }
-      if (level >= 2) expect(additions).toBeGreaterThanOrEqual(1);
+      if (size % 2) expect(additions).toBeGreaterThanOrEqual(1);
+      if (choice) {
+        choices++;
+        const branch = choice.alternative[0]!;
+        expect(branch).not.toEqual(proof[choice.at]);
+        expect(branch.some(index => proof[choice.at]!.includes(index))).toBe(true);
+        expect(measureClassic(initial, [...proof.slice(0, choice.at), ...choice.alternative]).removals).toBeGreaterThan(0);
+      }
     }
     expect(fields.size).toBe(160);
+    expect([...counts].sort((a, b) => a - b)).toEqual(CLASSIC_START_COUNTS[level]);
+    expect(densities).toEqual(new Set([0, CLASSIC_START_HOLES[level]]));
+    expect(choices).toBeGreaterThan(15);
   }
 }, 30000);
 
@@ -117,19 +128,23 @@ test("legacy saves keep the actual game, while corrupt generation metadata recov
 
 test("exhausting attempts produces a certified same-size field, without repeating its recent deals", () => {
   for (const level of [0, 1, 2, 3] as const) {
-    const state = newClassicRun(12081);
-    const first = generateClassic(state, level, { attempts: 0 });
-    expect(first.fallback).toBe(true);
-    const next = newClassicRun(12081);
-    next.recent.push(first.board.join(""));
-    const second = generateClassic(next, level, { attempts: 0 });
-    expect(second.fallback).toBe(true);
-    expect(second.board).not.toEqual(first.board);
-    expect(second.diagnostics).toMatchObject({ attempts: 0, candidates: 0, fallbackAttempts: 2 });
-    expect(second.board.length).toBe(CLASSIC_SIZES[level]);
-    expect(occupied(second.board)).toBe(CLASSIC_SIZES[level]);
-    expect(measureClassic(second.board, second.proof).additions).toBe(Number(level >= 2));
-    if (!level) expect(tryClassicOrder(second.board, "first", 0, 9).outcome).toBe("FOUND");
+    for (const size of CLASSIC_START_COUNTS[level]) {
+      for (const sparse of [false, true]) {
+        const options = { attempts: 0, size, sparse };
+        const first = generateClassic(newClassicRun(12081), level, options);
+        const next = newClassicRun(12081);
+        next.recent.push(first.board.join(""));
+        const second = generateClassic(next, level, options);
+        expect(first.fallback && second.fallback).toBe(true);
+        expect(second.board).not.toEqual(first.board);
+        expect(second.diagnostics).toMatchObject({ attempts: 0, candidates: 0 });
+        expect(second.board.length).toBe(size + (sparse ? CLASSIC_START_HOLES[level] : 0));
+        expect(occupied(second.board)).toBe(size);
+        expect(measureClassic(second.board, second.proof).additions).toBe(size % 2);
+        if (!level) expect(tryClassicOrder(second.board, "first", 0, size / 2).outcome).toBe("FOUND");
+        if (level === 1 && size === 28) expect(second.board.filter(Boolean).sort()).toEqual(classic().sort());
+      }
+    }
   }
 });
 
@@ -148,7 +163,7 @@ test("legacy High keeps its 27-digit board, Undo and generator seed in the new f
   const restored = readProgress(serializeProgress(p));
   expect(restored).toEqual(p);
   expect(undo(restored.sessions.classic).current.board).toEqual(initial);
-  expect(takeGeneratedClassic(restored.meta!.classicRun!, "next", 2).current.board).toHaveLength(45);
+  expect(CLASSIC_START_COUNTS[2]).toContain(occupied(takeGeneratedClassic(restored.meta!.classicRun!, "next", 2).current.board));
 });
 
 test("structural identity preserves geometry and complementary value roles", () => {
@@ -159,13 +174,16 @@ test("structural identity preserves geometry and complementary value roles", () 
 });
 
 test("a scenario records the winning recipe when the requested preference loses", () => {
-  const state = newClassicRun(15);
-  const selected = generateClassic(newClassicRun(15), 2);
-  expect(selected.style).toBe("gaps");
-  expect(selected.recipe).toBe("stock");
+  const seed = Array.from({ length: 20 }, (_, n) => n).find(n => {
+    const deal = generateClassic(newClassicRun(n), 2);
+    return deal.style !== deal.recipe && !deal.fallback;
+  });
+  expect(seed).toBeDefined();
+  const state = newClassicRun(seed);
+  const selected = generateClassic(newClassicRun(seed), 2);
   takeGeneratedClassic(state, "actual-recipe", 2);
   const restored = readClassicRun(JSON.parse(JSON.stringify(state)))!;
-  expect(restored.scenarios?.[2]).toEqual([{ recipe: "stock", motif: selected.profile.motif }]);
+  expect(restored.scenarios?.[2]).toEqual([{ recipe: selected.recipe, motif: selected.profile.motif }]);
 
   const legacy = { ...restored, scenarios: undefined, rotation: { 2: ["stock", "gaps"] } };
   const migrated = readClassicRun(legacy)!;
@@ -175,14 +193,25 @@ test("a scenario records the winning recipe when the requested preference loses"
   expect(migrated.seed).toBe(restored.seed);
 });
 
-test("the audited High45 series varies the first Add on deals 29 and 30", () => {
-  let state = newClassicRun(12081);
-  const motifs = [];
-  for (let number = 1; number <= 30; number++) {
-    takeGeneratedClassic(state, `audit-${number}`, 2);
-    state = readClassicRun(JSON.parse(JSON.stringify(state)))!;
-    if (number >= 29) motifs.push(state.scenarios![2]!.at(-1)!.motif);
+test("every difficulty rotates through all dimensions and roundtrips sparse starts and Undo", () => {
+  for (const level of [0, 1, 2, 3] as const) {
+    const p = fresh();
+    const m = metadata(p);
+    m.classicRun = newClassicRun(12081);
+    const sizes: number[] = [];
+    for (let n = 0; n < 9; n++) {
+      startAttempt(p, "classic");
+      const original = takeGeneratedClassic(m.classicRun, m.attempts.classic.id, level);
+      const board = original.current.board;
+      const move = pairs(board)[0];
+      p.sessions.classic = commit(original, removePair(board, move.a, move.b), "pair", 7);
+      const restored = readProgress(serializeProgress(p));
+      expect(restored).toEqual(p);
+      expect(undo(restored.sessions.classic).current.board).toEqual(board);
+      sizes.push(occupied(board));
+      m.classicRun = restored.meta!.classicRun;
+    }
+    for (let n = 0; n < sizes.length; n += 3)
+      expect(new Set(sizes.slice(n, n + 3))).toEqual(new Set(CLASSIC_START_COUNTS[level]));
   }
-  expect(motifs.map(motif => motif.stage)).toEqual(["first-add", "first-add"]);
-  expect(motifs[0].structure).not.toBe(motifs[1].structure);
 });

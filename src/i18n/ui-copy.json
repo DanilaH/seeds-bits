@@ -2255,8 +2255,5 @@
   "calm.classic.startNote": {"ru":"Выберите сложность — партия начнётся сразу.","en":"Choose a difficulty to start a new game.","es":"Elige una dificultad para empezar.","tr":"Başlamak için zorluk seçin.","pt-BR":"Escolha uma dificuldade para começar."},
   "calm.classic.confirmNote": {"ru":"Начатая классика заменится только после подтверждения.","en":"Your current Classic game will be replaced only after you confirm.","es":"Tu partida actual solo se sustituirá si lo confirmas.","tr":"Mevcut Klasik oyun yalnızca onaylarsanız değişir.","pt-BR":"O jogo clássico atual só será substituído após a confirmação."},
   "calm.classic.current": {"ru":"Сейчас","en":"Current","es":"Actual","tr":"Şu an","pt-BR":"Atual"},
-  "calm.classic.easyDetail": {"ru":"18 цифр · доступный старт","en":"18 numbers · gentler start","es":"18 números · inicio sencillo","tr":"18 sayı · kolay başlangıç","pt-BR":"18 números · início mais fácil"},
-  "calm.classic.normalDetail": {"ru":"28 цифр · стандартный набор","en":"28 numbers · standard set","es":"28 números · conjunto estándar","tr":"28 sayı · standart dizilim","pt-BR":"28 números · conjunto padrão"},
-  "calm.classic.hardDetail": {"ru":"45 цифр · 5 рядов","en":"45 numbers · 5 rows","es":"45 números · 5 filas","tr":"45 sayı · 5 sıra","pt-BR":"45 números · 5 linhas"},
-  "calm.classic.expertDetail": {"ru":"81 цифра · 9 рядов","en":"81 numbers · 9 rows","es":"81 números · 9 filas","tr":"81 sayı · 9 sıra","pt-BR":"81 números · 9 linhas"}
+  "calm.classic.startRange": {"ru":"{0}–{1} цифр","en":"{0}–{1} numbers","es":"{0}–{1} números","tr":"{0}–{1} sayı","pt-BR":"{0}–{1} números"}
 }

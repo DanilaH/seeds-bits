@@ -23,7 +23,7 @@ test("New Classic: home -> difficulty sheet -> ordinary board -> resume",async({
   await expect(page.locator("#classic-new-sheet")).toBeHidden();
   await expect(page.locator("#dialog")).toBeHidden();
   await expect(page.locator("#mode")).toContainText("Классика");
-  await expect(page.locator("#remaining")).toHaveText("28");
+  await expect(page.locator("#remaining")).toHaveText(/^(24|28|32)$/);
   await page.waitForTimeout(850);
   await page.locator("#menu").click();
   await expect(page.locator("#resume")).toBeVisible();

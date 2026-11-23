@@ -1,5 +1,6 @@
 import {test,expect} from "@playwright/test";
-import {pairs} from "../src/core";
+import {occupied,pairs} from "../src/core";
+import {CLASSIC_START_COUNTS} from "../src/classic-generator";
 
 const key="seeds-bits.progress.v2", settings="seeds-bits.settings.v1";
 const state=async(page:import("@playwright/test").Page)=>page.evaluate(
@@ -26,10 +27,10 @@ test("home separates saved Continue and New Classic with four real levels",async
   await expect(page.locator("#classic-new-sheet")).toBeVisible();
   await page.screenshot({path:"test-results/classic-new-sheet/390x844-light.jpg",type:"jpeg",quality:88,animations:"disabled"});
   await expect(page.locator(".classic-difficulty-option")).toHaveCount(4);
-  await expect(choice(page,0)).toContainText("18 цифр");
-  await expect(choice(page,1)).toContainText("28 цифр");
-  await expect(choice(page,2)).toContainText("45 цифр");
-  await expect(choice(page,3)).toContainText("81 цифра");
+  await expect(choice(page,0)).toContainText("16–20 цифр");
+  await expect(choice(page,1)).toContainText("24–32 цифр");
+  await expect(choice(page,2)).toContainText("40–50 цифр");
+  await expect(choice(page,3)).toContainText("72–90 цифр");
   await expect(page.locator("#classic-new-sheet")).toContainText("Обычная");
   const {width,height,bottom}=await page.locator("#classic-new-sheet").evaluate(e=>{
     const r=e.getBoundingClientRect();return{width:r.width,height:r.height,bottom:r.bottom};
@@ -47,18 +48,19 @@ test("home separates saved Continue and New Classic with four real levels",async
   await expect(page.locator("#board")).toBeVisible();
 });
 
-for(const [level,count] of [[0,18],[1,28],[2,45],[3,81]] as const){
-  test(`fresh Classic starts ${count} numbers after one level choice ${level}`,async({page})=>{
+for(const level of [0,1,2,3] as const){
+  test(`fresh Classic starts a valid field after one level choice ${level}`,async({page})=>{
     await menu(page);
     await page.locator("#next-classic").click();
     await choice(page,level).click();
     await expect(page.locator("#classic-new-sheet")).toBeHidden();
     await expect(page.locator("#dialog")).not.toBeVisible();
-    await expect(page.locator("#remaining")).toHaveText(String(count));
     const saved=await state(page);
+    const count=occupied(saved.sessions.classic.current.board);
+    expect(CLASSIC_START_COUNTS[level]).toContain(count);
+    await expect(page.locator("#remaining")).toHaveText(String(count));
     expect(saved.active).toBe("classic");
     expect(saved.meta.classicRun.difficulty).toBe(level);
-    expect(saved.sessions.classic.current.board.filter(Boolean)).toHaveLength(count);
     await page.locator("#menu").click();
     await expect(page.locator("#resume")).toBeVisible();
     await expect(page.locator("#home-difficulty")).toBeVisible();
@@ -87,8 +89,12 @@ test("an unfinished Classic game is replaced only after confirmation",async({pag
   await page.locator("#next-classic").click();
   await choice(page,2).click();
   await page.locator("#confirm-new").click();
-  await expect(page.locator("#remaining")).toHaveText("45");
-  expect((await state(page)).meta.classicRun.difficulty).toBe(2);
+  await expect(page.locator("#dialog")).not.toBeVisible();
+  const high=await state(page);
+  const count=occupied(high.sessions.classic.current.board);
+  expect(CLASSIC_START_COUNTS[2]).toContain(count);
+  await expect(page.locator("#remaining")).toHaveText(String(count));
+  expect(high.meta.classicRun.difficulty).toBe(2);
 });
 
 test("new Classic saves an unfinished notebook; it is recoverable with Undo",async({page})=>{
