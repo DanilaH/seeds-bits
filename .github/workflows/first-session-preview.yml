@@ -103,3 +103,90 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: markets-android, path: test-results/markets-android/}
+
+  sign-preview:
+    needs: preview
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check preview signing configuration
+        id: signing
+        env:
+          SEEDS_PREVIEW_KEYSTORE_BASE64: ${{ secrets.SEEDS_PREVIEW_KEYSTORE_BASE64 }}
+          SEEDS_PREVIEW_KEYSTORE_PASSWORD: ${{ secrets.SEEDS_PREVIEW_KEYSTORE_PASSWORD }}
+          SEEDS_PREVIEW_KEY_ALIAS: ${{ secrets.SEEDS_PREVIEW_KEY_ALIAS }}
+        run: |
+          if [[ -z "$SEEDS_PREVIEW_KEYSTORE_BASE64" && -z "$SEEDS_PREVIEW_KEYSTORE_PASSWORD" && -z "$SEEDS_PREVIEW_KEY_ALIAS" ]]; then
+            echo "::notice::Preview signing is waiting for repository secrets."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          elif [[ -z "$SEEDS_PREVIEW_KEYSTORE_BASE64" || -z "$SEEDS_PREVIEW_KEYSTORE_PASSWORD" || -z "$SEEDS_PREVIEW_KEY_ALIAS" ]]; then
+            echo "::error::Set all three SEEDS_PREVIEW signing secrets."
+            exit 1
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-java@v4
+        if: steps.signing.outputs.configured == 'true'
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+        if: steps.signing.outputs.configured == 'true'
+      - uses: actions/download-artifact@v4
+        if: steps.signing.outputs.configured == 'true'
+        with: {name: first-session-preview-unsigned, path: unsigned-preview/}
+      - name: Sign and verify the tested preview APK
+        if: steps.signing.outputs.configured == 'true'
+        shell: bash
+        env:
+          SEEDS_PREVIEW_KEYSTORE_BASE64: ${{ secrets.SEEDS_PREVIEW_KEYSTORE_BASE64 }}
+          SEEDS_PREVIEW_KEYSTORE_PASSWORD: ${{ secrets.SEEDS_PREVIEW_KEYSTORE_PASSWORD }}
+          SEEDS_PREVIEW_KEY_ALIAS: ${{ secrets.SEEDS_PREVIEW_KEY_ALIAS }}
+        run: |
+          version_code=$(node -e '
+            const source = require("./unsigned-preview/source.json");
+            if (source.source !== process.env.GITHUB_SHA || !Number.isSafeInteger(source.versionCode) ||
+                source.profile !== "baseline" || source.analytics !== false ||
+                source.firstSession !== true) throw Error("Unexpected preview build manifest");
+            process.stdout.write(String(source.versionCode));
+          ')
+          unsigned="unsigned-preview/seeds-first-session-${version_code}-unsigned.apk"
+          signed="signed-preview/seeds-preview-${version_code}-portrait.apk"
+          apksigner=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
+          test -x "$apksigner"
+          build_tools=$(dirname "$apksigner")
+          "$build_tools/zipalign" -c -P 16 4 "$unsigned"
+          manifest=$("$build_tools/aapt" dump badging "$unsigned")
+          package_line="package: name='com.seedsbits.game.preview' versionCode='$version_code'"
+          [[ "$manifest" == "$package_line"* ]]
+
+          umask 077
+          signing_dir=$(mktemp -d "$RUNNER_TEMP/seeds-preview-signing.XXXXXX")
+          trap 'rm -rf -- "$signing_dir"' EXIT
+          printf '%s' "$SEEDS_PREVIEW_KEYSTORE_BASE64" | base64 --decode > "$signing_dir/preview.p12"
+          printf '%s\n' "$SEEDS_PREVIEW_KEYSTORE_PASSWORD" > "$signing_dir/password"
+          expected_certificate=ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30
+          certificate=$(keytool -exportcert -storetype PKCS12 -keystore "$signing_dir/preview.p12" \
+            -alias "$SEEDS_PREVIEW_KEY_ALIAS" -storepass:file "$signing_dir/password" | sha256sum)
+          if [[ "${certificate%% *}" != "$expected_certificate" ]]; then
+            echo "::error::The keystore certificate does not match the existing Seeds preview."
+            exit 1
+          fi
+          mkdir -p signed-preview
+          "$apksigner" sign --ks "$signing_dir/preview.p12" --ks-key-alias "$SEEDS_PREVIEW_KEY_ALIAS" \
+            --ks-pass "file:$signing_dir/password" --v1-signing-enabled false --v2-signing-enabled true \
+            --v3-signing-enabled true --v4-signing-enabled false --out "$signed" "$unsigned"
+          "$build_tools/zipalign" -c -P 16 4 "$signed"
+          "$apksigner" verify --verbose --print-certs "$signed" > "$signing_dir/verification.txt"
+          grep -Fxq "Signer #1 certificate SHA-256 digest: $expected_certificate" "$signing_dir/verification.txt"
+          grep -Fqx 'Verified using v2 scheme (APK Signature Scheme v2): true' "$signing_dir/verification.txt"
+          grep -Fqx 'Verified using v3 scheme (APK Signature Scheme v3): true' "$signing_dir/verification.txt"
+          (
+            cd signed-preview
+            sha256sum "seeds-preview-${version_code}-portrait.apk" > SHA256SUMS
+          )
+          cp unsigned-preview/source.json signed-preview/
+      - uses: actions/upload-artifact@v4
+        if: steps.signing.outputs.configured == 'true'
+        with:
+          name: first-session-preview-signed
+          path: signed-preview/
+          if-no-files-found: error
