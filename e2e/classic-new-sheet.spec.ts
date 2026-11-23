@@ -34,7 +34,9 @@ test("home separates saved Continue and New Classic with three real levels",asyn
     const r=e.getBoundingClientRect();return{width:r.width,height:r.height,bottom:r.bottom};
   });
   expect(width).toBeLessThanOrEqual(390);
-  expect(height).toBeLessThanOrEqual(844);
+  // Unlike the old full-screen dialog the chooser must hug its three rows.
+  expect(height).toBeGreaterThan(270);
+  expect(height).toBeLessThan(470);
   expect(844-bottom).toBeLessThanOrEqual(1);
   await page.keyboard.press("Escape");
   await expect(page.locator("#classic-new-sheet")).toBeHidden();
