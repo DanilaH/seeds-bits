@@ -3,11 +3,7 @@ import {test,expect,type Page} from "@playwright/test";
 // Reconstructed from the 23 November phone report, then matched byte-for-byte
 // against notebook-extra.json, id book-v1-78 (book 4, puzzle 6).
 const board="000200060600070060006000000085700500064000000".split("").map(Number);
-const route:[[number,number],[number,number],[number,number],[number,number],[number,number],[number,number]]=[
-  [16,20],[13,30],[3,28],[37,38],[29,33],[7,9],
-];
-// Route above expresses original positions; indices after compaction come from the
-// shipped encoded witness and must be re-read after every move.
+// Indices are taken from the shipped witness and adjusted after row compaction.
 const witness:[[number,number],[number,number],[number,number],[number,number],[number,number],[number,number]]=[
   [16,20],[13,21],[3,19],[28,29],[20,24],[7,9],
 ];
