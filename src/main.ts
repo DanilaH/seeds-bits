@@ -2796,12 +2796,19 @@ function playBoardEntrance() {
   if (revealedAttempts.has(attempt)) return;
   revealedAttempts.add(attempt);
   if (!reduced()) {
-    const digits = [...$("board").querySelectorAll(".digit")].slice(0, 36);
-    for (const [index, digit] of digits.entries()) {
+    const view = viewport.getBoundingClientRect();
+    const visibleCells = [...$("board").querySelectorAll<HTMLButtonElement>("button.cell")]
+      .filter((cell) => {
+        const { top, bottom } = cell.getBoundingClientRect();
+        return bottom > view.top && top < view.bottom;
+      });
+    for (const cell of visibleCells) {
+      const column = Number(cell.dataset.index) % WIDTH;
+      const digit = cell.querySelector(".digit");
       const animation = ownedDomMotion.animate(digit, [
-        { opacity: 0.2, transform: "translateY(-6px)" },
-        { opacity: 1, transform: "translateY(0)" },
-      ], { duration: 165, delay: index * 2, easing: "ease-out", fill: "backwards" });
+        { opacity: 0 },
+        { opacity: 1 },
+      ], { duration: 160, delay: column * 24, easing: "ease-out", fill: "backwards" });
       if (animation) animation.id = "board-entrance";
     }
   }

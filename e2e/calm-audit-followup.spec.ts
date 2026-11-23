@@ -170,9 +170,16 @@ test("today is emphasized until its puzzle is completed", async ({page}) => {
   await expect(daily).not.toHaveAttribute("data-daily-pending","");
 });
 
-test("a fresh field deals once without locking input or shaking on resume", async ({page}) => {
-  await page.addInitScript((key) => {
-    localStorage.setItem(key,JSON.stringify({tutorialDone:true,languageChoice:"ru",sound:false,vibration:true}));
+test("a fresh field fades by column from left to right and deals once", async ({page}) => {
+  await page.addInitScript(({settingsKey, progressKey}) => {
+    localStorage.setItem(settingsKey,JSON.stringify({tutorialDone:true,languageChoice:"ru",sound:false,vibration:true}));
+    localStorage.setItem(progressKey,JSON.stringify({
+      version: 3, active: "classic", done: [], seen: [], hints: {},
+      sessions: { classic: {
+        rules: 1, history: [],
+        current: { board: [5,5,0,2,3,4,6,7,8,1,0,9,2,3,4,6,7,8], scroll: 0, moves: 0, additions: 0 },
+      }},
+    }));
     Object.defineProperty(navigator,"vibrate",{value:(pattern:number|number[])=>{
       if(Array.isArray(pattern) && pattern.join(",")==="10,20,14,24,18") {
         const state = document.documentElement.dataset;
@@ -180,24 +187,41 @@ test("a fresh field deals once without locking input or shaking on resume", asyn
       }
       return true;
     }});
-  },settingsKey);
+  },{settingsKey,progressKey});
   await page.goto("/");
   await page.locator("#resume").evaluate((button) => {
     button.addEventListener("click",()=>{
       const board = document.querySelector("#board")!;
-      board.setAttribute("data-entrances",String(board.getAnimations({subtree:true}).filter(frame=>frame.id==="board-entrance").length));
+      const wave = board.getAnimations({subtree:true})
+        .filter(animation => animation.id === "board-entrance")
+        .map(animation => {
+          const effect = animation.effect as KeyframeEffect;
+          const index = Number(effect.target!.parentElement!.dataset.index);
+          return [index, effect.getTiming().delay, ...effect.getKeyframes().map(frame => frame.opacity)];
+        });
+      board.setAttribute("data-entrances", JSON.stringify(wave));
     });
   });
   await page.locator("#resume").click();
   const board = page.locator("#board");
-  await expect(board).toHaveAttribute("data-entrances",/^[1-9]\d*$/);
+  const wave: [number, number, string, string][] = JSON.parse((await board.getAttribute("data-entrances"))!);
+  const delayAt = new Map(wave.map(([index, delay]) => [index, delay]));
+  expect(wave).toHaveLength(16);
+  expect(delayAt.get(0)).toBe(0);
+  expect(delayAt.get(9)).toBe(delayAt.get(0));
+  expect(delayAt.get(11)).toBeGreaterThan(delayAt.get(1)!);
+  expect(delayAt.get(17)).toBe(delayAt.get(8));
+  const firstRow = wave.filter(([index]) => index < 9);
+  for (const [i, [, delay]] of firstRow.entries())
+    if (i > 0) expect(delay).toBeGreaterThan(firstRow[i - 1][1]);
+  expect(wave.every(([, , start, end]) => start === "0" && end === "1")).toBe(true);
   await expect(page.locator("html")).toHaveAttribute("data-deals","1");
   const first = board.locator("button").first();
   await first.click();
   await expect(first).toHaveAttribute("aria-pressed","true");
   await page.locator("#menu").click();
   await page.locator("#resume").click();
-  await expect(board).toHaveAttribute("data-entrances","0");
+  await expect(board).toHaveAttribute("data-entrances","[]");
   await expect(page.locator("html")).toHaveAttribute("data-deals","1");
 });
 
