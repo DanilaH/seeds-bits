@@ -1,5 +1,7 @@
 import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
+import { CLASSIC_START_COUNTS } from "../src/classic-generator";
+import { occupied } from "../src/core";
 const KEY = "seeds-bits.progress.v2";
 const snapshot = (board: number[]) => ({
   board,
@@ -139,14 +141,15 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
   ]);
   await page.locator("#close").click();
   await page.locator("#play-again").click();
-  await expect
-    .poll(
-      async () => Number(await page.locator("#remaining").innerText()) === 28,
-    )
-    .toBe(true);
-  expect((await data(page)).meta.classicRun.current).toBeDefined();
-  expect((await data(page)).meta.attempts.classic.completed).toBe(false);
-  expect((await data(page)).meta.completed).toBe(6);
+  await expect(page.locator("#win")).toBeHidden();
+  const saved = await data(page);
+  const board = saved.sessions.classic.current.board;
+  const count = occupied(board);
+  expect(CLASSIC_START_COUNTS[1]).toContain(count);
+  await expect(page.locator("#remaining")).toHaveText(String(count));
+  expect(saved.meta.classicRun.current.board).toEqual(board);
+  expect(saved.meta.attempts.classic.completed).toBe(false);
+  expect(saved.meta.completed).toBe(6);
 });
 test("A05 record of solved daily remains in statistics when device clock moves backward", async ({
   page,
