@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "scope": "Portable package of the completed independent 12082 archive replay and APK manifest extraction",
+  "source": {
+    "runtime": "eae2bcbeaaa1a5c76872dddc7a7f79844988b60e",
+    "baseline": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+    "documentationHead": "df9ff5c3df8b017803e2ff924c2812a5efc530ac"
+  },
+  "comparisonArtifact": {
+    "repository": "DanilaH/seeds-bits",
+    "runId": 45235845420,
+    "artifactId": 14849741823,
+    "name": "classic-series-comparison",
+    "url": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/artifacts/14849741823",
+    "zipSha256": "dc5fdc6306463b3246a53f6d62651c20c6a7ff480cb64edea9e52458af15d17c",
+    "manifestFile": "artifact-manifest.json",
+    "artifactAndFileHashesCheckedDuringOriginalAudit": true
+  },
+  "completedValidation": {
+    "resultFile": "archive-validation.json",
+    "rows": 18408,
+    "proofsPassed": 18408,
+    "proofsFailed": 0,
+    "actions": 484269,
+    "summariesRecounted": 40,
+    "freshPairedComparisonsIdentical": 8000,
+    "method": "Pinned core/profile replay; independent row deletion; independently counted summary histograms/repeats"
+  },
+  "apk": {
+    "manifestFile": "apk-manifest.json",
+    "package": "com.seedsbits.game.preview",
+    "versionName": "1.1.2",
+    "versionCode": 12082,
+    "sha256": "b254fda5b36bccec4eb0c90f0cd7b7a5adda51098993f3dcf0914747fbab8d4a",
+    "artifactId": 14849428081,
+    "url": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/artifacts/14849428081",
+    "signatureEvidence": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/job/137915608437",
+    "manifestReadFromActualApk": true
+  },
+  "packaging": {
+    "originalCheckerSha256": "16d118392d585c3a11cfa61f0c7d192a77f7b4c97a0ecabc16feae7eaa3d07ad",
+    "replayBodyUnchanged": true,
+    "replayBodySha256": "c68623ad9b19d6a48b55a5964d9f5fc92be3e986c4a74096e006a6385b1fb466",
+    "portableWrapperChecks": [
+      "node --check",
+      "--help",
+      "exact unchanged replay body comparison"
+    ],
+    "corpusRerunDuringPackaging": false
+  },
+  "files": {
+    "verify-archive.mjs": {
+      "bytes": 9774,
+      "sha256": "f5230fd3e513bea82087bcfc86fc713130e21e16a473ec34b2052768a98e240d"
+    },
+    "apk-manifest.json": {
+      "bytes": 228,
+      "sha256": "ce08e29ea200f1a8e14b01aeda7f4508a962b43aaa38eecf62ed6a97c5bb5ea6"
+    },
+    "archive-validation.json": {
+      "bytes": 2741,
+      "sha256": "6e633b4743c3108b519aaf3b3e5a878f0cc2bdcff979437b18bb5eea740c32ec"
+    },
+    "artifact-manifest.json": {
+      "bytes": 2895,
+      "sha256": "b49624bc0d45cc3ca47d2d689d245caf69b7876afad828a20a80b61f53a6fce4"
+    }
+  },
+  "limits": [
+    "Candidate selection was not regenerated for all archived inputs.",
+    "The developer's two local byte-identical runs were not independently observed.",
+    "This verifier checks the comparison archive; APK manifest extraction and CI signature evidence are separate prior observations.",
+    "No physical-phone, live-audience, human-difficulty or end-to-end latency claim."
+  ]
+}

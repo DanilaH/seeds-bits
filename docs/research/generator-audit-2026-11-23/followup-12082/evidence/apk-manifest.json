@@ -1,0 +1,9 @@
+{
+  "versionCode": 12082,
+  "versionName": "1.1.2",
+  "compileSdkVersion": 36,
+  "compileSdkVersionCodename": "16",
+  "package": "com.seedsbits.game.preview",
+  "platformBuildVersionCode": 36,
+  "platformBuildVersionName": 16
+}

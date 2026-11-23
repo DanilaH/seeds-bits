@@ -142,11 +142,11 @@ if (process.argv[2] === "--bundle") {
       }
       if (oldRows.length) summary.old.push(summarize(oldRows));
       summary.pilot.push(summarize(newRows));
-      const open = newRows.filter(r => !r.fallback && r.style === "open" && (!r.recipe || r.recipe === r.style))
+      const open = newRows.filter(r => !r.fallback && r.style === "open" && (level < 2 || r.recipe === r.style))
         .sort((a,b) => a.profile.gapMoves - b.profile.gapMoves || b.profile.opening - a.profile.opening)[0];
-      const gaps = newRows.filter(r => !r.fallback && r.style === "gaps" && (!r.recipe || r.recipe === r.style))
+      const gaps = newRows.filter(r => !r.fallback && r.style === "gaps" && (level < 2 || r.recipe === r.style))
         .sort((a,b) => b.profile.gapMoves - a.profile.gapMoves || b.profile.newPairs - a.profile.newPairs)[0];
-      const stock = newRows.filter(r => !r.fallback && r.style === "stock" && (!r.recipe || r.recipe === r.style) && (level === 0 || r.profile.firstAdd !== null))
+      const stock = newRows.filter(r => !r.fallback && r.style === "stock" && (level < 2 || r.recipe === r.style) && (level === 0 || r.profile.firstAdd !== null))
         .sort((a,b) => (a.profile.firstAdd ?? 0) - (b.profile.firstAdd ?? 0) ||
           b.profile.compressionChanges - a.profile.compressionChanges || b.profile.newPairs - a.profile.newPairs)[0];
       for (const row of [open, gaps, stock]) {

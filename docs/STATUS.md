@@ -1,10 +1,24 @@
-# Latest — независимый аудит генератора и свежий CI · 23 ноября 2026
+# Latest — независимая приёмка исправлений 12082 · 23 ноября 2026
+
+**GA-01/GA-03 закрыты.** Проверены PR #9 df9ff5c и runtime eae2bcbe: история фактических рецептов/мотивов влияет на выбор, старый High45 seed12081 пример29/30 исправлен. Независимо воспроизведены все18408 архивных путей (484269действий), пересчитаны40сводок; отдельный ограниченный прогон генератора и миграции прошёл. Оба общих CI нового runtime зелёные:130unit+2model+15regression+399browser. [Повторная приёмка и паспорт APK12082](research/generator-audit-2026-11-23/FOLLOWUP_12082.md).
+
+Набор больших ядер остаётся ограниченным; человеческая интересность, физический телефон и seeds/minute UNKNOWN. Тетради/daily этим исправлением не менялись. [База следующего исследования](research/daily-notebook-baseline-2026-11-23/README.md):2400immutable notebook задач и365вычисленных daily дат2026; далее темп поздних тетрадей и ритм недели. Награды/ID/архив и шесть приостановленных экспериментов сохраняются.36строк оригиналов неизменны. **KIT IMPACT — REUSE.**
+
+# Latest — история раздач Классики и preview 12082 · 23 ноября 2026
+
+Закрыты GA-01 и GA-03 аудита №16. В [PR №9](https://github.com/DanilaH/seeds-bits/pull/9) отбор сравнивает фактически выданные рецепты и формы поля на проверенных путях. Сравнение 18 408 раздач включает два диапазона свежих seed и по три серии из 100 на сложность. В соседних партиях Высокой точный повтор перед первым добавлением снизился с 12 до 0 из 276. [Отчёт, команда и исходные данные](classic-difficulty-2026-11-12/SERIES_12082.md).
+
+Preview 1.1.2 (12082), runtime `eae2bcbeaaa1a5c76872dddc7a7f79844988b60e`. [Общий CI](https://github.com/DanilaH/seeds-bits/actions/runs/45235845364) и [обновление 12081 → 12082 на Android API35](https://github.com/DanilaH/seeds-bits/actions/runs/45235845420) прошли. Плейтест на физическом телефоне остаётся для баланса, разнообразия и семечек в минуту. **KIT IMPACT — REUSE.**
+
+
+# История — независимый аудит генератора и свежий CI · 23 ноября 2026
 
 Проверен PR #9 head `7f8ac0e05a338d4101d10f680720343b6881ba9a`, runtime preview 12081 `d450a61893923b61115dd2ac5dbc7c4f2c8fff9a`. **18/28/45/81 реализованы; общий CI на конечных коде и тестах прошёл.** Независимое исполнение точных TS: 4000 новых полей, 400 серийных сертификатов, 36 принудительных fallback и 9 сценариев сохранений — PASS. [Аудит и воспроизведения](research/generator-audit-2026-11-23/README.md) · [PR №16](https://github.com/DanilaH/seeds-bits/pull/16).
 
 После публикации документов общий [CI 45230217226](https://github.com/DanilaH/seeds-bits/actions/runs/45230217226) на `4917599e0f534c70f09f79496353b063195d2cae` полностью SUCCESS: 128 unit, 2 model, 15 regression browser, **399/399** main browser, web/Yandex, Android debug/native. Все 20 изменённых файлов находятся под docs/, продукт/тесты/workflows равны проверенному7f8. Во втором PR-прогоне web тоже399PASS; Android остановился на внешнем MavenHTTP429. Три прежних браузерных падения не повторились; узкий GA-02 по отсутствию подтверждённого общего CI закрыт. Причина исторических scroll50→48 остаётся неизвестной, при повторении нужен захват геометрии.
 
 **Открыто:** фактический recipe/центральный мотив может повторяться при смене записанного предпочтения; GA-01/GA-03 требуют оценки реальной серии и полных воспроизводимых распределений. APK com.seedsbits.game.preview,1.1.2/12081 проверен по байтам/manifest; эмулятор Android35/WebView124 подтверждает миграцию, нижние касания/Undo и scroll47→47 в своём сценарии. Физический телефон, человеческий баланс, seeds/minute и аудитория UNKNOWN. Шесть экспериментов на паузе,36механик оригиналов неизменны. **KIT IMPACT — REUSE / CANDIDATE QA.**
+
 
 # Latest — пилот четырёх сложностей Классики · 23 ноября 2026
 
@@ -219,3 +233,4 @@ Browser tests run with an explicit local Chromium executable when SEEDS_CHROMIUM
 Web remains TypeScript/Vite/DOM/CSS/SVG. No React, engine, external font, account, backend, ads or payments. Native app icon/splash/signing still need release preparation. The 1,800-cell classic guard is provisional; it does not declare defeat.
 
 CI confirmation: [run 38790676788](https://github.com/DanilaH/seeds-bits/actions/runs/38790676788) passed both web and Android jobs for source commit e66dba87. Artifacts: [Android debug APK ZIP](https://github.com/DanilaH/seeds-bits/actions/runs/38790676788/artifacts/11999453346), [Yandex draft ZIP](https://github.com/DanilaH/seeds-bits/actions/runs/38790676788/artifacts/11999752523), [browser screenshots](https://github.com/DanilaH/seeds-bits/actions/runs/38790676788/artifacts/12000311556). These are test builds, not published store releases.
+

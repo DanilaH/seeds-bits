@@ -1,0 +1,1262 @@
+{
+  "source": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "level": "ACTUAL_SOURCE_NODE_AND_PRECOMPUTED_DATA",
+  "runtime": "v24.22.3",
+  "notebooks": {
+    "count": 2400,
+    "volumes": 100,
+    "volumeSize": 24,
+    "firstId": "book-v1-1",
+    "lastId": "book-v1-2400",
+    "minOccupied": 8,
+    "maxOccupied": 594,
+    "maxLogical": 972,
+    "uniqueExact": 2400,
+    "uniqueValueRoleStructures": 2400,
+    "over54": 1878,
+    "rewardCap24": 1670,
+    "extraUtf8Bytes": 2756123,
+    "extraWitnessJsonBytes": 1820562,
+    "selectedVolumes": [
+      {
+        "volume": 1,
+        "minOccupied": 8,
+        "medianOccupied": 19,
+        "maxOccupied": 30,
+        "medianLogical": 31.5,
+        "medianWitnessPairs": 9.5,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 20,
+        "minOccupied": 26,
+        "medianOccupied": 46,
+        "maxOccupied": 58,
+        "medianLogical": 81,
+        "medianWitnessPairs": 23,
+        "medianSeeds": 12
+      },
+      {
+        "volume": 40,
+        "minOccupied": 110,
+        "medianOccupied": 137,
+        "maxOccupied": 158,
+        "medianLogical": 243,
+        "medianWitnessPairs": 68.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 60,
+        "minOccupied": 204,
+        "medianOccupied": 238,
+        "maxOccupied": 270,
+        "medianLogical": 441,
+        "medianWitnessPairs": 119,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 80,
+        "minOccupied": 326,
+        "medianOccupied": 365,
+        "maxOccupied": 408,
+        "medianLogical": 679.5,
+        "medianWitnessPairs": 182.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 100,
+        "minOccupied": 466,
+        "medianOccupied": 513,
+        "maxOccupied": 594,
+        "medianLogical": 963,
+        "medianWitnessPairs": 256.5,
+        "medianSeeds": 24
+      }
+    ],
+    "allVolumes": [
+      {
+        "volume": 1,
+        "minOccupied": 8,
+        "medianOccupied": 19,
+        "maxOccupied": 30,
+        "medianLogical": 31.5,
+        "medianWitnessPairs": 9.5,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 2,
+        "minOccupied": 12,
+        "medianOccupied": 20,
+        "maxOccupied": 32,
+        "medianLogical": 36,
+        "medianWitnessPairs": 10,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 3,
+        "minOccupied": 12,
+        "medianOccupied": 20,
+        "maxOccupied": 32,
+        "medianLogical": 36,
+        "medianWitnessPairs": 10,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 4,
+        "minOccupied": 12,
+        "medianOccupied": 21,
+        "maxOccupied": 32,
+        "medianLogical": 36,
+        "medianWitnessPairs": 10.5,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 5,
+        "minOccupied": 12,
+        "medianOccupied": 21,
+        "maxOccupied": 32,
+        "medianLogical": 40.5,
+        "medianWitnessPairs": 10.5,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 6,
+        "minOccupied": 12,
+        "medianOccupied": 21,
+        "maxOccupied": 32,
+        "medianLogical": 40.5,
+        "medianWitnessPairs": 10.5,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 7,
+        "minOccupied": 12,
+        "medianOccupied": 24,
+        "maxOccupied": 32,
+        "medianLogical": 40.5,
+        "medianWitnessPairs": 12,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 8,
+        "minOccupied": 12,
+        "medianOccupied": 21,
+        "maxOccupied": 32,
+        "medianLogical": 40.5,
+        "medianWitnessPairs": 10.5,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 9,
+        "minOccupied": 12,
+        "medianOccupied": 22,
+        "maxOccupied": 32,
+        "medianLogical": 36,
+        "medianWitnessPairs": 11,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 10,
+        "minOccupied": 12,
+        "medianOccupied": 22,
+        "maxOccupied": 32,
+        "medianLogical": 40.5,
+        "medianWitnessPairs": 11,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 11,
+        "minOccupied": 12,
+        "medianOccupied": 22,
+        "maxOccupied": 32,
+        "medianLogical": 36,
+        "medianWitnessPairs": 11,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 12,
+        "minOccupied": 12,
+        "medianOccupied": 19,
+        "maxOccupied": 32,
+        "medianLogical": 40.5,
+        "medianWitnessPairs": 9.5,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 13,
+        "minOccupied": 12,
+        "medianOccupied": 21,
+        "maxOccupied": 30,
+        "medianLogical": 40.5,
+        "medianWitnessPairs": 10.5,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 14,
+        "minOccupied": 12,
+        "medianOccupied": 22,
+        "maxOccupied": 32,
+        "medianLogical": 40.5,
+        "medianWitnessPairs": 11,
+        "medianSeeds": 6
+      },
+      {
+        "volume": 15,
+        "minOccupied": 26,
+        "medianOccupied": 42,
+        "maxOccupied": 62,
+        "medianLogical": 81,
+        "medianWitnessPairs": 21,
+        "medianSeeds": 12
+      },
+      {
+        "volume": 16,
+        "minOccupied": 30,
+        "medianOccupied": 46,
+        "maxOccupied": 62,
+        "medianLogical": 81,
+        "medianWitnessPairs": 23,
+        "medianSeeds": 12
+      },
+      {
+        "volume": 17,
+        "minOccupied": 30,
+        "medianOccupied": 46,
+        "maxOccupied": 62,
+        "medianLogical": 81,
+        "medianWitnessPairs": 23,
+        "medianSeeds": 12
+      },
+      {
+        "volume": 18,
+        "minOccupied": 26,
+        "medianOccupied": 40,
+        "maxOccupied": 62,
+        "medianLogical": 81,
+        "medianWitnessPairs": 20,
+        "medianSeeds": 11
+      },
+      {
+        "volume": 19,
+        "minOccupied": 26,
+        "medianOccupied": 48,
+        "maxOccupied": 62,
+        "medianLogical": 81,
+        "medianWitnessPairs": 24,
+        "medianSeeds": 13
+      },
+      {
+        "volume": 20,
+        "minOccupied": 26,
+        "medianOccupied": 46,
+        "maxOccupied": 58,
+        "medianLogical": 81,
+        "medianWitnessPairs": 23,
+        "medianSeeds": 12
+      },
+      {
+        "volume": 21,
+        "minOccupied": 26,
+        "medianOccupied": 45,
+        "maxOccupied": 58,
+        "medianLogical": 81,
+        "medianWitnessPairs": 22.5,
+        "medianSeeds": 12
+      },
+      {
+        "volume": 22,
+        "minOccupied": 46,
+        "medianOccupied": 72,
+        "maxOccupied": 88,
+        "medianLogical": 121.5,
+        "medianWitnessPairs": 36,
+        "medianSeeds": 18
+      },
+      {
+        "volume": 23,
+        "minOccupied": 42,
+        "medianOccupied": 60,
+        "maxOccupied": 90,
+        "medianLogical": 121.5,
+        "medianWitnessPairs": 30,
+        "medianSeeds": 16
+      },
+      {
+        "volume": 24,
+        "minOccupied": 42,
+        "medianOccupied": 69,
+        "maxOccupied": 84,
+        "medianLogical": 117,
+        "medianWitnessPairs": 34.5,
+        "medianSeeds": 18
+      },
+      {
+        "volume": 25,
+        "minOccupied": 44,
+        "medianOccupied": 61,
+        "maxOccupied": 88,
+        "medianLogical": 121.5,
+        "medianWitnessPairs": 30.5,
+        "medianSeeds": 16
+      },
+      {
+        "volume": 26,
+        "minOccupied": 44,
+        "medianOccupied": 70,
+        "maxOccupied": 90,
+        "medianLogical": 121.5,
+        "medianWitnessPairs": 35,
+        "medianSeeds": 18
+      },
+      {
+        "volume": 27,
+        "minOccupied": 42,
+        "medianOccupied": 64,
+        "maxOccupied": 90,
+        "medianLogical": 117,
+        "medianWitnessPairs": 32,
+        "medianSeeds": 17
+      },
+      {
+        "volume": 28,
+        "minOccupied": 68,
+        "medianOccupied": 96,
+        "maxOccupied": 116,
+        "medianLogical": 162,
+        "medianWitnessPairs": 48,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 29,
+        "minOccupied": 64,
+        "medianOccupied": 84,
+        "maxOccupied": 114,
+        "medianLogical": 162,
+        "medianWitnessPairs": 42,
+        "medianSeeds": 22
+      },
+      {
+        "volume": 30,
+        "minOccupied": 60,
+        "medianOccupied": 84,
+        "maxOccupied": 108,
+        "medianLogical": 162,
+        "medianWitnessPairs": 42,
+        "medianSeeds": 22
+      },
+      {
+        "volume": 31,
+        "minOccupied": 60,
+        "medianOccupied": 84,
+        "maxOccupied": 114,
+        "medianLogical": 162,
+        "medianWitnessPairs": 42,
+        "medianSeeds": 22
+      },
+      {
+        "volume": 32,
+        "minOccupied": 60,
+        "medianOccupied": 84,
+        "maxOccupied": 114,
+        "medianLogical": 162,
+        "medianWitnessPairs": 42,
+        "medianSeeds": 22
+      },
+      {
+        "volume": 33,
+        "minOccupied": 60,
+        "medianOccupied": 94,
+        "maxOccupied": 114,
+        "medianLogical": 162,
+        "medianWitnessPairs": 47,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 34,
+        "minOccupied": 80,
+        "medianOccupied": 110,
+        "maxOccupied": 132,
+        "medianLogical": 202.5,
+        "medianWitnessPairs": 55,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 35,
+        "minOccupied": 84,
+        "medianOccupied": 105,
+        "maxOccupied": 138,
+        "medianLogical": 202.5,
+        "medianWitnessPairs": 52.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 36,
+        "minOccupied": 80,
+        "medianOccupied": 107,
+        "maxOccupied": 134,
+        "medianLogical": 198,
+        "medianWitnessPairs": 53.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 37,
+        "minOccupied": 80,
+        "medianOccupied": 109,
+        "maxOccupied": 138,
+        "medianLogical": 198,
+        "medianWitnessPairs": 54.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 38,
+        "minOccupied": 102,
+        "medianOccupied": 128,
+        "maxOccupied": 154,
+        "medianLogical": 243,
+        "medianWitnessPairs": 64,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 39,
+        "minOccupied": 102,
+        "medianOccupied": 126,
+        "maxOccupied": 156,
+        "medianLogical": 243,
+        "medianWitnessPairs": 63,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 40,
+        "minOccupied": 110,
+        "medianOccupied": 137,
+        "maxOccupied": 158,
+        "medianLogical": 243,
+        "medianWitnessPairs": 68.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 41,
+        "minOccupied": 102,
+        "medianOccupied": 137,
+        "maxOccupied": 160,
+        "medianLogical": 243,
+        "medianWitnessPairs": 68.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 42,
+        "minOccupied": 102,
+        "medianOccupied": 125,
+        "maxOccupied": 160,
+        "medianLogical": 243,
+        "medianWitnessPairs": 62.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 43,
+        "minOccupied": 126,
+        "medianOccupied": 143,
+        "maxOccupied": 178,
+        "medianLogical": 279,
+        "medianWitnessPairs": 71.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 44,
+        "minOccupied": 126,
+        "medianOccupied": 150,
+        "maxOccupied": 190,
+        "medianLogical": 283.5,
+        "medianWitnessPairs": 75,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 45,
+        "minOccupied": 126,
+        "medianOccupied": 149,
+        "maxOccupied": 180,
+        "medianLogical": 279,
+        "medianWitnessPairs": 74.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 46,
+        "minOccupied": 126,
+        "medianOccupied": 144,
+        "maxOccupied": 166,
+        "medianLogical": 279,
+        "medianWitnessPairs": 72,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 47,
+        "minOccupied": 152,
+        "medianOccupied": 174,
+        "maxOccupied": 198,
+        "medianLogical": 324,
+        "medianWitnessPairs": 87,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 48,
+        "minOccupied": 144,
+        "medianOccupied": 168,
+        "maxOccupied": 198,
+        "medianLogical": 324,
+        "medianWitnessPairs": 84,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 49,
+        "minOccupied": 128,
+        "medianOccupied": 174,
+        "maxOccupied": 198,
+        "medianLogical": 324,
+        "medianWitnessPairs": 87,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 50,
+        "minOccupied": 148,
+        "medianOccupied": 165,
+        "maxOccupied": 198,
+        "medianLogical": 324,
+        "medianWitnessPairs": 82.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 51,
+        "minOccupied": 148,
+        "medianOccupied": 168,
+        "maxOccupied": 192,
+        "medianLogical": 324,
+        "medianWitnessPairs": 84,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 52,
+        "minOccupied": 162,
+        "medianOccupied": 203,
+        "maxOccupied": 226,
+        "medianLogical": 360,
+        "medianWitnessPairs": 101.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 53,
+        "minOccupied": 168,
+        "medianOccupied": 192,
+        "maxOccupied": 226,
+        "medianLogical": 360,
+        "medianWitnessPairs": 96,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 54,
+        "minOccupied": 168,
+        "medianOccupied": 193,
+        "maxOccupied": 224,
+        "medianLogical": 360,
+        "medianWitnessPairs": 96.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 55,
+        "minOccupied": 166,
+        "medianOccupied": 182,
+        "maxOccupied": 234,
+        "medianLogical": 360,
+        "medianWitnessPairs": 91,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 56,
+        "minOccupied": 176,
+        "medianOccupied": 214,
+        "maxOccupied": 250,
+        "medianLogical": 405,
+        "medianWitnessPairs": 107,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 57,
+        "minOccupied": 182,
+        "medianOccupied": 212,
+        "maxOccupied": 250,
+        "medianLogical": 405,
+        "medianWitnessPairs": 106,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 58,
+        "minOccupied": 182,
+        "medianOccupied": 213,
+        "maxOccupied": 246,
+        "medianLogical": 405,
+        "medianWitnessPairs": 106.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 59,
+        "minOccupied": 204,
+        "medianOccupied": 238,
+        "maxOccupied": 278,
+        "medianLogical": 441,
+        "medianWitnessPairs": 119,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 60,
+        "minOccupied": 204,
+        "medianOccupied": 238,
+        "maxOccupied": 270,
+        "medianLogical": 441,
+        "medianWitnessPairs": 119,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 61,
+        "minOccupied": 208,
+        "medianOccupied": 236,
+        "maxOccupied": 276,
+        "medianLogical": 441,
+        "medianWitnessPairs": 118,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 62,
+        "minOccupied": 196,
+        "medianOccupied": 231,
+        "maxOccupied": 284,
+        "medianLogical": 441,
+        "medianWitnessPairs": 115.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 63,
+        "minOccupied": 224,
+        "medianOccupied": 262,
+        "maxOccupied": 304,
+        "medianLogical": 481.5,
+        "medianWitnessPairs": 131,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 64,
+        "minOccupied": 242,
+        "medianOccupied": 262,
+        "maxOccupied": 316,
+        "medianLogical": 486,
+        "medianWitnessPairs": 131,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 65,
+        "minOccupied": 218,
+        "medianOccupied": 262,
+        "maxOccupied": 296,
+        "medianLogical": 486,
+        "medianWitnessPairs": 131,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 66,
+        "minOccupied": 226,
+        "medianOccupied": 259,
+        "maxOccupied": 314,
+        "medianLogical": 486,
+        "medianWitnessPairs": 129.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 67,
+        "minOccupied": 238,
+        "medianOccupied": 283,
+        "maxOccupied": 316,
+        "medianLogical": 522,
+        "medianWitnessPairs": 141.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 68,
+        "minOccupied": 230,
+        "medianOccupied": 279,
+        "maxOccupied": 324,
+        "medianLogical": 522,
+        "medianWitnessPairs": 139.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 69,
+        "minOccupied": 248,
+        "medianOccupied": 282,
+        "maxOccupied": 326,
+        "medianLogical": 522,
+        "medianWitnessPairs": 141,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 70,
+        "minOccupied": 242,
+        "medianOccupied": 294,
+        "maxOccupied": 356,
+        "medianLogical": 567,
+        "medianWitnessPairs": 147,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 71,
+        "minOccupied": 258,
+        "medianOccupied": 294,
+        "maxOccupied": 354,
+        "medianLogical": 567,
+        "medianWitnessPairs": 147,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 72,
+        "minOccupied": 254,
+        "medianOccupied": 312,
+        "maxOccupied": 336,
+        "medianLogical": 567,
+        "medianWitnessPairs": 156,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 73,
+        "minOccupied": 292,
+        "medianOccupied": 316,
+        "maxOccupied": 366,
+        "medianLogical": 603,
+        "medianWitnessPairs": 158,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 74,
+        "minOccupied": 276,
+        "medianOccupied": 320,
+        "maxOccupied": 366,
+        "medianLogical": 603,
+        "medianWitnessPairs": 160,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 75,
+        "minOccupied": 266,
+        "medianOccupied": 334,
+        "maxOccupied": 366,
+        "medianLogical": 603,
+        "medianWitnessPairs": 167,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 76,
+        "minOccupied": 272,
+        "medianOccupied": 316,
+        "maxOccupied": 356,
+        "medianLogical": 603,
+        "medianWitnessPairs": 158,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 77,
+        "minOccupied": 292,
+        "medianOccupied": 340,
+        "maxOccupied": 374,
+        "medianLogical": 648,
+        "medianWitnessPairs": 170,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 78,
+        "minOccupied": 300,
+        "medianOccupied": 337,
+        "maxOccupied": 384,
+        "medianLogical": 639,
+        "medianWitnessPairs": 168.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 79,
+        "minOccupied": 294,
+        "medianOccupied": 356,
+        "maxOccupied": 394,
+        "medianLogical": 639,
+        "medianWitnessPairs": 178,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 80,
+        "minOccupied": 326,
+        "medianOccupied": 365,
+        "maxOccupied": 408,
+        "medianLogical": 679.5,
+        "medianWitnessPairs": 182.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 81,
+        "minOccupied": 314,
+        "medianOccupied": 375,
+        "maxOccupied": 418,
+        "medianLogical": 684,
+        "medianWitnessPairs": 187.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 82,
+        "minOccupied": 334,
+        "medianOccupied": 363,
+        "maxOccupied": 398,
+        "medianLogical": 684,
+        "medianWitnessPairs": 181.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 83,
+        "minOccupied": 330,
+        "medianOccupied": 378,
+        "maxOccupied": 428,
+        "medianLogical": 729,
+        "medianWitnessPairs": 189,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 84,
+        "minOccupied": 336,
+        "medianOccupied": 379,
+        "maxOccupied": 420,
+        "medianLogical": 720,
+        "medianWitnessPairs": 189.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 85,
+        "minOccupied": 340,
+        "medianOccupied": 390,
+        "maxOccupied": 440,
+        "medianLogical": 729,
+        "medianWitnessPairs": 195,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 86,
+        "minOccupied": 372,
+        "medianOccupied": 407,
+        "maxOccupied": 458,
+        "medianLogical": 765,
+        "medianWitnessPairs": 203.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 87,
+        "minOccupied": 356,
+        "medianOccupied": 402,
+        "maxOccupied": 440,
+        "medianLogical": 760.5,
+        "medianWitnessPairs": 201,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 88,
+        "minOccupied": 368,
+        "medianOccupied": 405,
+        "maxOccupied": 462,
+        "medianLogical": 760.5,
+        "medianWitnessPairs": 202.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 89,
+        "minOccupied": 362,
+        "medianOccupied": 439,
+        "maxOccupied": 468,
+        "medianLogical": 801,
+        "medianWitnessPairs": 219.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 90,
+        "minOccupied": 402,
+        "medianOccupied": 435,
+        "maxOccupied": 480,
+        "medianLogical": 810,
+        "medianWitnessPairs": 217.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 91,
+        "minOccupied": 380,
+        "medianOccupied": 426,
+        "maxOccupied": 456,
+        "medianLogical": 805.5,
+        "medianWitnessPairs": 213,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 92,
+        "minOccupied": 408,
+        "medianOccupied": 444,
+        "maxOccupied": 476,
+        "medianLogical": 846,
+        "medianWitnessPairs": 222,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 93,
+        "minOccupied": 390,
+        "medianOccupied": 448,
+        "maxOccupied": 492,
+        "medianLogical": 837,
+        "medianWitnessPairs": 224,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 94,
+        "minOccupied": 394,
+        "medianOccupied": 458,
+        "maxOccupied": 502,
+        "medianLogical": 846,
+        "medianWitnessPairs": 229,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 95,
+        "minOccupied": 432,
+        "medianOccupied": 488,
+        "maxOccupied": 526,
+        "medianLogical": 882,
+        "medianWitnessPairs": 244,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 96,
+        "minOccupied": 416,
+        "medianOccupied": 469,
+        "maxOccupied": 530,
+        "medianLogical": 882,
+        "medianWitnessPairs": 234.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 97,
+        "minOccupied": 422,
+        "medianOccupied": 468,
+        "maxOccupied": 540,
+        "medianLogical": 882,
+        "medianWitnessPairs": 234,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 98,
+        "minOccupied": 444,
+        "medianOccupied": 508,
+        "maxOccupied": 548,
+        "medianLogical": 927,
+        "medianWitnessPairs": 254,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 99,
+        "minOccupied": 446,
+        "medianOccupied": 489,
+        "maxOccupied": 568,
+        "medianLogical": 927,
+        "medianWitnessPairs": 244.5,
+        "medianSeeds": 24
+      },
+      {
+        "volume": 100,
+        "minOccupied": 466,
+        "medianOccupied": 513,
+        "maxOccupied": 594,
+        "medianLogical": 963,
+        "medianWitnessPairs": 256.5,
+        "medianSeeds": 24
+      }
+    ],
+    "sampleWitnessReplay": [
+      {
+        "id": "book-v1-1",
+        "occupied": 8,
+        "logicalCells": 18,
+        "pairs": 4,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-24",
+        "occupied": 30,
+        "logicalCells": 45,
+        "pairs": 15,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-78",
+        "occupied": 12,
+        "logicalCells": 45,
+        "pairs": 6,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-240",
+        "occupied": 14,
+        "logicalCells": 36,
+        "pairs": 7,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-480",
+        "occupied": 50,
+        "logicalCells": 81,
+        "pairs": 25,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-960",
+        "occupied": 150,
+        "logicalCells": 243,
+        "pairs": 75,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-1440",
+        "occupied": 252,
+        "logicalCells": 441,
+        "pairs": 126,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-1920",
+        "occupied": 338,
+        "logicalCells": 666,
+        "pairs": 169,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-2380",
+        "occupied": 526,
+        "logicalCells": 963,
+        "pairs": 263,
+        "result": "PASS"
+      },
+      {
+        "id": "book-v1-2400",
+        "occupied": 536,
+        "logicalCells": 972,
+        "pairs": 268,
+        "result": "PASS"
+      }
+    ],
+    "book78FirstChoices": [
+      {
+        "a": 7,
+        "b": 9,
+        "result": "move"
+      },
+      {
+        "a": 7,
+        "b": 16,
+        "result": "dead"
+      },
+      {
+        "a": 16,
+        "b": 20,
+        "result": "move"
+      },
+      {
+        "a": 37,
+        "b": 38,
+        "result": "move"
+      }
+    ]
+  },
+  "daily2026": {
+    "dates": 365,
+    "uniqueExact": 365,
+    "uniqueValueRoleStructures": 365,
+    "minOccupied": 16,
+    "maxOccupied": 32,
+    "medianOccupied": 24,
+    "medianOpeningPairs": 19,
+    "occupiedCounts": {
+      "16": 38,
+      "18": 41,
+      "20": 42,
+      "22": 39,
+      "24": 43,
+      "26": 37,
+      "28": 37,
+      "30": 46,
+      "32": 42
+    },
+    "logicalCellCounts": {
+      "36": 182,
+      "45": 183
+    },
+    "firstNoAddClears": 273,
+    "readingInWitness": 336,
+    "neighborJumpsAtLeast8": 91,
+    "neighborJumpsAtLeast12": 59,
+    "seedRewards": {
+      "4": 38,
+      "6": 165,
+      "8": 162
+    },
+    "witnessReplays": 365,
+    "selectedWeek": [
+      {
+        "day": "2026-11-23",
+        "id": "daily-v1-2026-11-23",
+        "occupied": 30,
+        "logicalCells": 36,
+        "openingPairs": 25,
+        "witnessPairs": 15,
+        "readingInWitness": true,
+        "firstNoAddClears": false,
+        "seeds": 8,
+        "boardSha256": "f130c3565404815a380b692ee19c7bdde0900e1a79aeabd84c2188488a3a4069",
+        "structure": "122234622006474586419486900660065525"
+      },
+      {
+        "day": "2026-11-24",
+        "id": "daily-v1-2026-11-24",
+        "occupied": 32,
+        "logicalCells": 45,
+        "openingPairs": 29,
+        "witnessPairs": 16,
+        "readingInWitness": true,
+        "firstNoAddClears": true,
+        "seeds": 8,
+        "boardSha256": "dab08128212ae0567fd8f6e59f32ee0e3f5df259a74aed53b7171f8582657bc2",
+        "structure": "120200030109881384092000022642280490811197364"
+      },
+      {
+        "day": "2026-11-25",
+        "id": "daily-v1-2026-11-25",
+        "occupied": 16,
+        "logicalCells": 36,
+        "openingPairs": 9,
+        "witnessPairs": 8,
+        "readingInWitness": true,
+        "firstNoAddClears": true,
+        "seeds": 4,
+        "boardSha256": "cec57879b6e0753704bb940344d84ece9a9eb479605df592d689313a49d9e065",
+        "structure": "050010928005103310008400091000000062"
+      },
+      {
+        "day": "2026-11-26",
+        "id": "daily-v1-2026-11-26",
+        "occupied": 18,
+        "logicalCells": 45,
+        "openingPairs": 13,
+        "witnessPairs": 9,
+        "readingInWitness": true,
+        "firstNoAddClears": true,
+        "seeds": 6,
+        "boardSha256": "6cfd796d69158a0ebf85790f079bfa7691635376579551e3706aa5fccb097511",
+        "structure": "515000005002005050098303001035000051000057000"
+      },
+      {
+        "day": "2026-11-27",
+        "id": "daily-v1-2026-11-27",
+        "occupied": 28,
+        "logicalCells": 36,
+        "openingPairs": 31,
+        "witnessPairs": 14,
+        "readingInWitness": true,
+        "firstNoAddClears": false,
+        "seeds": 8,
+        "boardSha256": "1d08ace4ad646df4d2a59719630c7d5a53baa52e4675f00c6a768163b5423238",
+        "structure": "019115221129931529099050800440452760"
+      },
+      {
+        "day": "2026-11-28",
+        "id": "daily-v1-2026-11-28",
+        "occupied": 30,
+        "logicalCells": 45,
+        "openingPairs": 23,
+        "witnessPairs": 15,
+        "readingInWitness": true,
+        "firstNoAddClears": true,
+        "seeds": 8,
+        "boardSha256": "26b463eec5522a46b49f0f9549a459d8e36b53ebbb84bcce34be92b256bb2fd9",
+        "structure": "011230207750503090974804001016780262802004682"
+      },
+      {
+        "day": "2026-11-29",
+        "id": "daily-v1-2026-11-29",
+        "occupied": 32,
+        "logicalCells": 36,
+        "openingPairs": 29,
+        "witnessPairs": 16,
+        "readingInWitness": true,
+        "firstNoAddClears": false,
+        "seeds": 8,
+        "boardSha256": "67b474828732c8280541f9ca223b2d0578c8ca088498a36a5087a2a275ac0047",
+        "structure": "120233218928720428123892545072987073"
+      }
+    ]
+  },
+  "rewardAndDateContracts": {
+    "firstUniqueBookSeeds": 4,
+    "repeatAttemptSeeds": 0,
+    "sevenTodayStreakHints": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      3
+    ],
+    "archiveDoesNotAdvanceStreak": true,
+    "duplicateDayReward": 0,
+    "bronzeAt7": true,
+    "archiveStart": "2025-01-01",
+    "futureAndInvalidDatesBlocked": true
+  },
+  "metadataMigration": {
+    "previous": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+    "current": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+    "migrations": [
+      {
+        "name": "12081-high45",
+        "oldSource": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+        "initialSize": 45,
+        "oldRotation": {
+          "2": [
+            "gaps"
+          ]
+        },
+        "newScenariosBeforeNext": null,
+        "newScenariosAfterNext": 1,
+        "oldUndo": "PASS",
+        "sessionsWalletHelpPreserved": true,
+        "recoveries": 0
+      },
+      {
+        "name": "legacy-high27",
+        "oldSource": "0c8fbba9c8864f39a398c5a6517b7b493ae3b1fc",
+        "initialSize": 27,
+        "oldRotation": null,
+        "newScenariosBeforeNext": null,
+        "newScenariosAfterNext": 1,
+        "oldUndo": "PASS",
+        "sessionsWalletHelpPreserved": true,
+        "recoveries": 0
+      }
+    ],
+    "newHistoryGames": 8,
+    "maxScenarios": 4,
+    "recordsActualRecipeAndMotif": true,
+    "corruptOptionalMetadataKeepsCurrentRecentSeed": true,
+    "result": "PASS"
+  },
+  "method": {
+    "notebooks": "All 2400 fixed boards were counted; only 10 selected stored witnesses replayed in this audit, not all 2400.",
+    "daily2026": "Actual-source deterministic calendar sweep of 365 dates, 2026-01-01 through 2026-12-31; not player sessions. Dates after 2026-11-23 are prospective.",
+    "medians": "For an even sample, arithmetic mean of the two central sorted values. Earlier issue14 notebook values use the lower central value.",
+    "walletUnit": "meta.wallet stores shared additional hint credits, separate from seeds/jars and the up-to-three free hints in an attempt.",
+    "deviceAndLive": "Physical phone timing/feel, user retention and seeds per minute were not measured."
+  }
+}

@@ -1,0 +1,308 @@
+{
+  "asOf": "2026-11-23",
+  "timezone": "Asia/Yekaterinburg",
+  "consumerHead": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "runtime": "eae2bcbeaaa1a5c76872dddc7a7f79844988b60e",
+  "before": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+  "kitHead": "5cac32b0851c80bdff1d61069b8524b9e42170e1",
+  "kitSeedsReadmeBlob": "210f79f5a30bb73328eaf9978488a1e9ee5544e1",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "blobSha": "fa2bb4559d6281d2c9b62fb443e55a896ae1c085"
+    },
+    {
+      "path": "docs/PROJECT_DECISIONS.md",
+      "blobSha": "55619b9d5d2e2e7367e2bb38ac4d70cf7c0ce5a0"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "blobSha": "1f00c6c8fc0e2e54db0dae1211b9f4cc3064f757"
+    },
+    {
+      "path": "docs/help-pause-2026-11-13.md",
+      "blobSha": "def3ac534c662842e368ccbcdfc236491e1e48df"
+    }
+  ],
+  "branches": [
+    {
+      "name": "ads-integration-060",
+      "sha": "a239b8eeb7e7cb8de513d8cbb5cd95e4c086dd18"
+    },
+    {
+      "name": "audit-independent-060",
+      "sha": "95c6d9146cf3fc448b60aac7f58e2bd379389091"
+    },
+    {
+      "name": "checks/release-size-1.0.0",
+      "sha": "b9ac9802ff58de6b26570ca57bea8186037c45bd"
+    },
+    {
+      "name": "chore/adopt-kit-agent-guidance-2026-11-12",
+      "sha": "25f23ec27bc343699733ada9b648d5c3970d46da"
+    },
+    {
+      "name": "docs/seeds-calm-screen-handoff-20261122",
+      "sha": "825b9c1f257d34f34beb2b9944092380e947c508"
+    },
+    {
+      "name": "feat/monetization-assists-20261113",
+      "sha": "7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b"
+    },
+    {
+      "name": "fix-audit-061",
+      "sha": "8214d880d92ae7c4a227770f7aad68c45197a5d1"
+    },
+    {
+      "name": "main",
+      "sha": "4f7a8f93e044cc5eb5f4dadceb8a0458b555cf08"
+    },
+    {
+      "name": "polish/ui-1.0.0",
+      "sha": "37aae1b5831f76ca991a8c8f9f11faa6e8e87e1a"
+    },
+    {
+      "name": "qa/audit-20261023",
+      "sha": "91bc61b361bdb2f5ffd6ed105dc5959d78a25aea"
+    },
+    {
+      "name": "qa/audit-followup-20261023",
+      "sha": "f69da40f20e5fcbe60d4f05007ccbd000804a5bf"
+    },
+    {
+      "name": "qa/classic-difficulty-20261112",
+      "sha": "8046a7da31470d248a30ad467453b3745827178f"
+    },
+    {
+      "name": "qa/composition-20261023",
+      "sha": "86d950b970a69e5dec3ebc269075143a1c28f94a"
+    },
+    {
+      "name": "qa/jar-spill-20261112",
+      "sha": "4e35473eb49429eebb56131e374a201cacd21aff"
+    },
+    {
+      "name": "qa/portrait-preview-12070",
+      "sha": "90146adda6fe3af25ab1527786a9bb271b5ce17f"
+    },
+    {
+      "name": "qa/product-audit-20261111",
+      "sha": "c7a91580d134071ca2ae1799d5754922751f7b5b"
+    },
+    {
+      "name": "qa/product-native-20261111",
+      "sha": "bfb578049293f68db055cc38b519d55e7950a1e0"
+    },
+    {
+      "name": "qa/product-native-close-20261111",
+      "sha": "b51a505fb5d74d93683877357d5a687678403446"
+    },
+    {
+      "name": "qa/product-recordings-20261111",
+      "sha": "8ca00dce10f43de82c25f33006132b6c47e2bef8"
+    },
+    {
+      "name": "qa/rustore-1.0.0",
+      "sha": "627f8af50150bc8e2b1d642b58dba52f28dd21db"
+    },
+    {
+      "name": "qa/rustore-112-acceptance-20261113",
+      "sha": "cb63733eecfd2d7bfcd95d61bc88692a91a8fd08"
+    },
+    {
+      "name": "qa/rustore-1100019",
+      "sha": "1d7d48773cb1d802607c889cdc14872081717371"
+    },
+    {
+      "name": "qa/screen-gallery-20261023",
+      "sha": "19473c6d02db8a74dca590c6a5b4f0c98ac7ccbc"
+    },
+    {
+      "name": "qa/store-media-1.0.0",
+      "sha": "e52ba519e56ef7cac2f4252ad354e859df50ab0c"
+    },
+    {
+      "name": "qa/store-media-20261023",
+      "sha": "a1c2ef74ead8e61dbe4bd27b8ffb5f5c0c7108c7"
+    },
+    {
+      "name": "qa/ui-1.0.0",
+      "sha": "57402a191d843990395f6153439a6b0f4aee260e"
+    },
+    {
+      "name": "qa/ui-fixes-20261112",
+      "sha": "f9cb0a61dd1f6011aa825e494740294a6b36e73f"
+    },
+    {
+      "name": "qa/ui-ux-audit-20261112",
+      "sha": "2880012991ea45e520d7fcd90391a1571479f2d9"
+    },
+    {
+      "name": "qa/ux111-acceptance",
+      "sha": "2724f3733de6fd1e13411539f658bfc4bbe9cb55"
+    },
+    {
+      "name": "qa/ux111-final-native",
+      "sha": "1594215b758b6b0694471a785693c7ebfee93d17"
+    },
+    {
+      "name": "qa/ux111-tabs-check",
+      "sha": "45ebbb8d05c9ed4b65ebcb90b6bb986b47936d9d"
+    },
+    {
+      "name": "qa/ux-20261111",
+      "sha": "b83add9f50ebe95295a5274a3177e69422ca0ac9"
+    },
+    {
+      "name": "qa/ux-fixes-20261111",
+      "sha": "56d0c7763816bf9ee783535f446f411ea50dc2c1"
+    },
+    {
+      "name": "qa/ux-probe-111",
+      "sha": "e353106ba87b453c8fbe52f859797249938648ec"
+    },
+    {
+      "name": "qa/visual-sweep-20261111",
+      "sha": "023f96c36ca39ebd5fa803bc641ab83fcdef72c7"
+    },
+    {
+      "name": "release/nashstore-1.1.3",
+      "sha": "7537d9cf6f07ca1300a78d184e3bfff53e0dd7ff"
+    },
+    {
+      "name": "release/rustore-1.0.0",
+      "sha": "86d950b970a69e5dec3ebc269075143a1c28f94a"
+    },
+    {
+      "name": "release/rustore-1.1.0",
+      "sha": "e92bd4915d677caf47f74944402c82d48b483d9c"
+    },
+    {
+      "name": "release/rustore-1.1.2",
+      "sha": "746277f761a09d24236219aca1b1edb2354c466d"
+    },
+    {
+      "name": "research/independent-ui-audit-12073",
+      "sha": "4f4b3f1fa1c3d91cf70ec52237146a8456350f48"
+    },
+    {
+      "name": "research/seeds-classic-add-20261120",
+      "sha": "3eb4acd8e9b57eb0bdd528c96909444df8fc13fd"
+    },
+    {
+      "name": "research/seeds-first-session-20261120",
+      "sha": "df9ff5c3df8b017803e2ff924c2812a5efc530ac"
+    },
+    {
+      "name": "research/seeds-generator-audit-20261123",
+      "sha": "44c03ce3d19bc4e74f70430296cd19f3ff18de16"
+    },
+    {
+      "name": "research/seeds-generator-cross-project-20261123",
+      "sha": "bbeaea43c302b9f99ac8aa7598bc9e69e9428068"
+    },
+    {
+      "name": "research/seeds-layout-audit-20261120",
+      "sha": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338"
+    },
+    {
+      "name": "research/seeds-markets-l10n-20261121",
+      "sha": "ba561235022bc001c0eabc779570f6cc20c6de6c"
+    },
+    {
+      "name": "research/seeds-screen-audit-20261122",
+      "sha": "237462e2e6f88292e1c301cb29f4d24dae51c6c2"
+    },
+    {
+      "name": "research/seeds-ux-handoff-20261121",
+      "sha": "494860102a2dd005be464903c86cc2260638973e"
+    },
+    {
+      "name": "update/1.1.0",
+      "sha": "5681cceffb656e99549ac60438a8c94c204d01aa"
+    }
+  ],
+  "openPRs": [
+    {
+      "number": 16,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/16",
+      "title": "Аудит генератора 18/28/45/81: фактическое разнообразие и приёмка",
+      "state": "open",
+      "head": "44c03ce3d19bc4e74f70430296cd19f3ff18de16",
+      "base": "research/seeds-first-session-20261120"
+    },
+    {
+      "number": 15,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/15",
+      "title": "Исследование выдачи: проверка структуры, выбора и плотных 45/81",
+      "state": "open",
+      "head": "bbeaea43c302b9f99ac8aa7598bc9e69e9428068",
+      "base": "research/seeds-first-session-20261120"
+    },
+    {
+      "number": 11,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/11",
+      "title": "«Семечки» — независимый аудит preview 12073 по 14 экранам",
+      "state": "open",
+      "head": "4f4b3f1fa1c3d91cf70ec52237146a8456350f48",
+      "base": "research/seeds-first-session-20261120"
+    },
+    {
+      "number": 9,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "title": "Первый запуск и редизайн игровых экранов «Семечек» · preview 12073",
+      "state": "open",
+      "head": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "base": "research/seeds-layout-audit-20261120"
+    },
+    {
+      "number": 8,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/8",
+      "title": "Исправить скачки обучения, дальнюю подсказку и переполнения при крупном тексте",
+      "state": "open",
+      "head": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
+      "base": "research/seeds-classic-add-20261120"
+    },
+    {
+      "number": 7,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/7",
+      "title": "Классика: объяснять добавление, после которого пары не появились",
+      "state": "open",
+      "head": "3eb4acd8e9b57eb0bdd528c96909444df8fc13fd",
+      "base": "feat/monetization-assists-20261113"
+    },
+    {
+      "number": 6,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/6",
+      "title": "Keep game actions visible and distinguish task, page and notebook completion",
+      "state": "open",
+      "head": "f9cb0a61dd1f6011aa825e494740294a6b36e73f",
+      "base": "qa/classic-difficulty-20261112"
+    },
+    {
+      "number": 4,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/4",
+      "title": "Add generated classic difficulty and compact adaptive banners",
+      "state": "open",
+      "head": "8046a7da31470d248a30ad467453b3745827178f",
+      "base": "qa/jar-spill-20261112"
+    },
+    {
+      "number": 3,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/3",
+      "title": "Vary classic starts, unify icons and celebrate full jars",
+      "state": "open",
+      "head": "4e35473eb49429eebb56131e374a201cacd21aff",
+      "base": "qa/product-audit-20261111"
+    },
+    {
+      "number": 2,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/2",
+      "title": "Persist completed results before analytics and fix clipped compact screens",
+      "state": "open",
+      "head": "c7a91580d134071ca2ae1799d5754922751f7b5b",
+      "base": "main"
+    }
+  ],
+  "publicationScope": "Research documentation only; merge-current-base into draft audit branch. Original feature rows unchanged. Product code equals consumerHead."
+}

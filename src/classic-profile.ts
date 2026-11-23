@@ -3,6 +3,23 @@ import { WIDTH, addNumbers, occupied, pairs, removePair, type Connection } from 
 export type ClassicProof = ([number, number] | null)[];
 export const CLASSIC_STYLES = ["open", "gaps", "stock"] as const;
 export type ClassicStyle = (typeof CLASSIC_STYLES)[number];
+export type ClassicMotif = { stage: "first-add" | "midpoint"; structure: string };
+
+export const CLOSE_CLASSIC_MOTIF = 0.8;
+
+/** Compare occupied slots in the same geometry, ignoring shared empty slots. */
+export function classicMotifSimilarity(a: ClassicMotif, b: ClassicMotif) {
+  if (a.stage !== b.stage || a.structure.length !== b.structure.length) return 0;
+  let occupiedSlots = 0;
+  let matchingSlots = 0;
+  for (let i = 0; i < a.structure.length; i++) {
+    const left = a.structure[i], right = b.structure[i];
+    if (left === "0" && right === "0") continue;
+    occupiedSlots++;
+    if (left === right) matchingSlots++;
+  }
+  return matchingSlots / (occupiedSlots || 1);
+}
 
 export function crossesEmptyCell({ a, b, kind }: Connection) {
   if (kind === "reading") return b - a > 1;
@@ -38,6 +55,9 @@ export function measureClassic(initial: readonly number[], proof: ClassicProof) 
   // Large enough for every ID allocated by this particular witness.
   const keySize = board.length * (proof.length + 1) + 1;
   let legal = pairs(board);
+  const midpointAfter = Math.ceil(occupied(initial) / 4);
+  let midpoint: ClassicMotif | undefined;
+  let firstAdd: ClassicMotif | undefined;
   const profile = {
     opening: legal.length,
     openingInFirstFourRows: legal.filter(({ b }) => b < 4 * WIDTH).length,
@@ -54,6 +74,7 @@ export function measureClassic(initial: readonly number[], proof: ClassicProof) 
   };
   for (const move of proof) {
     if (!move) {
+      firstAdd ??= { stage: "first-add", structure: classicStructure(board) };
       board = addNumbers(board);
       ids.push(...Array.from({ length: board.length - ids.length }, () => nextId++));
       legal = pairs(board);
@@ -82,13 +103,16 @@ export function measureClassic(initial: readonly number[], proof: ClassicProof) 
       for (const key of beforeCompression) if (!after.has(key)) profile.compressionChanges++;
     }
     profile.removals++;
+    if (profile.removals === midpointAfter && !firstAdd)
+      midpoint = { stage: "midpoint", structure: classicStructure(board) };
     if (crossesEmptyCell(path)) profile.gapMoves++;
     if (path.kind === "reading") profile.readingMoves++;
     else if (a % WIDTH !== b % WIDTH && Math.floor(a / WIDTH) !== Math.floor(b / WIDTH))
       profile.diagonalMoves++;
   }
   if (board.length || occupied(board)) throw new Error("Incomplete Classic witness");
-  return profile;
+  const motif = firstAdd ?? midpoint ?? { stage: "midpoint", structure: classicStructure(initial) } as const;
+  return { ...profile, motif };
 }
 
 /** Coordinate-preserving key, invariant under complement-preserving digit relabeling. */
