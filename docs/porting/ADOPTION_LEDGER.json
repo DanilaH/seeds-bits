@@ -845,7 +845,7 @@
         "comparison": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14840781761"
       },
       "verification": {
-        "code": "128 unit and 27 targeted Chromium scenarios; 14000 exact old/new witnesses and 60 early/mid/late alternative branch probes.",
+        "code": "128 unit and 399 local Chromium scenarios; 14000 exact old/new witnesses and 60 early/mid/late alternative branch probes.",
         "emulator": "Android API 35 / 12081 / preserved 12080 save and legacy High 27 with Undo, lower-pair taps and generator timings.",
         "physicalPhone": "UNKNOWN",
         "liveAudience": "UNKNOWN"
