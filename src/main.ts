@@ -922,7 +922,8 @@ function save(state = progress, game = session) {
   if (storageConflict || futureSave || (switching && state === progress))
     return;
   metadata(state);
-  if (lesson < 0 && !busy) game.current.scroll = viewport.scrollTop;
+  // Layout may still be missing its native banner reserve during boot.
+  if (bootComplete && lesson < 0 && !busy) game.current.scroll = viewport.scrollTop;
   state.sessions[state.active] = game;
   const committedEvents = [...(metadata(state).analytics ?? [])];
   const bundle = serializeProgress(state),
@@ -3369,7 +3370,6 @@ async function boot() {
   $<HTMLInputElement>("sound").checked = settings.sound;
   $<HTMLInputElement>("vibration").checked = settings.vibration;
   render();
-  viewport.scrollTop = session.current.scroll;
   try {
     await platform.initPlatform(
       () => {
@@ -3416,6 +3416,7 @@ async function boot() {
   await adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}).catch(() => {});
   experience(progress).sessions++;
   await initializeMonetization(() => syncPauseState(), receiveReward);
+  viewport.scrollTop = session.current.scroll;
   if (
     !futureSave &&
     !readWarning &&

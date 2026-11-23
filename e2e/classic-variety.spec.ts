@@ -285,13 +285,18 @@ for (const viewport of [
     });
 
 
-test("Expert uses normal cells and permits scrolling, touch and Undo above a 50px banner", async ({ page }) => {
+test("Expert keeps its scroll, move and Undo after restarting above a 50px banner", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 568 });
   const original = await boot(page, 3);
   await page.locator("#resume").click();
   const viewport = page.locator("#viewport");
   const regular = await viewport.evaluate(e => [e.clientHeight, e.scrollHeight]);
   await page.evaluate(() => document.documentElement.classList.add("has-mobile-ads"));
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      document.documentElement.classList.add("has-mobile-ads");
+    }, { once: true });
+  });
   const reserved = await viewport.evaluate(e => [e.clientHeight, e.scrollHeight]);
   expect(reserved[1]).toBeGreaterThan(reserved[0]);
   await viewport.evaluate(e => e.scrollTop = e.scrollHeight);
@@ -300,6 +305,13 @@ test("Expert uses normal cells and permits scrolling, touch and Undo above a 50p
   expect(bottom).toBeDefined();
   await move(page, [bottom.a, bottom.b]);
   await expect(page.locator("#remaining")).toHaveText("79");
+  const scroll = await viewport.evaluate(e => e.scrollTop);
+  expect(scroll).toBeGreaterThan(0);
+  await page.locator("#menu").click();
+  await page.reload();
+  await page.locator("#resume").click();
+  await expect(page.locator("#remaining")).toHaveText("79");
+  expect(await viewport.evaluate(e => e.scrollTop)).toBe(scroll);
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("81");
   expect((await saved(page)).sessions.classic.current.board).toEqual(board);

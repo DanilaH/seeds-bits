@@ -464,7 +464,7 @@ return (${code})(SeedsClassicQA);})()`;
   const depth=()=>ui.evaluate(`(()=>{const v=document.querySelector("#viewport");
     return {w:innerWidth,h:innerHeight,clientHeight:v.clientHeight,scrollHeight:v.scrollHeight,scroll:v.scrollTop};})()`);
   const timing=[];
-  let geometry;
+  let geometry, savedScroll;
   try {
     assertViewportResult(await depth());
     await ui.tap("#resume");
@@ -508,8 +508,10 @@ return (${code})(SeedsClassicQA);})()`;
     await ui.until(left(81));
     assert.deepEqual(profiles().values[progress].sessions.classic.current.board,savedExpert);
     shot("classic-expert-bottom-320-dark");
-    if (!reservesBanner)
-      await ui.evaluate("document.documentElement.classList.remove('has-mobile-ads')");
+    await ui.tap(digit(bottomPair.a));
+    await ui.tap(digit(bottomPair.b));
+    await ui.until(left(79));
+    savedScroll=(await depth()).scroll;
     for(const level of [0,1,2,3]){
       timing.push(await ui.evaluate(withGenerator(`({generateClassic,newClassicRun})=>{
         for(let seed=9996;seed<10000;seed++)generateClassic(newClassicRun(seed),${level});
@@ -535,8 +537,13 @@ return (${code})(SeedsClassicQA);})()`;
   const resumed=await connect();
   try{
     await resumed.tap("#resume");
+    await resumed.until(left(79));
+    const restoredScroll=await resumed.evaluate("document.querySelector('#viewport').scrollTop");
+    if(geometry.realBannerReserve)assert(Math.abs(restoredScroll-savedScroll)<=1,"Lost Expert scroll after restart");
+    await resumed.tap("#undo");
     await resumed.until(left(81));
-    return {timing,geometry,physicalPhone:false,viewport320:true,legacy27Undo:true,legacyWallet:7,
+    return {timing,geometry,scrollRestore:{before:savedScroll,after:restoredScroll,realReserve:geometry.realBannerReserve},
+      physicalPhone:false,viewport320:true,legacy27Undo:true,legacyWallet:7,
       bottomTouch:true,undo:true,restartAndContinue:true,
       webview:adb("shell","dumpsys","webviewupdate") .split("\n").find(x=>x.includes("Current WebView package"))};
   } finally {resumed.close();stop();}
