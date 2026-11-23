@@ -161,6 +161,9 @@ test("field header follows the grid and the compact language rows keep their mar
 test("home mode art sits beside the labels and extends past both card edges", async ({page}) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await seeded(page);
+  await expect(page.locator("#book-mode .book-picture > .book-cover")).toHaveCount(1);
+  await expect(page.locator("#book-mode .book-cover svg")).toHaveCount(0);
+  await expect(page.locator("#home-current-art .book-cover-number")).toHaveText("№1");
   const dimensions = await page.evaluate(() => {
     return [["#book-mode", "#book-mode .book-picture"], [".home-calendar", "#home-today-art .calendar-picture"]]
       .map(([card, art]) => {
@@ -214,10 +217,12 @@ test("today is emphasized until its puzzle is completed", async ({page}) => {
   await seeded(page,{active:id,done:["daily-v1-2026-11-22"]});
   const daily = page.locator("#daily-mode");
   const icon = daily.locator("#home-today-art");
+  const calendar = icon.locator(".calendar-picture");
   await expect(daily).toHaveAttribute("data-daily-pending","");
-  expect(await icon.evaluate(el=>getComputedStyle(el,"::after").animationName)).toBe("today-glow");
+  expect(await icon.evaluate(el=>getComputedStyle(el,"::after").content)).toBe("none");
+  await expect(calendar).toHaveCSS("animation-name", "today-calendar-glow");
   await page.emulateMedia({reducedMotion:"reduce"});
-  expect(await icon.evaluate(el=>getComputedStyle(el,"::after").animationName)).toBe("none");
+  await expect(calendar).toHaveCSS("animation-name", "none");
   await page.locator("#calendar-open").click();
   await expect(page.locator("#today-task")).toHaveAttribute("data-daily-pending","");
   await page.locator("#today-task").click();

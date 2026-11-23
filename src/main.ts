@@ -3992,7 +3992,8 @@ function nextBookVolume() {
   return Math.max(0, Math.floor(first / 24));
 }
 function bookPicture(number?: number) {
-  return `<span class="book-picture" aria-hidden="true"><span>${number === undefined ? icon("book") : `№${number}`}</span></span>`;
+  const label = number === undefined ? "" : `<span class="book-cover-number">№${number}</span>`;
+  return `<span class="book-picture" aria-hidden="true"><span class="book-cover">${label}</span></span>`;
 }
 function calendarPicture(day: string, showMonth = false) {
   const month = showMonth

@@ -226,30 +226,40 @@
   height: 2.15em;
   color: #30473d;
 }
-.book-picture::before,
-.book-picture > span {
+.book-cover {
   position: absolute;
-  inset: 4% 10%;
-  border: 1px solid #789075;
-  border-radius: 4px 5px 5px 4px;
-  background: var(--calm-book);
-}
-.book-picture::before {
-  content: "";
-  transform: rotate(-8deg) translateX(-4%);
-}
-.book-picture > span {
+  inset: 4% 8% 4% 12%;
   display: grid;
   place-items: center;
-  padding-inline-start: .15em;
-  background: var(--calm-illustration);
-  border-inline-start: .2em solid var(--calm-book);
+  padding-inline-start: .14em;
+  border: 1px solid #789075;
+  border-radius: .14em .23em .23em .14em;
+  background: linear-gradient(90deg, var(--calm-book) .31em, var(--calm-illustration) .31em);
+  transform: rotate(-7deg);
+}
+.book-cover::before {
+  content: "";
+  position: absolute;
+  inset-block-start: .31em;
+  inset-inline-start: -.13em;
+  width: .31em;
+  height: .10em;
+  border-radius: 2px;
+  background: currentColor;
+  box-shadow: 0 .38em currentColor, 0 .76em currentColor, 0 1.14em currentColor;
+}
+.book-cover:empty::after {
+  content: "";
+  width: .59em;
+  height: 1px;
+  background: #789075;
+  box-shadow: 0 .17em #789075, 0 .34em #789075;
+  transform: translateY(-.17em);
+}
+.book-cover-number {
   font-size: .53em;
   font-weight: 650;
-  transform: rotate(8deg);
-}
-.book-picture svg {
-  width: 1.25em;
+  white-space: nowrap;
 }
 .calendar-picture {
   width: 1.85em;
@@ -402,28 +412,29 @@
   background: var(--calm-action);
   color: var(--calm-action-ink);
 }
-#daily-mode[data-daily-pending] #home-today-art::after,
-#today-task[data-daily-pending]::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  inset: -2px;
-  border: 1px solid color-mix(in srgb, var(--accent) 64%, transparent);
-  border-radius: 5px;
-  opacity: .45;
-}
 #today-task[data-daily-pending] {
   position: relative;
 }
 #today-task[data-daily-pending]::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
   inset: 3px;
+  border: 1px solid color-mix(in srgb, var(--accent) 64%, transparent);
   border-radius: inherit;
+  opacity: .45;
 }
 @media (prefers-reduced-motion: no-preference) {
-  #daily-mode[data-daily-pending] #home-today-art::after,
+  #daily-mode[data-daily-pending] .calendar-picture {
+    animation: today-calendar-glow 3.4s ease-out infinite;
+  }
   #today-task[data-daily-pending]::after {
     animation: today-glow 3.4s ease-out infinite;
   }
+}
+@keyframes today-calendar-glow {
+  0%, 100% { background-color: var(--calm-action); }
+  28% { background-color: color-mix(in srgb, var(--calm-action) 75%, white); }
 }
 @keyframes today-glow {
   0%, 100% { opacity: .2; }
