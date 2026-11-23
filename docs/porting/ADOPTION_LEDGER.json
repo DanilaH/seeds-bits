@@ -660,7 +660,7 @@
         "pr11PhoneVerification": "NOT_VERIFIED"
       },
       "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
-      "nextAction": "Подписать готовый портретный preview 12074 прежним ключом CN=Seeds Preview, затем проверить обновление на физическом телефоне, TalkBack, звук и вибрацию. Отдельно наблюдать, сможет ли новичок после первой победы найти задачу дня и вернуться в начатую тетрадь.",
+      "nextAction": "Подписанный прежним ключом preview 12074 выдан владельцу. Проверить обновление на физическом телефоне, TalkBack, звук и вибрацию. Отдельно наблюдать, сможет ли новичок после первой победы найти задачу дня и вернуться в начатую тетрадь.",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
       "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26"
     },
