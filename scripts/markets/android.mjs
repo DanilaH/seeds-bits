@@ -71,6 +71,8 @@ async function connect() {
   let bounds;
   for(let attempt=0;attempt<6;attempt++){
     try {
+      // uiautomator can exit successfully without writing a new dump.
+      adb("shell","rm","-f","/sdcard/market.xml");
       adb("shell","uiautomator","dump","/sdcard/market.xml");
       bounds=/class="android\.webkit\.WebView"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/.exec(adb("shell","cat","/sdcard/market.xml"))?.slice(1).map(Number);
       if(bounds)break;
