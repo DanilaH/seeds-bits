@@ -205,6 +205,23 @@ test("the Home notebook cover shows progress for the volume it opens", async ({ 
   await expect(page.locator(".volume-heading")).toContainText("2 из 24 задач");
 });
 
+test("the three-digit notebook number fits on the cover at 320px", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await seeded(page);
+  await page.locator("#book-mode").click();
+  await page.locator("#other-books summary").click();
+  await page.locator("#book-chapter").selectOption("9");
+  await page.locator('#collection .volume-cover[data-volume="99"]').click();
+  await page.locator("#collection-back").click();
+
+  const number = page.locator("#book-mode .book-cover-number");
+  await expect(number).toHaveText("№100");
+  expect(await number.evaluate((label: HTMLElement) =>
+    label.offsetLeft >= 0 &&
+    label.offsetLeft + label.offsetWidth <= label.parentElement!.clientWidth,
+  )).toBe(true);
+});
+
 test.describe("month on the home calendar", () => {
   test.use({ timezoneId: "America/Los_Angeles" });
 

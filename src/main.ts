@@ -3996,7 +3996,8 @@ function nextBookVolume() {
   return Math.max(0, Math.floor(first / 24));
 }
 function bookPicture(number: number) {
-  return `<span class="book-picture" aria-hidden="true"><span class="book-cover"><span class="book-cover-number">№${number}</span></span></span>`;
+  const compact = number >= 100 ? " book-cover-number-compact" : "";
+  return `<span class="book-picture" aria-hidden="true"><span class="book-cover"><span class="book-cover-number${compact}">№${number}</span></span></span>`;
 }
 function calendarPicture(day: string, showMonth = false) {
   const month = showMonth
@@ -4120,7 +4121,7 @@ function updateHome() {
   const bookNumber = selectedVolume + 1;
   const solvedInBook = volumeTasks(selectedVolume).filter((task) => finished.has(task.id)).length;
   const bookMode = $("book-mode");
-  bookMode.querySelector(".book-cover-number")!.textContent = `№${bookNumber}`;
+  bookMode.querySelector(".book-picture")!.outerHTML = bookPicture(bookNumber);
   $("book-count").textContent = t("ui.of-24-puzzles", { "0": solvedInBook });
   bookMode.setAttribute("aria-label", t("ui.puzzle-book-of-24", { "0": bookNumber, "1": solvedInBook }));
   const date = today();

@@ -253,6 +253,7 @@
   font-weight: 650;
   white-space: nowrap;
 }
+.book-cover-number-compact { font-size: .42em; }
 .calendar-picture {
   width: 1.85em;
   height: 1.8em;
