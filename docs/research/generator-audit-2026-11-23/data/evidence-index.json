@@ -165,5 +165,16 @@
     "liveAudience": "UNKNOWN"
   },
   "timingLimits": "Separate current-source IIFE injected into debug WebView; 32 fresh empty-history seeds/level after4warmup; excludes main app navigation/save/render; no fullhistory/end-to-end/physicalphone bound",
-  "scrollFailure": "50->48 has no captured scrollHeight/clientHeight/saved scroll at failure. Correct clamp vs wrong restoration UNKNOWN; do not call product defect from this alone."
+  "scrollFailure": "50->48 has no captured scrollHeight/clientHeight/saved scroll at failure. Correct clamp vs wrong restoration UNKNOWN; do not call product defect from this alone.",
+  "freshGeneralCI": {
+    "head": "4917599e0f534c70f09f79496353b063195d2cae",
+    "relationToAuditedHead": "20 files under docs only; product/tests/workflows identical",
+    "successRun": 45230217226,
+    "mainBrowserPass": 399,
+    "secondWebSuccessRun": 45230405612,
+    "secondRunAndroidFailure": "MavenHTTP429 dependency download; sameSHA Android passed in successRun",
+    "detail": "fresh-ci.json",
+    "ga02": "CI_GAP_RESOLVED",
+    "historicalScrollCause": "UNKNOWN; not repeated in two new browser runs"
+  }
 }

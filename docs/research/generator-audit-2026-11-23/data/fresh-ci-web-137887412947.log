@@ -1,0 +1,9 @@
+2026-11-23T17:41:04.1455766Z       Tests  128 passed (128)
+2026-11-23T17:41:05.6374984Z       Tests  2 passed (2)
+2026-11-23T17:41:31.8828614Z   15 passed (18.0s)
+2026-11-23T17:42:13.4806911Z   ✓   73 e2e/classic-variety.spec.ts:288:1 › Expert keeps its scroll, move and Undo after restarting above a 50px banner (693ms)
+2026-11-23T17:42:14.0425211Z   ✓   74 e2e/classic-variety.spec.ts:324:1 › Expert Add copies the certified remainder, saves it and preserves Undo on reload (555ms)
+2026-11-23T17:44:03.8917841Z   ✓  185 e2e/porting-classic-add.spec.ts:6:1 › a saved ordinary board needs two consecutive Adds to restore moves (4.0s)
+2026-11-23T17:47:40.2164680Z   399 passed (6.1m)
+2026-11-23T17:47:44.6212960Z ✓ built in 298ms
+2026-11-23T17:47:45.7063863Z ✓ built in 292ms

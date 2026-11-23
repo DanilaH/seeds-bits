@@ -24,8 +24,28 @@
     },
     {
       "path": "evidence-index.json",
-      "bytes": 6109,
-      "sha256": "4e5aef1a0adcbfff77c01450f0dcd6e4e4a07750247546b86299c5daf9f2336f"
+      "bytes": 6627,
+      "sha256": "10c1c6ad9b6439167280fbdd0dd1b75c5a2baf13779f6c046b718eb295073cf2"
+    },
+    {
+      "path": "fresh-ci-android-137888087060.log",
+      "bytes": 4255,
+      "sha256": "9bcb3f46696b1ca18913c4c6ba440d8ef33fe391ead37368cafca5701aab36ee"
+    },
+    {
+      "path": "fresh-ci-web-137887412947.log",
+      "bytes": 791,
+      "sha256": "3260e5fcbbbd0ac8e717c06742a9b7382a38504c61fa12d7d086aaf8a66384a7"
+    },
+    {
+      "path": "fresh-ci-web-137888087402.log",
+      "bytes": 791,
+      "sha256": "8890b4aca6653d2c7e98b9291c2b87b2708dd4892130ddd59b70befb131e9f30"
+    },
+    {
+      "path": "fresh-ci.json",
+      "bytes": 21733,
+      "sha256": "d2b8709e202efd891aad2dbdad89edec4ef9cf2ff2605e2dc0dd49c6ef5d2a9b"
     },
     {
       "path": "generator-fallback-check.json",

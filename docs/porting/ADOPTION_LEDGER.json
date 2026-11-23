@@ -821,7 +821,7 @@
         },
         "implementationAudit": "../research/generator-audit-2026-11-23/README.md"
       },
-      "nextAction": "Закрыть замечания независимого аудита генератора GA-01..GA-03, затем телефонный плейтест Классики. Отдельно продолжить №14 по поздним тетрадям, дневной кривой и seeds/minute до любых изменений наград. Сохранять immutable задания и все шесть экспериментов на паузе.",
+      "nextAction": "Закрыть замечания независимого аудита генератора GA-01/GA-03 (общий CI по GA-02 подтверждён), затем телефонный плейтест Классики. Отдельно продолжить №14 по поздним тетрадям, дневной кривой и seeds/minute до любых изменений наград. Сохранять immutable задания и все шесть экспериментов на паузе.",
       "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes."
     },
     {
@@ -845,18 +845,20 @@
         "android": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14841601829",
         "comparison": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14840781761",
         "independentAudit": "../research/generator-audit-2026-11-23/README.md",
-        "independentAuditHead": "7f8ac0e05a338d4101d10f680720343b6881ba9a"
+        "independentAuditHead": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+        "independentAuditFreshCI": "https://github.com/DanilaH/seeds-bits/actions/runs/45230217226",
+        "independentAuditCIHead": "4917599e0f534c70f09f79496353b063195d2cae"
       },
       "verification": {
-        "code": "Implemented. CI on runtime d450a618: 128 unit + 2 model + 15 regression PASS; 396 main browser PASS / 3 FAIL. Exact audit HEAD 7f8ac0e has no workflow runs. Developer reports local 399 and 14000 witnesses; only the first 7000 witnesses are backed by the attached CI artifact.",
+        "code": "PASS final product/tests on docs-only descendant4917599e: complete general CI45230217226,128 unit+2 model+15 regression+399 main browser,web/Yandex,Android debug/native. PR run45230405612 web399PASS; its Android failed only MavenHTTP429. Product/tests/workflows identical to7f8. Developer comparison CI artifact backs first7000 witnesses; extra reported7000 control remains without attached provenance.",
         "emulator": "Android API35/WebView124: optimized 12080→12081 migration with temporary CI signing identity; debug UI bottom taps, Undo and scroll47→47 with real banner reserve. Signed/unsigned 670 entries and debug/release18 webassets match. Not a full signed-APK physical-phone run.",
         "physicalPhone": "UNKNOWN",
         "liveAudience": "UNKNOWN",
         "independentNode": "PASS on exact 7f8ac0e: 4000 fresh seeds30000..30999, 400 serialized sequential deals, 36 forced fallback cases and 9 integration roundtrips; Node24.22.3. Actual TS with pinned Git blobs. No physical input or human difficulty conclusion.",
-        "technicalAcceptance": "OPEN: no green final-head general CI; scroll50→48 cause UNKNOWN; actual recipe/core repetition and complete distributions need explicit serial acceptance.",
+        "technicalAcceptance": "GENERAL_CI_PASS on unchanged final product/tests. GA-02 CI gap RESOLVED. Historical scroll50→48 cause UNKNOWN, not repeated in two new399-scenario runs; capture layout if it recurs. Serial quality evidence and human balance remain open.",
         "developerReportedAdditionalControl": "PILOT reports seeds20000..20999 and100 serialized games per level. Reproducible command/raw report absent from attached CI artifact at audit time; not asserted false."
       },
-      "nextAction": "Close GA-01 actual recipe/central motif serial evidence and GA-02/GA-03 final-head CI plus reproducible per-deal distributions; then physical-phone contrast/serial playtest and seeds per minute. Keep final human balance and remaining notebook/daily work open.",
+      "nextAction": "Close GA-01 actual recipe/central motif serial evidence and GA-03 reproducible per-deal distributions; then physical-phone contrast/serial playtest and seeds per minute. GA-02 final-code general CI gap was closed by successful audit CI45230217226. Keep final human balance and remaining notebook/daily work open.",
       "kitImpact": "REUSE: Playability Choice Evidence Ladder; сохранены границы FOUND/UNKNOWN, без изменения карты оригиналов.",
       "auditFindings": [
         {
@@ -869,11 +871,12 @@
         },
         {
           "id": "SEEDS-GEN-AUDIT-02",
-          "status": "OPEN",
+          "status": "RESOLVED",
           "priority": "ACCEPTANCE_GATE",
           "reason": "Latest runtime general CI is red; final HEAD has no runs. Scroll50→48 has no captured maxScroll geometry.",
-          "returnCondition": "Green general CI on final SHA and stable-layout scroll/board/Undo evidence.",
-          "reference": "../research/generator-audit-2026-11-23/README.md"
+          "returnCondition": "Reopen if the same scroll scenario fails after stable layout, or if next product/test revision lacks a green general run.",
+          "reference": "../research/generator-audit-2026-11-23/README.md",
+          "resolution": "Complete green CI45230217226 on4917599e, a docs-only descendant of audited7f8 with identical product/tests/workflows; second web399PASS too. No assertions relaxed. Historical2px cause remains unknown; capture geometry if repeated."
         },
         {
           "id": "SEEDS-GEN-AUDIT-03",

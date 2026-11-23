@@ -1,0 +1,646 @@
+{
+  "scope": "Seeds Classic pilot audit follow-up: actual CI results on a docs-only descendant; no runtime, tests, workflows or CI execution changed by this follow-up",
+  "observedAt": "2026-11-23 17:50:22 UTC",
+  "testedHead": "4917599e0f534c70f09f79496353b063195d2cae",
+  "parentHead": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+  "runtime": "d450a61893923b61115dd2ac5dbc7c4f2c8fff9a",
+  "comparison": {
+    "url": "https://github.com/DanilaH/seeds-bits/compare/7f8ac0e05a338d4101d10f680720343b6881ba9a...4917599e0f534c70f09f79496353b063195d2cae",
+    "changedFiles": 20,
+    "nonDocsFiles": [],
+    "paths": [
+      "docs/STATUS.md",
+      "docs/porting/2026-11-20/ROADMAP.md",
+      "docs/porting/ADOPTION_LEDGER.json",
+      "docs/research/generator-audit-2026-11-23/README.md",
+      "docs/research/generator-audit-2026-11-23/data/MANIFEST.json",
+      "docs/research/generator-audit-2026-11-23/data/ci-failure-137851842656.txt",
+      "docs/research/generator-audit-2026-11-23/data/ci-failure-137852086277.txt",
+      "docs/research/generator-audit-2026-11-23/data/developer-android.json",
+      "docs/research/generator-audit-2026-11-23/data/developer-comparison.json",
+      "docs/research/generator-audit-2026-11-23/data/evidence-index.json",
+      "docs/research/generator-audit-2026-11-23/data/generator-fallback-check.json",
+      "docs/research/generator-audit-2026-11-23/data/generator-results.json.gz",
+      "docs/research/generator-audit-2026-11-23/data/generator-rotation-fixture.json",
+      "docs/research/generator-audit-2026-11-23/data/generator-summary.json",
+      "docs/research/generator-audit-2026-11-23/data/roundtrip-results.json",
+      "docs/research/generator-audit-2026-11-23/scripts/fallback-check.mjs",
+      "docs/research/generator-audit-2026-11-23/scripts/generator-audit.mjs",
+      "docs/research/generator-audit-2026-11-23/scripts/rotation-check.mjs",
+      "docs/research/generator-audit-2026-11-23/scripts/run-roundtrips.mjs",
+      "docs/research/generator-audit-2026-11-23/scripts/source.mjs"
+    ],
+    "productCodeUnchanged": true,
+    "testsUnchanged": true,
+    "workflowsUnchanged": true
+  },
+  "runs": [
+    {
+      "runId": 45230217226,
+      "url": "https://github.com/DanilaH/seeds-bits/actions/runs/45230217226",
+      "event": "push",
+      "headSha": "4917599e0f534c70f09f79496353b063195d2cae",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-11-23T17:40:33Z",
+      "updatedAt": "2026-11-23T17:47:54Z",
+      "jobs": [
+        {
+          "id": 137887412947,
+          "name": "web",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run npm ci",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run npm test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Run npx vitest run --config scripts/regression-061/vitest.config.ts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Run npx playwright install chromium",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Run npx playwright test --config scripts/regression-061/playwright.config.ts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Run npm run test:e2e",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Run npm run build && npm run build:yandex",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 25
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 26
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 27
+            }
+          ]
+        },
+        {
+          "id": 137887413367,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run android-actions/setup-android@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Run npm ci",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Run python3 scripts/regression-061/native-harness.py",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Run python3 scripts/feedback-native-harness.py",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Run npm run setup:android",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Run node scripts/configure-android.mjs",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Run npm run sync:android",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Run chmod +x android/gradlew && cd android && ./gradlew assembleDebug",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 14
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 26
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 27
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 28
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 29
+            }
+          ]
+        }
+      ],
+      "verifiedCounts": {
+        "unit": 128,
+        "model": 2,
+        "regressionBrowser": 15,
+        "mainBrowser": 399,
+        "mainBrowserFailures": 0
+      },
+      "previouslyFailingScenarios": "All three pass in the completed web-job log",
+      "artifacts": [
+        {
+          "id": 14848090399,
+          "name": "browser-checks",
+          "digest": "sha256:700ea354c3ccd01c3d43bd1341dc16f9fd32c093e71b3e3379f0aab1201be8c6",
+          "size": 18155005,
+          "downloadedInThisFollowup": false
+        },
+        {
+          "id": 14847870223,
+          "name": "seeds-bits-android-preview-intermediate",
+          "digest": "sha256:343aebb63eaee797a5c564cd933b76389d79d50ef0b6431276810a3aaa59c283",
+          "size": 10431775,
+          "downloadedInThisFollowup": false
+        },
+        {
+          "id": 14847278445,
+          "name": "seeds-bits-yandex-draft",
+          "digest": "sha256:6c445bfb686b2ac883929c183483155ec516253efc88ef73b517f72859cbb21e",
+          "size": 1204183,
+          "downloadedInThisFollowup": false
+        },
+        {
+          "id": 14846953678,
+          "name": "seeds-bits-web",
+          "digest": "sha256:71b53f968ed655b666bb3afe237dc0dfab6b42ccce62b3c67f4c37335186ff5e",
+          "size": 1203856,
+          "downloadedInThisFollowup": false
+        },
+        {
+          "id": 14846547582,
+          "name": "native-regression-061",
+          "digest": "sha256:df3d9ea1fdd7d77b0c9b2108ed63477f8b9b0600b6da529d9d8c616ce0c7e036",
+          "size": 2524,
+          "downloadedInThisFollowup": false
+        }
+      ]
+    },
+    {
+      "runId": 45230405612,
+      "url": "https://github.com/DanilaH/seeds-bits/actions/runs/45230405612",
+      "event": "pull_request",
+      "headSha": "4917599e0f534c70f09f79496353b063195d2cae",
+      "status": "completed",
+      "conclusion": "failure",
+      "createdAt": "2026-11-23T17:41:39Z",
+      "updatedAt": "2026-11-23T17:48:51Z",
+      "jobs": [
+        {
+          "id": 137888087060,
+          "name": "android",
+          "status": "completed",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run android-actions/setup-android@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Run npm ci",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Run python3 scripts/regression-061/native-harness.py",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Run python3 scripts/feedback-native-harness.py",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Run npm run setup:android",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Run node scripts/configure-android.mjs",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Run npm run sync:android",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Run chmod +x android/gradlew && cd android && ./gradlew assembleDebug",
+              "status": "completed",
+              "conclusion": "failure",
+              "number": 13
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 14
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 26
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 27
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 28
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 29
+            }
+          ]
+        },
+        {
+          "id": 137888087402,
+          "name": "web",
+          "status": "completed",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run npm ci",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Run npm test",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Run npx vitest run --config scripts/regression-061/vitest.config.ts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Run npx playwright install chromium",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Run npx playwright test --config scripts/regression-061/playwright.config.ts",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Run npm run test:e2e",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 9
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 10
+            },
+            {
+              "name": "Run npm run build && npm run build:yandex",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 11
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 12
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 13
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 25
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 26
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 27
+            }
+          ]
+        }
+      ],
+      "verifiedCounts": {
+        "unit": 128,
+        "model": 2,
+        "regressionBrowser": 15,
+        "mainBrowser": 399,
+        "mainBrowserFailures": 0
+      },
+      "previouslyFailingScenarios": "All three pass in the completed web-job log",
+      "artifacts": [
+        {
+          "id": 14847660166,
+          "name": "native-regression-061",
+          "digest": "sha256:ae03bf0bdba669cf075e51ae7eea2bcde25eae1cb76548284142df55446535ee",
+          "size": 2524,
+          "downloadedInThisFollowup": false
+        },
+        {
+          "id": 14847108699,
+          "name": "seeds-bits-yandex-draft",
+          "digest": "sha256:09d0e083acac39164b6b710f95534616752a26e4d176448791808f7216090fda",
+          "size": 1204183,
+          "downloadedInThisFollowup": false
+        },
+        {
+          "id": 14846127996,
+          "name": "seeds-bits-web",
+          "digest": "sha256:650ad974d5f908a04971a3a5e061d6ba90383b834fa28ac9dd0ba39e10acdb75",
+          "size": 1203856,
+          "downloadedInThisFollowup": false
+        },
+        {
+          "id": 14845603127,
+          "name": "browser-checks",
+          "digest": "sha256:54dc7573f3a22fa34200a50ea429e2f088ecaf329ffe66a39b76a2cd52502272",
+          "size": 18184537,
+          "downloadedInThisFollowup": false
+        }
+      ]
+    }
+  ],
+  "previouslyFailingScenarios": [
+    {
+      "file": "e2e/classic-variety.spec.ts",
+      "line": 288,
+      "name": "Expert keeps its scroll, move and Undo after restarting above a 50px banner",
+      "push": "PASS",
+      "pullRequest": "PASS",
+      "sourceCodeStillHasExactScrollEquality": true
+    },
+    {
+      "file": "e2e/classic-variety.spec.ts",
+      "line": 324,
+      "name": "Expert Add copies the certified remainder, saves it and preserves Undo on reload",
+      "push": "PASS",
+      "pullRequest": "PASS"
+    },
+    {
+      "file": "e2e/porting-classic-add.spec.ts",
+      "line": 6,
+      "name": "a saved ordinary board needs two consecutive Adds to restore moves",
+      "push": "PASS",
+      "pullRequest": "PASS"
+    }
+  ],
+  "androidPullRequestFailure": {
+    "jobId": 137888087060,
+    "step": "Run chmod +x android/gradlew && cd android && ./gradlew assembleDebug",
+    "stage": "Gradle configuration and dependency resolution, before product compilation",
+    "cause": "HTTP 429 Too Many Requests from repo.maven.apache.org",
+    "exampleDependency": "org.jetbrains.kotlin:kotlin-stdlib:2.2.0",
+    "classification": "External dependency download failure; not an observed product compile/test failure",
+    "sameHeadPushAndroid": "SUCCESS, job137887413367",
+    "rerunPerformed": false
+  },
+  "closure": {
+    "ga02": "The narrow absence-of-green-general-CI gate is CLOSED by full push SUCCESS at491; both web jobs verify399/399 with the final unchanged tests.",
+    "historicalRuntimeFailures": "Retain old396/399 runs as historical evidence; do not rewrite their outcomes.",
+    "scrollFailureCause": "The old50->48 cause is still not reconstructed. Current exact scroll scenario passed twice; this is not proof that every intermittent cause is absent.",
+    "physicalPhone": "UNKNOWN",
+    "liveAudience": "UNKNOWN",
+    "subjectiveDifficultyAndVariety": "Not certified by these test results",
+    "holdoutAndDistributionProvenance": "Not changed by this CI follow-up"
+  },
+  "logEvidence": [
+    {
+      "jobId": 137887412947,
+      "path": "fresh-ci-web-137887412947.log",
+      "kind": "Selected decoded log lines, ANSI removed"
+    },
+    {
+      "jobId": 137888087402,
+      "path": "fresh-ci-web-137888087402.log",
+      "kind": "Selected decoded log lines, ANSI removed"
+    },
+    {
+      "jobId": 137888087060,
+      "path": "fresh-ci-android-137888087060.log",
+      "kind": "Failure excerpt from decoded job log"
+    }
+  ]
+}
