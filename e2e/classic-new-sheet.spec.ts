@@ -64,24 +64,12 @@ for(const [level,count] of [[0,18],[1,28],[2,27]] as const){
 test("an unfinished Classic game is replaced only after confirmation",async({page})=>{
   await menu(page);
   await page.locator("#resume").click();
-  const pair=await page.locator("#board button").evaluateAll(buttons=>{
-    const indexes=buttons.map(x=>Number((x as HTMLElement).dataset.index));
-    const values=buttons.map(x=>Number(x.textContent));
-    const first=indexes.findIndex((i,k)=>k+1<indexes.length&&values[k]===values[k+1]);
-    return first>=0?[indexes[first],indexes[first+1]]:null;
-  });
-  // The exact pair is taken from the current DOM only when adjacent values match.
-  if(pair){
-    await page.locator(`#board button[data-index="${pair[0]}"]`).click();
-    await page.locator(`#board button[data-index="${pair[1]}"]`).click();
-  } else {
-    const values=await page.locator("#board button").evaluateAll(ns=>
-      ns.map(x=>({index:Number((x as HTMLElement).dataset.index),value:Number(x.textContent)})));
-    const adjacent=values.findIndex((v,i)=>i+1<values.length&&v.value+values[i+1].value===10);
-    expect(adjacent).toBeGreaterThanOrEqual(0);
-    await page.locator(`#board button[data-index="${values[adjacent].index}"]`).click();
-    await page.locator(`#board button[data-index="${values[adjacent+1].index}"]`).click();
-  }
+  // Choose a verified legal pair from this session, never a guessed adjacent value.
+  const initial=await state(page);
+  const pair=pairs(initial.sessions.classic.current.board)[0];
+  expect(pair).toBeDefined();
+  await page.locator(`#board button[data-index="${pair.a}"]`).click();
+  await page.locator(`#board button[data-index="${pair.b}"]`).click();
   await expect(page.locator("#undo")).toBeEnabled();
   await page.locator("#menu").click();
   const original=await state(page);
