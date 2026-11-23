@@ -174,7 +174,7 @@ function smallCandidate(level: 0 | 1, state: ClassicRun, visits: number, onVisit
   return proof && { board, proof };
 }
 
-function smallFallback(level: 0 | 1, state: ClassicRun): Deal {
+function smallFallback(level: 0 | 1, state: ClassicRun): number[][] {
   return level === 0
     ? Array.from({ length: 9 }, (_, i) => [i + 1, random(state) < 0.5 ? i + 1 : 9 - i])
     : [
