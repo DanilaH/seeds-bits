@@ -178,7 +178,8 @@ test("home mode art sits beside the labels and extends past both card edges", as
     expect(iconWidth).toBeGreaterThan(48);
     expect(iconRight).toBeLessThan(labelLeft);
   }
-  expect(Math.abs(dimensions[0].labelLeft - dimensions[1].labelLeft)).toBeLessThanOrEqual(1);
+  const [bookInset, dayInset] = dimensions.map(({ cardLeft, labelLeft }) => labelLeft - cardLeft);
+  expect(Math.abs(bookInset - dayInset)).toBeLessThanOrEqual(1);
   await expect(page.locator("#calendar-open")).toBeVisible();
 });
 
