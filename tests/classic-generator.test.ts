@@ -2,6 +2,7 @@ import { test, expect } from "vitest";
 import {
   CLASSIC_DEFAULT,
   CLASSIC_SIZES,
+  CLASSIC_SCENARIO_HISTORY,
   generateClassic,
   newClassicRun,
   readClassicRun,
@@ -69,8 +70,10 @@ test("selection is deterministic across saves, remembers the band and avoids rec
     expect(game).toEqual(takeGeneratedClassic(parallel, `attempt-${n}`, level));
     expect(before.recent).not.toContain(game.current.board.join(""));
     expect(state.recent.length).toBeLessThanOrEqual(8);
-    if (state.rotation?.[level]?.length === 2)
-      expect(new Set(state.rotation[level]).size).toBe(2);
+    const scenario = state.scenarios![level]!.at(-1);
+    const selected = generateClassic(before, level);
+    expect(scenario).toEqual({ recipe: selected.recipe, motif: selected.profile.motif });
+    expect(state.scenarios![level]!.length).toBeLessThanOrEqual(CLASSIC_SCENARIO_HISTORY);
     expect(state.difficulty).toBe(level);
     expect(state.current!.board).toEqual(game.current.board);
     state = readClassicRun(JSON.parse(JSON.stringify(state)))!;
@@ -153,4 +156,33 @@ test("structural identity preserves geometry and complementary value roles", () 
   expect(classicStructure([1, 9, 5, 2, 8])).not.toBe(classicStructure([1, 1, 5, 2, 8]));
   expect(classicStructure([1, 0, 2, 1])).not.toBe(classicStructure([1, 2, 1, 0]));
   expect(tryClassicOrder([1, 2, 3], "last", 0, 12).outcome).toBe("UNKNOWN");
+});
+
+test("a scenario records the winning recipe when the requested preference loses", () => {
+  const state = newClassicRun(15);
+  const selected = generateClassic(newClassicRun(15), 2);
+  expect(selected.style).toBe("gaps");
+  expect(selected.recipe).toBe("stock");
+  takeGeneratedClassic(state, "actual-recipe", 2);
+  const restored = readClassicRun(JSON.parse(JSON.stringify(state)))!;
+  expect(restored.scenarios?.[2]).toEqual([{ recipe: "stock", motif: selected.profile.motif }]);
+
+  const legacy = { ...restored, scenarios: undefined, rotation: { 2: ["stock", "gaps"] } };
+  const migrated = readClassicRun(legacy)!;
+  expect(migrated.scenarios).toBeUndefined();
+  expect(migrated.current).toEqual(restored.current);
+  expect(migrated.recent).toEqual(restored.recent);
+  expect(migrated.seed).toBe(restored.seed);
+});
+
+test("the audited High45 series varies the first Add on deals 29 and 30", () => {
+  let state = newClassicRun(12081);
+  const motifs = [];
+  for (let number = 1; number <= 30; number++) {
+    takeGeneratedClassic(state, `audit-${number}`, 2);
+    state = readClassicRun(JSON.parse(JSON.stringify(state)))!;
+    if (number >= 29) motifs.push(state.scenarios![2]!.at(-1)!.motif);
+  }
+  expect(motifs.map(motif => motif.stage)).toEqual(["first-add", "first-add"]);
+  expect(motifs[0].structure).not.toBe(motifs[1].structure);
 });

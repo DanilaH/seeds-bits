@@ -10,8 +10,9 @@ import {
 
 import { clearInReadingOrder, constructDense, denseFallback } from "./classic-dense";
 import {
-  CLASSIC_STYLES, classicStructure, measureClassic, openingEdges, openingSimilarity,
-  tryClassicOrder, type ClassicProof, type ClassicStyle,
+  CLASSIC_STYLES, CLOSE_CLASSIC_MOTIF, classicMotifSimilarity, classicStructure,
+  measureClassic, openingEdges, openingSimilarity, tryClassicOrder,
+  type ClassicMotif, type ClassicProof, type ClassicStyle,
 } from "./classic-profile";
 export type { ClassicProof } from "./classic-profile";
 
@@ -22,13 +23,17 @@ export const CLASSIC_SIZES = [18, 28, 45, 81] as const;
 export const CLASSIC_LEVELS = [0, 1, 2, 3] as const;
 export type ClassicDifficulty = (typeof CLASSIC_LEVELS)[number];
 export const classicDifficultyNames = ["Лёгкая", "Обычная", "Высокая", "Эксперт"];
-type Rotation = Partial<Record<ClassicDifficulty, ClassicStyle[]>>;
+export const CLASSIC_SCENARIO_HISTORY = 4;
+const CLASSIC_RECIPES = [...CLASSIC_STYLES, "shuffle", "fallback"] as const;
+type ClassicRecipe = (typeof CLASSIC_RECIPES)[number];
+type Scenario = { recipe: ClassicRecipe; motif: ClassicMotif };
+type ScenarioHistory = Partial<Record<ClassicDifficulty, Scenario[]>>;
 export type ClassicRun = {
   version: 1;
   seed: number;
   difficulty: ClassicDifficulty;
   recent: string[];
-  rotation?: Rotation;
+  scenarios?: ScenarioHistory;
   current?: { attempt: string; board: number[] };
 };
 export const isClassicDifficulty = (v: unknown): v is ClassicDifficulty =>
@@ -62,20 +67,27 @@ export function readClassicRun(value: unknown): ClassicRun | undefined {
           !(v.difficulty === 2 && v.current.board.length === 27))))
   )
     return;
-  // Repair optional rotation independently of the saved deal and Undo.
-  const rotation: Rotation = {};
+  // Previous saves recorded a preference, which cannot identify the dealt route.
+  // Read optional scenario metadata independently of the board and Undo.
+  const scenarios: ScenarioHistory = {};
   for (const level of CLASSIC_LEVELS) {
-    const styles = v.rotation?.[level];
-    if (Array.isArray(styles) && styles.length <= 2 &&
-        styles.every(style => CLASSIC_STYLES.includes(style)))
-      rotation[level] = [...styles];
+    const entries = v.scenarios?.[level];
+    if (!Array.isArray(entries)) continue;
+    const recent = entries.slice(-CLASSIC_SCENARIO_HISTORY)
+      .filter(entry => entry && CLASSIC_RECIPES.includes(entry.recipe) &&
+        (entry.motif?.stage === "first-add" || entry.motif?.stage === "midpoint") &&
+        typeof entry.motif.structure === "string" &&
+        entry.motif.structure.length <= CLASSIC_SIZES[level] &&
+        /^[0-9]*[1-9][0-9]*$/.test(entry.motif.structure));
+    if (recent.length)
+      scenarios[level] = recent.map(({ recipe, motif }) => ({ recipe, motif: { ...motif } }));
   }
   return {
     version: 1,
     seed: v.seed,
     difficulty: v.difficulty,
     recent: [...v.recent],
-    ...(Object.keys(rotation).length ? { rotation } : {}),
+    ...(Object.keys(scenarios).length ? { scenarios } : {}),
     ...(v.current
       ? { current: { attempt: v.current.attempt, board: [...v.current.board] } }
       : {}),
@@ -157,7 +169,7 @@ type Deal = { board: number[]; proof: ClassicProof };
 type Candidate = Deal & {
   profile: ReturnType<typeof measureClassic>;
   similarity: number;
-  recipe: ClassicStyle | null;
+  recipe: ClassicRecipe;
 };
 type PolicyBudget = { attempts?: number; visits?: number };
 
@@ -206,19 +218,20 @@ export function generateClassic(state: ClassicRun, level: ClassicDifficulty, opt
   const structures = new Set(recent.map(classicStructure));
   const previousEdges = recent.map(openingEdges);
   const original = classic().join("");
-  const history = state.rotation?.[level] ?? [];
+  const history = state.scenarios?.[level] ?? [];
+  const previousRecipe = history.at(-1)?.recipe;
   const styleOrder = shuffle([...CLASSIC_STYLES], state)
-    .sort((a, b) => history.lastIndexOf(a) - history.lastIndexOf(b));
+    .sort((a, b) => Number(a === previousRecipe) - Number(b === previousRecipe));
   const style = styleOrder[0];
   const diagnostics = { attempts: 0, candidates: 0, solverVisits: 0, fallbackAttempts: 0 };
   const pool: Candidate[] = [];
-  const qualify = (deal: Deal | undefined, recipe: ClassicStyle | null, fallback = false): Candidate | undefined => {
+  const qualify = (deal: Deal | undefined, recipe: ClassicRecipe): Candidate | undefined => {
     if (!deal || deal.board.length !== size || occupied(deal.board) !== size ||
         new Set(deal.board).size < 6) return;
     const key = deal.board.join("");
     if (key === original || state.recent.includes(key)) return;
     const structure = classicStructure(deal.board);
-    if (!fallback && structures.has(structure)) return;
+    if (recipe !== "fallback" && structures.has(structure)) return;
     const currentEdges = openingEdges(deal.board);
     const similarity = Math.max(0, ...previousEdges.map(edges => openingSimilarity(currentEdges, edges)));
     const profile = measureClassic(deal.board, deal.proof);
@@ -231,24 +244,37 @@ export function generateClassic(state: ClassicRun, level: ClassicDifficulty, opt
   const recipes = [style, ...styleOrder];
   const attemptLimit = Math.min(MAX_ATTEMPTS, options.attempts ?? (level === 0 ? MAX_ATTEMPTS : level === 1 ? 16 : recipes.length));
   const visits = Math.min(600, options.visits ?? (level === 0 ? 9 : 600));
+  const budget = {
+    attemptLimit, maxCandidates,
+    solverVisitsPerAttempt: level === 1 ? visits : null,
+    greedyStepsPerAttempt: level === 0 ? visits : null,
+  };
   while (diagnostics.attempts < attemptLimit && pool.length < maxCandidates) {
     const recipe = recipes[diagnostics.attempts % recipes.length];
     diagnostics.attempts++;
     const deal = size === 45 || size === 81
       ? constructDense(size, recipe, nextInt)
       : smallCandidate(level as 0 | 1, state, visits, () => diagnostics.solverVisits++);
-    const candidate = qualify(deal, dense ? recipe : null);
+    const candidate = qualify(deal, dense ? recipe : "shuffle");
     if (candidate) pool.push(candidate);
   }
   diagnostics.candidates = pool.length;
   function score(candidate: Candidate) {
-    // Prefer a structurally fresh opening, with the route metrics as tie-breakers
-    // for distant candidates. Do not use digit count as a proxy for the style.
     const recipeBonus = candidate.recipe === style ? size * .6 : 0;
-    return recipeBonus + styleScore(candidate, style, level) - candidate.similarity * 70;
+    let motifPenalty = 0, recipePenalty = 0;
+    for (const [index, previous] of history.entries()) {
+      const recency = 1 / (history.length - index);
+      const similarity = classicMotifSimilarity(candidate.profile.motif, previous.motif);
+      if (similarity >= CLOSE_CLASSIC_MOTIF)
+        motifPenalty = Math.max(motifPenalty, size * (similarity === 1 ? 4 : .6) * recency);
+      if (dense && candidate.recipe === previous.recipe)
+        recipePenalty = Math.max(recipePenalty, size * .95 * recency);
+    }
+    return recipeBonus + styleScore(candidate, style, level) -
+      candidate.similarity * 70 - motifPenalty - recipePenalty;
   }
   pool.sort((a, b) => score(b) - score(a));
-  if (pool.length) return { ...pool[0], style, fallback: false, diagnostics };
+  if (pool.length) return { ...pool[0], style, fallback: false, diagnostics, budget };
 
   const { blocks, last } = size === 45 || size === 81
     ? denseFallback(size, nextInt)
@@ -263,8 +289,8 @@ export function generateClassic(state: ClassicRun, level: ClassicDifficulty, opt
     // At most eight exact boards are in history.
     const board = [...blocks.slice(index), ...blocks.slice(0, index)].flat();
     if (last !== undefined) board.push(last);
-    const candidate = qualify({ board, proof: clearInReadingOrder(board, last !== undefined) }, null, true);
-    if (candidate) return { ...candidate, style: "open" as const, fallback: true, diagnostics };
+    const candidate = qualify({ board, proof: clearInReadingOrder(board, last !== undefined) }, "fallback");
+    if (candidate) return { ...candidate, style, fallback: true, diagnostics, budget };
   }
   throw new Error("Cannot prepare a fresh classic game");
 }
@@ -276,14 +302,13 @@ export function takeGeneratedClassic(
   level = state.difficulty,
 ): Session {
   if (!isClassicDifficulty(level)) throw new Error("Invalid classic difficulty");
-  const { board, style, fallback } = generateClassic(state, level);
+  const { board, recipe, profile } = generateClassic(state, level);
   state.difficulty = level;
   state.recent = [...state.recent, board.join("")].slice(-8);
   state.current = { attempt, board: [...board] };
-  if (!fallback) {
-    state.rotation ??= {};
-    state.rotation[level] = [...(state.rotation[level] ?? []), style].slice(-2);
-  }
+  state.scenarios ??= {};
+  state.scenarios[level] = [...(state.scenarios[level] ?? []), { recipe, motif: profile.motif }]
+    .slice(-CLASSIC_SCENARIO_HISTORY);
   const game = newSession();
   game.current.board = board;
   return game;
