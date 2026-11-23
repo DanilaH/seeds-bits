@@ -77,6 +77,8 @@ test("legacy games remain intact; new games generate normal fields and retain th
   const fields = new Set<string>();
   for (let n = 0; n < 9; n++) {
     await page.locator("#next-classic").click();
+    await expect(page.locator("#classic-new-sheet")).toBeVisible();
+    await page.locator('#classic-new-sheet [data-classic-level="1"]').click();
     await expect(page.locator("#dialog")).not.toBeVisible();
     const p = await saved(page),
       board = p.sessions.classic.current.board;
