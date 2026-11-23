@@ -801,9 +801,9 @@
     {
       "id": "generator-quality-evidence-20261123",
       "sourceFeatureIds": [],
-      "scope": "Локальный аудит Seed Bits: три сложности классики, 2400 precomputed задач тетради и seeded daily, без нового наблюдения Number Match Easybrain/NADO.",
+      "scope": "Исторический локальный аудит трёх уровней Классики и исходная задача №14 по тетрадям/daily. Сейчас Классика имеет отдельный пилот 18/28/45/81; оригиналы в этом проходе не наблюдались.",
       "status": "DEFERRED",
-      "reason": "Нужен сначала read-only game-quality анализ и плейтест; изменения ядра/экономики требуют отдельного решения владельца. Пилот четырёх уровней остаётся активным по issue #13.",
+      "reason": "Технические GA-01/GA-03 закрыты повторной приёмкой12082. Открыты человеческий плейтест Классики, темп тетрадей, недельный ритм daily и семечки в минуту; изменение экономики требует отдельного решения владельца.",
       "evidence": {
         "report": "https://github.com/DanilaH/seeds-bits/issues/14",
         "difficultyTask": "https://github.com/DanilaH/seeds-bits/issues/13",
@@ -818,10 +818,15 @@
           "device": "NOT_VERIFIED",
           "liveAudience": "NOT_VERIFIED",
           "reference": "NOT_APPLICABLE"
-        }
+        },
+        "implementationAudit": "../research/generator-audit-2026-11-23/README.md",
+        "followup12082": "../research/generator-audit-2026-11-23/FOLLOWUP_12082.md",
+        "contentBaseline": "../research/daily-notebook-baseline-2026-11-23/README.md",
+        "medianClarification": "В issue14 значение512 для тома100 — нижнее из двух центральных значений512/514. Обычная медиана513; каталог не менялся. Подробности в baseline20261123."
       },
-      "nextAction": "Разработчик issue #13 сначала меряет исходные качества/стоимость на 1000 seeds × 4 и моделирует seeds/minute, сохраняет 27-digit legacy High, затем пилот 45/81. Отдельно issue #14: телефонный аудит поздних тетрадей, пауза/награда, lazy data и дневная кривая. Не включать шесть приостановленных экспериментов.",
-      "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes."
+      "nextAction": "Продолжить два исследования №14: темп поздних тетрадей и недельный ритм daily на неизменённых ID/наградах. Для Классики остаются физический плейтест серии и seeds/minute. Шесть экспериментов на паузе.",
+      "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes.",
+      "returnCondition": "Получить телефонные наблюдения длительности/помощи/решений по фиксированным задачам и неделе; до изменений контента определить совместимость старых ID, до изменения наград получить решение владельца."
     },
     {
       "id": "classic-generator-pilot-20261123",
@@ -842,16 +847,58 @@
         "research": "https://github.com/DanilaH/seeds-bits/pull/15",
         "report": "../classic-difficulty-2026-11-12/PILOT_12081.md",
         "android": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14841601829",
-        "comparison": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14840781761"
+        "comparison": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14840781761",
+        "independentAudit": "../research/generator-audit-2026-11-23/README.md",
+        "independentAuditHead": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+        "independentAuditFreshCI": "https://github.com/DanilaH/seeds-bits/actions/runs/45230217226",
+        "independentAuditCIHead": "4917599e0f534c70f09f79496353b063195d2cae",
+        "followup12082": "../research/generator-audit-2026-11-23/FOLLOWUP_12082.md",
+        "followupRuntime": "eae2bcbeaaa1a5c76872dddc7a7f79844988b60e"
       },
       "verification": {
-        "code": "128 unit and 399 local Chromium scenarios; 14000 exact old/new witnesses and 60 early/mid/late alternative branch probes.",
-        "emulator": "Android API 35 / 12081 / preserved 12080 save and legacy High 27 with Undo, lower-pair taps and generator timings.",
+        "code": "PASS final product/tests on docs-only descendant4917599e: complete general CI45230217226,128 unit+2 model+15 regression+399 main browser,web/Yandex,Android debug/native. PR run45230405612 web399PASS; its Android failed only MavenHTTP429. Product/tests/workflows identical to7f8. Developer comparison CI artifact backs first7000 witnesses; extra reported7000 control remains without attached provenance.",
+        "emulator": "Android API35/WebView124: optimized 12080→12081 migration with temporary CI signing identity; debug UI bottom taps, Undo and scroll47→47 with real banner reserve. Signed/unsigned 670 entries and debug/release18 webassets match. Not a full signed-APK physical-phone run.",
         "physicalPhone": "UNKNOWN",
-        "liveAudience": "UNKNOWN"
+        "liveAudience": "UNKNOWN",
+        "independentNode": "PASS on exact 7f8ac0e: 4000 fresh seeds30000..30999, 400 serialized sequential deals, 36 forced fallback cases and 9 integration roundtrips; Node24.22.3. Actual TS with pinned Git blobs. No physical input or human difficulty conclusion.",
+        "technicalAcceptance": "GENERAL_CI_PASS on unchanged final product/tests. GA-02 CI gap RESOLVED. Historical scroll50→48 cause UNKNOWN, not repeated in two new399-scenario runs; capture layout if it recurs. Serial quality evidence and human balance remain open.",
+        "developerReportedAdditionalControl": "PILOT reports seeds20000..20999 and100 serialized games per level. Reproducible command/raw report absent from attached CI artifact at audit time; not asserted false.",
+        "followupTechnicalAcceptance": "GA-01/GA-03 RESOLVED on eae2 runtime/df9 docs head. Actual recipe/motif history affects ranking; old29/30 fixture fixed. Full18408 archive proofs and40 summaries independently verified. Both current general CI runs green. Original12081 evidence above remains historical."
       },
-      "nextAction": "Сопоставить контрастные партии на физическом телефоне. Владелец утверждает размеры и баланс после игры. Отдельный открытый риск из №14 — оценить семечки за минуту и длинные тетради до предложения менять награды.",
-      "kitImpact": "REUSE: Playability Choice Evidence Ladder; сохранены границы FOUND/UNKNOWN, без изменения карты оригиналов."
+      "nextAction": "Технические GA-01/GA-02/GA-03 закрыты. На физическом телефоне оценить контрастные партии, серию одной сложности, задержку с заполненной историей и семечки в минуту. Человеческий баланс и часть №14 по тетрадям/daily остаются открыты.",
+      "kitImpact": "REUSE: Playability Choice Evidence Ladder; сохранены границы FOUND/UNKNOWN, без изменения карты оригиналов.",
+      "auditFindings": [
+        {
+          "id": "SEEDS-GEN-AUDIT-01",
+          "status": "RESOLVED",
+          "priority": "P2",
+          "reason": "Requested preference can differ from selected recipe; identical certified central motif can occur in consecutive High45 deals.",
+          "returnCondition": "Reopen if stored history diverges from selected output or ceases to affect ranking. Human recognition of finite motifs is a separate open playtest question.",
+          "reference": "../research/generator-audit-2026-11-23/README.md#3-ga-01--p2--история-предпочтений-не-отражает-фактические-повторения",
+          "resolution": "12082 stores actual selected recipe and motif, uses soft recency-weighted similarity penalty; exact oldHigh45seed12081 games29/30 now differ. Independent controlled inputs prove ranking effect. Remaining motif frequency quantified, not claimed eliminated.",
+          "resolutionEvidence": "../research/generator-audit-2026-11-23/FOLLOWUP_12082.md"
+        },
+        {
+          "id": "SEEDS-GEN-AUDIT-02",
+          "status": "RESOLVED",
+          "priority": "ACCEPTANCE_GATE",
+          "reason": "Latest runtime general CI is red; final HEAD has no runs. Scroll50→48 has no captured maxScroll geometry.",
+          "returnCondition": "Reopen if the same scroll scenario fails after stable layout, or if next product/test revision lacks a green general run.",
+          "reference": "../research/generator-audit-2026-11-23/README.md",
+          "resolution": "Complete green CI45230217226 on4917599e, a docs-only descendant of audited7f8 with identical product/tests/workflows; second web399PASS too. No assertions relaxed. Historical2px cause remains unknown; capture geometry if repeated.",
+          "latestVerification": "Both eae2 general CI45235845364 and45235857741 SUCCESS:130unit+2model+15regression+399browser; nextdf9 only3docs."
+        },
+        {
+          "id": "SEEDS-GEN-AUDIT-03",
+          "status": "RESOLVED",
+          "priority": "P2",
+          "reason": "Per-deal distributions/serial history and provenance of additional reported control not attached to developer CI artifact.",
+          "returnCondition": "Reopen when new acceptance claims cannot be traced to pinned per-deal rows, parameters and source/results hashes.",
+          "reference": "../research/generator-audit-2026-11-23/README.md",
+          "resolution": "Current CLI pins two nonoverlapping seed ranges and three serialized series. Artifact14849741823 contains18408 rows and manifest. Independent replay18408/18408,484269actions,40summary groups and8000paired fresh comparisons pass. Does not retroactively verify unattached12081 local claims.",
+          "resolutionEvidence": "../research/generator-audit-2026-11-23/FOLLOWUP_12082.md"
+        }
+      ]
     },
     {
       "id": "classic-series-actual-scenarios-20261123",
@@ -871,16 +918,88 @@
         "data": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/artifacts/14849741823",
         "preview": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420",
         "android": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/artifacts/14848964860",
-        "ci": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845364"
+        "ci": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845364",
+        "independentFollowup": "../research/generator-audit-2026-11-23/FOLLOWUP_12082.md",
+        "independentHead": "df9ff5c3df8b017803e2ff924c2812a5efc530ac"
       },
       "verification": {
-        "code": "18408 verified paths, deterministic paired fresh/control and filled-history series. High adjacent central repeat 12/276 to 0/276.",
-        "emulator": "Android API35, signed preview 12082, 12081 upgrade and legacy High27 Undo verified.",
+        "code": "PASS ACTUAL_SOURCE_NODE:64paired fresh boards/proofs identical,496serialized series,36forced fallback,13metadata cases;661full replays. GA-01 controlled history intervention changes winner without changing candidate pool.",
+        "emulator": "API35/WebView124: optimized12081→12082 upgrade with temporary CI certificate; legacy27/Undo/notebook preserved. UI/debug webassets match release. Not a physical run of final signed APK.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN",
+        "archivedModelReplay": "PASS18408/18408 downloaded proofs,484269actions,40recomputed summaries,8000fresh board/proof pairs identical. Candidate selection not independently regenerated for every archived row; developer two local byte-identical runs not independently observed.",
+        "generalCI": "Both runtimeeae2 runs45235845364/45235857741 SUCCESS:130unit+2model+15regression+399browser plus web/Android. df9only3docs.",
+        "apk": "Actual manifestcom.seedsbits.game.preview1.1.2/12082; SHA256b254fda5b36bccec4eb0c90f0cd7b7a5adda51098993f3dcf0914747fbab8d4a;670signed/unsigned ZIP entries and18debug/releasewebassets match; CIv2/v3verified.",
+        "technicalAcceptance": "GA-01/GA-03 RESOLVED. IMPLEMENTED_UNVERIFIED remains overall because physicalPhone/liveAudience UNKNOWN."
+      },
+      "nextAction": "Физический плейтест узнаваемости и сложности серии, end-to-end задержка с заполненной историей и seeds/minute. Остаточные точные мотивы recent4:High179/276,Expert138/276; это не повтор целых партий и не измерение удовольствия.",
+      "kitImpact": "REUSE: applied the evidence ladder to selected recipes, canonical motifs and serial acceptance."
+    },
+    {
+      "id": "seeds-notebook-pacing-20261123",
+      "sourceFeatureIds": [],
+      "scope": "Семечки, режим тетрадей. Собственный фиксированный каталог; не наблюдение оригиналов.",
+      "status": "RESEARCHED",
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "implementation": [
+        "src/puzzles.ts:99–123",
+        "src/notebooks.ts",
+        "src/notebook.json",
+        "src/notebook-extra.json",
+        "src/jars.ts:113–115",
+        "src/advice-worker.ts"
+      ],
+      "behavior": "100томов×24=2400immutable IDs.1878задач>54цифр; максимум594цифры/972логические клетки.1670наград достигают24. Add запрещён; Hint с witness/ограниченным поиском и возможным возвратом.",
+      "evidence": {
+        "report": "../research/daily-notebook-baseline-2026-11-23/README.md",
+        "results": "../research/daily-notebook-baseline-2026-11-23/results.json",
+        "task": "https://github.com/DanilaH/seeds-bits/issues/14"
+      },
+      "verification": {
+        "data": "All2400boards counted; no exact duplicates. Median uses mean of middle two,vol100513.",
+        "actualSourceNode": "10selected notebook proofs replayed; actual Progress migration and reward contracts checked. Not all2400proofs replayed in this pass.",
         "physicalPhone": "UNKNOWN",
         "liveAudience": "UNKNOWN"
       },
-      "nextAction": "Телефонный плейтест ощущения сложности и серии, замер семечек в минуту.",
-      "kitImpact": "REUSE: applied the evidence ladder to selected recipes, canonical motifs and serial acceptance."
+      "nextAction": "Фиксированные book1,78,240,480,960,1440,1920,2380: длительность/Undo/Hint/scroll и объяснение выбора на телефоне; на длинной задаче отклониться от witness и проверить подсказку. Сравнить одинаковый объём с разной структурой. Паспорта дешевле переавторства каталога.",
+      "constraints": [
+        "Сохранить все существующие book-v1 ID, поля и порядокextra.",
+        "Сохранить sessions/Undo/done и одноразовые награды; изменение экономики отдельно.",
+        "Не включать шесть приостановленных экспериментов."
+      ],
+      "kitImpact": "REUSE: choice evidence and stable identity; no source parity changes."
+    },
+    {
+      "id": "seeds-daily-rhythm-20261123",
+      "sourceFeatureIds": [],
+      "scope": "Семечки, ежедневные задачи и архив. Вычисленный срез2026 включает будущие на дату аудита дни; не данные игроков.",
+      "status": "RESEARCHED",
+      "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "implementation": [
+        "src/puzzles.ts:124–160",
+        "src/daily-run.ts",
+        "src/calendar.ts",
+        "src/jars.ts:113–115",
+        "src/progress.ts:29–35"
+      ],
+      "behavior": "daily-v1-date привязывает поле к hash даты:16–32цифры,без заданной недельной кривой. Архив с2025-01; серия только за today сегодня. Первая очистка4–8семечек; серия3/7 добавляет1/3 в общий запас подсказок.",
+      "evidence": {
+        "report": "../research/daily-notebook-baseline-2026-11-23/README.md",
+        "results": "../research/daily-notebook-baseline-2026-11-23/results.json",
+        "task": "https://github.com/DanilaH/seeds-bits/issues/14"
+      },
+      "verification": {
+        "actualSourceNode": "365unique daily boards and365proof replays PASS; median24digits/19openingpairs; first-legal policy withoutAdd273/365. Not a player win rate.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "nextAction": "Отобрать контрастные задачи одинаковых16/24/32цифр и семидневную подборку, сравнить с фиксированной текущей неделей. Измерить длительность/выбор/Undo/понимание. До продуктового ввода определить будущую дату и совместимую версию; малая–средняя стоимость отбора, средняя для ввода/миграции.",
+      "constraints": [
+        "Не менять задним числом daily-v1-поля и сохранённые назначения.",
+        "Сохранить archive/today distinction, sessions/Undo, трофеи и уникальность наград.",
+        "Новая неделя не разрешает изменение экономики или возврат paused help."
+      ],
+      "kitImpact": "REUSE: structural contrast and evidence ladder; no source parity changes."
     }
   ]
 }

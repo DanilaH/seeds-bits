@@ -1,0 +1,109 @@
+{
+  "scope": "Replaying downloaded CI deal rows through exact hashed runtime core/profile; not regenerated candidate selection",
+  "runtime": "eae2bcbeaaa1a5c76872dddc7a7f79844988b60e",
+  "baseline": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+  "rows": 18408,
+  "sources": {
+    "src/core.ts": {
+      "blob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+      "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+    },
+    "src/classic-profile.ts": {
+      "blob": "3f8edf6f286cd65a703f83918f129d4df3222487",
+      "sha256": "6c03aa06497052117431cbc3105a9c1f770224d0ddf08d22bb6dcf7ef37cc154"
+    }
+  },
+  "proofsPassed": 18408,
+  "proofsFailed": 0,
+  "actions": 484269,
+  "pairs": 469003,
+  "adds": 15266,
+  "summariesVerified": 40,
+  "freshComparisonsIdentical": 8000,
+  "seriesSummary": [
+    {
+      "variant": "before",
+      "level": 0,
+      "count": 276,
+      "recent4Motif": 0,
+      "adjacentMotif": 0,
+      "adjacentRecipe": 276,
+      "recent8Board": 0,
+      "recent8Structure": 0
+    },
+    {
+      "variant": "before",
+      "level": 1,
+      "count": 276,
+      "recent4Motif": 0,
+      "adjacentMotif": 0,
+      "adjacentRecipe": 276,
+      "recent8Board": 0,
+      "recent8Structure": 0
+    },
+    {
+      "variant": "before",
+      "level": 2,
+      "count": 276,
+      "recent4Motif": 230,
+      "adjacentMotif": 12,
+      "adjacentRecipe": 13,
+      "recent8Board": 0,
+      "recent8Structure": 0
+    },
+    {
+      "variant": "before",
+      "level": 3,
+      "count": 276,
+      "recent4Motif": 227,
+      "adjacentMotif": 0,
+      "adjacentRecipe": 2,
+      "recent8Board": 0,
+      "recent8Structure": 0
+    },
+    {
+      "variant": "after",
+      "level": 0,
+      "count": 276,
+      "recent4Motif": 0,
+      "adjacentMotif": 0,
+      "adjacentRecipe": 276,
+      "recent8Board": 0,
+      "recent8Structure": 0
+    },
+    {
+      "variant": "after",
+      "level": 1,
+      "count": 276,
+      "recent4Motif": 0,
+      "adjacentMotif": 0,
+      "adjacentRecipe": 276,
+      "recent8Board": 0,
+      "recent8Structure": 0
+    },
+    {
+      "variant": "after",
+      "level": 2,
+      "count": 276,
+      "recent4Motif": 179,
+      "adjacentMotif": 0,
+      "adjacentRecipe": 17,
+      "recent8Board": 0,
+      "recent8Structure": 0
+    },
+    {
+      "variant": "after",
+      "level": 3,
+      "count": 276,
+      "recent4Motif": 138,
+      "adjacentMotif": 0,
+      "adjacentRecipe": 14,
+      "recent8Board": 0,
+      "recent8Structure": 0
+    }
+  ],
+  "claimsNotReproduced": [
+    "No fresh generator rerun for every archived input; no verification of developer local double-run byte equality",
+    "No Android hardware / live audience / human difficulty / end-to-end timing"
+  ]
+}

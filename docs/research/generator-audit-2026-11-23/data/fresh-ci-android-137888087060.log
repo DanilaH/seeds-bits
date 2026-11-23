@@ -1,0 +1,38 @@
+2026-11-23T17:43:36.8350475Z FAILURE: Build failed with an exception.
+2026-11-23T17:43:36.8379940Z 
+2026-11-23T17:43:36.8380725Z * What went wrong:
+2026-11-23T17:43:36.8381392Z A problem occurred configuring root project 'android'.
+2026-11-23T17:43:36.8382162Z > Could not resolve all artifacts for configuration 'classpath'.
+2026-11-23T17:43:36.8382982Z    > Could not resolve org.jetbrains.kotlin:kotlin-stdlib:2.2.0.
+2026-11-23T17:43:36.8383504Z      Required by:
+2026-11-23T17:43:36.8384013Z          root project : > com.android.tools.build:gradle:8.13.0
+2026-11-23T17:43:36.8384954Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools.build:gradle-settings-api:8.13.0
+2026-11-23T17:43:36.8385967Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools.build:aaptcompiler:8.13.0
+2026-11-23T17:43:36.8386991Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools.build:builder:8.13.0
+2026-11-23T17:43:36.8388066Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools.build:builder-model:8.13.0
+2026-11-23T17:43:36.8389269Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools.build:gradle-api:8.13.0
+2026-11-23T17:43:36.8390955Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools.build:gradle-settings-api:8.13.0 > com.android.tools.build:gradle-common-api:8.13.0
+2026-11-23T17:43:36.8392517Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools.build:builder:8.13.0 > com.android.tools.build:manifest-merger:31.13.0
+2026-11-23T17:43:36.8393608Z       > Could not resolve org.jetbrains.kotlin:kotlin-stdlib:2.2.0.
+2026-11-23T17:43:36.8394838Z          > Could not get resource 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.0/kotlin-stdlib-2.2.0.pom'.
+2026-11-23T17:43:36.8396982Z             > Could not GET 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.0/kotlin-stdlib-2.2.0.pom'. Received status code 429 from server: Too Many Requests
+2026-11-23T17:43:36.8398183Z    > Could not resolve org.apache.httpcomponents:httpmime:4.5.6.
+2026-11-23T17:43:36.8398726Z      Required by:
+2026-11-23T17:43:36.8399574Z          root project : > com.android.tools.build:gradle:8.13.0
+2026-11-23T17:43:36.8400439Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools:sdklib:31.13.0
+2026-11-23T17:43:36.8401436Z          root project : > com.android.tools.build:gradle:8.13.0 > com.android.tools.analytics-library:crash:31.13.0
+2026-11-23T17:43:36.8402280Z       > Could not resolve org.apache.httpcomponents:httpmime:4.5.6.
+2026-11-23T17:43:36.8403278Z          > Could not get resource 'https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpmime/4.5.6/httpmime-4.5.6.pom'.
+2026-11-23T17:43:36.8404814Z             > Could not GET 'https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpmime/4.5.6/httpmime-4.5.6.pom'. Received status code 429 from server: Too Many Requests
+2026-11-23T17:43:36.8405982Z    > Could not resolve commons-io:commons-io:2.16.1.
+2026-11-23T17:43:36.8406465Z      Required by:
+2026-11-23T17:43:36.8406992Z          root project : > com.android.tools.build:gradle:8.13.0
+2026-11-23T17:43:36.8408112Z          root project : > com.android.tools.build:gradle:8.13.0 > androidx.databinding:databinding-compiler-common:8.13.0
+2026-11-23T17:43:36.8409181Z       > Could not resolve commons-io:commons-io:2.16.1.
+2026-11-23T17:43:36.8410159Z          > Could not get resource 'https://repo.maven.apache.org/maven2/commons-io/commons-io/2.16.1/commons-io-2.16.1.pom'.
+2026-11-23T17:43:36.8411950Z             > Could not GET 'https://repo.maven.apache.org/maven2/commons-io/commons-io/2.16.1/commons-io-2.16.1.pom'. Received status code 429 from server: Too Many Requests
+2026-11-23T17:43:36.8413043Z    > Could not resolve org.ow2.asm:asm:9.8.
+2026-11-23T17:43:36.8413506Z      Required by:
+2026-11-23T17:43:36.8414027Z          root project : > com.android.tools.build:gradle:8.13.0
+2026-11-23T17:43:36.8882475Z BUILD FAILED in 1m 21s
+2026-11-23T17:43:37.3439118Z ##[error]Process completed with exit code 1.

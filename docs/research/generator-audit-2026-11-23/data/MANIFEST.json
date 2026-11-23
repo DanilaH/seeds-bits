@@ -1,0 +1,76 @@
+{
+  "auditHead": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+  "rawJsonUncompressedSha256": "19ad567c93b66c822449244d06a0773aabfc87a51278d9568c3f30c2b1ef2a3d",
+  "files": [
+    {
+      "path": "ci-failure-137851842656.txt",
+      "bytes": 8383,
+      "sha256": "ddd2a99db1761e81ec9e75a947ec6a61c129ba446757ae9533649097dde15b1a"
+    },
+    {
+      "path": "ci-failure-137852086277.txt",
+      "bytes": 9368,
+      "sha256": "00cf7def6045ed5c510f3a70da957d14580a64a9dd2bdb73c31b4ef288f4e1ff"
+    },
+    {
+      "path": "developer-android.json",
+      "bytes": 30500,
+      "sha256": "7668811ad9b8a055fbfebe29952e3daba20f21713ba3b1e16a325b9bc58ac512"
+    },
+    {
+      "path": "developer-comparison.json",
+      "bytes": 4989,
+      "sha256": "d29527544a398fb2d01e20bc8cce437693a0b5cc8d423da36b34e51de15b5037"
+    },
+    {
+      "path": "evidence-index.json",
+      "bytes": 6627,
+      "sha256": "10c1c6ad9b6439167280fbdd0dd1b75c5a2baf13779f6c046b718eb295073cf2"
+    },
+    {
+      "path": "fresh-ci-android-137888087060.log",
+      "bytes": 4255,
+      "sha256": "9bcb3f46696b1ca18913c4c6ba440d8ef33fe391ead37368cafca5701aab36ee"
+    },
+    {
+      "path": "fresh-ci-web-137887412947.log",
+      "bytes": 791,
+      "sha256": "3260e5fcbbbd0ac8e717c06742a9b7382a38504c61fa12d7d086aaf8a66384a7"
+    },
+    {
+      "path": "fresh-ci-web-137888087402.log",
+      "bytes": 791,
+      "sha256": "8890b4aca6653d2c7e98b9291c2b87b2708dd4892130ddd59b70befb131e9f30"
+    },
+    {
+      "path": "fresh-ci.json",
+      "bytes": 21733,
+      "sha256": "d2b8709e202efd891aad2dbdad89edec4ef9cf2ff2605e2dc0dd49c6ef5d2a9b"
+    },
+    {
+      "path": "generator-fallback-check.json",
+      "bytes": 6090,
+      "sha256": "a854c35115b2659b5093c81981bdab7304d65ac3dd886cbc2102b596f393372b"
+    },
+    {
+      "path": "generator-results.json.gz",
+      "bytes": 302920,
+      "sha256": "8de2c91048111176d7914b5a4acb96887aa917be96c7b3ba536fc4a128bcd877"
+    },
+    {
+      "path": "generator-rotation-fixture.json",
+      "bytes": 9601,
+      "sha256": "d4a8a4cf6b6b43ddc0bba7689377dc2894295a2f1bd33115a4ac10498f1e79a4"
+    },
+    {
+      "path": "generator-summary.json",
+      "bytes": 67902,
+      "sha256": "1a46503136529c47a9237024a068d02f5b3dc3538af1ae7b4c94ecf3ead7d07b"
+    },
+    {
+      "path": "roundtrip-results.json",
+      "bytes": 2864,
+      "sha256": "dcb9d50a9d492b2be63240760bb0130664dac00c59a6f5c157e538c4ab3fda12"
+    }
+  ]
+}

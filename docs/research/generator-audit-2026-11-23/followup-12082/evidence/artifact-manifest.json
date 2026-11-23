@@ -1,0 +1,82 @@
+{
+  "node": "v24.22.3",
+  "before": "7f8ac0e05a338d4101d10f680720343b6881ba9a",
+  "after": "eae2bcbeaaa1a5c76872dddc7a7f79844988b60e",
+  "sources": {
+    "before": {
+      "src/core.ts": {
+        "blob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+        "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+      },
+      "src/classic-profile.ts": {
+        "blob": "27f418686fe79ed66f9045f0e3f3f8e3881499fc",
+        "sha256": "c6f8ea55c5a4b908f82a142404c18ff07669a9cc7b09c9ab40c4cc7ddfe0e653"
+      },
+      "src/classic-dense.ts": {
+        "blob": "dbdfb1f9da795067f6c9940d748a86755070d50f",
+        "sha256": "c1744b6c6f3eff0c06ad1ad1ae40360365b991ba6319c4319c1ed4cced0379ce"
+      },
+      "src/classic-generator.ts": {
+        "blob": "e360737bdd25a1083aad31fc0c9a277c5b2cbb91",
+        "sha256": "035ad75fd8c2535d1323aa94dba8433ff56cb4c755eddc3e395d1b2e397b2e46"
+      }
+    },
+    "after": {
+      "src/core.ts": {
+        "blob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+        "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+      },
+      "src/classic-profile.ts": {
+        "blob": "3f8edf6f286cd65a703f83918f129d4df3222487",
+        "sha256": "6c03aa06497052117431cbc3105a9c1f770224d0ddf08d22bb6dcf7ef37cc154"
+      },
+      "src/classic-dense.ts": {
+        "blob": "dbdfb1f9da795067f6c9940d748a86755070d50f",
+        "sha256": "c1744b6c6f3eff0c06ad1ad1ae40360365b991ba6319c4319c1ed4cced0379ce"
+      },
+      "src/classic-generator.ts": {
+        "blob": "78f3fad7b270d1a5c2d9f64ed75bcff96200a9c6",
+        "sha256": "a443435e268bd78406b8e1387b8d4e2ead007da116303129920f7c55f5ebb2fd"
+      }
+    }
+  },
+  "command": "node scripts/classic-series.mjs --before 7f8ac0e05a338d4101d10f680720343b6881ba9a --after eae2bcbeaaa1a5c76872dddc7a7f79844988b60e --fresh 30000:30999 --control 40000:40999 --series-seeds 12081,42081,52081 --series-count 100",
+  "fresh": [
+    30000,
+    30999
+  ],
+  "control": [
+    40000,
+    40999
+  ],
+  "seriesSeeds": [
+    12081,
+    42081,
+    52081
+  ],
+  "seriesCount": 100,
+  "historyWindow": 4,
+  "warmup": 8,
+  "closeMotifThreshold": 0.8,
+  "freshSequence": "Independent deals; comparison windows follow seed order only for measurement.",
+  "motif": "Canonical coordinates before first Add, or at the halfway removal when the witness has no Add.",
+  "counts": {
+    "before": {
+      "fresh": 4000,
+      "control": 4000,
+      "series": 1200,
+      "forced-fallback": 4
+    },
+    "after": {
+      "fresh": 4000,
+      "control": 4000,
+      "series": 1200,
+      "forced-fallback": 4
+    }
+  },
+  "artifacts": {
+    "deals.jsonl.gz": "5a8c110016350fd62cdc4bc3002d478e4e034a921b7e9b61f1c1912d85cc83f9",
+    "summary.json": "22dd2ff4caa1e631529b53852dd0b7224910b69ffe4fee420c3412d8947924d5",
+    "audit-29-30.json": "0e4477f69e9d08198caa446e7e21cee4c0d261a7c8de49c3f38248ac00b32fe3"
+  }
+}

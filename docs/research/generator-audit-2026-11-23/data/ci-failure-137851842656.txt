@@ -1,0 +1,137 @@
+2026-11-23T16:52:47.6689163Z   1) e2e/classic-variety.spec.ts:288:1 › Expert keeps its scroll, move and Undo after restarting above a 50px banner 
+2026-11-23T16:52:47.6690142Z 
+2026-11-23T16:52:47.6690451Z     Error: expect(received).toBe(expected) // Object.is equality
+2026-11-23T16:52:47.6690889Z 
+2026-11-23T16:52:47.6691085Z     Expected: 50
+2026-11-23T16:52:47.6691401Z     Received: 48
+2026-11-23T16:52:47.6691611Z 
+2026-11-23T16:52:47.6691852Z       312 |   await page.locator("#resume").click();
+2026-11-23T16:52:47.6695347Z       313 |   await expect(page.locator("#remaining")).toHaveText("79");
+2026-11-23T16:52:47.6695926Z     > 314 |   expect(await viewport.evaluate(e => e.scrollTop)).toBe(scroll);
+2026-11-23T16:52:47.6696521Z           |                                                     ^
+2026-11-23T16:52:47.6697022Z       315 |   await page.locator("#undo").click();
+2026-11-23T16:52:47.6697708Z       316 |   await expect(page.locator("#remaining")).toHaveText("81");
+2026-11-23T16:52:47.6698371Z       317 |   expect((await saved(page)).sessions.classic.current.board).toEqual(board);
+2026-11-23T16:52:47.6699065Z         at /home/runner/work/seeds-bits/seeds-bits/e2e/classic-variety.spec.ts:314:53
+2026-11-23T16:52:47.6699455Z 
+2026-11-23T16:52:47.6699892Z     Error Context: test-results/main/classic-variety-Expert-kee-6e168-tarting-above-a-50px-banner/error-context.md
+2026-11-23T16:52:47.6700390Z 
+2026-11-23T16:52:47.6701382Z   2) e2e/classic-variety.spec.ts:324:1 › Expert Add copies the certified remainder, saves it and preserves Undo on reload 
+2026-11-23T16:52:47.6701781Z 
+2026-11-23T16:52:47.6701951Z     Error: expect(received).toEqual(expected) // deep equality
+2026-11-23T16:52:47.6702429Z 
+2026-11-23T16:52:47.6702552Z     - Expected  - 0
+2026-11-23T16:52:47.6702831Z     + Received  + 1
+2026-11-23T16:52:47.6702970Z 
+2026-11-23T16:52:47.6703100Z     @@ -6,6 +6,7 @@
+2026-11-23T16:52:47.6703324Z         0,
+2026-11-23T16:52:47.6703529Z         0,
+2026-11-23T16:52:47.6703716Z         0,
+2026-11-23T16:52:47.6703974Z         0,
+2026-11-23T16:52:47.6704193Z         0,
+2026-11-23T16:52:47.6704400Z     +   1,
+2026-11-23T16:52:47.6704626Z       ]
+2026-11-23T16:52:47.6704727Z 
+2026-11-23T16:52:47.6704886Z       345 |   await page.locator("#undo").click();
+2026-11-23T16:52:47.6705817Z     > 347 |   expect((await saved(page)).sessions.classic.current.board).toEqual(beforeAdd);
+2026-11-23T16:52:47.6706246Z           |                                                              ^
+2026-11-23T16:52:47.6706522Z       348 | });
+2026-11-23T16:52:47.6706776Z       349 |
+2026-11-23T16:52:47.6707128Z         at /home/runner/work/seeds-bits/seeds-bits/e2e/classic-variety.spec.ts:347:62
+2026-11-23T16:52:47.6707480Z 
+2026-11-23T16:52:47.6707833Z     Error Context: test-results/main/classic-variety-Expert-Add-31c11-nd-preserves-Undo-on-reload/error-context.md
+2026-11-23T16:52:47.6708205Z 
+2026-11-23T16:52:47.6708641Z   3) e2e/porting-classic-add.spec.ts:7:1 › a generated ordinary board needs two consecutive Adds to restore moves 
+2026-11-23T16:52:47.6708971Z 
+2026-11-23T16:52:47.6709149Z     Error: expect(received).toEqual(expected) // deep equality
+2026-11-23T16:52:47.6709396Z 
+2026-11-23T16:52:47.6709486Z     - Expected  - 15
+2026-11-23T16:52:47.6709772Z     + Received  + 15
+2026-11-23T16:52:47.6709920Z 
+2026-11-23T16:52:47.6710086Z       Array [
+2026-11-23T16:52:47.6710343Z     +   3,
+2026-11-23T16:52:47.6710639Z     +   7,
+2026-11-23T16:52:47.6710964Z         1,
+2026-11-23T16:52:47.6711212Z         1,
+2026-11-23T16:52:47.6711425Z     -   7,
+2026-11-23T16:52:47.6711646Z     -   9,
+2026-11-23T16:52:47.6711840Z         1,
+2026-11-23T16:52:47.6712225Z         1,
+2026-11-23T16:52:47.6712500Z     -   5,
+2026-11-23T16:52:47.6712808Z     -   5,
+2026-11-23T16:52:47.6713053Z     -   7,
+2026-11-23T16:52:47.6713339Z     -   3,
+2026-11-23T16:52:47.6713612Z         1,
+2026-11-23T16:52:47.6713842Z     -   4,
+2026-11-23T16:52:47.6714299Z     -   2,
+2026-11-23T16:52:47.6714553Z     -   3,
+2026-11-23T16:52:47.6714828Z     -   8,
+2026-11-23T16:52:47.6715061Z         1,
+2026-11-23T16:52:47.6715338Z         1,
+2026-11-23T16:52:47.6715602Z     -   9,
+2026-11-23T16:52:47.6715854Z         6,
+2026-11-23T16:52:47.6716173Z     -   6,
+2026-11-23T16:52:47.6716434Z     -   4,
+2026-11-23T16:52:47.6716680Z     -   1,
+2026-11-23T16:52:47.6716957Z     +   8,
+2026-11-23T16:52:47.6717197Z         8,
+2026-11-23T16:52:47.6717506Z         1,
+2026-11-23T16:52:47.6717760Z     +   5,
+2026-11-23T16:52:47.6718050Z     +   2,
+2026-11-23T16:52:47.6718286Z     +   4,
+2026-11-23T16:52:47.6718544Z     +   9,
+2026-11-23T16:52:47.6718848Z         1,
+2026-11-23T16:52:47.6719090Z     +   2,
+2026-11-23T16:52:47.6719343Z         1,
+2026-11-23T16:52:47.6719619Z     -   2,
+2026-11-23T16:52:47.6719889Z     +   7,
+2026-11-23T16:52:47.6720144Z     +   6,
+2026-11-23T16:52:47.6720394Z     +   4,
+2026-11-23T16:52:47.6720691Z     +   1,
+2026-11-23T16:52:47.6720941Z     +   9,
+2026-11-23T16:52:47.6721273Z     +   5,
+2026-11-23T16:52:47.6721560Z     +   3,
+2026-11-23T16:52:47.6721782Z         1,
+2026-11-23T16:52:47.6722218Z       ]
+2026-11-23T16:52:47.6722380Z 
+2026-11-23T16:52:47.6722837Z        7 | test("a generated ordinary board needs two consecutive Adds to restore moves", async ({page}) => {
+2026-11-23T16:52:47.6723558Z        8 |   const start = generateClassic(newClassicRun(fixture.seed), 1).board;
+2026-11-23T16:52:47.6724233Z     >  9 |   expect(start).toEqual(fixture.start);
+2026-11-23T16:52:47.6724645Z          |                 ^
+2026-11-23T16:52:47.6725012Z       10 |   await page.addInitScript(board => {
+2026-11-23T16:52:47.6725550Z       11 |     if (localStorage.getItem("seeds-bits.settings.v1")) return;
+2026-11-23T16:52:47.6726225Z       12 |     localStorage.setItem("seeds-bits.settings.v1", JSON.stringify({tutorialDone: true}));
+2026-11-23T16:52:47.6726946Z         at /home/runner/work/seeds-bits/seeds-bits/e2e/porting-classic-add.spec.ts:9:17
+2026-11-23T16:52:47.6727312Z 
+2026-11-23T16:52:47.6727809Z     Error Context: test-results/main/porting-classic-add-a-gene-6ba44-utive-Adds-to-restore-moves/error-context.md
+2026-11-23T16:52:47.6728246Z 
+2026-11-23T16:52:47.6728478Z   3 failed
+2026-11-23T16:52:47.6729199Z     e2e/classic-variety.spec.ts:288:1 › Expert keeps its scroll, move and Undo after restarting above a 50px banner 
+2026-11-23T16:52:47.6730186Z     e2e/classic-variety.spec.ts:324:1 › Expert Add copies the certified remainder, saves it and preserves Undo on reload 
+2026-11-23T16:52:47.6731085Z     e2e/porting-classic-add.spec.ts:7:1 › a generated ordinary board needs two consecutive Adds to restore moves 
+2026-11-23T16:52:47.6731636Z   396 passed (6.1m)
+2026-11-23T16:52:47.6887318Z ##[error]Process completed with exit code 1.
+2026-11-23T16:52:47.7072305Z with:
+2026-11-23T16:52:47.7072506Z   name: browser-checks
+2026-11-23T16:52:47.7072713Z   path: test-results/
+2026-11-23T16:52:47.7072948Z   if-no-files-found: warn
+2026-11-23T16:52:47.7073182Z   compression-level: 6
+2026-11-23T16:52:47.7073393Z   overwrite: false
+2026-11-23T16:52:47.7073615Z   include-hidden-files: false
+2026-11-23T16:52:47.7073853Z ##[endgroup]
+2026-11-23T16:52:47.8334354Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-23T16:52:47.8762609Z With the provided path, there will be 488 files uploaded
+2026-11-23T16:52:47.8763196Z Artifact name is valid!
+2026-11-23T16:52:47.8763532Z Root directory input is valid!
+2026-11-23T16:52:48.0981045Z Beginning upload of artifact content to blob storage
+2026-11-23T16:52:48.7134930Z Uploaded bytes 8388608
+2026-11-23T16:52:48.9541124Z Uploaded bytes 16777216
+2026-11-23T16:52:49.0067026Z Uploaded bytes 18071793
+2026-11-23T16:52:49.0245328Z Finished uploading artifact content to blob storage!
+2026-11-23T16:52:49.0246006Z SHA256 digest of uploaded artifact zip is 52191e9ee1313d844c679abbe57760478171e8ddce2e0c67e6437a28e657ec8f
+2026-11-23T16:52:49.0248153Z Finalizing artifact upload
+2026-11-23T16:52:49.3958242Z Artifact browser-checks.zip successfully finalized. Artifact ID 14840034107
+2026-11-23T16:52:49.3958806Z Artifact browser-checks has been successfully uploaded! Final size is 18071793 bytes. Artifact ID is 14840034107
+2026-11-23T16:52:49.4176674Z Post job cleanup.
+2026-11-23T16:52:49.5686269Z Cleaning up orphan processes
+
