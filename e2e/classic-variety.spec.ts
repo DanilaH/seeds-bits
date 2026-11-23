@@ -314,7 +314,7 @@ test("Expert keeps its scroll, move and Undo after restarting above a 50px banne
   expect(await viewport.evaluate(e => e.scrollTop)).toBe(scroll);
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("81");
-  expect((await saved(page)).sessions.classic.current.board).toEqual(board);
+  await expect.poll(async () => (await saved(page)).sessions.classic.current.board).toEqual(board);
   await page.screenshot({ path: "test-results/classic-difficulty/expert-320-reserved.png" });
   await test.info().attach("viewport", {
     body: JSON.stringify({ regular, reserved }), contentType: "application/json",
@@ -344,5 +344,5 @@ test("Expert Add copies the certified remainder, saves it and preserves Undo on 
   expect((await saved(page)).sessions.classic.current.board).toEqual([...beforeAdd, ...digits]);
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText(String(digits.length));
-  expect((await saved(page)).sessions.classic.current.board).toEqual(beforeAdd);
+  await expect.poll(async () => (await saved(page)).sessions.classic.current.board).toEqual(beforeAdd);
 });

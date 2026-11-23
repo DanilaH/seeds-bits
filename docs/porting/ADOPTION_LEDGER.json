@@ -822,6 +822,36 @@
       },
       "nextAction": "Разработчик issue #13 сначала меряет исходные качества/стоимость на 1000 seeds × 4 и моделирует seeds/minute, сохраняет 27-digit legacy High, затем пилот 45/81. Отдельно issue #14: телефонный аудит поздних тетрадей, пауза/награда, lazy data и дневная кривая. Не включать шесть приостановленных экспериментов.",
       "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes."
+    },
+    {
+      "id": "classic-generator-pilot-20261123",
+      "sourceFeatureIds": [],
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "scope": "Локальный пилот собственной Классики 18/28/45/81. №13/№14 и проверяемые примеры №15. Без нового утверждения о паритете с оригиналами.",
+      "consumerCommit": "d450a61893923b61115dd2ac5dbc7c4f2c8fff9a",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "implementation": [
+        "src/classic-generator.ts",
+        "src/classic-dense.ts",
+        "src/classic-profile.ts",
+        "src/main.ts"
+      ],
+      "evidence": {
+        "spec": "https://github.com/DanilaH/seeds-bits/issues/13",
+        "baseline": "https://github.com/DanilaH/seeds-bits/issues/14",
+        "research": "https://github.com/DanilaH/seeds-bits/pull/15",
+        "report": "../classic-difficulty-2026-11-12/PILOT_12081.md",
+        "android": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14841601829",
+        "comparison": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14840781761"
+      },
+      "verification": {
+        "code": "128 unit and 27 targeted Chromium scenarios; 14000 exact old/new witnesses and 60 early/mid/late alternative branch probes.",
+        "emulator": "Android API 35 / 12081 / preserved 12080 save and legacy High 27 with Undo, lower-pair taps and generator timings.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "nextAction": "Сопоставить контрастные партии на физическом телефоне. Владелец утверждает размеры и баланс после игры. Отдельный открытый риск из №14 — оценить семечки за минуту и длинные тетради до предложения менять награды.",
+      "kitImpact": "REUSE: Playability Choice Evidence Ladder; сохранены границы FOUND/UNKNOWN, без изменения карты оригиналов."
     }
   ]
 }

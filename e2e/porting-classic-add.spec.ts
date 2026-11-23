@@ -1,12 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { addNumbers, pairs } from "../src/core";
-import { generateClassic, newClassicRun } from "../src/classic-generator";
 import fixture from "../docs/porting/2026-11-20/double-add.json" with { type: "json" };
 import { install, key } from "./help-test-utils";
 
-test("a generated ordinary board needs two consecutive Adds to restore moves", async ({page}) => {
-  const start = generateClassic(newClassicRun(fixture.seed), 1).board;
-  expect(start).toEqual(fixture.start);
+test("a saved ordinary board needs two consecutive Adds to restore moves", async ({page}) => {
+  // Keep this previously issued field even when new-game generation evolves.
+  const start = fixture.start;
   await page.addInitScript(board => {
     if (localStorage.getItem("seeds-bits.settings.v1")) return;
     localStorage.setItem("seeds-bits.settings.v1", JSON.stringify({tutorialDone: true}));
