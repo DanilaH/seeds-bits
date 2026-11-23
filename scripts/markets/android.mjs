@@ -258,14 +258,22 @@ async function archiveAtLargeFont(language,title,undo) {
   }
 }
 function installRecord(){return JSON.parse(adb("shell","cat",`/data/user/0/${app}/no_backup/seeds-first-install.json`));}
+function installedVersionCode() {
+  const match=adb("shell","dumpsys","package",app).match(/^\s*versionCode=(\d+)\b/m);
+  assert(match,"Installed Android package has no versionCode");
+  return Number(match[1]);
+}
 async function update() {
   adb("install",baseline);
+  const from=installedVersionCode();
   launch();
   for(let i=0;i<50;i++){try{if(profiles().values[progress]&&installRecord())break;}catch{}await wait(200);}
   await fixture({[progress]:sample,[settings]:{tutorialDone:true,theme:"dark",sound:false,vibration:false}});
   const before=profiles().values;
   const source=installRecord();
   adb("install","-r",optimized);
+  const to=installedVersionCode();
+  assert(to>from,"The preview must have a newer versionCode than the installed baseline");
   launch();
   assert.deepEqual(installRecord(),source);
   const after=profiles().values;
@@ -276,6 +284,7 @@ async function update() {
   assert.equal(after[settings].theme,"dark");
   shot("updated");
   stop();
+  return {from,to};
 }
 async function showEdge(size,order,video) {
   stop();
@@ -349,9 +358,11 @@ try{
   adb("shell","wm","density","320");
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
-  await update();
+  const upgrade=await update();
   adb("uninstall",app);
   adb("install",candidate);
+  const versionCode=installedVersionCode();
+  assert.equal(versionCode,upgrade.to,"Debug and optimized previews must share a versionCode");
   adb("shell","wm","size","640x1232");
   const gameText={};
   for (const scale of [1,1.5,2]) {
@@ -374,8 +385,8 @@ try{
   archives.push(await archiveAtLargeFont("pt-BR","Desafio do arquivo · 13 de novembro","Desfazer"));
   const controls=[];
   for(const order of [[8,9],[9,8]]) controls.push(await showEdge("640x1232",order,order[0]===8));
-  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12073,
-    physicalPhone:false,systemFont:2,forwardedFile:file,updatePreservedSave:true,opening,archives,controls,
+  fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode,
+    physicalPhone:false,systemFont:2,forwardedFile:file,upgrade,updatePreservedSave:true,opening,archives,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
   // An optional recording must never turn a passing game regression into a red CI.
   // Log camera/emulator failures separately so the real acceptance result survives.
@@ -383,7 +394,7 @@ try{
     assert.equal(adb("shell","pm","clear",app),"Success");
     launch();
     await firstNotebookEdge([7,14],{recordVideo:true});
-    fs.writeFileSync(out+"/video-result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode:12073,physicalPhone:false,recorded:true},null,2));
+    fs.writeFileSync(out+"/video-result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode,physicalPhone:false,recorded:true},null,2));
   } catch(videoError) {
     fs.writeFileSync(out+"/video-failure.txt",String(videoError)+"\n"+videoError.stack);
     console.warn("ANDROID_VIDEO_CAPTURE_FAILED",String(videoError));
