@@ -144,10 +144,42 @@ test("field header follows the grid and the compact language rows keep their mar
   expect(await page.locator("#language-open").evaluate(el=>getComputedStyle(el).borderInlineStartWidth)).toBe("0px");
   await page.locator("#language-open").click();
   await expect(page.locator('#language-options [data-language="auto"] .language-mark svg')).toBeVisible();
-  await expect(page.locator('#language-options button:not([data-language="auto"]) .language-mark svg')).toHaveCount(5);
+  const flags = page.locator('#language-options button:not([data-language="auto"]) .language-mark svg');
+  await expect(flags).toHaveCount(5);
+  expect(await flags.evaluateAll(icons => icons.every(icon =>
+    [...icon.querySelectorAll("path:not([stroke]), circle:not([stroke])")]
+      .every(shape => getComputedStyle(shape).stroke === "none"),
+  ))).toBe(true);
+  expect(await flags.nth(1).locator("path[stroke]").first().evaluate(
+    path => getComputedStyle(path).stroke,
+  )).toBe("rgb(255, 255, 255)");
   await page.locator('#language-options [data-language="pt-BR"]').click();
   await expect(page.locator('#language-options [data-language="pt-BR"]')).toHaveAttribute("aria-pressed","true");
   expect(await page.locator("#language-options").evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+});
+
+test("home mode art sits beside the labels and extends past both card edges", async ({page}) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await seeded(page);
+  const dimensions = await page.evaluate(() => {
+    return [["#book-mode", "#book-mode .book-picture"], [".home-calendar", "#home-today-art .calendar-picture"]]
+      .map(([card, art]) => {
+        const frame = document.querySelector(card)!.getBoundingClientRect();
+        const artwork = document.querySelector(art)!;
+        const icon = artwork.getBoundingClientRect();
+        const label = artwork.closest("button")!.lastElementChild!;
+        return { cardLeft: frame.left, iconLeft: icon.left, iconRight: icon.right,
+          iconWidth: icon.width, labelLeft: label.getBoundingClientRect().left };
+      });
+  });
+  for (const { cardLeft, iconLeft, iconRight, iconWidth, labelLeft } of dimensions) {
+    expect(iconLeft).toBeGreaterThan(0);
+    expect(iconLeft).toBeLessThan(cardLeft);
+    expect(iconWidth).toBeGreaterThan(48);
+    expect(iconRight).toBeLessThan(labelLeft);
+  }
+  expect(Math.abs(dimensions[0].labelLeft - dimensions[1].labelLeft)).toBeLessThanOrEqual(1);
+  await expect(page.locator("#calendar-open")).toBeVisible();
 });
 
 test("today is emphasized until its puzzle is completed", async ({page}) => {

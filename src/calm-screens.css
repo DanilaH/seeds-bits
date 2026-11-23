@@ -340,6 +340,21 @@
   color: inherit;
   font-size: inherit;
 }
+#dialog[data-screen="home"] :is(#book-mode, #daily-mode) {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  min-height: 72px;
+  padding-block: 5px;
+  padding-inline-start: 0;
+  overflow: visible;
+}
+#book-mode > .book-picture,
+#home-today-art {
+  width: 54px;
+  margin-inline-start: -8px;
+  font-size: 28px;
+}
 .home-calendar {
   display: flex;
   gap: 4px;
@@ -351,9 +366,6 @@
 }
 #dialog[data-screen="home"] .home-calendar .mode-link {
   flex: 1 1 auto;
-  flex-direction: row;
-  gap: 9px;
-  align-items: center;
   border: 0;
   background: transparent;
 }
@@ -372,6 +384,7 @@
 #home-today-art {
   position: relative;
   display: inline-grid;
+  place-items: center;
   flex: none;
 }
 #daily-mode[data-daily-pending] .calendar-picture {
@@ -911,6 +924,9 @@
   width: 28px;
   overflow: hidden;
   border-radius: 3px;
+}
+.language-mark svg[viewBox="0 0 30 20"] {
+  stroke: none;
 }
 .language-mark svg[viewBox="0 0 24 24"],
 .language-check svg {
