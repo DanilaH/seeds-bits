@@ -167,8 +167,16 @@ const edgeRoute = [
 ];
 
 for (const [first, second] of [[6, 10], [10, 6]]) {
-  test(`first required reading-order pair in task 5, starting at ${first}`, async ({page}) => {
+  test(`first required reading-order pair in pinned legacy task 5, starting at ${first}`, async ({page}) => {
     await start(page);
+    // This witness spans five original layouts. Resume a profile that already assigned them.
+    await page.evaluate(k => {
+      const save = JSON.parse(localStorage.getItem(k)!);
+      for (let n = 2; n <= 5; n++) save.bookRevisions["book-v1-" + n] = 1;
+      localStorage.setItem(k, JSON.stringify(save));
+    }, key);
+    await page.reload();
+    await page.locator("#resume").click();
     for (const [index, route] of edgeRoute.entries()) {
       let board = notebook[index].board;
       for (const [a, b] of route) {
