@@ -25,6 +25,12 @@ function straightStep(lo: number, hi: number, width: number): number {
   if (dc === 0) return width;
   return dr === Math.abs(dc) ? width + Math.sign(dc) : 0;
 }
+/** The cells of a checked connection in tap order, including its ends. */
+export function connectionCells({ a, b, kind }: Connection): number[] {
+  const step = kind === "reading" ? 1 : straightStep(Math.min(a, b), Math.max(a, b), WIDTH);
+  const direction = Math.sign(b - a);
+  return Array.from({ length: Math.abs(b - a) / step + 1 }, (_, i) => a + i * step * direction);
+}
 export function checkPair(
   board: Board,
   a: number,

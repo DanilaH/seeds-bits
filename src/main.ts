@@ -87,6 +87,7 @@ import {
   occupied,
   pairs,
   checkPair,
+  connectionCells,
   pairBlockers,
   removePair,
   addNumbers,
@@ -1312,12 +1313,18 @@ function drawPath(path: Connection | null, sequence = false) {
   updateJump();
 }
 let pairTrace: SVGSVGElement | undefined;
+let pairWave: HTMLElement | undefined;
+let blockerKick: Animation | null = null;
 let outlinedBlockers: HTMLElement[] = [];
 let pairFeedbackTimer: ReturnType<typeof setTimeout>;
 function clearPairFeedback() {
   clearTimeout(pairFeedbackTimer);
   pairTrace?.remove();
   pairTrace = undefined;
+  pairWave?.remove();
+  pairWave = undefined;
+  blockerKick?.cancel();
+  blockerKick = null;
   for (const blocker of outlinedBlockers) blocker.classList.remove("pair-blocker");
   outlinedBlockers = [];
 }
@@ -1332,9 +1339,10 @@ function showPairBlockers(indices: readonly number[]) {
   if (outlinedBlockers.length) pairFeedbackTimer = setTimeout(clearPairFeedback, 850);
 }
 function clipPairTrace() {
-  if (!pairTrace) return;
-  const trace = pairTrace.getBoundingClientRect(), view = viewport.getBoundingClientRect();
-  pairTrace.style.clipPath = `inset(${Math.max(0, view.top - trace.top)}px ${Math.max(0, trace.right - view.right)}px ${Math.max(0, trace.bottom - view.bottom)}px ${Math.max(0, view.left - trace.left)}px)`;
+  const effect = pairWave ?? pairTrace;
+  if (!effect) return;
+  const trace = effect.getBoundingClientRect(), view = viewport.getBoundingClientRect();
+  effect.style.clipPath = `inset(${Math.max(0, view.top - trace.top)}px ${Math.max(0, trace.right - view.right)}px ${Math.max(0, trace.bottom - view.bottom)}px ${Math.max(0, view.left - trace.left)}px)`;
 }
 function showPairTrace(path: Connection) {
   const view = viewport.getBoundingClientRect();
@@ -1353,6 +1361,57 @@ function showPairTrace(path: Connection) {
   $("app").append(trace);
   pairTrace = trace;
   pairFeedbackTimer = setTimeout(clearPairFeedback, 360);
+}
+function showPairWave(path: Connection, blocked = false) {
+  if (reduced() || document.hidden) return false;
+  const view = viewport.getBoundingClientRect();
+  const firstCell = cell(0)?.getBoundingClientRect();
+  if (!firstCell?.height || !view.height) return false;
+  const firstRow = Math.floor((view.top - firstCell.top) / firstCell.height) - 1;
+  const lastRow = Math.floor((view.bottom - firstCell.top) / firstCell.height) + 1;
+  const indices = connectionCells(path);
+  const step = Math.min(28, (blocked ? 126 : 92) / (indices.length - 1));
+  const wave = document.createElement("div");
+  wave.className = "pair-wave";
+  wave.dataset.kind = blocked ? "blocked" : "match";
+  wave.setAttribute("aria-hidden", "true");
+  Object.assign(wave.style, {
+    left: `${view.left}px`, top: `${view.top}px`, width: `${view.width}px`, height: `${view.height}px`,
+  });
+  for (const [order, index] of indices.entries()) {
+    const row = Math.floor(index / WIDTH);
+    if (row < firstRow || row > lastRow) continue;
+    const node = cell(index);
+    if (!node) continue;
+    const box = node.getBoundingClientRect();
+    const tile = document.createElement("span");
+    tile.className = "pair-wave-cell";
+    tile.dataset.index = String(index);
+    const impact = blocked && index === path.b;
+    if (impact) tile.classList.add("pair-wave-impact");
+    const delay = order * step;
+    Object.assign(tile.style, {
+      left: `${box.left - view.left + 2}px`, top: `${box.top - view.top + 2}px`,
+      width: `${box.width - 4}px`, height: `${box.height - 4}px`, animationDelay: `${delay}ms`,
+    });
+    wave.append(tile);
+    if (impact) {
+      const approach = indices[order - 1];
+      const dx = path.kind === "reading" ? Math.sign(path.b - path.a) : Math.sign(index % WIDTH - approach % WIDTH);
+      const dy = path.kind === "reading" ? 0 : Math.sign(Math.floor(index / WIDTH) - Math.floor(approach / WIDTH));
+      blockerKick = ownedDomMotion.animate(node.querySelector(".digit"), [
+        {transform: "none"},
+        {transform: `translate(${3 * dx}px, ${3 * dy}px) scale(1.13)`, offset: .24},
+        {transform: `translate(${-2 * dx}px, ${-2 * dy}px) scale(.98)`, offset: .54},
+        {transform: "none"},
+      ], {duration: 170, delay, easing: "ease-out"});
+    }
+  }
+  if (!wave.childElementCount) return false;
+  $("app").append(wave);
+  pairWave = wave;
+  if (!blocked) pairFeedbackTimer = setTimeout(clearPairFeedback, 240);
+  return true;
 }
 const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ownedDomMotion = new OwnedDomMotion();
@@ -2393,16 +2452,21 @@ async function choose(i: number) {
     showPairBlockers(blockers);
     const blockedEdge = result.reason === "direction" && blockers.length > 0;
     feedback("reject");
-    motion(cell(a), [
-      { background: "transparent" },
-      { background: "var(--reject)", offset: 0.35 },
-      { background: "transparent" },
-    ]);
-    motion(cell(i)?.querySelector(".digit") ?? null, [
-      { transform: "translateX(-3px)" },
-      { transform: "translateX(3px)" },
-      { transform: "translateX(0)" },
-    ]);
+    const firstBlocker = a < i ? blockers[0] : blockers.at(-1);
+    if (firstBlocker !== undefined) {
+      showPairWave({a, b: firstBlocker, kind: blockedEdge ? "reading" : "straight"}, true);
+    } else {
+      motion(cell(a), [
+        { background: "transparent" },
+        { background: "var(--reject)", offset: 0.35 },
+        { background: "transparent" },
+      ]);
+      motion(cell(i)?.querySelector(".digit") ?? null, [
+        { transform: "translateX(-3px)" },
+        { transform: "translateX(3px)" },
+        { transform: "translateX(0)" },
+      ]);
+    }
     if (inOpening() && openingErrors[result.reason]) {
       const copy = document.querySelector<HTMLElement>(".opening-copy");
       if (copy) copy.textContent = blockedEdge ? t("error.edge")
@@ -2449,7 +2513,9 @@ async function choose(i: number) {
   render();
   const firstEdge = lesson < 0 && result.path.kind === "reading" && !progress.seen.includes("edge-trace");
   const traceMove = firstEdge || (lesson < 0 && result.path.kind === "straight" && acrossGap(a, i));
-  if (traceMove) showPairTrace(result.path);
+  const wave = showPairWave(result.path);
+  if (wave && result.path.kind === "reading") $("paths").replaceChildren();
+  if (traceMove && !wave) showPairTrace(result.path);
   for (const n of [a, i]) cell(n)?.classList.add("erasing");
   const oldLength = values.length,
     next = removePair(values, a, i);
@@ -2472,7 +2538,7 @@ async function choose(i: number) {
   }
   // A finishing route is shown on the old field before it gives way to the result.
   // Non-finishing moves keep the usual erase/remap interval.
-  await new Promise((r) => setTimeout(r, ending && traceMove ? 240 : reduced() ? 0 : 100));
+  await new Promise((r) => setTimeout(r, ending && (wave || traceMove) ? 240 : reduced() ? 0 : 100));
   if (ending) clearPairFeedback();
   const blank = [...values];
   blank[a] = blank[i] = 0;
@@ -3265,7 +3331,7 @@ dialog.addEventListener("cancel", (e) => {
 let scrollTimer: ReturnType<typeof setTimeout>;
 viewport.addEventListener("scroll", () => {
   updateBoardEdges();
-  if (pairTrace) clearPairFeedback();
+  if (pairTrace || pairWave) clearPairFeedback();
   updateJump();
   clearTimeout(scrollTimer);
   scrollTimer = setTimeout(() => {

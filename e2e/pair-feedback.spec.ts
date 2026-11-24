@@ -44,12 +44,17 @@ for (const [name, entries, endpoints, blockers] of [
       await digit(page,b).click();
       const outlined = page.locator("#board .pair-blocker");
       expect(await outlined.evaluateAll(nodes=>nodes.map(e=>Number((e as HTMLElement).dataset.index)))).toEqual(blockers);
+      const wave = page.locator('.pair-wave[data-kind="blocked"]');
+      await expect(wave.locator(".pair-wave-cell").first()).toHaveAttribute("data-index", String(a));
+      await expect(wave.locator(".pair-wave-impact")).toHaveAttribute("data-index", String(reverse ? blockers.at(-1) : blockers[0]));
+      await expect(wave.locator(".pair-wave-cell").last()).toHaveClass(/pair-wave-impact/);
       await expect(digit(page,b)).toHaveClass(/selected/);
       expect(await viewportTop(page)).toBeCloseTo(top, 0);
       expect(await savedBoard(page)).toEqual(board);
       if (reverse) await digit(page,b).click();
       else await page.clock.fastForward(900);
       await expect(outlined).toHaveCount(0);
+      await expect(wave).toHaveCount(0);
     });
   }
 }
@@ -106,7 +111,7 @@ for (const [name, entries, endpoints] of [
 }
 
 for (const reverse of [false,true]) {
-  test(`exit right before entering left, reverse=${reverse}`, async ({page})=>{
+  test(`the wave follows tap order across the row edge, reverse=${reverse}`, async ({page})=>{
     await page.clock.install();
     const board = boardOf({7:6, 10:4});
     await open(page, board);
@@ -116,22 +121,34 @@ for (const reverse of [false,true]) {
     const [a,b] = reverse ? [10,7] : [7,10];
     await digit(page,a).click();
     await digit(page,b).click();
-    const trace = page.locator("#pair-trace");
-    const geometry = await trace.locator("path").evaluateAll(paths=>paths.map(el=>{
-      const path=el as SVGPathElement;
-      const [,x0,y0,x1]=path.getAttribute("d")!.match(/^M([^,]+),([^H]+)H([^m]+)/)!;
-      return {x0:Number(x0),y:Number(y0),x1:Number(x1),delay:getComputedStyle(path).animationDelay};
-    }));
-    expect(geometry).toHaveLength(2);
-    expect(geometry[0].y).toBeLessThan(geometry[1].y);
-    expect(geometry[0].x0).toBeGreaterThan(geometry[1].x0);
-    expect(geometry.every(g=>g.x1>g.x0)).toBe(true);
-    expect(geometry.map(g=>g.delay)).toEqual(["0s","0.085s"]);
+    const wave = page.locator('.pair-wave[data-kind="match"]');
+    const cells = await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(el=>({
+      index: Number((el as HTMLElement).dataset.index),
+      delay: parseFloat(getComputedStyle(el).animationDelay),
+    })));
+    expect(cells.map(c=>c.index)).toEqual(reverse ? [10,9,8,7] : [7,8,9,10]);
+    expect(cells.map(c=>c.delay)).toEqual([0,.028,.056,.084]);
     await page.clock.runFor(270);
     await expect(page.locator("#win")).toBeVisible();
-    await expect(trace).toHaveCount(0);
+    await expect(wave).toHaveCount(0);
   });
 }
+
+test("a green diagonal runs from the first tap and releases the board before it fades", async ({page})=>{
+  await page.clock.install();
+  await open(page,boardOf({0:3,12:5,13:5,30:3}));
+  await digit(page,30).click();
+  await digit(page,0).click();
+  const wave = page.locator('.pair-wave[data-kind="match"]');
+  expect(await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(e=>Number((e as HTMLElement).dataset.index)))).toEqual([30,20,10,0]);
+  await page.clock.runFor(115);
+  await expect(page.locator("#remaining")).toHaveText("2");
+  await expect(wave).toHaveCount(1);
+  await expect(page.locator("#undo")).toBeEnabled();
+  await page.locator("#undo").click();
+  await expect(wave).toHaveCount(0);
+  await expect(page.locator("#remaining")).toHaveText("4");
+});
 
 test("wrong values preserve the new selection and adjacent removal has no trail",async({page})=>{
   await open(page,[2,3,7]);

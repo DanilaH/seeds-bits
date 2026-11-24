@@ -441,6 +441,43 @@ async function verifyReport78Taps() {
     adb("shell","wm","size","640x1232");
   }
 }
+async function verifyPairWaves() {
+  const board=[6,0,8,0,4,2,0,0,8];
+  const game={...sample,active:"classic",sessions:{classic:{rules:1,
+    current:{board,scroll:0,moves:0,additions:0},history:[]}}};
+  await fixture({[progress]:game,[settings]:{tutorialDone:true,languageChoice:"ru",sound:false,vibration:false}});
+  launch();
+  const ui=await connect();
+  try {
+    await ui.tap("#resume");
+    await ui.evaluate(`(() => {
+      window.seedsWaveCheck=[];
+      new MutationObserver(records=>{
+        for(const record of records)for(const node of record.addedNodes){
+          if(!(node instanceof HTMLElement) || !node.matches(".pair-wave")) continue;
+          window.seedsWaveCheck.push({kind:node.dataset.kind,
+            cells:[...node.children].map(cell=>Number(cell.dataset.index)),
+            impact:node.querySelector(".pair-wave-impact")?.dataset.index ?? null});
+        }
+      }).observe(document.getElementById("app"),{childList:true});
+    })()`);
+    await ui.tap(digit(0));
+    await ui.tap(digit(4));
+    assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"5");
+    await ui.tap(digit(4));
+    await ui.tap(digit(8));
+    await ui.tap(digit(5));
+    await ui.until("document.querySelector('#remaining').textContent==='3'");
+    const waves=await ui.evaluate("window.seedsWaveCheck");
+    assert.deepEqual(waves,[
+      {kind:"blocked",cells:[0,1,2],impact:"2"},
+      {kind:"match",cells:[8,7,6,5],impact:null},
+    ]);
+    await ui.tap("#undo");
+    await ui.until("document.querySelector('#remaining').textContent==='5'");
+    return waves;
+  } finally {ui.close(); stop();}
+}
 // Exact old generator seed 73, with its legal first pair [0,9] removed.
 const oldHighBoard=[1,6,1,5,1,5,6,1,4,1,8,1,9,8,7,1,7,1,2,1,4,3,1,3,1,9,2];
 const oldHighCurrent=oldHighBoard.map((digit,i)=>i===0||i===9?0:digit);
@@ -624,6 +661,8 @@ try{
   // The player report requires a native touch regression, separate from solver proof.
   const report78=await verifyReport78Taps();
   fs.writeFileSync(out+"/book78-taps.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode, ...report78},null,2));
+  const waves=await verifyPairWaves();
+  fs.writeFileSync(out+"/pair-waves.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,waves},null,2));
   if (classicBundle) {
     const pilot=await classicPilot();
     fs.writeFileSync(out+"/classic-pilot-android.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,...pilot},null,2));
