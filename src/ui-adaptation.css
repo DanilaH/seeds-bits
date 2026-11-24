@@ -906,6 +906,12 @@
 #hint-dock:has(> .status-wrap) #hint-jump[hidden] {
   display: none !important;
 }
+@media (orientation: portrait) {
+  #status {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
 @media (orientation: portrait), (max-width: 539px) {
   /* Reserve two lines for ordinary copy, with room to grow for longer guidance. */
   .game:not(:has(#lesson:not([hidden]))) .status-wrap {
@@ -915,6 +921,19 @@
     overflow: auto;
     justify-content: safe flex-start;
     padding-block: 4px;
+  }
+  .game[data-mode="classic"]:not(.stacked-actions)
+    .status-wrap:has(> #hint-jump:not([hidden])):not(:has(#save-notice:not([hidden]), #read-notice:not([hidden]), #plan-rail:not([hidden]))) {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 6px;
+    align-items: center;
+    padding-block: 2px;
+    & > #hint-jump {
+      padding: 4px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
   }
   .game:not(:has(#lesson:not([hidden]))) .status-wrap:has(#save-notice:not([hidden])) {
     flex-basis: 144px;
