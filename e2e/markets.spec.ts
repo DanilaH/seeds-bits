@@ -1,4 +1,5 @@
 import { openBookPicker } from "./book-controls";
+import { bookV5Fixture } from "./content-v5-fixture";
 import {expect,test,type BrowserContext,type Locator,type Page} from "@playwright/test";
 import fs from "node:fs";
 
@@ -116,8 +117,9 @@ test("portal language before play, two tabs and switching with the same selectio
   }
   await page.locator("#play-again").click();
   await expect(page.locator("#mode")).toContainText("Puzzle 2");
-  await digit(page,7).click();
-  await digit(page,15).click();
+  const first = bookV5Fixture("book-v1-2").solution[0];
+  await digit(page,first.a).click();
+  await digit(page,first.b).click();
   await expect.poll(()=>events.some(e=>e.name==="first_unassisted_pair")).toBe(true);
   await expect.poll(()=>events.some(e=>e.name==="game_complete")).toBe(true);
   const other=await context.newPage();
