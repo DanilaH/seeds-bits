@@ -1230,7 +1230,10 @@
         "src/solver.ts"
       ],
       "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый замороженный банк создан: pilot-bank/bank.json. Проверить интеграцию и человеческую различимость в APK.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/89fe486f5bd59edf58b36a02628f6ac2382868e7/docs/research/daily-notebook-design-2026-11-24/pilot-bank/bank.json"
+      ]
     },
     {
       "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
@@ -1263,7 +1266,10 @@
         "src/solver.ts"
       ],
       "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый замороженный банк создан: pilot-bank/bank.json. Проверить интеграцию и человеческую различимость в APK.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/89fe486f5bd59edf58b36a02628f6ac2382868e7/docs/research/daily-notebook-design-2026-11-24/pilot-bank/bank.json"
+      ]
     },
     {
       "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
@@ -1296,7 +1302,10 @@
         "src/solver.ts"
       ],
       "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый замороженный банк создан: pilot-bank/bank.json. Проверить интеграцию и человеческую различимость в APK.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/89fe486f5bd59edf58b36a02628f6ac2382868e7/docs/research/daily-notebook-design-2026-11-24/pilot-bank/bank.json"
+      ]
     },
     {
       "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
@@ -1329,7 +1338,10 @@
         "src/solver.ts"
       ],
       "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый замороженный банк создан: pilot-bank/bank.json. Проверить интеграцию и человеческую различимость в APK.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/89fe486f5bd59edf58b36a02628f6ac2382868e7/docs/research/daily-notebook-design-2026-11-24/pilot-bank/bank.json"
+      ]
     },
     {
       "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
@@ -1362,7 +1374,10 @@
         "src/solver.ts"
       ],
       "cost": "LOW_MEDIUM authoring; shared compatibility MEDIUM",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый замороженный банк создан: pilot-bank/bank.json. Проверить интеграцию и человеческую различимость в APK.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/seeds-bits/blob/89fe486f5bd59edf58b36a02628f6ac2382868e7/docs/research/daily-notebook-design-2026-11-24/pilot-bank/bank.json"
+      ]
     },
     {
       "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
@@ -1438,6 +1453,24 @@
       "returnCondition": "Schedule next future pack before existing bank expires; first-assignment and fallback contract passes.",
       "nextAction": "Schedule next future pack before existing bank expires; first-assignment and fallback contract passes.",
       "cost": "LOW_MEDIUM"
+    },
+    {
+      "id": "seeds-content-pilot-bank-v2-20261124",
+      "sourceFeatureIds": [],
+      "scope": "Новые собственные тетради и дейлики; 76 полей исследовательского банка; не перенос исходной игры",
+      "status": "RESEARCHED",
+      "consumerCommit": "92ac62f938e12b617132c78bf3d2b4c132a37621",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/17",
+      "evidence": {
+        "bank": "https://github.com/DanilaH/seeds-bits/blob/89fe486f5bd59edf58b36a02628f6ac2382868e7/docs/research/daily-notebook-design-2026-11-24/pilot-bank/bank.json",
+        "model": "1746 candidates, 76 accepted, 0 duplicate keys among compared eligible historical boards and 1095 v1 dates",
+        "code": "76 paths / 811 moves / 75 causal episodes / 10 order checks / 25 safe openings / 77 control states / 879 FOUND, 2 NO_WIN_PROVEN, 2 UNKNOWN on exact core.ts Git blob",
+        "browser": "Standalone HTML only; 76 wins via DOM button handlers, touch Hint/Undo, 320/390/520 widths",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "nextAction": "Проверить actual-source full-catalogue verifier в repo checkout, затем интегрировать resolver/wire7, календарные назначения, тетради и приёмку C01–C12. Не менять старые ID/экономику/паузы.",
+      "kitImpact": "REUSE: content quality + causal trace + explicit bounded outcomes."
     }
   ]
 }

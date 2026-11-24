@@ -1,0 +1,80 @@
+{
+  "verification": "ACTUAL_SOURCE_NODE",
+  "sourceBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+  "node": "v22.16.0",
+  "tasks": 76,
+  "steps": 811,
+  "causalEpisodes": 75,
+  "orderChecks": 10,
+  "initialSafe": 25,
+  "controlStates": 77,
+  "branchOutcomes": {
+    "FOUND": 879,
+    "NO_WIN_PROVEN": 2,
+    "UNKNOWN": 2
+  },
+  "families": {
+    "reveal": 18,
+    "flow": 17,
+    "reading": 13,
+    "compression": 18,
+    "order": 10
+  },
+  "unresolved": [
+    {
+      "id": "book-v2-links-24",
+      "step": 0,
+      "action": [
+        24,
+        33
+      ],
+      "outcome": "UNKNOWN",
+      "visits": 5000
+    },
+    {
+      "id": "book-v2-links-24",
+      "step": 0,
+      "action": [
+        25,
+        33
+      ],
+      "outcome": "UNKNOWN",
+      "visits": 5000
+    },
+    {
+      "id": "daily-pilot-v2-03",
+      "step": 0,
+      "action": [
+        7,
+        17
+      ],
+      "outcome": "NO_WIN_PROVEN",
+      "visits": 702
+    },
+    {
+      "id": "daily-pilot-v2-26",
+      "step": 0,
+      "action": [
+        6,
+        15
+      ],
+      "outcome": "NO_WIN_PROVEN",
+      "visits": 1396
+    }
+  ],
+  "standaloneBrowser": {
+    "browser": "Chromium",
+    "tasks": 76,
+    "moves": 811,
+    "touchHintUndo": true,
+    "widths": [
+      320,
+      390,
+      520
+    ],
+    "pageErrors": 0,
+    "loadMethod": "set_content from generated standalone HTML",
+    "fileReloadStorage": "NOT_VERIFIED",
+    "productAPK": "NOT_VERIFIED"
+  }
+}

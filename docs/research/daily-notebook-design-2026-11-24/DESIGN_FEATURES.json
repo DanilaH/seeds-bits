@@ -4,7 +4,7 @@
   "timezone": "Asia/Yekaterinburg",
   "repository": "DanilaH/seeds-bits",
   "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
-  "status": "RESEARCH_PROPOSAL_NOT_IMPLEMENTED",
+  "status": "RESEARCH_CANDIDATE_BANK_AUTHORED_NOT_INTEGRATED",
   "scopeDecision": "User requested expansion and variety. Exact 2x24+28 scope is researcher recommendation, not separately approved release decision.",
   "sourceInventoryCount": 36,
   "sourceInventoryChanged": false,
@@ -20,7 +20,7 @@
       "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
       "currentPresence": "PARTIAL",
       "criterion": "Несколько подтверждённых продолжений после первых действий; простое продвижение.",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
     },
     {
       "id": "seeds-content-reveal",
@@ -34,7 +34,7 @@
       "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
       "currentPresence": "PARTIAL",
       "criterion": "Причинное открытие связи между прежними клетками без сжатия.",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
     },
     {
       "id": "seeds-content-reading",
@@ -48,7 +48,7 @@
       "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
       "currentPresence": "PARTIAL",
       "criterion": "Подтверждённый reading-эпизод внутри пути, без заявления обязательности во всех решениях.",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
     },
     {
       "id": "seeds-content-compression",
@@ -62,7 +62,7 @@
       "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
       "currentPresence": "PARTIAL",
       "criterion": "Связь появляется или исчезает именно из-за удаления строки; контроль без сжатия.",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
     },
     {
       "id": "seeds-content-order",
@@ -76,7 +76,7 @@
       "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
       "currentPresence": "PARTIAL",
       "criterion": "Содержательно разные связи общих оставшихся цифр, доступность следующего приёма либо возможность полного завершения; stable cell IDs, обе ветки и влияние на план. Разные снятые клетки сами по себе недостаточны; проигрышная ветка необязательна.",
-      "nextAction": "Авторить новые поля по DEVELOPER_SPEC; до phone check человеческая различимость UNKNOWN."
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
     }
   ],
   "patterns": [
@@ -201,8 +201,8 @@
         32
       ],
       "startLogicalMax": 54,
-      "implementation": "MISSING for new collections; existing v1 mechanics PARTIAL",
-      "nextAction": "Author 48 genuinely new boards and implement compatible collection resolver; DEVELOPER_SPEC sections3,6–8.",
+      "implementation": "AUTHORED_RESEARCH_BANK; PRODUCT_RUNTIME_NOT_IMPLEMENTED",
+      "nextAction": "Поля кандидата созданы в pilot-bank/bank.json; подключить через контракт совместимости после плейтеста и проверки C01–C12.",
       "cost": "MEDIUM"
     },
     {
@@ -221,8 +221,8 @@
         24
       ],
       "activationDate": null,
-      "implementation": "MISSING for new editorial bank; existing v1 mode PARTIAL",
-      "nextAction": "Author 28; assign only after acceptance; no retroactive v1 replacement; preserve offline fallback.",
+      "implementation": "AUTHORED_RESEARCH_BANK; PRODUCT_RUNTIME_NOT_IMPLEMENTED",
+      "nextAction": "Поля кандидата созданы в pilot-bank/bank.json; подключить через контракт совместимости после плейтеста и проверки C01–C12.",
       "cost": "MEDIUM"
     }
   ],
@@ -309,5 +309,90 @@
       "Explicit FOUND/NO_WIN_PROVEN/UNKNOWN"
     ],
     "candidate": "Content identity/assignment migration checklist after product validation; not a universal released module."
+  },
+  "pilotBank": {
+    "status": "AUTHORED_RESEARCH_CANDIDATE",
+    "reference": "89fe486f5bd59edf58b36a02628f6ac2382868e7",
+    "manifest": "pilot-bank/bank.json",
+    "verification": {
+      "verification": "ACTUAL_SOURCE_NODE",
+      "sourceBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+      "node": "v22.16.0",
+      "tasks": 76,
+      "steps": 811,
+      "causalEpisodes": 75,
+      "orderChecks": 10,
+      "initialSafe": 25,
+      "controlStates": 77,
+      "branchOutcomes": {
+        "FOUND": 879,
+        "NO_WIN_PROVEN": 2,
+        "UNKNOWN": 2
+      },
+      "families": {
+        "reveal": 18,
+        "flow": 17,
+        "reading": 13,
+        "compression": 18,
+        "order": 10
+      },
+      "unresolved": [
+        {
+          "id": "book-v2-links-24",
+          "step": 0,
+          "action": [
+            24,
+            33
+          ],
+          "outcome": "UNKNOWN",
+          "visits": 5000
+        },
+        {
+          "id": "book-v2-links-24",
+          "step": 0,
+          "action": [
+            25,
+            33
+          ],
+          "outcome": "UNKNOWN",
+          "visits": 5000
+        },
+        {
+          "id": "daily-pilot-v2-03",
+          "step": 0,
+          "action": [
+            7,
+            17
+          ],
+          "outcome": "NO_WIN_PROVEN",
+          "visits": 702
+        },
+        {
+          "id": "daily-pilot-v2-26",
+          "step": 0,
+          "action": [
+            6,
+            15
+          ],
+          "outcome": "NO_WIN_PROVEN",
+          "visits": 1396
+        }
+      ],
+      "standaloneBrowser": {
+        "browser": "Chromium",
+        "tasks": 76,
+        "moves": 811,
+        "touchHintUndo": true,
+        "widths": [
+          320,
+          390,
+          520
+        ],
+        "pageErrors": 0,
+        "loadMethod": "set_content from generated standalone HTML",
+        "fileReloadStorage": "NOT_VERIFIED",
+        "productAPK": "NOT_VERIFIED"
+      }
+    }
   }
 }
