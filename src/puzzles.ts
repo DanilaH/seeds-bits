@@ -1,3 +1,5 @@
+import { pilotBooks, pilotDaily } from "./content-pilot";
+import { dailyDay, dailyDone, LEGACY_BOOK_TASKS } from "./content-ids";
 import { validDay } from "./calendar";
 import notebookData from "./notebook.json" with { type: "json" };
 import { checkPair, removePair, type Connection, type Session } from "./core";
@@ -120,6 +122,7 @@ export const notebook: Puzzle[] = [
       },
     };
   }),
+  ...pilotBooks,
 ];
 export function daily(day: string) {
   return makePuzzle(
@@ -128,6 +131,10 @@ export function daily(day: string) {
     8 + (hash(day) % 9),
     4 + (hash(day) % 2),
   );
+}
+export function dailyForTask(id: string): Puzzle | undefined {
+  const day = dailyDay(id);
+  return day ? id.startsWith("daily-v3-") ? pilotDaily(id) : daily(day) : undefined;
 }
 export function today(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -153,7 +160,7 @@ export function availableDay(day: string, now = today()) {
   );
 }
 export function trophy(month: string, done: readonly string[]) {
-  const n = days(month).filter((d) => done.includes(`daily-v1-${d}`)).length;
+  const n = days(month).filter((d) => dailyDone(done,d)).length;
   return {
     count: n,
     tier: n === monthDays(month) ? 3 : n >= 14 ? 2 : n >= 7 ? 1 : 0,
@@ -171,26 +178,28 @@ export function nextTask(
   id: string,
   done: readonly string[],
   now = today(),
+  resolveDay: (day: string) => string = day => `daily-v1-${day}`,
 ): string | undefined {
   const finished = new Set(done);
   const index = notebook.findIndex((p) => p.id === id);
-  if (index >= 0)
-    return [...notebook.slice(index + 1), ...notebook.slice(0, index)].find(
-      (p) => !finished.has(p.id),
-    )?.id;
-  if (!id.startsWith("daily-v1-")) return;
-  const start = id.slice(9);
+  if (index >= 0) {
+    const start = index < LEGACY_BOOK_TASKS ? 0 : Math.floor(index / 24) * 24;
+    const end = index < LEGACY_BOOK_TASKS ? LEGACY_BOOK_TASKS : start + 24;
+    return [...notebook.slice(index+1,end), ...notebook.slice(start,index)].find(p=>!finished.has(p.id))?.id;
+  }
+  const start = dailyDay(id);
+  if (!start) return;
   const step = (day: string, delta: number) => {
     const [y, m, d] = day.split("-").map(Number);
     return today(new Date(y, m - 1, d + delta));
   };
   for (let day = step(start, 1); day <= now; day = step(day, 1))
-    if (availableDay(day, now) && !finished.has(`daily-v1-${day}`))
-      return `daily-v1-${day}`;
+    if (availableDay(day, now) && !dailyDone(done, day))
+      return resolveDay(day);
   for (
     let day = step(start > now ? step(now, 1) : start, -1);
     day >= `${FIRST_MONTH}-01`;
     day = step(day, -1)
   )
-    if (!finished.has(`daily-v1-${day}`)) return `daily-v1-${day}`;
+    if (!dailyDone(done, day)) return resolveDay(day);
 }
