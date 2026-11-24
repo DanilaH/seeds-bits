@@ -73,7 +73,7 @@ public class SeedsDailyReminder extends BroadcastReceiver {
   }
   static boolean done(JSONObject p,String day){
     JSONArray done=p.optJSONArray("done");if(done==null)return false;
-    String id="daily-v1-"+day;for(int i=0;i<done.length();i++)if(id.equals(done.optString(i)) || ("daily-v3-"+day).equals(done.optString(i)))return true;
+    String id="daily-v1-"+day;for(int i=0;i<done.length();i++)if(id.equals(done.optString(i)) || ("daily-v3-"+day).equals(done.optString(i)) || ("daily-v4-"+day).equals(done.optString(i)))return true;
     return false;
   }
   public static void sync(Context c){
@@ -111,6 +111,7 @@ public class SeedsDailyReminder extends BroadcastReceiver {
       int reward=next==3?1:next>0&&next%7==0?3:0;
       JSONObject game=p.optJSONObject("sessions")==null?null:p.optJSONObject("sessions").optJSONObject("daily-v1-"+today);
       if(game==null && p.optJSONObject("sessions")!=null)game=p.optJSONObject("sessions").optJSONObject("daily-v3-"+today);
+      if(game==null && p.optJSONObject("sessions")!=null)game=p.optJSONObject("sessions").optJSONObject("daily-v4-"+today);
       boolean started=game!=null && game.optJSONObject("current")!=null && game.optJSONObject("current").optInt("moves",0)>0;
       JSONObject table=catalog(c);
       JSONObject text=copy(c);

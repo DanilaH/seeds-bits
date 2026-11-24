@@ -58,7 +58,7 @@ import {
 } from "./hint-budget";
 import { jars, collectPair, jarState, jarNames, jarColors } from "./jars";
 import { volumeOf, volumeTasks, chapterNames, puzzleNumberInVolume, VOLUMES, themeOf } from "./notebooks";
-import { dailyDay, dailyDone, dailyIdFor, pilotDayIndex, validContentId, LEGACY_BOOK_TASKS } from "./content-ids";
+import { dailyDay, dailyDone, dailyIdFor, versionedDay, bookRevisionFor, legacyBookNumber, validContentId, LEGACY_BOOK_TASKS } from "./content-ids";
 import { playSound, suspendSound, blockSound } from "./sound";
 import { SeedFlight } from "./seed-flight";
 import { JarSpill } from "./jar-spill";
@@ -102,6 +102,7 @@ import {
 } from "./core";
 import {
   notebook,
+  notebookForTask,
   loadNotebook,
   nextTask,
   dailyForTask,
@@ -1484,7 +1485,7 @@ function digitWord(n: number) {
 }
 function activePuzzle(): Puzzle | undefined {
   return (
-    notebook.find((p) => p.id === progress.active) ??
+    notebookForTask(progress.active,progress) ??
     dailyForTask(progress.active)
   );
 }
@@ -2750,11 +2751,15 @@ async function hint() {
     hintPending = true;
     $<HTMLButtonElement>("hint").disabled = true;
     message(t("ui.looking-for-a-hint"));
-    const result = await requestAdvice(
-      originalBoard,
-      session.history,
-      activePuzzle()!,
-    );
+    let original: Puzzle | undefined;
+    try { original=activePuzzle(); } catch { /* unavailable legacy catalogue */ }
+    if(!original){
+      hintPending=false;
+      $<HTMLButtonElement>("hint").disabled=false;
+      message(t("ui.your-saved-board-is-available-to-restore-hints-try"));
+      return;
+    }
+    const result = await requestAdvice(originalBoard,session.history,original);
     if (
       generation !== hintGeneration ||
       board() !== originalBoard ||
@@ -3009,11 +3014,16 @@ function reset() {
     void beginClassic(occupied(session.current.board) ? "restart" : "next");
     return;
   }
+  // Resolve the assigned content before mutating any attempt or board.
+  // A failed lazy legacy load must never replace a saved puzzle with Classic.
+  let original: Puzzle | undefined;
+  try { original=activePuzzle(); } catch { /* preserve existing save */ }
+  if(!original) { message(t("ui.your-saved-board-is-available-to-restore-hints-try")); return; }
   settlePresentation();
   earnedAward = "";
   startAttempt(progress, progress.active);
   saveRecovered = false;
-  session = activePuzzle() ? puzzleSession(activePuzzle()!) : newSession();
+  session = puzzleSession(original);
   progress.hints[progress.active] = 0;
   clearSelection();
   if (lesson >= 0) {
@@ -3426,7 +3436,7 @@ async function boot() {
   if (recoveryAvailable && !readWarning)
     readWarning =
       t("ui.a-backup-is-available-restoring-it-will-replace-your");
-  if (progress.active.startsWith("book-v1-") && volumeOf(progress.active) > 0) {
+  if (legacyBookNumber(progress.active)>24 && bookRevisionFor(progress.active,progress)===1) {
     try {
       await loadNotebook();
     } catch {
@@ -3593,7 +3603,7 @@ async function switchGame(id: string) {
     if (!availableDay(day)) return;
     id = dailyIdFor(day, progress);
   }
-  if (id.startsWith("book-v1-") && volumeOf(id) > 0) {
+  if (legacyBookNumber(id)>24 && bookRevisionFor(id,progress)===1) {
     busy = true;
     dialog.inert = true;
     document.getElementById("book-load-error")?.remove();
@@ -3668,9 +3678,10 @@ async function switchGame(id: string) {
   }
 
   candidate.active = id;
-  if (day && pilotDayIndex(day)>=0) candidate.dailyAssignments = {...candidate.dailyAssignments,[day]:id};
+  if (day && versionedDay(day)) candidate.dailyAssignments = {...candidate.dailyAssignments,[day]:id};
+  if (legacyBookNumber(id)) candidate.bookRevisions={...candidate.bookRevisions,[id]:bookRevisionFor(id,progress)};
   const p =
-    notebook.find((p) => p.id === id) ??
+    notebookForTask(id,candidate) ??
     dailyForTask(id);
   if (!candidate.sessions[id]) startAttempt(candidate, id);
   let nextSession =

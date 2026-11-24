@@ -78,7 +78,7 @@ test("dated bank is frozen and finite, preserves v1 generation and blocks future
   expect(dailyIdFor("2026-11-30",p)).toBe("daily-v1-2026-11-30");
   expect(dailyIdFor(day(1),p)).toBe("daily-v3-"+day(1));
   expect(dailyIdFor(day(24),p)).toBe("daily-v3-"+day(24));
-  expect(dailyIdFor(day(25),p)).toBe("daily-v1-"+day(25));
+  expect(dailyIdFor(day(25),p)).toBe("daily-v4-"+day(25));
   expect(dailyForTask("daily-v1-"+day(1))).toEqual(daily(day(1)));
   expect(dailyForTask("daily-v3-"+day(1))).toEqual(pilotDaily("daily-v3-"+day(1)));
   expect(availableDay(day(2),day(1))).toBe(false);
@@ -98,7 +98,7 @@ test("legacy assignment takes precedence even for unplayed completed / in-progre
   p.done.push("daily-v1-"+day(2),"book-v1-1");
   metadata(p).wallet=7;helpProfile(p).inventory.magnet=3;
   const wire=serializeProgress(p);
-  expect(JSON.parse(wire).version).toBe(6);
+  expect(JSON.parse(wire).version).toBe(8);
   const q=readProgress(wire);
   expect(q.sessions[old.id]).toEqual(p.sessions[old.id]);
   expect(q.active).toBe(old.id);
@@ -123,7 +123,7 @@ test("new content survives v7 restart, undo and hints; invalid assignment is pro
   expect(metadata(q).wallet).toBe(12);expect(helpProfile(q).inventory.plan).toBe(2);
   const broken=JSON.parse(wire);broken.dailyAssignments[day(1)]="daily-v3-"+day(2);
   expect(()=>readProgress(JSON.stringify(broken))).toThrow(FutureProgress);
-  broken.version=8;expect(()=>readProgress(JSON.stringify(broken))).toThrow(FutureProgress);
+  broken.version=9;expect(()=>readProgress(JSON.stringify(broken))).toThrow(FutureProgress);
 });
 test("mixed date identities count one trophy day and one reward, preserve streak across v1/v3",()=>{
   const p=fresh();

@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { notebook, daily } from "../src/puzzles";
+import {bookV4} from "../src/content-v4";
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() =>
     localStorage.setItem(
@@ -23,7 +24,7 @@ test("notebook solution, page stamp, replay and classic restore", async ({
       await page.locator("#book-top").click();
       await page.locator(`[data-game="${notebook[n].id}"]`).click();
     }
-    for (const p of notebook[n].solution) {
+    for (const p of (n===0?notebook[n]:bookV4(notebook[n].id)!).solution) {
       await page.locator(`[data-index="${p.a}"]`).click();
       await page.locator(`[data-index="${p.b}"]`).click();
       await expect(page.locator("#undo")).toBeEnabled();

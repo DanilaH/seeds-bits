@@ -601,6 +601,8 @@ test("backup recovery is explicit and survives reload", async ({ page }) => {
   await page.evaluate((key) => {
     const p = JSON.parse(localStorage.getItem(key)!);
     p.done = ["book-v1-1", "book-v1-2"];
+    // A valid recovery bundle includes immutable revision assignments for every known slot.
+    if(p.version===8)p.bookRevisions={...p.bookRevisions,"book-v1-1":1,"book-v1-2":1};
     localStorage.setItem(key + ".recovery", JSON.stringify(p));
   }, KEY);
   await page.reload();

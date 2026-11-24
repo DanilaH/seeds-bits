@@ -1,9 +1,9 @@
 import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
-async function start(page: any, seeds = 0) {
+async function start(page: any, seeds = 0, oldLast = false) {
   await page.addInitScript(
-    ({ key, seeds }: any) => {
+    ({ key, seeds, oldLast }: any) => {
       if (sessionStorage.getItem("050")) return;
       sessionStorage.setItem("050", "1");
       localStorage.setItem(
@@ -27,7 +27,7 @@ async function start(page: any, seeds = 0) {
               history: [],
             },
           },
-          hints: {},
+          hints: oldLast ? {"book-v1-2400": 0} : {},
           done: ["book-v1-1"],
           seen: [],
           meta: {
@@ -41,7 +41,7 @@ async function start(page: any, seeds = 0) {
         }),
       );
     },
-    { key, seeds },
+    { key, seeds, oldLast },
   );
   await page.goto("/");
 }
@@ -75,7 +75,7 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
   );
   expect(p.jars.seeds).toBe(26);
   expect(p.jars.wins).toBe(1);
-  expect(p.version).toBe(6);
+  expect(p.version).toBe(8);
   await expect(page.locator("#jar-meter")).toHaveAttribute("data-filled", "2");
   await expect(page.locator("#jar-meter")).toHaveAttribute(
     "data-capacity",
@@ -110,7 +110,7 @@ test("archive exposes January 2025 and keeps future dates closed in 2028", async
   await page.locator("#menu").click();
   await page.locator("#calendar-open").click();
   await expect(
-    page.locator('[data-game="daily-v1-2028-06-21"]'),
+    page.locator('[data-game="daily-v4-2028-06-21"]'),
   ).toBeDisabled();
   await page.locator("#collection-back").click();
   await page.locator("#progress-open").click();
@@ -119,11 +119,11 @@ test("archive exposes January 2025 and keeps future dates closed in 2028", async
   await page.locator("#trophy-year").selectOption("2025");
   await expect(page.locator("[data-month]")).toHaveCount(12);
 });
-test("100 notebooks remain navigable and final huge board has legible digits, working hints and undo", async ({
+test("100 notebooks remain navigable and a previously assigned final huge board has legible digits, working hints and undo", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 568 });
-  await start(page);
+  await start(page,0,true);
   await page.locator("#book-mode").click();
   await expect(page.locator('[data-game="book-v1-1"].task')).toHaveClass(
     /done/,

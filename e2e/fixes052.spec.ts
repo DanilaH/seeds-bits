@@ -142,8 +142,8 @@ test("F04 calendar 2028 leap-day and 2125 trophies", async ({ page }) => {
   )
     await page.locator("#calendar-picker summary").click();
   await page.locator("#calendar-month").selectOption("02");
-  await expect(page.locator('[data-game="daily-v1-2028-02-29"]')).toBeEnabled();
-  await expect(page.locator('[data-game="daily-v1-2028-02-30"]')).toHaveCount(
+  await expect(page.locator('[data-game="daily-v4-2028-02-29"]')).toBeEnabled();
+  await expect(page.locator('[data-game="daily-v4-2028-02-30"]')).toHaveCount(
     0,
   );
   await page.clock.setFixedTime(new Date("2125-06-20T12:00:00"));
