@@ -1,3 +1,4 @@
+import { dailyDay } from "./content-ids";
 import { dayNumber, localDay, validDay } from "./calendar";
 import { metadata, type Progress } from "./progress";
 export type DailyRun = {
@@ -37,7 +38,7 @@ export function dailyRun(p: Progress, now = localDay()) {
   };
 }
 export function recordDaily(p: Progress, task: string, now = localDay()) {
-  if (task !== `daily-v1-${now}` || !validDay(now)) return 0;
+  if (dailyDay(task) !== now || !validDay(now)) return 0;
   const m = metadata(p),
     s = m.daily;
   // Strictly increasing completion dates also protect rollback/replayed saves in one stream.

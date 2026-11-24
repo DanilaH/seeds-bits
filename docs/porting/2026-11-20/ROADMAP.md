@@ -45,3 +45,7 @@ node docs/porting/2026-11-20/sample-classic.mjs
 Для нового профиля испытать вход сразу в первую настоящую задачу тетради. Поддержать первый выбор цифры, объяснять пустоту и край на игровом поле. После решения дать человеку самому открыть задачу 2 или другой режим. Отдельные упражнения открываются по желанию. Существующим игрокам сохранять привычный вход. Сначала провести наблюдение с новичками на телефонах, затем решать о пилоте на новых профилях и сравнивать самостоятельный ход, следующую добровольную партию и фактический D1. [ТЗ, модель и пробная сборка](../../research/first-session-2026-11-20/README.md)
 
 20 ноября, пакет плейтеста PR #9: первый вход и четыре замечания реализованы только в opt-in тестовом APK. [Код, проверки и точные границы](../../research/first-session-2026-11-20/implementation/ACCEPTANCE.md). Следующий этап — наблюдение новичков на телефонах; публичный первый вход пока прежний.
+
+
+## 24.11.2026: pilot v3 integration
+Owner requested integration after standalone pilot. 96 thematic tasks appended (104 volumes total), 24 dated candidates for Dec 1–24, 2026, fallback v1 elsewhere. Existing assignments win; daily completion deduplicates by date; wire v7 protects new IDs. Implementation on separate draft branch, acceptance and full legacy comparison pending. Research: [PR17](https://github.com/DanilaH/seeds-bits/pull/17). No economy or paused-feature changes.

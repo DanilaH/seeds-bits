@@ -1,3 +1,4 @@
+import "./content-pilot.css";
 import { t, plural, choice, localName, word, activeLanguage, launchLanguages, languageNames, resolveLocale, useLanguage, staticCopy, type LanguageChoice } from "./i18n";
 import { WebAcquisition, activityDate, type InstallContext } from "./distribution";
 import type { EventData } from "./analytics";
@@ -56,7 +57,8 @@ import {
   grantReward,
 } from "./hint-budget";
 import { jars, collectPair, jarState, jarNames, jarColors } from "./jars";
-import { volumeOf, volumeTasks, chapterNames, puzzleNumberInVolume } from "./notebooks";
+import { volumeOf, volumeTasks, chapterNames, puzzleNumberInVolume, VOLUMES, themeOf } from "./notebooks";
+import { dailyDay, dailyDone, dailyIdFor, pilotDayIndex, validContentId, LEGACY_BOOK_TASKS } from "./content-ids";
 import { playSound, suspendSound, blockSound } from "./sound";
 import { SeedFlight } from "./seed-flight";
 import { JarSpill } from "./jar-spill";
@@ -102,7 +104,7 @@ import {
   notebook,
   loadNotebook,
   nextTask,
-  daily,
+  dailyForTask,
   today,
   days,
   trophy,
@@ -1483,9 +1485,7 @@ function digitWord(n: number) {
 function activePuzzle(): Puzzle | undefined {
   return (
     notebook.find((p) => p.id === progress.active) ??
-    (progress.active.startsWith("daily-v1-")
-      ? daily(progress.active.slice(9))
-      : undefined)
+    dailyForTask(progress.active)
   );
 }
 let appForeground = true;
@@ -1926,7 +1926,7 @@ function complete(rects: DOMRect[]) {
     metadata(progress).attempts[progress.active]?.completed;
   const id = progress.active,
     month = id.slice(9, 16);
-  const before = id.startsWith("daily-v1-")
+  const before = id.startsWith("daily")
     ? trophy(month, progress.done).tier
     : 0;
   const gains = recordCompletion(progress, id);
@@ -1955,7 +1955,7 @@ function complete(rects: DOMRect[]) {
       mode: gameMode(),
       attempt: hintAttempt(progress).id,
     });
-  const after = id.startsWith("daily-v1-")
+  const after = id.startsWith("daily")
     ? trophy(month, progress.done).tier
     : 0;
   earnedAward =
@@ -1981,7 +1981,7 @@ function renderWin() {
       : kind === "daily"
         ? id.slice(9) === today() ? t("result.daily") : t("ui.puzzle-for-solved", { "0": taskDate(id.slice(9)) })
         : kind === "book"
-          ? t("result.book", { "book": volumeOf(id) + 1 })
+          ? themeOf(volumeOf(id)) ? t("content.complete",{theme:volumeLabel(volumeOf(id))}) : t("result.book", { "book": volumeOf(id) + 1 })
           : kind === "page"
             ? t("ui.page-complete", { "0": (Math.floor(index / 6) % 4) + 1 })
             : t("result.puzzle");
@@ -1995,7 +1995,7 @@ function renderWin() {
           : "";
   if (index >= 0 && kind !== "book" && kind !== "page") {
     const solved = volumeTasks(volumeOf(id)).filter(task => progress.done.includes(task.id)).length;
-    resultSubtitle.textContent = t("result.progress", { "book": volumeOf(id) + 1, "solved": solved });
+    resultSubtitle.textContent = themeOf(volumeOf(id)) ? t("content.progress",{theme:volumeLabel(volumeOf(id)),solved}) : t("result.progress", { "book": volumeOf(id) + 1, "solved": solved });
   }
   resultSubtitle.hidden = !resultSubtitle.textContent;
   resultJarCard.hidden = !openingWin;
@@ -2003,7 +2003,7 @@ function renderWin() {
   const resultGains = $("result-gains");
   if (openingWin) {
     if (resultGains.parentElement !== resultJarCard) $("result-jar-amount").before(resultGains);
-    resultBookCard.innerHTML = `${bookPicture(volumeOf(id) + 1)}<span><strong>${t("ui.puzzle-book", { "0": volumeOf(id) + 1 })}</strong><small>${t("ui.of-24-puzzles", { "0": volumeTasks(volumeOf(id)).filter(task => progress.done.includes(task.id)).length })}</small></span>`;
+    resultBookCard.innerHTML = `${bookPicture(volumeOf(id) + 1)}<span><strong>${volumeLabel(volumeOf(id))}</strong><small>${t("ui.of-24-puzzles", { "0": volumeTasks(volumeOf(id)).filter(task => progress.done.includes(task.id)).length })}</small></span>`;
     updateResultJar();
   } else if (resultGains.parentElement === resultJarCard) {
     $("completion-status").after(resultGains);
@@ -2028,10 +2028,10 @@ function renderWin() {
   resultAssistance.textContent = !helpPaused && hintAttempt(progress).help?.assisted ? hintAttempt(progress).help?.plan ? hintAttempt(progress).help?.magnet ? "С Планом и Магнитом" : "С помощью Плана" : "С помощью Магнита" : "";
   resultAssistance.hidden = !resultAssistance.textContent;
   const i = index;
-  const next = nextTask(id, progress.done);
+  const next = nextTask(id, progress.done, today(), day => dailyIdFor(day,progress));
   const nextButton = $("play-again");
   nextButton.dataset.destination = next ?? "";
-  if (next?.startsWith("daily-v1-")) {
+  if (next?.startsWith("daily")) {
     const date = next.slice(9);
     nextButton.textContent = date === today()
       ? t("ui.todays-puzzle")
@@ -2040,7 +2040,7 @@ function renderWin() {
     const puzzle = puzzleNumberInVolume(next);
     nextButton.textContent = volumeOf(next) === volumeOf(id)
       ? t("result.nextTask", { puzzle })
-      : t("home.book.title", { book: volumeOf(next) + 1, puzzle });
+      : taskLabel(next);
   } else {
     nextButton.textContent = i >= 0 ? t("books.back") : dailyResult ? t("result.calendar") : t("result.again");
   }
@@ -2216,7 +2216,7 @@ function render() {
       : progress.active === "classic"
         ? t("home.classic")
         : progress.active.startsWith("book")
-          ? t("home.book.title", { "book": volumeOf(progress.active) + 1, "puzzle": puzzleNumberInVolume(progress.active) })
+          ? taskLabel(progress.active)
           : dailyFieldTitle(progress.active);
   fieldDateArt.hidden = game.dataset.mode !== "daily";
   if (!fieldDateArt.hidden && fieldDateArt.dataset.day !== progress.active) {
@@ -3426,7 +3426,7 @@ async function boot() {
   if (recoveryAvailable && !readWarning)
     readWarning =
       t("ui.a-backup-is-available-restoring-it-will-replace-your");
-  if (progress.active.startsWith("book") && volumeOf(progress.active) > 0) {
+  if (progress.active.startsWith("book-v1-") && volumeOf(progress.active) > 0) {
     try {
       await loadNotebook();
     } catch {
@@ -3587,8 +3587,13 @@ async function switchGame(id: string) {
   earnedHints = 0;
   saveRecovered = false;
   if (busy || futureSave || storageConflict) return;
-  if (id.startsWith("daily") && !availableDay(id.slice(9))) return;
-  if (id.startsWith("book") && volumeOf(id) > 0) {
+  if (!validContentId(id)) return;
+  const day = dailyDay(id);
+  if (day) {
+    if (!availableDay(day)) return;
+    id = dailyIdFor(day, progress);
+  }
+  if (id.startsWith("book-v1-") && volumeOf(id) > 0) {
     busy = true;
     dialog.inert = true;
     document.getElementById("book-load-error")?.remove();
@@ -3663,9 +3668,10 @@ async function switchGame(id: string) {
   }
 
   candidate.active = id;
+  if (day && pilotDayIndex(day)>=0) candidate.dailyAssignments = {...candidate.dailyAssignments,[day]:id};
   const p =
     notebook.find((p) => p.id === id) ??
-    (id.startsWith("daily-v1-") ? daily(id.slice(9)) : undefined);
+    dailyForTask(id);
   if (!candidate.sessions[id]) startAttempt(candidate, id);
   let nextSession =
     candidate.sessions[id] ?? (p ? puzzleSession(p) : newSession());
@@ -3729,16 +3735,13 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     const completedBook = notebook.filter((p) =>
       progress.done.includes(p.id),
     ).length;
-    const completedDaily = progress.done.filter(
-      (id) =>
-        id.startsWith("daily-v1-") && availableDay(id.slice(9), "9999-12-31"),
-    ).length;
+    const completedDaily = new Set(progress.done.map(dailyDay).filter(Boolean)).size;
     const j = jarState(jars(progress).meter);
     const nextVolume = nextBookVolume();
     const nextDone = volumeTasks(nextVolume).filter((p) =>
       progress.done.includes(p.id),
     ).length;
-    html += `<h2>${t("home.progress")}</h2>${jarHero(j)}<button id="progress-book" class="progress-book" data-volume="${nextVolume}">${bookPicture(nextVolume + 1)}<span><strong>${t("ui.puzzle-book", { "0": nextVolume + 1 })}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${t("ui.puzzle-book", { "0": nextVolume + 1 })}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p><button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button>`;
+    html += `<h2>${t("home.progress")}</h2>${jarHero(j)}<button id="progress-book" class="progress-book" data-volume="${nextVolume}">${bookPicture(nextVolume + 1)}<span><strong>${volumeLabel(nextVolume)}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${volumeLabel(nextVolume)}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p><button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button>`;
   } else if (kind === "book") {
     const finished = new Set(progress.done);
     const status = (v: number) => {
@@ -3757,7 +3760,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         : bookFilter === "new"
           ? !status(v).started
           : status(v).started && status(v).n < 24);
-    const candidates = Array.from({ length: 100 }, (_, i) => i).filter(allowed);
+    const candidates = Array.from({ length: VOLUMES }, (_, i) => i).filter(allowed);
     const chapter = Math.floor(selectedVolume / 10);
     const chapterCandidates = candidates.filter(
       (v) => Math.floor(v / 10) === chapter,
@@ -3765,7 +3768,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     if (!chapterCandidates.includes(selectedVolume) && chapterCandidates.length)
       selectedVolume = chapterCandidates[0];
     const stats = status(selectedVolume);
-    html += `<h2>${t("home.books")}</h2><p class="intro book-total">${t("ui.100-puzzle-books-2-400-puzzles")}</p><div class="archive-controls"><label>${t("ui.section")}<select id="book-chapter">${chapterNames.map((n, i) => `<option value="${i}" ${i === chapter ? "selected" : ""}>${i + 1}. ${localName(n)}</option>`).join("")}</select></label><label>${t("ui.show")}<select id="book-filter">${[
+    html += `<h2>${t("home.books")}</h2><p class="intro book-total">${t("content.total", {books:VOLUMES,tasks:notebook.length})}</p><div class="archive-controls"><label>${t("ui.section")}<select id="book-chapter">${chapterNames.map((n, i) => `<option value="${i}" ${i === chapter ? "selected" : ""}>${i + 1}. ${localName(n)}</option>`).join("")}</select></label><label>${t("ui.show")}<select id="book-filter">${[
       ["all", t("ui.all")],
       ["new", t("ui.not-started")],
       ["active", t("ui.in-progress")],
@@ -3779,7 +3782,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       .filter((v) => Math.floor(v / 10) === chapter)
       .map(
         (v) =>
-          `<button class="volume-cover ${v === selectedVolume ? "current" : ""}" data-volume="${v}" aria-pressed="${v === selectedVolume}" aria-label="${t("ui.puzzle-book-of-24", { "0": v + 1, "1": status(v).n })}"><strong>${v + 1}${status(v).n === 24 ? '<span class="volume-done">✓</span>' : ""}</strong><small>${status(v).n}/24</small><progress max="24" value="${status(v).n}" aria-hidden="true"></progress></button>`,
+          `<button class="volume-cover ${v === selectedVolume ? "current" : ""}" data-volume="${v}" aria-pressed="${v === selectedVolume}" aria-label="${t("ui.puzzle-book-of-24", { "0": v + 1, "1": status(v).n })}"><strong>${v + 1}${status(v).n === 24 ? '<span class="volume-done">✓</span>' : ""}</strong>${themeOf(v) ? `<small class="theme-name">${volumeLabel(v)}</small>` : ""}<small>${status(v).n}/24</small><progress max="24" value="${status(v).n}" aria-hidden="true"></progress></button>`,
       )
       .join("")}</div>`;
     if (chapterCandidates.length) {
@@ -3791,7 +3794,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ) ??
         tasks.find((p) => !finished.has(p.id)) ??
         tasks[0];
-      html += `<div class="volume-heading">${bookPicture(selectedVolume + 1)}<div><small>${t("calm.book.open")}</small><h3>${t("ui.puzzle-book", { "0": selectedVolume + 1 })}</h3><span>${t("ui.of-24-puzzles", { "0": stats.n })}</span></div></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${t("ui.puzzle", { "0": stats.n === 24 ? t("ui.replay") : stats.started ? t("daily.resume") : t("action.start"), "1": puzzleNumberInVolume(continuing.id) })}</button>`;
+      html += `<div class="volume-heading">${bookPicture(selectedVolume + 1)}<div><small>${t("calm.book.open")}</small><h3>${volumeLabel(selectedVolume)}</h3><span>${t("ui.of-24-puzzles", { "0": stats.n })}</span></div></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${t("ui.puzzle", { "0": stats.n === 24 ? t("ui.replay") : stats.started ? t("daily.resume") : t("action.start"), "1": puzzleNumberInVolume(continuing.id) })}</button>`;
       for (let page = 0; page < 4; page++) {
         const group = tasks.slice(page * 6, page * 6 + 6),
           n = group.filter((p) => finished.has(p.id)).length;
@@ -3807,8 +3810,8 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   } else if (kind === "calendar") {
     if (calendarMonth > today().slice(0, 7))
       calendarMonth = today().slice(0, 7);
-    const date = today(), todayId = `daily-v1-${date}`;
-    const todayAction = progress.done.includes(todayId) ? "replay" : progress.sessions[todayId]?.history.length ? "resume" : "play";
+    const date = today(), todayId = dailyIdFor(date,progress);
+    const todayAction = dailyDone(progress.done,date) ? "replay" : progress.sessions[todayId]?.history.length ? "resume" : "play";
     const monthTrophy = trophy(calendarMonth, progress.done),
       weekday =
         (new Date(
@@ -3823,7 +3826,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     )
       .map(
         (d) =>
-          `<button class="task ${progress.done.includes("daily-v1-" + d) ? "done" : ""} ${d === today() ? "today" : ""}" data-game="daily-v1-${d}" ${!availableDay(d) ? "disabled" : ""} ${d === date ? 'aria-current="date"' : ""} aria-label="${taskDate(d, true)}${progress.done.includes("daily-v1-" + d) ? t("ui.solved") : ""}">${Number(d.slice(-2))}${progress.done.includes("daily-v1-" + d) ? "<small>✓</small>" : ""}</button>`,
+          `<button class="task ${dailyDone(progress.done,d) ? "done" : ""} ${d === today() ? "today" : ""}" data-game="${dailyIdFor(d,progress)}" ${!availableDay(d) ? "disabled" : ""} ${d === date ? 'aria-current="date"' : ""} aria-label="${taskDate(d, true)}${dailyDone(progress.done,d) ? t("ui.solved") : ""}">${Number(d.slice(-2))}${dailyDone(progress.done,d) ? "<small>✓</small>" : ""}</button>`,
       )
       .join(
         "",
@@ -3909,10 +3912,20 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       resume.append(heading, button);
       panel.append(resume);
     }
+    const pilotAccess = document.createElement("button");
+    pilotAccess.id = "pilot-books";
+    pilotAccess.className = "secondary";
+    pilotAccess.textContent = t("content.open");
+    pilotAccess.onclick = () => {
+      selectedVolume = themeOf(selectedVolume) ? selectedVolume : LEGACY_BOOK_TASKS / 24;
+      bookFilter = "all";
+      openCollection("book");
+    };
+    panel.append(pilotAccess);
     const browser = document.createElement("details");
     browser.id = "other-books";
     browser.className = "book-browser";
-    browser.open = Boolean(bookPickerOpen || panel.querySelector(".empty-state"));
+    browser.open = Boolean(themeOf(selectedVolume) || bookPickerOpen || panel.querySelector(".empty-state"));
     const summary = document.createElement("summary");
     summary.textContent = t("calm.book.other", { count: notebook.length / 24 });
     browser.append(summary);
@@ -4066,7 +4079,7 @@ $("book-mode").onclick = () => {
   bookFilter = "all";
   openCollection("book");
 };
-$("daily-mode").onclick = () => switchGame(daily(today()).id);
+$("daily-mode").onclick = () => switchGame(dailyIdFor(today(),progress));
 $("calendar-open").onclick = () => {
   calendarMonth = today().slice(0, 7);
   openCollection("calendar");
@@ -4076,6 +4089,14 @@ function nextBookVolume() {
   if (progress.active.startsWith("book")) return volumeOf(progress.active);
   const first = notebook.findIndex((p) => !progress.done.includes(p.id));
   return Math.max(0, Math.floor(first / 24));
+}
+function volumeLabel(volume: number) {
+  const theme = themeOf(volume);
+  return theme ? t("content.theme."+theme) : t("ui.puzzle-book", {"0":volume+1});
+}
+function taskLabel(id: string) {
+  const volume=volumeOf(id), puzzle=puzzleNumberInVolume(id);
+  return themeOf(volume) ? t("content.task", {theme:volumeLabel(volume),puzzle}) : t("home.book.title",{book:volume+1,puzzle});
 }
 function bookPicture(number: number) {
   const compact = number >= 100 ? " book-cover-number-compact" : "";
@@ -4150,7 +4171,7 @@ function renderHomeCurrent() {
   }
   $("classic-mode").hidden = classicMode;
   const isBook = progress.active.startsWith("book");
-  const activeDay = progress.active.startsWith("daily-v1-") ? progress.active.slice(9) : "";
+  const activeDay = progress.active.startsWith("daily") ? progress.active.slice(9) : "";
   const dateLabel = activeDay
     ? taskDate(activeDay, activeDay.slice(0, 4) !== today().slice(0, 4))
     : "";
@@ -4167,7 +4188,7 @@ function renderHomeCurrent() {
   $("home-game-title").textContent = classicMode
     ? t("home.classic")
     : progress.active.startsWith("book")
-      ? t("ui.puzzle-book", { "0": volumeOf(progress.active) + 1 })
+      ? volumeLabel(volumeOf(progress.active))
       : progress.active.slice(9) === today() ? t("notification.channel") : t("home.daily.date", { "date": dateLabel });
   $("resume-context").textContent = classicMode
     ? t("ui.on-the-board", { "0": count, "1": digitWord(count) })
@@ -4181,7 +4202,7 @@ function renderHomeCurrent() {
       : classicMode
         ? t("ui.start-classic")
         : t("ui.play");
-  if (progress.active.startsWith("daily-v1-") && progress.active.slice(9) !== today())
+  if (progress.active.startsWith("daily") && progress.active.slice(9) !== today())
     $("resume").textContent = t("ui.resume-puzzle-for", { "0": dateLabel });
   if (classicMode) {
     const j = jarState(jars(progress).meter);
@@ -4207,14 +4228,14 @@ function updateHome() {
   $("book-count").textContent = t("ui.of-24-puzzles", { "0": solvedInBook });
   bookMode.setAttribute("aria-label", t("ui.puzzle-book-of-24", { "0": bookNumber, "1": solvedInBook }));
   const date = today();
-  const id = `daily-v1-${date}`;
-  $("daily-mode").toggleAttribute("data-daily-pending", !finished.has(id));
+  const id = dailyIdFor(date,progress);
+  $("daily-mode").toggleAttribute("data-daily-pending", !dailyDone(progress.done,date));
   $("home-today-art").innerHTML = calendarPicture(date, true);
   const run = dailyRun(progress);
   $("daily-series").hidden = run.count === 0;
   $("daily-series").textContent =
     t("ui.in-a-row", { "0": run.count, "1": dayWord(run.count), "2": run.solvedToday ? "" : t("ui.until-reward", { "0": run.until, "1": dayWord(run.until) }) });
-  $("daily-state").textContent = progress.done.includes(id)
+  $("daily-state").textContent = dailyDone(progress.done,date)
     ? t("daily.replay")
     : progress.sessions[id]?.history.length
       ? t("daily.resume")
@@ -4227,7 +4248,7 @@ function refreshDate() {
   displayedDate = date;
   updateHome();
   // Refresh the label in place: rendering the board would replace feedback and focus.
-  if (lesson < 0 && progress.active.startsWith("daily-v1-")) {
+  if (lesson < 0 && progress.active.startsWith("daily")) {
     $("mode").textContent = dailyFieldTitle(progress.active, date);
     if (!$("win").hidden) renderWin();
     if (dialog.open && dialog.dataset.screen === "home") renderHomeCurrent();
@@ -4499,7 +4520,7 @@ async function openDailyNotification() {
   pendingDailyOpen = false;
   skipNextInterstitial = true;
   track("reminder_open");
-  await switchGame(daily(today()).id);
+  await switchGame(dailyIdFor(today(),progress));
 }
 async function tryResultEngagement() {
   if (
@@ -4507,7 +4528,7 @@ async function tryResultEngagement() {
     settings.reminders &&
     !notificationGranted &&
     !metadata(progress).flags?.includes("reminder_permission_requested") &&
-    progress.active === `daily-v1-${today()}` &&
+    dailyDay(progress.active) === today() &&
     bootComplete &&
     lesson < 0 &&
     !occupied(board()) &&

@@ -1,3 +1,4 @@
+import { validContentId, dailyDay, dailyDone, readDailyAssignments } from "./content-ids";
 import { freshHelp, readHelp, readHelpAttempt, type HelpProfile, type HelpAttempt } from "./help-contract";
 import { compactHintKey } from "./hint-key";
 import { readAnalytics, type AnalyticsJournal } from "./analytics";
@@ -10,6 +11,7 @@ import { readClassicDeals, type ClassicDeals } from "./classic-deals";
 import { readClassicRun, type ClassicRun } from "./classic-generator";
 export type Progress = {
   version: 3;
+  dailyAssignments?: Record<string,string>;
   active: string;
   sessions: Record<string, Session>;
   hints: Record<string, number>;
@@ -26,40 +28,39 @@ export const fresh = (): Progress => ({
   done: [],
   seen: [],
 });
-const validId = (id: string) =>
-  typeof id === "string" &&
-  (id === "classic" ||
-    (/^book-v1-[1-9]\d*$/.test(id) && Number(id.slice(8)) <= 2400) ||
-    (id.startsWith("daily-v1-") &&
-      validDay(id.slice(9)) &&
-      id.slice(9, 16) >= "2025-01"));
+const validId = validContentId;
 export class FutureProgress extends Error {}
 export function readProgress(
   raw: string,
   onRecovery: () => void = () => {},
 ): Progress {
   const p = JSON.parse(raw);
-  if (p?.version > 6 || p?.meta?.version > 2 || p?.jars?.version > 2 || p?.meta?.help?.version > 1 || Object.values(p?.meta?.attempts ?? {}).some((a: any) => a?.help?.version > 1))
+  if (p?.version > 7 || p?.meta?.version > 2 || p?.jars?.version > 2 || p?.meta?.help?.version > 1 || Object.values(p?.meta?.attempts ?? {}).some((a: any) => a?.help?.version > 1))
     throw new FutureProgress("Newer save format");
   if (
     (p?.version !== 2 &&
       p?.version !== 3 &&
       p?.version !== 4 &&
       p?.version !== 5 &&
-      p?.version !== 6) ||
+      p?.version !== 6 &&
+      p?.version !== 7) ||
     !validId(p.active) ||
     !p.sessions ||
     !Array.isArray(p.done) ||
     !Array.isArray(p.seen)
   )
     throw Error("Invalid progress");
-  if (p.version === 6) {
+  if (p.version >= 6) {
     try {
       if (p.meta?.help !== undefined) readHelp(p.meta.help);
       for (const a of Object.values(p.meta?.attempts ?? {}) as any[]) if (a.help !== undefined) readHelpAttempt(a.help);
     } catch { throw new FutureProgress("Protected assistance data could not be read"); }
   }
   const clean = fresh();
+  if (p.dailyAssignments !== undefined) {
+    try { clean.dailyAssignments = readDailyAssignments(p.dailyAssignments); }
+    catch { throw new FutureProgress("Protected daily identities could not be read"); }
+  }
   for (const [id, s] of Object.entries(p.sessions))
     if (validId(id)) {
       try {
@@ -345,21 +346,24 @@ export function recordCompletion(p: Progress, task: string, now?: string) {
   if (!(p.hints[task] ?? 0) && !a.help?.assisted) m.unassisted++;
   if (task === "classic") jars(p).wins++;
   let seeds = 0;
-  if (task !== "classic" && !p.done.includes(task)) {
+  const day = dailyDay(task);
+  const alreadyDay = day !== undefined && dailyDone(p.done, day);
+  const alreadyTask = p.done.includes(task);
+  if (task !== "classic" && !alreadyTask && !alreadyDay) {
     const game = p.sessions[task];
     const first = game?.history[0]?.board ?? game?.current.board ?? [];
     seeds = taskSeeds(occupied(first) / 2);
     addSeeds(p, seeds);
     p.done.push(task);
   }
-  return { seeds, hints: recordDaily(p, task, now) };
+  return { seeds, hints: alreadyDay && !alreadyTask ? 0 : recordDaily(p, task, now) };
 }
 
-/** Wire v6 prevents older clients from overwriting product inventory and entitlements. */
+/** Wire v7 protects new content identities; untouched legacy saves remain wire v6. */
 export function serializeProgress(p: Progress): string {
   return JSON.stringify({
     ...p,
-    version: 6,
+    version: p.dailyAssignments !== undefined || [p.active, ...Object.keys(p.sessions), ...p.done, ...Object.keys(p.hints), ...Object.keys(p.meta?.attempts ?? {})].some(id=>/^(book|daily)-v3-/.test(id)) ? 7 : 6,
     sessions: Object.fromEntries(
       Object.entries(p.sessions).map(([id, s]) => [id, packSession(s)]),
     ),
