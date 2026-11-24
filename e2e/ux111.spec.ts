@@ -190,7 +190,7 @@ test("a usable recovery copy survives a damaged primary save", async ({
   }, key);
   await page.reload();
   await page.locator("#restore-backup").click();
-  await expect(page.locator("#book-count")).toHaveText("1 из 2400 решено");
+  await expect(page.locator("#book-count")).toHaveText("1 из 24 задач");
   expect(
     await page.evaluate((k) => localStorage.getItem(k + ".damaged"), key),
   ).toBe("{broken");
@@ -217,10 +217,10 @@ test("today's result names the actual archived destination", async ({
   await page.locator('[data-index="0"]').click();
   await page.locator('[data-index="1"]').click();
   await expect(page.locator("#play-again")).toHaveText(
-    "Задача из архива · 04.11.2026",
+    "Задача из архива · 4 ноября",
   );
   await page.locator("#play-again").click();
-  await expect(page.locator("#mode")).toContainText("04.11.2026");
+  await expect(page.locator("#mode")).toHaveText("Задача из архива · 4 ноября");
 });
 test("landscape enlarged action text gets whole words and reachable controls", async ({
   page,
@@ -275,5 +275,5 @@ test("an archived result distinguishes the still-unplayed current day", async ({
   await page.locator('[data-index="1"]').click();
   await expect(page.locator("#play-again")).toHaveText("Сегодняшняя задача");
   await page.locator("#play-again").click();
-  await expect(page.locator("#mode")).toContainText("11.11.2026");
+  await expect(page.locator("#mode")).toHaveText("Задача дня · 11 ноября");
 });

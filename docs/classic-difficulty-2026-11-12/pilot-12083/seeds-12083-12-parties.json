@@ -1,0 +1,3597 @@
+[
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 0,
+    "size": 16,
+    "holes": 0,
+    "index": 789,
+    "seriesSeed": null,
+    "seed": 30788,
+    "seedAfter": 1804622198,
+    "stateSha256": "24a902a4b2a723ba0fd1e8c4e023f087ef1b31a557a349b46c96172d752c9301",
+    "recentCount": 0,
+    "requestedStyle": "gaps",
+    "actualRecipe": "shuffle",
+    "board": "1319188283721123",
+    "structure": "1219133732871172",
+    "proof": [
+      [
+        1,
+        9
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        1,
+        6
+      ]
+    ],
+    "profile": {
+      "opening": 16,
+      "openingInFirstFourRows": 16,
+      "removals": 8,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 3,
+      "readingMoves": 0,
+      "diagonalMoves": 1,
+      "newPairs": 3,
+      "compressionChanges": 0,
+      "maxDigits": 16,
+      "peakLength": 16,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "0000000190213318"
+      }
+    },
+    "choice": {
+      "at": 0,
+      "alternative": [
+        [
+          1,
+          10
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          0,
+          6
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 26,
+      "candidates": 3,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 40,
+      "maxCandidates": 3,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": 8
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 0,
+      "rejoinedAfter": 8,
+      "primary": [
+        1,
+        9
+      ],
+      "alternative": [
+        [
+          1,
+          10
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          0,
+          6
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 0,
+    "size": 18,
+    "holes": 2,
+    "index": 768,
+    "seriesSeed": null,
+    "seed": 30767,
+    "seedAfter": 2300999153,
+    "stateSha256": "bcf580070d5c76a46c78e766ecb182dd45b2a94cb1996722b74573f442ccc66d",
+    "recentCount": 0,
+    "requestedStyle": "stock",
+    "actualRecipe": "shuffle",
+    "board": "80149426618229190118",
+    "structure": "10238397721998280221",
+    "proof": [
+      [
+        0,
+        10
+      ],
+      [
+        2,
+        18
+      ],
+      [
+        4,
+        13
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        9,
+        14
+      ],
+      [
+        15,
+        17
+      ],
+      [
+        6,
+        10
+      ]
+    ],
+    "profile": {
+      "opening": 13,
+      "openingInFirstFourRows": 13,
+      "removals": 9,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 5,
+      "readingMoves": 1,
+      "diagonalMoves": 2,
+      "newPairs": 4,
+      "compressionChanges": 0,
+      "maxDigits": 18,
+      "peakLength": 20,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "00000010020110280209"
+      }
+    },
+    "choice": {
+      "at": 0,
+      "alternative": [
+        [
+          10,
+          19
+        ],
+        [
+          2,
+          18
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          6,
+          8
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 24,
+      "candidates": 3,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 40,
+      "maxCandidates": 3,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": 9
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 0,
+      "rejoinedAfter": 9,
+      "primary": [
+        0,
+        10
+      ],
+      "alternative": [
+        [
+          10,
+          19
+        ],
+        [
+          2,
+          18
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          9,
+          14
+        ],
+        [
+          15,
+          17
+        ],
+        [
+          0,
+          6
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 0,
+    "size": 20,
+    "holes": 0,
+    "index": 17,
+    "seriesSeed": null,
+    "seed": 30016,
+    "seedAfter": 755502577,
+    "stateSha256": "0d24eb2cad57081f4b0c60fc0fce0458f67a46a15bb8981a365517675976ff85",
+    "recentCount": 0,
+    "requestedStyle": "open",
+    "actualRecipe": "shuffle",
+    "board": "89988681968226484628",
+    "structure": "12211318231993717391",
+    "proof": [
+      [
+        0,
+        10
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        13
+      ],
+      [
+        6,
+        15
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "profile": {
+      "opening": 18,
+      "openingInFirstFourRows": 18,
+      "removals": 10,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 1,
+      "readingMoves": 0,
+      "diagonalMoves": 2,
+      "newPairs": 2,
+      "compressionChanges": 0,
+      "maxDigits": 20,
+      "peakLength": 20,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "00000001920330808237"
+      }
+    },
+    "choice": {
+      "at": 0,
+      "alternative": [
+        [
+          10,
+          11
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 15,
+      "candidates": 3,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 40,
+      "maxCandidates": 3,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": 10
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 0,
+      "rejoinedAfter": 10,
+      "primary": [
+        0,
+        10
+      ],
+      "alternative": [
+        [
+          10,
+          18
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          9,
+          14
+        ],
+        [
+          16,
+          17
+        ],
+        [
+          0,
+          10
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 1,
+    "size": 24,
+    "holes": 0,
+    "index": 429,
+    "seriesSeed": null,
+    "seed": 30428,
+    "seedAfter": 4031656636,
+    "stateSha256": "1d7df077c4e8bede3c1bf2d3b12be7ad59d272da460cb74a8de9fafd1e6b418e",
+    "recentCount": 0,
+    "requestedStyle": "open",
+    "actualRecipe": "shuffle",
+    "board": "911374588916315764111221",
+    "structure": "199283544197295873999669",
+    "proof": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        6,
+        14
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        9,
+        18
+      ],
+      [
+        5,
+        11
+      ],
+      [
+        4,
+        14
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "profile": {
+      "opening": 23,
+      "openingInFirstFourRows": 23,
+      "removals": 12,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 2,
+      "readingMoves": 1,
+      "diagonalMoves": 3,
+      "newPairs": 2,
+      "compressionChanges": 0,
+      "maxDigits": 24,
+      "peakLength": 24,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "000001000009230891033443"
+      }
+    },
+    "choice": {
+      "at": 2,
+      "alternative": [
+        [
+          3,
+          12
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9,
+          18
+        ],
+        [
+          5,
+          11
+        ],
+        [
+          13,
+          23
+        ],
+        [
+          4,
+          15
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 4,
+      "candidates": 3,
+      "solverVisits": 36,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 16,
+      "maxCandidates": 3,
+      "solverVisitsPerAttempt": 600,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 1,
+      "rejoinedAfter": 11,
+      "primary": [
+        2,
+        10
+      ],
+      "alternative": [
+        [
+          10,
+          19
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          9,
+          18
+        ],
+        [
+          5,
+          11
+        ],
+        [
+          13,
+          23
+        ],
+        [
+          12,
+          15
+        ],
+        [
+          16,
+          17
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 1,
+    "size": 28,
+    "holes": 4,
+    "index": 976,
+    "seriesSeed": null,
+    "seed": 30975,
+    "seedAfter": 1568255700,
+    "stateSha256": "642f94c7de991b547a5b15a48c740b925adc73f50af9c777a5c9bf08d026e8b8",
+    "recentCount": 0,
+    "requestedStyle": "gaps",
+    "actualRecipe": "shuffle",
+    "board": "14101101911300514775121916138286",
+    "structure": "12101101911300512775141918136468",
+    "proof": [
+      [
+        0,
+        9
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        8,
+        10
+      ],
+      [
+        15,
+        23
+      ],
+      [
+        16,
+        25
+      ],
+      [
+        17,
+        18
+      ],
+      [
+        14,
+        19
+      ],
+      [
+        11,
+        27
+      ],
+      [
+        12,
+        20
+      ],
+      [
+        11,
+        13
+      ],
+      [
+        15,
+        17
+      ],
+      [
+        10,
+        12
+      ],
+      [
+        1,
+        13
+      ]
+    ],
+    "profile": {
+      "opening": 26,
+      "openingInFirstFourRows": 26,
+      "removals": 14,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 9,
+      "readingMoves": 4,
+      "diagonalMoves": 3,
+      "newPairs": 8,
+      "compressionChanges": 0,
+      "maxDigits": 28,
+      "peakLength": 32,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "01000000000200500005343030326469"
+      }
+    },
+    "choice": {
+      "at": 4,
+      "alternative": [
+        [
+          15,
+          24
+        ],
+        [
+          16,
+          25
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          14,
+          19
+        ],
+        [
+          11,
+          27
+        ],
+        [
+          12,
+          20
+        ],
+        [
+          11,
+          13
+        ],
+        [
+          14,
+          17
+        ],
+        [
+          10,
+          12
+        ],
+        [
+          1,
+          13
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 3,
+      "candidates": 3,
+      "solverVisits": 51,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 16,
+      "maxCandidates": 3,
+      "solverVisitsPerAttempt": 600,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 1,
+      "rejoinedAfter": 11,
+      "primary": [
+        2,
+        4
+      ],
+      "alternative": [
+        [
+          2,
+          22
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          8,
+          10
+        ],
+        [
+          15,
+          23
+        ],
+        [
+          16,
+          25
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          14,
+          19
+        ],
+        [
+          11,
+          27
+        ],
+        [
+          12,
+          20
+        ],
+        [
+          4,
+          11
+        ],
+        [
+          15,
+          17
+        ],
+        [
+          10,
+          12
+        ],
+        [
+          1,
+          13
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 1,
+    "size": 32,
+    "holes": 0,
+    "index": 372,
+    "seriesSeed": null,
+    "seed": 30371,
+    "seedAfter": 1568255096,
+    "stateSha256": "57299eafd9f7b8529cee580f533f9588e28b0a8cf3dd3b00093290637a54dea8",
+    "recentCount": 0,
+    "requestedStyle": "open",
+    "actualRecipe": "shuffle",
+    "board": "18511118471913111991261136945172",
+    "structure": "12511112341916111991871167935148",
+    "proof": [
+      [
+        0,
+        10
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        9,
+        13
+      ],
+      [
+        14,
+        15
+      ],
+      [
+        16,
+        17
+      ],
+      [
+        1,
+        11
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        9,
+        10
+      ],
+      [
+        13,
+        14
+      ],
+      null,
+      [
+        18,
+        28
+      ],
+      [
+        19,
+        29
+      ],
+      [
+        17,
+        20
+      ],
+      [
+        21,
+        31
+      ],
+      [
+        22,
+        32
+      ],
+      [
+        27,
+        30
+      ],
+      null,
+      [
+        23,
+        31
+      ],
+      [
+        24,
+        32
+      ],
+      [
+        25,
+        33
+      ],
+      [
+        15,
+        26
+      ],
+      [
+        2,
+        18
+      ],
+      [
+        12,
+        20
+      ],
+      [
+        7,
+        10
+      ],
+      [
+        3,
+        7
+      ]
+    ],
+    "profile": {
+      "opening": 31,
+      "openingInFirstFourRows": 31,
+      "removals": 25,
+      "additions": 2,
+      "firstAdd": 11,
+      "gapMoves": 7,
+      "readingMoves": 3,
+      "diagonalMoves": 12,
+      "newPairs": 11,
+      "compressionChanges": 4,
+      "maxDigits": 32,
+      "peakLength": 35,
+      "motif": {
+        "stage": "first-add",
+        "structure": "00500001000020030485679"
+      }
+    },
+    "choice": {
+      "at": 6,
+      "alternative": [
+        [
+          16,
+          26
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          8,
+          16
+        ],
+        [
+          10,
+          20
+        ],
+        [
+          13,
+          14
+        ],
+        null,
+        [
+          18,
+          27
+        ],
+        [
+          19,
+          28
+        ],
+        [
+          21,
+          29
+        ],
+        [
+          22,
+          30
+        ],
+        null,
+        [
+          23,
+          31
+        ],
+        [
+          24,
+          32
+        ],
+        [
+          25,
+          33
+        ],
+        [
+          15,
+          26
+        ],
+        [
+          2,
+          18
+        ],
+        [
+          12,
+          20
+        ],
+        [
+          7,
+          10
+        ],
+        [
+          3,
+          7
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 3,
+      "candidates": 3,
+      "solverVisits": 109,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 16,
+      "maxCandidates": 3,
+      "solverVisitsPerAttempt": 600,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 0,
+      "rejoinedAfter": 10,
+      "primary": [
+        0,
+        10
+      ],
+      "alternative": [
+        [
+          10,
+          18
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          9,
+          13
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          16,
+          17
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          8,
+          16
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          13,
+          14
+        ],
+        null,
+        [
+          18,
+          28
+        ],
+        [
+          19,
+          29
+        ],
+        [
+          17,
+          20
+        ],
+        [
+          21,
+          31
+        ],
+        [
+          22,
+          32
+        ],
+        [
+          27,
+          30
+        ],
+        null,
+        [
+          23,
+          31
+        ],
+        [
+          24,
+          32
+        ],
+        [
+          25,
+          33
+        ],
+        [
+          15,
+          26
+        ],
+        [
+          2,
+          18
+        ],
+        [
+          12,
+          20
+        ],
+        [
+          7,
+          10
+        ],
+        [
+          3,
+          7
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 2,
+    "size": 40,
+    "holes": 0,
+    "index": 861,
+    "seriesSeed": null,
+    "seed": 30860,
+    "seedAfter": 1857656370,
+    "stateSha256": "29f46981c972bbcc7538bb6abdad3a554f9b897c12433b084ec380a899213fab",
+    "recentCount": 0,
+    "requestedStyle": "open",
+    "actualRecipe": "open",
+    "board": "5252778662482289449692241122944621188882",
+    "structure": "5151229331791194774341176611477316699991",
+    "proof": [
+      [
+        4,
+        5
+      ],
+      [
+        29,
+        30
+      ],
+      [
+        12,
+        21
+      ],
+      [
+        3,
+        11
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        18,
+        28
+      ],
+      [
+        10,
+        19
+      ],
+      [
+        7,
+        16
+      ],
+      [
+        23,
+        31
+      ],
+      [
+        15,
+        24
+      ],
+      [
+        25,
+        33
+      ],
+      [
+        22,
+        32
+      ],
+      [
+        27,
+        36
+      ],
+      [
+        26,
+        35
+      ],
+      [
+        1,
+        9
+      ],
+      [
+        6,
+        14
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        11,
+        25
+      ],
+      [
+        4,
+        12
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "profile": {
+      "opening": 47,
+      "openingInFirstFourRows": 41,
+      "removals": 20,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 2,
+      "readingMoves": 1,
+      "diagonalMoves": 8,
+      "newPairs": 24,
+      "compressionChanges": 1,
+      "maxDigits": 40,
+      "peakLength": 40,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "5150009001000190000020100811000018899991"
+      }
+    },
+    "choice": {
+      "at": 10,
+      "alternative": [
+        [
+          25,
+          34
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          8,
+          17
+        ],
+        [
+          9,
+          14
+        ],
+        [
+          2,
+          15
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 4,
+      "candidates": 4,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 4,
+      "maxCandidates": 4,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 2,
+      "rejoinedAfter": 12,
+      "primary": [
+        12,
+        21
+      ],
+      "alternative": [
+        [
+          21,
+          22
+        ],
+        [
+          3,
+          11
+        ],
+        [
+          8,
+          17
+        ],
+        [
+          18,
+          28
+        ],
+        [
+          10,
+          19
+        ],
+        [
+          7,
+          16
+        ],
+        [
+          23,
+          31
+        ],
+        [
+          15,
+          24
+        ],
+        [
+          25,
+          33
+        ],
+        [
+          12,
+          32
+        ],
+        [
+          27,
+          36
+        ],
+        [
+          26,
+          35
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          11,
+          25
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 2,
+    "size": 45,
+    "holes": 6,
+    "index": 73,
+    "seriesSeed": null,
+    "seed": 30072,
+    "seedAfter": 2993444528,
+    "stateSha256": "b2bdf718077cae94eb90a359558a645b6c7c78fbe444c14d7f36a82b89b17662",
+    "recentCount": 0,
+    "requestedStyle": "stock",
+    "actualRecipe": "stock",
+    "board": "653898162989653514470904590845646605275334019907653",
+    "structure": "152343617434152569980409540395191105785229064408152",
+    "proof": [
+      [
+        39,
+        40
+      ],
+      [
+        33,
+        41
+      ],
+      [
+        25,
+        43
+      ],
+      [
+        18,
+        28
+      ],
+      [
+        29,
+        49
+      ],
+      [
+        19,
+        37
+      ],
+      [
+        30,
+        48
+      ],
+      [
+        27,
+        36
+      ],
+      [
+        21,
+        45
+      ],
+      [
+        47,
+        50
+      ],
+      [
+        31,
+        32
+      ],
+      [
+        15,
+        35
+      ],
+      [
+        17,
+        23
+      ],
+      [
+        24,
+        29
+      ],
+      [
+        16,
+        26
+      ],
+      null,
+      [
+        6,
+        24
+      ],
+      [
+        7,
+        25
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        0,
+        18
+      ],
+      [
+        3,
+        10
+      ],
+      [
+        1,
+        19
+      ],
+      [
+        14,
+        20
+      ],
+      [
+        11,
+        29
+      ],
+      [
+        23,
+        26
+      ],
+      [
+        22,
+        27
+      ],
+      [
+        13,
+        31
+      ],
+      [
+        21,
+        28
+      ],
+      [
+        12,
+        21
+      ],
+      [
+        2,
+        14
+      ]
+    ],
+    "profile": {
+      "opening": 27,
+      "openingInFirstFourRows": 15,
+      "removals": 30,
+      "additions": 1,
+      "firstAdd": 15,
+      "gapMoves": 23,
+      "readingMoves": 8,
+      "diagonalMoves": 6,
+      "newPairs": 29,
+      "compressionChanges": 1,
+      "maxDigits": 45,
+      "peakLength": 51,
+      "motif": {
+        "stage": "first-add",
+        "structure": "152343617434152000"
+      }
+    },
+    "choice": {
+      "at": 13,
+      "alternative": [
+        [
+          13,
+          29
+        ],
+        [
+          6,
+          16
+        ],
+        null,
+        [
+          3,
+          43
+        ],
+        [
+          4,
+          40
+        ],
+        [
+          12,
+          36
+        ],
+        [
+          14,
+          38
+        ],
+        [
+          5,
+          41
+        ],
+        [
+          35,
+          44
+        ],
+        [
+          10,
+          30
+        ],
+        [
+          1,
+          28
+        ],
+        [
+          9,
+          11
+        ],
+        [
+          15,
+          31
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          2,
+          12
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          1,
+          5
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 4,
+      "candidates": 4,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 4,
+      "maxCandidates": 4,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 0,
+      "rejoinedAfter": 10,
+      "primary": [
+        39,
+        40
+      ],
+      "alternative": [
+        [
+          39,
+          47
+        ],
+        [
+          33,
+          41
+        ],
+        [
+          25,
+          43
+        ],
+        [
+          18,
+          28
+        ],
+        [
+          29,
+          49
+        ],
+        [
+          19,
+          37
+        ],
+        [
+          30,
+          48
+        ],
+        [
+          27,
+          36
+        ],
+        [
+          21,
+          45
+        ],
+        [
+          40,
+          50
+        ],
+        [
+          31,
+          32
+        ],
+        [
+          15,
+          35
+        ],
+        [
+          17,
+          23
+        ],
+        [
+          24,
+          29
+        ],
+        [
+          16,
+          26
+        ],
+        null,
+        [
+          6,
+          24
+        ],
+        [
+          7,
+          25
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          0,
+          18
+        ],
+        [
+          3,
+          10
+        ],
+        [
+          1,
+          19
+        ],
+        [
+          14,
+          20
+        ],
+        [
+          11,
+          29
+        ],
+        [
+          23,
+          26
+        ],
+        [
+          22,
+          27
+        ],
+        [
+          13,
+          31
+        ],
+        [
+          21,
+          28
+        ],
+        [
+          12,
+          21
+        ],
+        [
+          2,
+          14
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 2,
+    "size": 50,
+    "holes": 0,
+    "index": 159,
+    "seriesSeed": null,
+    "seed": 30158,
+    "seedAfter": 2354032644,
+    "stateSha256": "a84c377449c55afebe07cb9a914f5ca3fa1083dcb33e5c71972a1e0432a9372d",
+    "recentCount": 0,
+    "requestedStyle": "open",
+    "actualRecipe": "open",
+    "board": "86478152124687252136458699117524492459642626252449",
+    "structure": "12831459498213959472851266443598869856289292959886",
+    "proof": [
+      [
+        4,
+        14
+      ],
+      [
+        23,
+        31
+      ],
+      [
+        38,
+        47
+      ],
+      [
+        35,
+        43
+      ],
+      [
+        11,
+        20
+      ],
+      [
+        32,
+        41
+      ],
+      [
+        0,
+        9
+      ],
+      [
+        30,
+        40
+      ],
+      [
+        21,
+        29
+      ],
+      [
+        12,
+        22
+      ],
+      [
+        36,
+        45
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        6,
+        15
+      ],
+      [
+        24,
+        33
+      ],
+      [
+        7,
+        16
+      ],
+      [
+        27,
+        37
+      ],
+      [
+        18,
+        28
+      ],
+      [
+        34,
+        42
+      ],
+      [
+        25,
+        26
+      ],
+      [
+        10,
+        19
+      ],
+      [
+        3,
+        13
+      ],
+      [
+        12,
+        21
+      ],
+      [
+        17,
+        19
+      ],
+      [
+        5,
+        13
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "profile": {
+      "opening": 48,
+      "openingInFirstFourRows": 33,
+      "removals": 25,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 1,
+      "readingMoves": 1,
+      "diagonalMoves": 11,
+      "newPairs": 19,
+      "compressionChanges": 8,
+      "maxDigits": 50,
+      "peakLength": 50,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "01920304009002004081000077332000074007090040404097"
+      }
+    },
+    "choice": {
+      "at": 15,
+      "alternative": [
+        [
+          26,
+          27
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          5,
+          25
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          8,
+          10
+        ],
+        [
+          1,
+          13
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 4,
+      "candidates": 4,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 4,
+      "maxCandidates": 4,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 0,
+      "rejoinedAfter": 10,
+      "primary": [
+        4,
+        14
+      ],
+      "alternative": [
+        [
+          4,
+          12
+        ],
+        [
+          23,
+          31
+        ],
+        [
+          38,
+          47
+        ],
+        [
+          35,
+          43
+        ],
+        [
+          11,
+          20
+        ],
+        [
+          32,
+          41
+        ],
+        [
+          0,
+          9
+        ],
+        [
+          30,
+          40
+        ],
+        [
+          21,
+          29
+        ],
+        [
+          14,
+          22
+        ],
+        [
+          36,
+          45
+        ],
+        [
+          8,
+          17
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          24,
+          33
+        ],
+        [
+          7,
+          16
+        ],
+        [
+          27,
+          37
+        ],
+        [
+          18,
+          28
+        ],
+        [
+          34,
+          42
+        ],
+        [
+          25,
+          26
+        ],
+        [
+          10,
+          19
+        ],
+        [
+          3,
+          13
+        ],
+        [
+          12,
+          21
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 3,
+    "size": 72,
+    "holes": 0,
+    "index": 616,
+    "seriesSeed": null,
+    "seed": 30615,
+    "seedAfter": 3282845856,
+    "stateSha256": "daecf269e8090423f613d3eb3b46dd1783cac3657af4fe95157bd62d54c6fb98",
+    "recentCount": 0,
+    "requestedStyle": "stock",
+    "actualRecipe": "open",
+    "board": "833926896583149114453216219643497992646239122666227286642813253484978583",
+    "structure": "122394134512763776652974973462638339464923799444998914469172952616381512",
+    "proof": [
+      [
+        14,
+        22
+      ],
+      [
+        7,
+        16
+      ],
+      [
+        33,
+        34
+      ],
+      [
+        60,
+        70
+      ],
+      [
+        9,
+        19
+      ],
+      [
+        37,
+        45
+      ],
+      [
+        47,
+        55
+      ],
+      [
+        18,
+        28
+      ],
+      [
+        32,
+        40
+      ],
+      [
+        39,
+        49
+      ],
+      [
+        25,
+        26
+      ],
+      [
+        13,
+        23
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        38,
+        46
+      ],
+      [
+        3,
+        12
+      ],
+      [
+        41,
+        42
+      ],
+      [
+        53,
+        54
+      ],
+      [
+        58,
+        66
+      ],
+      [
+        29,
+        59
+      ],
+      [
+        44,
+        48
+      ],
+      [
+        15,
+        31
+      ],
+      [
+        27,
+        36
+      ],
+      [
+        43,
+        52
+      ],
+      [
+        11,
+        20
+      ],
+      [
+        47,
+        48
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        43,
+        51
+      ],
+      [
+        6,
+        15
+      ],
+      [
+        4,
+        12
+      ],
+      [
+        12,
+        36
+      ],
+      [
+        35,
+        44
+      ],
+      [
+        23,
+        31
+      ],
+      [
+        24,
+        32
+      ],
+      [
+        17,
+        19
+      ],
+      [
+        5,
+        11
+      ]
+    ],
+    "profile": {
+      "opening": 88,
+      "openingInFirstFourRows": 30,
+      "removals": 36,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 6,
+      "readingMoves": 4,
+      "diagonalMoves": 19,
+      "newPairs": 47,
+      "compressionChanges": 16,
+      "maxDigits": 72,
+      "peakLength": 72,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "100092102013000408003900900203860009200000099000907910009103053818071503"
+      }
+    },
+    "choice": {
+      "at": 26,
+      "alternative": [
+        [
+          0,
+          4
+        ],
+        [
+          6,
+          10
+        ],
+        [
+          5,
+          21
+        ],
+        [
+          6,
+          17
+        ],
+        [
+          25,
+          33
+        ],
+        [
+          26,
+          35
+        ],
+        [
+          3,
+          19
+        ],
+        [
+          5,
+          13
+        ],
+        [
+          6,
+          14
+        ],
+        [
+          0,
+          2
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 4,
+      "candidates": 4,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 4,
+      "maxCandidates": 4,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 1,
+      "rejoinedAfter": 11,
+      "primary": [
+        7,
+        16
+      ],
+      "alternative": [
+        [
+          16,
+          26
+        ],
+        [
+          33,
+          34
+        ],
+        [
+          60,
+          70
+        ],
+        [
+          9,
+          19
+        ],
+        [
+          37,
+          45
+        ],
+        [
+          47,
+          55
+        ],
+        [
+          18,
+          28
+        ],
+        [
+          32,
+          40
+        ],
+        [
+          39,
+          49
+        ],
+        [
+          7,
+          25
+        ],
+        [
+          13,
+          23
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          38,
+          46
+        ],
+        [
+          3,
+          12
+        ],
+        [
+          41,
+          42
+        ],
+        [
+          53,
+          54
+        ],
+        [
+          58,
+          66
+        ],
+        [
+          29,
+          59
+        ],
+        [
+          44,
+          48
+        ],
+        [
+          15,
+          31
+        ],
+        [
+          27,
+          36
+        ],
+        [
+          43,
+          52
+        ],
+        [
+          11,
+          20
+        ],
+        [
+          47,
+          48
+        ],
+        [
+          8,
+          17
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          43,
+          51
+        ],
+        [
+          6,
+          15
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          12,
+          36
+        ],
+        [
+          35,
+          44
+        ],
+        [
+          23,
+          31
+        ],
+        [
+          24,
+          32
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          5,
+          11
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 3,
+    "size": 81,
+    "holes": 9,
+    "index": 530,
+    "seriesSeed": null,
+    "seed": 30529,
+    "seedAfter": 691561893,
+    "stateSha256": "97fa0ad4ac212d4c97bbb57e48ba00e633f0eb61a772dc1cfc59853b185b664a",
+    "recentCount": 0,
+    "requestedStyle": "stock",
+    "actualRecipe": "stock",
+    "board": "349252579253494185618587579574361821281660010460011258444015601119639959791764493775001379",
+    "structure": "123454593451232765876569593592187647467880070280077456222075807773813353937982231995007193",
+    "proof": [
+      [
+        72,
+        81
+      ],
+      [
+        64,
+        74
+      ],
+      [
+        80,
+        82
+      ],
+      [
+        67,
+        75
+      ],
+      [
+        76,
+        77
+      ],
+      [
+        87,
+        88
+      ],
+      [
+        65,
+        73
+      ],
+      [
+        59,
+        83
+      ],
+      [
+        69,
+        79
+      ],
+      [
+        68,
+        86
+      ],
+      [
+        71,
+        89
+      ],
+      [
+        52,
+        70
+      ],
+      [
+        40,
+        56
+      ],
+      [
+        60,
+        78
+      ],
+      [
+        38,
+        58
+      ],
+      [
+        49,
+        50
+      ],
+      [
+        62,
+        63
+      ],
+      [
+        39,
+        55
+      ],
+      [
+        33,
+        34
+      ],
+      [
+        35,
+        43
+      ],
+      [
+        54,
+        66
+      ],
+      [
+        45,
+        46
+      ],
+      [
+        51,
+        53
+      ],
+      [
+        36,
+        37
+      ],
+      null,
+      [
+        23,
+        43
+      ],
+      [
+        24,
+        42
+      ],
+      [
+        15,
+        51
+      ],
+      [
+        6,
+        60
+      ],
+      [
+        26,
+        44
+      ],
+      [
+        17,
+        53
+      ],
+      [
+        8,
+        62
+      ],
+      [
+        28,
+        36
+      ],
+      [
+        29,
+        37
+      ],
+      [
+        32,
+        38
+      ],
+      [
+        18,
+        48
+      ],
+      [
+        22,
+        52
+      ],
+      [
+        25,
+        61
+      ],
+      [
+        21,
+        27
+      ],
+      [
+        41,
+        45
+      ],
+      [
+        14,
+        50
+      ],
+      [
+        40,
+        46
+      ],
+      [
+        19,
+        55
+      ],
+      [
+        9,
+        39
+      ],
+      [
+        16,
+        20
+      ],
+      [
+        11,
+        29
+      ],
+      [
+        12,
+        22
+      ],
+      [
+        13,
+        31
+      ],
+      [
+        4,
+        36
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        10,
+        30
+      ],
+      [
+        1,
+        31
+      ],
+      [
+        7,
+        23
+      ],
+      [
+        20,
+        22
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        12,
+        28
+      ],
+      [
+        9,
+        20
+      ],
+      [
+        2,
+        14
+      ]
+    ],
+    "profile": {
+      "opening": 53,
+      "openingInFirstFourRows": 2,
+      "removals": 57,
+      "additions": 1,
+      "firstAdd": 24,
+      "gapMoves": 41,
+      "readingMoves": 10,
+      "diagonalMoves": 22,
+      "newPairs": 59,
+      "compressionChanges": 11,
+      "maxDigits": 81,
+      "peakLength": 90,
+      "motif": {
+        "stage": "first-add",
+        "structure": "123454593451232765876569593592187000"
+      }
+    },
+    "choice": {
+      "at": 52,
+      "alternative": [
+        [
+          23,
+          28
+        ],
+        [
+          20,
+          22
+        ],
+        [
+          0,
+          30
+        ],
+        [
+          7,
+          12
+        ],
+        [
+          9,
+          20
+        ],
+        [
+          2,
+          14
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 4,
+      "candidates": 4,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 4,
+      "maxCandidates": 4,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 4,
+      "rejoinedAfter": 14,
+      "primary": [
+        76,
+        77
+      ],
+      "alternative": [
+        [
+          77,
+          78
+        ],
+        [
+          87,
+          88
+        ],
+        [
+          65,
+          73
+        ],
+        [
+          59,
+          83
+        ],
+        [
+          69,
+          79
+        ],
+        [
+          68,
+          86
+        ],
+        [
+          71,
+          89
+        ],
+        [
+          52,
+          70
+        ],
+        [
+          40,
+          56
+        ],
+        [
+          60,
+          76
+        ],
+        [
+          38,
+          58
+        ],
+        [
+          49,
+          50
+        ],
+        [
+          62,
+          63
+        ],
+        [
+          39,
+          55
+        ],
+        [
+          33,
+          34
+        ],
+        [
+          35,
+          43
+        ],
+        [
+          54,
+          66
+        ],
+        [
+          45,
+          46
+        ],
+        [
+          51,
+          53
+        ],
+        [
+          36,
+          37
+        ],
+        null,
+        [
+          23,
+          43
+        ],
+        [
+          24,
+          42
+        ],
+        [
+          15,
+          51
+        ],
+        [
+          6,
+          60
+        ],
+        [
+          26,
+          44
+        ],
+        [
+          17,
+          53
+        ],
+        [
+          8,
+          62
+        ],
+        [
+          28,
+          36
+        ],
+        [
+          29,
+          37
+        ],
+        [
+          32,
+          38
+        ],
+        [
+          18,
+          48
+        ],
+        [
+          22,
+          52
+        ],
+        [
+          25,
+          61
+        ],
+        [
+          21,
+          27
+        ],
+        [
+          41,
+          45
+        ],
+        [
+          14,
+          50
+        ],
+        [
+          40,
+          46
+        ],
+        [
+          19,
+          55
+        ],
+        [
+          9,
+          39
+        ],
+        [
+          16,
+          20
+        ],
+        [
+          11,
+          29
+        ],
+        [
+          12,
+          22
+        ],
+        [
+          13,
+          31
+        ],
+        [
+          4,
+          36
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          10,
+          30
+        ],
+        [
+          1,
+          31
+        ],
+        [
+          7,
+          23
+        ],
+        [
+          20,
+          22
+        ],
+        [
+          0,
+          30
+        ],
+        [
+          12,
+          28
+        ],
+        [
+          9,
+          20
+        ],
+        [
+          2,
+          14
+        ]
+      ]
+    }
+  },
+  {
+    "variant": "after",
+    "mode": "fresh",
+    "level": 3,
+    "size": 90,
+    "holes": 0,
+    "index": 652,
+    "seriesSeed": null,
+    "seed": 30651,
+    "seedAfter": 676409415,
+    "stateSha256": "732f47651e8d034cb1f6c03cb7506bd6743bc4a75f627dd74dcebe9cc4beb0c9",
+    "recentCount": 0,
+    "requestedStyle": "open",
+    "actualRecipe": "open",
+    "board": "841998645847169865976416668694144981569449482356464286679667688995678261515982881152812299",
+    "structure": "123771825124387185748238881872322713587227219658282918847884811775841983535719113359139977",
+    "proof": [
+      [
+        69,
+        79
+      ],
+      [
+        68,
+        76
+      ],
+      [
+        57,
+        66
+      ],
+      [
+        20,
+        29
+      ],
+      [
+        43,
+        52
+      ],
+      [
+        60,
+        70
+      ],
+      [
+        11,
+        19
+      ],
+      [
+        13,
+        21
+      ],
+      [
+        56,
+        64
+      ],
+      [
+        39,
+        49
+      ],
+      [
+        26,
+        34
+      ],
+      [
+        48,
+        58
+      ],
+      [
+        31,
+        40
+      ],
+      [
+        27,
+        37
+      ],
+      [
+        47,
+        50
+      ],
+      [
+        24,
+        32
+      ],
+      [
+        73,
+        81
+      ],
+      [
+        23,
+        25
+      ],
+      [
+        65,
+        74
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        51,
+        61
+      ],
+      [
+        12,
+        22
+      ],
+      [
+        4,
+        14
+      ],
+      [
+        78,
+        87
+      ],
+      [
+        53,
+        54
+      ],
+      [
+        59,
+        67
+      ],
+      [
+        75,
+        85
+      ],
+      [
+        1,
+        10
+      ],
+      [
+        41,
+        71
+      ],
+      [
+        33,
+        35
+      ],
+      [
+        6,
+        16
+      ],
+      [
+        80,
+        88
+      ],
+      [
+        36,
+        46
+      ],
+      [
+        18,
+        28
+      ],
+      [
+        63,
+        73
+      ],
+      [
+        36,
+        46
+      ],
+      [
+        35,
+        44
+      ],
+      [
+        3,
+        21
+      ],
+      [
+        0,
+        9
+      ],
+      [
+        5,
+        15
+      ],
+      [
+        2,
+        11
+      ],
+      [
+        32,
+        41
+      ],
+      [
+        7,
+        15
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        0,
+        17
+      ]
+    ],
+    "profile": {
+      "opening": 116,
+      "openingInFirstFourRows": 34,
+      "removals": 45,
+      "additions": 0,
+      "firstAdd": null,
+      "gapMoves": 6,
+      "readingMoves": 2,
+      "diagonalMoves": 26,
+      "newPairs": 56,
+      "compressionChanges": 14,
+      "maxDigits": 90,
+      "peakLength": 90,
+      "motif": {
+        "stage": "midpoint",
+        "structure": "123701820120000180700000000070300703507007209450000008860006001700060003500709103059139977"
+      }
+    },
+    "choice": {
+      "at": 36,
+      "alternative": [
+        [
+          15,
+          35
+        ],
+        [
+          0,
+          9
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          5,
+          35
+        ],
+        [
+          12,
+          20
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          14,
+          20
+        ],
+        [
+          12,
+          14
+        ],
+        [
+          0,
+          17
+        ]
+      ]
+    },
+    "openingSimilarity": 0,
+    "diagnostics": {
+      "attempts": 4,
+      "candidates": 4,
+      "solverVisits": 0,
+      "fallbackAttempts": 0
+    },
+    "budget": {
+      "attemptLimit": 4,
+      "maxCandidates": 4,
+      "solverVisitsPerAttempt": null,
+      "greedyStepsPerAttempt": null
+    },
+    "fallback": false,
+    "earlyChoice": {
+      "at": 2,
+      "rejoinedAfter": 12,
+      "primary": [
+        57,
+        66
+      ],
+      "alternative": [
+        [
+          48,
+          57
+        ],
+        [
+          20,
+          29
+        ],
+        [
+          43,
+          52
+        ],
+        [
+          60,
+          70
+        ],
+        [
+          11,
+          19
+        ],
+        [
+          13,
+          21
+        ],
+        [
+          56,
+          64
+        ],
+        [
+          39,
+          49
+        ],
+        [
+          26,
+          34
+        ],
+        [
+          58,
+          66
+        ],
+        [
+          31,
+          40
+        ],
+        [
+          27,
+          37
+        ],
+        [
+          47,
+          50
+        ],
+        [
+          24,
+          32
+        ],
+        [
+          73,
+          81
+        ],
+        [
+          23,
+          25
+        ],
+        [
+          65,
+          74
+        ],
+        [
+          8,
+          17
+        ],
+        [
+          51,
+          61
+        ],
+        [
+          12,
+          22
+        ],
+        [
+          4,
+          14
+        ],
+        [
+          78,
+          87
+        ],
+        [
+          53,
+          54
+        ],
+        [
+          59,
+          67
+        ],
+        [
+          75,
+          85
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          41,
+          71
+        ],
+        [
+          33,
+          35
+        ],
+        [
+          6,
+          16
+        ],
+        [
+          80,
+          88
+        ],
+        [
+          36,
+          46
+        ],
+        [
+          18,
+          28
+        ],
+        [
+          63,
+          73
+        ],
+        [
+          36,
+          46
+        ],
+        [
+          35,
+          44
+        ],
+        [
+          3,
+          21
+        ],
+        [
+          0,
+          9
+        ],
+        [
+          5,
+          15
+        ],
+        [
+          2,
+          11
+        ],
+        [
+          32,
+          41
+        ],
+        [
+          7,
+          15
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          0,
+          17
+        ]
+      ]
+    }
+  }
+]

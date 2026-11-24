@@ -123,9 +123,25 @@ header {
   flex: 1;
   min-height: 0;
   overflow: auto;
+  overflow-anchor: none;
   overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
+}
+.game:not(.is-result) > #viewport:is([data-scroll-above], [data-scroll-below]) {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--scroll-fade-top, 0px),
+    black calc(100% - var(--scroll-fade-bottom, 0px)),
+    transparent
+  );
+}
+#viewport[data-scroll-above] {
+  --scroll-fade-top: min(16px, 18%);
+}
+#viewport[data-scroll-below] {
+  --scroll-fade-bottom: min(16px, 18%);
 }
 #board-wrap {
   position: relative;
@@ -158,6 +174,21 @@ header {
 .cell.hinted {
   background: var(--highlight);
 }
+.cell.pair-blocker {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--reject) 60%, var(--ink));
+}
+.collapsed-row {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  transform-origin: center top;
+  border-block: 1px solid var(--line);
+  background: linear-gradient(to right, var(--line) 1px, transparent 1px) 0 0 / calc(100% / 9) 100%,
+    color-mix(in srgb, var(--accent) 12%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .digit.add-pending { opacity: 0; }
+}
 .cell:focus-visible {
   outline-offset: -3px;
   z-index: 1;
@@ -174,10 +205,72 @@ header {
   overflow: visible;
   color: var(--accent);
 }
-#paths path {
+#paths path,
+#pair-trace path {
   stroke: currentColor;
   stroke-width: 2;
   fill: none;
+}
+#pair-trace {
+  position: fixed;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--accent);
+}
+#pair-trace .gap-trail {
+  stroke-linecap: round;
+  opacity: .68;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #paths .edge-entry,
+  #pair-trace .edge-entry {
+    animation: edge-entry 65ms ease-out 85ms backwards;
+  }
+  #pair-trace {
+    animation: pair-trace-fade 145ms ease-out 210ms forwards;
+  }
+}
+@keyframes edge-entry {
+  from { opacity: 0; }
+}
+@keyframes pair-trace-fade {
+  to { opacity: 0; }
+}
+.pair-wave {
+  position: fixed;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--accent);
+}
+.pair-wave[data-kind="blocked"] {
+  color: #bb483e;
+}
+:root[data-theme="dark"] .pair-wave[data-kind="blocked"] {
+  color: #f18070;
+}
+.pair-wave-cell {
+  position: absolute;
+  opacity: 0;
+  border-radius: 5px;
+  border: 1px solid color-mix(in srgb, currentColor 76%, transparent);
+  background: color-mix(in srgb, currentColor 44%, transparent);
+  animation: pair-wave-step 142ms ease-out;
+}
+.pair-wave-impact {
+  box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 60%, transparent);
+  animation: pair-wave-hit 186ms ease-out;
+}
+@keyframes pair-wave-step {
+  0% { opacity: .28; transform: scale(.96); }
+  30% { opacity: .98; transform: translateY(-3px) scale(1.02); }
+  100% { opacity: 0; transform: none; }
+}
+@keyframes pair-wave-hit {
+  0% { opacity: 1; transform: scale(.88); }
+  28% { opacity: .95; transform: scale(1.12); }
+  100% { opacity: 0; transform: scale(1.2); }
 }
 #paths circle {
   fill: currentColor;

@@ -5,12 +5,14 @@ import {
   takeClassicDeal,
 } from "../src/classic-deals";
 import {
+  CLASSIC_START_COUNTS,
+  generateClassic,
   newClassicRun,
-  solveClassic,
+
   takeGeneratedClassic,
   type ClassicDifficulty,
 } from "../src/classic-generator";
-import { classic } from "../src/core";
+import { classic, commit, occupied, pairs, removePair } from "../src/core";
 import { fresh, metadata, startAttempt } from "../src/progress";
 const key = "seeds-bits.progress.v2";
 const saved = (page: Page) =>
@@ -20,6 +22,7 @@ async function boot(
   level: ClassicDifficulty = 1,
   completed = false,
   legacy = false,
+  prepare?: (progress: ReturnType<typeof fresh>) => void,
 ) {
   const p = fresh(),
     m = metadata(p);
@@ -44,6 +47,7 @@ async function boot(
     m.attempts.classic.completed = true;
     m.completed = 1;
   }
+  prepare?.(p);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addInitScript(
     ({ key, p }) => {
@@ -75,12 +79,18 @@ test("legacy games remain intact; new games generate normal fields and retain th
     initial.sessions.classic.current.board,
   );
   const fields = new Set<string>();
+  const sizes = new Set<number>();
   for (let n = 0; n < 9; n++) {
     await page.locator("#next-classic").click();
+    await expect(page.locator("#classic-new-sheet")).toBeVisible();
+    await page.locator('#classic-new-sheet [data-classic-level="1"]').click();
     await expect(page.locator("#dialog")).not.toBeVisible();
     const p = await saved(page),
       board = p.sessions.classic.current.board;
-    expect([...board].sort()).toEqual(classic().sort());
+    const digits = board.filter(Boolean);
+    expect(CLASSIC_START_COUNTS[1]).toContain(digits.length);
+    sizes.add(digits.length);
+    if (digits.length === 28) expect(digits.sort()).toEqual(classic().sort());
     expect(p.meta.classicRun.difficulty).toBe(1);
     expect(p.meta.classicDeals).toBeUndefined();
     fields.add(board.join(""));
@@ -94,13 +104,14 @@ test("legacy games remain intact; new games generate normal fields and retain th
     await page.locator("#menu").click();
   }
   expect(fields.size).toBe(9);
+  expect(sizes).toEqual(new Set(CLASSIC_START_COUNTS[1]));
 });
 
 test("cancel retains the band; restart repeats the generated field without repaying seeds", async ({
   page,
 }) => {
   const initial = await boot(page, 2);
-  const proof = solveClassic(initial.sessions.classic.current.board, 2, 6000)!;
+  const proof = generateClassic(newClassicRun(73), 2).proof;
   await page.locator("#resume").click();
   await move(page, proof[0]!);
   await expect(page.locator("#undo")).toBeEnabled();
@@ -160,14 +171,14 @@ test("failed replacement leaves the game, generator and chosen band intact", asy
   expect((await saved(page)).meta.classicRun.recent).toHaveLength(2);
 });
 
-for (const level of [0, 1, 2] as ClassicDifficulty[])
+for (const level of [0, 1, 2, 3] as ClassicDifficulty[])
   test(`result choices enforce boundary ${level}`, async ({ page }) => {
     await boot(page, level, true);
     await page.locator("#resume").click();
     await expect(page.locator("#win")).toBeVisible();
     for (const [id, disabled] of [
       ["classic-easier", level === 0],
-      ["classic-harder", level === 2],
+      ["classic-harder", level === 3],
     ] as const) {
       await expect(page.locator(`#${id}`)).toBeVisible();
       if (disabled) {
@@ -181,11 +192,11 @@ for (const level of [0, 1, 2] as ClassicDifficulty[])
         );
       } else await expect(page.locator(`#${id}`)).toBeEnabled();
     }
-    const action = level === 2 ? "classic-easier" : "classic-harder";
+    const action = level === 3 ? "classic-easier" : "classic-harder";
     await page.locator(`#${action}`).click();
     await expect(page.locator("#win")).toBeHidden();
     const selected = (await saved(page)).meta.classicRun.difficulty;
-    expect(selected).toBe(level === 2 ? 1 : level + 1);
+    expect(selected).toBe(level === 3 ? 2 : level + 1);
     await page.reload();
     expect((await saved(page)).meta.classicRun.difficulty).toBe(selected);
   });
@@ -194,9 +205,11 @@ test("generated hard game clears through the UI and same-band play stays hard", 
   page,
 }) => {
   const initial = await boot(page, 2);
-  const proof = solveClassic(initial.sessions.classic.current.board, 2, 6000)!;
+  const deal = generateClassic(newClassicRun(73), 2);
+  const proof = deal.choice
+    ? [...deal.proof.slice(0, deal.choice.at), ...deal.choice.alternative]
+    : deal.proof;
   await page.locator("#resume").click();
-  let additions = 0;
   for (const [n, action] of proof.entries()) {
     if (action === null) {
       await expect(page.locator("#add")).toHaveAttribute(
@@ -204,13 +217,11 @@ test("generated hard game clears through the UI and same-band play stays hard", 
         "false",
       );
       await page.locator("#add").click();
-      additions++;
     } else await move(page, action);
     if (n < proof.length - 1) await expect(page.locator("#undo")).toBeEnabled();
   }
-  expect(additions).toBeGreaterThan(0);
   await expect(page.locator("#win")).toBeVisible();
-  await expect(page.locator("#classic-harder")).toBeDisabled();
+  await expect(page.locator("#classic-harder")).toBeEnabled();
   await page.locator("#play-again").click();
   await expect(page.locator("#win")).toBeHidden();
   const p = await saved(page);
@@ -278,3 +289,89 @@ for (const viewport of [
         path: `test-results/classic-difficulty/${viewport.width}-${theme}.png`,
       });
     });
+
+
+test("Expert keeps its scroll, move and Undo after restarting above a 50px banner", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  const original = await boot(page, 3);
+  await page.locator("#resume").click();
+  const viewport = page.locator("#viewport");
+  const edgeState = () => viewport.evaluate(e => [
+    e.hasAttribute("data-scroll-above"),
+    e.hasAttribute("data-scroll-below"),
+    getComputedStyle(e).maskImage !== "none",
+  ]);
+  const regular = await viewport.evaluate(e => [e.clientHeight, e.scrollHeight]);
+  await page.evaluate(() => document.documentElement.classList.add("has-mobile-ads"));
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      document.documentElement.classList.add("has-mobile-ads");
+    }, { once: true });
+  });
+  const reserved = await viewport.evaluate(e => [e.clientHeight, e.scrollHeight]);
+  expect(reserved[1]).toBeGreaterThan(reserved[0]);
+  await expect(page.locator(".status-wrap")).toHaveCSS("height", "48px");
+  await expect(page.locator("#status")).toHaveCSS("font-size", "14px");
+  await expect.poll(edgeState).toEqual([false, true, true]);
+  await viewport.evaluate(e => e.scrollTop = (e.scrollHeight - e.clientHeight) / 2);
+  await expect.poll(edgeState).toEqual([true, true, true]);
+  await viewport.evaluate(e => e.scrollTop = e.scrollHeight);
+  await expect.poll(edgeState).toEqual([true, false, true]);
+  const board = original.sessions.classic.current.board;
+  const count = occupied(board);
+  const visible = await page.locator("#board").evaluate(board =>
+    [...board.querySelectorAll<HTMLButtonElement>("button[data-index]")].filter(cell =>
+      !cell.disabled && cell.getBoundingClientRect().top >=
+        document.querySelector("#viewport")!.getBoundingClientRect().top).map(cell => Number(cell.dataset.index)),
+  );
+  const bottom = pairs(board).reverse().find(({ a, b }) => visible.includes(a) && visible.includes(b))!;
+  expect(bottom).toBeDefined();
+  await move(page, [bottom.a, bottom.b]);
+  await expect(page.locator("#remaining")).toHaveText(String(count - 2));
+  const scroll = await viewport.evaluate(e => e.scrollTop);
+  expect(scroll).toBeGreaterThan(0);
+  await page.locator("#menu").click();
+  await page.reload();
+  await page.locator("#resume").click();
+  await expect(page.locator("#remaining")).toHaveText(String(count - 2));
+  expect(await viewport.evaluate(e => e.scrollTop)).toBe(scroll);
+  await page.locator("#undo").click();
+  await expect(page.locator("#remaining")).toHaveText(String(count));
+  await expect.poll(async () => (await saved(page)).sessions.classic.current.board).toEqual(board);
+  await page.screenshot({ path: "test-results/classic-difficulty/expert-320-reserved.png" });
+  await test.info().attach("viewport", {
+    body: JSON.stringify({ regular, reserved }), contentType: "application/json",
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(edgeState).toEqual([false, false, false]);
+});
+
+test("Expert Add copies the certified remainder, saves it and preserves Undo on reload", async ({ page }) => {
+  const { board, proof: witness } = generateClassic(newClassicRun(73), 3, { size: 81, sparse: true });
+  const original = await boot(page, 3, false, false, progress => {
+    let session = progress.sessions.classic;
+    session.current.board = board;
+    const run = metadata(progress).classicRun!;
+    run.current!.board = board;
+    run.recent = [board.join("")];
+    for (const action of witness) {
+      if (!action) break;
+      session = commit(session, removePair(session.current.board, ...action), "pair", 0);
+    }
+    progress.sessions.classic = session;
+  });
+  const beforeAdd = original.sessions.classic.current.board;
+  const digits = beforeAdd.filter(Boolean);
+  expect(digits.length % 2).toBe(1);
+  await page.locator("#resume").click();
+  await expect(page.locator("#add")).toHaveAttribute("aria-disabled", "false");
+  await page.locator("#add").click();
+  await expect(page.locator("#remaining")).toHaveText(String(digits.length * 2));
+  await page.locator("#menu").click();
+  await page.reload();
+  await page.locator("#resume").click();
+  expect((await saved(page)).sessions.classic.current.board).toEqual([...beforeAdd, ...digits]);
+  await page.locator("#undo").click();
+  await expect(page.locator("#remaining")).toHaveText(String(digits.length));
+  await expect.poll(async () => (await saved(page)).sessions.classic.current.board).toEqual(beforeAdd);
+});

@@ -30,6 +30,9 @@ function fixture(release = true, helpQa = false) {
   );
   cpSync("native", join(root, "native"), { recursive: true });
   cpSync("package.json", join(root, "package.json"));
+  mkdirSync(join(root,"src/i18n"),{recursive:true});
+  cpSync("src/distribution-channels.json",join(root,"src/distribution-channels.json"));
+  cpSync("src/i18n/launch-copy.json",join(root,"src/i18n/launch-copy.json"));
   return root;
 }
 const env = {

@@ -1,12 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { addNumbers, pairs } from "../src/core";
-import { generateClassic, newClassicRun } from "../src/classic-generator";
 import fixture from "../docs/porting/2026-11-20/double-add.json" with { type: "json" };
 import { install, key } from "./help-test-utils";
 
-test("a generated ordinary board needs two consecutive Adds to restore moves", async ({page}) => {
-  const start = generateClassic(newClassicRun(fixture.seed), 1).board;
-  expect(start).toEqual(fixture.start);
+test("a saved ordinary board needs two consecutive Adds to restore moves", async ({page}) => {
+  // Keep this previously issued field even when new-game generation evolves.
+  const start = fixture.start;
   await page.addInitScript(board => {
     if (localStorage.getItem("seeds-bits.settings.v1")) return;
     localStorage.setItem("seeds-bits.settings.v1", JSON.stringify({tutorialDone: true}));
@@ -44,7 +43,7 @@ test("a generated ordinary board needs two consecutive Adds to restore moves", a
   await expect(status).toHaveText(addedMessage);
   await page.locator("#undo").click();
   await expect.poll(board).toEqual(fixture.stuck);
-  await expect(status).toHaveText("Пар нет. Добавьте оставшиеся цифры.");
+  await expect(status).toHaveText("В конец поля скопируются 8 цифр.");
   await add.click();
   await expect(status).toHaveText(addedMessage);
   await add.click();
@@ -75,7 +74,8 @@ test("a first Add that restores pairs keeps the ordinary status and supports Und
   await expect(page.locator("#status")).toHaveText("Равные или сумма 10");
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("9");
-  await expect(page.locator("#status")).toHaveText("Пар нет. Добавьте оставшиеся цифры.");
+  await expect(page.locator("#status")).toHaveText("В конец поля скопируются 9 цифр.");
+  await expect(page.locator("#add .action-label")).toHaveText("Добавить 9");
 });
 
 test("an Add without pairs reports when the next Add would exceed the cell limit", async ({page}) => {
@@ -126,7 +126,7 @@ test("an Add without pairs reports when the next Add would exceed the cell limit
   await expect(page.locator("#remaining")).toHaveText("16");
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("8");
-  await expect(page.locator("#status")).toHaveText("Пар нет. Добавьте оставшиеся цифры.");
+  await expect(page.locator("#status")).toHaveText("В конец поля скопируются 8 цифр.");
 });
 
 test("a dead end remains playable with an exhausted hint wallet and five prior Adds", async ({page}) => {

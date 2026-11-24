@@ -1,0 +1,41 @@
+[
+  {
+    "action": "First real notebook task",
+    "timeMs": 6768
+  },
+  {
+    "action": "Pair removed",
+    "timeMs": 8952,
+    "a": 8,
+    "b": 17,
+    "cue": "Найдите следующую пару."
+  },
+  {
+    "action": "Pair removed",
+    "timeMs": 10329,
+    "a": 4,
+    "b": 5,
+    "cue": "Пустые клетки можно пропускать."
+  },
+  {
+    "action": "Pair removed",
+    "timeMs": 11693,
+    "a": 9,
+    "b": 11,
+    "cue": "От правого края — в начало строки ниже."
+  },
+  {
+    "action": "Pair removed",
+    "timeMs": 13545,
+    "a": 7,
+    "b": 14
+  },
+  {
+    "action": "Victory 1 of 24",
+    "timeMs": 14203
+  },
+  {
+    "action": "Voluntary task 2",
+    "timeMs": 16967
+  }
+]

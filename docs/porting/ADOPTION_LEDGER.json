@@ -2,8 +2,8 @@
   "schema": "consumer-adoption-ledger-v1",
   "consumer": "DanilaH/seeds-bits",
   "consumerCommit": "7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b",
-  "sourceInventory": "https://github.com/DanilaH/mini-games-kit/blob/a0bc409a34033ea47501a7d59966e690e9b647cd/research/games/seeds/porting/SOURCE_FEATURES.json",
-  "scope": "Первая сверка по раннему плюсу, тупику, подсказке и связанным вариантам. MATCH относится к конкретному наблюдаемому свойству, а не к полному совпадению сессии Android.",
+  "sourceInventory": "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/porting/SOURCE_FEATURES.json",
+  "scope": "Первая сверка по раннему плюсу, тупику, подсказке и связанным вариантам. MATCH относится к конкретному наблюдаемому свойству, а не к полному совпадению сессии Android. Следующие три записи проверены на 2e7f30f5407aa00ec6ec766ec0b5f0a166eec338 и описывают доступность объяснения. Старые 33 строки сохраняют свои исходные привязки. Обновление PR #9: первый сеанс — test-only локальная адаптация; исходные source feature PARTIAL и пробелы наблюдения оригиналов сохранены.",
   "roadmap": "./2026-11-20/ROADMAP.md",
   "features": [
     {
@@ -504,6 +504,72 @@
       "dependencies": [
         "Запись конкретного варианта оригинала для проверки поведения в игре"
       ]
+    },
+    {
+      "id": "eb-tutorial-gap-copy",
+      "parity": "PARTIAL",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "7ad737e3581dd734d7970da5b18ef52fd49e1412",
+      "currentImplementation": "Собственный test-only первый вход: в book-v1-1 обязательный прямой пропуск объясняется до хода, без автоматического выделения; явная лампочка заменяет команду объяснением отмеченной пары.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
+        "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L188",
+        "../research/first-session-2026-11-20/route.json",
+        "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/first-session.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/main.ts",
+        "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md"
+      ],
+      "sourceLocator": "RU/tutorial_step_3_description",
+      "nextAction": "Плейтест на телефоне: человек должен найти пару через пропуск/край без лампочки. Отдельно наблюдать момент объяснения в оригинале; PARTIAL не означает полное совпадение FTUE.",
+      "dependencies": [
+        "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
+      ],
+      "consumerTest": "../../e2e/first-session.spec.ts",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "acceptanceEvidence": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md"
+    },
+    {
+      "id": "eb-tutorial-row-edge-copy",
+      "parity": "PARTIAL",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26",
+      "currentImplementation": "В тестовой тетради короткое объяснение появляется до первого обязательного хода через край, в том числе в задаче 5. Первый успешный ход сохраняет отметку правила. Проверены оба порядка касания.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
+        "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L970",
+        "../research/first-session-2026-11-20/route.json",
+        "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/first-session.ts",
+        "https://github.com/DanilaH/seeds-bits/blob/7ad737e3581dd734d7970da5b18ef52fd49e1412/src/main.ts",
+        "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
+        "https://github.com/DanilaH/seeds-bits/blob/6d67fea7312d43a43786f68a2a64106a44b71d26/src/main.ts",
+        "../research/first-session-2026-11-20/implementation/FOLLOWUP_12062.md"
+      ],
+      "sourceLocator": "RU/tutorial_step_4_title, tutorial_step_4_description",
+      "nextAction": "Плейтест на телефоне: человек должен найти пару через пропуск/край без лампочки. Отдельно наблюдать момент объяснения в оригинале; PARTIAL не означает полное совпадение FTUE.",
+      "dependencies": [
+        "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
+      ],
+      "consumerTest": "../../e2e/first-session.spec.ts",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "acceptanceEvidence": "../research/first-session-2026-11-20/implementation/FOLLOWUP_12062.md"
+    },
+    {
+      "id": "eb-daily-intro-monthly-cup-copy",
+      "parity": "PARTIAL",
+      "status": "ROADMAPPED",
+      "consumerCommit": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
+      "currentImplementation": "Число решённых дат и трофей показаны в календаре и результате. Первый вход через кнопку дня сразу открывает поле. У Семечек свои пороги месячных трофеев.",
+      "evidenceRef": [
+        "https://github.com/DanilaH/mini-games-kit/blob/0e4cb526883a30ab52f42067669665a31c1ee587/research/games/seeds/2026-11-20-first-session/README.md",
+        "https://github.com/DanilaH/seeds-bits/blob/2e7f30f5407aa00ec6ec766ec0b5f0a166eec338/src/main.ts#L3413",
+        "../research/first-session-2026-11-20/route.json"
+      ],
+      "sourceLocator": "RU/dc_tutorial_2",
+      "nextAction": "Объяснить собственную отметку календаря перед первой датой и проверить, различает ли человек сегодня и архив.",
+      "dependencies": [
+        "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
+      ],
+      "consumerTest": "../research/first-session-2026-11-20/replay.mjs"
     }
   ],
   "localAdaptations": [
@@ -551,10 +617,270 @@
         "emulator": "Android 35/WebView 124: both courses and hints at 12 size/font combinations on e417397 (44732728904). Final scoped rerun at 320x520/font200 passed on 204b186 (44734430854), including full row at save error, retry/88 digits, privacy/progress. Full matrix not repeated at final SHA.",
         "device": "NOT_VERIFIED",
         "liveAudience": "NOT_VERIFIED",
-        "apk": "../layout-audit-2026-11-20/APK.json"
+        "apk": "../layout-audit-2026-11-20/APK.json",
+        "systemFont12065": "../layout-audit-2026-11-20/SYSTEM_FONT_12065.md"
       },
       "acceptance": "../layout-audit-2026-11-20/FIXES.md",
       "nextAction": "Телефонная приёмка preview 12054 при системном шрифте 100/150/200%; эксперименты и оригиналы отдельно."
+    },
+    {
+      "id": "first-session-20261120",
+      "sourceFeatureIds": [
+        "eb-tutorial-gap-copy",
+        "eb-tutorial-row-edge-copy",
+        "eb-daily-intro-monthly-cup-copy"
+      ],
+      "localIssueIds": [
+        "SEEDS-START-01",
+        "SEEDS-START-02"
+      ],
+      "scope": "Первый самостоятельный ход и ориентирование между классикой, тетрадью и днём. Тетрадь является собственной адаптацией.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "evidence": {
+        "build": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
+        "browser": "24 состояния и обе очередности нажатий, Chromium 390×844.",
+        "model": "book-v1-1: 6 первых ходов, 44 успешных последовательности, 0 тупиков, все 44 содержат прямой пропуск, у 8 есть переход чтения. Среди первых пяти задач переход обязателен для победы впервые в №5. check-opening.mjs.",
+        "device": "NOT_VERIFIED: physical phone playtest remains open.",
+        "liveAudience": "Один пересказ наблюдения владельцем. Новая версия людьми не проверена.",
+        "prototype": "Исследовательская сборка из исходного интерфейса и движка. Chromium offline, четыре размера/масштаба, шесть состояний на каждом; обе очередности, результат, выбор задачи 2 и восстановление после reload. first-game-checks.json. В продуктовый runtime не внесено. Исторический результат до продуктового переноса.",
+        "independentCheck": "Повтор normal entry PR #8 и отдельного пилота PR #9, исправный возврат и четыре проблемы читаемости/подсказок/архива. См. ../research/first-session-2026-11-20/INDEPENDENT_CHECK.md. Телефон и живые игроки для нового входа открыты.",
+        "runtime": "7ad737e: новый первый вход только с VITE_SEEDS_FIRST_SESSION=1, чистая настоящая book-v1-1, добровольная задача 2. Исправлены четыре замечания независимого аудита. Итоговые CI/APK/Android evidence — в acceptance.",
+        "code": "Runtime 7ad737e; QA 0c33b38. CI 44766644206 passed (118 + 2 unit, 320 + 15 browser, web/Yandex, Android debug/native doubles). CI 44766629267 passed (25 targeted browser, optimized Android, native update/fresh/font200).",
+        "emulator": "Android 35 / WebView 124: exact old optimized 12054 → current optimized 12061 re-signed with one ephemeral CI certificate, board/history/settings/hints/wallet/paused inventory preserved; debug Undo restored 8. Fresh real task, manual task 2; 320x520/system font200 instruction visibility and stable lesson field.",
+        "apk": "../research/first-session-2026-11-20/implementation/APK.json",
+        "followup12061": "25 целевых browser-тестов прошли повторно. Независимый прогон assets/public из optimized CI APK 12061: первая встреча с краем в задаче 5 без инструкции, частичная команда 568×320/200% и устаревший заголовок открытого дня после полуночи. Физическая проверка и плейтест открыты. См. ../research/first-session-2026-11-20/implementation/FOLLOWUP_12061.md.",
+        "followup12062": "Финальная ревизия 6d67fea. Три случая исправлены. 30 целевых браузерных сценариев и offline Android 35 прошли в CI 44793614971. Подписанная выдача выполнена в preview 12063.",
+        "apk12063": "../research/first-session-2026-11-20/implementation/APK_12063.json",
+        "systemFont12065": "../layout-audit-2026-11-20/SYSTEM_FONT_12065.md",
+        "apk12065": "../research/first-session-2026-11-20/implementation/APK_12065.json",
+        "pr11CalmScreensFollowup": "../research/first-session-2026-11-20/implementation/PR11_FOLLOWUP_20261123.md",
+        "pr11IndependentAudit": "https://github.com/DanilaH/seeds-bits/pull/11",
+        "pr11CodeAndBrowserVerification": "CI 45062012299: 122 unit, 2 model unit, 15 browser regression, 377 browser e2e, Android debug and native regression PASS on b4e005df. Both filters target saved book-v1-2; full/short lessons keep field position, month targets and seed plural validated. Browser video and two 390x844 JPEG in artifact 14770431009.",
+        "pr11AndroidEmulatorVerification": "CI 45122643720 on 49a49f5: Android 35 / WebView 124. Upgrade from exact delivered 12073 payload to optimized 12074 with ephemeral CI certificate preserved board, history length and theme. Both last-pair orders, Back and continuation to puzzle 2 passed.",
+        "pr11PhoneVerification": "NOT_VERIFIED",
+        "preview12075": "PR #9, код 2a81f5c70213bdfbfae93f542e4107c870f857d1. Флаги языков, направляющая кнопки меню, подсветка нерешённого дня, устойчивое поле уроков, перезапуск в тупике и появление цифр с тремя импульсами. CI 45138046652: 125 unit, 2 model, 15 browser regression, 382 e2e и Android debug. CI 45138046651: Android 35 / WebView 124, обновление 12074 → 12075 с восстановлением игры, оба порядка последней пары, Back, задача 2 и архив ES/PT-BR. Подписанный портретный APK 1.1.2 / 12075, com.seedsbits.game.preview, SHA256 89b3d12fa83a186bbcc515e0b4dfd6ff3a202c691ea6945f9a793ede95d5766d. Проверка на физическом телефоне открыта.",
+        "preview12076": "PR #9, код 1bf3ba2c425be4eacb5998a98d6cb20727c7f8bd. Панель подсказки игры исключена из первого кадра урока в альбомном окне. Chromium: 133 состояния сеток в семи конфигурациях, включая 568×320 и 844×390. CI 45143914897: 125 unit, 2 model, 15 browser regression, 383 e2e и Android debug. CI 45143906924: Android 35 / WebView 124, обновление 12075 → 12076 с восстановлением партии, оба порядка последней пары, Back, задача 2, портретная ориентация и архив ES/PT-BR. Подписанный портретный APK 1.1.2 / 12076, com.seedsbits.game.preview, SHA256 05ce705ff3609bfa1ab3832112b1eef05466d94cb949ffe22325416eb2ef806b. Проверка на физическом телефоне открыта.",
+        "preview12077": "PR #9, код e90b9472dbb34ae2e1903d9f552fa31eef40978d. Цифры новой партии проявляются слева направо по столбцам, флаги без внешней обводки, тетради и задача дня с увеличенными иконками слева. Chromium: подписи меню на пяти языках помещаются на 320×568 и 390×844. CI 45156883191: 125 unit, 2 model, 15 browser regression, 384 e2e и Android debug. CI 45157028396: Android 35 / WebView 124, обновление 12076 → 12077 с восстановлением партии, оба порядка последней пары, Back, задача 2, портретная ориентация и архив ES/PT-BR. Подписанный портретный APK 1.1.2 / 12077, com.seedsbits.game.preview, SHA256 a8b39919b92412308681842b8d42ff03aeadfe12c05c5adcd8f29fff298fd0ff. Проверка на физическом телефоне открыта."
+      },
+      "acceptance": "../research/first-session-2026-11-20/implementation/ACCEPTANCE.md",
+      "nextAction": "Подписанный прежним ключом preview 12077 выдан владельцу. Проверить обновление, TalkBack, звук и три импульса при появлении цифр на физическом телефоне. Отдельно наблюдать, сможет ли новичок после первой победы найти задачу дня и вернуться в начатую тетрадь.",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "consumerCommit": "6d67fea7312d43a43786f68a2a64106a44b71d26"
+    },
+    {
+      "id": "pair-feedback-and-task-rollback-20261121",
+      "sourceFeatureIds": [],
+      "localIssueIds": [
+        "SEEDS-UX-01",
+        "SEEDS-UX-02",
+        "SEEDS-UX-03",
+        "SEEDS-UX-04",
+        "SEEDS-UX-05",
+        "SEEDS-UX-06",
+        "SEEDS-UX-07"
+      ],
+      "scope": "Обратная связь нашей классики, тетради и календаря. Откат в тетради и календаре.",
+      "status": "PRODUCT_IMPLEMENTED",
+      "implementation": [
+        "src/core.ts:checkPair/pairBlockers",
+        "src/main.ts:choose/displayHint/render/hint",
+        "src/hint-explanation.ts",
+        "src/style.css",
+        "src/ui-adaptation.css"
+      ],
+      "behavior": "Показывает препятствия и пройденный маршрут, объясняет «Добавить» и открывает первую нерешённую задачу после победы в классике. Проверенный откат восстанавливает N ходов, поле и прокрутку. Лампочка остаётся самостоятельным действием.",
+      "verification": {
+        "code": "619bbcb5e853d77275f7fc32b26f76ddc22e4ec4. 118 модульных, 355 основных браузерных и 31 проверка первого сеанса.",
+        "emulator": "Android 35 / WebView 124. CI 44911332505 прошёл обновление 12065 → 12066, первый запуск и оба порядка края. 566 состояний на одном runtime покрыты двумя Android-прогонами. В последнем прогоне новый объём прошёл, а шесть состояний после тайм-аута перехода из трофеев подтверждены предыдущим.",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED",
+        "apk": "../research/ux-handoff-2026-11-21/APK_12066.json"
+      },
+      "acceptance": "../research/ux-handoff-2026-11-21/ACCEPTANCE.md",
+      "nextAction": "Повторить задачу № 5, копирование в классике и откат в задаче № 4 на физическом телефоне. Отдельно наблюдать следующий ход новичка.",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "consumerCommit": "619bbcb5e853d77275f7fc32b26f76ddc22e4ec4"
+    },
+    {
+      "id": "selection-and-daily-return-20261121",
+      "sourceFeatureIds": [],
+      "localIssueIds": [
+        "SEEDS-UX-08",
+        "SEEDS-UX-09"
+      ],
+      "scope": "Предложения для классики, тетради и задачи дня по итогам наблюдений.",
+      "status": "DEFERRED",
+      "reason": "Решение отложено до короткого плейтеста с новичками.",
+      "dependencies": [
+        "UX-08. Записать, нажимает ли игрок уже выбранную 3 после промаха 2 → 3.",
+        "UX-09. Записать, ищет ли игрок конкретную прерванную партию после сегодняшней задачи."
+      ],
+      "nextAction": "Повторить оба сценария без устной инструкции. Взять соответствующую правку при наблюдении её условия.",
+      "acceptance": "../research/ux-handoff-2026-11-21/ACCEPTANCE.md"
+    },
+    {
+      "id": "markets-localization-b1-20261121",
+      "sourceFeatureIds": [],
+      "scope": "Собственная адаптация для пяти языков интерфейса и напоминаний, атрибуции площадки и отчёта первого игрового опыта.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "implementation": [
+        "src/i18n/index.ts",
+        "src/distribution.ts",
+        "src/platform.ts",
+        "native/android/SeedsInstallStore.java",
+        "native/android/SeedsDailyReminder.java",
+        "scripts/markets/report.mjs"
+      ],
+      "behavior": "Пять локалей B1. Выбор языка работает в текущей партии и оставляет выделение и Undo. Первый магазин, метка APK, веб-портал и дистрибьютор сохраняются отдельными полями. Android-установки и веб-профили разделены в отчёте.",
+      "verification": {
+        "code": "10 целевых сценариев Playwright, 31 тест первого сеанса и 80 контрольных экранов. 46 сценариев на подставных Android API, в том числе магазины, конфликт, APK-файл и перезапуск после обновления.",
+        "emulator": "../research/markets-localization-2026-11-21/ANDROID_12069.json",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED",
+        "apk": "../research/markets-localization-2026-11-21/APK_12069.json",
+        "controlledReport": "../research/markets-localization-2026-11-21/CONTROL_REPORT.json"
+      },
+      "consumerCommit": "12bc67fdf7409823871a19e2db2e229c4b7650cb",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "acceptance": "../research/markets-localization-2026-11-21/ACCEPTANCE.md",
+      "nextAction": "Подключить тестовые кабинеты RuStore, NashStore и Яндекс Игр, принять нативный 200% и напоминание на телефоне, проверить ОК в реальном размещении GamePush."
+    },
+    {
+      "id": "markets-localization-b2-20261121",
+      "sourceFeatureIds": [],
+      "scope": "Французский, немецкий, итальянский, вьетнамский и индонезийский для следующей сборки.",
+      "status": "DEFERRED",
+      "reason": "В B1 включены пять локалей первой волны. Для B2 подготовлен черновик всех 305 дополнительных ключей, впереди редактура и экранная приёмка.",
+      "dependencies": [
+        "Типографика обеих тем и масштабов, формы множественного числа, TalkBack и нативное напоминание.",
+        "Обновление B1 → B2 с Auto на it-IT и явным EN, первый ход новичка."
+      ],
+      "nextAction": "После редакторской и экранной проверки объединить черновик с пользовательским словарём и открыть локали B2.",
+      "acceptance": "../research/markets-localization-2026-11-21/ACCEPTANCE.md"
+    },
+    {
+      "id": "crossmath-classic-new-game-chooser-20261123",
+      "sourceFeatureIds": [
+        "xcm-home-continue-new-separation",
+        "xcm-new-game-bottom-sheet",
+        "xcm-new-game-enter-field",
+        "xcm-home-daily-status"
+      ],
+      "scope": "Кросс-жанровый UI-референс Cross Math (Main → New Game), не оригинал Number Match Easybrain/NADO. В нашу Классику перенесён выбор уровня как локальная адаптация.",
+      "source": "Attached video_2026-11-23_17-27-21.mp4, sha256 99a2e7891f191e00c59250c1b58e9ec5e5e92abba5c2aa67602173bf9cac63cf; 576x1280, 31.629s; relevant 00:00-00:09; package/version UNKNOWN.",
+      "parity": "PARTIAL",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "implementation": [
+        "src/main.ts:classicNewSheet/renderClassicNewSheet/openClassicNewSheet",
+        "src/main.ts:beginClassic/requestRestart",
+        "src/calm-screens.css:#classic-new-sheet",
+        "src/i18n/ui-copy.json",
+        "e2e/classic-new-sheet.spec.ts",
+        "e2e/classic-new-video.spec.ts"
+      ],
+      "behavior": "Раздельные Продолжить и Новая классика; нижняя модальная панель с тремя реальными уровнями 18/28/27 цифр, один тап для новой партии, подтверждение замены незаконченной классики; при переходе из тетради сохранены поле и Undo. Четвёртая Expert и таймер не добавлены, иной дизайн оригинален.",
+      "verification": {
+        "code": "PASS: CI 45179150418, 125 unit + 2 model unit, 15 browser regression, 393 browser e2e, Android debug + native harness and web/Yandex builds",
+        "ui": "PASS Chromium 390x844 (height 270-470px) and 320x568 short portrait, English; two actual JPEG and real browser video in artifact 14818734487",
+        "android": "DEBUG_BUILD_ONLY: no direct native touch verification of the new bottom sheet",
+        "device": "NOT_VERIFIED",
+        "liveAudience": "NOT_VERIFIED",
+        "referenceVideo": "OBSERVED first 00:00-00:09; unobserved reference generation, audio and live economy UNKNOWN"
+      },
+      "excluded": {
+        "fourTiers": "DEFERRED: three validated Classic algorithms currently exist, Expert requires owner approval and balance proof",
+        "gameTimer": "INTENTIONAL_DIFFERENCE: Seeds Classic has no timer; do not add an extra Play gate",
+        "liveEvents": "DEFERRED: dated event/timed currency not copied from unrelated genre"
+      },
+      "acceptance": "../research/classic-new-game-reference-2026-11-23/README.md",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "consumerCommit": "5de066f39ad839b32dad3a21802f6c34147e0fe8",
+      "nextAction": "Evaluate bottom sheet and Android Back on the exact new APK on physical phone; keep saved-party confirmation and all six help experiments paused. No change to classic balance or economy.",
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "generator-quality-evidence-20261123",
+      "sourceFeatureIds": [],
+      "scope": "Локальный аудит Seed Bits: три сложности классики, 2400 precomputed задач тетради и seeded daily, без нового наблюдения Number Match Easybrain/NADO.",
+      "status": "DEFERRED",
+      "reason": "Нужен сначала read-only game-quality анализ и плейтест; изменения ядра/экономики требуют отдельного решения владельца. Пилот четырёх уровней остаётся активным по issue #13.",
+      "evidence": {
+        "report": "https://github.com/DanilaH/seeds-bits/issues/14",
+        "difficultyTask": "https://github.com/DanilaH/seeds-bits/issues/13",
+        "staticCode": "PR #9 d22a70886c759b5a1a74f2773411c3684138221c: src/classic-generator.ts,src/core.ts,src/puzzles.ts,src/jars.ts,src/progress.ts,src/notebook.json,src/notebook-extra.json",
+        "model": "Independent JS rule/generator port, seeds 0..999 per current Classic level. Exact match on first 512 greedy no-Add outcomes to docs/porting/2026-11-20/ROADMAP.md (86 clear/426 stuck). Current fallback 0/1000 per level; start-pair median 13/22/16. Greedy ≤2 Add solved 1000/714/584 per 1000.",
+        "precomputed": "All 2400 notebook task boards: volume 100 median 512 occupied, 1670/2400 already at reward cap 24. First 240 notebooks 4028 legal opening actions: 3971 independently winning, 52 dead, 5 unknown under 50k search cap.",
+        "seededDaily": "2026 seeded model 365 dates: median 24 occupied, 19 legal starting pairs, 273 greedily cleared without Add; unchanged past date content.",
+        "economics": "collectPair pays 2 seeds/pair; existing modeled proof medians 18/36/38 per Easy/Normal/Hard, proposed odd 45/81 min 46/82 seeds per cleared game; seeds/minute on device UNKNOWN.",
+        "verification": {
+          "code": "INSPECTED",
+          "model": "MODEL_REPLAY",
+          "device": "NOT_VERIFIED",
+          "liveAudience": "NOT_VERIFIED",
+          "reference": "NOT_APPLICABLE"
+        }
+      },
+      "nextAction": "Разработчик issue #13 сначала меряет исходные качества/стоимость на 1000 seeds × 4 и моделирует seeds/minute, сохраняет 27-digit legacy High, затем пилот 45/81. Отдельно issue #14: телефонный аудит поздних тетрадей, пауза/награда, lazy data и дневная кривая. Не включать шесть приостановленных экспериментов.",
+      "kitImpact": "REUSE: Playability Choice Evidence Ladder, no sourceFeatureId changes."
+    },
+    {
+      "id": "classic-generator-pilot-20261123",
+      "sourceFeatureIds": [],
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "scope": "Локальный пилот собственной Классики 18/28/45/81. №13/№14 и проверяемые примеры №15. Без нового утверждения о паритете с оригиналами.",
+      "consumerCommit": "d450a61893923b61115dd2ac5dbc7c4f2c8fff9a",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "implementation": [
+        "src/classic-generator.ts",
+        "src/classic-dense.ts",
+        "src/classic-profile.ts",
+        "src/main.ts"
+      ],
+      "evidence": {
+        "spec": "https://github.com/DanilaH/seeds-bits/issues/13",
+        "baseline": "https://github.com/DanilaH/seeds-bits/issues/14",
+        "research": "https://github.com/DanilaH/seeds-bits/pull/15",
+        "report": "../classic-difficulty-2026-11-12/PILOT_12081.md",
+        "android": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14841601829",
+        "comparison": "https://github.com/DanilaH/seeds-bits/actions/runs/45220134550/artifacts/14840781761"
+      },
+      "verification": {
+        "code": "128 unit and 399 local Chromium scenarios; 14000 exact old/new witnesses and 60 early/mid/late alternative branch probes.",
+        "emulator": "Android API 35 / 12081 / preserved 12080 save and legacy High 27 with Undo, lower-pair taps and generator timings.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "nextAction": "Сопоставить контрастные партии на физическом телефоне. Владелец утверждает размеры и баланс после игры. Отдельный открытый риск из №14 — оценить семечки за минуту и длинные тетради до предложения менять награды.",
+      "kitImpact": "REUSE: Playability Choice Evidence Ladder; сохранены границы FOUND/UNKNOWN, без изменения карты оригиналов."
+    },
+    {
+      "id": "classic-series-actual-scenarios-20261123",
+      "sourceFeatureIds": [],
+      "scope": "Классика «Семечек». GA-01 и GA-03 из независимого аудита №16.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "eae2bcbeaaa1a5c76872dddc7a7f79844988b60e",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "implementation": [
+        "src/classic-generator.ts",
+        "src/classic-profile.ts",
+        "scripts/classic-series.mjs"
+      ],
+      "evidence": {
+        "audit": "https://github.com/DanilaH/seeds-bits/pull/16",
+        "report": "../classic-difficulty-2026-11-12/SERIES_12082.md",
+        "data": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/artifacts/14849741823",
+        "preview": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420",
+        "android": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845420/artifacts/14848964860",
+        "ci": "https://github.com/DanilaH/seeds-bits/actions/runs/45235845364"
+      },
+      "verification": {
+        "code": "18408 verified paths, deterministic paired fresh/control and filled-history series. High adjacent central repeat 12/276 to 0/276.",
+        "emulator": "Android API35, signed preview 12082, 12081 upgrade and legacy High27 Undo verified.",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN"
+      },
+      "nextAction": "Телефонный плейтест ощущения сложности и серии, замер семечек в минуту.",
+      "kitImpact": "REUSE: applied the evidence ladder to selected recipes, canonical motifs and serial acceptance."
     }
   ]
 }

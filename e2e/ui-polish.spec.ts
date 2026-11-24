@@ -1,3 +1,4 @@
+import { openBookPicker } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 async function boot(page: Page) {
   await page.addInitScript(() =>
@@ -34,6 +35,7 @@ test("notebooks have meaningful selection, progress and a recoverable empty filt
 }) => {
   await boot(page);
   await page.locator("#book-mode").click();
+  await openBookPicker(page);
   await page.locator('[data-volume="4"]').click();
   await expect(page.locator('[data-volume="4"]')).toHaveAttribute(
     "aria-pressed",
@@ -42,6 +44,7 @@ test("notebooks have meaningful selection, progress and a recoverable empty filt
   await expect(page.locator('[data-volume="4"]')).toBeFocused();
   expect(await page.locator("[data-volume][style*=cover-hue]").count()).toBe(0);
   await expect(page.locator("[data-volume] progress")).toHaveCount(10);
+  await openBookPicker(page);
   await page.locator("#book-filter").selectOption("done");
   await expect(page.locator("#book-filter-reset")).toBeVisible();
   await page.locator("#book-filter-reset").click();

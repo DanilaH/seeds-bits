@@ -63,7 +63,7 @@ test("escape steps back from collections and settings without discarding game", 
   await page.keyboard.press("Escape");
   await expect(page.locator("#board")).toBeVisible();
 });
-test("dead end restart can be cancelled and undo recovers the board", async ({
+test("dead end can be undone or restarted immediately", async ({
   page,
 }) => {
   await page.addInitScript(() =>
@@ -90,13 +90,17 @@ test("dead end restart can be cancelled and undo recovers the board", async ({
   await page.goto("/");
   await page.locator("#resume").click();
   await expect(page.locator("#restart-task")).toBeVisible();
-  await page.locator("#restart-task").click();
-  await page.locator("#cancel-new").click();
-  await expect(page.locator("#dialog")).toBeHidden();
   await expect(page.locator("#remaining")).toHaveText("2");
   await page.locator("#undo").click();
   await expect(page.locator("#remaining")).toHaveText("4");
   await expect(page.locator("#restart-task")).toBeHidden();
+  await page.locator('#board button[data-index="2"]').click();
+  await page.locator('#board button[data-index="3"]').click();
+  await expect(page.locator("#restart-task")).toBeVisible();
+  await page.locator("#restart-task").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  await expect(page.locator("#remaining")).toHaveText("8");
+  await expect(page.locator("#undo")).toBeDisabled();
 });
 test("obsolete damaged save does not override current progress", async ({
   page,

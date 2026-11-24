@@ -1,3 +1,4 @@
+import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
 import { writeFileSync, mkdirSync } from "node:fs";
 const out = "test-results/fixes052",
@@ -89,6 +90,7 @@ test("F02 book chunk failure is visible in open modal and retry clears loading",
   );
   await page.goto("/");
   await page.locator("#book-mode").click();
+  await openBookPicker(page);
   await page.locator('[data-volume="1"]').click();
   await page.locator('[data-game="book-v1-25"]').click();
   await page.waitForTimeout(300);
@@ -101,6 +103,7 @@ test("F02 book chunk failure is visible in open modal and retry clears loading",
   await page.getByRole("button", { name: "Сохранить и перезагрузить" }).click();
   await expect(page.locator("#book-mode")).toBeVisible();
   await page.locator("#book-mode").click();
+  await openBookPicker(page);
   await page.locator('[data-volume="1"]').click();
   await page.locator('[data-game="book-v1-25"]').click();
   await expect(page.locator("#dialog")).toBeHidden();
@@ -117,7 +120,9 @@ test("F03 completed volume filter does not silently reset when changing section"
   );
   await page.goto("/");
   await page.locator("#book-mode").click();
+  await openBookPicker(page);
   await page.locator("#book-filter").selectOption("done");
+  await openBookPicker(page);
   await page.locator("#book-chapter").selectOption("9");
   save("filter", {
     value: await page.locator("#book-filter").inputValue(),
@@ -413,12 +418,14 @@ test("F14 fresh reload recovers blocked notebook chunk", async ({ page }) => {
   );
   await page.goto("/");
   await page.locator("#book-mode").click();
+  await openBookPicker(page);
   await page.locator('[data-volume="1"]').click();
   await page.locator('[data-game="book-v1-25"]').click();
   await page.waitForTimeout(250);
   blocked = false;
   await page.reload();
   await page.locator("#book-mode").click();
+  await openBookPicker(page);
   await page.locator('[data-volume="1"]').click();
   await page.locator('[data-game="book-v1-25"]').click();
   await expect(page.locator("#dialog")).toBeHidden();

@@ -1,0 +1,12 @@
+{
+  "cssViewport": [
+    320,
+    520
+  ],
+  "systemFont": "2.0",
+  "openingInstructionFullyVisible": true,
+  "lessonInstructionFullyVisible": true,
+  "lessonFieldTopStable": true,
+  "openingFieldTop": 216.5,
+  "explicitHintReplacesOldInstruction": true
+}

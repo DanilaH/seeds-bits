@@ -3,6 +3,11 @@ package com.seedsbits.game.preview;
 import android.app.*;
 import android.content.*;
 import android.os.Build;
+import android.os.LocaleList;
+import android.icu.text.PluralRules;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import org.json.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,10 +28,38 @@ public class SeedsDailyReminder extends BroadcastReceiver {
     return format.parse(day).getTime()/86400000L;
   }
   private static NotificationManager manager(Context c){return (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);}
+  private static JSONObject catalog;
+  private static synchronized JSONObject catalog(Context context) {
+    if (catalog != null) return catalog;
+    try (InputStream input = context.getResources().openRawResource(R.raw.seeds_notification_copy);
+        ByteArrayOutputStream content = new ByteArrayOutputStream()) {
+      byte[] chunk = new byte[1024];
+      for (int size; (size=input.read(chunk))!=-1;) content.write(chunk,0,size);
+      catalog = new JSONObject(new String(content.toByteArray(), StandardCharsets.UTF_8));
+      return catalog;
+    } catch(Exception ignored) { return new JSONObject(); }
+  }
+  private static String language(Context context, JSONObject table) {
+    String selected = settings(context).optString("languageChoice","auto");
+    if (table.has(selected)) return selected;
+    LocaleList system = context.getResources().getConfiguration().getLocales();
+    for (int i=0; i<system.size(); i++) {
+      String base = system.get(i).getLanguage();
+      String key = "pt".equals(base) ? "pt-BR" : base;
+      if (table.has(key)) return key;
+    }
+    return "en";
+  }
+  private static JSONObject copy(Context context) {
+    JSONObject table = catalog(context);
+    JSONObject value = table.optJSONObject(language(context, table));
+    return value == null ? new JSONObject() : value;
+  }
   private static void channel(Context c){
     if(Build.VERSION.SDK_INT>=26){
-      NotificationChannel channel=new NotificationChannel(CHANNEL,"Задача дня",NotificationManager.IMPORTANCE_LOW);
-      channel.setDescription("Напоминание о сегодняшней головоломке");channel.enableVibration(false);channel.setSound(null,null);
+      JSONObject strings = copy(c);
+      NotificationChannel channel=new NotificationChannel(CHANNEL,strings.optString("channel","Daily puzzle"),NotificationManager.IMPORTANCE_LOW);
+      channel.setDescription(strings.optString("channelDescription","A reminder for today’s puzzle"));channel.enableVibration(false);channel.setSound(null,null);
       manager(c).createNotificationChannel(channel);
     }
   }
@@ -78,17 +111,27 @@ public class SeedsDailyReminder extends BroadcastReceiver {
       int reward=next==3?1:next>0&&next%7==0?3:0;
       JSONObject game=p.optJSONObject("sessions")==null?null:p.optJSONObject("sessions").optJSONObject("daily-v1-"+today);
       boolean started=game!=null && game.optJSONObject("current")!=null && game.optJSONObject("current").optInt("moves",0)>0;
+      JSONObject table=catalog(c);
+      JSONObject text=copy(c);
+      String title=text.optString("channel","Daily puzzle");
       List<String[]> pool=new ArrayList<>();
-      if(reward>0 && next>1)pool.add(new String[]{"milestone","Задача дня","Сегодня может быть "+next+"-й день подряд. За прохождение — "+reward+(reward==1?" подсказка.":" подсказки.")});
-      else if(started){pool.add(new String[]{"resume","Задача дня","Продолжим сегодняшнюю задачу?"});pool.add(new String[]{"return","Задача дня","Можно вернуться к начатой головоломке."});}
-      else {
-        pool.add(new String[]{"new","Задача дня","Есть новая задачка на сегодня."});
-        pool.add(new String[]{"break","Перерыв на семечки?","Сегодняшняя головоломка готова."});
-        pool.add(new String[]{"calendar","Что там сегодня?","В календаре появилась новая задача."});
-        pool.add(new String[]{"pause","Можно немного отвлечься","Открыть сегодняшнюю головоломку?"});
-        if(hour>=11&&hour<15)pool.add(new String[]{"lunch","Перерыв на семечки?","Обеденный перерыв? Есть задачка с числами."});
+      if(reward>0 && next>1) {
+        JSONObject forms=text.optJSONObject("milestone");
+        String category=PluralRules.forLocale(Locale.forLanguageTag(language(c,table))).select(reward);
+        String body=forms.optString(category,forms.optString("other"))
+            .replace("{days}",String.valueOf(next)).replace("{reward}",String.valueOf(reward));
+        pool.add(new String[]{"milestone",title,body});
+      } else if(started) {
+        pool.add(new String[]{"resume",title,text.optString("resume")});
+        pool.add(new String[]{"return",title,text.optString("return")});
+      } else {
+        pool.add(new String[]{"new",title,text.optString("new")});
+        pool.add(new String[]{"break",text.optString("breakTitle",title),text.optString("break")});
+        pool.add(new String[]{"calendar",text.optString("calendarTitle",title),text.optString("calendar")});
+        pool.add(new String[]{"pause",text.optString("pauseTitle",title),text.optString("pause")});
+        if(hour>=11&&hour<15)pool.add(new String[]{"lunch",text.optString("breakTitle",title),text.optString("lunch")});
         Calendar yesterday=Calendar.getInstance();yesterday.add(Calendar.DAY_OF_YEAR,-1);
-        if(done(p,day(yesterday.getTimeInMillis())))pool.add(new String[]{"yesterday","Задача дня","Вчерашняя решена. Сегодня — новая."});
+        if(done(p,day(yesterday.getTimeInMillis())))pool.add(new String[]{"yesterday",title,text.optString("yesterday")});
       }
       String history=preferences.getString("text_history","");List<String[]> candidates=new ArrayList<>();
       for(String[] item:pool)if(!Arrays.asList(history.split(",")).contains(item[0]))candidates.add(item);

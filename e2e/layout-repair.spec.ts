@@ -91,7 +91,7 @@ for (const [width, height] of [[320,568], [390,844], [568,320], [844,390]]) {
   }
 }
 
-for (const [width, height, scale] of [[390,844,1.5],[568,320,2],[320,568,2]]) {
+for (const [width, height, scale] of [[390,844,1],[320,568,1],[390,844,1.5],[568,320,2],[320,568,2]]) {
   test(`LAYOUT-02: distant hint owns its space at ${width}x${height}, text ${scale}`, async ({page}) => {
     await page.setViewportSize({width,height});
     await page.emulateMedia({reducedMotion:"reduce"});

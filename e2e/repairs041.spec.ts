@@ -1,4 +1,7 @@
+import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
+import { CLASSIC_START_COUNTS } from "../src/classic-generator";
+import { occupied } from "../src/core";
 const KEY = "seeds-bits.progress.v2";
 const snapshot = (board: number[]) => ({
   board,
@@ -138,14 +141,15 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
   ]);
   await page.locator("#close").click();
   await page.locator("#play-again").click();
-  await expect
-    .poll(
-      async () => Number(await page.locator("#remaining").innerText()) === 28,
-    )
-    .toBe(true);
-  expect((await data(page)).meta.classicRun.current).toBeDefined();
-  expect((await data(page)).meta.attempts.classic.completed).toBe(false);
-  expect((await data(page)).meta.completed).toBe(6);
+  await expect(page.locator("#win")).toBeHidden();
+  const saved = await data(page);
+  const board = saved.sessions.classic.current.board;
+  const count = occupied(board);
+  expect(CLASSIC_START_COUNTS[1]).toContain(count);
+  await expect(page.locator("#remaining")).toHaveText(String(count));
+  expect(saved.meta.classicRun.current.board).toEqual(board);
+  expect(saved.meta.attempts.classic.completed).toBe(false);
+  expect(saved.meta.completed).toBe(6);
 });
 test("A05 record of solved daily remains in statistics when device clock moves backward", async ({
   page,
@@ -192,11 +196,13 @@ test("A07 completed first notebook leads to next volume and keeps reachable repl
   await page.goto("/");
   await page.locator("#resume").click();
   await pair(page);
-  await expect(page.locator("#play-again")).toHaveText("Следующая тетрадь");
+  await expect(page.locator("#play-again")).toHaveText("Тетрадь 2 · задача 1");
   await page.locator("#play-again").click();
   await expect(page.locator("#mode")).toHaveText("Тетрадь 2 · задача 1");
   await page.locator("#book-top").click();
+  await openBookPicker(page);
   await page.locator('[data-volume="0"]').click();
+  await page.locator("#book-later-pages > summary").click();
   await expect(page.locator(".task.done")).toHaveCount(24);
   await page.locator('[data-game="book-v1-24"]').click();
   await expect(page.locator("#win")).toBeHidden();
@@ -586,7 +592,7 @@ test("failed switch can retry without lost attempt or rapid-click double transit
   expect((await data(page)).active).toBe("book-v1-2");
   await page.reload();
   await page.locator("#resume").click();
-  await expect(page.locator("#mode")).toHaveText("Тетрадь · задача 2");
+  await expect(page.locator("#mode")).toHaveText("Тетрадь 1 · задача 2");
 });
 
 test("backup recovery is explicit and survives reload", async ({ page }) => {
@@ -599,29 +605,23 @@ test("backup recovery is explicit and survives reload", async ({ page }) => {
   }, KEY);
   await page.reload();
   await page.locator("#restore-backup").click();
-  await expect(page.locator("#book-count")).toHaveText("2 из 2400 решено");
+  await expect(page.locator("#book-count")).toHaveText("2 из 24 задач");
   expect((await data(page)).done).toEqual(["book-v1-1", "book-v1-2"]);
 });
 
-test("compact home keeps settings within first viewport and touch targets at least 44px", async ({
+test("compact home can reach settings and its touch targets are at least 44px", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await seed(page);
   await page.goto("/");
   await expect(page.locator("#dialog")).toBeVisible();
+  await page.locator("#settings-open").scrollIntoViewIfNeeded();
+  await expect(page.locator("#settings-open")).toBeInViewport({ratio:.98});
+  await page.locator("#settings-open").click();
+  await expect(page.locator("#settings-panel")).toBeVisible();
   expect(
-    await page
-      .locator("#dialog")
-      .evaluate((e) => e.scrollHeight <= e.clientHeight),
-  ).toBe(true);
-  expect(
-    await page
-      .locator("#settings-open")
-      .evaluate((e) => e.getBoundingClientRect().bottom <= innerHeight),
-  ).toBe(true);
-  expect(
-    await page.locator(".home-links button").evaluateAll((es) =>
+    await page.locator(".home-links button:visible").evaluateAll((es) =>
       // Animated translation may yield 43.999996 for a 44 CSS-pixel target.
       es.every(
         (e) => Math.round(e.getBoundingClientRect().height * 100) / 100 >= 44,

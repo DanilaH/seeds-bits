@@ -9,4 +9,9 @@ public class MainActivity extends BridgeActivity {
     registerPlugin(SeedsFeedbackPlugin.class);
     super.onCreate(savedInstanceState);
   }
+
+  @Override protected void load() {
+    super.load();
+    getBridge().getWebView().getSettings().setTextZoom(100);
+  }
 }

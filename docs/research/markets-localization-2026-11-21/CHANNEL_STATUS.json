@@ -1,0 +1,417 @@
+{
+  "version": 1,
+  "as_of": "2026-11-21",
+  "source": "https://github.com/DanilaH/seeds-bits/blob/6a5607bd28d5f6c0cf2edcc992c470e90f40ac1c/docs/research/markets-localization-2026-11-21/README.md",
+  "channels": [
+    {
+      "id": "rustore",
+      "name": "RuStore",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "primary",
+      "implementation": "android_installer_implemented",
+      "verification": "controlled_report_fixture",
+      "next": "store_console_and_device_install_pending"
+    },
+    {
+      "id": "nashstore",
+      "name": "NashStore",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "primary",
+      "implementation": "android_installer_implemented",
+      "verification": "controlled_report_fixture",
+      "next": "store_console_and_device_install_pending"
+    },
+    {
+      "id": "uptodown",
+      "name": "Uptodown",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "rumarket",
+      "name": "RuMarket",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "huawei_appgallery",
+      "name": "Huawei AppGallery",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "xiaomi_getapps",
+      "name": "Xiaomi GetApps",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "taptap",
+      "name": "TapTap",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "one_store",
+      "name": "ONE Store",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "google_play",
+      "name": "Google Play",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "samsung_galaxy_store",
+      "name": "Samsung Galaxy Store",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "oppo_app_market",
+      "name": "OPPO App Market",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "honor_app_market",
+      "name": "HONOR App Market",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "aptoide",
+      "name": "Aptoide",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "amazon_appstore",
+      "name": "Amazon Appstore",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "apkpure",
+      "name": "APKPure",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "softonic",
+      "name": "Softonic",
+      "surface": "android",
+      "role": "store_or_catalog",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "yandex_games",
+      "name": "Яндекс Игры",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "portal_sdk_instrumented",
+      "verification": "sdk_double_and_browser_controls_passed",
+      "next": "embed_sdk_and_counter_pending"
+    },
+    {
+      "id": "gamepush",
+      "name": "GamePush",
+      "surface": "web",
+      "role": "network_or_direct_portal",
+      "planning": "primary",
+      "implementation": "distributor_route_supported",
+      "verification": "distribution_and_report_fixture",
+      "next": "actual_gamepush_portal_pending"
+    },
+    {
+      "id": "pikabu_games",
+      "name": "Пикабу Игры",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "vk_games",
+      "name": "VK Игры",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "ok_games",
+      "name": "Одноклассники",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "portal_route_supported",
+      "verification": "distribution_and_report_fixture",
+      "next": "actual_gamepush_portal_pending"
+    },
+    {
+      "id": "crazygames",
+      "name": "CrazyGames",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "y8",
+      "name": "Y8",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "gamedistribution",
+      "name": "GameDistribution",
+      "surface": "web",
+      "role": "network_or_direct_portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "gamepix",
+      "name": "GamePix",
+      "surface": "web",
+      "role": "network_or_direct_portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "gamemonetize",
+      "name": "GameMonetize",
+      "surface": "web",
+      "role": "network_or_direct_portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "kongregate",
+      "name": "Kongregate",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "coolmath_games",
+      "name": "Coolmath Games",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "playdeck",
+      "name": "PlayDeck",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "wg_playground",
+      "name": "WG Playground",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "vk_play",
+      "name": "VK Play",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "beeline",
+      "name": "билайн",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "fotostrana",
+      "name": "Фотострана",
+      "surface": "web",
+      "role": "portal",
+      "planning": "primary",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "playgama",
+      "name": "Playgama",
+      "surface": "web",
+      "role": "network_or_direct_portal",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "poki",
+      "name": "Poki",
+      "surface": "web",
+      "role": "portal",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "telegram_mini_apps",
+      "name": "Telegram Mini Apps",
+      "surface": "web",
+      "role": "portal",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "max_mini_apps",
+      "name": "MAX Mini Apps",
+      "surface": "web",
+      "role": "portal",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "youtube_playables",
+      "name": "YouTube Playables",
+      "surface": "web",
+      "role": "portal",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "itch_io",
+      "name": "itch.io",
+      "surface": "web",
+      "role": "portal",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "newgrounds",
+      "name": "Newgrounds",
+      "surface": "web",
+      "role": "portal",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    },
+    {
+      "id": "game_jolt",
+      "name": "Game Jolt",
+      "surface": "web",
+      "role": "portal",
+      "planning": "candidate",
+      "implementation": "registry_only",
+      "verification": "not_verified",
+      "next": "connect_after_publication"
+    }
+  ]
+}

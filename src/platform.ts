@@ -1,8 +1,11 @@
+import { identifyPortal } from "./distribution";
+import type { AnalyticsEvent } from "./analytics";
 import { nativePlugin } from "./monetization";
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 export const isYandex = import.meta.env.MODE === "yandex";
 type YandexSDK = {
+  environment?: {app?: {id?: string}; i18n?: {lang?: string}};
   features: {
     LoadingAPI: { ready(): void };
     GameplayAPI?: { start(): void; stop(): void };
@@ -11,10 +14,63 @@ type YandexSDK = {
 };
 declare global {
   interface Window {
+    ym?: (counter: number, method: string, ...args: unknown[]) => void;
     YaGames?: { init(): Promise<YandexSDK> };
   }
 }
 let sdk: YandexSDK | undefined;
+const configuredOrigin = import.meta.env.VITE_SEEDS_PORTAL_ORIGIN;
+const counterId = Number(import.meta.env.VITE_SEEDS_YANDEX_COUNTER);
+export const marketQA = import.meta.env.VITE_SEEDS_MARKET_QA === "1";
+export function platformLocale() { return sdk?.environment?.i18n?.lang; }
+export function webDistribution() {
+  const app = sdk?.environment?.app?.id;
+  const expected = import.meta.env.VITE_SEEDS_YANDEX_APP_ID;
+  const yandex = isYandex && app && (!expected || String(app)===expected);
+  const verifiedOrigin = Boolean(configuredOrigin && location.origin===configuredOrigin);
+  return identifyPortal({
+    buildPortal:isYandex?"yandex_games":import.meta.env.VITE_SEEDS_PORTAL,
+    sdkPortal:yandex?"yandex_games":undefined,
+    distributor:verifiedOrigin?import.meta.env.VITE_SEEDS_DISTRIBUTOR:undefined,
+    verifiedOrigin:verifiedOrigin && (!isYandex || !app || Boolean(yandex)),
+    direct: Boolean(import.meta.env.VITE_SEEDS_DIRECT_ORIGIN && location.origin===import.meta.env.VITE_SEEDS_DIRECT_ORIGIN),
+    conflict:Boolean(isYandex && app && expected && String(app)!==expected),
+  });
+}
+const webGoal = /^(web_first_play|web_session_open|activity_day|locale_resolved|language_picker_open|language_changed|first_unassisted_pair|first_complete|game_start|game_complete)$/;
+export function webAnalyticsEnabled() {
+  if (marketQA) return true;
+  return import.meta.env.VITE_SEEDS_YANDEX_TELEMETRY === "1" && Number.isInteger(counterId) && counterId>0 &&
+    webDistribution().portal_id==="yandex_games" && navigator.doNotTrack!=="1";
+}
+let counterStarted = false;
+export async function reportWeb(event: AnalyticsEvent): Promise<boolean> {
+  if (!webGoal.test(event.name)) return true;
+  if (!webAnalyticsEnabled()) return true;
+  const data = {...event.data,event_id:event.id};
+  if (marketQA) {
+    window.dispatchEvent(new CustomEvent("seeds:market-qa", {detail:{name:event.name,data}}));
+    return true;
+  }
+  if (!navigator.onLine) return false;
+  if (!counterStarted && !window.ym) {
+    counterStarted=true;
+    const queue = Object.assign((...args: unknown[]) => { queue.a.push(args); },{a: [] as unknown[][],l:Date.now()});
+    window.ym=queue;
+    const tag=document.createElement("script");
+    tag.src="https://mc.yandex.ru/metrika/tag.js";
+    tag.async=true;
+    tag.onerror=()=>{ window.ym=undefined;counterStarted=false;tag.remove(); };
+    document.head.append(tag);
+    window.ym(counterId,"init",{clickmap:false,trackLinks:false,accurateTrackBounce:false});
+  }
+  return new Promise<boolean>(resolve=>{
+    const timeout=setTimeout(()=>resolve(false),3500);
+    try {
+      window.ym?.(counterId,"reachGoal",event.name,data,()=>{clearTimeout(timeout);resolve(true);});
+    } catch {clearTimeout(timeout);resolve(false);}
+  });
+}
 export async function initPlatform(
   onPause: () => void,
   onResume: () => void,
@@ -54,10 +110,24 @@ export function gameplay(active: boolean) {
   const api = sdk?.features.GameplayAPI;
   active ? api?.start() : api?.stop();
 }
+const temporary = new Map<string,string>();
+let webStorageBlocked = false;
+try { if(!Capacitor.isNativePlatform()) localStorage.getItem("seeds-bits.settings.v1"); }
+catch (error) {
+  if ((error as Error).name!=="SecurityError") throw error;
+  webStorageBlocked = true;
+}
+function browserRead(key:string) {
+  return webStorageBlocked ? temporary.get(key) ?? null : localStorage.getItem(key);
+}
+function browserWrite(key:string,value:string) {
+  if(webStorageBlocked) temporary.set(key,value);
+  else localStorage.setItem(key,value);
+}
 export async function read(key: string): Promise<string | null> {
   return Capacitor.isNativePlatform()
     ? (await Preferences.get({ key })).value
-    : localStorage.getItem(key);
+    : browserRead(key);
 }
 /** Per-field browser keys prevent unrelated preferences from overwriting each other across tabs. */
 export async function readSettings(key: string): Promise<string | null> {
@@ -76,8 +146,9 @@ export async function readSettings(key: string): Promise<string | null> {
     "tutorialDone",
     "reminders",
     "reminderTime",
+    "languageChoice",
   ]) {
-    const item = localStorage.getItem(`${key}.${field}`);
+    const item = browserRead(`${key}.${field}`);
     if (item !== null)
       try {
         result[field] = JSON.parse(item);
@@ -87,7 +158,7 @@ export async function readSettings(key: string): Promise<string | null> {
 }
 export async function write(key: string, value: string): Promise<void> {
   if (Capacitor.isNativePlatform()) await Preferences.set({ key, value });
-  else localStorage.setItem(key, value);
+  else browserWrite(key, value);
 }
 export { haptic, setHapticState } from "./haptics";
 export async function listenAppState(
@@ -122,7 +193,7 @@ export async function saveState(
   patch: Record<string, unknown> = {},
 ) {
   const persist = async () => {
-    const conflict = !native && localStorage.getItem(key) !== expected;
+    const conflict = !native && browserRead(key) !== expected;
     const defaults = JSON.parse(settings);
     let latest: Record<string, unknown> = {};
     try {
@@ -153,14 +224,14 @@ export async function saveState(
           Object.hasOwn(defaults, field) &&
           typeof patch[field] === typeof defaults[field]
         )
-          localStorage.setItem(
+          browserWrite(
             `${settingsKey}.${field}`,
             JSON.stringify(patch[field]),
           );
       }
-      localStorage.setItem(settingsKey, JSON.stringify(merged));
+      browserWrite(settingsKey, JSON.stringify(merged));
       if (conflict) throw new SaveConflict();
-      localStorage.setItem(key, value);
+      browserWrite(key, value);
     }
     return merged;
   };
@@ -186,19 +257,18 @@ export async function writeSettingsPatch(
   defaults: string,
   patch: Record<string, unknown>,
 ) {
-  if (native) return;
   const update = async () => {
     const merged = {
       ...JSON.parse(defaults),
       ...JSON.parse((await readSettings(key)) ?? "{}"),
       ...patch,
     };
-    for (const [field, value] of Object.entries(patch))
-      localStorage.setItem(`${key}.${field}`, JSON.stringify(value));
-    localStorage.setItem(key, JSON.stringify(merged));
+    if (!native) for (const [field, value] of Object.entries(patch))
+      browserWrite(`${key}.${field}`, JSON.stringify(value));
+    await write(key, JSON.stringify(merged));
     return merged;
   };
-  return navigator.locks
+  return !native && navigator.locks
     ? await navigator.locks.request("seeds-save", update)
     : await update();
 }

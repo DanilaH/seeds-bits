@@ -1,3 +1,4 @@
+import { localName } from "./i18n";
 import type { Progress } from "./progress";
 export type Jars = {
   version: 2;
@@ -57,7 +58,7 @@ function state(
     filled: left,
     capacity: cap,
     percent: Math.floor((left / cap) * 100),
-    name: jarNames[index % 6],
+    name: localName(jarNames[index % 6]),
     color: jarColors[index % 6],
   };
 }

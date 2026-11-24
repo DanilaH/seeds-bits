@@ -247,6 +247,7 @@ for (const [run, reward] of [
     expect((await stored(page)).meta.wallet).toBe(4 + reward);
     await page.locator("#menu").click();
     await page.locator("#calendar-open").click();
+    await page.locator("#calendar-extras > summary").click();
     await expect(page.locator(".run-heading")).toContainText(`${run + 1}`);
     await page.locator("#today-task").click();
     const solution = await page.evaluate(
@@ -423,7 +424,7 @@ test("cold reminder opens today's task and preserves another mode without an ad"
   page,
 }) => {
   await seed(page, { entry: true });
-  await expect(page.locator("#mode")).toContainText("08.11.2026");
+  await expect(page.locator("#mode")).toHaveText("Задача дня · 8 ноября");
   await expect(page.locator("#dialog")).toBeHidden();
   expect((await stored(page)).sessions.classic.current.board).toEqual([
     5, 5, 5, 5, 5, 5,

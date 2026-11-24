@@ -1,0 +1,11 @@
+{
+  "source": "0c33b38a353138a5cde47edd9e5e85134ba26958",
+  "package": "com.seedsbits.game.preview",
+  "version": 12061,
+  "upgrade": true,
+  "freshRealTask": true,
+  "voluntaryTask2": true,
+  "firstInstructionFont200": true,
+  "physicalPhone": false,
+  "webview": "  Current WebView package (name, version): (com.google.android.webview, 124.0.6367.219)"
+}

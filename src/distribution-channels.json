@@ -1,0 +1,301 @@
+{
+  "version": 1,
+  "as_of": "2026-11-21",
+  "planning_definition": "Подтверждённый владельцем перечень возможных площадок для всего портфеля игр. primary — основные, candidate — потенциальные. Выбранные размещения, публикацию и проверку аналитики фиксируют отдельно по каждой игре и площадке.",
+  "channels": [
+    {
+      "id": "rustore",
+      "name": "RuStore",
+      "surface": "android",
+      "planning": "primary",
+      "role": "store_or_catalog",
+      "existing_installers": [
+        "ru.vk.store"
+      ]
+    },
+    {
+      "id": "nashstore",
+      "name": "NashStore",
+      "surface": "android",
+      "planning": "primary",
+      "role": "store_or_catalog",
+      "existing_installers": [
+        "com.nashstore"
+      ]
+    },
+    {
+      "id": "uptodown",
+      "name": "Uptodown",
+      "surface": "android",
+      "planning": "primary",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "rumarket",
+      "name": "RuMarket",
+      "surface": "android",
+      "planning": "primary",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "huawei_appgallery",
+      "name": "Huawei AppGallery",
+      "surface": "android",
+      "planning": "primary",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "xiaomi_getapps",
+      "name": "Xiaomi GetApps",
+      "surface": "android",
+      "planning": "primary",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "taptap",
+      "name": "TapTap",
+      "surface": "android",
+      "planning": "primary",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "one_store",
+      "name": "ONE Store",
+      "surface": "android",
+      "planning": "primary",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "google_play",
+      "name": "Google Play",
+      "surface": "android",
+      "planning": "candidate",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "samsung_galaxy_store",
+      "name": "Samsung Galaxy Store",
+      "surface": "android",
+      "planning": "candidate",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "oppo_app_market",
+      "name": "OPPO App Market",
+      "surface": "android",
+      "planning": "candidate",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "honor_app_market",
+      "name": "HONOR App Market",
+      "surface": "android",
+      "planning": "candidate",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "aptoide",
+      "name": "Aptoide",
+      "surface": "android",
+      "planning": "candidate",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "amazon_appstore",
+      "name": "Amazon Appstore",
+      "surface": "android",
+      "planning": "candidate",
+      "role": "store_or_catalog",
+      "scope": "fire_devices_only"
+    },
+    {
+      "id": "apkpure",
+      "name": "APKPure",
+      "surface": "android",
+      "planning": "candidate",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "softonic",
+      "name": "Softonic",
+      "surface": "android",
+      "planning": "candidate",
+      "role": "store_or_catalog"
+    },
+    {
+      "id": "yandex_games",
+      "name": "Яндекс Игры",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "gamepush",
+      "name": "GamePush",
+      "surface": "web",
+      "planning": "primary",
+      "role": "network_or_direct_portal"
+    },
+    {
+      "id": "pikabu_games",
+      "name": "Пикабу Игры",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "vk_games",
+      "name": "VK Игры",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "ok_games",
+      "name": "Одноклассники",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "crazygames",
+      "name": "CrazyGames",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "y8",
+      "name": "Y8",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "gamedistribution",
+      "name": "GameDistribution",
+      "surface": "web",
+      "planning": "primary",
+      "role": "network_or_direct_portal"
+    },
+    {
+      "id": "gamepix",
+      "name": "GamePix",
+      "surface": "web",
+      "planning": "primary",
+      "role": "network_or_direct_portal"
+    },
+    {
+      "id": "gamemonetize",
+      "name": "GameMonetize",
+      "surface": "web",
+      "planning": "primary",
+      "role": "network_or_direct_portal"
+    },
+    {
+      "id": "kongregate",
+      "name": "Kongregate",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "coolmath_games",
+      "name": "Coolmath Games",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "playdeck",
+      "name": "PlayDeck",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "wg_playground",
+      "name": "WG Playground",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "vk_play",
+      "name": "VK Play",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "beeline",
+      "name": "билайн",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "fotostrana",
+      "name": "Фотострана",
+      "surface": "web",
+      "planning": "primary",
+      "role": "portal"
+    },
+    {
+      "id": "playgama",
+      "name": "Playgama",
+      "surface": "web",
+      "planning": "candidate",
+      "role": "network_or_direct_portal"
+    },
+    {
+      "id": "poki",
+      "name": "Poki",
+      "surface": "web",
+      "planning": "candidate",
+      "role": "portal"
+    },
+    {
+      "id": "telegram_mini_apps",
+      "name": "Telegram Mini Apps",
+      "surface": "web",
+      "planning": "candidate",
+      "role": "portal"
+    },
+    {
+      "id": "max_mini_apps",
+      "name": "MAX Mini Apps",
+      "surface": "web",
+      "planning": "candidate",
+      "role": "portal"
+    },
+    {
+      "id": "youtube_playables",
+      "name": "YouTube Playables",
+      "surface": "web",
+      "planning": "candidate",
+      "role": "portal"
+    },
+    {
+      "id": "itch_io",
+      "name": "itch.io",
+      "surface": "web",
+      "planning": "candidate",
+      "role": "portal"
+    },
+    {
+      "id": "newgrounds",
+      "name": "Newgrounds",
+      "surface": "web",
+      "planning": "candidate",
+      "role": "portal"
+    },
+    {
+      "id": "game_jolt",
+      "name": "Game Jolt",
+      "surface": "web",
+      "planning": "candidate",
+      "role": "portal"
+    }
+  ]
+}

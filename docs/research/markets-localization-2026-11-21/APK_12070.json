@@ -1,0 +1,64 @@
+{
+  "source_kind": "Signed exact CI release payload, aligned locally; static inspection, no physical installation claim",
+  "package": "com.seedsbits.game.preview",
+  "name": "Семечки · тест",
+  "version_name": "1.1.2",
+  "version_code": 12070,
+  "bytes": 5599782,
+  "sha256": "53934bc1298d39165ec8e060f5f4d552d011699bdfe524684b9d71d9e368a942",
+  "certificate_sha256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+  "v2_v3_signatures_verified": true,
+  "baseline_version_code": 12069,
+  "upgrade_package_and_certificate_match": true,
+  "unsigned_entries_unchanged": 668,
+  "web_assets_match_local_dist": [
+    "assets/advice-worker-CVT9rZ-V.js",
+    "assets/esm-DiAtYvM3.js",
+    "assets/esm-IifJ_HB4.js",
+    "assets/help-worker-DJ_O9eiP.js",
+    "assets/index-U5Re3igd.css",
+    "assets/index-yClh4Y_-.js",
+    "assets/magnet-example-BHG7KZrk.js",
+    "assets/notebook-extra-B_1ZZVK0.js",
+    "assets/shuffle-lab-ui-Ds8P4HHV.js",
+    "assets/shuffle-lab-worker-Cs7-OpwT.js",
+    "assets/web-15KAUMT1.js",
+    "assets/web-Cdo7pP26.js",
+    "assets/web-ml7G_78l.js",
+    "index.html"
+  ],
+  "no_stale_asset_files": true,
+  "no_development_hooks": true,
+  "native_bridges": {
+    "SeedsFeedbackPlugin": true,
+    "SeedsMonetizationPlugin": true,
+    "SeedsEngagementPlugin": true,
+    "SeedsApplication": true
+  },
+  "analytics_disabled": true,
+  "ads_test_mode": true,
+  "physical_installation_tested": false,
+  "screenOrientation": "portrait",
+  "appCategory": "game",
+  "webviewAssetsMatch12069": true,
+  "runtime_commit": "565aec0912d9beb9e5ae9e698072f65371fbf12a",
+  "ci_run_id": 45007893930,
+  "emulator": {
+    "ci_run_id": 45009391477,
+    "artifact_id": 14748764360,
+    "android_api": 35,
+    "system_font_scale": 2,
+    "device_rotations": [
+      1,
+      0,
+      1,
+      3
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "update_preserved_save": true,
+    "selection_preserved": true
+  }
+}

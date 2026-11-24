@@ -5,16 +5,23 @@ import android.content.pm.PackageInfo;
 import com.getcapacitor.JSObject;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.profile.Attribute;
+import io.appmetrica.analytics.profile.UserProfile;
 public class SeedsApplication extends Application {
   private static boolean analyticsInitialized;
   /** A local alarm/boot receiver is not a player's return to the game. */
   static synchronized void initializeAnalytics(Application application) {
     if (analyticsInitialized) return;
+    JSObject acquisition = SeedsInstallStore.capture(application);
     String key=application.getString(R.string.appmetrica_api_key);
     if (!key.isEmpty()) {
       AppMetrica.activate(application,AppMetricaConfig.newConfigBuilder(key).withLocationTracking(false).build());
       AppMetrica.enableActivityAutoTracking(application);
       analyticsInitialized=true;
+      AppMetrica.reportUserProfile(UserProfile.newBuilder()
+          .apply(Attribute.customString(SeedsInstallStore.KEY)
+              .withValue(acquisition.optString(SeedsInstallStore.KEY, "unknown")))
+          .build());
     }
   }
   /** Common non-personal context. `test` stays compatible and describes ads only. */
@@ -24,6 +31,9 @@ public class SeedsApplication extends Application {
     boolean test = context.getResources().getBoolean(R.bool.ads_test_mode);
     data.put("test", test).put("ads_test", test);
     data.put("schema", 3);
+    JSObject acquisition = SeedsInstallStore.capture(context);
+    for (String field : new String[]{"install_store", "artifact_channel", "store_evidence", "acquisition_state"})
+      data.put(field, acquisition.optString(field, "unknown"));
     android.content.SharedPreferences prefs = context.getSharedPreferences("seeds-monetization",0);
     for (String field : new String[]{"install","experiment","variant","config","anchor","cohort","qa"})
       if (prefs.contains("context_"+field) && !data.has(field)) data.put(field,prefs.getString("context_"+field,""));

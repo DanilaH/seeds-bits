@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import { WIDTH, type Board, type Connection } from "./core";
 /** Preserve cell nodes during selection and retain surviving nodes on row collapse. */
 export class BoardView {
@@ -63,6 +64,13 @@ export class BoardView {
       (n) => this.values[positions.get(n)!],
     );
   }
+  relabel() {
+    for (const [i,node] of this.nodes.entries()) if (this.values[i])
+      node.setAttribute("aria-label",this.label(this.values[i],i));
+  }
+  private label(value:number,i:number) {
+    return t("board.cell",{value,row:Math.floor(i/WIDTH)+1,column:i%WIDTH+1});
+  }
   render(values: Board, selected: number, hint: Connection | null) {
     const changed =
       this.remapped ||
@@ -99,7 +107,7 @@ export class BoardView {
           }
           if (digit.textContent !== String(value))
             digit.textContent = String(value);
-          const label = `${value}, строка ${Math.floor(i / WIDTH) + 1}, столбец ${(i % WIDTH) + 1}`;
+          const label = this.label(value,i);
           if (node.getAttribute("aria-label") !== label)
             node.setAttribute("aria-label", label);
         }

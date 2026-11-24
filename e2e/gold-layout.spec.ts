@@ -1,3 +1,4 @@
+import { openBookPicker } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 const out = "test-results/gold-layout";
@@ -298,11 +299,13 @@ test("reduced motion keeps medals, no burst; failed save celebrates only after r
   await expect(page.locator("#save-notice")).toBeVisible();
   await expect(page.locator(".trophy-confetti")).toHaveCount(0);
   await expect(page.locator("#award .medal-receipt")).toBeHidden();
-  await expect(page.locator("#award .next-eyebrow")).toHaveText("Следом");
+  // No earned bronze yet: never advertise silver during a failed durable write.
+  await expect(page.locator("#award .next-medal")).toHaveCount(0);
   await page.evaluate(() => ((window as any).failGold = false));
   await page.locator("#retry-save").click();
   await expect(page.locator(".trophy-confetti")).toHaveCount(1);
   await expect(page.locator("#award .medal-receipt")).toBeVisible();
+  await expect(page.locator("#award .next-eyebrow")).toHaveText("Следующая");
   await page.locator("#menu").click();
   await expect(page.locator(".trophy-confetti")).toHaveCount(0);
 });
@@ -330,10 +333,10 @@ test("all screens contain their text with ads, themes, narrow landscape and tabl
       const check = async (name: string) => {
         await page.waitForTimeout(60);
         const failures = await textOverflow(page);
-        if (name === "trophies")
-          expect(await page.locator(".trophy .medal-art").count()).toBe(
-            await page.locator(".trophy").count(),
-          );
+        if (name === "trophies") {
+          await expect(page.locator(".month-hero .medal-art")).toHaveCount(1);
+          await expect(page.locator(".past-months .medal-art")).toHaveCount(0);
+        }
         if (name === "calendar")
           await expect(
             page.locator(".calendar-trophies .medal-art"),
@@ -366,6 +369,7 @@ test("all screens contain their text with ads, themes, narrow landscape and tabl
       await expect(page.locator("#menu-content")).toBeVisible();
       await page.locator("#book-mode").click();
       await check("books");
+      await openBookPicker(page);
       await page.locator("#book-filter").selectOption("done");
       await check("book-empty");
       await page.locator("#book-filter-reset").click();

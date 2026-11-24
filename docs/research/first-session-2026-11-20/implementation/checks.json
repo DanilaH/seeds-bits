@@ -1,0 +1,66 @@
+{
+  "runtime_source": "7ad737e3581dd734d7970da5b18ef52fd49e1412",
+  "acceptance_source": "0c33b38a353138a5cde47edd9e5e85134ba26958",
+  "implementation_pr": "https://github.com/DanilaH/seeds-bits/pull/9",
+  "build_flag": "VITE_SEEDS_FIRST_SESSION=1",
+  "profile": "baseline",
+  "reference_scope": "Own Seeds notebook/first-session UX; no new original-game runtime observations",
+  "targeted_browser": {
+    "run": 44766629267,
+    "cases": 25,
+    "passed": true,
+    "includes": [
+      "eight first selections",
+      "fresh hint",
+      "gap before move",
+      "two edge orders",
+      "Undo",
+      "manual task 2",
+      "restart/task 2 position",
+      "short and full course at 320x520/568 font200",
+      "eight existing or uncertain profile routes",
+      "archive replay/restart/calendar/today"
+    ]
+  },
+  "additional_local_checks": {
+    "first_session_cases": 25,
+    "archive_replay_synchronized_repeats": 3,
+    "build": true
+  },
+  "source_inventory": {
+    "pinned_sha": "0e4cb526883a30ab52f42067669665a31c1ee587",
+    "feature_ids": 36,
+    "mapped": 36,
+    "missing": 0
+  },
+  "physical_phone": "NOT_VERIFIED",
+  "human_understanding": "NOT_VERIFIED",
+  "live_audience": "NOT_VERIFIED",
+  "kit_impact": "REUSE / CANDIDATE; QA first actionable sentence visible before scroll and guidance before required mechanic",
+  "no_runtime_changes_after_signed_build": true,
+  "general_ci": {
+    "run": 44766644206,
+    "passed": true,
+    "unit": 118,
+    "additional_unit": 2,
+    "browser": 320,
+    "additional_browser": 15,
+    "web_and_yandex_build": true,
+    "android_debug_and_native_doubles": true
+  },
+  "android": {
+    "run": 44766629267,
+    "passed": true,
+    "artifact": 14646462528,
+    "upgrade_12054_to_12061": true,
+    "undo_restores_eight": true,
+    "system_font_200": true,
+    "css_viewport": [
+      320,
+      520
+    ],
+    "webview": "124.0.6367.219",
+    "release_payload_entries_equal_signed_deliverable": 667,
+    "debug_public_web_assets_equal_release": 16
+  }
+}

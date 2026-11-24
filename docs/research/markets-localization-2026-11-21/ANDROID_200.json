@@ -1,0 +1,69 @@
+{
+  "source": "77de85bea27c543dfdeaa488af52773c71a4dbca",
+  "package": "com.seedsbits.game.preview",
+  "versionCode": 12067,
+  "physicalPhone": false,
+  "systemFont": 2,
+  "forwardedFile": {
+    "install_store": "unknown",
+    "store_evidence": "unavailable",
+    "artifact_channel": "rustore",
+    "acquisition_state": "fresh"
+  },
+  "legacyUpdate": true,
+  "controls": [
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "order": [
+        8,
+        9
+      ],
+      "languageSwitch": true,
+      "selectionPreserved": true,
+      "solved": true
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "order": [
+        9,
+        8
+      ],
+      "languageSwitch": true,
+      "selectionPreserved": true,
+      "solved": true
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "order": [
+        8,
+        9
+      ],
+      "languageSwitch": true,
+      "selectionPreserved": true,
+      "solved": true
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "order": [
+        9,
+        8
+      ],
+      "languageSwitch": true,
+      "selectionPreserved": true,
+      "solved": true
+    }
+  ],
+  "webview": "  Current WebView package (name, version): (com.google.android.webview, 124.0.6367.219)"
+}

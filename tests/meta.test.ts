@@ -1,4 +1,4 @@
-import { test, expect } from "vitest";
+import { test, expect, vi } from "vitest";
 import {
   fresh,
   metadata,
@@ -7,6 +7,8 @@ import {
   startAttempt,
 } from "../src/progress";
 import { nextTask, trophy } from "../src/puzzles";
+import { type Language, useLanguage } from "../src/i18n";
+import { trophyMark } from "../src/trophies";
 test("migration preserves wins and does not invent past statistics", () => {
   const p = fresh();
   p.done = ["book-v1-1"];
@@ -65,6 +67,30 @@ test("existing medal thresholds stay 7 and 14, leap month gold needs 29", () => 
   expect(
     [6, 7, 13, 14, 28, 29].map((n) => trophy("2028-02", done.slice(0, n)).tier),
   ).toEqual([0, 1, 1, 2, 2, 3]);
+});
+test("the medal preview uses the same pluralized count in text and its label", () => {
+  const examples: Array<[Language, string[]]> = [
+    ["ru", ["Ещё 1 задача", "Ещё 2 задачи", "Ещё 5 задач", "Ещё 11 задач", "Ещё 21 задача"]],
+    ["en", ["1 puzzle to go", "2 puzzles to go", "5 puzzles to go", "11 puzzles to go", "21 puzzles to go"]],
+    ["es", ["Falta 1 reto", "Faltan 2 retos", "Faltan 5 retos", "Faltan 11 retos", "Faltan 21 retos"]],
+    ["tr", ["1 bulmaca kaldı", "2 bulmaca kaldı", "5 bulmaca kaldı", "11 bulmaca kaldı", "21 bulmaca kaldı"]],
+    ["pt-BR", ["Falta 1 desafio", "Faltam 2 desafios", "Faltam 5 desafios", "Faltam 11 desafios", "Faltam 21 desafios"]],
+  ];
+  vi.stubGlobal("document", { documentElement: { lang: "ru" } });
+  try {
+    for (const [locale, expected] of examples) {
+      useLanguage(locale);
+      for (const [i, count] of [1, 2, 5, 11, 21].entries()) {
+        // Use a synthetic gold threshold to exercise counts the calendar cannot show.
+        const html = trophyMark("2026-11", 14, 14 + count);
+        expect(html).toContain(`class="next-count">${expected[i]}<`);
+        expect(html).toContain(`. ${expected[i]}"`);
+      }
+    }
+  } finally {
+    useLanguage("ru");
+    vi.unstubAllGlobals();
+  }
 });
 test("unknown metadata cannot silently erase statistics", () => {
   const p = fresh();

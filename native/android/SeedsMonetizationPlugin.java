@@ -201,9 +201,19 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (!edit.commit()) { call.reject("Experiment context could not be saved"); return; }
     call.resolve();
   }
+  @PluginMethod public void installContext(PluginCall call) {
+    JSObject data = SeedsInstallStore.capture(getContext());
+    data.put("build_channel", getContext().getString(R.string.analytics_channel));
+    data.put("enabled", !getContext().getString(R.string.appmetrica_api_key).isEmpty());
+    android.os.LocaleList current = getContext().getResources().getConfiguration().getLocales();
+    JSONArray locales = new JSONArray();
+    for (int i=0; i<current.size() && i<12; i++) locales.put(current.get(i).toLanguageTag());
+    data.put("locales", locales);
+    call.resolve(data);
+  }
   @PluginMethod public void report(PluginCall call) {
     String name = call.getString("name", "");
-    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_(error|recovered)|tutorial_(start|end)|first_(pair|unassisted_pair|no_moves|hint|complete)|reminder_(permission_requested|permission|toggle|open)|review_(request|flow)|daily_reward|result_transition|experiment_assignment|assist_(eligibility|offer|choice|request|result|grant|apply|stored|followup)")) {
+    if (name.matches("game_(open|start|complete)|hint_(used|offer|reward_granted)|save_(error|recovered)|tutorial_(start|end)|first_(pair|unassisted_pair|no_moves|hint|complete)|reminder_(permission_requested|permission|toggle|open)|review_(request|flow)|daily_reward|result_transition|experiment_assignment|distribution_context|language_picker_open|language_changed|locale_resolved|activity_day|assist_(eligibility|offer|choice|request|result|grant|apply|stored|followup)")) {
       JSObject data = call.getObject("data", new JSObject());
       String id = data.optString("event_id", "");
       if (id.length() > 100) { call.reject("Invalid event id"); return; }

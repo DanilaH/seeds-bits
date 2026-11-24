@@ -1,0 +1,242 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "textScale": 1,
+    "drift": 0,
+    "states": [
+      {
+        "name": "01-start",
+        "boardTop": 148.796875,
+        "cue": "Уберите все цифры. Нажмите любую.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "01-selected",
+        "boardTop": 148.796875,
+        "cue": "Ещё одна 9 или 1 (9 + 1 = 10).",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "02-rejected",
+        "boardTop": 148.796875,
+        "cue": "Эти цифры разные и не дают 10 в сумме.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "03-sum",
+        "boardTop": 148.796875,
+        "cue": "6 + 4 = 10",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "04-edge",
+        "boardTop": 148.796875,
+        "cue": "От правого края — в начало строки ниже.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "05-selected-edge",
+        "boardTop": 148.796875,
+        "cue": "От правого края — в начало строки ниже.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      }
+    ],
+    "reverseEdge": "M297.5547916666667,31.21875H343m-4,-4l4,4 -4,4 M3,69.65625H202.21083333333334m-4,-4l4,4 -4,4",
+    "result": "1/24",
+    "next": "book-v1-2",
+    "resumeSameBoard": true
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "textScale": 1.5,
+    "drift": 0,
+    "states": [
+      {
+        "name": "01-start",
+        "boardTop": 218.375,
+        "cue": "Уберите все цифры. Нажмите любую.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "01-selected",
+        "boardTop": 218.375,
+        "cue": "Ещё одна 9 или 1 (9 + 1 = 10).",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "02-rejected",
+        "boardTop": 218.375,
+        "cue": "Эти цифры разные и не дают 10 в сумме.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "03-sum",
+        "boardTop": 218.375,
+        "cue": "6 + 4 = 10",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "04-edge",
+        "boardTop": 218.375,
+        "cue": "От правого края — в начало строки ниже.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "05-selected-edge",
+        "boardTop": 218.375,
+        "cue": "От правого края — в начало строки ниже.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      }
+    ],
+    "reverseEdge": "M237.3521875,32.625H273m-4,-4l4,4 -4,4 M3,73.875H161.29625m-4,-4l4,4 -4,4",
+    "result": "1/24",
+    "next": "book-v1-2",
+    "resumeSameBoard": true
+  },
+  {
+    "width": 320,
+    "height": 568,
+    "textScale": 2,
+    "drift": 0,
+    "states": [
+      {
+        "name": "01-start",
+        "boardTop": 312.28125,
+        "cue": "Уберите все цифры. Нажмите любую.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "01-selected",
+        "boardTop": 312.28125,
+        "cue": "Ещё одна 9 или 1 (9 + 1 = 10).",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "02-rejected",
+        "boardTop": 312.28125,
+        "cue": "Эти цифры разные и не дают 10 в сумме.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "03-sum",
+        "boardTop": 312.28125,
+        "cue": "6 + 4 = 10",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "04-edge",
+        "boardTop": 312.28125,
+        "cue": "От правого края — в начало строки ниже.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "05-selected-edge",
+        "boardTop": 312.28125,
+        "cue": "От правого края — в начало строки ниже.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      }
+    ],
+    "reverseEdge": "M237.3521875,39.5H273m-4,-4l4,4 -4,4 M3,94.5H161.29625m-4,-4l4,4 -4,4",
+    "result": "1/24",
+    "next": "book-v1-2",
+    "resumeSameBoard": true
+  },
+  {
+    "width": 568,
+    "height": 320,
+    "textScale": 2,
+    "drift": 0,
+    "states": [
+      {
+        "name": "01-start",
+        "boardTop": 20,
+        "cue": "Уберите все цифры. Нажмите любую.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "01-selected",
+        "boardTop": 20,
+        "cue": "Ещё одна 9 или 1 (9 + 1 = 10).",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "02-rejected",
+        "boardTop": 20,
+        "cue": "Эти цифры разные и не дают 10 в сумме.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "03-sum",
+        "boardTop": 20,
+        "cue": "6 + 4 = 10",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "04-edge",
+        "boardTop": 20,
+        "cue": "От правого края — в начало строки ниже.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      },
+      {
+        "name": "05-selected-edge",
+        "boardTop": 20,
+        "cue": "От правого края — в начало строки ниже.",
+        "overlap": false,
+        "canTap": true,
+        "pageOverflow": false
+      }
+    ],
+    "reverseEdge": "M288.9521875,49.5H333m-4,-4l4,4 -4,4 M3,124.5H196.3603125m-4,-4l4,4 -4,4",
+    "result": "1/24",
+    "next": "book-v1-2",
+    "resumeSameBoard": true
+  }
+]

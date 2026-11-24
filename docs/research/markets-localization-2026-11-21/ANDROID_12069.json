@@ -1,0 +1,85 @@
+{
+  "runtime_commit": "12bc67fdf7409823871a19e2db2e229c4b7650cb",
+  "run_id": 44940993229,
+  "attempt": 2,
+  "version_code": 12069,
+  "system_font": 2,
+  "physical_phone": false,
+  "optimized_upgrade_12066": "passed",
+  "forwarded_file_context": "passed",
+  "controls": [
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "order": [
+        8,
+        9
+      ],
+      "languageSwitch": true,
+      "selectionPreserved": true,
+      "solved": true
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "order": [
+        9,
+        8
+      ],
+      "languageSwitch": true,
+      "selectionPreserved": true,
+      "solved": true
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "order": [
+        8,
+        9
+      ],
+      "languageSwitch": true,
+      "selectionPreserved": true,
+      "solved": true
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "order": [
+        9,
+        8
+      ],
+      "languageSwitch": true,
+      "selectionPreserved": true,
+      "solved": true
+    }
+  ],
+  "checks_for_passed_cases": [
+    "English and Spanish full cue",
+    "same field geometry after first tap and after language choice",
+    "no auto-scroll",
+    "selected digit retained",
+    "pair solved"
+  ],
+  "recording": "Landscape 568x320, English cue, simultaneous board visibility, select 6, switch EN to ES, tap 4 and solve. The delivered clip plays at 1/1.8 of the captured speed.",
+  "attempt1": {
+    "status": "device_offline",
+    "landscapeReverseNotReached": true,
+    "artifact": "https://github.com/DanilaH/seeds-bits/actions/runs/44940993229/artifacts/14722345031"
+  },
+  "webview": "  Current WebView package (name, version): (com.google.android.webview, 124.0.6367.219)",
+  "forwardedFile": {
+    "install_store": "unknown",
+    "store_evidence": "unavailable",
+    "artifact_channel": "rustore",
+    "acquisition_state": "fresh"
+  },
+  "artifact": "https://github.com/DanilaH/seeds-bits/actions/runs/44940993229/artifacts/14721984158"
+}

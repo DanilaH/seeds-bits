@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ru">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+  <title>Семечки · примеры ходов</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      font-family: system-ui, sans-serif;
+      color: #20352e;
+      background: #eef2ed;
+    }
+    body {
+      margin: 0;
+    }
+    main {
+      max-width: 30rem;
+      margin: auto;
+      background: #fafbf8;
+      padding: 1rem;
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: auto minmax(8rem, auto) auto minmax(
+          3.6rem,
+          auto
+        ) auto;
+      align-content: start;
+      gap: 0.8rem;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      color: #52685e;
+      align-items: center;
+    }
+    header strong {
+      color: #20352e;
+    }
+    h1 {
+      font-size: 1.4rem;
+      line-height: 1.15;
+      margin: 0.4rem 0;
+    }
+    .copy p {
+      margin: 0.45rem 0;
+      line-height: 1.45;
+    }
+    .board {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9/2;
+      align-self: start;
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      grid-template-rows: repeat(2, 1fr);
+      border: 1px solid #96aa9e;
+      background: #fff;
+    }
+    .cell {
+      min-width: 0;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: inset -1px -1px #d1ddd4;
+      display: grid;
+      place-content: center;
+      color: inherit;
+      font: 500 clamp(1rem, 5vw, 1.5rem)/1 system-ui;
+      position: relative;
+    }
+    .cell[aria-pressed="true"] {
+      background: #c0dcce;
+      outline: 2px solid #146046;
+      outline-offset: -3px;
+    }
+    .cell.solved {
+      background: #d4e8db;
+      color: #12583f;
+    }
+    .cell:focus-visible,
+    button:focus-visible {
+      outline: 3px solid #245b9a;
+      outline-offset: -3px;
+    }
+    .trace {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: visible;
+      width: 100%;
+      height: 100%;
+    }
+    .trace path {
+      stroke: #187250;
+      stroke-width: 0.09;
+      stroke-linecap: round;
+      fill: none;
+      stroke-dasharray: 0.12 0.15;
+    }
+    .trace circle {
+      fill: #187250;
+    }
+    #feedback {
+      margin: 0;
+      line-height: 1.4;
+      align-self: start;
+    }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .actions button {
+      border: 1px solid #789585;
+      padding: 0.65rem 0.9rem;
+      color: #234c3c;
+      background: #fff;
+      border-radius: 0.5rem;
+      min-height: 44px;
+      font: inherit;
+    }
+    .actions button.primary {
+      background: #235e47;
+      color: #fff;
+    }
+    .actions button[aria-disabled="true"] {
+      opacity: 0.5;
+    }
+    .actions button[hidden] {
+      display: none;
+    }
+    @media (max-height: 540px) and (min-aspect-ratio: 13/10) {
+      main {
+        max-width: 58rem;
+        grid-template-columns: 1fr 1.2fr;
+        grid-template-rows: auto auto auto;
+      }
+      header {
+        grid-column: 1/-1;
+      }
+      .copy {
+        grid-column: 1;
+      }
+      .board {
+        grid-column: 2;
+        grid-row: 2/4;
+      }
+      #feedback {
+        grid-column: 1;
+      }
+      .actions {
+        grid-column: 1/-1;
+      }
+    }
+  </style>
+  <main>
+    <header><strong>Семечки</strong><span id="step"></span></header>
+    <section class="copy">
+      <h1 id="title"></h1>
+      <p id="prompt"></p>
+    </section>
+    <div
+      class="board"
+      id="board"
+      role="group"
+      aria-label="Учебное поле из девяти столбцов"
+    ></div>
+    <p id="feedback" role="status" aria-live="polite"></p>
+    <div class="actions">
+      <button type="button" id="next" class="primary">Дальше</button
+      ><button type="button" id="example">Показать путь</button>
+    </div>
+  </main>
+  <script>
+    const cases = [
+      {
+        title: "Через пустую клетку",
+        prompt:
+          "Нажмите 4 и 6. В сумме они дают десять. Пустую клетку между ними можно пропустить.",
+        board: [1, 2, 1, 4, 0, 6],
+        pair: [3, 5],
+        reason: "Между 4 и 6 было пусто.",
+        lines: ["M3.83 .5 H5.17"],
+      },
+      {
+        title: "Из строки в строку",
+        prompt:
+          "Найдите 6 и 4. За правым краем ряд продолжается слева, строкой ниже. На этом пути только пустые клетки.",
+        board: [2, 1, 2, 0, 0, 0, 0, 6, 0, 0, 4, 3],
+        pair: [7, 10],
+        reason:
+          "От шестёрки до края и от начала следующей строки до четвёрки было пусто.",
+        lines: ["M7.83 .5 H8.98", "M.02 1.5 H1.17"],
+      },
+      {
+        title: "Теперь найдите пару сами",
+        prompt:
+          "Уберите одну пару на этом новом поле. Первой можно нажать любую из двух цифр.",
+        board: [2, 1, 2, 0, 0, 0, 3, 0, 0, 0, 0, 7, 4],
+        pair: [6, 11],
+        reason:
+          "3 и 7 дают десять. Между ними через край строки нет других цифр.",
+        lines: ["M6.83 .5 H8.98", "M.02 1.5 H2.17"],
+      },
+    ];
+    const el = (id) => document.getElementById(id);
+    let step = 0,
+      selected = null,
+      done = false,
+      usedHelp = false;
+    function drawPath() {
+      const board = el("board");
+      board.querySelector("svg")?.remove();
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("class", "trace");
+      svg.setAttribute("viewBox", "0 0 9 2");
+      svg.setAttribute("aria-hidden", "true");
+      for (const d of cases[step].lines) {
+        const path = document.createElementNS(svg.namespaceURI, "path");
+        path.setAttribute("d", d);
+        svg.append(path);
+      }
+      board.append(svg);
+    }
+    function choose(index) {
+      if (done) return;
+      const task = cases[step],
+        cells = el("board");
+      if (selected === index) {
+        cells.children[index].setAttribute("aria-pressed", "false");
+        selected = null;
+        return;
+      }
+      if (selected !== null) {
+        cells.children[selected].setAttribute("aria-pressed", "false");
+        if (task.pair.includes(selected) && task.pair.includes(index)) {
+          done = true;
+          for (const i of task.pair) cells.children[i].classList.add("solved");
+          drawPath();
+          el("feedback").textContent = task.reason;
+          el("next").setAttribute("aria-disabled", "false");
+          return;
+        }
+        el("feedback").textContent =
+          (selected === 0 && index === 2) || (selected === 2 && index === 0)
+            ? "Между этими одинаковыми цифрами стоит другая цифра. Она закрывает путь."
+            : "Проверьте и сумму, и путь. Нужны равные цифры или сумма десять, между ними должно быть пусто.";
+      }
+      selected = index;
+      cells.children[index].setAttribute("aria-pressed", "true");
+      if (step < 2 && task.pair.includes(index)) drawPath();
+    }
+    function render() {
+      const t = cases[step];
+      selected = null;
+      done = false;
+      usedHelp = false;
+      el("step").textContent = step + 1 + " из " + cases.length;
+      el("title").textContent = t.title;
+      el("prompt").textContent = t.prompt;
+      el("feedback").textContent = "";
+      el("board").replaceChildren();
+      for (let i = 0; i < 18; i++) {
+        const value = t.board[i];
+        const c = document.createElement(value ? "button" : "span");
+        c.className = "cell";
+        if (value) {
+          c.type = "button";
+          c.textContent = value;
+          c.setAttribute(
+            "aria-label",
+            value +
+              ", строка " +
+              (1 + Math.floor(i / 9)) +
+              ", столбец " +
+              ((i % 9) + 1),
+          );
+          c.setAttribute("aria-pressed", "false");
+          c.onclick = () => choose(i);
+        } else c.setAttribute("aria-hidden", "true");
+        el("board").append(c);
+      }
+      el("next").hidden = false;
+      el("next").textContent = step === 2 ? "Закончить" : "Дальше";
+      el("next").setAttribute("aria-disabled", "true");
+      el("example").hidden = false;
+    }
+    el("example").onclick = () => {
+      if (done) return;
+      usedHelp = true;
+      drawPath();
+      el("feedback").textContent = cases[step].reason;
+    };
+    el("next").onclick = () => {
+      if (!done) return;
+      if (step < 2) {
+        step++;
+        render();
+        return;
+      }
+      el("step").textContent = "Готово";
+      el("title").textContent = "Пара найдена";
+      el("prompt").textContent = usedHelp
+        ? "Вы соединили цифры с подсказкой."
+        : "Вы нашли пару на новом поле самостоятельно.";
+      el("feedback").textContent = "";
+      el("next").hidden = true;
+      el("example").hidden = false;
+      el("example").textContent = "Пройти ещё раз";
+      el("example").onclick = () => location.reload();
+    };
+    render();
+  </script>
+</html>

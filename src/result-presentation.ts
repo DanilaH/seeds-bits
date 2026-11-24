@@ -1,3 +1,4 @@
+import { t } from "./i18n";
 import { icon } from "./icons";
 
 export type ResultKind = "classic" | "daily" | "task" | "page" | "book";
@@ -50,7 +51,7 @@ export function resultArtwork(kind: ResultKind): string {
             `<g class="result-leaf" style="--leaf:${i}" transform="translate(${i * 2} ${-i * 2})"><rect class="result-paper" x="26" y="15" width="75" height="101" rx="5"/></g>`,
         ).join("") +
         '<g class="result-cover"><rect x="20" y="13" width="83" height="106" rx="6"/><path d="M34 13v106M44 37h43M44 45h30"/><circle cx="66" cy="78" r="20"/><path class="result-book-check" d="m55 77 8 8 15-17"/></g>';
-  return `<svg class="result-paper-art" viewBox="0 0 132 132" aria-hidden="true" focusable="false">${content}</svg><span class="result-stamp">${kind === "page" ? "Готово" : "24/24"}</span>`;
+  return `<svg class="result-paper-art" viewBox="0 0 132 132" aria-hidden="true" focusable="false">${content}</svg><span class="result-stamp">${kind === "page" ? t("ui.done") : "24/24"}</span>`;
 }
 
 /** No timers or gameplay locks. Navigation cancels every animation and particle. */
