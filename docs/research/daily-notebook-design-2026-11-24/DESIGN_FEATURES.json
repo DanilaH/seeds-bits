@@ -1,0 +1,398 @@
+{
+  "schema": "seeds-daily-notebook-design-v1",
+  "date": "2026-11-24",
+  "timezone": "Asia/Yekaterinburg",
+  "repository": "DanilaH/seeds-bits",
+  "consumerCommit": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "status": "RESEARCH_CANDIDATE_BANK_AUTHORED_NOT_INTEGRATED",
+  "scopeDecision": "User requested expansion and variety. Exact 2x24+28 scope is researcher recommendation, not separately approved release decision.",
+  "sourceInventoryCount": 36,
+  "sourceInventoryChanged": false,
+  "families": [
+    {
+      "id": "seeds-content-flow",
+      "name": "Спокойная зачистка",
+      "localResearchIds": [
+        "seeds-daily-flow"
+      ],
+      "sourceFeatureIds": [],
+      "status": "RESEARCHED",
+      "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
+      "currentPresence": "PARTIAL",
+      "criterion": "Несколько подтверждённых продолжений после первых действий; простое продвижение.",
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
+    },
+    {
+      "id": "seeds-content-reveal",
+      "name": "Новые связи",
+      "localResearchIds": [
+        "seeds-daily-reveal",
+        "seeds-nb-open-links-20261124"
+      ],
+      "sourceFeatureIds": [],
+      "status": "RESEARCHED",
+      "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
+      "currentPresence": "PARTIAL",
+      "criterion": "Причинное открытие связи между прежними клетками без сжатия.",
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
+    },
+    {
+      "id": "seeds-content-reading",
+      "name": "Край строки",
+      "localResearchIds": [
+        "seeds-daily-reading",
+        "seeds-nb-reading-edge-20261124"
+      ],
+      "sourceFeatureIds": [],
+      "status": "RESEARCHED",
+      "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
+      "currentPresence": "PARTIAL",
+      "criterion": "Подтверждённый reading-эпизод внутри пути, без заявления обязательности во всех решениях.",
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
+    },
+    {
+      "id": "seeds-content-compression",
+      "name": "Поле меняется",
+      "localResearchIds": [
+        "seeds-daily-compression",
+        "seeds-nb-row-shift-20261124"
+      ],
+      "sourceFeatureIds": [],
+      "status": "RESEARCHED",
+      "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
+      "currentPresence": "PARTIAL",
+      "criterion": "Связь появляется или исчезает именно из-за удаления строки; контроль без сжатия.",
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
+    },
+    {
+      "id": "seeds-content-order",
+      "name": "Порядок",
+      "localResearchIds": [
+        "seeds-daily-order",
+        "seeds-nb-order-choice-20261124"
+      ],
+      "sourceFeatureIds": [],
+      "status": "RESEARCHED",
+      "evidenceLevel": "ACTUAL_SOURCE_NODE_EXPLORATORY",
+      "currentPresence": "PARTIAL",
+      "criterion": "Содержательно разные связи общих оставшихся цифр, доступность следующего приёма либо возможность полного завершения; stable cell IDs, обе ветки и влияние на план. Разные снятые клетки сами по себе недостаточны; проигрышная ветка необязательна.",
+      "nextAction": "Новый банк создан (pilot-bank/bank.json), подтверждены causal episodes on exact core. Проверить интеграцию и человеческую различимость."
+    }
+  ],
+  "patterns": [
+    {
+      "localResearchId": "seeds-content-volume-decision-20261124",
+      "name": "Раздельные объём и характер решения",
+      "sourceIds": [
+        "S04"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "current": "Размеры и сертификаты есть; содержание тетради и daily не выбирается по двум независимым осям.",
+      "proposed": "Подбирать matched-size контрасты и хранить объём отдельно от эпизода/последствий выбора.",
+      "acceptance": "Две точные доски одного объёма, replay и конкретные различные before/action/after; обязательность приёма не выводить из одного witness.",
+      "cost": "LOW для отбора/паспортов, MEDIUM для новых конструкций.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-content-sequence-20261124",
+      "name": "Редакторский ритм конечного репертуара",
+      "sourceIds": [
+        "S05",
+        "S07"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "MISSING",
+      "current": "daily hash не задаёт недельной кривой; notebooks в основном нарастают по объёму.",
+      "proposed": "Последовательность разных ситуаций/коротких повторений знакомого; поздние задачи не требуют непрерывного роста цифр.",
+      "acceptance": "Проверяется соседняя подборка; роль каждого перехода объяснена; конкретный период доноров не принимается за оптимум.",
+      "cost": "LOW для расписания, MEDIUM для совместимости календаря.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-notebook-theme-sequence-20261124",
+      "name": "Тематическая страница с переносом приёма",
+      "sourceIds": [
+        "S06",
+        "S09",
+        "S11",
+        "S13"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "current": "Тома/страницы/названия и свободный выбор есть; редакционная роль каждой задачи в данных не задана.",
+      "proposed": "Небольшие дуги внутри существующей структуры страниц: приём, варианты, сочетание, знакомое завершение.",
+      "acceptance": "Для роли есть точный эпизод и контраст с соседями; тема не обещает доказанную необходимость без проверки всех путей.",
+      "cost": "LOW–MEDIUM для подборок существующих ID; MEDIUM для дополнительных задач.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-content-repertoire-20261124",
+      "name": "Сначала новые конструкции, затем частоты",
+      "sourceIds": [
+        "S08",
+        "S09"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "current": "Пять ситуаций подтверждены в текущих коротких полях; отдельного нового редакторского банка 48+28 пока нет. Конкретные дефициты следующих конструкций определит авторинг.",
+      "proposed": "Добавлять собственные шаблоны под недостающий эпизод, затем распределять их по набору/неделе.",
+      "acceptance": "Два контрастных поля семейства, replay, ключевое действие, bounded альтернативы и отличие от ближайшего старого поля.",
+      "cost": "MEDIUM; offline authoring прежде runtime director.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-content-authoring-assignment-20261124",
+      "name": "Кандидат → принятый банк → закреплённое назначение",
+      "sourceIds": [
+        "S04",
+        "S06",
+        "S10"
+      ],
+      "sourceFeatureIds": [],
+      "consumerGap": "PARTIAL",
+      "current": "Есть фиксированныеbook-v1 и детерминированныеdaily-v1; shared editorial pool/versioned explicit assignments ещё проектируются.",
+      "proposed": "Общий offline паспорт, отдельные списки назначения, точные опубликованные версии/доски. Reward identity отдельно от fingerprint.",
+      "acceptance": "Старые назначения/restart/Undo сохраняются; существующий book-ID в подборке не платит заново; daily сохраняет текущую календарную единицу награды.",
+      "cost": "LOW–MEDIUM для инструмента; MEDIUM для сохранений/валидаторов.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    },
+    {
+      "localResearchId": "seeds-daily-goal-continuity-20261124",
+      "name": "Сохранить конечную цель календаря",
+      "sourceIds": [
+        "S01",
+        "S02",
+        "S10"
+      ],
+      "sourceFeatureIds": [
+        "eb-daily-intro-monthly-cup-copy"
+      ],
+      "consumerGap": "PARTIAL",
+      "current": "У нас есть trophy7/14/all; у Easybrain проверен только текст о monthly cup/all stars, полный original UI parity неизвестен.",
+      "proposed": "Разнообразить сами дни, сохранить трофеи/архив/серию и текущую выдачу наград.",
+      "acceptance": "Старый completed-day/month и сегодняшняя серия сохраняются; повторный вход не выдаёт повторную награду.",
+      "cost": "LOW для сохранения существующей меты; новая экономика вне пакета.",
+      "status": "RESEARCHED",
+      "humanAcceptance": "UNKNOWN",
+      "scope": "Own adaptation proposal; no implementation or new original runtime observation."
+    }
+  ],
+  "packages": [
+    {
+      "id": "seeds-notebook-pacing-20261123",
+      "status": "RESEARCHED",
+      "proposal": "2 new thematic notebooks x24; 4 pages x6",
+      "newContentRequired": 48,
+      "referenceExistingIds": 48,
+      "referenceIdsAreNewContent": false,
+      "startOccupiedRange": [
+        12,
+        32
+      ],
+      "startLogicalMax": 54,
+      "implementation": "AUTHORED_RESEARCH_BANK; PRODUCT_RUNTIME_NOT_IMPLEMENTED",
+      "nextAction": "Поля кандидата созданы в pilot-bank/bank.json; подключить через контракт совместимости после плейтеста и проверки C01–C12.",
+      "cost": "MEDIUM"
+    },
+    {
+      "id": "seeds-daily-rhythm-20261123",
+      "status": "RESEARCHED",
+      "proposal": "28 new frozen daily boards, five lead families, four editorial weeks",
+      "newContentRequired": 28,
+      "constantVolumeFirstWeek": 24,
+      "proposedLaterWeekOccupied": [
+        16,
+        24,
+        24,
+        16,
+        24,
+        32,
+        24
+      ],
+      "activationDate": null,
+      "implementation": "AUTHORED_RESEARCH_BANK; PRODUCT_RUNTIME_NOT_IMPLEMENTED",
+      "nextAction": "Поля кандидата созданы в pilot-bank/bank.json; подключить через контракт совместимости после плейтеста и проверки C01–C12.",
+      "cost": "MEDIUM"
+    }
+  ],
+  "verification": {
+    "notebookWitnesses": {
+      "selected": 336,
+      "passed": 336,
+      "catalogueTotal": 2400,
+      "allCataloguePathsReplayed": false
+    },
+    "notebookAlternatives": {
+      "tasks": 11,
+      "states": 33,
+      "actions": 208,
+      "FOUND": 205,
+      "NO_WIN_PROVEN": 3,
+      "UNKNOWN": 0
+    },
+    "dailyWitnesses": {
+      "year": 2026,
+      "selected": 365,
+      "passed": 365,
+      "includesFutureComputedDates": true
+    },
+    "dailyAlternatives": {
+      "tasks": 6,
+      "states": 18,
+      "actions": 195,
+      "FOUND": 193,
+      "NO_WIN_PROVEN": 2,
+      "UNKNOWN": 0
+    },
+    "integrationHypotheticalFutureIdCases": 9,
+    "solverBudgetPerCall": 5000,
+    "negativeResultBoundary": "No clearing continuation by pair removals from that state without Undo/restart/Add. Undo remains available.",
+    "sampleSelection": "Exploratory after inspecting profiles, not held-out, not representative audience statistics.",
+    "physicalPhone": "UNKNOWN",
+    "liveAudience": "UNKNOWN",
+    "humanDifficulty": "UNKNOWN",
+    "seedsPerMinute": "UNKNOWN"
+  },
+  "later": [
+    {
+      "id": "seeds-content-combinations-next",
+      "status": "DEFERRED",
+      "proposal": "Dedicated edge/order collections, two-step openings and mixed constructions",
+      "reason": "First bounded 76-board bank and its actual deficits not implemented yet.",
+      "returnCondition": "First bank delivered; report identifies missing arrangements or combinations; commission next frozen pack.",
+      "cost": "MEDIUM",
+      "ownerExcluded": false
+    },
+    {
+      "id": "seeds-content-long-optional-next",
+      "status": "DEFERRED",
+      "proposal": "Long optional thematic tasks with separate volume label",
+      "reason": "First release targets short varied situations; long-task phone duration/hint/scroll remains unknown.",
+      "returnCondition": "Owner requests long-format expansion and physical session establishes usable volume and reward/time evidence.",
+      "cost": "MEDIUM",
+      "ownerExcluded": false
+    },
+    {
+      "id": "seeds-content-calendar-editions-next",
+      "status": "DEFERRED",
+      "proposal": "New themed weeks or seasonal editorial sets using same rules/rewards",
+      "reason": "Need first accepted bank and immutable assignment contract; no evidence for new event economy.",
+      "returnCondition": "Schedule next future pack before existing bank expires; first-assignment and fallback contract passes.",
+      "cost": "LOW_MEDIUM",
+      "ownerExcluded": false
+    }
+  ],
+  "constraints": [
+    "Keep existing 2400 v1 boards/IDs and old dates immutable.",
+    "Keep Undo/Hint; Add forbidden in daily/notebook.",
+    "Preserve paid/earned paused-help stock; do not reactivate six experiments.",
+    "Existing notebook-ID aliases share done/session/reward.",
+    "Daily reward and trophy deduplicate calendar day; preserve archive versus today streak.",
+    "Do not globally merge cross-mode rewards by content fingerprint.",
+    "No runtime, calendar assignment, reward or source-inventory changes in this research package."
+  ],
+  "kitImpact": {
+    "reuse": [
+      "Volume versus choice",
+      "Causal stable-cell tracking",
+      "Explicit FOUND/NO_WIN_PROVEN/UNKNOWN"
+    ],
+    "candidate": "Content identity/assignment migration checklist after product validation; not a universal released module."
+  },
+  "pilotBank": {
+    "status": "AUTHORED_RESEARCH_CANDIDATE",
+    "reference": "89fe486f5bd59edf58b36a02628f6ac2382868e7",
+    "manifest": "pilot-bank/bank.json",
+    "verification": {
+      "verification": "ACTUAL_SOURCE_NODE",
+      "sourceBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+      "node": "v22.16.0",
+      "tasks": 76,
+      "steps": 811,
+      "causalEpisodes": 75,
+      "orderChecks": 10,
+      "initialSafe": 25,
+      "controlStates": 77,
+      "branchOutcomes": {
+        "FOUND": 879,
+        "NO_WIN_PROVEN": 2,
+        "UNKNOWN": 2
+      },
+      "families": {
+        "reveal": 18,
+        "flow": 17,
+        "reading": 13,
+        "compression": 18,
+        "order": 10
+      },
+      "unresolved": [
+        {
+          "id": "book-v2-links-24",
+          "step": 0,
+          "action": [
+            24,
+            33
+          ],
+          "outcome": "UNKNOWN",
+          "visits": 5000
+        },
+        {
+          "id": "book-v2-links-24",
+          "step": 0,
+          "action": [
+            25,
+            33
+          ],
+          "outcome": "UNKNOWN",
+          "visits": 5000
+        },
+        {
+          "id": "daily-pilot-v2-03",
+          "step": 0,
+          "action": [
+            7,
+            17
+          ],
+          "outcome": "NO_WIN_PROVEN",
+          "visits": 702
+        },
+        {
+          "id": "daily-pilot-v2-26",
+          "step": 0,
+          "action": [
+            6,
+            15
+          ],
+          "outcome": "NO_WIN_PROVEN",
+          "visits": 1396
+        }
+      ],
+      "standaloneBrowser": {
+        "browser": "Chromium",
+        "tasks": 76,
+        "moves": 811,
+        "touchHintUndo": true,
+        "widths": [
+          320,
+          390,
+          520
+        ],
+        "pageErrors": 0,
+        "loadMethod": "set_content from generated standalone HTML",
+        "fileReloadStorage": "NOT_VERIFIED",
+        "productAPK": "NOT_VERIFIED"
+      }
+    }
+  }
+}

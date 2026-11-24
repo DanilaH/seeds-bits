@@ -1,0 +1,30 @@
+[
+  {
+    "fixtureId": "daily-proposal-order-24",
+    "day": "2026-03-06",
+    "stage": "middle",
+    "pair": {
+      "a": 19,
+      "b": 25,
+      "kind": "straight"
+    },
+    "outcome": "NO_WIN_PROVEN",
+    "reachableStates": 8,
+    "transitions": 12,
+    "nonemptyTerminalStates": 1
+  },
+  {
+    "fixtureId": "daily-negative-reading-start",
+    "day": "2026-10-16",
+    "stage": "early",
+    "pair": {
+      "a": 5,
+      "b": 15,
+      "kind": "straight"
+    },
+    "outcome": "NO_WIN_PROVEN",
+    "reachableStates": 3940,
+    "transitions": 20176,
+    "nonemptyTerminalStates": 24
+  }
+]

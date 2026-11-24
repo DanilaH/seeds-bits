@@ -1,0 +1,32 @@
+{
+  "repository": "DanilaH/seeds-bits",
+  "ref": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "date": "2026-11-24",
+  "files": [
+    {
+      "path": "src/core.ts",
+      "gitBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+      "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+    },
+    {
+      "path": "src/solver.ts",
+      "gitBlob": "711b0866fb20bc8ecaaea9890120c1421c8dff59",
+      "sha256": "351122e55243cacfd2f17749064975001762ad9e6c9bf4844ca83672d4421686"
+    },
+    {
+      "path": "src/notebook.json",
+      "gitBlob": "ef77d106e87cd0320ef6887c4b4e39809abc1d93",
+      "sha256": "83f1e5af127d0647c112309d365e90b0cd91f7d4e9f96fefb590d87e1c2d0634"
+    },
+    {
+      "path": "src/notebook-extra.json",
+      "gitBlob": "6e81195773e4d1e9c13d2bf9ea2aafd6a59d8c7a",
+      "sha256": "a9148fd8e99cf6a615748402a039017cf5e310b726d756d876d561c7ae555456"
+    },
+    {
+      "path": "src/puzzles.ts",
+      "gitBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847",
+      "sha256": "7d5fc94edb634c1012e8b23de19fbc032709fcd785df1aa80001a47f119ef3d0"
+    }
+  ]
+}

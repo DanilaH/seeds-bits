@@ -1,0 +1,36 @@
+{
+  "repository": "DanilaH/seeds-bits",
+  "ref": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "files": [
+    {
+      "path": "src/core.ts",
+      "gitBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+      "sha256": "43e8b7850439180cf5f352b5230e88ef8633073dcbfd4addca494440f7a5d00b"
+    },
+    {
+      "path": "src/classic-profile.ts",
+      "gitBlob": "3f8edf6f286cd65a703f83918f129d4df3222487",
+      "sha256": "6c03aa06497052117431cbc3105a9c1f770224d0ddf08d22bb6dcf7ef37cc154"
+    },
+    {
+      "path": "src/calendar.ts",
+      "gitBlob": "b836708545670699c776d4645aeecd4ae77d5003",
+      "sha256": "c342de7da79599bba2f153d37917382e5326f6bdfc0decc9c384b9fb1986a63b"
+    },
+    {
+      "path": "src/puzzles.ts",
+      "gitBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847",
+      "sha256": "7d5fc94edb634c1012e8b23de19fbc032709fcd785df1aa80001a47f119ef3d0"
+    },
+    {
+      "path": "src/solver.ts",
+      "gitBlob": "711b0866fb20bc8ecaaea9890120c1421c8dff59",
+      "sha256": "351122e55243cacfd2f17749064975001762ad9e6c9bf4844ca83672d4421686"
+    },
+    {
+      "path": "src/notebook.json",
+      "gitBlob": "ef77d106e87cd0320ef6887c4b4e39809abc1d93",
+      "sha256": "83f1e5af127d0647c112309d365e90b0cd91f7d4e9f96fefb590d87e1c2d0634"
+    }
+  ]
+}

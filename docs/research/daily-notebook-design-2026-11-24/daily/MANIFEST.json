@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "scope": "Seeds own daily research proposal; no product or calendar assignment changed",
+  "auditedSource": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "runtime": "v24.22.3",
+  "execution": "Hash-verified snapshot; portable loader also supports pinned git show; no full checkout validation claimed",
+  "results": {
+    "dates": 365,
+    "fixtures": 12,
+    "probeStates": 18,
+    "probeBranches": 195,
+    "FOUND": 193,
+    "NO_WIN_PROVEN": 2,
+    "UNKNOWN": 0,
+    "deadGraphs": [
+      {
+        "states": 8,
+        "transitions": 12
+      },
+      {
+        "states": 3940,
+        "transitions": 20176
+      }
+    ]
+  },
+  "limits": [
+    "Exploratory selected examples, not a holdout estimate.",
+    "One stored witness per calendar puzzle.",
+    "No claim that all reachable states of selected puzzles were exhausted; only two specific dead branches have closed state graphs.",
+    "No physical-phone, human-interest, timing or live audience measurement.",
+    "No new production content, original APK observation, reward or identity change.",
+    "NO_WIN_PROVEN concerns pair-removal continuations from the given board, excluding Undo, restart and Add. Available Undo can return to the saved winning fork; this is not an irreversible game loss."
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 31142,
+      "sha256": "5cdc81fd512c2d8e2dc2d6f91f6027032c3525fbf2e00acb684c364aa209f023"
+    },
+    {
+      "path": "research.mjs",
+      "bytes": 8968,
+      "sha256": "369abc318b02ae1aec96dcbbc1bd02bb449a099bb889552e6b02c33464e2194c"
+    },
+    {
+      "path": "results/choice-probes.json",
+      "bytes": 241240,
+      "sha256": "fbe8002dd45aef3861ce6739375a2ec9f03880009fcc945c9d68ca9c29bde116"
+    },
+    {
+      "path": "results/episodes.json",
+      "bytes": 7450,
+      "sha256": "81c8407e5805b002f3802bc62f0b8c64b573cc8e118ec0c555cf7f74d4706e7d"
+    },
+    {
+      "path": "results/fixtures.json",
+      "bytes": 234816,
+      "sha256": "0625a74f5798459f0633fd475aaacaee0e86d220b98691069cfc615671dc7ea6"
+    },
+    {
+      "path": "results/no-win-graph-checks.json",
+      "bytes": 593,
+      "sha256": "7d1c74510899bb57a5b575cb585afbddff7d70feef9bd015f1bfe38a68ffd803"
+    },
+    {
+      "path": "results/profiles.json.gz",
+      "bytes": 30306,
+      "sha256": "142f40483f839b74a9f1ff58e1a56f2e11a866e42045f5dc92439e173f5ad3aa"
+    },
+    {
+      "path": "results/summary.json",
+      "bytes": 8233,
+      "sha256": "2a3d64dee462e53a67d6d06a1a63d3062a9f3de41bf7f77588e007142bc48133"
+    },
+    {
+      "path": "source-manifest.json",
+      "bytes": 1253,
+      "sha256": "8f2e46c4be473734c83515a20b59add4304417a4578f3b2df774b6a99c651b9f"
+    },
+    {
+      "path": "source.mjs",
+      "bytes": 1849,
+      "sha256": "d290f111acc4ded81d768f64bf9ff6affba1a4e7e6bb6626eed9a160a58bf7d3"
+    }
+  ]
+}

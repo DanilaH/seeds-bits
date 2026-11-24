@@ -1,0 +1,118 @@
+{
+  "project": "DanilaH/seeds-bits",
+  "mode": "notebook",
+  "sourceRevision": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "date": "2026-11-24",
+  "scope": "Own content research; not original Number Match observations. Product code/data untouched.",
+  "families": [
+    {
+      "id": "seeds-nb-open-links-20261124",
+      "status": "RESEARCHED",
+      "title": "Открой связь",
+      "currentBehavior": "При снятии пары без удаления строки открываются новые связи между оставшимися постоянными ID.",
+      "fixture": {
+        "taskId": "book-v1-6",
+        "step": 1,
+        "move": [
+          1,
+          9
+        ],
+        "expectedAfter": "300000300037073820"
+      },
+      "evidenceLevel": "ACTUAL_SOURCE_NODE",
+      "nextAction": "Авторить короткие новые варианты по этому причинному контракту; не считать иной seed самостоятельным приёмом."
+    },
+    {
+      "id": "seeds-nb-row-shift-20261124",
+      "status": "RESEARCHED",
+      "title": "Измени поле",
+      "currentBehavior": "Удаление пустой строки меняет геометрию и создаёт связь, отсутствующую в контрольном поле без сжатия.",
+      "fixture": {
+        "taskId": "book-v1-216",
+        "step": 0,
+        "move": [
+          9,
+          18
+        ],
+        "expectedAfter": "000007600000000909000060300060090000000000904"
+      },
+      "evidenceLevel": "ACTUAL_SOURCE_NODE",
+      "nextAction": "Сохранить before/marked-without-collapse/after и ID ремап в каждом выбранном примере; затем проверить заметность эффекта на телефоне."
+    },
+    {
+      "id": "seeds-nb-reading-edge-20261124",
+      "status": "RESEARCHED",
+      "title": "Свяжи край",
+      "currentBehavior": "Существующие reading-пары применяются в нескольких местах короткой партии.",
+      "fixture": {
+        "taskId": "book-v1-241",
+        "step": 1,
+        "move": [
+          5,
+          10
+        ],
+        "expectedAfter": "800200000000000031009000338008000007"
+      },
+      "evidenceLevel": "ACTUAL_SOURCE_NODE",
+      "nextAction": "Варьировать расположение/контекст reading-ходов, проверить самостоятельное распознавание игроком; наличие в proof не выдавать за обязательность."
+    },
+    {
+      "id": "seeds-nb-order-choice-20261124",
+      "status": "RESEARCHED",
+      "title": "Выбери порядок",
+      "currentBehavior": "При одинаковых24цифрах/27клетках/16стартовыхпарах book70 имеет1доказанноневыигрышныйпервыйход, book73 имеет16найденныхвыигрышныхпродолжений.",
+      "fixture": {
+        "taskId": "book-v1-70",
+        "step": 0,
+        "move": [
+          11,
+          12
+        ],
+        "expectedAfter": "797237738400023421319960940",
+        "outcome": "NO_WIN_PROVEN",
+        "controlTaskId": "book-v1-73"
+      },
+      "evidenceLevel": "ACTUAL_SOURCE_NODE_BOUNDED_EXACT",
+      "nextAction": "Использовать различие последствий как ось авторинга; не вводить квоту проигрышей и не приписывать человеку результаты двух ботов."
+    }
+  ],
+  "pilot": {
+    "id": "seeds-notebook-thematic-pilot-20261124",
+    "status": "PROPOSED",
+    "newTasks": 48,
+    "books": 2,
+    "tasksPerBook": 24,
+    "pagesPerBook": 4,
+    "tasksPerPage": 6,
+    "occupiedRange": [
+      12,
+      32
+    ],
+    "logicalCellMax": 54,
+    "referenceSelection": "data/pilot-reference-sets.json",
+    "referenceSelectionIsNewContent": false,
+    "firstBook": "Новые связи",
+    "secondBook": "Поле меняется"
+  },
+  "unknowns": [
+    {
+      "topic": "Human distinction/interest",
+      "check": "Телефон: контрастные одинаковые по объёму задачи и одна страница каждой темы; объяснение выбора, длительность, Undo/Hint, желание продолжить."
+    },
+    {
+      "topic": "Comfort at320×568/390×844",
+      "check": "Проверить поле и controls без уменьшения цифр, после row collapse, возврата и Undo."
+    },
+    {
+      "topic": "Seeds per minute",
+      "check": "Измерить на телефонных партиях; сохранять текущую формулу награды до отдельного решения."
+    }
+  ],
+  "constraints": [
+    "Old2400IDs/boards/proofs immutable.",
+    "Reference selection shares original done/session/reward identity.",
+    "New IDs only for genuinely new content.",
+    "No Add in notebook, no changed pair rules, no reactivation of paused help."
+  ],
+  "kitImpact": "REUSE; fourlocalResearchIds, no sourceFeatureIds of original games modified."
+}

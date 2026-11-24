@@ -1,0 +1,8086 @@
+{
+  "source": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "level": "PRECOMPUTED_DATA_PLUS_ACTUAL_CORE_REPLAY",
+  "runtime": "v24.22.3",
+  "counts": {
+    "totalCatalogue": 2400,
+    "shortScanned": 336,
+    "shortDefinition": {
+      "occupiedMin": 8,
+      "occupiedMax": 32,
+      "logicalMax": 54
+    },
+    "openingAtLeastOne": 169,
+    "compressionAtLeastOne": 96,
+    "earlyReadingAtLeastOne": 213,
+    "firstPolicyStuck": 73,
+    "lastPolicyStuck": 96,
+    "firstAndLastClear": 200
+  },
+  "profiles": [
+    {
+      "id": "book-v1-1",
+      "number": 1,
+      "occupied": 8,
+      "logical": 18,
+      "openingPairs": 6,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 4
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 4
+      },
+      "moves": 4,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-2",
+      "number": 2,
+      "occupied": 8,
+      "logical": 18,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 4
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 4
+      },
+      "moves": 4,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-3",
+      "number": 3,
+      "occupied": 10,
+      "logical": 18,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 5
+      },
+      "moves": 5,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 0
+    },
+    {
+      "id": "book-v1-4",
+      "number": 4,
+      "occupied": 10,
+      "logical": 18,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 5
+      },
+      "moves": 5,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 0
+    },
+    {
+      "id": "book-v1-5",
+      "number": 5,
+      "occupied": 12,
+      "logical": 18,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-6",
+      "number": 6,
+      "occupied": 12,
+      "logical": 18,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-7",
+      "number": 7,
+      "occupied": 14,
+      "logical": 27,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-8",
+      "number": 8,
+      "occupied": 14,
+      "logical": 27,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-9",
+      "number": 9,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 5,
+      "earlyReading": 3,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-10",
+      "number": 10,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 6
+      },
+      "moves": 8,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-11",
+      "number": 11,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-12",
+      "number": 12,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-13",
+      "number": 13,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-14",
+      "number": 14,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-15",
+      "number": 15,
+      "occupied": 22,
+      "logical": 36,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-16",
+      "number": 16,
+      "occupied": 22,
+      "logical": 36,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-17",
+      "number": 17,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-18",
+      "number": 18,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-19",
+      "number": 19,
+      "occupied": 26,
+      "logical": 45,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-20",
+      "number": 20,
+      "occupied": 26,
+      "logical": 45,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 10
+      },
+      "moves": 13,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-21",
+      "number": 21,
+      "occupied": 28,
+      "logical": 45,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 11
+      },
+      "moves": 14,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-22",
+      "number": 22,
+      "occupied": 28,
+      "logical": 45,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 11
+      },
+      "moves": 14,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-23",
+      "number": 23,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-24",
+      "number": 24,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 35,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "moves": 15,
+      "reading": 4,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-25",
+      "number": 25,
+      "occupied": 16,
+      "logical": 54,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-26",
+      "number": 26,
+      "occupied": 14,
+      "logical": 27,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-27",
+      "number": 27,
+      "occupied": 28,
+      "logical": 36,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-28",
+      "number": 28,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-29",
+      "number": 29,
+      "occupied": 28,
+      "logical": 54,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-30",
+      "number": 30,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-31",
+      "number": 31,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-32",
+      "number": 32,
+      "occupied": 32,
+      "logical": 36,
+      "openingPairs": 30,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "moves": 16,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-33",
+      "number": 33,
+      "occupied": 12,
+      "logical": 27,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 3
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 3
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-34",
+      "number": 34,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 8
+      },
+      "moves": 11,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-35",
+      "number": 35,
+      "occupied": 16,
+      "logical": 45,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-36",
+      "number": 36,
+      "occupied": 28,
+      "logical": 36,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-37",
+      "number": 37,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-38",
+      "number": 38,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 5,
+      "earlyReading": 4,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-39",
+      "number": 39,
+      "occupied": 20,
+      "logical": 45,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-40",
+      "number": 40,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-41",
+      "number": 41,
+      "occupied": 26,
+      "logical": 36,
+      "openingPairs": 28,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 11
+      },
+      "moves": 13,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-42",
+      "number": 42,
+      "occupied": 14,
+      "logical": 45,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-43",
+      "number": 43,
+      "occupied": 20,
+      "logical": 54,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 2,
+      "compressionLost": 1,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-44",
+      "number": 44,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-45",
+      "number": 45,
+      "occupied": 26,
+      "logical": 36,
+      "openingPairs": 33,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 16
+    },
+    {
+      "id": "book-v1-46",
+      "number": 46,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-47",
+      "number": 47,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 38,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "moves": 15,
+      "reading": 5,
+      "earlyReading": 3,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-48",
+      "number": 48,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-49",
+      "number": 49,
+      "occupied": 32,
+      "logical": 36,
+      "openingPairs": 31,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "moves": 16,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 12
+    },
+    {
+      "id": "book-v1-50",
+      "number": 50,
+      "occupied": 14,
+      "logical": 45,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-51",
+      "number": 51,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-52",
+      "number": 52,
+      "occupied": 14,
+      "logical": 54,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-53",
+      "number": 53,
+      "occupied": 24,
+      "logical": 45,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-54",
+      "number": 54,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 4
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-55",
+      "number": 55,
+      "occupied": 14,
+      "logical": 27,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-56",
+      "number": 56,
+      "occupied": 28,
+      "logical": 54,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 11
+      },
+      "moves": 14,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-57",
+      "number": 57,
+      "occupied": 28,
+      "logical": 45,
+      "openingPairs": 31,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-58",
+      "number": 58,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-59",
+      "number": 59,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-60",
+      "number": 60,
+      "occupied": 12,
+      "logical": 54,
+      "openingPairs": 4,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-61",
+      "number": 61,
+      "occupied": 18,
+      "logical": 54,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-62",
+      "number": 62,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-63",
+      "number": 63,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-64",
+      "number": 64,
+      "occupied": 14,
+      "logical": 45,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-65",
+      "number": 65,
+      "occupied": 18,
+      "logical": 54,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-66",
+      "number": 66,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-67",
+      "number": 67,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-68",
+      "number": 68,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-69",
+      "number": 69,
+      "occupied": 20,
+      "logical": 54,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-70",
+      "number": 70,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-71",
+      "number": 71,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-72",
+      "number": 72,
+      "occupied": 30,
+      "logical": 36,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "moves": 15,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-73",
+      "number": 73,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-74",
+      "number": 74,
+      "occupied": 26,
+      "logical": 54,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-75",
+      "number": 75,
+      "occupied": 18,
+      "logical": 36,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-76",
+      "number": 76,
+      "occupied": 16,
+      "logical": 36,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 5
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-77",
+      "number": 77,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 8
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-78",
+      "number": 78,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 4,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-79",
+      "number": 79,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 38,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "moves": 16,
+      "reading": 3,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-80",
+      "number": 80,
+      "occupied": 18,
+      "logical": 36,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-81",
+      "number": 81,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-82",
+      "number": 82,
+      "occupied": 22,
+      "logical": 45,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-83",
+      "number": 83,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-84",
+      "number": 84,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-85",
+      "number": 85,
+      "occupied": 28,
+      "logical": 36,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-86",
+      "number": 86,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-87",
+      "number": 87,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 30,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-88",
+      "number": 88,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 33,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-89",
+      "number": 89,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-90",
+      "number": 90,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 6
+      },
+      "moves": 9,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-91",
+      "number": 91,
+      "occupied": 12,
+      "logical": 27,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-92",
+      "number": 92,
+      "occupied": 14,
+      "logical": 54,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-93",
+      "number": 93,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 30,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 4,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-94",
+      "number": 94,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-95",
+      "number": 95,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-96",
+      "number": 96,
+      "occupied": 14,
+      "logical": 54,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-97",
+      "number": 97,
+      "occupied": 28,
+      "logical": 45,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-98",
+      "number": 98,
+      "occupied": 32,
+      "logical": 36,
+      "openingPairs": 37,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "moves": 16,
+      "reading": 4,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-99",
+      "number": 99,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-100",
+      "number": 100,
+      "occupied": 16,
+      "logical": 54,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-101",
+      "number": 101,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 7
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-102",
+      "number": 102,
+      "occupied": 16,
+      "logical": 54,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-103",
+      "number": 103,
+      "occupied": 24,
+      "logical": 45,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 4,
+      "earlyReading": 1,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 12
+    },
+    {
+      "id": "book-v1-104",
+      "number": 104,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 7
+      },
+      "moves": 10,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-105",
+      "number": 105,
+      "occupied": 12,
+      "logical": 27,
+      "openingPairs": 4,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-106",
+      "number": 106,
+      "occupied": 24,
+      "logical": 54,
+      "openingPairs": 25,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-107",
+      "number": 107,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 2,
+      "compressionLost": 1,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-108",
+      "number": 108,
+      "occupied": 28,
+      "logical": 36,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "moves": 14,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-109",
+      "number": 109,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 21,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-110",
+      "number": 110,
+      "occupied": 20,
+      "logical": 54,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-111",
+      "number": 111,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 6,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-112",
+      "number": 112,
+      "occupied": 22,
+      "logical": 45,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 8
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-113",
+      "number": 113,
+      "occupied": 28,
+      "logical": 54,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 4,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-114",
+      "number": 114,
+      "occupied": 26,
+      "logical": 27,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 11
+      },
+      "moves": 13,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-115",
+      "number": 115,
+      "occupied": 16,
+      "logical": 36,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-116",
+      "number": 116,
+      "occupied": 20,
+      "logical": 45,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-117",
+      "number": 117,
+      "occupied": 28,
+      "logical": 54,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "moves": 14,
+      "reading": 5,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-118",
+      "number": 118,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "moves": 9,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-119",
+      "number": 119,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-120",
+      "number": 120,
+      "occupied": 20,
+      "logical": 45,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 3,
+      "earlyReading": 3,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-121",
+      "number": 121,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 31,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 13
+      },
+      "moves": 16,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-122",
+      "number": 122,
+      "occupied": 28,
+      "logical": 36,
+      "openingPairs": 21,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "moves": 14,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-123",
+      "number": 123,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-124",
+      "number": 124,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-125",
+      "number": 125,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-126",
+      "number": 126,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-127",
+      "number": 127,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-128",
+      "number": 128,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 25,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-129",
+      "number": 129,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "moves": 16,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-130",
+      "number": 130,
+      "occupied": 30,
+      "logical": 36,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 12
+      },
+      "moves": 15,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-131",
+      "number": 131,
+      "occupied": 26,
+      "logical": 54,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 11
+      },
+      "moves": 13,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-132",
+      "number": 132,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 6
+      },
+      "moves": 8,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-133",
+      "number": 133,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 6,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-134",
+      "number": 134,
+      "occupied": 14,
+      "logical": 45,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-135",
+      "number": 135,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 28,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-136",
+      "number": 136,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 6
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-137",
+      "number": 137,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-138",
+      "number": 138,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 6,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 3
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-139",
+      "number": 139,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-140",
+      "number": 140,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 8
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-141",
+      "number": 141,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-142",
+      "number": 142,
+      "occupied": 14,
+      "logical": 54,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-143",
+      "number": 143,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "moves": 16,
+      "reading": 5,
+      "earlyReading": 4,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-144",
+      "number": 144,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-145",
+      "number": 145,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 25,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-146",
+      "number": 146,
+      "occupied": 24,
+      "logical": 54,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-147",
+      "number": 147,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-148",
+      "number": 148,
+      "occupied": 12,
+      "logical": 27,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-149",
+      "number": 149,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-150",
+      "number": 150,
+      "occupied": 28,
+      "logical": 54,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "moves": 14,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-151",
+      "number": 151,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 8
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-152",
+      "number": 152,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-153",
+      "number": 153,
+      "occupied": 20,
+      "logical": 54,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-154",
+      "number": 154,
+      "occupied": 26,
+      "logical": 27,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 10
+      },
+      "moves": 13,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 13
+    },
+    {
+      "id": "book-v1-155",
+      "number": 155,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 8
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-156",
+      "number": 156,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "moves": 16,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-157",
+      "number": 157,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-158",
+      "number": 158,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 29,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 5,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 12
+    },
+    {
+      "id": "book-v1-159",
+      "number": 159,
+      "occupied": 28,
+      "logical": 36,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-160",
+      "number": 160,
+      "occupied": 24,
+      "logical": 45,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-161",
+      "number": 161,
+      "occupied": 14,
+      "logical": 45,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 4
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-162",
+      "number": 162,
+      "occupied": 30,
+      "logical": 36,
+      "openingPairs": 21,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 10,
+        "moves": 10
+      },
+      "moves": 15,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-163",
+      "number": 163,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-164",
+      "number": 164,
+      "occupied": 24,
+      "logical": 54,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-165",
+      "number": 165,
+      "occupied": 20,
+      "logical": 45,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-166",
+      "number": 166,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-167",
+      "number": 167,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 25,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-168",
+      "number": 168,
+      "occupied": 32,
+      "logical": 54,
+      "openingPairs": 27,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "moves": 16,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-169",
+      "number": 169,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 6
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-170",
+      "number": 170,
+      "occupied": 32,
+      "logical": 36,
+      "openingPairs": 25,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "moves": 16,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-171",
+      "number": 171,
+      "occupied": 32,
+      "logical": 54,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 13
+      },
+      "moves": 16,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 2,
+      "compressionLost": 1,
+      "totalNew": 15
+    },
+    {
+      "id": "book-v1-172",
+      "number": 172,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-173",
+      "number": 173,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-174",
+      "number": 174,
+      "occupied": 26,
+      "logical": 45,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-175",
+      "number": 175,
+      "occupied": 20,
+      "logical": 54,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 2,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-176",
+      "number": 176,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 29,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-177",
+      "number": 177,
+      "occupied": 16,
+      "logical": 36,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-178",
+      "number": 178,
+      "occupied": 24,
+      "logical": 45,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-179",
+      "number": 179,
+      "occupied": 16,
+      "logical": 54,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 5
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-180",
+      "number": 180,
+      "occupied": 14,
+      "logical": 27,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-181",
+      "number": 181,
+      "occupied": 12,
+      "logical": 27,
+      "openingPairs": 6,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 4
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-182",
+      "number": 182,
+      "occupied": 32,
+      "logical": 54,
+      "openingPairs": 27,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 13
+      },
+      "moves": 16,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-183",
+      "number": 183,
+      "occupied": 22,
+      "logical": 45,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-184",
+      "number": 184,
+      "occupied": 16,
+      "logical": 36,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-185",
+      "number": 185,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-186",
+      "number": 186,
+      "occupied": 32,
+      "logical": 54,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "moves": 16,
+      "reading": 3,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-187",
+      "number": 187,
+      "occupied": 20,
+      "logical": 45,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 7
+      },
+      "moves": 10,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-188",
+      "number": 188,
+      "occupied": 28,
+      "logical": 36,
+      "openingPairs": 29,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "moves": 14,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-189",
+      "number": 189,
+      "occupied": 12,
+      "logical": 27,
+      "openingPairs": 2,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 4
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-190",
+      "number": 190,
+      "occupied": 26,
+      "logical": 54,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 10
+      },
+      "moves": 13,
+      "reading": 4,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-191",
+      "number": 191,
+      "occupied": 22,
+      "logical": 36,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-192",
+      "number": 192,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 4
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-193",
+      "number": 193,
+      "occupied": 24,
+      "logical": 54,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-194",
+      "number": 194,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-195",
+      "number": 195,
+      "occupied": 30,
+      "logical": 36,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 12
+      },
+      "moves": 15,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 14
+    },
+    {
+      "id": "book-v1-196",
+      "number": 196,
+      "occupied": 26,
+      "logical": 45,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 10
+      },
+      "moves": 13,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-197",
+      "number": 197,
+      "occupied": 16,
+      "logical": 54,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-198",
+      "number": 198,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-199",
+      "number": 199,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 21,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-200",
+      "number": 200,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 21,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "moves": 16,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-201",
+      "number": 201,
+      "occupied": 22,
+      "logical": 36,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 7
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-202",
+      "number": 202,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-203",
+      "number": 203,
+      "occupied": 16,
+      "logical": 54,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-204",
+      "number": 204,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 6
+      },
+      "moves": 9,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-205",
+      "number": 205,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-206",
+      "number": 206,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-207",
+      "number": 207,
+      "occupied": 24,
+      "logical": 54,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 4,
+      "earlyReading": 3,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-208",
+      "number": 208,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-209",
+      "number": 209,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-210",
+      "number": 210,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 13
+      },
+      "moves": 16,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-211",
+      "number": 211,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-212",
+      "number": 212,
+      "occupied": 12,
+      "logical": 54,
+      "openingPairs": 6,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-213",
+      "number": 213,
+      "occupied": 24,
+      "logical": 45,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 12
+    },
+    {
+      "id": "book-v1-214",
+      "number": 214,
+      "occupied": 16,
+      "logical": 36,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-215",
+      "number": 215,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-216",
+      "number": 216,
+      "occupied": 12,
+      "logical": 54,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 2,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-217",
+      "number": 217,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 11
+      },
+      "moves": 15,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-218",
+      "number": 218,
+      "occupied": 24,
+      "logical": 36,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "moves": 12,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-219",
+      "number": 219,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 27,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-220",
+      "number": 220,
+      "occupied": 24,
+      "logical": 54,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-221",
+      "number": 221,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 27,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 6,
+      "earlyReading": 3,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 13
+    },
+    {
+      "id": "book-v1-222",
+      "number": 222,
+      "occupied": 14,
+      "logical": 27,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 5
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-223",
+      "number": 223,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-224",
+      "number": 224,
+      "occupied": 16,
+      "logical": 45,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-225",
+      "number": 225,
+      "occupied": 16,
+      "logical": 45,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-226",
+      "number": 226,
+      "occupied": 26,
+      "logical": 27,
+      "openingPairs": 25,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 13
+    },
+    {
+      "id": "book-v1-227",
+      "number": 227,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-228",
+      "number": 228,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 31,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "moves": 15,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 11
+    },
+    {
+      "id": "book-v1-229",
+      "number": 229,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-230",
+      "number": 230,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "moves": 12,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-231",
+      "number": 231,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-232",
+      "number": 232,
+      "occupied": 16,
+      "logical": 36,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-233",
+      "number": 233,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-234",
+      "number": 234,
+      "occupied": 32,
+      "logical": 54,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "moves": 16,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 15
+    },
+    {
+      "id": "book-v1-235",
+      "number": 235,
+      "occupied": 16,
+      "logical": 45,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-236",
+      "number": 236,
+      "occupied": 30,
+      "logical": 36,
+      "openingPairs": 32,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 12
+    },
+    {
+      "id": "book-v1-237",
+      "number": 237,
+      "occupied": 26,
+      "logical": 27,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-238",
+      "number": 238,
+      "occupied": 12,
+      "logical": 54,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-239",
+      "number": 239,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 5
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-240",
+      "number": 240,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 5
+      },
+      "moves": 7,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-241",
+      "number": 241,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 4,
+      "earlyReading": 3,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-242",
+      "number": 242,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-243",
+      "number": 243,
+      "occupied": 26,
+      "logical": 54,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 4,
+      "earlyReading": 3,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-244",
+      "number": 244,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-245",
+      "number": 245,
+      "occupied": 32,
+      "logical": 36,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "moves": 16,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 13
+    },
+    {
+      "id": "book-v1-246",
+      "number": 246,
+      "occupied": 20,
+      "logical": 45,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-247",
+      "number": 247,
+      "occupied": 18,
+      "logical": 54,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-248",
+      "number": 248,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 8
+      },
+      "moves": 11,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-249",
+      "number": 249,
+      "occupied": 18,
+      "logical": 36,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-250",
+      "number": 250,
+      "occupied": 24,
+      "logical": 45,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-251",
+      "number": 251,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-252",
+      "number": 252,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-253",
+      "number": 253,
+      "occupied": 28,
+      "logical": 45,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 4,
+      "earlyReading": 2,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-254",
+      "number": 254,
+      "occupied": 26,
+      "logical": 36,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-255",
+      "number": 255,
+      "occupied": 12,
+      "logical": 27,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 0
+    },
+    {
+      "id": "book-v1-256",
+      "number": 256,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-257",
+      "number": 257,
+      "occupied": 22,
+      "logical": 45,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-258",
+      "number": 258,
+      "occupied": 18,
+      "logical": 36,
+      "openingPairs": 28,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 4,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-259",
+      "number": 259,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-260",
+      "number": 260,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 2,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-261",
+      "number": 261,
+      "occupied": 28,
+      "logical": 54,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "moves": 14,
+      "reading": 4,
+      "earlyReading": 3,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-262",
+      "number": 262,
+      "occupied": 14,
+      "logical": 27,
+      "openingPairs": 6,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-263",
+      "number": 263,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 1
+    },
+    {
+      "id": "book-v1-264",
+      "number": 264,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 12
+      },
+      "moves": 16,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 12
+    },
+    {
+      "id": "book-v1-265",
+      "number": 265,
+      "occupied": 16,
+      "logical": 54,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 6
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-266",
+      "number": 266,
+      "occupied": 14,
+      "logical": 27,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 5
+      },
+      "moves": 7,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-267",
+      "number": 267,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-268",
+      "number": 268,
+      "occupied": 26,
+      "logical": 45,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-269",
+      "number": 269,
+      "occupied": 28,
+      "logical": 54,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 12
+      },
+      "moves": 14,
+      "reading": 2,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-270",
+      "number": 270,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-271",
+      "number": 271,
+      "occupied": 26,
+      "logical": 45,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 11
+      },
+      "moves": 13,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-272",
+      "number": 272,
+      "occupied": 18,
+      "logical": 36,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-273",
+      "number": 273,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-274",
+      "number": 274,
+      "occupied": 12,
+      "logical": 54,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-275",
+      "number": 275,
+      "occupied": 22,
+      "logical": 45,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-276",
+      "number": 276,
+      "occupied": 32,
+      "logical": 36,
+      "openingPairs": 41,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "moves": 16,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-277",
+      "number": 277,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-278",
+      "number": 278,
+      "occupied": 12,
+      "logical": 54,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-279",
+      "number": 279,
+      "occupied": 30,
+      "logical": 45,
+      "openingPairs": 27,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-280",
+      "number": 280,
+      "occupied": 16,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-281",
+      "number": 281,
+      "occupied": 12,
+      "logical": 36,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-282",
+      "number": 282,
+      "occupied": 16,
+      "logical": 45,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-283",
+      "number": 283,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 12
+      },
+      "moves": 15,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 12
+    },
+    {
+      "id": "book-v1-284",
+      "number": 284,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-285",
+      "number": 285,
+      "occupied": 20,
+      "logical": 36,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 3,
+      "earlyReading": 3,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-286",
+      "number": 286,
+      "occupied": 22,
+      "logical": 45,
+      "openingPairs": 17,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-287",
+      "number": 287,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 13
+      },
+      "moves": 15,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-288",
+      "number": 288,
+      "occupied": 18,
+      "logical": 27,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-289",
+      "number": 289,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 1,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-290",
+      "number": 290,
+      "occupied": 14,
+      "logical": 45,
+      "openingPairs": 14,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-291",
+      "number": 291,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-292",
+      "number": 292,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 5,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-293",
+      "number": 293,
+      "occupied": 16,
+      "logical": 45,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-294",
+      "number": 294,
+      "occupied": 30,
+      "logical": 36,
+      "openingPairs": 36,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-295",
+      "number": 295,
+      "occupied": 26,
+      "logical": 27,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 9
+      },
+      "moves": 13,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-296",
+      "number": 296,
+      "occupied": 24,
+      "logical": 54,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 3,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-297",
+      "number": 297,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-298",
+      "number": 298,
+      "occupied": 30,
+      "logical": 36,
+      "openingPairs": 30,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 11
+      },
+      "moves": 15,
+      "reading": 4,
+      "earlyReading": 3,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 15
+    },
+    {
+      "id": "book-v1-299",
+      "number": 299,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-300",
+      "number": 300,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 32,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-301",
+      "number": 301,
+      "occupied": 16,
+      "logical": 45,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-302",
+      "number": 302,
+      "occupied": 28,
+      "logical": 36,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 14
+      },
+      "moves": 14,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-303",
+      "number": 303,
+      "occupied": 20,
+      "logical": 27,
+      "openingPairs": 21,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 10
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-304",
+      "number": 304,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 2,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-305",
+      "number": 305,
+      "occupied": 14,
+      "logical": 45,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-306",
+      "number": 306,
+      "occupied": 18,
+      "logical": 36,
+      "openingPairs": 13,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-307",
+      "number": 307,
+      "occupied": 12,
+      "logical": 27,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-308",
+      "number": 308,
+      "occupied": 30,
+      "logical": 54,
+      "openingPairs": 29,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 15
+      },
+      "moves": 15,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-309",
+      "number": 309,
+      "occupied": 22,
+      "logical": 45,
+      "openingPairs": 16,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 9
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-310",
+      "number": 310,
+      "occupied": 14,
+      "logical": 36,
+      "openingPairs": 8,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 7
+      },
+      "moves": 7,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-311",
+      "number": 311,
+      "occupied": 16,
+      "logical": 54,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 6
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-312",
+      "number": 312,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 26,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-313",
+      "number": 313,
+      "occupied": 22,
+      "logical": 36,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-314",
+      "number": 314,
+      "occupied": 26,
+      "logical": 45,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 10
+      },
+      "moves": 13,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 10
+    },
+    {
+      "id": "book-v1-315",
+      "number": 315,
+      "occupied": 24,
+      "logical": 54,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-316",
+      "number": 316,
+      "occupied": 22,
+      "logical": 27,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-317",
+      "number": 317,
+      "occupied": 22,
+      "logical": 36,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 9
+      },
+      "moves": 11,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 4,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 14
+    },
+    {
+      "id": "book-v1-318",
+      "number": 318,
+      "occupied": 12,
+      "logical": 45,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 0,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-319",
+      "number": 319,
+      "occupied": 18,
+      "logical": 54,
+      "openingPairs": 11,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-320",
+      "number": 320,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 6,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-321",
+      "number": 321,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 10
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    },
+    {
+      "id": "book-v1-322",
+      "number": 322,
+      "occupied": 12,
+      "logical": 54,
+      "openingPairs": 7,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 4
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 6
+      },
+      "moves": 6,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 2,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-323",
+      "number": 323,
+      "occupied": 20,
+      "logical": 45,
+      "openingPairs": 12,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 7
+      },
+      "moves": 10,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-324",
+      "number": 324,
+      "occupied": 18,
+      "logical": 36,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 5
+    },
+    {
+      "id": "book-v1-325",
+      "number": 325,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 21,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-326",
+      "number": 326,
+      "occupied": 22,
+      "logical": 54,
+      "openingPairs": 18,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 3,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 0,
+      "totalNew": 7
+    },
+    {
+      "id": "book-v1-327",
+      "number": 327,
+      "occupied": 26,
+      "logical": 45,
+      "openingPairs": 19,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 13
+      },
+      "moves": 13,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-328",
+      "number": 328,
+      "occupied": 32,
+      "logical": 36,
+      "openingPairs": 31,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 12
+      },
+      "moves": 16,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 9
+    },
+    {
+      "id": "book-v1-329",
+      "number": 329,
+      "occupied": 16,
+      "logical": 27,
+      "openingPairs": 10,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 8
+      },
+      "moves": 8,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-330",
+      "number": 330,
+      "occupied": 32,
+      "logical": 54,
+      "openingPairs": 22,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 14
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 16
+      },
+      "moves": 16,
+      "reading": 3,
+      "earlyReading": 1,
+      "openingEpisodes": 3,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-331",
+      "number": 331,
+      "occupied": 22,
+      "logical": 36,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 4,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 6
+    },
+    {
+      "id": "book-v1-332",
+      "number": 332,
+      "occupied": 32,
+      "logical": 45,
+      "openingPairs": 23,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 8,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 12,
+        "moves": 10
+      },
+      "moves": 16,
+      "reading": 4,
+      "earlyReading": 2,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 1,
+      "compressionLost": 1,
+      "totalNew": 13
+    },
+    {
+      "id": "book-v1-333",
+      "number": 333,
+      "occupied": 18,
+      "logical": 54,
+      "openingPairs": 9,
+      "firstPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 6
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 0,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 3
+    },
+    {
+      "id": "book-v1-334",
+      "number": 334,
+      "occupied": 24,
+      "logical": 27,
+      "openingPairs": 15,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 12
+      },
+      "lastPolicy": {
+        "cleared": false,
+        "remaining": 6,
+        "moves": 9
+      },
+      "moves": 12,
+      "reading": 1,
+      "earlyReading": 0,
+      "openingEpisodes": 2,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 8
+    },
+    {
+      "id": "book-v1-335",
+      "number": 335,
+      "occupied": 22,
+      "logical": 36,
+      "openingPairs": 24,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 11
+      },
+      "moves": 11,
+      "reading": 1,
+      "earlyReading": 1,
+      "openingEpisodes": 0,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 2
+    },
+    {
+      "id": "book-v1-336",
+      "number": 336,
+      "occupied": 18,
+      "logical": 45,
+      "openingPairs": 20,
+      "firstPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "lastPolicy": {
+        "cleared": true,
+        "remaining": 0,
+        "moves": 9
+      },
+      "moves": 9,
+      "reading": 2,
+      "earlyReading": 1,
+      "openingEpisodes": 1,
+      "compressionEpisodes": 0,
+      "compressionLost": 0,
+      "totalNew": 4
+    }
+  ]
+}

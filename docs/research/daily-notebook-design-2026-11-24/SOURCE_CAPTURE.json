@@ -1,0 +1,140 @@
+{
+  "schema": "seeds-content-design-source-capture-v1",
+  "date": "2026-11-24",
+  "timezone": "Asia/Yekaterinburg",
+  "checkedAgainUtc": "2026-11-23T19:33:13Z",
+  "game": "DanilaH/seeds-bits",
+  "kit": "DanilaH/mini-games-kit",
+  "kitRequestedStartingRevision": "691bad84a4d99ab183a8213fd8108a74de32d0fe",
+  "kitMain": "5cac32b0851c80bdff1d61069b8524b9e42170e1",
+  "gameWorkingHead": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+  "researchBase": "861e669484a4a29968a9dc25168b37dc62f6f57e",
+  "branches": [
+    {
+      "name": "feat/monetization-assists-20261113",
+      "sha": "7fee610c981eb5f9ac77cbccf4a9c7b5cb32877b"
+    },
+    {
+      "name": "main",
+      "sha": "4f7a8f93e044cc5eb5f4dadceb8a0458b555cf08"
+    },
+    {
+      "name": "release/nashstore-1.1.3",
+      "sha": "7537d9cf6f07ca1300a78d184e3bfff53e0dd7ff"
+    },
+    {
+      "name": "release/rustore-1.0.0",
+      "sha": "86d950b970a69e5dec3ebc269075143a1c28f94a"
+    },
+    {
+      "name": "release/rustore-1.1.0",
+      "sha": "e92bd4915d677caf47f74944402c82d48b483d9c"
+    },
+    {
+      "name": "release/rustore-1.1.2",
+      "sha": "746277f761a09d24236219aca1b1edb2354c466d"
+    },
+    {
+      "name": "research/seeds-first-session-20261120",
+      "sha": "df9ff5c3df8b017803e2ff924c2812a5efc530ac"
+    },
+    {
+      "name": "research/seeds-generator-audit-20261123",
+      "sha": "861e669484a4a29968a9dc25168b37dc62f6f57e"
+    },
+    {
+      "name": "research/seeds-generator-cross-project-20261123",
+      "sha": "bbeaea43c302b9f99ac8aa7598bc9e69e9428068"
+    }
+  ],
+  "openPullRequests": [
+    {
+      "number": 16,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/16",
+      "title": "Аудит генератора: приёмка 12082 и база для дейликов/тетрадей",
+      "head": "861e669484a4a29968a9dc25168b37dc62f6f57e",
+      "base": "research/seeds-first-session-20261120"
+    },
+    {
+      "number": 15,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/15",
+      "title": "Исследование выдачи: проверка структуры, выбора и плотных 45/81",
+      "head": "bbeaea43c302b9f99ac8aa7598bc9e69e9428068",
+      "base": "research/seeds-first-session-20261120"
+    },
+    {
+      "number": 11,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/11",
+      "title": "«Семечки» — независимый аудит preview 12073 по 14 экранам",
+      "head": "4f4b3f1fa1c3d91cf70ec52237146a8456350f48",
+      "base": "research/seeds-first-session-20261120"
+    },
+    {
+      "number": 9,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/9",
+      "title": "Первый запуск и редизайн игровых экранов «Семечек» · preview 12073",
+      "head": "df9ff5c3df8b017803e2ff924c2812a5efc530ac",
+      "base": "research/seeds-layout-audit-20261120"
+    },
+    {
+      "number": 8,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/8",
+      "title": "Исправить скачки обучения, дальнюю подсказку и переполнения при крупном тексте",
+      "head": "2e7f30f5407aa00ec6ec766ec0b5f0a166eec338",
+      "base": "research/seeds-classic-add-20261120"
+    },
+    {
+      "number": 7,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/7",
+      "title": "Классика: объяснять добавление, после которого пары не появились",
+      "head": "3eb4acd8e9b57eb0bdd528c96909444df8fc13fd",
+      "base": "feat/monetization-assists-20261113"
+    },
+    {
+      "number": 6,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/6",
+      "title": "Keep game actions visible and distinguish task, page and notebook completion",
+      "head": "f9cb0a61dd1f6011aa825e494740294a6b36e73f",
+      "base": "qa/classic-difficulty-20261112"
+    },
+    {
+      "number": 4,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/4",
+      "title": "Add generated classic difficulty and compact adaptive banners",
+      "head": "8046a7da31470d248a30ad467453b3745827178f",
+      "base": "qa/jar-spill-20261112"
+    },
+    {
+      "number": 3,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/3",
+      "title": "Vary classic starts, unify icons and celebrate full jars",
+      "head": "4e35473eb49429eebb56131e374a201cacd21aff",
+      "base": "qa/product-audit-20261111"
+    },
+    {
+      "number": 2,
+      "url": "https://github.com/DanilaH/seeds-bits/pull/2",
+      "title": "Persist completed results before analytics and fix clipped compact screens",
+      "head": "c7a91580d134071ca2ae1799d5754922751f7b5b",
+      "base": "main"
+    }
+  ],
+  "read": [
+    "research/games/seeds/README.md (kit)",
+    "AGENTS.md (both repositories)",
+    "docs/PROJECT_DECISIONS.md",
+    "docs/STATUS.md",
+    "docs/help-pause-2026-11-13.md",
+    "docs/agent-workflows/RESEARCHER_CHAT_BOOTSTRAP.md",
+    "docs/agent-workflows/REFERENCE_PROTOCOL.md",
+    "docs/agent-workflows/REFERENCE_PORTING_FRAMEWORK.md",
+    "docs/agent-workflows/TASK_ROUTER.md",
+    "docs/content-quality/README.md (kit)"
+  ],
+  "sourceInventory": {
+    "count": 36,
+    "changed": false,
+    "pinnedRef": "0e4cb526883a30ab52f42067669665a31c1ee587"
+  },
+  "scope": "Research and docs-only proposal. All product evidence pinned; no new original APK/runtime observation, product implementation, calendar assignment or economy change."
+}
