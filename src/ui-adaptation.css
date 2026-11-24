@@ -832,7 +832,7 @@
   }
 }
 
-/* Hints and save recovery never float over cells or grow the playing chrome. */
+/* Keep hints and save recovery outside the field. */
 .status-wrap #hint-jump {
   position: static;
   transform: none;
@@ -907,10 +907,10 @@
   display: none !important;
 }
 @media (orientation: portrait), (max-width: 539px) {
+  /* Reserve two lines for ordinary copy, with room to grow for longer guidance. */
   .game:not(:has(#lesson:not([hidden]))) .status-wrap {
-    flex: 0 0 84px;
-    height: 84px;
-    min-height: 0;
+    flex: 0 0 auto;
+    min-height: 48px;
     max-height: 84px;
     overflow: auto;
     justify-content: safe flex-start;

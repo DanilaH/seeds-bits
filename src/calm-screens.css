@@ -671,7 +671,7 @@
 #no-pairs-title {
   width: 100%;
   color: var(--ink);
-  font-size: 14px;
+  font-size: 15px;
 }
 .game:has(#no-pairs-title:not([hidden])) #status {
   min-height: 0;

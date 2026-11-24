@@ -656,6 +656,16 @@ $("win-stats").after(resultAssistance);
 const boardView = new BoardView($("board"));
 const dialog = $<HTMLDialogElement>("dialog"),
   viewport = $("viewport");
+function updateBoardEdges() {
+  const limit = viewport.scrollHeight - viewport.clientHeight;
+  const top = viewport.scrollTop;
+  // Avoid a fade on an edge reached to within WebView scroll rounding.
+  viewport.toggleAttribute("data-scroll-above", limit > 1 && top > 1);
+  viewport.toggleAttribute("data-scroll-below", limit > 1 && limit - top > 1);
+}
+const boardEdgeObserver = new ResizeObserver(updateBoardEdges);
+boardEdgeObserver.observe(viewport);
+boardEdgeObserver.observe($("board-wrap"));
 const calendarActions = document.createElement("div");
 calendarActions.id = "calendar-actions";
 calendarActions.hidden = true;
@@ -3254,6 +3264,7 @@ dialog.addEventListener("cancel", (e) => {
 });
 let scrollTimer: ReturnType<typeof setTimeout>;
 viewport.addEventListener("scroll", () => {
+  updateBoardEdges();
   if (pairTrace) clearPairFeedback();
   updateJump();
   clearTimeout(scrollTimer);

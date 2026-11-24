@@ -463,6 +463,9 @@ return (${code})(SeedsClassicQA);})()`;
   const left=n=>`document.querySelector("#remaining").textContent==="${n}"`;
   const depth=()=>ui.evaluate(`(()=>{const v=document.querySelector("#viewport");
     return {w:innerWidth,h:innerHeight,clientHeight:v.clientHeight,scrollHeight:v.scrollHeight,scroll:v.scrollTop};})()`);
+  const edgeState=(above,below)=>`(()=>{const v=document.querySelector("#viewport");
+    return v.hasAttribute("data-scroll-above")===${above} && v.hasAttribute("data-scroll-below")===${below}
+      && (getComputedStyle(v).maskImage!=="none")===${above||below};})()`;
   const timing=[];
   let geometry, savedScroll, expertCount;
   const generated = [];
@@ -490,6 +493,7 @@ return (${code})(SeedsClassicQA);})()`;
         assert(counts[level].includes(count));
         assert([0,holes[level]].includes(board.length-count));
         await ui.until(left(count));
+        if(level===0) await ui.until(edgeState(false,false));
         if (!seen.has(count)) {
           await ui.until("!document.getAnimations().some(a=>a.id==='board-entrance'&&a.playState==='running')");
           shot(`classic-${count}-320-dark`);
@@ -512,8 +516,19 @@ return (${code})(SeedsClassicQA);})()`;
     const reserved=await depth();
     geometry={natural,reserved,realBannerReserve:reservesBanner};
     assert(reserved.scrollHeight>reserved.clientHeight,`Expert is not scrollable with the short reserved viewport: ${JSON.stringify(reserved)}`);
+    await ui.until(edgeState(false,true));
+    const statusMetrics=await ui.evaluate(`(() => {
+      const copy=document.querySelector("#status");
+      return {height:copy.closest(".status-wrap").getBoundingClientRect().height,font:getComputedStyle(copy).fontSize};
+    })()`);
+    assert.deepEqual(statusMetrics,{height:48,font:"14px"});
+    shot("classic-scroll-top");
+    await ui.evaluate(`(() => { const v=document.querySelector("#viewport"); v.scrollTop=(v.scrollHeight-v.clientHeight)/2; })()`);
+    await ui.until(edgeState(true,true));
+    shot("classic-scroll-middle");
     await ui.swipeBoardUp();
-    await ui.until("document.querySelector('#viewport').scrollTop>0");
+    await ui.until(edgeState(true,false));
+    shot("classic-scroll-bottom");
     const bottomPair=await ui.evaluate(withGenerator(`({pairs}) => pairs(${JSON.stringify(savedExpert)})
       .reverse().find(({a,b})=> a>=54 && [a,b].every(i=>{
         const r=document.querySelector('#board button[data-index="'+i+'"]').getBoundingClientRect();
@@ -563,7 +578,7 @@ return (${code})(SeedsClassicQA);})()`;
     if(geometry.realBannerReserve)assert(Math.abs(restoredScroll-savedScroll)<=1,"Lost Expert scroll after restart");
     await resumed.tap("#undo");
     await resumed.until(left(expertCount));
-    return {timing,generated,geometry,scrollRestore:{before:savedScroll,after:restoredScroll,realReserve:geometry.realBannerReserve},
+    return {timing,generated,geometry,scrollEdges:true,scrollRestore:{before:savedScroll,after:restoredScroll,realReserve:geometry.realBannerReserve},
       physicalPhone:false,viewport320:true,legacy27Undo:true,legacyWallet:7,
       bottomTouch:true,undo:true,restartAndContinue:true,
       webview:adb("shell","dumpsys","webviewupdate") .split("\n").find(x=>x.includes("Current WebView package"))};

@@ -127,6 +127,21 @@ header {
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
 }
+.game:not(.is-result) > #viewport:is([data-scroll-above], [data-scroll-below]) {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--scroll-fade-top, 0px),
+    black calc(100% - var(--scroll-fade-bottom, 0px)),
+    transparent
+  );
+}
+#viewport[data-scroll-above] {
+  --scroll-fade-top: min(16px, 18%);
+}
+#viewport[data-scroll-below] {
+  --scroll-fade-bottom: min(16px, 18%);
+}
 #board-wrap {
   position: relative;
 }

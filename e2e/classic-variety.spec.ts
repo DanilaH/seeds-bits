@@ -296,6 +296,11 @@ test("Expert keeps its scroll, move and Undo after restarting above a 50px banne
   const original = await boot(page, 3);
   await page.locator("#resume").click();
   const viewport = page.locator("#viewport");
+  const edgeState = () => viewport.evaluate(e => [
+    e.hasAttribute("data-scroll-above"),
+    e.hasAttribute("data-scroll-below"),
+    getComputedStyle(e).maskImage !== "none",
+  ]);
   const regular = await viewport.evaluate(e => [e.clientHeight, e.scrollHeight]);
   await page.evaluate(() => document.documentElement.classList.add("has-mobile-ads"));
   await page.addInitScript(() => {
@@ -305,7 +310,13 @@ test("Expert keeps its scroll, move and Undo after restarting above a 50px banne
   });
   const reserved = await viewport.evaluate(e => [e.clientHeight, e.scrollHeight]);
   expect(reserved[1]).toBeGreaterThan(reserved[0]);
+  await expect(page.locator(".status-wrap")).toHaveCSS("height", "48px");
+  await expect(page.locator("#status")).toHaveCSS("font-size", "14px");
+  await expect.poll(edgeState).toEqual([false, true, true]);
+  await viewport.evaluate(e => e.scrollTop = (e.scrollHeight - e.clientHeight) / 2);
+  await expect.poll(edgeState).toEqual([true, true, true]);
   await viewport.evaluate(e => e.scrollTop = e.scrollHeight);
+  await expect.poll(edgeState).toEqual([true, false, true]);
   const board = original.sessions.classic.current.board;
   const count = occupied(board);
   const visible = await page.locator("#board").evaluate(board =>
@@ -331,6 +342,8 @@ test("Expert keeps its scroll, move and Undo after restarting above a 50px banne
   await test.info().attach("viewport", {
     body: JSON.stringify({ regular, reserved }), contentType: "application/json",
   });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(edgeState).toEqual([false, false, false]);
 });
 
 test("Expert Add copies the certified remainder, saves it and preserves Undo on reload", async ({ page }) => {
