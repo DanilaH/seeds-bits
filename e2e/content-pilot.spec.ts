@@ -26,7 +26,7 @@ test("themed books visible from normal menu, real move, reload, Undo, next task"
   await page.locator('#board button[data-index="'+a+'"]').click();
   await page.locator('#board button[data-index="'+b+'"]').click();
   await expect(page.locator("#remaining")).toHaveText(String(occupied(task.board)-2));
-  await expect.poll(()=>page.evaluate(k=>{const p=JSON.parse(localStorage.getItem(k)!);return [p.version,p.sessions[p.active].current.moves]},key)).toEqual([7,1]);
+  await expect.poll(()=>page.evaluate(k=>{const p=JSON.parse(localStorage.getItem(k)!);return [p.version,p.sessions[p.active].current.moves]},key)).toEqual([8,1]);
   await page.reload();
   await page.locator("#resume").click();
   await expect(page.locator("#remaining")).toHaveText(String(occupied(task.board)-2));

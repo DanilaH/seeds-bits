@@ -906,6 +906,23 @@
       },
       "nextAction": "Full CI and historical catalogue comparison; browser reload, calendar alias and reward checks; Android preview physical phone acceptance. Keep branch separate until green. No release/publication.",
       "kitImpact": "REUSE fixed content, explicit versioned IDs and durable reward identity."
+    },
+    {
+      "id": "seeds-content-v4-20261124",
+      "sourceFeatureIds": [],
+      "scope": "Owner-authorized redesign of existing 100 notebooks and continuing daily calendar; own content and save compatibility, not a reference parity claim",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "197821d42a47eee7d082a4c51add1b38d9fa0824",
+      "evidence": {
+        "author": "scripts/author-content-v4.mjs",
+        "data": "../research/daily-notebook-design-2026-11-24/catalogue-v4/summary.json",
+        "model": "2765 authored boards; 23611 witnessed legal moves; 939 all-states-safe, 1274 safe openings with proven later risk, 552 mixed first actions with proven risk; no canonical or occupied-mask duplicate against exclusion set (336 eligible historic starts, 76 earlier designs, 120 v3 designs, 1095 v1 dates). 58 requested roles replaced by actually verified roles; risk profile unchanged.",
+        "code": "content-v4.ts, content-ids.ts, puzzles.ts, progress.ts, main.ts; native daily reminders",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Require all-bank replay and legacy collision tests, save migration tests v2–v8, browser/Android upgrade and exact restart. Reconcile PR18 with current developer PR9 before combining. User acceptance on phone before release.",
+      "kitImpact": "REUSE immutable versioned content with stable logical reward IDs and explicit revision pins. Future dates beyond fixed bank use causal scoring, not full-state risk certification."
     }
   ]
 }

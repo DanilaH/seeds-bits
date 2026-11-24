@@ -49,3 +49,6 @@ node docs/porting/2026-11-20/sample-classic.mjs
 
 ## 24.11.2026: pilot v3 integration
 Owner requested integration after standalone pilot. 96 thematic tasks appended (104 volumes total), 24 dated candidates for Dec 1–24, 2026, fallback v1 elsewhere. Existing assignments win; daily completion deduplicates by date; wire v7 protects new IDs. Implementation on separate draft branch, acceptance and full legacy comparison pending. Research: [PR17](https://github.com/DanilaH/seeds-bits/pull/17). No economy or paused-feature changes.
+
+## 24.11.2026: catalogue v4 (owner authorized)
+[Design, frozen bank, acceptance and limitations](../../research/daily-notebook-design-2026-11-24/catalogue-v4/README.md). 2400 replacement candidates + 365 dated tasks; slot 1 remains the original first-session tutorial. Unstarted slots resolve v4, known legacy slots pin v1, calendar aliases retain assigned date identity; wire8 protects revisions. PR stacked on PR18, not merged. Human difficulty and physical upgrade are still unverified. No paused assistance or reward-formula change.

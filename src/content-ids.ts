@@ -87,8 +87,9 @@ export function dailyIdFor(day: string, state: IdentityState) {
 export function knownDailyAssignments(state:IdentityState) {
   const assigned:Record<string,string>={...state.dailyAssignments};
   const days=new Set<string>();
-  for(const id of knownIds(state)){const day=dailyDay(id);if(day&&versionedDay(day))days.add(day)}
-  for(const day of days)assigned[day]??=dailyIdFor(day,state);
+  const ids=knownIds(state);
+  for(const id of ids){const day=dailyDay(id);if(day&&versionedDay(day))days.add(day)}
+  for(const day of days)assigned[day]??=ids.has("daily-v1-"+day)?"daily-v1-"+day:pilotDayIndex(day)>=0?"daily-v3-"+day:"daily-v4-"+day;
   return assigned;
 }
 export function readDailyAssignments(value: unknown): Record<string,string> {
