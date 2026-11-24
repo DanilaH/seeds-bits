@@ -893,7 +893,16 @@
         "model": "Research PR17 exact graph checks: 120 boards, 269779 states, 1305355 transitions; previous 76 checked, full historical gate in tests",
         "code": "src/content-pilot.json,content-ids.ts,content-pilot.ts,puzzles.ts,progress.ts,notebooks.ts,main.ts,daily-run.ts; native reminder; wire7 and daily aliases",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "initialCI": {
+          "run": "https://github.com/DanilaH/seeds-bits/actions/runs/45369428968",
+          "head": "4a625da07d798055c77904f98bcc1e717a34306b",
+          "newTests": "7/7 PASS including full legacy canonical gate",
+          "allUnit": "136/137; stale wire7 boundary assertion, corrected in followup",
+          "browser": "BLOCKED: install skipped after old assertion",
+          "android": "Native harness and web build/setup PASS; complete APK pending"
+        },
+        "independentIntegrationModel": "120/120 exact published runtime paths (1032 removals), 7 identity scenarios; zero canonical collisions vs 336 eligible old starts, previous 76 and 1095 v1 dates"
       },
       "nextAction": "Full CI and historical catalogue comparison; browser reload, calendar alias and reward checks; Android preview physical phone acceptance. Keep branch separate until green. No release/publication.",
       "kitImpact": "REUSE fixed content, explicit versioned IDs and durable reward identity."

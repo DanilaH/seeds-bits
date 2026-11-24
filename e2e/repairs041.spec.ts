@@ -72,7 +72,7 @@ test("A01 damage isolated to metadata does not discard valid tasks and boards", 
     path: "test-results/repairs041/corrupt-meta.png",
   });
   await expect(page.locator(".progress-stats dd").first()).toHaveText(
-    "1 из 2400",
+    "1 из 2496",
   );
 });
 test("A02 unsupported future metadata is not overwritten by ordinary interaction", async ({
@@ -134,7 +134,7 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
   await page.reload();
   await page.locator("#progress-open").click();
   await expect(page.locator(".progress-stats dd")).toHaveText([
-    "1 из 2400",
+    "1 из 2496",
     "0",
     "6",
     "4",
