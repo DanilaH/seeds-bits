@@ -1,0 +1,497 @@
+{
+  "attempts": 1746,
+  "rejections": {
+    "reveal": 117,
+    "size_or_digit_diversity": 78,
+    "intro_safety": 28,
+    "opening": 36,
+    "flow": 68,
+    "reading": 322,
+    "compression": 489
+  },
+  "slots": [
+    {
+      "id": "book-v2-links-1",
+      "attempts": 34,
+      "eligible": 8,
+      "selectedAttempt": 18
+    },
+    {
+      "id": "book-v2-links-2",
+      "attempts": 101,
+      "eligible": 8,
+      "selectedAttempt": 57
+    },
+    {
+      "id": "book-v2-links-3",
+      "attempts": 25,
+      "eligible": 8,
+      "selectedAttempt": 22
+    },
+    {
+      "id": "book-v2-links-4",
+      "attempts": 16,
+      "eligible": 8,
+      "selectedAttempt": 14
+    },
+    {
+      "id": "book-v2-links-5",
+      "attempts": 11,
+      "eligible": 8,
+      "selectedAttempt": 8
+    },
+    {
+      "id": "book-v2-links-6",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 2
+    },
+    {
+      "id": "book-v2-links-7",
+      "attempts": 23,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "book-v2-links-8",
+      "attempts": 14,
+      "eligible": 8,
+      "selectedAttempt": 13
+    },
+    {
+      "id": "book-v2-links-9",
+      "attempts": 24,
+      "eligible": 8,
+      "selectedAttempt": 7
+    },
+    {
+      "id": "book-v2-links-10",
+      "attempts": 11,
+      "eligible": 8,
+      "selectedAttempt": 10
+    },
+    {
+      "id": "book-v2-links-11",
+      "attempts": 18,
+      "eligible": 8,
+      "selectedAttempt": 1
+    },
+    {
+      "id": "book-v2-links-12",
+      "attempts": 17,
+      "eligible": 8,
+      "selectedAttempt": 15
+    },
+    {
+      "id": "book-v2-links-13",
+      "attempts": 10,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "book-v2-links-14",
+      "attempts": 22,
+      "eligible": 8,
+      "selectedAttempt": 2
+    },
+    {
+      "id": "book-v2-links-15",
+      "attempts": 23,
+      "eligible": 8,
+      "selectedAttempt": 22
+    },
+    {
+      "id": "book-v2-links-16",
+      "attempts": 14,
+      "eligible": 8,
+      "selectedAttempt": 7
+    },
+    {
+      "id": "book-v2-links-17",
+      "attempts": 29,
+      "eligible": 8,
+      "selectedAttempt": 22
+    },
+    {
+      "id": "book-v2-links-18",
+      "attempts": 23,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "book-v2-links-19",
+      "attempts": 29,
+      "eligible": 8,
+      "selectedAttempt": 12
+    },
+    {
+      "id": "book-v2-links-20",
+      "attempts": 10,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "book-v2-links-21",
+      "attempts": 25,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "book-v2-links-22",
+      "attempts": 13,
+      "eligible": 8,
+      "selectedAttempt": 11
+    },
+    {
+      "id": "book-v2-links-23",
+      "attempts": 10,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "book-v2-links-24",
+      "attempts": 14,
+      "eligible": 8,
+      "selectedAttempt": 7
+    },
+    {
+      "id": "book-v2-shift-1",
+      "attempts": 50,
+      "eligible": 8,
+      "selectedAttempt": 44
+    },
+    {
+      "id": "book-v2-shift-2",
+      "attempts": 70,
+      "eligible": 8,
+      "selectedAttempt": 8
+    },
+    {
+      "id": "book-v2-shift-3",
+      "attempts": 20,
+      "eligible": 8,
+      "selectedAttempt": 15
+    },
+    {
+      "id": "book-v2-shift-4",
+      "attempts": 17,
+      "eligible": 8,
+      "selectedAttempt": 4
+    },
+    {
+      "id": "book-v2-shift-5",
+      "attempts": 28,
+      "eligible": 8,
+      "selectedAttempt": 8
+    },
+    {
+      "id": "book-v2-shift-6",
+      "attempts": 29,
+      "eligible": 8,
+      "selectedAttempt": 16
+    },
+    {
+      "id": "book-v2-shift-7",
+      "attempts": 50,
+      "eligible": 8,
+      "selectedAttempt": 34
+    },
+    {
+      "id": "book-v2-shift-8",
+      "attempts": 28,
+      "eligible": 8,
+      "selectedAttempt": 27
+    },
+    {
+      "id": "book-v2-shift-9",
+      "attempts": 9,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "book-v2-shift-10",
+      "attempts": 13,
+      "eligible": 8,
+      "selectedAttempt": 6
+    },
+    {
+      "id": "book-v2-shift-11",
+      "attempts": 30,
+      "eligible": 8,
+      "selectedAttempt": 29
+    },
+    {
+      "id": "book-v2-shift-12",
+      "attempts": 34,
+      "eligible": 8,
+      "selectedAttempt": 17
+    },
+    {
+      "id": "book-v2-shift-13",
+      "attempts": 10,
+      "eligible": 8,
+      "selectedAttempt": 1
+    },
+    {
+      "id": "book-v2-shift-14",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "book-v2-shift-15",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 4
+    },
+    {
+      "id": "book-v2-shift-16",
+      "attempts": 12,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "book-v2-shift-17",
+      "attempts": 18,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "book-v2-shift-18",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 4
+    },
+    {
+      "id": "book-v2-shift-19",
+      "attempts": 41,
+      "eligible": 8,
+      "selectedAttempt": 23
+    },
+    {
+      "id": "book-v2-shift-20",
+      "attempts": 61,
+      "eligible": 8,
+      "selectedAttempt": 14
+    },
+    {
+      "id": "book-v2-shift-21",
+      "attempts": 9,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "book-v2-shift-22",
+      "attempts": 12,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "book-v2-shift-23",
+      "attempts": 67,
+      "eligible": 8,
+      "selectedAttempt": 34
+    },
+    {
+      "id": "book-v2-shift-24",
+      "attempts": 95,
+      "eligible": 8,
+      "selectedAttempt": 94
+    },
+    {
+      "id": "daily-pilot-v2-01",
+      "attempts": 12,
+      "eligible": 8,
+      "selectedAttempt": 2
+    },
+    {
+      "id": "daily-pilot-v2-02",
+      "attempts": 9,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "daily-pilot-v2-03",
+      "attempts": 35,
+      "eligible": 8,
+      "selectedAttempt": 28
+    },
+    {
+      "id": "daily-pilot-v2-04",
+      "attempts": 13,
+      "eligible": 8,
+      "selectedAttempt": 9
+    },
+    {
+      "id": "daily-pilot-v2-05",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "daily-pilot-v2-06",
+      "attempts": 13,
+      "eligible": 8,
+      "selectedAttempt": 12
+    },
+    {
+      "id": "daily-pilot-v2-07",
+      "attempts": 16,
+      "eligible": 8,
+      "selectedAttempt": 4
+    },
+    {
+      "id": "daily-pilot-v2-08",
+      "attempts": 17,
+      "eligible": 8,
+      "selectedAttempt": 16
+    },
+    {
+      "id": "daily-pilot-v2-09",
+      "attempts": 29,
+      "eligible": 8,
+      "selectedAttempt": 16
+    },
+    {
+      "id": "daily-pilot-v2-10",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 5
+    },
+    {
+      "id": "daily-pilot-v2-11",
+      "attempts": 14,
+      "eligible": 8,
+      "selectedAttempt": 7
+    },
+    {
+      "id": "daily-pilot-v2-12",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "daily-pilot-v2-13",
+      "attempts": 47,
+      "eligible": 8,
+      "selectedAttempt": 40
+    },
+    {
+      "id": "daily-pilot-v2-14",
+      "attempts": 19,
+      "eligible": 8,
+      "selectedAttempt": 8
+    },
+    {
+      "id": "daily-pilot-v2-15",
+      "attempts": 10,
+      "eligible": 8,
+      "selectedAttempt": 5
+    },
+    {
+      "id": "daily-pilot-v2-16",
+      "attempts": 17,
+      "eligible": 8,
+      "selectedAttempt": 5
+    },
+    {
+      "id": "daily-pilot-v2-17",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 2
+    },
+    {
+      "id": "daily-pilot-v2-18",
+      "attempts": 16,
+      "eligible": 8,
+      "selectedAttempt": 3
+    },
+    {
+      "id": "daily-pilot-v2-19",
+      "attempts": 20,
+      "eligible": 8,
+      "selectedAttempt": 18
+    },
+    {
+      "id": "daily-pilot-v2-20",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 2
+    },
+    {
+      "id": "daily-pilot-v2-21",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "daily-pilot-v2-22",
+      "attempts": 11,
+      "eligible": 8,
+      "selectedAttempt": 7
+    },
+    {
+      "id": "daily-pilot-v2-23",
+      "attempts": 8,
+      "eligible": 8,
+      "selectedAttempt": 6
+    },
+    {
+      "id": "daily-pilot-v2-24",
+      "attempts": 41,
+      "eligible": 8,
+      "selectedAttempt": 0
+    },
+    {
+      "id": "daily-pilot-v2-25",
+      "attempts": 16,
+      "eligible": 8,
+      "selectedAttempt": 6
+    },
+    {
+      "id": "daily-pilot-v2-26",
+      "attempts": 15,
+      "eligible": 8,
+      "selectedAttempt": 1
+    },
+    {
+      "id": "daily-pilot-v2-27",
+      "attempts": 60,
+      "eligible": 8,
+      "selectedAttempt": 43
+    },
+    {
+      "id": "daily-pilot-v2-28",
+      "attempts": 9,
+      "eligible": 8,
+      "selectedAttempt": 1
+    }
+  ],
+  "oldBooks": 336,
+  "oldDaily": 1095,
+  "verification": {
+    "paths": 975,
+    "actions": 8653,
+    "branchOutcomes": {
+      "FOUND": 879,
+      "NO_WIN_PROVEN": 2,
+      "UNKNOWN": 2
+    },
+    "safeOpenings": 25,
+    "notebookControls": 8,
+    "dailyControls": 10,
+    "newCanonicalCount": 76,
+    "canonicalDuplicates": 0
+  },
+  "source": {
+    "consumer": "92ac62f938e12b617132c78bf3d2b4c132a37621",
+    "previousResearch": "0339f7992badcbed551a5dfa26a4790919ad642c",
+    "oldNotebookProfiles": "5fac7d9b6ecedf8ae82fd68a2ff68086f092654f",
+    "oldNotebookCompleteness": "All 336 eligible <=32 occupied and <=54 logical, from verified scan; catalog/core/puzzles blobs identical to audited revision.",
+    "oldDailyWindow": "2025-01-01..2027-12-31 inclusive",
+    "oldDailyFixtureMatches": 12,
+    "sourceCoreBlob": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+    "sourcePuzzlesBlob": "1493bb50a6b71f11a63ea01e503b1659fcc93847"
+  },
+  "verificationLevel": "MODEL_REPLAY: direct rule port plus exhaustive pair enumeration cross-check; exact core replay runner supplied separately; not APK/phone."
+}

@@ -1,0 +1,10423 @@
+{
+  "schema": "seeds-content-pilot-bank-v2",
+  "revision": "pilot-bank-v2.1",
+  "activationDate": null,
+  "notebooks": [
+    {
+      "id": "links",
+      "title": "Новые связи",
+      "tasks": [
+        "book-v2-links-1",
+        "book-v2-links-2",
+        "book-v2-links-3",
+        "book-v2-links-4",
+        "book-v2-links-5",
+        "book-v2-links-6",
+        "book-v2-links-7",
+        "book-v2-links-8",
+        "book-v2-links-9",
+        "book-v2-links-10",
+        "book-v2-links-11",
+        "book-v2-links-12",
+        "book-v2-links-13",
+        "book-v2-links-14",
+        "book-v2-links-15",
+        "book-v2-links-16",
+        "book-v2-links-17",
+        "book-v2-links-18",
+        "book-v2-links-19",
+        "book-v2-links-20",
+        "book-v2-links-21",
+        "book-v2-links-22",
+        "book-v2-links-23",
+        "book-v2-links-24"
+      ]
+    },
+    {
+      "id": "shift",
+      "title": "Поле меняется",
+      "tasks": [
+        "book-v2-shift-1",
+        "book-v2-shift-2",
+        "book-v2-shift-3",
+        "book-v2-shift-4",
+        "book-v2-shift-5",
+        "book-v2-shift-6",
+        "book-v2-shift-7",
+        "book-v2-shift-8",
+        "book-v2-shift-9",
+        "book-v2-shift-10",
+        "book-v2-shift-11",
+        "book-v2-shift-12",
+        "book-v2-shift-13",
+        "book-v2-shift-14",
+        "book-v2-shift-15",
+        "book-v2-shift-16",
+        "book-v2-shift-17",
+        "book-v2-shift-18",
+        "book-v2-shift-19",
+        "book-v2-shift-20",
+        "book-v2-shift-21",
+        "book-v2-shift-22",
+        "book-v2-shift-23",
+        "book-v2-shift-24"
+      ]
+    }
+  ],
+  "daily": [
+    "daily-pilot-v2-01",
+    "daily-pilot-v2-02",
+    "daily-pilot-v2-03",
+    "daily-pilot-v2-04",
+    "daily-pilot-v2-05",
+    "daily-pilot-v2-06",
+    "daily-pilot-v2-07",
+    "daily-pilot-v2-08",
+    "daily-pilot-v2-09",
+    "daily-pilot-v2-10",
+    "daily-pilot-v2-11",
+    "daily-pilot-v2-12",
+    "daily-pilot-v2-13",
+    "daily-pilot-v2-14",
+    "daily-pilot-v2-15",
+    "daily-pilot-v2-16",
+    "daily-pilot-v2-17",
+    "daily-pilot-v2-18",
+    "daily-pilot-v2-19",
+    "daily-pilot-v2-20",
+    "daily-pilot-v2-21",
+    "daily-pilot-v2-22",
+    "daily-pilot-v2-23",
+    "daily-pilot-v2-24",
+    "daily-pilot-v2-25",
+    "daily-pilot-v2-26",
+    "daily-pilot-v2-27",
+    "daily-pilot-v2-28"
+  ],
+  "tasks": [
+    {
+      "id": "book-v2-links-1",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 1,
+      "position": 1,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        4,
+        0,
+        8,
+        6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        4,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        7,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "49e1886548056e60cff3499bb78a7de9527d93d86ab4b860a46e9e070b071a99",
+      "solution": [
+        {
+          "a": 34,
+          "b": 38,
+          "kind": "reading"
+        },
+        {
+          "a": 3,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 7,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 12,
+        "logical": 45,
+        "openingPairs": 6,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 2,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 351557480,
+        "rows": 5,
+        "recipe": "uniform",
+        "attempt": 18
+      },
+      "fingerprint": "000102900000313000004800060000000170003000000",
+      "closestPrior": {
+        "id": "daily-v1-2027-03-31",
+        "similarity": 0.17391304347826086
+      }
+    },
+    {
+      "id": "book-v2-links-2",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 1,
+      "position": 2,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        5,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        1,
+        8,
+        0,
+        8,
+        0,
+        0,
+        0,
+        8,
+        9,
+        0,
+        0,
+        0,
+        8,
+        0,
+        8,
+        2,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "9f08c641fb048e2530bc9e5dafc5585f375d8bd053603a74f00b99299a6b8562",
+      "solution": [
+        {
+          "a": 19,
+          "b": 27,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 31,
+          "kind": "reading"
+        },
+        {
+          "a": 16,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 22,
+          "b": 33,
+          "kind": "reading"
+        },
+        {
+          "a": 8,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 7,
+          "b": 11,
+          "kind": "reading"
+        },
+        {
+          "a": 7,
+          "b": 12,
+          "kind": "reading"
+        },
+        {
+          "a": 8,
+          "b": 10,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 16,
+        "logical": 54,
+        "openingPairs": 20,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 5,
+        "compression": 1,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 669864794,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 57
+      },
+      "fingerprint": "000000015500000010129090009800090910000900009010000000",
+      "closestPrior": {
+        "id": "book-v1-92",
+        "similarity": 0.12
+      }
+    },
+    {
+      "id": "book-v2-links-3",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 1,
+      "position": 3,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        1,
+        0,
+        9,
+        1,
+        8,
+        2,
+        9,
+        8,
+        3,
+        7,
+        3,
+        0,
+        3,
+        7,
+        7,
+        4,
+        8,
+        0,
+        1,
+        0,
+        0,
+        0,
+        9,
+        0,
+        6,
+        0
+      ],
+      "boardSha256": "b3962c5ad22675696befb48e69b4c3c48ee01b77fe5ee0f1b0cbf85a9461af77",
+      "solution": [
+        {
+          "a": 8,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 6,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 7,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 18,
+        "logical": 27,
+        "openingPairs": 11,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2125096579,
+        "rows": 3,
+        "recipe": "horizontal",
+        "attempt": 22
+      },
+      "fingerprint": "010912892373037742010009060",
+      "closestPrior": {
+        "id": "book-v1-7",
+        "similarity": 0.21739130434782608
+      }
+    },
+    {
+      "id": "book-v2-links-4",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 1,
+      "position": 4,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        7,
+        0,
+        0,
+        9,
+        9,
+        0,
+        0,
+        0,
+        6,
+        3,
+        0,
+        7,
+        0,
+        0,
+        5,
+        0,
+        5,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "194819ce4ceea6a16f7a507712cf2f3c172b40a43c9a5dcca0a2bb0faad7d72c",
+      "solution": [
+        {
+          "a": 27,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 12,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 12,
+        "logical": 36,
+        "openingPairs": 10,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 0,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 2
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1626107333,
+        "rows": 4,
+        "recipe": "vertical",
+        "attempt": 14
+      },
+      "fingerprint": "005000100005010022000390100505700000",
+      "closestPrior": {
+        "id": "book-v1-285",
+        "similarity": 0.17391304347826086
+      }
+    },
+    {
+      "id": "book-v2-links-5",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 1,
+      "position": 5,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        5,
+        0,
+        0,
+        0,
+        4,
+        0,
+        7,
+        6,
+        0,
+        0,
+        5,
+        6,
+        0,
+        0,
+        6,
+        4,
+        7,
+        0,
+        0,
+        6,
+        6,
+        0,
+        0,
+        5,
+        8,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        8,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        6,
+        3,
+        0,
+        0,
+        0,
+        5,
+        4
+      ],
+      "boardSha256": "321afaf3527feba396ad707f84a889d122fe7c6e032ff13018faf452fe8d351b",
+      "solution": [
+        {
+          "a": 6,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 29,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 31,
+          "kind": "reading"
+        },
+        {
+          "a": 14,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 10,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 20,
+        "logical": 45,
+        "openingPairs": 15,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 7,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 654045927,
+        "rows": 5,
+        "recipe": "diagonal",
+        "attempt": 8
+      },
+      "fingerprint": "500010290059009120099005300008030010009800051",
+      "closestPrior": {
+        "id": "daily-v1-2025-07-02",
+        "similarity": 0.17857142857142858
+      }
+    },
+    {
+      "id": "book-v2-links-6",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 1,
+      "position": 6,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        8,
+        0,
+        2,
+        3,
+        7,
+        0,
+        6,
+        0,
+        0,
+        7,
+        7,
+        0,
+        4,
+        0,
+        3,
+        6,
+        2,
+        0,
+        1,
+        9,
+        0,
+        4,
+        0,
+        6,
+        3,
+        8,
+        0,
+        0,
+        4,
+        6,
+        6,
+        0,
+        3,
+        6,
+        6,
+        3
+      ],
+      "boardSha256": "8c2f59bbcc2eea217bd64bbe081d6ebc48b13f94b1031a0b91136dfc25e568fb",
+      "solution": [
+        {
+          "a": 14,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 33,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 36,
+        "openingPairs": 19,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3760189528,
+        "rows": 4,
+        "recipe": "horizontal",
+        "attempt": 2
+      },
+      "fingerprint": "109280300880702390460703210073302332",
+      "closestPrior": {
+        "id": "book-v1-130",
+        "similarity": 0.24242424242424243
+      }
+    },
+    {
+      "id": "book-v2-links-7",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 2,
+      "position": 7,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        3,
+        9,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        7,
+        5,
+        0,
+        7,
+        0,
+        9,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        5,
+        0,
+        0,
+        3,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7
+      ],
+      "boardSha256": "7f4b3c42d6f680522c15fa6d2704c81104ec966237e50f4ca5ab5d5177539e2e",
+      "solution": [
+        {
+          "a": 17,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 29,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 2,
+          "b": 9,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 14,
+        "logical": 45,
+        "openingPairs": 10,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 2,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3316476748,
+        "rows": 5,
+        "recipe": "spaced",
+        "attempt": 3
+      },
+      "fingerprint": "001010002900050008508090000005005002800000008",
+      "closestPrior": {
+        "id": "daily-v1-2026-01-12",
+        "similarity": 0.14705882352941177
+      }
+    },
+    {
+      "id": "book-v2-links-8",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 2,
+      "position": 8,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        3,
+        0,
+        1,
+        0,
+        4,
+        0,
+        1,
+        0,
+        0,
+        9,
+        5,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        9,
+        0,
+        5,
+        0,
+        6,
+        8,
+        6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        4,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0
+      ],
+      "boardSha256": "5a6cbcd2ef174ff2f4f2c3ec010e20e04d85a4df1b29c78809b403cce42e536d",
+      "solution": [
+        {
+          "a": 10,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 11,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 18,
+        "logical": 54,
+        "openingPairs": 11,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 1,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3432501220,
+        "rows": 6,
+        "recipe": "diagonal",
+        "attempt": 13
+      },
+      "fingerprint": "102030200850000400805076700000100007003900000009000300",
+      "closestPrior": {
+        "id": "book-v1-43",
+        "similarity": 0.1111111111111111
+      }
+    },
+    {
+      "id": "book-v2-links-9",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 2,
+      "position": 9,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        7,
+        9,
+        0,
+        0,
+        0,
+        2,
+        0,
+        5,
+        7,
+        0,
+        0,
+        5,
+        0,
+        7,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        2,
+        7,
+        4,
+        0,
+        0,
+        8,
+        0,
+        2,
+        0,
+        0,
+        0,
+        8,
+        2,
+        0,
+        2,
+        0,
+        0,
+        9,
+        0,
+        4,
+        4,
+        8,
+        0,
+        0
+      ],
+      "boardSha256": "c04387a6ef96b4a9be196c6f4ab4e478b8f18df71f791db1c8f89ed0d80304a5",
+      "solution": [
+        {
+          "a": 14,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 28,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 12,
+          "kind": "reading"
+        },
+        {
+          "a": 14,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 17,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 20,
+        "logical": 45,
+        "openingPairs": 13,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 4,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2425141770,
+        "rows": 5,
+        "recipe": "uniform",
+        "attempt": 7
+      },
+      "fingerprint": "012000305100501040000314007030007303002044700",
+      "closestPrior": {
+        "id": "daily-v1-2027-07-11",
+        "similarity": 0.17857142857142858
+      }
+    },
+    {
+      "id": "book-v2-links-10",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 2,
+      "position": 10,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        6,
+        0,
+        6,
+        0,
+        6,
+        4,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "boardSha256": "b5de63c789d9c98f1720c56cd05ae94aae02da5d6e35829616298b256f8914b1",
+      "solution": [
+        {
+          "a": 16,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 42,
+          "b": 48,
+          "kind": "reading"
+        },
+        {
+          "a": 12,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 20,
+          "kind": "reading"
+        },
+        {
+          "a": 2,
+          "b": 17,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 12,
+        "logical": 54,
+        "openingPairs": 8,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 0,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 344262650,
+        "rows": 6,
+        "recipe": "uniform",
+        "attempt": 10
+      },
+      "fingerprint": "001000000200101019000050000000050000008000500000500001",
+      "closestPrior": {
+        "id": "book-v1-252",
+        "similarity": 0.13793103448275862
+      }
+    },
+    {
+      "id": "book-v2-links-11",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 2,
+      "position": 11,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        8,
+        0,
+        0,
+        7,
+        0,
+        3,
+        0,
+        0,
+        0,
+        7,
+        0,
+        7,
+        8,
+        0,
+        1,
+        4,
+        6,
+        0,
+        0,
+        0,
+        2,
+        6,
+        1,
+        0,
+        0,
+        0,
+        4,
+        0,
+        2,
+        0,
+        6,
+        4,
+        4,
+        9,
+        8,
+        0,
+        8,
+        9,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "8d718fef9a7580ea5f4aad12d5bd50ba4356561f467c7ca02a80e4d7bcb146f2",
+      "solution": [
+        {
+          "a": 0,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 12,
+          "kind": "reading"
+        },
+        {
+          "a": 21,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 24,
+          "b": 28,
+          "kind": "reading"
+        },
+        {
+          "a": 17,
+          "b": 23,
+          "kind": "reading"
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 22,
+        "logical": 45,
+        "openingPairs": 21,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 5,
+        "reading": 3,
+        "compression": 0,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2088026893,
+        "rows": 5,
+        "recipe": "spaced",
+        "attempt": 1
+      },
+      "fingerprint": "100208000202103460009630004090644710170060000",
+      "closestPrior": {
+        "id": "book-v1-156",
+        "similarity": 0.19444444444444445
+      }
+    },
+    {
+      "id": "book-v2-links-12",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 2,
+      "position": 12,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        5,
+        0,
+        0,
+        5,
+        0,
+        1,
+        5,
+        0,
+        5,
+        0,
+        0,
+        5,
+        9,
+        1,
+        0,
+        9,
+        3,
+        0,
+        9,
+        0,
+        1,
+        0,
+        5,
+        0,
+        0,
+        1,
+        0,
+        0,
+        9,
+        0,
+        0,
+        3,
+        0,
+        9,
+        7,
+        8,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        9,
+        0,
+        2,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0
+      ],
+      "boardSha256": "87feabac5ccc972aa3e2ba5c054b1549a6b3beb183ecb316cac9acfaec28eda0",
+      "solution": [
+        {
+          "a": 6,
+          "b": 8,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 45,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 20,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 51,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 37,
+          "kind": "reading"
+        },
+        {
+          "a": 5,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 29,
+          "kind": "reading"
+        },
+        {
+          "a": 2,
+          "b": 13,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 24,
+        "firstClear": false,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 10
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 554243063,
+        "rows": 6,
+        "recipe": "spaced",
+        "attempt": 15
+      },
+      "fingerprint": "500501505005910920901050010090020983070000070907000800",
+      "closestPrior": {
+        "id": "book-v1-168",
+        "similarity": 0.125
+      }
+    },
+    {
+      "id": "book-v2-links-13",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 3,
+      "position": 13,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        4,
+        9,
+        0,
+        9,
+        4,
+        4,
+        9,
+        3,
+        8,
+        7,
+        7,
+        9,
+        0,
+        9,
+        6,
+        9,
+        8,
+        3
+      ],
+      "boardSha256": "66c50463c01851c65e8e5a0e57af6c63c069fbdaac1c67ff294403b1f958fa6e",
+      "solution": [
+        {
+          "a": 8,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 1,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 18,
+        "openingPairs": 12,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 3
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3252069964,
+        "rows": 2,
+        "recipe": "spaced",
+        "attempt": 0
+      },
+      "fingerprint": "120211234772029243",
+      "closestPrior": {
+        "id": "book-v1-6",
+        "similarity": 0.11764705882352941
+      }
+    },
+    {
+      "id": "book-v2-links-14",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 3,
+      "position": 14,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        9,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        9,
+        6,
+        7,
+        2,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        4,
+        8,
+        0,
+        0,
+        0,
+        1,
+        0,
+        7,
+        0,
+        3,
+        0,
+        0,
+        4,
+        9,
+        5,
+        0,
+        7,
+        0,
+        0,
+        5,
+        0,
+        6,
+        0,
+        0
+      ],
+      "boardSha256": "91ab11697cd58cc626004bdfd8169d5f2b59b4dda7dd2b914bb6f55a83a9c65e",
+      "solution": [
+        {
+          "a": 42,
+          "b": 51,
+          "kind": "straight"
+        },
+        {
+          "a": 37,
+          "b": 46,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 30,
+          "kind": "reading"
+        },
+        {
+          "a": 21,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 35,
+          "kind": "reading"
+        },
+        {
+          "a": 26,
+          "b": 31,
+          "kind": "reading"
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 16,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 20,
+        "logical": 54,
+        "openingPairs": 11,
+        "firstClear": false,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 3,
+        "compression": 0,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 460690391,
+        "rows": 6,
+        "recipe": "uniform",
+        "attempt": 2
+      },
+      "fingerprint": "001090000002000900012340020000860009030700815030050200",
+      "closestPrior": {
+        "id": "book-v1-43",
+        "similarity": 0.13793103448275862
+      }
+    },
+    {
+      "id": "book-v2-links-15",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 3,
+      "position": 15,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        6,
+        0,
+        0,
+        4,
+        0,
+        6,
+        1,
+        0,
+        2,
+        4,
+        0,
+        0,
+        7,
+        2,
+        0,
+        0,
+        7,
+        6,
+        6,
+        9,
+        0,
+        0,
+        7,
+        6,
+        4,
+        4,
+        4,
+        9,
+        7,
+        6,
+        0,
+        4,
+        1,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "cea7397c930a84009a4b2bcbd1111057f0be766785910cb5081997c5dbdeda15",
+      "solution": [
+        {
+          "a": 17,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 24,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 27,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 13,
+          "kind": "reading"
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 22,
+          "kind": "reading"
+        },
+        {
+          "a": 17,
+          "b": 20,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 14,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 22,
+        "logical": 36,
+        "openingPairs": 17,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 4,
+        "reading": 3,
+        "compression": 0,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2869763430,
+        "rows": 4,
+        "recipe": "edge",
+        "attempt": 22
+      },
+      "fingerprint": "100901203900430041180041999841092000",
+      "closestPrior": {
+        "id": "daily-v1-2026-08-29",
+        "similarity": 0.22580645161290322
+      }
+    },
+    {
+      "id": "book-v2-links-16",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 3,
+      "position": 16,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        7,
+        0,
+        3,
+        0,
+        0,
+        1,
+        0,
+        9,
+        0,
+        0,
+        3,
+        3,
+        8,
+        0,
+        2,
+        0,
+        2,
+        0,
+        2,
+        8,
+        0,
+        8,
+        0,
+        4,
+        6
+      ],
+      "boardSha256": "03d7ad505613a90a90f8df7f547f8f67638467cf901e5983178bcd763c9095bc",
+      "solution": [
+        {
+          "a": 7,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 18,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 21,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 14,
+        "logical": 27,
+        "openingPairs": 13,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 1,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1891895438,
+        "rows": 3,
+        "recipe": "horizontal",
+        "attempt": 7
+      },
+      "fingerprint": "001090020800993070707303046",
+      "closestPrior": {
+        "id": "book-v1-299",
+        "similarity": 0.20833333333333334
+      }
+    },
+    {
+      "id": "book-v2-links-17",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 3,
+      "position": 17,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        3,
+        0,
+        2,
+        2,
+        0,
+        2,
+        0,
+        9,
+        1,
+        0,
+        8,
+        0,
+        3,
+        2,
+        4,
+        7,
+        8,
+        9,
+        0,
+        0,
+        1,
+        0,
+        0,
+        9,
+        8,
+        0,
+        8,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        9,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        7,
+        3,
+        0
+      ],
+      "boardSha256": "6aa5fb878a7c574d460eafc82d13f9dd6ce363269b02ebdee6c01966c43d1059",
+      "solution": [
+        {
+          "a": 31,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 51,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 15,
+          "kind": "reading"
+        },
+        {
+          "a": 22,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 28,
+          "kind": "reading"
+        },
+        {
+          "a": 17,
+          "b": 20,
+          "kind": "reading"
+        },
+        {
+          "a": 12,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 14,
+          "kind": "reading"
+        },
+        {
+          "a": 5,
+          "b": 11,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 20,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 4,
+        "reading": 3,
+        "compression": 0,
+        "gaps": 8
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 4006019748,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 22
+      },
+      "fingerprint": "000102033030460702398740060047070003004007000008000820",
+      "closestPrior": {
+        "id": "book-v1-74",
+        "similarity": 0.13157894736842105
+      }
+    },
+    {
+      "id": "book-v2-links-18",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 3,
+      "position": 18,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        3,
+        8,
+        0,
+        9,
+        0,
+        2,
+        0,
+        0,
+        9,
+        1,
+        0,
+        0,
+        0,
+        1,
+        2,
+        3,
+        0,
+        9,
+        8,
+        2,
+        0,
+        8,
+        0,
+        1,
+        0,
+        1,
+        8,
+        1,
+        0,
+        3,
+        1,
+        9,
+        0,
+        1,
+        0,
+        0,
+        3,
+        4,
+        4,
+        0
+      ],
+      "boardSha256": "2df50ed2da466abaedc2a45bde3b94994b7dac7b7300ebdefb9cf3ae08863b1e",
+      "solution": [
+        {
+          "a": 2,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 26,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 33,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 11,
+          "kind": "reading"
+        },
+        {
+          "a": 3,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 7,
+          "b": 14,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 26,
+        "logical": 45,
+        "openingPairs": 24,
+        "firstClear": false,
+        "lastClear": false,
+        "reveal": 7,
+        "reading": 3,
+        "compression": 1,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 922621040,
+        "rows": 5,
+        "recipe": "edge",
+        "attempt": 3
+      },
+      "fingerprint": "001203908010082000213089109020292032802003440",
+      "closestPrior": {
+        "id": "daily-v1-2025-02-16",
+        "similarity": 0.20588235294117646
+      }
+    },
+    {
+      "id": "book-v2-links-19",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 4,
+      "position": 19,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        6,
+        0,
+        0,
+        4,
+        7,
+        0,
+        0,
+        7,
+        0,
+        0,
+        3,
+        0,
+        6,
+        8,
+        0,
+        0,
+        7,
+        2,
+        0,
+        0,
+        2,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        7,
+        0,
+        8,
+        0,
+        0,
+        0,
+        4
+      ],
+      "boardSha256": "847f84568d7554967b7adc8fb6776c8e2be9000df1c103e6a38747ad0e359ce8",
+      "solution": [
+        {
+          "a": 2,
+          "b": 7,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 28,
+          "b": 36,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 31,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 13,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 35,
+          "kind": "reading"
+        },
+        {
+          "a": 5,
+          "b": 10,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 18,
+        "logical": 54,
+        "openingPairs": 12,
+        "firstClear": false,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 8
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2163154821,
+        "rows": 6,
+        "recipe": "spaced",
+        "attempt": 12
+      },
+      "fingerprint": "001000090000002300780080020390081001090000000108090007",
+      "closestPrior": {
+        "id": "book-v1-322",
+        "similarity": 0.125
+      }
+    },
+    {
+      "id": "book-v2-links-20",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 4,
+      "position": 20,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        9,
+        6,
+        2,
+        2,
+        9,
+        9,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        9,
+        4,
+        0,
+        8,
+        0,
+        3,
+        0,
+        3,
+        4,
+        7,
+        0,
+        4,
+        0,
+        4,
+        0,
+        7,
+        6,
+        5,
+        5,
+        4,
+        0,
+        0,
+        0,
+        6,
+        5
+      ],
+      "boardSha256": "847dacb0063cdf2b8432b18856b5b8fa2a51be25fd6a00420eed24f4bb81052f",
+      "solution": [
+        {
+          "a": 4,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 37,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 21,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 8,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 11,
+          "kind": "reading"
+        },
+        {
+          "a": 20,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 15,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 5,
+        "reading": 3,
+        "compression": 0,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2824847951,
+        "rows": 5,
+        "recipe": "spaced",
+        "attempt": 3
+      },
+      "fingerprint": "000012331103000005001807040486080806255800025",
+      "closestPrior": {
+        "id": "daily-v1-2027-04-27",
+        "similarity": 0.21875
+      }
+    },
+    {
+      "id": "book-v2-links-21",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 4,
+      "position": 21,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        5,
+        0,
+        0,
+        6,
+        9,
+        0,
+        1,
+        1,
+        5,
+        5,
+        0,
+        0,
+        9,
+        5,
+        1,
+        0,
+        0,
+        5,
+        5,
+        4,
+        0,
+        6,
+        0,
+        9,
+        0,
+        0,
+        4,
+        0,
+        8,
+        0,
+        7,
+        5,
+        0,
+        0,
+        0,
+        5,
+        0,
+        8,
+        0,
+        0,
+        5,
+        0,
+        0,
+        1,
+        0,
+        0,
+        7,
+        0,
+        5,
+        0,
+        1,
+        0,
+        0
+      ],
+      "boardSha256": "d94bbfe3ad7c9e4b6444e01f2d300a874431cb8fdc850373078fc2a7d02e059a",
+      "solution": [
+        {
+          "a": 41,
+          "b": 49,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 47,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 44,
+          "b": 51,
+          "kind": "reading"
+        },
+        {
+          "a": 29,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 1,
+          "b": 10,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 26,
+        "logical": 54,
+        "openingPairs": 26,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 7,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2435478761,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 0
+      },
+      "fingerprint": "050012088550025800559010200903045000503005008004050800",
+      "closestPrior": {
+        "id": "book-v1-287",
+        "similarity": 0.1282051282051282
+      }
+    },
+    {
+      "id": "book-v2-links-22",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 4,
+      "position": 22,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        6,
+        0,
+        6,
+        0,
+        2,
+        0,
+        2,
+        8,
+        0,
+        0,
+        7,
+        7,
+        6,
+        0,
+        8,
+        8,
+        8,
+        6,
+        2,
+        0,
+        0,
+        0,
+        2,
+        5,
+        0,
+        5,
+        0
+      ],
+      "boardSha256": "d8e266feb697ac02bbb8a213f5f1c04d4270e05aea0e52465b000c7f2cac64a5",
+      "solution": [
+        {
+          "a": 10,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 7,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 8,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 27,
+        "openingPairs": 17,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 1,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 4147003426,
+        "rows": 3,
+        "recipe": "horizontal",
+        "attempt": 11
+      },
+      "fingerprint": "101020280033108881200025050",
+      "closestPrior": {
+        "id": "book-v1-91",
+        "similarity": 0.21052631578947367
+      }
+    },
+    {
+      "id": "book-v2-links-23",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 4,
+      "position": 23,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        9,
+        0,
+        1,
+        0,
+        0,
+        9,
+        0,
+        6,
+        6,
+        0,
+        1,
+        5,
+        0,
+        0,
+        2,
+        0,
+        3,
+        6,
+        1,
+        0,
+        5,
+        0,
+        0,
+        0,
+        3,
+        8,
+        0,
+        8,
+        0,
+        1,
+        0,
+        0,
+        8,
+        0,
+        0,
+        3,
+        0,
+        0,
+        7,
+        8,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        2,
+        4,
+        7,
+        3,
+        9,
+        9,
+        3,
+        0
+      ],
+      "boardSha256": "e6c1d8cf51f3b7e5948e6b2cc0e8e87d6a24ae89541880050adc134e83e4bc11",
+      "solution": [
+        {
+          "a": 25,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 16,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 50,
+          "b": 51,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 38,
+          "kind": "reading"
+        },
+        {
+          "a": 14,
+          "b": 46,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 8,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 39,
+          "kind": "reading"
+        },
+        {
+          "a": 24,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 39,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 29,
+          "kind": "reading"
+        },
+        {
+          "a": 0,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 11,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 28,
+        "logical": 54,
+        "openingPairs": 20,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 6,
+        "reading": 3,
+        "compression": 0,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3879450694,
+        "rows": 6,
+        "recipe": "uniform",
+        "attempt": 3
+      },
+      "fingerprint": "109001022095003042905000470709007004006700600038641140",
+      "closestPrior": {
+        "id": "book-v1-186",
+        "similarity": 0.14285714285714285
+      }
+    },
+    {
+      "id": "book-v2-links-24",
+      "mode": "notebook",
+      "collection": "links",
+      "page": 4,
+      "position": 24,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        4,
+        7,
+        6,
+        8,
+        0,
+        3,
+        0,
+        0,
+        7,
+        3,
+        3,
+        8,
+        4,
+        7,
+        1,
+        7,
+        7,
+        8,
+        0,
+        8,
+        3,
+        6,
+        4,
+        0,
+        8,
+        8,
+        0,
+        0,
+        0,
+        2,
+        5,
+        2,
+        9,
+        8,
+        5,
+        3,
+        0,
+        0,
+        7,
+        4,
+        7,
+        0,
+        0,
+        0,
+        8
+      ],
+      "boardSha256": "66136753fe88ae0d3c93c5dfd324e0488714a7e637ed5ad56ddfea067de41484",
+      "solution": [
+        {
+          "a": 14,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 29,
+          "kind": "reading"
+        },
+        {
+          "a": 21,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 38,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 19,
+          "kind": "reading"
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 11,
+          "kind": "reading"
+        },
+        {
+          "a": 5,
+          "b": 17,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 32,
+        "logical": 45,
+        "openingPairs": 25,
+        "firstClear": false,
+        "lastClear": false,
+        "reveal": 9,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 12
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1762678295,
+        "rows": 5,
+        "recipe": "spaced",
+        "attempt": 7
+      },
+      "fingerprint": "129308002883124223038910330007576358002120003",
+      "closestPrior": {
+        "id": "daily-v1-2026-01-12",
+        "similarity": 0.20512820512820512
+      }
+    },
+    {
+      "id": "book-v2-shift-1",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 1,
+      "position": 1,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        5,
+        6,
+        0,
+        0,
+        3,
+        9,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        7,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "9228fbd25b80fd707627cf913356e97f1bfc02f48402039cd56ac496930ee749",
+      "solution": [
+        {
+          "a": 7,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 10,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 12,
+        "logical": 54,
+        "openingPairs": 7,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 0,
+        "reading": 0,
+        "compression": 2,
+        "gaps": 3
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3202686810,
+        "rows": 6,
+        "recipe": "diagonal",
+        "attempt": 44
+      },
+      "fingerprint": "000000015200310000080000010000700000097070000000005000",
+      "closestPrior": {
+        "id": "book-v1-333",
+        "similarity": 0.16
+      }
+    },
+    {
+      "id": "book-v2-shift-2",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 1,
+      "position": 2,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        4,
+        0,
+        6,
+        0,
+        7,
+        7,
+        0,
+        4,
+        4,
+        0,
+        8,
+        0,
+        0,
+        0,
+        8,
+        7,
+        3,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        8,
+        0,
+        0,
+        4,
+        4,
+        8,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "f551cc518da54eee57e472f218fa721b4a147c30b1eaddf40e25d3879f6db680",
+      "solution": [
+        {
+          "a": 30,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 21,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 8,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 16,
+        "logical": 36,
+        "openingPairs": 9,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 1,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1858198631,
+        "rows": 4,
+        "recipe": "horizontal",
+        "attempt": 8
+      },
+      "fingerprint": "109022011030003280000400400300113000",
+      "closestPrior": {
+        "id": "daily-v1-2026-01-26",
+        "similarity": 0.2
+      }
+    },
+    {
+      "id": "book-v2-shift-3",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 1,
+      "position": 3,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        5,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        5,
+        7,
+        9,
+        7,
+        0,
+        5,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        3,
+        0,
+        0,
+        5,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        3,
+        1,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "2f9d3aa40bb885c78e6927d28ccb050e950843c05c8a11ea82877db90a0e5823",
+      "solution": [
+        {
+          "a": 26,
+          "b": 50,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 12,
+          "kind": "reading"
+        },
+        {
+          "a": 41,
+          "b": 47,
+          "kind": "reading"
+        },
+        {
+          "a": 35,
+          "b": 40,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 17,
+          "kind": "reading"
+        },
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 11,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 18,
+        "logical": 54,
+        "openingPairs": 13,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 2,
+        "reading": 4,
+        "compression": 1,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3699048626,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 15
+      },
+      "fingerprint": "500010010000900005121050008809005009000005000005098000",
+      "closestPrior": {
+        "id": "book-v2-links-2",
+        "similarity": 0.14814814814814814
+      }
+    },
+    {
+      "id": "book-v2-shift-4",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 1,
+      "position": 4,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        3,
+        0,
+        9,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        9,
+        0,
+        0,
+        9,
+        0,
+        7,
+        0,
+        0,
+        0,
+        3,
+        1,
+        0,
+        0,
+        6,
+        0,
+        6
+      ],
+      "boardSha256": "0159e90a46d74e9d430f57a1dead78c08c15292e3baa629c375d35291b633235",
+      "solution": [
+        {
+          "a": 20,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 12,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 7,
+          "b": 11,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 12,
+        "logical": 36,
+        "openingPairs": 9,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 1,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3640709205,
+        "rows": 4,
+        "recipe": "spaced",
+        "attempt": 4
+      },
+      "fingerprint": "000100900010200000102002090001800303",
+      "closestPrior": {
+        "id": "daily-v1-2026-07-08",
+        "similarity": 0.17391304347826086
+      }
+    },
+    {
+      "id": "book-v2-shift-5",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 1,
+      "position": 5,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        6,
+        0,
+        0,
+        7,
+        0,
+        9,
+        9,
+        0,
+        0,
+        9,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        0,
+        0,
+        0,
+        4,
+        0,
+        9,
+        0,
+        2,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        3,
+        3,
+        0,
+        8,
+        0,
+        0,
+        0,
+        9,
+        0,
+        0,
+        0,
+        1,
+        9,
+        0,
+        8,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "boardSha256": "d7b750a6194cdfebd9e8a4868953c153575c18a5ebbae93b5955f9c43e80b0ea",
+      "solution": [
+        {
+          "a": 7,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 27,
+          "b": 37,
+          "kind": "straight"
+        },
+        {
+          "a": 45,
+          "b": 46,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 34,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 48,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 13,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 20,
+        "logical": 54,
+        "openingPairs": 17,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 2,
+        "reading": 1,
+        "compression": 1,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 4134754842,
+        "rows": 6,
+        "recipe": "uniform",
+        "attempt": 8
+      },
+      "fingerprint": "010020330030400000990009030400080088060003000730600700",
+      "closestPrior": {
+        "id": "book-v1-326",
+        "similarity": 0.14285714285714285
+      }
+    },
+    {
+      "id": "book-v2-shift-6",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 1,
+      "position": 6,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        5,
+        5,
+        7,
+        0,
+        0,
+        9,
+        5,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        9,
+        2,
+        0,
+        9,
+        9,
+        1,
+        0,
+        9,
+        9,
+        8,
+        1,
+        5,
+        7,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        7,
+        0,
+        5,
+        1,
+        0,
+        5,
+        9,
+        0
+      ],
+      "boardSha256": "cfa9f376e22343df8667b90a70572166badd3b323bb90697733521bfa92db6d5",
+      "solution": [
+        {
+          "a": 20,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 39,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 19,
+          "kind": "reading"
+        },
+        {
+          "a": 29,
+          "b": 37,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 27,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 14,
+          "kind": "reading"
+        },
+        {
+          "a": 17,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 9,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 19,
+        "firstClear": false,
+        "lastClear": false,
+        "reveal": 5,
+        "reading": 1,
+        "compression": 1,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2407721154,
+        "rows": 5,
+        "recipe": "edge",
+        "attempt": 16
+      },
+      "fingerprint": "000551002500900023022802278519000000910580520",
+      "closestPrior": {
+        "id": "daily-v1-2027-04-03",
+        "similarity": 0.17857142857142858
+      }
+    },
+    {
+      "id": "book-v2-shift-7",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 2,
+      "position": 7,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        3,
+        1,
+        0,
+        0,
+        0,
+        4,
+        0,
+        7,
+        3,
+        3,
+        1,
+        0,
+        0,
+        3,
+        0,
+        0,
+        7,
+        0,
+        3,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "boardSha256": "1898324691da3bae6f632555efac9fd13fbe1b10a58f80d4036bbb05c7f02889",
+      "solution": [
+        {
+          "a": 35,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 39,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 15,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 54,
+        "openingPairs": 15,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 1,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 714813851,
+        "rows": 6,
+        "recipe": "vertical",
+        "attempt": 34
+      },
+      "fingerprint": "000000010050000002000030002100030822100200802050000010",
+      "closestPrior": {
+        "id": "book-v1-69",
+        "similarity": 0.13793103448275862
+      }
+    },
+    {
+      "id": "book-v2-shift-8",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 2,
+      "position": 8,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        3,
+        7,
+        0,
+        7,
+        0,
+        0,
+        0,
+        1,
+        4,
+        1,
+        2,
+        0,
+        0,
+        2,
+        0,
+        2,
+        6,
+        8,
+        5,
+        5,
+        0,
+        0,
+        0,
+        3,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        1,
+        9,
+        2,
+        0,
+        0
+      ],
+      "boardSha256": "08e698075d2331bce7f47ba1d5509fbae6aad30ce2245d3829d283db4153b935",
+      "solution": [
+        {
+          "a": 24,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 40,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 29,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 27,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 23,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 6,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 20,
+        "logical": 45,
+        "openingPairs": 9,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 1,
+        "compression": 1,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 829441664,
+        "rows": 5,
+        "recipe": "horizontal",
+        "attempt": 27
+      },
+      "fingerprint": "000010190900023240040476550001900000600028400",
+      "closestPrior": {
+        "id": "daily-v1-2026-12-03",
+        "similarity": 0.1935483870967742
+      }
+    },
+    {
+      "id": "book-v2-shift-9",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 2,
+      "position": 9,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        8,
+        0,
+        0,
+        0,
+        5,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        2,
+        0,
+        5,
+        0,
+        3,
+        0,
+        0,
+        2,
+        8,
+        0,
+        0,
+        9,
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        8,
+        0,
+        2,
+        9,
+        0,
+        5,
+        0,
+        5,
+        8,
+        0,
+        1,
+        0,
+        0,
+        0,
+        9,
+        0,
+        5,
+        5,
+        0,
+        5,
+        0,
+        0,
+        7
+      ],
+      "boardSha256": "d0f03ac46d19653e32bbf5bce6364656807d26c286d432efa6b30c9e6e382e8e",
+      "solution": [
+        {
+          "a": 17,
+          "b": 53,
+          "kind": "straight"
+        },
+        {
+          "a": 38,
+          "b": 48,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 41,
+          "b": 45,
+          "kind": "reading"
+        },
+        {
+          "a": 47,
+          "b": 50,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 36,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 16,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 28,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3005730166,
+        "rows": 6,
+        "recipe": "diagonal",
+        "attempt": 0
+      },
+      "fingerprint": "100055000000190502009100390009010930505107000305505008",
+      "closestPrior": {
+        "id": "book-v1-243",
+        "similarity": 0.13513513513513514
+      }
+    },
+    {
+      "id": "book-v2-shift-10",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 2,
+      "position": 10,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        1,
+        0,
+        0,
+        9,
+        7,
+        9,
+        4,
+        8,
+        1,
+        1,
+        1,
+        0,
+        1,
+        3,
+        9,
+        6,
+        2
+      ],
+      "boardSha256": "e7f49851558db2e49fa63908eab56aaedc41266cd15809d6fb4a80da360bda86",
+      "solution": [
+        {
+          "a": 6,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 17,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 14,
+        "logical": 18,
+        "openingPairs": 12,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 0,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 0
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1808317452,
+        "rows": 2,
+        "recipe": "vertical",
+        "attempt": 6
+      },
+      "fingerprint": "010092934111018976",
+      "closestPrior": {
+        "id": "book-v1-4",
+        "similarity": 0.14285714285714285
+      }
+    },
+    {
+      "id": "book-v2-shift-11",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 2,
+      "position": 11,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        9,
+        2,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        9,
+        0,
+        1,
+        0,
+        2,
+        6,
+        6,
+        1,
+        1,
+        0,
+        9,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        9,
+        0,
+        0,
+        4,
+        0,
+        7,
+        0,
+        7,
+        4,
+        0,
+        5,
+        0,
+        7,
+        0,
+        6,
+        0,
+        0,
+        0,
+        7,
+        2,
+        3,
+        3,
+        4,
+        0,
+        0
+      ],
+      "boardSha256": "681eacd142609a89a53ae2b4e9ec09ece01131840517ea579180e8c5bcab3d76",
+      "solution": [
+        {
+          "a": 43,
+          "b": 51,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 34,
+          "b": 36,
+          "kind": "reading"
+        },
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 49,
+          "b": 50,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 37,
+          "kind": "reading"
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 21,
+          "kind": "reading"
+        },
+        {
+          "a": 23,
+          "b": 29,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 8,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 12,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 26,
+        "logical": 54,
+        "openingPairs": 24,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 4,
+        "compression": 2,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3277457978,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 29
+      },
+      "fingerprint": "012080000901090233990100005001007040470504030004266700",
+      "closestPrior": {
+        "id": "book-v1-190",
+        "similarity": 0.13157894736842105
+      }
+    },
+    {
+      "id": "book-v2-shift-12",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 2,
+      "position": 12,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        2,
+        0,
+        9,
+        9,
+        1,
+        0,
+        6,
+        4,
+        2,
+        0,
+        0,
+        5,
+        5,
+        0,
+        1,
+        7,
+        1,
+        1,
+        0,
+        0,
+        4,
+        6,
+        3,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        7,
+        0,
+        7,
+        7,
+        5,
+        1,
+        9,
+        9,
+        0,
+        0,
+        9,
+        7,
+        5
+      ],
+      "boardSha256": "869fe1073e9524c1aa7933ed56556cdc49686457380539d5f509b5c2a5cd1960",
+      "solution": [
+        {
+          "a": 4,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 7,
+          "kind": "straight"
+        },
+        {
+          "a": 39,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 37,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 20,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 21,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 8,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [
+        "seeds-content-reveal"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 28,
+        "logical": 45,
+        "openingPairs": 23,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 2,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 350910692,
+        "rows": 5,
+        "recipe": "horizontal",
+        "attempt": 17
+      },
+      "fingerprint": "102280371005508488007366000000604044582200245",
+      "closestPrior": {
+        "id": "book-v1-129",
+        "similarity": 0.1794871794871795
+      }
+    },
+    {
+      "id": "book-v2-shift-13",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 3,
+      "position": 13,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        8,
+        4,
+        6,
+        0,
+        0,
+        0,
+        0,
+        2,
+        9,
+        0,
+        0,
+        4,
+        1,
+        7,
+        0,
+        8,
+        0,
+        0,
+        4,
+        0,
+        8,
+        0,
+        1,
+        7,
+        1,
+        5,
+        5
+      ],
+      "boardSha256": "92a3b1f5ed994bcab6c57e25df56f176e7faf5a8eb95811b497505cce19b5a11",
+      "solution": [
+        {
+          "a": 25,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 13,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 27,
+        "openingPairs": 10,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 2,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 3
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3315915908,
+        "rows": 3,
+        "recipe": "diagonal",
+        "attempt": 1
+      },
+      "fingerprint": "128000093002740100201074755",
+      "closestPrior": {
+        "id": "book-v1-114",
+        "similarity": 0.2222222222222222
+      }
+    },
+    {
+      "id": "book-v2-shift-14",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 3,
+      "position": 14,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        7,
+        1,
+        1,
+        0,
+        0,
+        0,
+        3,
+        3,
+        3,
+        9,
+        0,
+        0,
+        2,
+        2,
+        5,
+        5,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        2,
+        0,
+        2,
+        5,
+        0,
+        1,
+        7,
+        0,
+        7,
+        0,
+        0,
+        6,
+        0,
+        4
+      ],
+      "boardSha256": "5382491c26b32b473d79201994d9362f4a718f30d9f90034cc322f04df7d4a45",
+      "solution": [
+        {
+          "a": 9,
+          "b": 27,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 2,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 33,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 7,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 8,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 6,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 20,
+        "logical": 36,
+        "openingPairs": 14,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3444936887,
+        "rows": 4,
+        "recipe": "horizontal",
+        "attempt": 3
+      },
+      "fingerprint": "122000999800335500005030350210100406",
+      "closestPrior": {
+        "id": "book-v1-240",
+        "similarity": 0.2
+      }
+    },
+    {
+      "id": "book-v2-shift-15",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 3,
+      "position": 15,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        2,
+        3,
+        3,
+        0,
+        8,
+        0,
+        2,
+        0,
+        5,
+        1,
+        0,
+        0,
+        0,
+        1,
+        5,
+        0,
+        0,
+        0,
+        0,
+        9,
+        4,
+        0,
+        0,
+        6,
+        2,
+        0,
+        0,
+        0,
+        3,
+        0,
+        1,
+        0,
+        0,
+        1,
+        7,
+        0,
+        0,
+        1,
+        0,
+        9,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        9,
+        0,
+        0,
+        0,
+        0,
+        8
+      ],
+      "boardSha256": "228c072980cc8b215f8d9ffe3ec4a6d812979232db5b6e8c71ccbd1df77fe110",
+      "solution": [
+        {
+          "a": 44,
+          "b": 53,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 38,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 29,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 6,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 22,
+        "logical": 54,
+        "openingPairs": 14,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 8
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3122678173,
+        "rows": 6,
+        "recipe": "horizontal",
+        "attempt": 4
+      },
+      "fingerprint": "012209010530003500007400610002030038003070009000700009",
+      "closestPrior": {
+        "id": "book-v1-69",
+        "similarity": 0.125
+      }
+    },
+    {
+      "id": "book-v2-shift-16",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 3,
+      "position": 16,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        7,
+        2,
+        5,
+        5,
+        4,
+        0,
+        3,
+        3,
+        8,
+        2,
+        3,
+        0,
+        5,
+        5,
+        4,
+        7,
+        2,
+        3
+      ],
+      "boardSha256": "5633cc8866cf53b4f42e92b9d0a2039e82e81197e9c6e9f04a6f4cd12d743566",
+      "solution": [
+        {
+          "a": 8,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 15,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 18,
+        "openingPairs": 14,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 2,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 0
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2495103132,
+        "rows": 2,
+        "recipe": "diagonal",
+        "attempt": 0
+      },
+      "fingerprint": "125530998290553129",
+      "closestPrior": {
+        "id": "book-v1-6",
+        "similarity": 0.23529411764705882
+      }
+    },
+    {
+      "id": "book-v2-shift-17",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 3,
+      "position": 17,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        3,
+        0,
+        9,
+        0,
+        3,
+        8,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        8,
+        1,
+        8,
+        7,
+        0,
+        3,
+        0,
+        1,
+        1,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        9,
+        0,
+        7,
+        9,
+        7,
+        0,
+        4,
+        0,
+        6,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "boardSha256": "3dd8b5bc8a52a6fd4d5be462d45853bec5edf5c6ebe3b67e24a0efeceb1c4b6d",
+      "solution": [
+        {
+          "a": 4,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 11,
+          "kind": "reading"
+        },
+        {
+          "a": 22,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 29,
+          "b": 36,
+          "kind": "reading"
+        },
+        {
+          "a": 37,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 5,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 23,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 2,
+        "compression": 2,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 204572334,
+        "rows": 6,
+        "recipe": "spaced",
+        "attempt": 3
+      },
+      "fingerprint": "001020130003009000010383901088007700800020929040600080",
+      "closestPrior": {
+        "id": "book-v1-330",
+        "similarity": 0.1282051282051282
+      }
+    },
+    {
+      "id": "book-v2-shift-18",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 3,
+      "position": 18,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        8,
+        2,
+        8,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        8,
+        0,
+        0,
+        7,
+        3,
+        9,
+        0,
+        9,
+        0,
+        0,
+        2,
+        0,
+        0,
+        8,
+        0,
+        0,
+        2,
+        2,
+        0,
+        4,
+        0,
+        8,
+        8,
+        0,
+        8,
+        0,
+        0,
+        2,
+        5,
+        6,
+        0,
+        1,
+        1,
+        0,
+        5,
+        0
+      ],
+      "boardSha256": "f2c040c5f62eae5214d45ec78ad4cca9308644da6dc2e586d6fd5b2494e6b0f7",
+      "solution": [
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 6,
+          "kind": "straight"
+        },
+        {
+          "a": 28,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 40,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 37,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 2,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 7,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 1,
+          "b": 8,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 28,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 6,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1707396282,
+        "rows": 5,
+        "recipe": "horizontal",
+        "attempt": 4
+      },
+      "fingerprint": "191020200100378080090010099040110100956022050",
+      "closestPrior": {
+        "id": "daily-v1-2025-12-17",
+        "similarity": 0.1891891891891892
+      }
+    },
+    {
+      "id": "book-v2-shift-19",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 4,
+      "position": 19,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        7,
+        9,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        9,
+        4,
+        0,
+        8,
+        1,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        1,
+        7,
+        1,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        3,
+        0,
+        0,
+        7,
+        6,
+        4,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0
+      ],
+      "boardSha256": "8ef24c7e93507d6ea5334b5c6728e74e979dc001db8a2f89a2c47288e12cbf26",
+      "solution": [
+        {
+          "a": 10,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 43,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 37,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 29,
+          "b": 47,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 11,
+          "kind": "reading"
+        },
+        {
+          "a": 8,
+          "b": 9,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 20,
+        "logical": 54,
+        "openingPairs": 13,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2944055732,
+        "rows": 6,
+        "recipe": "spaced",
+        "attempt": 23
+      },
+      "fingerprint": "000012003080002407806000000005818000010090016405000010",
+      "closestPrior": {
+        "id": "book-v1-261",
+        "similarity": 0.11764705882352941
+      }
+    },
+    {
+      "id": "book-v2-shift-20",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 4,
+      "position": 20,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        1,
+        0,
+        3,
+        7,
+        7,
+        0,
+        6,
+        0,
+        9,
+        0,
+        4,
+        4,
+        5,
+        2,
+        1,
+        4,
+        8,
+        0,
+        3,
+        0,
+        7,
+        0,
+        8,
+        1,
+        6,
+        0,
+        0,
+        6,
+        4,
+        0,
+        5,
+        3,
+        0,
+        6,
+        8
+      ],
+      "boardSha256": "dfe3c34622c05f2331a7b684932d42cf93ecd2b5b265030b9616e1fcff980bbb",
+      "solution": [
+        {
+          "a": 12,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 14,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [
+        "seeds-content-compression"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 36,
+        "openingPairs": 16,
+        "firstClear": false,
+        "lastClear": true,
+        "reveal": 5,
+        "reading": 0,
+        "compression": 2,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1636975890,
+        "rows": 4,
+        "recipe": "vertical",
+        "attempt": 14
+      },
+      "fingerprint": "010288030907754176020806130037052036",
+      "closestPrior": {
+        "id": "book-v1-27",
+        "similarity": 0.24242424242424243
+      }
+    },
+    {
+      "id": "book-v2-shift-21",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 4,
+      "position": 21,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        6,
+        0,
+        7,
+        0,
+        0,
+        7,
+        0,
+        0,
+        9,
+        2,
+        0,
+        2,
+        1,
+        4,
+        0,
+        0,
+        0,
+        0,
+        7,
+        8,
+        1,
+        1,
+        8,
+        9,
+        6,
+        5,
+        2,
+        3,
+        0,
+        4,
+        5,
+        7,
+        0,
+        0,
+        0,
+        7,
+        2,
+        0
+      ],
+      "boardSha256": "738cc6a270428c6e62994e935f124c4adfdc36e89567ca8fff531f99d069ce03",
+      "solution": [
+        {
+          "a": 33,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 27,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 29,
+          "kind": "reading"
+        },
+        {
+          "a": 20,
+          "b": 36,
+          "kind": "straight"
+        },
+        {
+          "a": 34,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 37,
+          "kind": "reading"
+        },
+        {
+          "a": 15,
+          "b": 19,
+          "kind": "reading"
+        },
+        {
+          "a": 7,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 11,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 12,
+        "firstClear": false,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 4,
+        "compression": 0,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3646103262,
+        "rows": 5,
+        "recipe": "edge",
+        "attempt": 0
+      },
+      "fingerprint": "000000120300300940418000036116925470853000340",
+      "closestPrior": {
+        "id": "daily-v1-2026-08-15",
+        "similarity": 0.18181818181818182
+      }
+    },
+    {
+      "id": "book-v2-shift-22",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 4,
+      "position": 22,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        1,
+        1,
+        9,
+        5,
+        0,
+        9,
+        4,
+        9,
+        8,
+        1,
+        7,
+        5,
+        3,
+        4,
+        6,
+        6,
+        0,
+        8
+      ],
+      "boardSha256": "5a11baf0b5656a8fb39acc1efb0af64a3b6b90d4bd304d8374357a8200566ea2",
+      "solution": [
+        {
+          "a": 0,
+          "b": 1,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 10,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 13,
+          "kind": "reading"
+        },
+        {
+          "a": 2,
+          "b": 5,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 18,
+        "openingPairs": 10,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 351395119,
+        "rows": 2,
+        "recipe": "uniform",
+        "attempt": 0
+      },
+      "fingerprint": "119509293145628803",
+      "closestPrior": {
+        "id": "book-v2-links-13",
+        "similarity": 0.2222222222222222
+      }
+    },
+    {
+      "id": "book-v2-shift-23",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 4,
+      "position": 23,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        1,
+        0,
+        0,
+        4,
+        4,
+        4,
+        7,
+        9,
+        0,
+        0,
+        0,
+        9,
+        5,
+        0,
+        0,
+        0,
+        8,
+        0,
+        8,
+        1,
+        0,
+        2,
+        9,
+        7,
+        4,
+        0,
+        5,
+        9,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        9,
+        0,
+        3,
+        5,
+        0,
+        0,
+        5,
+        5,
+        0,
+        5,
+        1,
+        0,
+        7,
+        6,
+        0
+      ],
+      "boardSha256": "a8280a59a351243d3127e0531532c1c84fc3b4887eb555a7f1b25d5facbd8dae",
+      "solution": [
+        {
+          "a": 46,
+          "b": 48,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 7,
+          "b": 11,
+          "kind": "reading"
+        },
+        {
+          "a": 21,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 49,
+          "kind": "straight"
+        },
+        {
+          "a": 34,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 30,
+          "kind": "reading"
+        },
+        {
+          "a": 17,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 5,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 10,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 28,
+        "logical": 54,
+        "openingPairs": 18,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 5,
+        "reading": 4,
+        "compression": 1,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3186086071,
+        "rows": 6,
+        "recipe": "spaced",
+        "attempt": 34
+      },
+      "fingerprint": "100222390009500040410693205900400020000907500550510380",
+      "closestPrior": {
+        "id": "book-v1-220",
+        "similarity": 0.15789473684210525
+      }
+    },
+    {
+      "id": "book-v2-shift-24",
+      "mode": "notebook",
+      "collection": "shift",
+      "page": 4,
+      "position": 24,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        9,
+        0,
+        6,
+        7,
+        7,
+        0,
+        9,
+        7,
+        8,
+        9,
+        4,
+        8,
+        8,
+        3,
+        4,
+        0,
+        2,
+        0,
+        7,
+        2,
+        0,
+        3,
+        4,
+        0,
+        7,
+        1,
+        7,
+        2,
+        0,
+        4,
+        9,
+        9,
+        9,
+        0,
+        9,
+        9,
+        3,
+        6,
+        3,
+        1,
+        0,
+        0
+      ],
+      "boardSha256": "336cf0abe9c09a409ee8f1c0c51148ea7d890561ace29ca75e0bd03d5c1064d4",
+      "solution": [
+        {
+          "a": 34,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 21,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 37,
+          "kind": "reading"
+        },
+        {
+          "a": 22,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 15,
+          "b": 20,
+          "kind": "reading"
+        },
+        {
+          "a": 7,
+          "b": 14,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [
+        "seeds-content-reading",
+        "seeds-content-reveal"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 32,
+        "logical": 45,
+        "openingPairs": 24,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 6,
+        "reading": 1,
+        "compression": 1,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1460716718,
+        "rows": 5,
+        "recipe": "edge",
+        "attempt": 94
+      },
+      "fingerprint": "000102330134184478060360780393608111011727900",
+      "closestPrior": {
+        "id": "daily-v1-2027-04-07",
+        "similarity": 0.19444444444444445
+      }
+    },
+    {
+      "id": "daily-pilot-v2-01",
+      "mode": "daily",
+      "week": 1,
+      "position": 1,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        1,
+        0,
+        9,
+        0,
+        0,
+        6,
+        0,
+        0,
+        1,
+        0,
+        1,
+        8,
+        9,
+        0,
+        2,
+        4,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        7,
+        0,
+        2,
+        0,
+        7,
+        0,
+        0,
+        8,
+        8,
+        4,
+        0,
+        2,
+        7,
+        7,
+        1,
+        0,
+        0,
+        0,
+        4,
+        4,
+        7,
+        4
+      ],
+      "boardSha256": "d6be3054bfe034d11b406b82884b666dbea27e39821b17d886fde73446920293",
+      "solution": [
+        {
+          "a": 1,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 42,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 36,
+          "kind": "reading"
+        },
+        {
+          "a": 19,
+          "b": 27,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 37,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 30,
+          "kind": "reading"
+        },
+        {
+          "a": 3,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 16,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 22,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1060783392,
+        "rows": 5,
+        "recipe": "edge",
+        "attempt": 2
+      },
+      "fingerprint": "010900200101390780040004070400338074410008848",
+      "closestPrior": {
+        "id": "book-v1-93",
+        "similarity": 0.1891891891891892
+      }
+    },
+    {
+      "id": "daily-pilot-v2-02",
+      "mode": "daily",
+      "week": 1,
+      "position": 2,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        1,
+        0,
+        3,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        7,
+        8,
+        0,
+        0,
+        4,
+        6,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        6,
+        6,
+        0,
+        4,
+        8,
+        6,
+        0,
+        1,
+        0,
+        4,
+        2,
+        0,
+        0,
+        8,
+        0,
+        0,
+        1,
+        0,
+        0,
+        2,
+        6,
+        6,
+        6,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "4f17d6b7b68700292fcac42e10cc2fc4703991abb119287982cee02179a736f9",
+      "solution": [
+        {
+          "a": 20,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 28,
+          "b": 37,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 46,
+          "b": 50,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 34,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 27,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 16,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 24,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 2,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 2
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 521512330,
+        "rows": 6,
+        "recipe": "vertical",
+        "attempt": 3
+      },
+      "fingerprint": "010230000001830046006000660436010470030010076660004000",
+      "closestPrior": {
+        "id": "book-v1-171",
+        "similarity": 0.09523809523809523
+      }
+    },
+    {
+      "id": "daily-pilot-v2-03",
+      "mode": "daily",
+      "week": 1,
+      "position": 3,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        6,
+        0,
+        1,
+        9,
+        0,
+        9,
+        7,
+        4,
+        4,
+        8,
+        0,
+        2,
+        0,
+        6,
+        0,
+        5,
+        7,
+        7,
+        5,
+        4,
+        0,
+        3,
+        0,
+        2,
+        8,
+        0,
+        8,
+        9,
+        7,
+        3,
+        0,
+        0,
+        8,
+        0,
+        6
+      ],
+      "boardSha256": "582e970f0b12709414146718e5c133d90baece8049eba7fcdd807373df88293e",
+      "solution": [
+        {
+          "a": 17,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 6,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 16,
+          "b": 19,
+          "kind": "reading"
+        },
+        {
+          "a": 8,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 11,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 36,
+        "openingPairs": 13,
+        "firstClear": false,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 3,
+        "compression": 1,
+        "gaps": 8
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3631519522,
+        "rows": 4,
+        "recipe": "spaced",
+        "attempt": 28
+      },
+      "fingerprint": "010280839940601053359070640483700401",
+      "closestPrior": {
+        "id": "daily-v1-2025-06-04",
+        "similarity": 0.22580645161290322
+      }
+    },
+    {
+      "id": "daily-pilot-v2-04",
+      "mode": "daily",
+      "week": 1,
+      "position": 4,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        8,
+        7,
+        0,
+        0,
+        7,
+        3,
+        7,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        2,
+        4,
+        5,
+        0,
+        3,
+        2,
+        7,
+        0,
+        8,
+        0,
+        0,
+        3,
+        5,
+        0,
+        4,
+        4,
+        8,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        6,
+        0,
+        4,
+        0,
+        7,
+        7,
+        0
+      ],
+      "boardSha256": "7b6dc128824484c85d51aa2d3b26728dfb3e8afea3a0987b93fb6f50d80c0bda",
+      "solution": [
+        {
+          "a": 4,
+          "b": 13,
+          "kind": "straight"
+        },
+        {
+          "a": 29,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 36,
+          "kind": "reading"
+        },
+        {
+          "a": 15,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 6,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 9,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 22,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 5,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2203357190,
+        "rows": 5,
+        "recipe": "uniform",
+        "attempt": 9
+      },
+      "fingerprint": "120028203000080935089201008503310000107030220",
+      "closestPrior": {
+        "id": "daily-v1-2026-11-22",
+        "similarity": 0.1891891891891892
+      }
+    },
+    {
+      "id": "daily-pilot-v2-05",
+      "mode": "daily",
+      "week": 1,
+      "position": 5,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        8,
+        0,
+        0,
+        2,
+        7,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7,
+        3,
+        0,
+        7,
+        3,
+        0,
+        0,
+        4,
+        7,
+        7,
+        0,
+        0,
+        3,
+        6,
+        6,
+        7,
+        2,
+        0,
+        0,
+        2,
+        0,
+        3,
+        0,
+        4,
+        0,
+        3,
+        2,
+        0,
+        7,
+        0,
+        0
+      ],
+      "boardSha256": "14fe23de652f88cf685953673f329afdd0f70479549c45cde84fcd944b1d95e5",
+      "solution": [
+        {
+          "a": 36,
+          "b": 37,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 38,
+          "kind": "reading"
+        },
+        {
+          "a": 31,
+          "b": 51,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 17,
+          "b": 49,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 46,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 23,
+          "kind": "reading"
+        },
+        {
+          "a": 10,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 15,
+          "kind": "reading"
+        },
+        {
+          "a": 8,
+          "b": 12,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 27,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 5,
+        "reading": 3,
+        "compression": 1,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2764513303,
+        "rows": 6,
+        "recipe": "spaced",
+        "attempt": 3
+      },
+      "fingerprint": "000100000010100929000002802800322008772900908030890200",
+      "closestPrior": {
+        "id": "book-v1-283",
+        "similarity": 0.1282051282051282
+      }
+    },
+    {
+      "id": "daily-pilot-v2-06",
+      "mode": "daily",
+      "week": 1,
+      "position": 6,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        4,
+        4,
+        6,
+        5,
+        5,
+        5,
+        6,
+        3,
+        0,
+        7,
+        4,
+        6,
+        5,
+        2,
+        6,
+        3,
+        9,
+        6,
+        1,
+        4,
+        5,
+        5,
+        8,
+        3,
+        0,
+        4,
+        0
+      ],
+      "boardSha256": "a4d302421a252361deae070664667379f49299c042a2ff09b6f501295dc08d58",
+      "solution": [
+        {
+          "a": 3,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 1,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 17,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 10,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 27,
+        "openingPairs": 23,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 6,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 3
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 230075694,
+        "rows": 3,
+        "recipe": "edge",
+        "attempt": 12
+      },
+      "fingerprint": "119555920819539249615572010",
+      "closestPrior": {
+        "id": "book-v1-62",
+        "similarity": 0.23076923076923078
+      }
+    },
+    {
+      "id": "daily-pilot-v2-07",
+      "mode": "daily",
+      "week": 1,
+      "position": 7,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        7,
+        7,
+        7,
+        5,
+        8,
+        8,
+        2,
+        0,
+        8,
+        0,
+        3,
+        7,
+        5,
+        0,
+        7,
+        0,
+        7,
+        8,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        2,
+        0,
+        0,
+        5,
+        7,
+        5,
+        0,
+        7,
+        2,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "c1353d48507dae50f307b2b3b921702427c0720cbd3de4336f799d1d5d110242",
+      "solution": [
+        {
+          "a": 22,
+          "b": 49,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 34,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 20,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 10,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 24,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 2,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 3
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3874212784,
+        "rows": 6,
+        "recipe": "vertical",
+        "attempt": 4
+      },
+      "fingerprint": "010000222599109082502029000080100525021000080000080000",
+      "closestPrior": {
+        "id": "book-v1-139",
+        "similarity": 0.1111111111111111
+      }
+    },
+    {
+      "id": "daily-pilot-v2-08",
+      "mode": "daily",
+      "week": 2,
+      "position": 8,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        6,
+        7,
+        8,
+        7,
+        2,
+        6,
+        9,
+        3,
+        3,
+        1,
+        2,
+        4,
+        0,
+        2,
+        5,
+        5,
+        4
+      ],
+      "boardSha256": "6811d20195a5281f49d8d3ef5fbfa2e2b5478c70fd50567974ee6e60415f66d8",
+      "solution": [
+        {
+          "a": 15,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 5,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 6,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 10,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 18,
+        "openingPairs": 4,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1648488476,
+        "rows": 2,
+        "recipe": "spaced",
+        "attempt": 16
+      },
+      "fingerprint": "012327148867907559",
+      "closestPrior": {
+        "id": "book-v1-3",
+        "similarity": 0.125
+      }
+    },
+    {
+      "id": "daily-pilot-v2-09",
+      "mode": "daily",
+      "week": 2,
+      "position": 9,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        5,
+        8,
+        0,
+        0,
+        9,
+        0,
+        6,
+        6,
+        4,
+        0,
+        8,
+        0,
+        0,
+        6,
+        5,
+        0,
+        4,
+        0,
+        0,
+        0,
+        1,
+        0,
+        9,
+        0,
+        4,
+        9,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        1,
+        1,
+        5,
+        3,
+        0,
+        3,
+        0,
+        5,
+        4,
+        0,
+        0,
+        0,
+        3,
+        0
+      ],
+      "boardSha256": "00fe04e7896a9f51dec96ef0fed0430ac8ff87b8158e1aec966fe7dcc6099f00",
+      "solution": [
+        {
+          "a": 36,
+          "b": 45,
+          "kind": "straight"
+        },
+        {
+          "a": 40,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 43,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 20,
+          "b": 47,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 28,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 1,
+          "b": 13,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 21,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 4,
+        "reading": 1,
+        "compression": 1,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2268190837,
+        "rows": 6,
+        "recipe": "vertical",
+        "attempt": 16
+      },
+      "fingerprint": "000010520030119020015090007030930000400077560605900060",
+      "closestPrior": {
+        "id": "book-v1-296",
+        "similarity": 0.1111111111111111
+      }
+    },
+    {
+      "id": "daily-pilot-v2-10",
+      "mode": "daily",
+      "week": 2,
+      "position": 10,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        3,
+        0,
+        2,
+        3,
+        0,
+        4,
+        2,
+        6,
+        0,
+        6,
+        3,
+        9,
+        0,
+        0,
+        8,
+        6,
+        4,
+        0,
+        1,
+        1,
+        3,
+        7,
+        2,
+        5,
+        4,
+        0,
+        0,
+        0,
+        9,
+        3,
+        8,
+        0,
+        2,
+        5,
+        0
+      ],
+      "boardSha256": "25ae9271106183c9c69c2d389888c09ba6a15f09a4f7600b5ca7883e44a832b6",
+      "solution": [
+        {
+          "a": 23,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 13,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 12,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 36,
+        "openingPairs": 24,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 2,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 3
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2654989171,
+        "rows": 4,
+        "recipe": "diagonal",
+        "attempt": 5
+      },
+      "fingerprint": "010210327071400873066192530004180250",
+      "closestPrior": {
+        "id": "daily-v1-2026-02-09",
+        "similarity": 0.24242424242424243
+      }
+    },
+    {
+      "id": "daily-pilot-v2-11",
+      "mode": "daily",
+      "week": 2,
+      "position": 11,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        6,
+        0,
+        4,
+        0,
+        7,
+        0,
+        3,
+        0,
+        0,
+        0,
+        9,
+        0,
+        0,
+        8,
+        0,
+        8,
+        9,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7,
+        3,
+        3,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      "boardSha256": "8fd0a5c642d796fec047e16ecd46a8b322b82781d4a8325d4743ae8258811e8c",
+      "solution": [
+        {
+          "a": 0,
+          "b": 8,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 21,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 7,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 45,
+        "openingPairs": 11,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 2,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 481901706,
+        "rows": 5,
+        "recipe": "horizontal",
+        "attempt": 7
+      },
+      "fingerprint": "100000001010902080003004043200000288000500050",
+      "closestPrior": {
+        "id": "daily-v1-2027-09-06",
+        "similarity": 0.19230769230769232
+      }
+    },
+    {
+      "id": "daily-pilot-v2-12",
+      "mode": "daily",
+      "week": 2,
+      "position": 12,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        3,
+        9,
+        1,
+        0,
+        0,
+        5,
+        0,
+        7,
+        0,
+        6,
+        0,
+        0,
+        0,
+        5,
+        2,
+        0,
+        0,
+        8,
+        0,
+        1,
+        9,
+        3,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        1,
+        0,
+        0,
+        3,
+        0,
+        2,
+        0,
+        0,
+        8,
+        0,
+        8,
+        1,
+        0,
+        0,
+        9,
+        0,
+        9,
+        2,
+        0,
+        0,
+        0,
+        8,
+        2,
+        0
+      ],
+      "boardSha256": "ea26c0444481417f28200ebde46b39379a0075d26fa645cb1c9d1e47cfeb2af0",
+      "solution": [
+        {
+          "a": 3,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 38,
+          "b": 47,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 19,
+          "kind": "reading"
+        },
+        {
+          "a": 21,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 51,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 40,
+          "kind": "reading"
+        },
+        {
+          "a": 22,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 26,
+          "b": 28,
+          "kind": "reading"
+        },
+        {
+          "a": 2,
+          "b": 9,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 21,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1545289690,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 0
+      },
+      "fingerprint": "001280050903000540060821000700800104006068002024000640",
+      "closestPrior": {
+        "id": "book-v2-links-23",
+        "similarity": 0.12195121951219512
+      }
+    },
+    {
+      "id": "daily-pilot-v2-13",
+      "mode": "daily",
+      "week": 2,
+      "position": 13,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        5,
+        3,
+        7,
+        7,
+        6,
+        2,
+        4,
+        8,
+        5,
+        7,
+        7,
+        7,
+        4,
+        9,
+        4,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        4,
+        0,
+        7,
+        4,
+        7,
+        5,
+        0,
+        7,
+        0,
+        5,
+        9,
+        8,
+        0,
+        7,
+        0,
+        2,
+        0,
+        3,
+        0,
+        5,
+        3,
+        0,
+        7,
+        3
+      ],
+      "boardSha256": "c49314ebc8eca53349f5101883084c480de76ff328df22512de742b17557e1f2",
+      "solution": [
+        {
+          "a": 9,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 43,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 14,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 7,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 13,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 32,
+        "logical": 45,
+        "openingPairs": 30,
+        "firstClear": true,
+        "lastClear": false,
+        "reveal": 6,
+        "reading": 1,
+        "compression": 1,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3635043623,
+        "rows": 5,
+        "recipe": "uniform",
+        "attempt": 40
+      },
+      "fingerprint": "519923875999848005000809895090547090301051091",
+      "closestPrior": {
+        "id": "daily-v1-2025-01-06",
+        "similarity": 0.19444444444444445
+      }
+    },
+    {
+      "id": "daily-pilot-v2-14",
+      "mode": "daily",
+      "week": 2,
+      "position": 14,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        6,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        6,
+        2,
+        0,
+        2,
+        4,
+        0,
+        7,
+        0,
+        2,
+        0,
+        0,
+        8,
+        4,
+        3,
+        0,
+        4,
+        0,
+        3,
+        3,
+        5,
+        5,
+        3,
+        2,
+        6,
+        0,
+        7,
+        0,
+        7,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "5eaf47d38d19780b6d85b2753f2d1cd7f2f195101867961fb6adacdf95118732",
+      "solution": [
+        {
+          "a": 8,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 26,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 25,
+          "b": 28,
+          "kind": "reading"
+        },
+        {
+          "a": 24,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 46,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 18,
+          "kind": "reading"
+        },
+        {
+          "a": 11,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 34,
+          "b": 36,
+          "kind": "reading"
+        },
+        {
+          "a": 13,
+          "b": 20,
+          "kind": "reading"
+        },
+        {
+          "a": 7,
+          "b": 13,
+          "kind": "reading"
+        },
+        {
+          "a": 0,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 16,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 17,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 5,
+        "reading": 6,
+        "compression": 0,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3565904800,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 8
+      },
+      "fingerprint": "100010012029030200897090775572103030300000020010000000",
+      "closestPrior": {
+        "id": "book-v1-207",
+        "similarity": 0.16666666666666666
+      }
+    },
+    {
+      "id": "daily-pilot-v2-15",
+      "mode": "daily",
+      "week": 3,
+      "position": 15,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        5,
+        0,
+        4,
+        9,
+        9,
+        5,
+        9,
+        2,
+        8,
+        9,
+        9,
+        4,
+        2,
+        8,
+        8,
+        8,
+        1
+      ],
+      "boardSha256": "5e1b959ceef8ef9c52ed009f148f07086d95d22deb02cf1e54e5823e1a669477",
+      "solution": [
+        {
+          "a": 13,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 3,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 6,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 7,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 8,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 18,
+        "openingPairs": 9,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 2,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 3
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3479812680,
+        "rows": 2,
+        "recipe": "spaced",
+        "attempt": 5
+      },
+      "fingerprint": "050122523722137778",
+      "closestPrior": {
+        "id": "book-v1-3",
+        "similarity": 0.17647058823529413
+      }
+    },
+    {
+      "id": "daily-pilot-v2-16",
+      "mode": "daily",
+      "week": 3,
+      "position": 16,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        5,
+        5,
+        0,
+        0,
+        0,
+        0,
+        5,
+        1,
+        0,
+        1,
+        2,
+        0,
+        3,
+        5,
+        7,
+        5,
+        0,
+        6,
+        5,
+        0,
+        0,
+        0,
+        1,
+        0,
+        5,
+        6,
+        7,
+        1,
+        3,
+        5,
+        2,
+        3,
+        7,
+        7,
+        3,
+        0
+      ],
+      "boardSha256": "018c8dd661431b5865d6108456074f0a5c546f2cf0711a48ddc816be0049c34f",
+      "solution": [
+        {
+          "a": 15,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 14,
+          "b": 32,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 33,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 1,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 13,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 0,
+          "b": 11,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 36,
+        "openingPairs": 14,
+        "firstClear": false,
+        "lastClear": false,
+        "reveal": 4,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 8
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 4237192789,
+        "rows": 4,
+        "recipe": "uniform",
+        "attempt": 5
+      },
+      "fingerprint": "550000510120357504500010547135237730",
+      "closestPrior": {
+        "id": "daily-v1-2025-02-04",
+        "similarity": 0.18181818181818182
+      }
+    },
+    {
+      "id": "daily-pilot-v2-17",
+      "mode": "daily",
+      "week": 3,
+      "position": 17,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        5,
+        5,
+        0,
+        0,
+        6,
+        8,
+        0,
+        0,
+        4,
+        2,
+        9,
+        0,
+        0,
+        4,
+        8,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        3,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        1,
+        0,
+        7,
+        5,
+        0,
+        4,
+        4,
+        0,
+        2,
+        0,
+        0,
+        0,
+        6,
+        1,
+        1,
+        0,
+        0
+      ],
+      "boardSha256": "4dcf521249ef1d6a15f45b14e739084708c11a20f8699f10d2afd5ff751ecc33",
+      "solution": [
+        {
+          "a": 0,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 27,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 22,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 34,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 41,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 17,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 13,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 19,
+        "firstClear": false,
+        "lastClear": true,
+        "reveal": 5,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 3
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2082162871,
+        "rows": 6,
+        "recipe": "vertical",
+        "attempt": 2
+      },
+      "fingerprint": "500000001550092001830012000707400090070650110800097700",
+      "closestPrior": {
+        "id": "book-v1-322",
+        "similarity": 0.10344827586206896
+      }
+    },
+    {
+      "id": "daily-pilot-v2-18",
+      "mode": "daily",
+      "week": 3,
+      "position": 18,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        1,
+        8,
+        5,
+        8,
+        7,
+        0,
+        1,
+        4,
+        0,
+        2,
+        0,
+        1,
+        0,
+        3,
+        6,
+        0,
+        6,
+        0,
+        6,
+        9,
+        5,
+        2,
+        0,
+        0
+      ],
+      "boardSha256": "42f36426a008febae6a0aa3e94d567e48cc497cd2b5464fac78d6c5ddc2df88f",
+      "solution": [
+        {
+          "a": 6,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 21,
+          "kind": "reading"
+        },
+        {
+          "a": 3,
+          "b": 9,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 27,
+        "openingPairs": 7,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 4
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2600390125,
+        "rows": 3,
+        "recipe": "uniform",
+        "attempt": 3
+      },
+      "fingerprint": "000125230140801076060695800",
+      "closestPrior": {
+        "id": "book-v1-208",
+        "similarity": 0.16
+      }
+    },
+    {
+      "id": "daily-pilot-v2-19",
+      "mode": "daily",
+      "week": 3,
+      "position": 19,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        3,
+        3,
+        0,
+        7,
+        0,
+        0,
+        0,
+        9,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        4,
+        7,
+        8,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        8,
+        4,
+        0,
+        0,
+        2,
+        0,
+        6,
+        0,
+        6,
+        6,
+        2,
+        0,
+        6,
+        4,
+        4,
+        6,
+        0,
+        8,
+        8,
+        0
+      ],
+      "boardSha256": "8b5f3b32806c69109ef44ac32fd7a36465bfa0511f5f5c973995ef9eb724dd0c",
+      "solution": [
+        {
+          "a": 44,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 10,
+          "kind": "reading"
+        },
+        {
+          "a": 40,
+          "b": 48,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 47,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 33,
+          "b": 37,
+          "kind": "reading"
+        },
+        {
+          "a": 21,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 13,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 23,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 2,
+        "compression": 2,
+        "gaps": 5
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1057343208,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 18
+      },
+      "fingerprint": "000000122080001000300007840000606047006030336037730440",
+      "closestPrior": {
+        "id": "book-v2-links-23",
+        "similarity": 0.14285714285714285
+      }
+    },
+    {
+      "id": "daily-pilot-v2-20",
+      "mode": "daily",
+      "week": 3,
+      "position": 20,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        6,
+        8,
+        0,
+        2,
+        0,
+        9,
+        1,
+        0,
+        0,
+        1,
+        9,
+        8,
+        2,
+        5,
+        2,
+        9,
+        4,
+        6,
+        4,
+        0,
+        6,
+        0,
+        0,
+        4,
+        9,
+        3,
+        2,
+        4,
+        7,
+        5,
+        0,
+        5,
+        0,
+        0,
+        4,
+        0,
+        3,
+        6,
+        5,
+        2,
+        0,
+        7,
+        8,
+        4
+      ],
+      "boardSha256": "c1d074c2fd469bda4a3fcec146c54aa668313ec124c9ba7deb3e104ed159a4c2",
+      "solution": [
+        {
+          "a": 29,
+          "b": 37,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 14,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 35,
+          "b": 38,
+          "kind": "reading"
+        },
+        {
+          "a": 26,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 16,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 11,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 19,
+          "kind": "reading"
+        },
+        {
+          "a": 1,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 30,
+          "kind": "reading"
+        },
+        {
+          "a": 2,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 13,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [
+        "seeds-content-reveal"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 32,
+        "logical": 45,
+        "openingPairs": 28,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 8,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 11
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2756947797,
+        "rows": 5,
+        "recipe": "uniform",
+        "attempt": 2
+      },
+      "fingerprint": "012080370073285839190100934896505009041580629",
+      "closestPrior": {
+        "id": "daily-v1-2026-01-21",
+        "similarity": 0.1951219512195122
+      }
+    },
+    {
+      "id": "daily-pilot-v2-21",
+      "mode": "daily",
+      "week": 3,
+      "position": 21,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        6,
+        0,
+        5,
+        0,
+        0,
+        5,
+        0,
+        0,
+        9,
+        0,
+        4,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        6,
+        0,
+        5,
+        0,
+        0,
+        5,
+        1,
+        0,
+        5,
+        0,
+        4,
+        0,
+        5,
+        5,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        1,
+        9,
+        0,
+        0,
+        4,
+        9,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        5,
+        9,
+        5
+      ],
+      "boardSha256": "58a5055ce1d0adf452c7b2199512a8126347eb6f90afc8917d6411a59cf869e2",
+      "solution": [
+        {
+          "a": 1,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 46,
+          "b": 51,
+          "kind": "straight"
+        },
+        {
+          "a": 34,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 23,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 53,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 6,
+          "b": 13,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 21,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 9
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 733070656,
+        "rows": 6,
+        "recipe": "uniform",
+        "attempt": 0
+      },
+      "fingerprint": "010500500209800008105005805090550010000820092050000525",
+      "closestPrior": {
+        "id": "book-v1-326",
+        "similarity": 0.1388888888888889
+      }
+    },
+    {
+      "id": "daily-pilot-v2-22",
+      "mode": "daily",
+      "week": 4,
+      "position": 22,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        4,
+        0,
+        9,
+        5,
+        0,
+        8,
+        9,
+        7,
+        0,
+        4,
+        0,
+        5,
+        1,
+        8,
+        1,
+        0,
+        9,
+        0,
+        9,
+        0,
+        9,
+        0,
+        0,
+        7,
+        9,
+        0
+      ],
+      "boardSha256": "e0d01597c92b138fb142f204f04e0c2ff5f70de3f8d5ead2c8208a6a938d9f06",
+      "solution": [
+        {
+          "a": 7,
+          "b": 15,
+          "kind": "straight"
+        },
+        {
+          "a": 4,
+          "b": 12,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 21,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 14,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 27,
+        "openingPairs": 15,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 2,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 2
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1178754912,
+        "rows": 3,
+        "recipe": "edge",
+        "attempt": 7
+      },
+      "fingerprint": "010250324010583802020200420",
+      "closestPrior": {
+        "id": "book-v1-140",
+        "similarity": 0.24
+      }
+    },
+    {
+      "id": "daily-pilot-v2-23",
+      "mode": "daily",
+      "week": 4,
+      "position": 23,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        3,
+        3,
+        0,
+        8,
+        2,
+        6,
+        0,
+        5,
+        0,
+        2,
+        6,
+        0,
+        8,
+        0,
+        0,
+        6,
+        0,
+        2,
+        0,
+        0,
+        1,
+        0,
+        0,
+        6,
+        0,
+        5,
+        2,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        1,
+        8,
+        8,
+        0,
+        8,
+        0,
+        6,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        6,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "boardSha256": "fa126f1b3019f153941903e827c0dfb0c497e1d421f123f0949538bcd4b8773b",
+      "solution": [
+        {
+          "a": 6,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 28,
+          "b": 36,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 37,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 27,
+          "kind": "straight"
+        },
+        {
+          "a": 17,
+          "b": 49,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 19,
+          "kind": "straight"
+        },
+        {
+          "a": 31,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 26,
+          "kind": "reading"
+        },
+        {
+          "a": 3,
+          "b": 9,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-order",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 54,
+        "openingPairs": 24,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 1756688644,
+        "rows": 6,
+        "recipe": "edge",
+        "attempt": 6
+      },
+      "fingerprint": "001102830508302003080040030580020004220203000700370000",
+      "closestPrior": {
+        "id": "book-v1-330",
+        "similarity": 0.1282051282051282
+      }
+    },
+    {
+      "id": "daily-pilot-v2-24",
+      "mode": "daily",
+      "week": 4,
+      "position": 24,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        5,
+        0,
+        8,
+        7,
+        0,
+        0,
+        0,
+        2,
+        5,
+        8,
+        7,
+        5,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        7,
+        3,
+        5,
+        7,
+        0,
+        8,
+        0,
+        0,
+        0,
+        5,
+        8,
+        6,
+        0,
+        0,
+        3,
+        2,
+        0,
+        0,
+        2,
+        4,
+        0,
+        2,
+        0,
+        7
+      ],
+      "boardSha256": "0df900736803655101a8872979543c779db5276b4fcbdb37b112714e2160a5ee",
+      "solution": [
+        {
+          "a": 26,
+          "b": 42,
+          "kind": "straight"
+        },
+        {
+          "a": 21,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 20,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 9,
+          "b": 39,
+          "kind": "straight"
+        },
+        {
+          "a": 32,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 10,
+          "kind": "straight"
+        },
+        {
+          "a": 13,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 22,
+          "kind": "reading"
+        },
+        {
+          "a": 4,
+          "b": 9,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 19,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 0,
+        "compression": 1,
+        "gaps": 7
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3873461043,
+        "rows": 5,
+        "recipe": "diagonal",
+        "attempt": 0
+      },
+      "fingerprint": "005012000951258000005285201000513008900970902",
+      "closestPrior": {
+        "id": "daily-v1-2027-04-16",
+        "similarity": 0.1875
+      }
+    },
+    {
+      "id": "daily-pilot-v2-25",
+      "mode": "daily",
+      "week": 4,
+      "position": 25,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        3,
+        0,
+        4,
+        0,
+        0,
+        3,
+        0,
+        3,
+        0,
+        6,
+        6,
+        4,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        4,
+        0,
+        3,
+        7,
+        7,
+        0,
+        6,
+        1,
+        0,
+        0,
+        0,
+        9,
+        0
+      ],
+      "boardSha256": "d26c3c246ab814456aace30849d41a739d91099cf43d4801097048d92de2bde4",
+      "solution": [
+        {
+          "a": 6,
+          "b": 26,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 34,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 27,
+          "kind": "reading"
+        },
+        {
+          "a": 11,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 23,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 8,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 12,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-flow",
+      "additionalFamilies": [],
+      "safeOpening": true,
+      "metrics": {
+        "occupied": 16,
+        "logical": 36,
+        "openingPairs": 16,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 1,
+        "compression": 0,
+        "gaps": 8
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 241595502,
+        "rows": 4,
+        "recipe": "spaced",
+        "attempt": 6
+      },
+      "fingerprint": "010200101088203000000302019908300070",
+      "closestPrior": {
+        "id": "daily-v1-2025-04-26",
+        "similarity": 0.25925925925925924
+      }
+    },
+    {
+      "id": "daily-pilot-v2-26",
+      "mode": "daily",
+      "week": 4,
+      "position": 26,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        3,
+        5,
+        0,
+        3,
+        0,
+        5,
+        9,
+        7,
+        0,
+        0,
+        7,
+        0,
+        4,
+        0,
+        0,
+        1,
+        1,
+        0,
+        7,
+        1,
+        0,
+        3,
+        4,
+        0,
+        0,
+        3,
+        8,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        2,
+        0,
+        9,
+        0,
+        3,
+        7,
+        0,
+        3,
+        2
+      ],
+      "boardSha256": "3907753c99ed0090bec8723b27fddcd890cd8f3bb02222d4b8f99e725ddd92ae",
+      "solution": [
+        {
+          "a": 0,
+          "b": 18,
+          "kind": "straight"
+        },
+        {
+          "a": 10,
+          "b": 40,
+          "kind": "straight"
+        },
+        {
+          "a": 12,
+          "b": 22,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 16,
+          "b": 19,
+          "kind": "reading"
+        },
+        {
+          "a": 26,
+          "b": 29,
+          "kind": "reading"
+        },
+        {
+          "a": 25,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 36,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 15,
+          "b": 35,
+          "kind": "straight"
+        },
+        {
+          "a": 7,
+          "b": 12,
+          "kind": "reading"
+        }
+      ],
+      "leadFamily": "seeds-content-reading",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 16,
+        "firstClear": false,
+        "lastClear": false,
+        "reveal": 5,
+        "reading": 2,
+        "compression": 0,
+        "gaps": 11
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2429489110,
+        "rows": 5,
+        "recipe": "spaced",
+        "attempt": 1
+      },
+      "fingerprint": "150105290090300880980130014006000002602019016",
+      "closestPrior": {
+        "id": "daily-v1-2025-06-12",
+        "similarity": 0.1891891891891892
+      }
+    },
+    {
+      "id": "daily-pilot-v2-27",
+      "mode": "daily",
+      "week": 4,
+      "position": 27,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        0,
+        0,
+        4,
+        0,
+        0,
+        6,
+        6,
+        6,
+        2,
+        8,
+        0,
+        4,
+        4,
+        7,
+        3,
+        5,
+        0,
+        0,
+        2,
+        7,
+        8,
+        0,
+        5,
+        0,
+        4,
+        4,
+        0,
+        0,
+        0,
+        7,
+        6,
+        4,
+        0,
+        8,
+        2,
+        0,
+        7,
+        0,
+        3,
+        8,
+        0,
+        8,
+        7,
+        7,
+        0,
+        0,
+        2,
+        8,
+        0,
+        0,
+        2,
+        0,
+        8,
+        0
+      ],
+      "boardSha256": "4ff281c37030b4ce5b0bdbaf29f8a8e967ece7a6afe36171e23813da54b3e514",
+      "solution": [
+        {
+          "a": 13,
+          "b": 14,
+          "kind": "straight"
+        },
+        {
+          "a": 36,
+          "b": 38,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 7,
+          "kind": "straight"
+        },
+        {
+          "a": 42,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 50,
+          "b": 52,
+          "kind": "straight"
+        },
+        {
+          "a": 19,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 24,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 30,
+          "b": 31,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 5,
+          "kind": "straight"
+        },
+        {
+          "a": 39,
+          "b": 41,
+          "kind": "straight"
+        },
+        {
+          "a": 18,
+          "b": 20,
+          "kind": "straight"
+        },
+        {
+          "a": 8,
+          "b": 9,
+          "kind": "reading"
+        },
+        {
+          "a": 24,
+          "b": 25,
+          "kind": "straight"
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 13,
+          "kind": "reading"
+        },
+        {
+          "a": 1,
+          "b": 2,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-compression",
+      "additionalFamilies": [
+        "seeds-content-reveal",
+        "seeds-content-reading"
+      ],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 32,
+        "logical": 54,
+        "openingPairs": 27,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 4,
+        "reading": 1,
+        "compression": 1,
+        "gaps": 6
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 2111432767,
+        "rows": 6,
+        "recipe": "horizontal",
+        "attempt": 43
+      },
+      "fingerprint": "001009992801137500238050110003910820307808330028002080",
+      "closestPrior": {
+        "id": "book-v1-315",
+        "similarity": 0.13636363636363635
+      }
+    },
+    {
+      "id": "daily-pilot-v2-28",
+      "mode": "daily",
+      "week": 4,
+      "position": 28,
+      "revision": "pilot-bank-v2.1",
+      "board": [
+        5,
+        9,
+        0,
+        0,
+        1,
+        7,
+        0,
+        0,
+        0,
+        5,
+        0,
+        7,
+        9,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        7,
+        2,
+        0,
+        7,
+        7,
+        0,
+        4,
+        2,
+        5,
+        8,
+        7,
+        0,
+        0,
+        7,
+        5,
+        0,
+        0,
+        5,
+        7,
+        0,
+        9,
+        0,
+        0,
+        0,
+        4,
+        8
+      ],
+      "boardSha256": "bd0269fc2c4824eac6566b571a5b90fc68e74626f918bf6a5bcda3735bdcce0c",
+      "solution": [
+        {
+          "a": 27,
+          "b": 36,
+          "kind": "straight"
+        },
+        {
+          "a": 20,
+          "b": 28,
+          "kind": "straight"
+        },
+        {
+          "a": 25,
+          "b": 43,
+          "kind": "straight"
+        },
+        {
+          "a": 11,
+          "b": 29,
+          "kind": "straight"
+        },
+        {
+          "a": 26,
+          "b": 44,
+          "kind": "straight"
+        },
+        {
+          "a": 0,
+          "b": 9,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 37,
+          "kind": "straight"
+        },
+        {
+          "a": 3,
+          "b": 30,
+          "kind": "straight"
+        },
+        {
+          "a": 6,
+          "b": 24,
+          "kind": "straight"
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "kind": "straight"
+        },
+        {
+          "a": 5,
+          "b": 14,
+          "kind": "straight"
+        }
+      ],
+      "leadFamily": "seeds-content-reveal",
+      "additionalFamilies": [],
+      "safeOpening": false,
+      "metrics": {
+        "occupied": 24,
+        "logical": 45,
+        "openingPairs": 20,
+        "firstClear": true,
+        "lastClear": true,
+        "reveal": 3,
+        "reading": 0,
+        "compression": 0,
+        "gaps": 8
+      },
+      "source": {
+        "constructor": "offline-reverse-v2.1",
+        "seed": 3398763508,
+        "rows": 5,
+        "recipe": "vertical",
+        "attempt": 1
+      },
+      "fingerprint": "510092000502100500023022043572002500520100047",
+      "closestPrior": {
+        "id": "daily-v1-2027-08-29",
+        "similarity": 0.23529411764705882
+      }
+    }
+  ]
+}
