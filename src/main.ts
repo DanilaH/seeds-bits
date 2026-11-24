@@ -1470,9 +1470,15 @@ const cellSelection = (el: Element) =>
 function clearMotions() {
   ownedDomMotion.cancelAll();
   cellColorMotions.clear();
+  resetRowSlideClip();
 }
 let collapseScroll = 0;
+let rowSlideClipTimer: ReturnType<typeof setTimeout>;
 const collapseRows = new Set<HTMLElement>();
+function resetRowSlideClip() {
+  clearTimeout(rowSlideClipTimer);
+  $("board").style.removeProperty("overflow-clip-margin");
+}
 function clearCollapseRows() {
   for (const row of collapseRows) row.getAnimations().forEach(animation => animation.cancel());
 }
@@ -2704,8 +2710,16 @@ async function choose(i: number) {
         node,
         dy: top - node.getBoundingClientRect().top,
       }));
+    const view = viewport.getBoundingClientRect();
     clearCollapseRows();
-    showCollapsedRows(collapsed, viewport.getBoundingClientRect());
+    showCollapsedRows(collapsed, view);
+    const span = Math.min(view.height, Math.max(0, ...movements.map(({ dy }) => dy)));
+    if (span > 1) {
+      // The bottom cells start below the newly shortened grid for this slide.
+      resetRowSlideClip();
+      $("board").style.setProperty("overflow-clip-margin", `${Math.ceil(span)}px`);
+      rowSlideClipTimer = setTimeout(resetRowSlideClip, 170);
+    }
     for (const { node, dy } of movements) {
       if (Math.abs(dy) > 1)
         motion(node, [{ translate: `0 ${dy}px` }, { translate: "0 0" }], 170);
@@ -2780,6 +2794,7 @@ function undoAction() {
   if (busy || paused || (lesson < 0 && !occupied(board()))) return;
   clearPairFeedback();
   clearCollapseRows();
+  resetRowSlideClip();
   clearBoardReveal();
   if (lesson === 5 && lessonPhase === 1) {
     lessonBoard = [...lessons[5].cells];
