@@ -151,11 +151,12 @@ for (const [width,height] of [[320,568],[390,844]]) {
       if(collapses && !undone) {
         await page.locator("#undo").click();
         await expect(page.locator("#remaining")).toHaveText(String(occupied(board)));
-        expect(unpackSession((await stored(page)).sessions[id]).current.board).toEqual(board);
+        await expect.poll(async()=> unpackSession((await stored(page)).sessions[id]).current.board).toEqual(board);
         await play();
         undone=true;
       }
       if(index>=5 && undone && !checkedReload) {
+        await expect.poll(async()=> unpackSession((await stored(page)).sessions[id]).current.board).toEqual(next);
         const before=unpackSession((await stored(page)).sessions[id]);
         await page.reload();
         await page.locator("#resume").click();
@@ -166,6 +167,7 @@ for (const [width,height] of [[320,568],[390,844]]) {
     }
     expect(undone&&checkedReload).toBe(true);
     await expect(page.locator("#win")).toBeVisible();
+    await expect.poll(async()=> (await stored(page)).done).toContain(id);
     const result=await stored(page);
     expect(result.done).toContain(id);
     expect(result.bookRevisions[id]).toBe(5);
