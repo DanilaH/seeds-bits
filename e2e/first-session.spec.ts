@@ -2,6 +2,7 @@ import {test,expect,type Page} from "@playwright/test";
 import {pairs,removePair} from "../src/core";
 import notebook from "../src/notebook.json" with {type:"json"};
 import {daily} from "../src/puzzles";
+import { bookV5Fixture as bookV5 } from "./content-v5-fixture";
 const key="seeds-bits.progress.v2", settings="seeds-bits.settings.v1";
 const cue=(p:Page)=>p.locator(".opening-copy");
 async function stable(p:Page){await p.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));}
@@ -41,7 +42,7 @@ test("clean first run is a real saved task, voluntary task 2 and no duplicate re
   const before=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).meta.completed,key);
   await page.reload();await page.locator("#resume").click();await expect(page.locator("#win")).toBeVisible();expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).meta.completed,key)).toBe(before);
   await page.locator("#play-again").click();await expect(page.locator("#mode")).toContainText("задача 2");
-  const pair=pairs(notebook[1].board)[0];await move(page,pair.a,pair.b);
+  const pair=pairs(bookV5("book-v1-2")!.board)[0];await move(page,pair.a,pair.b);
   const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).sessions["book-v1-2"],key);
   await page.locator("#menu").click();
   await expect(page.locator("#home-goal")).toContainText("1 из 24");

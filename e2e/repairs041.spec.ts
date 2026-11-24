@@ -72,7 +72,7 @@ test("A01 damage isolated to metadata does not discard valid tasks and boards", 
     path: "test-results/repairs041/corrupt-meta.png",
   });
   await expect(page.locator(".progress-stats dd").first()).toHaveText(
-    "1 из 2400",
+    "1 из 2496",
   );
 });
 test("A02 unsupported future metadata is not overwritten by ordinary interaction", async ({
@@ -134,7 +134,7 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
   await page.reload();
   await page.locator("#progress-open").click();
   await expect(page.locator(".progress-stats dd")).toHaveText([
-    "1 из 2400",
+    "1 из 2496",
     "0",
     "6",
     "4",
@@ -601,6 +601,8 @@ test("backup recovery is explicit and survives reload", async ({ page }) => {
   await page.evaluate((key) => {
     const p = JSON.parse(localStorage.getItem(key)!);
     p.done = ["book-v1-1", "book-v1-2"];
+    // A valid recovery bundle includes immutable revision assignments for every known slot.
+    if(p.version===8)p.bookRevisions={...p.bookRevisions,"book-v1-1":1,"book-v1-2":1};
     localStorage.setItem(key + ".recovery", JSON.stringify(p));
   }, KEY);
   await page.reload();

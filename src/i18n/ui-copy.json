@@ -1021,6 +1021,13 @@
     "tr": "Kayıt okunamadı. Yeni bir oyun açıldı.",
     "pt-BR": "Não foi possível ler o salvamento. Foi aberta uma nova partida."
   },
+  "save.contentIdentity": {
+    "ru": "Не удалось определить сохранённое поле. Исходное сохранение в безопасности.",
+    "en": "The saved board could not be identified. Your original save is safe.",
+    "es": "No se pudo identificar el tablero guardado. Tu partida original está a salvo.",
+    "tr": "Kaydedilen tahta belirlenemedi. Orijinal kaydın güvende.",
+    "pt-BR": "Não foi possível identificar o tabuleiro salvo. Seu progresso original está seguro."
+  },
   "ui.this-save-is-from-a-newer-version-update-the": {
     "ru": "Сохранение создано более новой версией игры. Обновите игру. Запись отключена, исходный прогресс защищён.",
     "en": "This save is from a newer version. Update the game. Saving is off to protect your progress.",
@@ -2106,7 +2113,13 @@
     "tr": "Zor",
     "pt-BR": "Difícil"
   },
-  "ui.expert": {"ru":"Эксперт","en":"Expert","es":"Experto","tr":"Uzman","pt-BR":"Especialista"},
+  "ui.expert": {
+    "ru": "Эксперт",
+    "en": "Expert",
+    "es": "Experto",
+    "tr": "Uzman",
+    "pt-BR": "Especialista"
+  },
   "ui.document-title": {
     "ru": "Семечки — игра с числами",
     "en": "Seeds Bits — Number Match",
@@ -2240,20 +2253,186 @@
     "tr": "{count} {digits} tahtanın sonuna kopyalanır.",
     "pt-BR": "Copia {count} {digits} para o fim do tabuleiro."
   },
-  "lesson.equal.rule": {"ru":"Одинаковые цифры образуют пару.","en":"Identical numbers make a pair.","es":"Los números iguales forman pareja.","tr":"Aynı sayılar bir çift oluşturur.","pt-BR":"Números iguais formam um par."},
-  "lesson.ten-short.rule": {"ru":"Пары с суммой 10 можно соединять через край строки.","en":"Pairs totaling 10 can connect across row edges.","es":"Los pares que suman 10 pueden unirse entre filas.","tr":"Toplamı 10 olan çiftler satır sonundan bağlanabilir.","pt-BR":"Pares que somam 10 podem se unir entre linhas."},
-  "lesson.ten.rule": {"ru":"Цифры с суммой 10 тоже образуют пару.","en":"Numbers that add up to 10 also make a pair.","es":"Los números que suman 10 también forman pareja.","tr":"Toplamı 10 olan sayılar da eşleşir.","pt-BR":"Números que somam 10 também formam um par."},
-  "lesson.gap.rule": {"ru":"Пустые клетки между цифрами можно пропускать.","en":"Empty cells between numbers can be skipped.","es":"Puedes saltar las casillas vacías entre números.","tr":"Sayıların arasındaki boş kareler atlanabilir.","pt-BR":"Você pode pular as casas vazias entre os números."},
-  "lesson.diagonal.rule": {"ru":"Соединять пары можно и по диагонали.","en":"Pairs can also be matched diagonally.","es":"También puedes unir parejas en diagonal.","tr":"Sayılar çapraz da eşleştirilebilir.","pt-BR":"Você também pode juntar pares na diagonal."},
-  "lesson.edge.rule": {"ru":"Конец строки продолжается в начале следующей.","en":"The end of a row connects to the start of the next.","es":"El final de una fila se une al principio de la siguiente.","tr":"Satır sonu, sonraki satırın başına bağlanır.","pt-BR":"O fim de uma linha se conecta ao começo da próxima."},
-  "lesson.undo.rule": {"ru":"«Добавить» копирует цифры, «Отмена» возвращает поле.","en":"Add copies the remaining numbers; Undo restores the board.","es":"Añadir copia los números; Deshacer restaura el tablero.","tr":"Ekle kalan sayıları kopyalar; Geri al tahtayı geri getirir.","pt-BR":"Adicionar copia os números; Desfazer restaura o tabuleiro."},
-  "calm.trophy.goal.bronze": {"ru":"До бронзы — {count} {days}","en":"Until bronze: {count} {days}","es":"Hasta el bronce: {count} {days}","tr":"Bronza {count} {days} kaldı","pt-BR":"Até o bronze: {count} {days}"},
-  "calm.trophy.goal.silver": {"ru":"До серебра — {count} {days}","en":"Until silver: {count} {days}","es":"Hasta la plata: {count} {days}","tr":"Gümüşe {count} {days} kaldı","pt-BR":"Até a prata: {count} {days}"},
-  "calm.trophy.goal.gold": {"ru":"До золота — {count} {days}","en":"Until gold: {count} {days}","es":"Hasta el oro: {count} {days}","tr":"Altına {count} {days} kaldı","pt-BR":"Até o ouro: {count} {days}"},
-  "calm.classic.new": {"ru":"Новая классика","en":"New Classic Game","es":"Nueva partida clásica","tr":"Yeni Klasik Oyun","pt-BR":"Novo jogo clássico"},
-  "calm.classic.choose": {"ru":"Новая игра","en":"New Game","es":"Nueva partida","tr":"Yeni oyun","pt-BR":"Novo jogo"},
-  "calm.classic.startNote": {"ru":"Выберите сложность — партия начнётся сразу.","en":"Choose a difficulty to start a new game.","es":"Elige una dificultad para empezar.","tr":"Başlamak için zorluk seçin.","pt-BR":"Escolha uma dificuldade para começar."},
-  "calm.classic.confirmNote": {"ru":"Начатая классика заменится только после подтверждения.","en":"Your current Classic game will be replaced only after you confirm.","es":"Tu partida actual solo se sustituirá si lo confirmas.","tr":"Mevcut Klasik oyun yalnızca onaylarsanız değişir.","pt-BR":"O jogo clássico atual só será substituído após a confirmação."},
-  "calm.classic.current": {"ru":"Сейчас","en":"Current","es":"Actual","tr":"Şu an","pt-BR":"Atual"},
-  "calm.classic.startRange": {"ru":"{0}–{1} цифр","en":"{0}–{1} numbers","es":"{0}–{1} números","tr":"{0}–{1} sayı","pt-BR":"{0}–{1} números"}
+  "lesson.equal.rule": {
+    "ru": "Одинаковые цифры образуют пару.",
+    "en": "Identical numbers make a pair.",
+    "es": "Los números iguales forman pareja.",
+    "tr": "Aynı sayılar bir çift oluşturur.",
+    "pt-BR": "Números iguais formam um par."
+  },
+  "lesson.ten-short.rule": {
+    "ru": "Пары с суммой 10 можно соединять через край строки.",
+    "en": "Pairs totaling 10 can connect across row edges.",
+    "es": "Los pares que suman 10 pueden unirse entre filas.",
+    "tr": "Toplamı 10 olan çiftler satır sonundan bağlanabilir.",
+    "pt-BR": "Pares que somam 10 podem se unir entre linhas."
+  },
+  "lesson.ten.rule": {
+    "ru": "Цифры с суммой 10 тоже образуют пару.",
+    "en": "Numbers that add up to 10 also make a pair.",
+    "es": "Los números que suman 10 también forman pareja.",
+    "tr": "Toplamı 10 olan sayılar da eşleşir.",
+    "pt-BR": "Números que somam 10 também formam um par."
+  },
+  "lesson.gap.rule": {
+    "ru": "Пустые клетки между цифрами можно пропускать.",
+    "en": "Empty cells between numbers can be skipped.",
+    "es": "Puedes saltar las casillas vacías entre números.",
+    "tr": "Sayıların arasındaki boş kareler atlanabilir.",
+    "pt-BR": "Você pode pular as casas vazias entre os números."
+  },
+  "lesson.diagonal.rule": {
+    "ru": "Соединять пары можно и по диагонали.",
+    "en": "Pairs can also be matched diagonally.",
+    "es": "También puedes unir parejas en diagonal.",
+    "tr": "Sayılar çapraz da eşleştirilebilir.",
+    "pt-BR": "Você também pode juntar pares na diagonal."
+  },
+  "lesson.edge.rule": {
+    "ru": "Конец строки продолжается в начале следующей.",
+    "en": "The end of a row connects to the start of the next.",
+    "es": "El final de una fila se une al principio de la siguiente.",
+    "tr": "Satır sonu, sonraki satırın başına bağlanır.",
+    "pt-BR": "O fim de uma linha se conecta ao começo da próxima."
+  },
+  "lesson.undo.rule": {
+    "ru": "«Добавить» копирует цифры, «Отмена» возвращает поле.",
+    "en": "Add copies the remaining numbers; Undo restores the board.",
+    "es": "Añadir copia los números; Deshacer restaura el tablero.",
+    "tr": "Ekle kalan sayıları kopyalar; Geri al tahtayı geri getirir.",
+    "pt-BR": "Adicionar copia os números; Desfazer restaura o tabuleiro."
+  },
+  "calm.trophy.goal.bronze": {
+    "ru": "До бронзы — {count} {days}",
+    "en": "Until bronze: {count} {days}",
+    "es": "Hasta el bronce: {count} {days}",
+    "tr": "Bronza {count} {days} kaldı",
+    "pt-BR": "Até o bronze: {count} {days}"
+  },
+  "calm.trophy.goal.silver": {
+    "ru": "До серебра — {count} {days}",
+    "en": "Until silver: {count} {days}",
+    "es": "Hasta la plata: {count} {days}",
+    "tr": "Gümüşe {count} {days} kaldı",
+    "pt-BR": "Até a prata: {count} {days}"
+  },
+  "calm.trophy.goal.gold": {
+    "ru": "До золота — {count} {days}",
+    "en": "Until gold: {count} {days}",
+    "es": "Hasta el oro: {count} {days}",
+    "tr": "Altına {count} {days} kaldı",
+    "pt-BR": "Até o ouro: {count} {days}"
+  },
+  "calm.classic.new": {
+    "ru": "Новая классика",
+    "en": "New Classic Game",
+    "es": "Nueva partida clásica",
+    "tr": "Yeni Klasik Oyun",
+    "pt-BR": "Novo jogo clássico"
+  },
+  "calm.classic.choose": {
+    "ru": "Новая игра",
+    "en": "New Game",
+    "es": "Nueva partida",
+    "tr": "Yeni oyun",
+    "pt-BR": "Novo jogo"
+  },
+  "calm.classic.startNote": {
+    "ru": "Выберите сложность — партия начнётся сразу.",
+    "en": "Choose a difficulty to start a new game.",
+    "es": "Elige una dificultad para empezar.",
+    "tr": "Başlamak için zorluk seçin.",
+    "pt-BR": "Escolha uma dificuldade para começar."
+  },
+  "calm.classic.confirmNote": {
+    "ru": "Начатая классика заменится только после подтверждения.",
+    "en": "Your current Classic game will be replaced only after you confirm.",
+    "es": "Tu partida actual solo se sustituirá si lo confirmas.",
+    "tr": "Mevcut Klasik oyun yalnızca onaylarsanız değişir.",
+    "pt-BR": "O jogo clássico atual só será substituído após a confirmação."
+  },
+  "calm.classic.current": {
+    "ru": "Сейчас",
+    "en": "Current",
+    "es": "Actual",
+    "tr": "Şu an",
+    "pt-BR": "Atual"
+  },
+  "calm.classic.startRange": {
+    "ru": "{0}–{1} цифр",
+    "en": "{0}–{1} numbers",
+    "es": "{0}–{1} números",
+    "tr": "{0}–{1} sayı",
+    "pt-BR": "{0}–{1} números"
+  },
+  "content.total": {
+    "ru": "{books} тетради · {tasks} задач",
+    "en": "{books} puzzle books · {tasks} puzzles",
+    "es": "{books} cuadernos · {tasks} retos",
+    "tr": "{books} bulmaca kitabı · {tasks} bulmaca",
+    "pt-BR": "{books} cadernos · {tasks} desafios"
+  },
+  "content.open": {
+    "ru": "Тематические тетради · 96 задач",
+    "en": "Themed books · 96 puzzles",
+    "es": "Cuadernos temáticos · 96 retos",
+    "tr": "Temalı kitaplar · 96 bulmaca",
+    "pt-BR": "Cadernos temáticos · 96 desafios"
+  },
+  "content.section": {
+    "ru": "Тематические тетради",
+    "en": "Themed puzzle books",
+    "es": "Cuadernos temáticos",
+    "tr": "Temalı bulmaca kitapları",
+    "pt-BR": "Cadernos temáticos"
+  },
+  "content.theme.links": {
+    "ru": "Новые связи",
+    "en": "New connections",
+    "es": "Nuevas conexiones",
+    "tr": "Yeni bağlantılar",
+    "pt-BR": "Novas conexões"
+  },
+  "content.theme.choice": {
+    "ru": "Важный выбор",
+    "en": "Meaningful choices",
+    "es": "Decisiones importantes",
+    "tr": "Önemli seçimler",
+    "pt-BR": "Escolhas importantes"
+  },
+  "content.theme.shift": {
+    "ru": "Поле меняется",
+    "en": "Changing board",
+    "es": "Tablero cambiante",
+    "tr": "Değişen tahta",
+    "pt-BR": "Tabuleiro em mudança"
+  },
+  "content.theme.mix": {
+    "ru": "Сочетание приёмов",
+    "en": "Mixed techniques",
+    "es": "Técnicas combinadas",
+    "tr": "Karma teknikler",
+    "pt-BR": "Técnicas combinadas"
+  },
+  "content.task": {
+    "ru": "{theme} · Задача {puzzle}",
+    "en": "{theme} · Puzzle {puzzle}",
+    "es": "{theme} · Reto {puzzle}",
+    "tr": "{theme} · Bulmaca {puzzle}",
+    "pt-BR": "{theme} · Desafio {puzzle}"
+  },
+  "content.complete": {
+    "ru": "«{theme}» — завершена",
+    "en": "{theme} completed",
+    "es": "{theme} completado",
+    "tr": "{theme} tamamlandı",
+    "pt-BR": "{theme} concluído"
+  },
+  "content.progress": {
+    "ru": "{theme} · {solved} из 24",
+    "en": "{theme} · {solved} of 24",
+    "es": "{theme} · {solved} de 24",
+    "tr": "{theme} · {solved}/24",
+    "pt-BR": "{theme} · {solved} de 24"
+  }
 }

@@ -108,6 +108,15 @@ async function connect() {
 }
 const board=[0,0,0,0,0,0,0,0,6,4];
 const digit=i=>`#board button[data-index="${i}"]`;
+function bookV5(slot) {
+  const index=slot-1;
+  const book=JSON.parse(fs.readFileSync(`src/content-v5-books-${Math.floor(index/600)+1}.json`,"utf8"));
+  const [cells,flat]=book[index%600];
+  const proof=[];
+  for(let i=0;i<flat.length;i+=2)proof.push([flat[i],flat[i+1]]);
+  return {board:Array.from(cells,Number),proof};
+}
+const v5Preview=fs.existsSync("src/content-v5-books-1.json");
 const saved={rules:1,current:{board,scroll:0,moves:1,additions:0},
   history:[{board:[5,5,0,0,0,0,0,0,6,4],scroll:0,moves:0,additions:0}]};
 const sample={version:3,active:"book-v1-5",done:[],seen:[],hints:{},sessions:{"book-v1-5":saved}};
@@ -208,9 +217,10 @@ async function firstNotebookEdge(order, {recordVideo=false}={}) {
       assert(fs.statSync(out+"/calm-first-win-to-task-2.mp4").size>15000,"First-win recording is empty");
       recorder=null;
     }
-    await ui.tap(digit(7),false);
-    await ui.tap(digit(15),false);
-    await ui.until("document.querySelector('#remaining').textContent==='6'");
+    const second=v5Preview?bookV5(2):{board:Array(8).fill(1),proof:[[7,15]]};
+    await ui.tap(digit(second.proof[0][0]));
+    await ui.tap(digit(second.proof[0][1]));
+    await ui.until(`document.querySelector('#remaining').textContent==='${second.board.filter(Boolean).length-2}'`);
     await ui.tap("#menu");
     await ui.until("document.querySelector('#dialog').open");
     assert.match(await ui.evaluate("document.querySelector('#resume').textContent"),/2/);
@@ -517,6 +527,83 @@ async function verifyBoardMotion() {
     return result;
   } finally {ui.close(); stop();}
 }
+async function verifyContentV5() {
+  const slot=2397,id="book-v1-"+slot,{board,proof}=bookV5(slot);
+  assert.equal(board.filter(Boolean).length,108);
+  const game={...sample,active:"classic",sessions:{classic:oldHighSession},
+    meta:oldHighMeta,jars:oldHighJars};
+  const settingsFixture={tutorialDone:true,languageChoice:"ru",sound:false,vibration:false};
+  await fixture({[progress]:game,[settings]:settingsFixture});
+  adb("shell","wm","size","640x1232");
+  launch();
+  let ui=await connect();
+  const elapsed={};
+  const remaining=n=>`document.querySelector('#remaining').textContent==='${n}'`;
+  try {
+    await ui.tap("#book-mode");
+    if(!await ui.evaluate("document.querySelector('#other-books').open"))await ui.tap("#other-books summary");
+    await ui.evaluate(`(()=>{
+      const chapter=document.querySelector("#book-chapter");
+      chapter.value="9";
+      chapter.dispatchEvent(new Event("change",{bubbles:true}));
+    })()`);
+    if(!await ui.evaluate("document.querySelector('#other-books').open"))await ui.tap("#other-books summary");
+    await ui.tap('[data-volume="99"]');
+    await ui.tap("#book-later-pages summary");
+    let at=performance.now();
+    await ui.tap(`[data-game="${id}"]`);
+    await ui.until(remaining(108)+" && !document.querySelector('#dialog').open");
+    elapsed.open=Math.round(performance.now()-at);
+    const top=()=>ui.evaluate("document.querySelector('#viewport').scrollTop");
+    await ui.swipeBoardUp();
+    assert(await top()>0,"108 digits should scroll");
+    at=performance.now();
+    await ui.tap("#hint");
+    await ui.until("document.querySelectorAll('#board .hinted').length===2");
+    elapsed.hint=Math.round(performance.now()-at);
+    shot("v5-108-320x568");
+    const grid=()=>ui.evaluate("document.querySelector('#board').childElementCount");
+    let collapsed=false;
+    for(const [index,[a,b]] of proof.entries()){
+      const before=await grid(), count=108-2*(index+1);
+      at=performance.now();
+      await ui.tap(digit(a));await ui.tap(digit(b));
+      await ui.until(remaining(count));
+      if(index===0) {
+        assert.equal(profiles().values[progress].bookRevisions[id],5);
+        assert.equal(profiles().values[progress].version,9);
+        elapsed.firstPairAndSave=Math.round(performance.now()-at);
+      }
+      if(!collapsed&&count>0&&(await grid())<before){
+        await ui.tap("#undo");
+        await ui.until(remaining(count+2));
+        assert.equal(await grid(),before);
+        await ui.tap(digit(a));await ui.tap(digit(b));
+        await ui.until(remaining(count));
+        collapsed=true;
+        const snapshot=profiles().values[progress].sessions[id];
+        ui.close();stop();
+        adb("shell","wm","size","780x1784");
+        launch();ui=await connect();
+        await ui.tap("#resume");
+        await ui.until(remaining(count));
+        assert.deepEqual(profiles().values[progress].sessions[id].current.board,snapshot.current.board);
+        shot("v5-108-resumed-390");
+      }
+    }
+    await ui.until("!document.querySelector('#win').hidden");
+    const p=profiles().values[progress];
+    assert(collapsed);
+    assert(p.done.includes(id));
+    assert.equal(p.jars.seeds>oldHighJars.seeds,true);
+    assert.deepEqual(p.sessions.classic.current,oldHighSession.current);
+    assert.equal(p.sessions[id].packedHistory?.length??p.sessions[id].history?.length,54);
+    return {id, digits:108, moves:proof.length, collapsedUndo:true, rebootRetained:true, offline:true,
+      checkedUsing:"Android shell taps, CDP observations and journal in Preferences", elapsed};
+  } finally {
+    ui.close();stop();adb("shell","wm","size","640x1232");
+  }
+}
 // Exact old generator seed 73, with its legal first pair [0,9] removed.
 const oldHighBoard=[1,6,1,5,1,5,6,1,4,1,8,1,9,8,7,1,7,1,2,1,4,3,1,3,1,9,2];
 const oldHighCurrent=oldHighBoard.map((digit,i)=>i===0||i===9?0:digit);
@@ -700,6 +787,10 @@ try{
   // The player report requires a native touch regression, separate from solver proof.
   const report78=await verifyReport78Taps();
   fs.writeFileSync(out+"/book78-taps.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode, ...report78},null,2));
+  if(v5Preview) {
+    const catalogue=await verifyContentV5();
+    fs.writeFileSync(out+"/content-v5-108.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,...catalogue},null,2));
+  }
   const waves=await verifyPairWaves();
   fs.writeFileSync(out+"/pair-waves.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,waves},null,2));
   const motion=await verifyBoardMotion();

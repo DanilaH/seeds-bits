@@ -1,0 +1,419 @@
+{
+  "schema": "seeds-catalogue-v4-authoring",
+  "sourceCore": "1b4f680c74dea2fdb778bb111d18f176c791ab34",
+  "sourceRevision": "9bbf04b4b09b83e2004732396a42039e0cab4ed7",
+  "authorBlob": "941bf062caa81ae1e3b095c0f3a9f3d446fd3be2",
+  "exclusionBlob": "761d5a77cdc920533de9254363e429c60a0f8c09",
+  "groups": [
+    {
+      "count": 600,
+      "types": {
+        "flow": 200,
+        "moderate": 300,
+        "tactical": 100
+      },
+      "roles": {
+        "reveal": 94,
+        "chain": 74,
+        "compression": 88,
+        "flow": 101,
+        "mix": 89,
+        "competition": 75,
+        "distant": 79
+      },
+      "sizes": {
+        "12": 127,
+        "14": 153,
+        "16": 129,
+        "18": 101,
+        "20": 77,
+        "22": 10,
+        "24": 3
+      },
+      "rows": {
+        "3": 131,
+        "4": 156,
+        "5": 133,
+        "6": 180
+      },
+      "styles": {
+        "0": 132,
+        "1": 158,
+        "2": 141,
+        "3": 169
+      },
+      "requested": {
+        "reveal": 87,
+        "chain": 88,
+        "compression": 88,
+        "flow": 100,
+        "mix": 87,
+        "competition": 75,
+        "distant": 75
+      },
+      "relaxed": 14,
+      "attempts": 13406,
+      "moves": 4690
+    },
+    {
+      "count": 600,
+      "types": {
+        "flow": 200,
+        "moderate": 300,
+        "tactical": 100
+      },
+      "roles": {
+        "distant": 79,
+        "mix": 87,
+        "competition": 75,
+        "flow": 100,
+        "chain": 78,
+        "compression": 87,
+        "reveal": 94
+      },
+      "sizes": {
+        "12": 70,
+        "14": 148,
+        "16": 119,
+        "18": 99,
+        "20": 77,
+        "22": 78,
+        "24": 5,
+        "26": 4
+      },
+      "rows": {
+        "3": 141,
+        "4": 149,
+        "5": 139,
+        "6": 171
+      },
+      "styles": {
+        "0": 148,
+        "1": 159,
+        "2": 133,
+        "3": 160
+      },
+      "requested": {
+        "distant": 75,
+        "mix": 88,
+        "competition": 75,
+        "flow": 100,
+        "chain": 87,
+        "compression": 87,
+        "reveal": 88
+      },
+      "relaxed": 11,
+      "attempts": 11911,
+      "moves": 5039
+    },
+    {
+      "count": 600,
+      "types": {
+        "flow": 200,
+        "moderate": 250,
+        "tactical": 150
+      },
+      "roles": {
+        "reveal": 90,
+        "chain": 78,
+        "compression": 89,
+        "flow": 100,
+        "mix": 90,
+        "competition": 75,
+        "distant": 78
+      },
+      "sizes": {
+        "12": 72,
+        "14": 131,
+        "16": 67,
+        "18": 97,
+        "20": 80,
+        "22": 77,
+        "24": 70,
+        "26": 6
+      },
+      "rows": {
+        "3": 114,
+        "4": 166,
+        "5": 150,
+        "6": 170
+      },
+      "styles": {
+        "0": 137,
+        "1": 131,
+        "2": 162,
+        "3": 170
+      },
+      "requested": {
+        "reveal": 87,
+        "chain": 88,
+        "compression": 88,
+        "flow": 100,
+        "mix": 87,
+        "competition": 75,
+        "distant": 75
+      },
+      "relaxed": 10,
+      "attempts": 11432,
+      "moves": 5323
+    },
+    {
+      "count": 600,
+      "types": {
+        "flow": 200,
+        "moderate": 250,
+        "tactical": 150
+      },
+      "roles": {
+        "distant": 76,
+        "mix": 92,
+        "competition": 75,
+        "flow": 102,
+        "chain": 76,
+        "compression": 87,
+        "reveal": 92
+      },
+      "sizes": {
+        "12": 69,
+        "14": 92,
+        "16": 106,
+        "18": 73,
+        "20": 60,
+        "22": 79,
+        "24": 73,
+        "26": 48
+      },
+      "rows": {
+        "3": 114,
+        "4": 161,
+        "5": 149,
+        "6": 176
+      },
+      "styles": {
+        "0": 144,
+        "1": 131,
+        "2": 148,
+        "3": 177
+      },
+      "requested": {
+        "distant": 75,
+        "mix": 88,
+        "competition": 75,
+        "flow": 100,
+        "chain": 87,
+        "compression": 87,
+        "reveal": 88
+      },
+      "relaxed": 12,
+      "attempts": 12406,
+      "moves": 5532
+    },
+    {
+      "count": 365,
+      "types": {
+        "flow": 139,
+        "moderate": 174,
+        "tactical": 52
+      },
+      "roles": {
+        "reveal": 63,
+        "chain": 45,
+        "compression": 54,
+        "flow": 53,
+        "mix": 55,
+        "competition": 41,
+        "distant": 54
+      },
+      "sizes": {
+        "12": 52,
+        "14": 88,
+        "16": 74,
+        "18": 58,
+        "20": 43,
+        "22": 46,
+        "24": 3,
+        "26": 1
+      },
+      "rows": {
+        "3": 75,
+        "4": 84,
+        "5": 93,
+        "6": 113
+      },
+      "styles": {
+        "0": 97,
+        "1": 79,
+        "2": 83,
+        "3": 106
+      },
+      "requested": {
+        "reveal": 60,
+        "chain": 55,
+        "compression": 54,
+        "flow": 53,
+        "mix": 54,
+        "competition": 41,
+        "distant": 48
+      },
+      "relaxed": 11,
+      "attempts": 7988,
+      "moves": 3027
+    }
+  ],
+  "notebooks": {
+    "count": 2400,
+    "types": {
+      "flow": 800,
+      "moderate": 1100,
+      "tactical": 500
+    },
+    "roles": {
+      "reveal": 370,
+      "chain": 306,
+      "compression": 351,
+      "flow": 403,
+      "mix": 358,
+      "competition": 300,
+      "distant": 312
+    },
+    "sizes": {
+      "12": 338,
+      "14": 524,
+      "16": 421,
+      "18": 370,
+      "20": 294,
+      "22": 244,
+      "24": 151,
+      "26": 58
+    },
+    "rows": {
+      "3": 500,
+      "4": 632,
+      "5": 571,
+      "6": 697
+    },
+    "styles": {
+      "0": 561,
+      "1": 579,
+      "2": 584,
+      "3": 676
+    },
+    "requested": {
+      "reveal": 350,
+      "chain": 350,
+      "compression": 350,
+      "flow": 400,
+      "mix": 350,
+      "competition": 300,
+      "distant": 300
+    },
+    "relaxed": 47,
+    "attempts": 49155,
+    "moves": 20584
+  },
+  "daily": {
+    "count": 365,
+    "types": {
+      "flow": 139,
+      "moderate": 174,
+      "tactical": 52
+    },
+    "roles": {
+      "reveal": 63,
+      "chain": 45,
+      "compression": 54,
+      "flow": 53,
+      "mix": 55,
+      "competition": 41,
+      "distant": 54
+    },
+    "sizes": {
+      "12": 52,
+      "14": 88,
+      "16": 74,
+      "18": 58,
+      "20": 43,
+      "22": 46,
+      "24": 3,
+      "26": 1
+    },
+    "rows": {
+      "3": 75,
+      "4": 84,
+      "5": 93,
+      "6": 113
+    },
+    "styles": {
+      "0": 97,
+      "1": 79,
+      "2": 83,
+      "3": 106
+    },
+    "requested": {
+      "reveal": 60,
+      "chain": 55,
+      "compression": 54,
+      "flow": 53,
+      "mix": 54,
+      "competition": 41,
+      "distant": 48
+    },
+    "relaxed": 11,
+    "attempts": 7988,
+    "moves": 3027
+  },
+  "all": {
+    "count": 2765,
+    "types": {
+      "flow": 939,
+      "moderate": 1274,
+      "tactical": 552
+    },
+    "roles": {
+      "reveal": 433,
+      "chain": 351,
+      "compression": 405,
+      "flow": 456,
+      "mix": 413,
+      "competition": 341,
+      "distant": 366
+    },
+    "sizes": {
+      "12": 390,
+      "14": 612,
+      "16": 495,
+      "18": 428,
+      "20": 337,
+      "22": 290,
+      "24": 154,
+      "26": 59
+    },
+    "rows": {
+      "3": 575,
+      "4": 716,
+      "5": 664,
+      "6": 810
+    },
+    "styles": {
+      "0": 658,
+      "1": 658,
+      "2": 667,
+      "3": 782
+    },
+    "requested": {
+      "reveal": 410,
+      "chain": 405,
+      "compression": 404,
+      "flow": 453,
+      "mix": 404,
+      "competition": 341,
+      "distant": 348
+    },
+    "relaxed": 58,
+    "attempts": 57143,
+    "moves": 23611
+  },
+  "dailyStart": "2026-12-25",
+  "dailyEnd": "2027-12-24",
+  "historicalFirstTask": "reserved original FTUE board, generated replacement retained in research"
+}
