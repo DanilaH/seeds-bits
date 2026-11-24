@@ -478,6 +478,45 @@ async function verifyPairWaves() {
     return waves;
   } finally {ui.close(); stop();}
 }
+async function verifyBoardMotion() {
+  const remaining=[1,2,3,4,1,2,3,4,2];
+  const board=[5,5,0,0,0,0,0,0,0,...remaining];
+  const game={...sample,active:"classic",sessions:{classic:{rules:1,
+    current:{board,scroll:0,moves:0,additions:0},history:[]}}};
+  await fixture({[progress]:game,[settings]:{tutorialDone:true,languageChoice:"ru",sound:false,vibration:false}});
+  launch();
+  const ui=await connect();
+  try {
+    await ui.tap("#resume");
+    await ui.evaluate(`(() => {
+      window.boardMotion={collapsed:0,added:[]};
+      new MutationObserver(records=>{
+        for(const record of records)for(const node of record.addedNodes)
+          if(node instanceof HTMLElement && node.matches(".collapsed-row")) window.boardMotion.collapsed++;
+      }).observe(document.getElementById("app"),{childList:true});
+      const play=Animation.prototype.play;
+      Animation.prototype.play=function(){
+        const effect=this.effect;
+        if(effect instanceof KeyframeEffect && effect.target?.matches(".digit") &&
+          effect.getTiming().duration===140 && Number(effect.getKeyframes()[0].opacity)===0 &&
+          effect.getKeyframes()[0].translate)
+          window.boardMotion.added.push([Number(effect.target.parentElement.dataset.index),effect.getTiming().delay]);
+        return play.call(this);
+      };
+    })()`);
+    await ui.tap(digit(0));
+    await ui.tap(digit(1));
+    await ui.until("document.querySelector('#remaining').textContent==='9'");
+    await ui.tap("#add");
+    await ui.until("window.boardMotion.added.length===9");
+    assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"18");
+    const result=await ui.evaluate("window.boardMotion");
+    assert.deepEqual(result,{collapsed:1,added:remaining.map((_,i)=>[i+9,i*23])});
+    await ui.tap("#undo");
+    await ui.until("document.querySelector('#remaining').textContent==='9' && !document.querySelector('.add-pending')");
+    return result;
+  } finally {ui.close(); stop();}
+}
 // Exact old generator seed 73, with its legal first pair [0,9] removed.
 const oldHighBoard=[1,6,1,5,1,5,6,1,4,1,8,1,9,8,7,1,7,1,2,1,4,3,1,3,1,9,2];
 const oldHighCurrent=oldHighBoard.map((digit,i)=>i===0||i===9?0:digit);
@@ -663,6 +702,8 @@ try{
   fs.writeFileSync(out+"/book78-taps.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode, ...report78},null,2));
   const waves=await verifyPairWaves();
   fs.writeFileSync(out+"/pair-waves.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,waves},null,2));
+  const motion=await verifyBoardMotion();
+  fs.writeFileSync(out+"/board-motion.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,...motion},null,2));
   if (classicBundle) {
     const pilot=await classicPilot();
     fs.writeFileSync(out+"/classic-pilot-android.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,...pilot},null,2));

@@ -123,6 +123,7 @@ header {
   flex: 1;
   min-height: 0;
   overflow: auto;
+  overflow-anchor: none;
   overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
@@ -175,6 +176,18 @@ header {
 }
 .cell.pair-blocker {
   box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--reject) 60%, var(--ink));
+}
+.collapsed-row {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  transform-origin: center top;
+  border-block: 1px solid var(--line);
+  background: linear-gradient(to right, var(--line) 1px, transparent 1px) 0 0 / calc(100% / 9) 100%,
+    color-mix(in srgb, var(--accent) 12%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .digit.add-pending { opacity: 0; }
 }
 .cell:focus-visible {
   outline-offset: -3px;

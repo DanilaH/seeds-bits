@@ -1104,27 +1104,76 @@ function clearBoardReveal() {
 }
 function revealAddedCells(start: number, end: number) {
   clearBoardReveal();
-  const current = session.current.board;
-  const reveal = (final = false) => {
-    if (session.current.board !== current || dialog.open || paused) {
-      clearBoardReveal();
-      return;
+  const first = cell(start)?.getBoundingClientRect();
+  if (!first?.height) return;
+  const view = viewport.getBoundingClientRect();
+  const scroll = viewport.scrollTop;
+  const target = Math.min(
+    Math.max(0, scroll + (first.top + first.bottom - view.top - view.bottom) / 2),
+    viewport.scrollHeight - viewport.clientHeight,
+  );
+  if (reduced() || document.hidden) {
+    viewport.scrollTop = target;
+    feedback("add");
+    return;
+  }
+  const firstRow = Math.floor(start / WIDTH);
+  const lastRow = firstRow + Math.ceil((view.bottom - first.top - scroll + target) / first.height);
+  const last = Math.min(end, lastRow * WIDTH, start + 54);
+  const digits: { digit: HTMLElement; delay: number; index: number }[] = [];
+  for (let index = start; index < last; index++) {
+    const digit = cell(index)?.querySelector<HTMLElement>(".digit");
+    if (!digit) continue;
+    const row = Math.floor(index / WIDTH) - firstRow;
+    const column = index % WIDTH - (row === 0 ? start % WIDTH : 0);
+    digits.push({ digit, delay: column * 23 + Math.min(row, 3) * 25, index });
+    digit.classList.add("add-pending");
+  }
+  const current = board();
+  const reveal = () => {
+    clearBoardReveal();
+    if (board() !== current || dialog.open || paused || document.hidden || reduced()) return;
+    const animations: Animation[] = [];
+    const duration = 140;
+    const bounds = viewport.getBoundingClientRect();
+    const visible = digits.filter(({ digit }) => {
+      const box = digit.getBoundingClientRect();
+      return box.bottom > bounds.top && box.top < bounds.bottom;
+    });
+    for (const { digit, delay } of visible) {
+      const animation = ownedDomMotion.animate(digit, [
+        { opacity: 0, translate: "0 -4px" },
+        { opacity: 1, translate: "0 1px", offset: .72 },
+        { opacity: 1, translate: "none" },
+      ], { duration, delay, easing: "ease-out", fill: "backwards" });
+      if (animation) {
+        animation.id = "board-add";
+        animations.push(animation);
+      }
     }
-    const count = visibleCellEffects(
-      Array.from({ length: end - start }, (_, i) => start + i),
-      [
-        { background: "var(--selected)", opacity: 0.45 },
-        { background: "transparent", opacity: 1 },
-      ],
-      220,
-    );
-    if (count || final) clearBoardReveal();
+    const lastFirstRow = visible.filter(({ index }) => Math.floor(index / WIDTH) === firstRow).at(-1);
+    if (lastFirstRow && settings.vibration && animations.length)
+      boardRevealTimer = setTimeout(() => {
+        if (settings.vibration && !paused && !dialog.open && !document.hidden)
+          void platform.haptic("button").catch(() => {});
+      }, lastFirstRow.delay + duration);
+    boardRevealCancel = () => animations.forEach(animation => animation.cancel());
   };
-  const arrived = () => reveal();
-  // Ignore a queued scrollend from the activating button's own scroll. The target must be visible.
-  viewport.addEventListener("scrollend", arrived);
-  boardRevealCancel = () => viewport.removeEventListener("scrollend", arrived);
-  boardRevealTimer = setTimeout(() => reveal(true), 1000);
+  const arrived = () => {
+    if (Math.abs(viewport.scrollTop - target) < 2) reveal();
+  };
+  boardRevealCancel = () => {
+    viewport.removeEventListener("scrollend", arrived);
+    for (const { digit } of digits) digit.classList.remove("add-pending");
+  };
+  feedback("add", false);
+  if (Math.abs(scroll - target) < 2) reveal();
+  else {
+    // A queued scrollend from the prior move may arrive first.
+    viewport.addEventListener("scrollend", arrived);
+    boardRevealTimer = setTimeout(reveal, 500);
+    viewport.scrollTo({ top: target, behavior: "smooth" });
+  }
 }
 function settlePresentation() {
   presentationRevision++;
@@ -1421,6 +1470,38 @@ const cellSelection = (el: Element) =>
 function clearMotions() {
   ownedDomMotion.cancelAll();
   cellColorMotions.clear();
+}
+let collapseScroll = 0;
+const collapseRows = new Set<HTMLElement>();
+function clearCollapseRows() {
+  for (const row of collapseRows) row.getAnimations().forEach(animation => animation.cancel());
+}
+function showCollapsedRows(rows: readonly DOMRect[], view: DOMRect) {
+  collapseScroll = viewport.scrollTop;
+  for (const rect of rows) {
+    const top = Math.max(view.top, rect.top);
+    const bottom = Math.min(view.bottom, rect.bottom);
+    if (bottom <= top) continue;
+    const row = document.createElement("span");
+    row.className = "collapsed-row";
+    row.setAttribute("aria-hidden", "true");
+    Object.assign(row.style, {
+      top: `${top}px`, left: `${rect.left}px`,
+      width: `${rect.width}px`, height: `${bottom - top}px`,
+    });
+    $("app").append(row);
+    collapseRows.add(row);
+    const remove = () => {
+      collapseRows.delete(row);
+      row.remove();
+    };
+    const animation = ownedDomMotion.animate(row, [
+      { opacity: .9, transform: "scaleY(1)" },
+      { opacity: 0, transform: "scaleY(0)" },
+    ], { duration: 155, easing: "ease-out" });
+    if (animation) void animation.finished.then(remove, remove);
+    else remove();
+  }
 }
 function motion(el: Element | null, frames: Keyframe[], duration = 160) {
   const color = frames.some(frame => "background" in frame || "backgroundColor" in frame);
@@ -2517,8 +2598,7 @@ async function choose(i: number) {
   if (wave && result.path.kind === "reading") $("paths").replaceChildren();
   if (traceMove && !wave) showPairTrace(result.path);
   for (const n of [a, i]) cell(n)?.classList.add("erasing");
-  const oldLength = values.length,
-    next = removePair(values, a, i);
+  const next = removePair(values, a, i);
   const ending = lesson < 0 && !occupied(next);
   if (!ending) feedback("pair");
   // Commit the accepted move before awaiting a decorative animation.
@@ -2543,37 +2623,48 @@ async function choose(i: number) {
   const blank = [...values];
   blank[a] = blank[i] = 0;
   const positions = new Map<number, number>();
+  const removedRows: number[] = [];
   let offset = 0;
-  for (let row = 0; row < blank.length; row += 9) {
-    if (!blank.slice(row, row + 9).some(Boolean)) {
-      offset += 9;
+  for (let row = 0; row < blank.length; row += WIDTH) {
+    if (!blank.slice(row, row + WIDTH).some(Boolean)) {
+      removedRows.push(row);
+      offset += WIDTH;
       continue;
     }
-    for (let c = row; c < Math.min(row + 9, blank.length); c++)
+    for (let c = row; c < Math.min(row + WIDTH, blank.length); c++)
       positions.set(c - offset, c);
   }
-  const oldRects = new Map<HTMLElement, DOMRect>();
-  const boardRect = $("board").getBoundingClientRect();
-  const previousHeight = boardRect.height;
-  if (next.length < oldLength && !reduced()) {
+  const oldTops = new Map<HTMLElement, number>();
+  const collapsed: DOMRect[] = [];
+  let anchor: HTMLElement | undefined;
+  const collapses = removedRows.length > 0 && next.length > 0;
+  const animateCollapse = collapses && !reduced() && !paused && !document.hidden;
+  if (collapses) {
     const viewRect = viewport.getBoundingClientRect();
-    const rowHeight = boardRect.width / WIDTH;
-    const firstRow = Math.max(
-      0,
-      Math.floor((viewRect.top - boardRect.top) / rowHeight) - 1,
-    );
-    const lastRow =
-      Math.ceil((viewRect.bottom - boardRect.top) / rowHeight) + 1;
+    const boardRect = $("board").getBoundingClientRect();
+    const rowHeight = cell(0)?.getBoundingClientRect().height || boardRect.width / WIDTH;
+    const firstRow = Math.max(0, Math.floor((viewRect.top - boardRect.top) / rowHeight));
+    const lastRow = Math.ceil((viewRect.bottom - boardRect.top) / rowHeight);
     for (const [nextIndex, oldIndex] of positions) {
       const oldRow = Math.floor(oldIndex / WIDTH),
         nextRow = Math.floor(nextIndex / WIDTH);
       if (
-        (oldRow < firstRow || oldRow > lastRow) &&
-        (nextRow < firstRow || nextRow > lastRow)
+        (oldRow < firstRow - 1 || oldRow > lastRow + 1) &&
+        (nextRow < firstRow - 1 || nextRow > lastRow + 1)
       )
         continue;
       const node = cell(oldIndex);
-      if (node) oldRects.set(node, node.getBoundingClientRect());
+      if (!node) continue;
+      if (!anchor && viewport.scrollTop > 1 && oldRow >= firstRow && oldRow < lastRow && blank[oldIndex])
+        anchor = node;
+      if (animateCollapse || node === anchor) oldTops.set(node, node.getBoundingClientRect().top);
+    }
+    if (animateCollapse) {
+      for (const row of removedRows) {
+        const top = boardRect.top + row / WIDTH * rowHeight;
+        if (top < viewRect.bottom && top + rowHeight > viewRect.top)
+          collapsed.push(new DOMRect(boardRect.left, top, boardRect.width, rowHeight));
+      }
     }
   }
   const hadBoardFocus = $("board").contains(document.activeElement);
@@ -2588,6 +2679,10 @@ async function choose(i: number) {
   clearSelection();
   busy = false;
   render();
+  if (anchor?.isConnected) {
+    const delta = anchor.getBoundingClientRect().top - oldTops.get(anchor)!;
+    if (Math.abs(delta) > 1) viewport.scrollTop += delta;
+  }
   if (hadBoardFocus && !$("board").contains(document.activeElement))
     (
       $("board").querySelector<HTMLElement>("button") ??
@@ -2600,25 +2695,21 @@ async function choose(i: number) {
   if (lesson < 0 && occupied(next) && !availablePairs(next).length) {
     if (firstEvent("first_no_moves", { mode: gameMode() })) void save();
   }
-  if (occupied(next) && next.length < oldLength && !reduced()) {
+  if (animateCollapse) {
     // Read every destination before starting animations; interleaving them forces
     // layout once per cell on long boards.
-    const movements = [...oldRects]
+    const movements = [...oldTops]
       .filter(([node]) => node.isConnected)
-      .map(([node, rect]) => ({
+      .map(([node, top]) => ({
         node,
-        dy: rect.top - node.getBoundingClientRect().top,
+        dy: top - node.getBoundingClientRect().top,
       }));
-    const height = $("board").getBoundingClientRect().height;
+    clearCollapseRows();
+    showCollapsedRows(collapsed, viewport.getBoundingClientRect());
     for (const { node, dy } of movements) {
       if (Math.abs(dy) > 1)
         motion(node, [{ translate: `0 ${dy}px` }, { translate: "0 0" }], 170);
     }
-    motion(
-      $("board"),
-      [{ height: `${previousHeight}px` }, { height: `${height}px` }],
-      170,
-    );
   }
   maybeCelebrateResult();
   if (lesson >= 0) message(t("ui.well-done"));
@@ -2676,11 +2767,6 @@ function add() {
     }
     clearSelection();
     render();
-    cell(values.length)?.scrollIntoView({
-      block: "center",
-      behavior: reduced() ? "instant" : "smooth",
-    });
-    feedback("add");
     revealAddedCells(values.length, next.length);
     if (lesson === 5) message(t("ui.now-tap-undo"));
   } catch {
@@ -2693,6 +2779,8 @@ function undoAction() {
   saveRecovered = false;
   if (busy || paused || (lesson < 0 && !occupied(board()))) return;
   clearPairFeedback();
+  clearCollapseRows();
+  clearBoardReveal();
   if (lesson === 5 && lessonPhase === 1) {
     lessonBoard = [...lessons[5].cells];
     lessonPhase = 2;
@@ -2704,7 +2792,6 @@ function undoAction() {
   }
   if (lesson >= 0) return;
   if (!session.history.length) return;
-  clearBoardReveal();
   const restored = removedPairs.get(session.current.board);
   session = undo(session);
   clearSelection();
@@ -3332,6 +3419,7 @@ let scrollTimer: ReturnType<typeof setTimeout>;
 viewport.addEventListener("scroll", () => {
   updateBoardEdges();
   if (pairTrace || pairWave) clearPairFeedback();
+  if (Math.abs(viewport.scrollTop - collapseScroll) > 1) clearCollapseRows();
   updateJump();
   clearTimeout(scrollTimer);
   scrollTimer = setTimeout(() => {

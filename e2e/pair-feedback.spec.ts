@@ -175,6 +175,92 @@ test("dead end explains the copy after a successful gap pair",async({page})=>{
   await expect.poll(()=>savedBoard(page)).toEqual([0,0,0,8,5]);
 });
 
+test("a collapse keeps the first surviving row in place on a scrolled board", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  const board = Array.from({ length: 144 }, (_, i) => (i % 4) + 1);
+  board.splice(36, 9, 5, 5, 0, 0, 0, 0, 0, 0, 0);
+  await open(page, board);
+  const viewport = page.locator("#viewport");
+  const anchor = await digit(page, 45).elementHandle();
+  const measure = (index: number) => digit(page, index).evaluate(el =>
+    el.getBoundingClientRect().top - document.querySelector("#viewport")!.getBoundingClientRect().top);
+  const previousScroll = await viewport.evaluate(el => {
+    const height = el.querySelector(".cell")!.getBoundingClientRect().height;
+    el.scrollTop = height * 4 + 5;
+    return el.scrollTop;
+  });
+  const before = await measure(45);
+  for (const index of [36, 37]) {
+    const box = (await digit(page, index).boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  }
+  await expect.poll(() => savedBoard(page)).toEqual(removePair(board, 36, 37));
+  await expect(page.locator("#remaining")).toHaveText(String(occupied(board) - 2));
+  expect(await anchor.getAttribute("data-index")).toBe("36");
+  await expect.poll(async () => Math.abs(await measure(36) - before)).toBeLessThan(1);
+  expect(await viewport.evaluate(el => el.scrollTop)).toBeLessThan(previousScroll);
+  await page.locator("#undo").click();
+  await expect.poll(() => savedBoard(page)).toEqual(board);
+  expect(await viewport.evaluate(el => el.scrollTop)).toBe(previousScroll);
+});
+
+test("collapse slides the surviving cells and accepts a new pair", async ({ page }) => {
+  await page.clock.install();
+  await open(page, boardOf({0:5, 1:5, 9:3, 10:3, 18:1}));
+  await page.evaluate(() => {
+    const board = document.getElementById("board")!;
+    const originalPlay = Animation.prototype.play;
+    Animation.prototype.play = function () {
+      const effect = this.effect;
+      if (effect instanceof KeyframeEffect && effect.target?.matches(".cell")
+        && effect.getKeyframes()[0].translate) board.dataset.slid = "true";
+      return originalPlay.call(this);
+    };
+  });
+  await digit(page, 0).click();
+  await digit(page, 1).click();
+  await page.clock.runFor(110);
+  await expect(page.locator("#board")).toHaveAttribute("data-slid", "true");
+  await expect(page.locator("#remaining")).toHaveText("3");
+  await digit(page, 0).dispatchEvent("click");
+  await digit(page, 1).dispatchEvent("click");
+  await page.clock.runFor(110);
+  await expect(page.locator("#remaining")).toHaveText("1");
+});
+
+for (const reducedMotion of ["no-preference", "reduce"] as const) {
+  test(`Add only deals the appended digits, reduced motion=${reducedMotion}`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.emulateMedia({ reducedMotion });
+    const board = [1, 2, 3, 4, 1, 2, 3, 4, 2, ...Array<number>(99).fill(0)];
+    await open(page, board);
+    await page.evaluate(() => {
+      const board = document.getElementById("board")!;
+      const originalPlay = Animation.prototype.play;
+      const dealt: [number, number][] = [];
+      Animation.prototype.play = function () {
+        const effect = this.effect;
+        if (effect instanceof KeyframeEffect && effect.target?.matches(".digit")
+          && effect.getKeyframes()[0].translate === "0px -4px") {
+          dealt.push([Number((effect.target.parentElement as HTMLElement).dataset.index), effect.getTiming().delay]);
+          board.dataset.dealt = JSON.stringify(dealt);
+        }
+        return originalPlay.call(this);
+      };
+    });
+    await page.locator("#add").click();
+    await expect.poll(() => savedBoard(page)).toEqual([...board, ...board.slice(0, 9)]);
+    await expect.poll(() => page.locator("#viewport").evaluate(el => el.scrollTop)).toBeGreaterThan(1);
+    if (reducedMotion === "reduce") await expect(page.locator("#board")).not.toHaveAttribute("data-dealt");
+    else await expect(page.locator("#board")).toHaveAttribute("data-dealt",
+      JSON.stringify(Array.from({ length: 9 }, (_, i) => [108 + i, i * 23])));
+    await page.locator("#undo").click();
+    await expect.poll(() => savedBoard(page)).toEqual(board);
+    await expect(page.locator(".add-pending")).toHaveCount(0);
+    expect(await page.locator("#viewport").evaluate(el => el.scrollTop)).toBe(0);
+  });
+}
+
 for (const count of [2,24,2400]) {
   test(`classic result opens first unsolved task with ${count} already solved`,async({page})=>{
     await open(page,[5,5],"classic",Array.from({length:count},(_,i)=>`book-v1-${i+1}`));
