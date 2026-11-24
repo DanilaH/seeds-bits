@@ -563,12 +563,33 @@ async function verifyContentV5() {
     elapsed.hint=Math.round(performance.now()-at);
     shot("v5-108-320x568");
     const grid=()=>ui.evaluate("document.querySelector('#board').childElementCount");
+    const settled="!document.querySelector('#board').getAnimations({subtree:true}).some(a=>"+
+      "(a.pending || a.playState==='running') && a.effect?.getKeyframes().some(f=>f.translate))";
+    async function pressPair(a,b,count){
+      await ui.until(settled);
+      try {
+        await ui.tap(digit(a));
+        assert.equal(await ui.evaluate(`document.querySelector('${digit(a)}').getAttribute('aria-pressed')`),"true");
+        await ui.tap(digit(b));
+        await ui.until(remaining(count));
+      } catch(error) {
+        const detail=await ui.evaluate(`({
+          remaining:document.querySelector('#remaining').textContent,
+          status:document.querySelector('#status').textContent,
+          selected:document.querySelector('#board .selected')?.dataset.index,
+          board:[...document.querySelectorAll('#board .cell')].map(el=>Number(el.textContent)||0),
+          scroll:document.querySelector('#viewport').scrollTop
+        })`);
+        fs.writeFileSync(out+"/v5-failed-move.json",JSON.stringify({id,a,b,count,detail},null,2));
+        shot("v5-failed-move");
+        throw error;
+      }
+    }
     let collapsed=false;
     for(const [index,[a,b]] of proof.entries()){
       const before=await grid(), count=108-2*(index+1);
       at=performance.now();
-      await ui.tap(digit(a));await ui.tap(digit(b));
-      await ui.until(remaining(count));
+      await pressPair(a,b,count);
       if(index===0) {
         assert.equal(profiles().values[progress].bookRevisions[id],5);
         assert.equal(profiles().values[progress].version,9);
@@ -578,8 +599,7 @@ async function verifyContentV5() {
         await ui.tap("#undo");
         await ui.until(remaining(count+2));
         assert.equal(await grid(),before);
-        await ui.tap(digit(a));await ui.tap(digit(b));
-        await ui.until(remaining(count));
+        await pressPair(a,b,count);
         collapsed=true;
         const snapshot=profiles().values[progress].sessions[id];
         ui.close();stop();
