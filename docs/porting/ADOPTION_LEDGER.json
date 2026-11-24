@@ -881,6 +881,22 @@
       },
       "nextAction": "Телефонный плейтест ощущения сложности и серии, замер семечек в минуту.",
       "kitImpact": "REUSE: applied the evidence ladder to selected recipes, canonical motifs and serial acceptance."
+    },
+    {
+      "id": "seeds-content-pilot-v3-integration-20261124",
+      "sourceFeatureIds": [],
+      "scope": "Owner-authorized integration of the 120 authored pilot v3 tasks (96 notebook,24 calendar dates); local adaptation, not an original-reference claim",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "b8f4c24e8bf04a902381d370730963209374f3fa",
+      "evidence": {
+        "bank": "https://github.com/DanilaH/seeds-bits/blob/86059fd20fd02442c5d00fb1a23bd1b94b5e65f8/docs/research/daily-notebook-design-2026-11-24/pilot-v3/bank-compact.txt",
+        "model": "Research PR17 exact graph checks: 120 boards, 269779 states, 1305355 transitions; previous 76 checked, full historical gate in tests",
+        "code": "src/content-pilot.json,content-ids.ts,content-pilot.ts,puzzles.ts,progress.ts,notebooks.ts,main.ts,daily-run.ts; native reminder; wire7 and daily aliases",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Full CI and historical catalogue comparison; browser reload, calendar alias and reward checks; Android preview physical phone acceptance. Keep branch separate until green. No release/publication.",
+      "kitImpact": "REUSE fixed content, explicit versioned IDs and durable reward identity."
     }
   ]
 }
