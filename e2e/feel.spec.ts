@@ -35,7 +35,9 @@ async function seed(
         if (!target) return;
         recorded.add(animation);
         w.effects.push({target: target.id || target.className,
-          duration: effect!.getTiming().duration, index: target.dataset?.index});
+          duration: effect!.getTiming().duration, index: target.dataset.index,
+          digitIndex: target.matches(".digit") ? target.parentElement?.dataset.index : undefined,
+          translate: effect!.getKeyframes()[0]?.translate});
       };
       Element.prototype.animate = function (frames: any, opts: any) {
         const animation = animate.call(this, frames, opts);
@@ -282,14 +284,15 @@ test("large addition animates a bounded visible portion and preserves all 1800 c
   await resetEvents(page);
   await page.locator("#add").click();
   await expect(page.locator("#remaining")).toHaveText("1800");
-  await page.waitForTimeout(1400);
-  const effects = await page.evaluate(() =>
+  const addedEffects = () => page.evaluate(() =>
     (window as any).effects.filter(
-      (e: any) => e.duration === 220 && e.index !== undefined,
-    ),
+      (e: any) => e.digitIndex !== undefined && e.translate === "0px -4px",
+    ).map((e: any) => Number(e.digitIndex)) as number[],
   );
-  expect(effects.length).toBeGreaterThan(0);
-  expect(effects.length).toBeLessThanOrEqual(54);
+  await expect.poll(async () => (await addedEffects()).length).toBeGreaterThan(0);
+  const indices = await addedEffects();
+  expect(indices.length).toBeLessThanOrEqual(54);
+  expect(indices.every(index => index >= 900 && index < 1800)).toBe(true);
 });
 
 test("undo flashes exactly the removed pair after a whole row disappears", async ({
