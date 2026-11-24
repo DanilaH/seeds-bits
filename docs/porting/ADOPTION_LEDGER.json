@@ -1471,6 +1471,24 @@
       },
       "nextAction": "Проверить actual-source full-catalogue verifier в repo checkout, затем интегрировать resolver/wire7, календарные назначения, тетради и приёмку C01–C12. Не менять старые ID/экономику/паузы.",
       "kitImpact": "REUSE: content quality + causal trace + explicit bounded outcomes."
+    },
+    {
+      "id": "seeds-content-pilot-bank-v3-20261124",
+      "sourceFeatureIds": [],
+      "scope": "Own Seeds experimental daily/notebook content, 120 candidate boards and exact graph profiles",
+      "status": "RESEARCHED",
+      "consumerCommit": "92ac62f938e12b617132c78bf3d2b4c132a37621",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/17",
+      "evidence": {
+        "bank": "./../research/daily-notebook-design-2026-11-24/pilot-v3/bank-compact.txt",
+        "model": "1762 attempts; 120 exact graphs, 269779 states / 1305355 transitions, 1032 verified pair removals, 36/60/24 profiles; independent enumeration",
+        "browser": "120/120 DOM wins, touch Hint/Undo, 320/390/520; reload UNKNOWN",
+        "physicalPhone": "UNKNOWN",
+        "liveAudience": "UNKNOWN",
+        "oldCatalogue": "Integration verifier pending; prior 76 checked locally"
+      },
+      "nextAction": "Run verify-compact.mjs on pinned checkout, then compare human playtest, accept or revise bank and only then integrate resolver/wire7 and future calendar assignments; retain old IDs, economy and paused features.",
+      "kitImpact": "REUSE: exact state graph, causal evidence and profile separation."
     }
   ]
 }

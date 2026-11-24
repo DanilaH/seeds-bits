@@ -84,3 +84,7 @@ node docs/porting/2026-11-20/sample-classic.mjs
 4. **DEFERRED, не OWNER_EXCLUDED:** дополнительные сочетания и отдельные темы — после принятого первого банка и выявленных дефицитов; большие необязательные задачи — при запросе владельца и измерении длительности/Hint/scroll на телефоне; тематические недели — как следующие будущие frozen editions с тем же assignment-контрактом. Причины и условия возврата записаны в [DESIGN_FEATURES](../../research/daily-notebook-design-2026-11-24/DESIGN_FEATURES.json).
 
 Доказательства своей модели/кода не приписаны оригиналам. Новых APK-сеансов Easybrain/NADO/Number Tiles нет.36sourceFeatureId неизменны; помощь/экономика сохраняются. **KIT IMPACT — REUSE / CANDIDATE QA.**
+
+
+## Own daily/notebook content pilot v3 (24.11.2026)
+120 research candidates authored and exact-graph checked; see [pilot v3](../../research/daily-notebook-design-2026-11-24/pilot-v3/README.md). Next: full legacy comparison, playtest, owner acceptance and C01–C12 integration gate. No product activation.
