@@ -1386,7 +1386,7 @@ function showPairWave(path: Connection, blocked = false) {
     const box = node.getBoundingClientRect();
     const tile = document.createElement("span");
     tile.className = "pair-wave-cell";
-    tile.dataset.index = String(index);
+    tile.dataset.waveIndex = String(index);
     const impact = blocked && index === path.b;
     if (impact) tile.classList.add("pair-wave-impact");
     const delay = order * step;

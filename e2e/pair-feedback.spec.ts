@@ -45,8 +45,8 @@ for (const [name, entries, endpoints, blockers] of [
       const outlined = page.locator("#board .pair-blocker");
       expect(await outlined.evaluateAll(nodes=>nodes.map(e=>Number((e as HTMLElement).dataset.index)))).toEqual(blockers);
       const wave = page.locator('.pair-wave[data-kind="blocked"]');
-      await expect(wave.locator(".pair-wave-cell").first()).toHaveAttribute("data-index", String(a));
-      await expect(wave.locator(".pair-wave-impact")).toHaveAttribute("data-index", String(reverse ? blockers.at(-1) : blockers[0]));
+      await expect(wave.locator(".pair-wave-cell").first()).toHaveAttribute("data-wave-index", String(a));
+      await expect(wave.locator(".pair-wave-impact")).toHaveAttribute("data-wave-index", String(reverse ? blockers.at(-1) : blockers[0]));
       await expect(wave.locator(".pair-wave-cell").last()).toHaveClass(/pair-wave-impact/);
       await expect(digit(page,b)).toHaveClass(/selected/);
       expect(await viewportTop(page)).toBeCloseTo(top, 0);
@@ -123,7 +123,7 @@ for (const reverse of [false,true]) {
     await digit(page,b).click();
     const wave = page.locator('.pair-wave[data-kind="match"]');
     const cells = await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(el=>({
-      index: Number((el as HTMLElement).dataset.index),
+      index: Number((el as HTMLElement).dataset.waveIndex),
       delay: parseFloat(getComputedStyle(el).animationDelay),
     })));
     expect(cells.map(c=>c.index)).toEqual(reverse ? [10,9,8,7] : [7,8,9,10]);
@@ -140,10 +140,11 @@ test("a green diagonal runs from the first tap and releases the board before it 
   await digit(page,30).click();
   await digit(page,0).click();
   const wave = page.locator('.pair-wave[data-kind="match"]');
-  expect(await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(e=>Number((e as HTMLElement).dataset.index)))).toEqual([30,20,10,0]);
+  expect(await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(e=>Number((e as HTMLElement).dataset.waveIndex)))).toEqual([30,20,10,0]);
   await page.clock.runFor(115);
   await expect(page.locator("#remaining")).toHaveText("2");
   await expect(wave).toHaveCount(1);
+  await expect(page.locator('[data-index="0"]')).toHaveCount(1);
   await expect(page.locator("#undo")).toBeEnabled();
   await page.locator("#undo").click();
   await expect(wave).toHaveCount(0);

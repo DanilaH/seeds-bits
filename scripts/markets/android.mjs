@@ -456,8 +456,8 @@ async function verifyPairWaves() {
         for(const record of records)for(const node of record.addedNodes){
           if(!(node instanceof HTMLElement) || !node.matches(".pair-wave")) continue;
           window.seedsWaveCheck.push({kind:node.dataset.kind,
-            cells:[...node.children].map(cell=>Number(cell.dataset.index)),
-            impact:node.querySelector(".pair-wave-impact")?.dataset.index ?? null});
+            cells:[...node.children].map(cell=>Number(cell.dataset.waveIndex)),
+            impact:node.querySelector(".pair-wave-impact")?.dataset.waveIndex ?? null});
         }
       }).observe(document.getElementById("app"),{childList:true});
     })()`);
