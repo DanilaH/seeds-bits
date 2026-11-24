@@ -17,7 +17,7 @@ describe("verified content and calendar", () => {
     { timeout: 120000 },
     () => {
       expect(new Set(notebook.map((p) => JSON.stringify(p.board))).size).toBe(
-        2400,
+        2496,
       );
       for (const p of notebook) {
         let b = p.board;

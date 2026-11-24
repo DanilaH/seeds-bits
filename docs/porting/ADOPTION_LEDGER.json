@@ -881,6 +881,69 @@
       },
       "nextAction": "Телефонный плейтест ощущения сложности и серии, замер семечек в минуту.",
       "kitImpact": "REUSE: applied the evidence ladder to selected recipes, canonical motifs and serial acceptance."
+    },
+    {
+      "id": "seeds-content-pilot-v3-integration-20261124",
+      "sourceFeatureIds": [],
+      "scope": "Owner-authorized integration of the 120 authored pilot v3 tasks (96 notebook,24 calendar dates); local adaptation, not an original-reference claim",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "b8f4c24e8bf04a902381d370730963209374f3fa",
+      "evidence": {
+        "bank": "https://github.com/DanilaH/seeds-bits/blob/86059fd20fd02442c5d00fb1a23bd1b94b5e65f8/docs/research/daily-notebook-design-2026-11-24/pilot-v3/bank-compact.txt",
+        "model": "Research PR17 exact graph checks: 120 boards, 269779 states, 1305355 transitions; previous 76 checked, full historical gate in tests",
+        "code": "src/content-pilot.json,content-ids.ts,content-pilot.ts,puzzles.ts,progress.ts,notebooks.ts,main.ts,daily-run.ts; native reminder; wire7 and daily aliases",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN",
+        "initialCI": {
+          "run": "https://github.com/DanilaH/seeds-bits/actions/runs/45369428968",
+          "head": "4a625da07d798055c77904f98bcc1e717a34306b",
+          "newTests": "7/7 PASS including full legacy canonical gate",
+          "allUnit": "136/137; stale wire7 boundary assertion, corrected in followup",
+          "browser": "BLOCKED: install skipped after old assertion",
+          "android": "Native harness and web build/setup PASS; complete APK pending"
+        },
+        "independentIntegrationModel": "120/120 exact published runtime paths (1032 removals), 7 identity scenarios; zero canonical collisions vs 336 eligible old starts, previous 76 and 1095 v1 dates"
+      },
+      "nextAction": "Full CI and historical catalogue comparison; browser reload, calendar alias and reward checks; Android preview physical phone acceptance. Keep branch separate until green. No release/publication.",
+      "kitImpact": "REUSE fixed content, explicit versioned IDs and durable reward identity."
+    },
+    {
+      "id": "seeds-content-v4-20261124",
+      "sourceFeatureIds": [],
+      "scope": "Owner-authorized redesign of existing 100 notebooks and continuing daily calendar; own content and save compatibility, not a reference parity claim",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "197821d42a47eee7d082a4c51add1b38d9fa0824",
+      "evidence": {
+        "author": "scripts/author-content-v4.mjs",
+        "data": "../research/daily-notebook-design-2026-11-24/catalogue-v4/summary.json",
+        "model": "2765 authored boards; 23611 witnessed legal moves; 939 all-states-safe, 1274 safe openings with proven later risk, 552 mixed first actions with proven risk; no canonical or occupied-mask duplicate against exclusion set (336 eligible historic starts, 76 earlier designs, 120 v3 designs, 1095 v1 dates). 58 requested roles replaced by actually verified roles; risk profile unchanged.",
+        "code": "content-v4.ts, content-ids.ts, puzzles.ts, progress.ts, main.ts; native daily reminders",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Require all-bank replay and legacy collision tests, save migration tests v2–v8, browser/Android upgrade and exact restart. Reconcile PR18 with current developer PR9 before combining. User acceptance on phone before release.",
+      "kitImpact": "REUSE immutable versioned content with stable logical reward IDs and explicit revision pins. Future dates beyond fixed bank use causal scoring, not full-state risk certification."
+    },
+    {
+      "id": "seeds-content-v5",
+      "sourceFeatureIds": [],
+      "scope": "Собственный каталог. Все 100 существующих тетрадей, ежедневная выдача и совместимость сохраняемых назначений",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/content-v5.ts",
+        "src/content-v5-generator.ts",
+        "src/content-ids.ts",
+        "src/progress.ts"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/20",
+        "report": "../research/daily-notebook-design-2026-11-24/catalogue-v5/README.md",
+        "model": "2400 слотов, 365 дат и 372 пробы продолжения. Для небольших полей точные профили, для больших — причинные события и ограниченная проверка развилок.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Подтвердить на телефоне обновление, воспринимаемую сложность и темп наград в размерных группах.",
+      "kitImpact": "REUSE: versioned content and bounded proof"
     }
   ]
 }

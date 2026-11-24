@@ -27,6 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - run: node scripts/build-content-v5.mjs
       - run: npx vitest run --config scripts/regression-061/vitest.config.ts
       # Hosted 24.04 already supplies Chrome's system libraries. Keep Playwright's
       # matching Chromium and its startup validation; avoid an unrelated apt update.

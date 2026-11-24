@@ -15,9 +15,10 @@ async function seed(
   board = [5, 5, 5, 5],
   done: string[] = [],
   seeds = 0,
+  known: string[] = [],
 ) {
   await page.addInitScript(
-    ({ active, board, done, seeds, key }: any) => {
+    ({ active, board, done, seeds, known, key }: any) => {
       if (sessionStorage.seeded) return;
       sessionStorage.seeded = "1";
       localStorage.setItem(
@@ -38,7 +39,7 @@ async function seed(
           },
           done,
           seen: [],
-          hints: {},
+          hints: Object.fromEntries(known.map((id: string) => [id, 0])),
           meta: {
             version: 1,
             since: "2026-10-20",
@@ -50,7 +51,7 @@ async function seed(
         }),
       );
     },
-    { active, board, done, seeds, key },
+    { active, board, done, seeds, known, key },
   );
 }
 const save = (name: string, value: any) =>
@@ -83,7 +84,7 @@ test("F01 second notebook completed page uses local page number", async ({
 test("F02 book chunk failure is visible in open modal and retry clears loading", async ({
   page,
 }) => {
-  await seed(page);
+  await seed(page, "classic", [5,5,5,5], [], 0, ["book-v1-25"]);
   let blocked = true;
   await page.route("**/*notebook-extra*", (r) =>
     blocked ? r.abort() : r.continue(),
@@ -142,8 +143,8 @@ test("F04 calendar 2028 leap-day and 2125 trophies", async ({ page }) => {
   )
     await page.locator("#calendar-picker summary").click();
   await page.locator("#calendar-month").selectOption("02");
-  await expect(page.locator('[data-game="daily-v1-2028-02-29"]')).toBeEnabled();
-  await expect(page.locator('[data-game="daily-v1-2028-02-30"]')).toHaveCount(
+  await expect(page.locator('[data-game="daily-v5-2028-02-29"]')).toBeEnabled();
+  await expect(page.locator('[data-game="daily-v5-2028-02-30"]')).toHaveCount(
     0,
   );
   await page.clock.setFixedTime(new Date("2125-06-20T12:00:00"));
@@ -411,7 +412,7 @@ for (const [w, h] of [
     expect(m.hitsButton).toBe(true);
   });
 test("F14 fresh reload recovers blocked notebook chunk", async ({ page }) => {
-  await seed(page);
+  await seed(page, "classic", [5,5,5,5], [], 0, ["book-v1-25"]);
   let blocked = true;
   await page.route("**/*notebook-extra*", (r) =>
     blocked ? r.abort() : r.continue(),

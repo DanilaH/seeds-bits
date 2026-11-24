@@ -45,3 +45,14 @@ node docs/porting/2026-11-20/sample-classic.mjs
 Для нового профиля испытать вход сразу в первую настоящую задачу тетради. Поддержать первый выбор цифры, объяснять пустоту и край на игровом поле. После решения дать человеку самому открыть задачу 2 или другой режим. Отдельные упражнения открываются по желанию. Существующим игрокам сохранять привычный вход. Сначала провести наблюдение с новичками на телефонах, затем решать о пилоте на новых профилях и сравнивать самостоятельный ход, следующую добровольную партию и фактический D1. [ТЗ, модель и пробная сборка](../../research/first-session-2026-11-20/README.md)
 
 20 ноября, пакет плейтеста PR #9: первый вход и четыре замечания реализованы только в opt-in тестовом APK. [Код, проверки и точные границы](../../research/first-session-2026-11-20/implementation/ACCEPTANCE.md). Следующий этап — наблюдение новичков на телефонах; публичный первый вход пока прежний.
+
+
+## 24.11.2026: pilot v3 integration
+Owner requested integration after standalone pilot. 96 thematic tasks appended (104 volumes total), 24 dated candidates for Dec 1–24, 2026, fallback v1 elsewhere. Existing assignments win; daily completion deduplicates by date; wire v7 protects new IDs. Implementation on separate draft branch, acceptance and full legacy comparison pending. Research: [PR17](https://github.com/DanilaH/seeds-bits/pull/17). No economy or paused-feature changes.
+
+## 24.11.2026: catalogue v4 (owner authorized)
+[Design, frozen bank, acceptance and limitations](../../research/daily-notebook-design-2026-11-24/catalogue-v4/README.md). 2400 replacement candidates + 365 dated tasks; slot 1 remains the original first-session tutorial. Unstarted slots resolve v4, known legacy slots pin v1, calendar aliases retain assigned date identity; wire8 protects revisions. PR stacked on PR18, not merged. Human difficulty and physical upgrade are still unverified. No paused assistance or reward-formula change.
+
+## 24.11.2026 · Каталог v5
+
+[Задача №20](https://github.com/DanilaH/seeds-bits/issues/20) · [Банк, кривая и приёмка](../../research/daily-notebook-design-2026-11-24/catalogue-v5/README.md). На интеграционной ветке с PR №9 и №19. 2 400 прежних слотов, размерные волны 8–108, 365 закреплённых дейликов и отдельное детерминированное продолжение. Wire9 закрепляет v5, прежние пины и результаты сохранены. После технической приёмки нужны плейтест размеров и семечек в минуту на телефоне и согласование даты включения.

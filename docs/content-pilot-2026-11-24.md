@@ -1,0 +1,14 @@
+# Pilot v3 — integration acceptance
+
+Owner requested integration. Source bank: [PR17](https://github.com/DanilaH/seeds-bits/pull/17), frozen at 86059fd20fd02442c5d00fb1a23bd1b94b5e65f8; compact bank Git blob 6f50f35c3cdf41abe6a560fe45b416b3e04400ba. Runtime base b8f4c24e8bf04a902381d370730963209374f3fa (PR9).
+
+* Existing 2400 notebook entries, v1 calendar generator, Classic, rules and reward formulas unchanged. New notebooks 101–104 are directly accessible from book screen; 96 tasks and four independent 24-task completion groups. Previous 76-board research pilot remains research, not part of this 120-board integration.
+* Proposed fixed calendar window December 1–24, 2026 (24 boards in exact pilot order). Before/after: existing v1 generator. Any existing v1 session, attempt, hint or completion for a pilot day wins over a new assignment. Exact task lookup never regenerates old board from the v3 alias. Calendar, trophy, streak and reminders use day identity; one seed reward per calendar date. No cycling of new daily fields.
+* New identities use wire7; existing legacy-only saves serialize as wire6. Old clients must not overwrite wire7. Persist daily assignment with session in existing save transaction. No old ID rewrites.
+* 5 launch languages localized, no new ad placement or paused experiments.
+* Acceptance: tests/content-pilot.test.ts covers complete paths, old catalogue collision gate (2400 tasks and v1 dates 2025–2027), grouping, old sessions/rights, wire, reward and calendar. e2e/content-pilot.spec.ts covers actual menu, board, persistence, Undo, completion and date routing. Existing CI unchanged.
+* Physical phone and live audience: UNKNOWN. No release/publish. Must complete CI, inspect browser layouts (320/390/520 and system text policy), verify Android upgrade from actual prior preview, then owner acceptance. See docs/porting/ADOPTION_LEDGER.json.
+
+## First integration verification
+
+On 4a625da07d798055c77904f98bcc1e717a34306b, all 7 new content tests passed in GitHub Actions run [45369428968](https://github.com/DanilaH/seeds-bits/actions/runs/45369428968), including the full 2400-entry and 1095-day canonical collision gate. 136/137 total unit tests passed; the single stale future-format assertion expected v7 to be rejected. Updated boundary to v8 and old UI count/completion fixtures. Browser suite of this initial run was blocked because Chromium installation was skipped after the unit failure (not a gameplay verdict). Independent replay of fetched runtime rule/identity functions: 120/120 boards, 1032 removals; 7 identity checks; no canonical collision with 336 eligible historical starts, 76 earlier pilot boards and 1095 v1 dates. Android native harness and web build/setup steps passed; physical device not verified. Rerun complete CI on corrected commit before acceptance.
