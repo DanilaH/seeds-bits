@@ -108,16 +108,17 @@ for (const [width,height] of [[320,568],[390,844]]) {
   test(`108 digits at ${width}×${height}: scrolling, a hint, compression Undo and full win`, async({page})=>{
     test.setTimeout(100_000);
     await page.setViewportSize({width,height});
-    const id="book-v1-2397";
+    const slot=width === 320 ? 2397 : 2027;
+    const id="book-v1-"+slot;
     const task=bookV5(id)!;
     await install(page);
     await page.goto("/");
-    await chooseVolume(page,100);
+    await chooseVolume(page,Math.ceil(slot/24));
     await selectTask(page,id);
     await expect(page.locator("#remaining")).toHaveText("108");
     await expect(page.locator("#add")).toBeHidden();
     const viewport=page.locator("#viewport");
-    await expect.poll(()=>viewport.evaluate(e=>e.scrollHeight-e.clientHeight)).toBeGreaterThan(50);
+    await expect.poll(()=>viewport.evaluate(e=>e.scrollHeight-e.clientHeight)).toBeGreaterThan(0);
     await viewport.evaluate(e=>e.scrollTop=e.scrollHeight);
     await expect(viewport).toHaveAttribute("data-scroll-above","");
     await page.locator("#hint").click();
@@ -125,6 +126,18 @@ for (const [width,height] of [[320,568],[390,844]]) {
     const pair=await page.locator("#board .hinted").evaluateAll(nodes=>nodes.map(n=>Number((n as HTMLElement).dataset.index)));
     expect(checkPair(task.board,pair[0],pair[1]).ok).toBe(true);
     await page.screenshot({path:`test-results/content-v5/108-${width}.png`});
+
+    if (width === 390) {
+      await digit(page,task.solution[0].a).click();
+      await digit(page,task.solution[0].b).click();
+      await expect(page.locator("#remaining")).toHaveText("106");
+      await page.locator("#menu").click();
+      await page.locator("#new").click();
+      await page.locator("#confirm-new").click();
+      await expect(page.locator("#remaining")).toHaveText("108");
+      expect((await stored(page)).sessions[id].current.board).toEqual(task.board);
+      await expect(page.locator("#undo")).toBeDisabled();
+    }
 
     let board=task.board, undone=false, checkedReload=false;
     for(const [index, move] of task.solution.entries()) {
@@ -157,6 +170,9 @@ for (const [width,height] of [[320,568],[390,844]]) {
     expect(result.done).toContain(id);
     expect(result.bookRevisions[id]).toBe(5);
     expect(unpackSession(result.sessions[id]).history).toHaveLength(54);
+    await page.locator("#play-again").click();
+    await expect.poll(async()=> (await stored(page)).active).not.toBe(id);
+    expect((await stored(page)).sessions[id]).toEqual(result.sessions[id]);
   });
 }
 

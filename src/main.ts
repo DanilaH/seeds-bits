@@ -3812,19 +3812,6 @@ async function switchGame(id: string) {
       : undefined,
     jars: progress.jars ? { ...progress.jars } : undefined,
   };
-  if (
-    progress.active !== id &&
-    progress.active !== "classic" &&
-    !occupied(session.current.board)
-  ) {
-    const previous = metadata(candidate).attempts[progress.active];
-    if (previous?.completed) {
-      candidate.meta!.attempts[progress.active] = { ...previous };
-      delete candidate.meta!.attempts[progress.active].hintKeys;
-      delete candidate.meta!.attempts[progress.active].hintChoices;
-    }
-  }
-
   candidate.active = id;
   if (day && versionedDay(day)) candidate.dailyAssignments = {...candidate.dailyAssignments,[day]:id};
   if (legacyBookNumber(id)) candidate.bookRevisions={...candidate.bookRevisions,[id]:bookRevisionFor(id,progress)};
