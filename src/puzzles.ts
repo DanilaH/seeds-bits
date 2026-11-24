@@ -1,8 +1,9 @@
 import { pilotBooks, pilotDaily } from "./content-pilot";
-import { dailyDay, dailyDone, LEGACY_BOOK_TASKS } from "./content-ids";
+import { dailyDay, dailyDone, LEGACY_BOOK_TASKS, dailyV4Index, bookRevisionFor, legacyBookNumber } from "./content-ids";
+import { bookV4, bankDailyV4 } from "./content-v4";
 import { validDay } from "./calendar";
 import notebookData from "./notebook.json" with { type: "json" };
-import { checkPair, removePair, type Connection, type Session } from "./core";
+import { checkPair, removePair, pairs, occupied, type Connection, type Session } from "./core";
 let extra: (string | number[])[][] | undefined;
 export async function loadNotebook() {
   extra ??= (await import("./notebook-extra.json")).default;
@@ -124,6 +125,11 @@ export const notebook: Puzzle[] = [
   }),
   ...pilotBooks,
 ];
+/** A logical notebook ID stays constant. Its assigned start/witness must not. */
+export function notebookForTask(id:string,state:Parameters<typeof bookRevisionFor>[1]):Puzzle|undefined {
+  if(legacyBookNumber(id)&&bookRevisionFor(id,state)===4)return bookV4(id);
+  return notebook.find(p=>p.id===id);
+}
 export function daily(day: string) {
   return makePuzzle(
     `daily-v1-${day}`,
@@ -134,8 +140,68 @@ export function daily(day: string) {
 }
 export function dailyForTask(id: string): Puzzle | undefined {
   const day = dailyDay(id);
-  return day ? id.startsWith("daily-v3-") ? pilotDaily(id) : daily(day) : undefined;
+  if(!day)return;
+  if(id.startsWith("daily-v3-"))return pilotDaily(id);
+  if(id.startsWith("daily-v4-"))return bankDailyV4(id)??futureDailyV4(day);
+  return daily(day);
 }
+
+// Frozen v4 continuation beyond the authored 365-day pack. This uses a bounded
+// causal witness score, not an asserted exact human difficulty or risk class.
+export function futureDailyV4(day:string):Puzzle {
+  const index=dailyV4Index(day);
+  if(index<0)throw Error("Invalid v4 date");
+  const id="daily-v4-"+day;
+  const wave=[12,16,20,14,18,24,16],role=(index+Math.floor(index/7))%5;
+  const n=wave[(index+Math.floor(index/14))%wave.length];
+  let best:Puzzle|undefined,bestScore=-Infinity;
+  const edge=(a:number,b:number)=>Math.min(a,b)*64+Math.max(a,b);
+  const connections=(b:number[],ids:number[])=>new Set(pairs(b).map(p=>edge(ids[p.a],ids[p.b])));
+  for(let i=0;i<8;i++){
+    const rows=Math.max(Math.ceil(n/9),3+(index+i)%4);
+    const p=makePuzzle(id,hash("seeds-daily-v4-future:"+day+":"+i),n/2,rows);
+    if(occupied(p.board)!==n||p.board.length!==rows*9||new Set(p.board.filter(Boolean)).size<4)continue;
+    let b=p.board,ids=b.map((v,j)=>v?j+1:0),reveal=0,shift=0,gaps=0,reading=0,chain=0,streak=0;
+    let previous=new Set<number>();
+    for(const move of p.solution){
+      const before=connections(b,ids),hole=b.slice(),hi=ids.slice();
+      hole[move.a]=hole[move.b]=hi[move.a]=hi[move.b]=0;
+      const next=removePair(b,move.a,move.b),ni=hi.filter((_,j)=>hole.slice(j-j%9,j-j%9+9).some(Boolean));
+      const unc=connections(hole,hi),after=connections(next,ni);
+      if(previous.has(edge(ids[move.a],ids[move.b])))streak++;else streak=0;
+      if(streak>=2)chain++;
+      previous=new Set([...after].filter(x=>!before.has(x)&&unc.has(x)));
+      reveal+=Number(previous.size>0);shift+=Number([...after].some(x=>!unc.has(x)));
+      reading+=Number(move.kind==="reading");
+      gaps+=Number(move.kind==="reading"?Math.abs(move.a-move.b)>1:Math.max(Math.abs(move.a%9-move.b%9),Math.abs(Math.floor(move.a/9)-Math.floor(move.b/9)))>1);
+      b=next;ids=ni;
+    }
+    const opening=pairs(p.board).length;
+    if(opening<2)continue;
+    const score=[reveal*4+chain*5,chain*12+reveal*2,shift*7+reveal,reading*4+gaps,shift*3+reveal*3+gaps][role]
+      +Math.min(10,opening)*.1;
+    if(score>bestScore){best=p;bestScore=score}
+  }
+  if(best)return best;
+  // Guaranteed legal, dated emergency construction; never call v1's date schedule.
+  const r=random(hash("seeds-daily-v4-fallback:"+day));
+  const board:number[]=Array(27).fill(0);
+  for(let row=0;row<3;row++){
+    const starts=[0,2,4,6];
+    const k=Math.floor(r()*4),l=(k+1+Math.floor(r()*3))%4;
+    for(const j of [starts[k],starts[l]]){const v=1+Math.floor(r()*9);board[row*9+j]=v;board[row*9+j+1]=r()<.5?v:10-v}
+  }
+  let b=board,solution:Connection[]=[];
+  while(b.length){
+    // Select only the disjoint adjacent construction groups.
+    let found:Connection|undefined;
+    for(let row=0;row<b.length/9&&!found;row++)for(let j=0;j<8;j+=2){const x=checkPair(b,row*9+j,row*9+j+1);if(x.ok){found=x.path;break}}
+    if(!found)throw Error("Invalid v4 fallback");
+    solution.push(found);b=removePair(b,found.a,found.b);
+  }
+  return {id,board,solution};
+}
+
 export function today(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }

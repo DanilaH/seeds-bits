@@ -1,4 +1,4 @@
-import { validContentId, dailyDay, dailyDone, readDailyAssignments } from "./content-ids";
+import { validContentId, dailyDay, dailyDone, readDailyAssignments, knownDailyAssignments, readBookRevisions, knownBookRevisions, type BookRevision } from "./content-ids";
 import { freshHelp, readHelp, readHelpAttempt, type HelpProfile, type HelpAttempt } from "./help-contract";
 import { compactHintKey } from "./hint-key";
 import { readAnalytics, type AnalyticsJournal } from "./analytics";
@@ -12,6 +12,7 @@ import { readClassicRun, type ClassicRun } from "./classic-generator";
 export type Progress = {
   version: 3;
   dailyAssignments?: Record<string,string>;
+  bookRevisions?: Record<string,BookRevision>;
   active: string;
   sessions: Record<string, Session>;
   hints: Record<string, number>;
@@ -35,7 +36,7 @@ export function readProgress(
   onRecovery: () => void = () => {},
 ): Progress {
   const p = JSON.parse(raw);
-  if (p?.version > 7 || p?.meta?.version > 2 || p?.jars?.version > 2 || p?.meta?.help?.version > 1 || Object.values(p?.meta?.attempts ?? {}).some((a: any) => a?.help?.version > 1))
+  if (p?.version > 8 || p?.meta?.version > 2 || p?.jars?.version > 2 || p?.meta?.help?.version > 1 || Object.values(p?.meta?.attempts ?? {}).some((a: any) => a?.help?.version > 1))
     throw new FutureProgress("Newer save format");
   if (
     (p?.version !== 2 &&
@@ -43,7 +44,8 @@ export function readProgress(
       p?.version !== 4 &&
       p?.version !== 5 &&
       p?.version !== 6 &&
-      p?.version !== 7) ||
+      p?.version !== 7 &&
+      p?.version !== 8) ||
     !validId(p.active) ||
     !p.sessions ||
     !Array.isArray(p.done) ||
@@ -57,10 +59,15 @@ export function readProgress(
     } catch { throw new FutureProgress("Protected assistance data could not be read"); }
   }
   const clean = fresh();
-  if (p.dailyAssignments !== undefined) {
-    try { clean.dailyAssignments = readDailyAssignments(p.dailyAssignments); }
-    catch { throw new FutureProgress("Protected daily identities could not be read"); }
-  }
+  try {
+    const explicit=p.bookRevisions===undefined?{}:readBookRevisions(p.bookRevisions);
+    if(p.version<8&&Object.values(explicit).includes(4))throw Error("Unprotected v4 notebook identity");
+    // Pin identities from the raw save BEFORE optional recovery drops damaged boards/metadata.
+    const books=knownBookRevisions({...p,bookRevisions:explicit},p.version===8);
+    if(Object.keys(books).length)clean.bookRevisions=books;
+    const days=knownDailyAssignments({...p,dailyAssignments:p.dailyAssignments===undefined?{}:readDailyAssignments(p.dailyAssignments)});
+    if(Object.keys(days).length)clean.dailyAssignments=days;
+  } catch { throw new FutureProgress("Protected content identities could not be read"); }
   for (const [id, s] of Object.entries(p.sessions))
     if (validId(id)) {
       try {
@@ -359,11 +366,18 @@ export function recordCompletion(p: Progress, task: string, now?: string) {
   return { seeds, hints: alreadyDay && !alreadyTask ? 0 : recordDaily(p, task, now) };
 }
 
-/** Wire v7 protects new content identities; untouched legacy saves remain wire v6. */
+/** Wire v8 protects board revisions of stable logical notebook slots and v4 dates. */
 export function serializeProgress(p: Progress): string {
+  const bookRevisions=knownBookRevisions(p);
+  const dailyAssignments=knownDailyAssignments(p);
+  const ids=[p.active,...Object.keys(p.sessions),...p.done,...Object.keys(p.hints),...Object.keys(p.meta?.attempts??{}),...Object.values(dailyAssignments)];
+  const version=Object.keys(bookRevisions).length||ids.some(id=>id.startsWith("daily-v4-"))?8:
+    Object.keys(dailyAssignments).length||ids.some(id=>/^(book|daily)-v3-/.test(id))?7:6;
   return JSON.stringify({
     ...p,
-    version: p.dailyAssignments !== undefined || [p.active, ...Object.keys(p.sessions), ...p.done, ...Object.keys(p.hints), ...Object.keys(p.meta?.attempts ?? {})].some(id=>/^(book|daily)-v3-/.test(id)) ? 7 : 6,
+    version,
+    bookRevisions:Object.keys(bookRevisions).length?bookRevisions:undefined,
+    dailyAssignments:Object.keys(dailyAssignments).length?dailyAssignments:undefined,
     sessions: Object.fromEntries(
       Object.entries(p.sessions).map(([id, s]) => [id, packSession(s)]),
     ),
