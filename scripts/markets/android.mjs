@@ -955,7 +955,15 @@ async function verifyAppBanner() {
     trace("first verified paint",{...initial,paintColorBuckets:painted});
     shot("banner-painted-start");
     const expected=async(visible,reason)=>{
-      await ui.evaluate(`window.Capacitor.Plugins.SeedsMonetization.bannerExpectation({visible:${visible}})`);
+      const mark=()=>ui.evaluate(`window.Capacitor.Plugins.SeedsMonetization.bannerExpectation({visible:${visible}})`);
+      try { await mark(); }
+      catch(error) {
+        if (!String(error).includes("CDP timeout")) throw error;
+        // Reattach the debugger without changing the banner or the test expectation.
+        ui.close();
+        ui=await connect();
+        await mark();
+      }
       trace(reason,{expected:visible});
     };
     const stable=async(label)=>{
@@ -1015,7 +1023,17 @@ async function verifyAppBanner() {
     const lastFullscreen=Number(/name="last_fullscreen" value="(\d+)"/.exec(adb("shell","cat",adPrefs))?.[1]);
     const deviceTime=Number(adb("shell","date","+%s"))*1000;
     assert(lastFullscreen>0&&deviceTime>0,"Native ad interval unavailable");
-    await wait(Math.max(0,lastFullscreen+181000-deviceTime));
+    const eligibleAt=performance.now()+Math.max(0,lastFullscreen+181000-deviceTime);
+    while(performance.now()<eligibleAt) {
+      await wait(Math.min(10000,Math.max(0,eligibleAt-performance.now())));
+      try { await diagnostics(); }
+      catch(error) {
+        if (!String(error).includes("timeout")) throw error;
+        ui.close();
+        ui=await connect();
+        await diagnostics();
+      }
+    }
     await stable("before genuine interstitial");
     await expected(false,"fullscreen request");
     await ui.tap("#resume");
