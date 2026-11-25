@@ -1158,6 +1158,48 @@ async function verifyAppBanner() {
     if(report.status==="ERROR")process.exitCode=1;
   }
 }
+async function verifyCoreFeel() {
+  const initial = [2,8,4,4,1,9];
+  const after = [0,0,4,4,1,9];
+  await fixture({
+    [progress]: {version:3, active:"classic", done:[], seen:[], hints:{},
+      sessions:{classic:{rules:1, current:{board:initial, moves:0, additions:0, scroll:0}, history:[]}}},
+    [settings]: {tutorialDone:true, sound:true, vibration:false, theme:"dark", languageChoice:"en"},
+  });
+  launch();
+  let ui=await connect();
+  try {
+    await ui.until("document.documentElement.dataset.coreFeel === 'baseline'");
+    await ui.tap("#settings-open");
+    const select=async value=>ui.evaluate(`(()=>{
+      const profile=document.querySelector("#core-feel-profile");
+      profile.value=${JSON.stringify(value)};
+      profile.dispatchEvent(new Event("change",{bubbles:true}));
+    })()`);
+    await select("audio");
+    await ui.until("document.documentElement.dataset.coreFeel === 'audio'");
+    await ui.until("performance.getEntriesByType('resource').some(entry=>/feel-pop-.*[.]ogg$/.test(entry.name))");
+    assert(await ui.evaluate("document.querySelector('#sound').checked && !document.querySelector('#vibration').checked"));
+    await select("feel");
+    await ui.tap("#settings-back");
+    await ui.tap("#resume");
+    await ui.tap(digit(0));
+    await ui.tap(digit(1));
+    await expectSavedBoard("classic",after);
+    ui.close();
+    stop();
+    launch();
+    ui=await connect();
+    await ui.until("document.documentElement.dataset.coreFeel === 'feel'");
+    await ui.tap("#resume");
+    await ui.tap("#undo");
+    await expectSavedBoard("classic",initial);
+    return {profiles:["baseline","audio","feel"], popLoadedOffline:true, settingsIndependent:true,
+      rebootRetainedProfile:true, undoRetained:true, physicalPhone:false};
+  } finally {
+    ui.close();
+  }
+}
 if(process.env.SEEDS_BANNER_ONLINE==="1"){
   await verifyAppBanner();
   process.exit(process.exitCode??0);
@@ -1167,6 +1209,10 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
+  if (process.env.SEEDS_ANDROID_CORE_FEEL === "1") {
+    const pilot=await verifyCoreFeel();
+    fs.writeFileSync(out+"/core-feel.json",JSON.stringify({source:process.env.GITHUB_SHA,...pilot},null,2));
+  }
   adb("uninstall",app);
   adb("install",candidate);
   const versionCode=installedVersionCode();

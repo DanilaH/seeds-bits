@@ -12,16 +12,18 @@ let lastPilotLand = -Infinity;
 let lastPilotAccent = -Infinity;
 
 export function warmPilotSound() {
-  if (!coreFeelPilot || !feelSoundPack() || typeof AudioContext === "undefined") return;
-  try {
-    context ??= new AudioContext();
-    if (!loadingPilot) loadingPilot = import("./feel-audio").then(audio => { pilotAudio = audio; });
-    void loadingPilot.then(() => {
-      const pack = feelSoundPack();
-      if (pack && context) pilotAudio?.primeFeelAudio(context, pack);
-    }).catch(() => {});
-  } catch {
-    // Optional feedback can be unavailable on the host.
+  if (import.meta.env.VITE_SEEDS_CORE_FEEL === "1") {
+    if (!feelSoundPack() || typeof AudioContext === "undefined") return;
+    try {
+      context ??= new AudioContext();
+      if (!loadingPilot) loadingPilot = import("./feel-audio").then(audio => { pilotAudio = audio; });
+      void loadingPilot.then(() => {
+        const pack = feelSoundPack();
+        if (pack && context) pilotAudio?.primeFeelAudio(context, pack);
+      }).catch(() => {});
+    } catch {
+      // Optional feedback can be unavailable on the host.
+    }
   }
 }
 
@@ -53,7 +55,7 @@ function playPilot(cue: FeelCue) {
     if (accent) lastPilotAccent = now;
     const { source, start, duration } = voice;
     const gain = audioContext.createGain();
-    gain.gain.value = .38;
+    gain.gain.value = .32;
     const release = () => {
       if (!active.delete(release)) return;
       pilotVoices.delete(release);

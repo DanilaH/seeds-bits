@@ -2711,17 +2711,17 @@ async function choose(i: number) {
   const flightRects = [cell(a), cell(i)]
     .filter(Boolean)
     .map((n) => n!.getBoundingClientRect());
+  const next = removePair(values, a, i);
+  const ending = lesson < 0 && !occupied(next);
+  const fast = feelMotion() && lesson < 0 && !ending;
   busy = true;
   highlight = result.path;
-  render();
+  if (!fast) render();
   const firstEdge = lesson < 0 && result.path.kind === "reading" && !progress.seen.includes("edge-trace");
   const traceMove = firstEdge || (lesson < 0 && result.path.kind === "straight" && acrossGap(a, i));
   const wave = showPairWave(result.path);
   if (wave && result.path.kind === "reading") $("paths").replaceChildren();
   if (traceMove && !wave) showPairTrace(result.path);
-  const next = removePair(values, a, i);
-  const ending = lesson < 0 && !occupied(next);
-  const fast = feelMotion() && lesson < 0 && !ending;
   if (feelMotion() && !reduced() && !document.hidden) eraseFeelPair([a, i]);
   if (!fast) for (const n of [a, i]) cell(n)?.classList.add("erasing");
 
@@ -3728,6 +3728,7 @@ async function boot() {
     hadBackup = backup !== null || (await platform.read(PROGRESS + ".damaged")) !== null;
     recoveryAvailable = restorable(backup);
   } catch { hadBackup = true; }
+  if (coreFeelPilot && settings.sound) warmPilotSound();
   if (recoveryAvailable && !readWarning)
     readWarning =
       t("ui.a-backup-is-available-restoring-it-will-replace-your");

@@ -50,6 +50,15 @@ public class FeedbackHarness {
   config(p,19,true);pulse(p,19,"book");check("F22_book_three_contacts",java.util.Arrays.equals(v.last.timing,new long[]{0,30,42,38,52,54}));
   n=v.pulses;SystemClock.now+=100;pulse(p,19,"land");check("F23_book_protects_celebration",v.pulses==n);config(p,20,false);pulse(p,19,"book");check("F24_book_cancel_barrier",v.pulses==n);
   config(p,21,true);pulse(p,21,"button");n=v.pulses;pulse(p,21,"deal");check("F25_deal_replaces_button_with_three_soft_contacts",v.pulses==n+1&&java.util.Arrays.equals(v.last.timing,new long[]{0,10,20,14,24,18})&&java.util.Arrays.equals(v.last.amp,new int[]{0,120,0,150,0,190}));
+  config(p,22,true);pulse(p,22,"feel-select");int select=v.last.amplitude;
+  SystemClock.now+=24;pulse(p,22,"feel-pair");int pair=v.last.amplitude;
+  SystemClock.now+=45;pulse(p,22,"feel-row");
+  check("F26_pilot_strength_tracks_the_move",select==75&&pair==157&&v.last.amplitude==195);
+  config(p,23,true);pulse(p,23,"feel-rows");
+  check("F27_pilot_double_row_has_two_contacts",java.util.Arrays.equals(v.last.timing,new long[]{0,17,27,23})&&v.last.amp[1]<v.last.amp[3]);
+  n=v.pulses;SystemClock.now+=44;pulse(p,23,"feel-select");
+  config(p,24,false);pulse(p,23,"feel-row");
+  check("F28_pilot_protection_and_opt_out_drop_pulses",v.pulses==n);
 
  }
 }''')

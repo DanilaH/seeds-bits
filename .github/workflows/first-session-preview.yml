@@ -8,7 +8,7 @@ permissions:
   actions: read
 concurrency:
   group: first-session-preview-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' }}
 jobs:
   browser:
     runs-on: ubuntu-24.04
@@ -33,6 +33,11 @@ jobs:
         if: always()
         with: {name: first-session-browser, path: test-results/}
       - run: npx playwright test --config playwright.markets.config.ts
+      - name: Compare the three Core Feel profiles
+        if: github.ref_name == 'feat/core-feel-pilot-20261125'
+        env:
+          VITE_SEEDS_CORE_FEEL: "1"
+        run: npx playwright test --config playwright.core-feel.config.ts
       - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
       - uses: actions/upload-artifact@v4
         if: always()
@@ -92,6 +97,7 @@ jobs:
     timeout-minutes: 25
     env:
       SEEDS_ANDROID_TEST_MODE: ${{ matrix.mode }}
+      SEEDS_ANDROID_CORE_FEEL: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '1' || '0' }}
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
       SEEDS_BUILD_FLAVOR: preview
