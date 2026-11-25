@@ -869,10 +869,15 @@ async function verifyAppBanner() {
   const remote = "/sdcard/seeds-banner-continuity.mp4";
   try {
     launch();
+    const home = adb("shell","cmd","package","resolve-activity","--brief",
+      "-a","android.intent.action.MAIN","-c","android.intent.category.HOME").split("\n").at(-1);
+    const launcher = home?.match(/^([a-z][a-z0-9_.]+)\//i)?.[1];
+    if (launcher && launcher !== app) adb("shell","am","force-stop",launcher);
     for(let attempt=1;attempt<=3;attempt++){
       try { ui=await connect(); break; }
       catch(error) {
         if(attempt===3) throw error;
+        if (launcher && launcher !== app) adb("shell","am","force-stop",launcher);
         stop();
         launch();
         await wait(1000);
