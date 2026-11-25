@@ -1,3 +1,4 @@
+import { openClassicNew } from "./restore-game";
 import { installLegacyClassic } from "./restore-game";
 import { returnToGame } from "./restore-game";
 import { openBookPicker } from "./book-controls";
@@ -86,10 +87,9 @@ test("A02 unsupported future metadata is not overwritten by ordinary interaction
   await seed(page, p);
   await installLegacyClassic(page);
   await page.goto("/");
-  await page.locator("#resume").click();
-  await page.locator('[data-index="0"]').click();
-  await page.locator('[data-index="9"]').click();
-  await page.waitForTimeout(300);
+  await page.locator("#classic-mode").click();
+  await expect(page.locator("#dialog")).toBeVisible();
+  await expect(page.locator("#classic-new-sheet")).toBeHidden();
   const actual = await data(page);
   console.log("FUTURE_SCHEMA", actual.meta);
   expect(
@@ -145,8 +145,9 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
     "6",
     "4",
   ]);
-  await returnToGame(page);
-  await page.locator("#play-again").click();
+  await page.locator("#collection-back").click();
+  await expect(page.locator("#resume")).toBeHidden();
+  await openClassicNew(page,1);
   await expect(page.locator("#win")).toBeHidden();
   const saved = await data(page);
   const board = saved.sessions.classic.current.board;
@@ -227,10 +228,11 @@ test("A08 offline already loaded APK web assets remain playable and save/reload"
   await page.locator("#resume").click();
   await pair(page);
   expect((await data(page)).meta.completed).toBe(6);
+  await expect(page.locator("#win")).toBeVisible();
   await context.setOffline(false);
   await page.reload();
-  await page.locator("#resume").click();
-  await expect(page.locator("#win")).toBeVisible();
+  await expect(page.locator("#resume")).toBeHidden();
+  expect((await data(page)).meta.completed).toBe(6);
 });
 test("A09 reduced motion has no running decorative animations during selection and menus", async ({
   page,
@@ -385,6 +387,7 @@ test("A12 fast contradictory inputs during removal cannot create extra result or
   await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.evaluate(() => {
@@ -455,17 +458,20 @@ test("A14 old tab cannot discard new statistics, and reload latest recovers them
   await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
-  const stale = await context.newPage();
-  await stale.goto("/");
-  await stale.locator("#resume").click();
-  await pair(page);
-  await stale.locator('[data-index="0"]').click();
-  await stale.locator('[data-index="1"]').click();
-  await expect(stale.locator("#save-notice")).toContainText("другой вкладке");
-  await stale.locator("#load-latest").click();
-  await expect(stale.locator("#dialog")).toBeVisible();
-  await stale.locator("#progress-open").click();
-  await expect(stale.locator(".progress-stats dd").nth(2)).toHaveText("6");
+  const newer = await context.newPage();
+  await newer.goto("/");
+  await newer.locator("#resume").click();
+  await expect(newer.locator("#dialog")).toBeHidden();
+  await pair(newer);
+  await expect.poll(async () => (await data(newer)).meta.completed).toBe(6);
+  await page.bringToFront();
+  await page.locator('[data-index="0"]').click();
+  await page.locator('[data-index="1"]').click();
+  await expect(page.locator("#save-notice")).toContainText("другой вкладке");
+  await page.locator("#load-latest").click();
+  await expect(page.locator("#dialog")).toBeVisible();
+  await page.locator("#progress-open").click();
+  await expect(page.locator(".progress-stats dd").nth(2)).toHaveText("6");
 });
 test("A15 solved final available day leads back to usable archive without future access", async ({
   page,
@@ -549,6 +555,7 @@ test("A17 accessibility contrast and motion timing measurements on actual built 
     await page.locator("#settings-open").click();
     await page.locator("#dark").setChecked(dark);
     await page.locator("#settings-back").click();
+    await expect(page.locator("#menu-content")).toBeVisible();
     results.push(
       await page.evaluate(() => ({
         theme: document.documentElement.dataset.theme,
@@ -627,7 +634,7 @@ test("backup recovery is explicit and survives reload", async ({ page }) => {
   }, KEY);
   await page.reload();
   await page.locator("#restore-backup").click();
-  await expect(page.locator("#book-count")).toHaveText("2 из 24 задач");
+  await expect(page.locator("#book-count")).toHaveText("Тетрадь 1 · задача 3 · 2/24");
   expect((await data(page)).done).toEqual(["book-v1-1", "book-v1-2"]);
 });
 

@@ -192,3 +192,50 @@ for(const [width,height] of [[320,568],[360,640],[390,844],[820,600],[568,320]])
     });
   }
 }
+
+test("theme selection, resume and Undo stay independent of the main notebook catalogue",async({page})=>{
+  const id = "book-v3-links-1";
+  await install(page,{classic:classicGame()});
+  await page.locator("#book-mode").click();
+  await page.locator("#all-books").click();
+  await page.locator("#book-section-themes").click();
+  await expect(page.locator(".theme-shelf [data-volume]")).toHaveCount(4);
+  await page.locator('[data-volume="100"]').click();
+  await expect(page.locator(".compact-task-grid button")).toHaveCount(24);
+  await page.locator(`[data-game="${id}"]`).click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  const initial = unpackSession((await read(page)).sessions[id]);
+  await page.locator("#hint").click();
+  await expect(page.locator("#board .hinted")).toHaveCount(2);
+  await page.locator("#board .hinted").first().click();
+  await page.locator("#board .hinted").last().click();
+  await expect(page.locator("#undo")).toBeEnabled();
+  await page.locator("#menu").click();
+  await page.locator("#classic-mode").click();
+  await page.locator("#classic-resume").click();
+  await expect(page.locator("#mode")).toHaveText("Классика");
+  await page.reload();
+  await expect(page.locator("#book-quick")).toHaveText("Продолжить");
+  await page.locator("#book-quick").click();
+  await expect(page.locator("#mode")).toContainText("Новые связи");
+  await page.locator("#undo").click();
+  await expect.poll(async()=>unpackSession((await read(page)).sessions[id]).current.board).toEqual(initial.current.board);
+});
+
+test("notebook completion markers and tap targets work from zero to all tasks solved",async({page})=>{
+  const done = [[0,1],[9,12],[90,23],[99,24]].flatMap(([volume,count])=>
+    Array.from({length:count},(_,i)=>`book-v1-${volume*24+i+1}`));
+  await install(page,{classic:classicGame()},"classic",done);
+  await page.locator("#book-mode").click();
+  await page.locator("#all-books").click();
+  for (const [volume,count] of [[0,1],[9,12],[90,23],[99,24],[1,0]]) {
+    await page.locator(`[data-book-range="${Math.floor(volume/20)}"]`).click();
+    await page.locator(`[data-volume="${volume}"]`).click();
+    await expect(page.locator(".compact-task-grid button")).toHaveCount(24);
+    await expect(page.locator(".compact-task-grid .task.done")).toHaveCount(count);
+    await expect(page.locator(".notebook-toolbar")).toContainText(`${count} из 24`);
+    if (count === 24) await expect(page.locator("#continue-book")).toHaveCount(0);
+    else await expect(page.locator("#continue-book")).toHaveAttribute("data-continue",`book-v1-${volume*24+count+1}`);
+    await page.locator("#collection-back").click();
+  }
+});

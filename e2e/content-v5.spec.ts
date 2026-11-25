@@ -76,7 +76,7 @@ test("a malformed v5 assignment is visible and the save stays byte-for-byte unch
   await install(page,invalid);
   await page.goto("/");
   await expect(page.locator("#read-notice")).toContainText("Не удалось определить сохранённое поле");
-  await page.locator("#resume").click();
+  await page.locator("#classic-mode").click();
   await expect(page.locator("#dialog")).toBeVisible();
   expect(await raw(page)).toBe(JSON.stringify(invalid));
   expect(await raw(page,".recovery")).toBe(JSON.stringify(invalid));

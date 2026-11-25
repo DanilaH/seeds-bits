@@ -57,7 +57,7 @@ test("escape steps back from collections and settings without discarding game", 
   await page.keyboard.press("Escape");
   await expect(page.locator("#resume")).toBeVisible();
   await page.keyboard.press("Escape");
-  // The startup home is a destination; only a pause menu dismisses to play.
+  // Both entries use the same explicit resume action.
   await expect(page.locator("#resume")).toBeVisible();
   await page.locator("#resume").click();
   await page.locator("#menu").click();
@@ -65,6 +65,8 @@ test("escape steps back from collections and settings without discarding game", 
   await page.keyboard.press("Escape");
   await expect(page.locator("#resume")).toBeVisible();
   await page.keyboard.press("Escape");
+  await expect(page.locator("#dialog")).toBeVisible();
+  await page.locator("#resume").click();
   await expect(page.locator("#board")).toBeVisible();
 });
 test("dead end can be undone or restarted immediately", async ({

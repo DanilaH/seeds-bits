@@ -215,7 +215,8 @@ for (const mode of ["book-v1-1", "daily-v1-2026-11-09"])
     );
     await page.reload();
     await resetEvents(page);
-    await page.locator("#resume").click();
+    if (mode.startsWith("book")) await expect(page.locator("#resume")).toHaveText("Начать · задача 2");
+    else await expect(page.locator("#resume")).toBeHidden();
     await page.waitForTimeout(1700);
     expect((await pulses(page)).filter((x: any) => Array.isArray(x))).toEqual(
       [],
@@ -227,6 +228,7 @@ test("unsaved completion stays quiet, successful retry celebrates once", async (
 }) => {
   await seed(page, { mode: "book-v1-1", board: [5, 5] });
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     (window as any).failFeel = true;
@@ -398,7 +400,7 @@ test("press feedback preserves a touch at the edge of a navigation button", asyn
   });
   await expect(page.locator("#collection")).toBeVisible();
   await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText(
-    "Тетради",
+    "Тетрадь 1",
   );
 });
 
@@ -523,6 +525,7 @@ test("reduced motion and failed saves do not start a full jar spill", async ({
   await page.emulateMedia({ reducedMotion: "reduce" });
   await seed(page, { meter: 22 });
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const write = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key, value) {

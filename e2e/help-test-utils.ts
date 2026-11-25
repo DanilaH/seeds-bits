@@ -17,6 +17,7 @@ export async function install(page: Page, state = "ready", profile = "") {
       readiness:async()=>w.nativeState, preload:async()=>{},banner:async()=>{}, report:async(e:any)=>{w.events.push(e);return {accepted:true};},
       pending:async()=>({reward:pending()}),acknowledge:async(r:any)=>{if(w.ackFail)throw Error("ack");w.acks.push(r);localStorage.removeItem("nativeHelp");},
       show:async(o:any)=>{
+        if(o.kind === "interstitial") return {status:"unavailable"};
         w.requests.push(o);
         if(w.unavailable)return {status:"unavailable",reward:pending()};
         const receipt={token:"earned-"+o.ad_session_id,attempt:o.attempt,version:1,product:o.product,intent_id:o.intent_id,offer_id:o.offer_id,ad_session_id:o.ad_session_id};
@@ -28,6 +29,7 @@ export async function install(page: Page, state = "ready", profile = "") {
       }};
   }, {key,state});
   await page.goto(profile ? `/?qa=${profile}` : "/"); await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
 }
 export async function watch(page: Page) {await page.locator("#hint").click();await page.locator("#watch-hints").click();await expect(page.locator("#qa-ad")).toBeVisible();}
 export async function wallet(page: Page) {return page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).meta.wallet,key);}

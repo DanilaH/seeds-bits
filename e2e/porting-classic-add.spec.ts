@@ -145,7 +145,7 @@ test("a dead end remains playable with an exhausted hint wallet and five prior A
   const add = page.locator("#add");
   const hint = page.locator("#hint");
   await expect(add).toHaveAttribute("aria-disabled", "true");
-  await add.click({force: true});
+  await add.evaluate((button: HTMLButtonElement) => button.dispatchEvent(new MouseEvent("click", {bubbles:true})));
   await expect(page.locator("#status")).toContainText("ещё есть пары");
   await hint.click();
   await expect(page.locator("#watch-hints")).toBeVisible();

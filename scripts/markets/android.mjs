@@ -877,12 +877,15 @@ async function verifyAppBanner() {
       window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics(),
       new Promise((_,reject)=>setTimeout(()=>reject(Error("Banner diagnostics did not respond")),5000))
     ])`);
-    const paint = () => {
-      const raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6});
+    const paint = frame => {
+      const raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6,timeout:12_000});
       const width=raw.readUInt32LE(0),height=raw.readUInt32LE(4),offset=raw.length-width*height*4;
-      const [left,,right,bottom]=ui.bounds;
+      assert(offset>=12,"Android returned an incomplete screenshot");
+      const left=ui.bounds[0]+frame.left, top=ui.bounds[1]+frame.top;
+      assert(left>=0&&top>=0&&left+frame.width<=width&&top+frame.height<=height,
+        "The native banner frame is outside the screenshot");
       const colors=new Set();
-      for(let y=bottom-90;y<bottom-13;y+=4)for(let x=left+40;x<right-40;x+=4) {
+      for(let y=top+4;y<top+frame.height-4;y+=3)for(let x=left+4;x<left+frame.width-4;x+=3) {
         const i=offset+(y*width+x)*4;
         colors.add((raw[i]>>4)*256+(raw[i+1]>>4)*16+(raw[i+2]>>4));
       }
@@ -891,7 +894,7 @@ async function verifyAppBanner() {
     let painted, initial;
     for(let i=0;i<36;i++) {
       initial=await diagnostics();
-      if(initial.loaded>0&&initial.visible&&(painted=paint())>20)break;
+      if(initial.loaded>0&&initial.visible&&(painted=paint(initial))>20)break;
       await wait(650);
     }
     report.initial=initial;
@@ -902,7 +905,7 @@ async function verifyAppBanner() {
     }
     shot("banner-painted-start");
     const remote="/sdcard/seeds-banner-continuity.mp4";
-    recorder=spawn("adb",["shell","screenrecord","--bit-rate","1800000","--time-limit","60",remote],{stdio:"ignore"});
+    recorder=spawn("adb",["shell","screenrecord","--size","320x616","--bit-rate","950000","--time-limit","60",remote],{stdio:"ignore"});
     await wait(500);
     const stable=async(label)=>{
       const current=await diagnostics();
@@ -910,8 +913,9 @@ async function verifyAppBanner() {
       assert.equal(current.request,initial.request,label);
       assert.equal(current.visible,true,label);
       assert.equal(current.hiddenFrames,initial.hiddenFrames,label);
-      assert(paint()>20,label+" creative band lost color");
-      report.observed.push({label,...current});
+      const observation={label,...current,paintColorBuckets:paint(current)};
+      report.observed.push(observation);
+      assert(observation.paintColorBuckets>20,label+" creative band lost color");
     };
     for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2],[7,14,0]]) {
       await ui.tap(digit(a)); await ui.tap(digit(b));
@@ -946,7 +950,7 @@ async function verifyAppBanner() {
   } catch(error) {
     report.status="ERROR";
     report.error=String(error);
-    shot("banner-failure");
+    try { shot("banner-failure"); } catch (captureError) { console.warn(String(captureError)); }
     throw error;
   } finally {
     if(recorder) {
@@ -958,8 +962,7 @@ async function verifyAppBanner() {
     }
     fs.writeFileSync(out+"/banner-continuity.json",JSON.stringify(report,null,2));
     ui?.close();
-    stop();
-    adb("uninstall",app);
+    try { stop(); adb("uninstall",app); } catch (cleanupError) { console.warn(String(cleanupError)); }
   }
 }
 if(process.env.SEEDS_BANNER_ONLINE==="1"){

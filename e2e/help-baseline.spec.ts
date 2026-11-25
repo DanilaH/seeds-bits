@@ -145,19 +145,21 @@ test("Paused build keeps ordinary rewarded hints and automatic reveal", async ({
   expect((await state(page)).meta.wallet).toBe(2);
   await plain(page);
 });
-test("Paused result hides assistant labels and starts a short task without the new ad route", async ({
+test("Paused result hides assistant labels and offers only the ordinary Home transition", async ({
   page,
 }) => {
   await install(page, "ready", "baseline");
   await page.evaluate((k) => {
     const p = JSON.parse(localStorage.getItem(k)!);
-    p.sessions.classic.current.board = [];
-    p.meta.attempts.classic.completed = true;
+    p.sessions.classic.current.board = [5, 5];
+    p.meta.attempts.classic.completed = false;
     p.meta.attempts.classic.help = { version: 1, assisted: true };
     localStorage.setItem(k, JSON.stringify(p));
   }, key);
   await page.reload();
   await page.locator("#resume").click();
+  await page.locator('[data-index="0"]').click();
+  await page.locator('[data-index="1"]').click();
   await expect(page.locator("#win")).toBeVisible();
   await expect(page.locator("#result-assistance")).toBeHidden();
   await page.evaluate(() => {
@@ -167,7 +169,6 @@ test("Paused result hides assistant labels and starts a short task without the n
       return { status: "skipped", reason: "not_loaded" };
     };
   });
-  await page.locator("#try-notebook").click();
-  await expect(page.locator("#mode")).toContainText("Тетрадь");
-  expect(await page.evaluate(() => (window as any).requests.length)).toBe(0);
+  await expect(page.locator("#try-notebook")).toBeHidden();
+  await expect(page.locator("#play-again")).toHaveText("В меню");
 });

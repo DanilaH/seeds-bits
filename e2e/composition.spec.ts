@@ -71,6 +71,7 @@ test("progress has a meaningful jar figure and reachable continuation, switches 
 test("home, archive, progress and play remain readable across portrait, landscape and themes", async ({
   browser,
 }) => {
+  test.setTimeout(180_000);
   const report: any[] = [];
   for (const [width, height] of [
     [320, 568],

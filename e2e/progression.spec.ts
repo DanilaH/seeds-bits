@@ -44,7 +44,8 @@ test("notebook solution, page stamp, replay and classic restore", async ({
   }
   await expect(page.locator("#award")).toContainText("Страница 1 завершена");
   await page.locator("#book-top").click();
-  await expect(page.locator(".stamp")).toHaveText("Завершено ✓");
+  await expect(page.locator(".notebook-toolbar")).toContainText("6 из 24");
+  await expect(page.locator(".task.done")).toHaveCount(6);
   await page.screenshot({
     animations: "disabled",
     path: "test-results/notebook.png",
@@ -115,14 +116,10 @@ test("daily calendar closes future days and persists trophy", async ({
     await expect(page.locator("#undo")).toBeEnabled();
   }
   await expect(page.locator("#award")).toContainText("1 из 31");
-  await page.reload();
-  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
-  if (await page.locator("#resume").isVisible())
-    await page.locator("#resume").click();
   await expect(page.locator("#win")).toBeVisible();
   await page.locator("#play-again").click();
-  await expect(page.locator("#mode")).toContainText("2");
-  await page.locator("#menu").click();
+  await expect(page.locator("#mode")).toContainText("2 октября");
+  await page.reload();
   await page.locator("#calendar-open").click();
   await expect(page.locator('[data-game="daily-v1-2026-10-01"]')).toHaveClass(
     /done/,

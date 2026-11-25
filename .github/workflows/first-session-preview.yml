@@ -82,9 +82,14 @@ jobs:
 
   android-regression:
     needs: preview
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [offline, demo]
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
+      SEEDS_ANDROID_TEST_MODE: ${{ matrix.mode }}
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
       SEEDS_BUILD_FLAVOR: preview
@@ -121,7 +126,9 @@ jobs:
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" "candidate/seeds-first-session-${version_code}-unsigned.apk"
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" "candidate/seeds-first-session-${version_code}-debug.apk"
       - run: node scripts/classic-series.mjs --before eae2bcbeaaa1a5c76872dddc7a7f79844988b60e
+        if: matrix.mode == 'offline'
       - uses: actions/upload-artifact@v4
+        if: matrix.mode == 'offline'
         with: {name: classic-series-comparison, path: test-results/classic-series/}
       - run: |
           node scripts/classic-pilot.mjs --bundle "$RUNNER_TEMP/seeds-classic-pilot.bundle.js"
@@ -145,18 +152,19 @@ jobs:
           done
           test "$(adb shell id -u | tr -d '\r')" = 0
           adb shell input keyevent 82
-          banner_status=0
-          SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" || banner_status=$?
+          if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then
+            SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk"
+            exit
+          fi
           adb shell svc wifi disable
           adb shell svc data disable
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
           adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
           adb shell input keyevent 82
           node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js"
-          exit "$banner_status"
       - uses: actions/upload-artifact@v4
         if: always()
-        with: {name: markets-android, path: "test-results/markets-android/\ntest-results/first-session-android/emulator.log"}
+        with: {name: 'markets-android-${{ matrix.mode }}', path: "test-results/markets-android/\ntest-results/first-session-android/emulator.log"}
 
   sign-preview:
     needs: preview

@@ -182,7 +182,10 @@ async function install(
   await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
-  await page.locator("#resume").click();
+  if (!opts.blockBoot) {
+    await page.locator("#resume").click();
+    await expect(page.locator("#dialog")).toBeHidden();
+  }
 }
 async function finish(page: Page) {
   await page.locator('[data-index="0"]').click();

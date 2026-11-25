@@ -33,8 +33,8 @@ async function install(
               classic: {
                 rules: 1,
                 current: {
-                  board: opts.won ? [] : Array(18).fill(5),
-                  moves: opts.won ? 9 : 0,
+                  board: opts.won ? [5,5] : Array(18).fill(5),
+                  moves: 0,
                   additions: 0,
                   scroll: 0,
                 },
@@ -47,12 +47,12 @@ async function install(
             meta: {
               version: 1,
               since: "2026-10-20",
-              completed: opts.won ? 1 : 0,
+              completed: 0,
               unassisted: 0,
               attempts: {
                 classic: {
                   id: "attempt-060",
-                  completed: !!opts.won,
+                  completed: false,
                   hintBonus: 0,
                   hintKeys: opts.exhausted ? ["one", "two", "three"] : [],
                 },
@@ -112,6 +112,8 @@ async function install(
   await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  await page.evaluate(() => { (window as any).adsCalls.length = 0; });
 }
 async function offer(page: Page) {
   await page.locator("#hint").click();
@@ -186,7 +188,7 @@ test("failed reward save retains native receipt until retry and recovery", async
   await expect(page.locator("#save-notice")).toBeVisible();
   expect(await page.evaluate(() => (window as any).adsAcks.length)).toBe(0);
 });
-test("banner reserves space in both orientations and hides in menus and tutorial", async ({
+test("banner reserves space in both orientations and only conceals at an actual overlay", async ({
   page,
 }) => {
   await install(page);
@@ -205,7 +207,10 @@ test("banner reserves space in both orientations and hides in menus and tutorial
     .poll(() =>
       page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
     )
-    .toBe(false);
+    .toBe(true);
+  await page.locator("#settings-open").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(false);
+  await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await page.setViewportSize({ width: 844, height: 390 });
   await expect
@@ -218,13 +223,18 @@ test("banner reserves space in both orientations and hides in menus and tutorial
   await page.locator("#learn").click();
   await expect(page.locator("#ad-space")).toBeHidden();
 });
-test("unavailable interstitial does not block next party and only runs after result action", async ({
+test("unavailable interstitial leaves Classic result for Home on the explicit action", async ({
   page,
 }) => {
   await install(page, { won: true });
+  await page.clock.install();
+  await page.clock.fastForward(31000);
+  await page.locator("#board button").first().click();
+  await page.locator("#board button").last().click();
+  await expect(page.locator("#win")).toBeVisible();
   expect(await page.evaluate(() => (window as any).adsCalls.length)).toBe(0);
   await page.locator("#play-again").click();
-  await expect(page.locator("#board button").first()).toBeVisible();
+  await expect(page.locator("#classic-mode")).toBeVisible();
   expect(
     await page.evaluate(() => (window as any).adsCalls.map((o: any) => o.kind)),
   ).toEqual(["interstitial"]);
@@ -345,7 +355,10 @@ test("banner shelf fits short phones and landscape with safe insets, in both the
     .poll(() =>
       page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible),
     )
-    .toBe(false);
+    .toBe(true);
+  await page.locator("#settings-open").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(false);
+  await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await expect
     .poll(() =>

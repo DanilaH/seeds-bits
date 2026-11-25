@@ -136,6 +136,7 @@ test("restart belongs to the current-game menu and cancelling preserves the boar
   await requestRestartFromSettings(page);
   await expect(page.locator("#confirm-content")).toBeVisible();
   await page.locator("#cancel-new").click();
+  await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await expect(page.locator("#remaining")).toHaveText("4");
 });
@@ -194,7 +195,7 @@ test("a usable recovery copy survives a damaged primary save", async ({
   }, key);
   await page.reload();
   await page.locator("#restore-backup").click();
-  await expect(page.locator("#book-count")).toHaveText("1 из 24 задач");
+  await expect(page.locator("#book-count")).toHaveText("Тетрадь 1 · задача 2 · 1/24");
   expect(
     await page.evaluate((k) => localStorage.getItem(k + ".damaged"), key),
   ).toBe("{broken");

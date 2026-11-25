@@ -41,7 +41,7 @@ test("notebooks have meaningful selection, progress and a recoverable empty filt
   await page.locator('[data-volume="4"]').click();
   await expect(page.locator(".dialog-head .screen-heading h2")).toContainText("5");
   await page.locator("#collection-back").click();
-  await expect(page.locator('[data-volume="4"]')).toHaveAttribute(
+  await expect(page.locator('[data-volume="0"]')).toHaveAttribute(
     "aria-pressed",
     "true",
   );
@@ -164,14 +164,14 @@ test("collection tabs and settings remain readable with enlarged text and reduce
           .querySelector("#collection-back")!
           .getBoundingClientRect()
           .toJSON(),
-        close: document
-          .querySelector("#collection-back")!
+        edge: document
+          .querySelector("#dialog")!
           .getBoundingClientRect()
           .toJSON(),
       };
     });
     expect(header.text.left).toBeGreaterThanOrEqual(header.back.right);
-    expect(header.text.right).toBeLessThanOrEqual(header.close.left);
+    expect(header.text.right).toBeLessThanOrEqual(header.edge.right);
     await page.screenshot({
       path: `test-results/ui-polish/${id}-large-text.png`,
       animations: "disabled",

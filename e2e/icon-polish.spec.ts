@@ -1,3 +1,4 @@
+import { openClassicNew } from "./restore-game";
 import { test, expect } from "@playwright/test";
 
 test("control glyphs stay centred in the same field at large text", async ({
@@ -10,7 +11,7 @@ test("control glyphs stay centred in the same field at large text", async ({
     ),
   );
   await page.goto("/");
-  await page.locator("#resume").click();
+  await openClassicNew(page,1);
   await page.evaluate(() => {
     document.documentElement.style.fontSize = "200%";
   });

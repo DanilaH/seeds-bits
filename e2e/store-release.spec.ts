@@ -1,3 +1,4 @@
+import { openClassicNew } from "./restore-game";
 import { test, expect } from "@playwright/test";
 test("privacy is readable offline and returns to settings without overlapping screens", async ({
   page,
@@ -30,6 +31,6 @@ test("privacy is readable offline and returns to settings without overlapping sc
   await expect(page.locator("#settings-panel")).toBeVisible();
   await expect(page.locator("#collection")).toBeHidden();
   await page.locator("#settings-back").click();
-  await page.locator("#resume").click();
+  await openClassicNew(page,1);
   await expect(page.locator("#dialog")).toBeHidden();
 });

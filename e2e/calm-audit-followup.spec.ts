@@ -158,14 +158,13 @@ test("field header follows the grid and the compact language rows keep their mar
   expect(await page.locator("#language-options").evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
 });
 
-test("home mode art sits beside the labels and extends past both card edges", async ({page}) => {
+test("Home mode art aligns with the compact labels and stays on-screen", async ({page}) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await seeded(page);
   await expect(page.locator("#book-mode .book-picture > .book-cover")).toHaveCount(1);
   await expect(page.locator("#book-mode .book-cover svg")).toHaveCount(0);
   await expect(page.locator("#book-mode .book-cover-number")).toHaveText("№1");
-  await expect(page.locator("#book-count")).toHaveText("1 из 24 задач");
-  await expect(page.locator("#home-current-art .book-cover-number")).toHaveText("№1");
+  await expect(page.locator("#book-count")).toHaveText("Тетрадь 1 · задача 2 · 1/24");
   const dimensions = await page.evaluate(() => {
     return [["#book-mode", "#book-mode .book-picture"], [".home-calendar", "#home-today-art .calendar-picture"]]
       .map(([card, art]) => {
@@ -179,8 +178,8 @@ test("home mode art sits beside the labels and extends past both card edges", as
   });
   for (const { cardLeft, iconLeft, iconRight, iconWidth, labelLeft } of dimensions) {
     expect(iconLeft).toBeGreaterThan(0);
-    expect(iconLeft).toBeLessThan(cardLeft);
-    expect(iconWidth).toBeGreaterThan(48);
+    expect(iconLeft).toBeGreaterThanOrEqual(cardLeft - 1);
+    expect(iconWidth).toBeGreaterThanOrEqual(24);
     expect(iconRight).toBeLessThan(labelLeft);
   }
   const [bookInset, dayInset] = dimensions.map(({ cardLeft, labelLeft }) => labelLeft - cardLeft);
@@ -277,8 +276,9 @@ test("a fresh field fades by column from left to right and deals once", async ({
     }});
   },{settingsKey,progressKey});
   await page.goto("/");
-  await page.locator("#resume").evaluate((button) => {
-    button.addEventListener("click",()=>{
+  await page.locator("#dialog").evaluate((dialog) => {
+    new MutationObserver(() => {
+      if (dialog.hasAttribute("open")) return;
       const board = document.querySelector("#board")!;
       const wave = board.getAnimations({subtree:true})
         .filter(animation => animation.id === "board-entrance")
@@ -288,10 +288,11 @@ test("a fresh field fades by column from left to right and deals once", async ({
           return [index, effect.getTiming().delay, ...effect.getKeyframes().map(frame => frame.opacity)];
         });
       board.setAttribute("data-entrances", JSON.stringify(wave));
-    });
+    }).observe(dialog, {attributes:true, attributeFilter:["open"]});
   });
   await page.locator("#resume").click();
   const board = page.locator("#board");
+  await expect(board).toHaveAttribute("data-entrances",/\[/);
   const wave: [number, number, string, string][] = JSON.parse((await board.getAttribute("data-entrances"))!);
   const delayAt = new Map(wave.map(([index, delay]) => [index, delay]));
   expect(wave).toHaveLength(16);

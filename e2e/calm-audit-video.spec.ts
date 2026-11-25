@@ -26,14 +26,14 @@ test("record saved task 2 after selecting New filter in catalog",async({page})=>
   await expect(page.locator("#dialog")).toHaveAttribute("open","");
   await page.locator("#book-mode").click();
   await (await exposeBookFilter(page)).selectOption("new");
-  await page.locator("#collection-back").click();
   await expect(page.locator("#book-filter")).toHaveValue("new");
+  await page.locator("#collection-back").click();
   await page.locator("#collection-back").click();
   await page.locator("#progress-open").click();
   await page.waitForTimeout(350);
   await expect(page.locator("#progress-book")).toContainText("Тетрадь 1");
   await page.locator("#progress-book").click();
-  await expect(page.locator(".volume-heading h3")).toHaveText("Тетрадь 1");
+  await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText("Тетрадь 1");
   await expect(page.locator("#continue-book")).toHaveAttribute("data-continue","book-v1-2");
   await page.waitForTimeout(500);
   await page.locator("#continue-book").click();

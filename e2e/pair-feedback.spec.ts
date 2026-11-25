@@ -262,18 +262,23 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
 }
 
 for (const count of [2,24,2400,2496]) {
-  test(`classic result opens first unsolved task with ${count} already solved`,async({page})=>{
+  test(`Home action after Classic resolves the main catalogue with ${count} already solved`,async({page})=>{
     const done=Array.from({length:Math.min(count,2400)},(_,i)=>`book-v1-${i+1}`);
     if(count===2496) for(const theme of ["links","choice","shift","mix"]) for(let i=1;i<=24;i++) done.push(`book-v3-${theme}-${i}`);
     await open(page,[5,5],"classic",done);
     await digit(page,0).click(); await digit(page,1).click();
     await expect(page.locator("#win")).toBeVisible();
-    const button=page.locator("#try-notebook");
-    if (count===2496) await expect(button).toBeHidden();
-    else {
-      await expect(button).toHaveText("Открыть тетрадь");
+    await expect(page.locator("#try-notebook")).toBeHidden();
+    await page.locator("#play-again").click();
+    const button=page.locator("#book-quick");
+    if (count>=2400) {
+      await expect(button).toBeHidden();
+      await page.locator("#book-mode").click();
+      await expect(page.locator("#all-books")).toBeVisible();
+    } else {
+      await expect(button).toHaveText("Начать");
       await button.click();
-      await expect(page.locator("#mode")).toHaveText(count===2 ? "Тетрадь 1 · задача 3" : count===24 ? "Тетрадь 2 · задача 1" : "Новые связи · Задача 1");
+      await expect(page.locator("#mode")).toHaveText(count===2 ? "Тетрадь 1 · задача 3" : "Тетрадь 2 · задача 1");
     }
   });
 }

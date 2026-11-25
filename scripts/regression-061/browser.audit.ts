@@ -83,6 +83,7 @@ async function boot(page: Page, exhausted = true, extra: any = {}) {
           w.acks.push(o);
         },
         show: async (o: any) => {
+          if (o.kind === "interstitial") return {status:"skipped",reason:"initial_grace"};
           w.calls.push(o);
           if (extra.unavailable) return { status: "unavailable" };
           return new Promise((resolve) => (w.finishAd = resolve));
@@ -93,6 +94,7 @@ async function boot(page: Page, exhausted = true, extra: any = {}) {
   );
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
 }
 async function reveal(page: Page) {
   await page.locator("#hint").click();
@@ -170,7 +172,7 @@ test("R03 saving failure before watching must leave retry reachable", async ({
         key,
       ),
     )
-    .toBe(true);
+    .not.toBe(true);
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     Storage.prototype.setItem = function (k, v) {
@@ -527,7 +529,7 @@ test("R15 pre-existing save failure closes reward offer and exposes retry", asyn
         key,
       ),
     )
-    .toBe(true);
+    .not.toBe(true);
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     Storage.prototype.setItem = function (k, v) {

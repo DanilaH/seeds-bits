@@ -1,3 +1,4 @@
+import { openClassicNew } from "./restore-game";
 import { test, expect, type Page } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
 async function seed(
@@ -153,6 +154,7 @@ test("daily completion, streak and wallet stay atomic across a failed save and r
 }) => {
   await seed(page, { daily: true, run: 6 });
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     (window as any).failDailySave = true;
@@ -186,7 +188,7 @@ test("daily completion, streak and wallet stay atomic across a failed save and r
   expect(after.jars.seeds).toBe(4);
   await expect.poll(() => permissionRequests(page)).toBe(1);
   await page.reload();
-  await page.locator("#resume").click();
+  await expect(page.locator("#resume")).toBeHidden();
   expect((await stored(page)).meta.wallet).toBe(7);
   expect((await stored(page)).meta.daily.count).toBe(7);
   expect((await stored(page)).jars.seeds).toBe(4);
@@ -243,9 +245,8 @@ for (const [run, reward] of [
     expect(saved.meta.daily.count).toBe(run + 1);
     expect(saved.jars.seeds).toBe(4);
     await page.reload();
-    await page.locator("#resume").click();
+    await expect(page.locator("#resume")).toBeHidden();
     expect((await stored(page)).meta.wallet).toBe(4 + reward);
-    await page.locator("#menu").click();
     await page.locator("#calendar-open").click();
     await page.locator("#calendar-extras > summary").click();
     await expect(page.locator(".run-heading")).toContainText(`${run + 1}`);
@@ -318,9 +319,9 @@ test("reminders default on for old settings and request Android permission after
   expect((await stored(page)).meta.flags).toContain(
     "reminder_permission_requested",
   );
-  expect(await page.evaluate(() => (window as any).adShows)).toEqual([]);
+  expect(await page.evaluate(() => (window as any).adShows)).toMatchObject([{kind:"interstitial"}]);
   await page.reload();
-  await page.locator("#resume").click();
+  await expect(page.locator("#resume")).toBeHidden();
   await page.waitForTimeout(850);
   expect(await permissionRequests(page)).toBe(0);
 });
@@ -402,10 +403,9 @@ test("the Android refusal disables reminders without asking again after reload",
     )
     .toBe(false);
   await page.reload();
-  await page.locator("#resume").click();
+  await expect(page.locator("#resume")).toBeHidden();
   await page.waitForTimeout(850);
   expect(await permissionRequests(page)).toBe(0);
-  await page.locator("#menu").click();
   await page.locator("#settings-open").click();
   await expect(page.locator("#reminders")).not.toBeChecked();
   await expect(page.locator("#notification-system-settings")).toBeVisible();
@@ -456,7 +456,8 @@ test("review follows a saved eligible result, skips the next ad and is not a sub
     ),
   ).toBe(false);
   await page.locator("#play-again").click();
-  expect(await page.evaluate(() => (window as any).adShows)).toEqual([]);
+  await expect(page.locator("#classic-mode")).toBeVisible();
+  expect(await page.evaluate(() => (window as any).adShows)).toMatchObject([{kind:"interstitial"}]);
   await page.evaluate((k) => {
     const p = JSON.parse(localStorage.getItem(k)!);
     p.sessions.classic.current.board = [5, 5];
@@ -586,6 +587,8 @@ test("slow review preparation keeps input usable and cannot interrupt a new part
     .toBe(true);
   expect(await page.locator("#app").evaluate((n) => n.inert)).toBe(false);
   await page.locator("#play-again").click();
+  await expect(page.locator("#classic-mode")).toBeVisible();
+  await openClassicNew(page,1);
   await expect(page.locator("#win")).toBeHidden();
   const next = await stored(page);
   const deal = next.meta.classicRun.current;

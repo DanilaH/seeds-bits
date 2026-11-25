@@ -1,4 +1,4 @@
-import { installLegacyClassic } from "./restore-game";
+import { installLegacyClassic, openClassicNew } from "./restore-game";
 import { continueClassic } from "./restore-game";
 import { test, expect } from "@playwright/test";
 test.beforeEach(async ({ page }) =>
@@ -30,7 +30,8 @@ test("corrupt save notice remains visible until dismissed and original bytes are
       localStorage.getItem("seeds-bits.progress.v2.recovery"),
     ),
   ).toBe("{broken");
-  await page.locator("#resume").click();
+  await expect(page.locator("#resume")).toBeHidden();
+  await openClassicNew(page,1);
   await page.locator('[data-index="0"]').click();
   await expect(page.locator("#read-notice")).toBeVisible();
   await page.locator("#menu").click();

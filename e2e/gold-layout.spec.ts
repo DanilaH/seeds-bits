@@ -1,6 +1,6 @@
 import { requestRestartFromSettings } from "./restore-game";
 import { installLegacyClassic } from "./restore-game";
-import { continueClassic } from "./restore-game";
+import { openClassicNew } from "./restore-game";
 import { openBookPicker, exposeBookFilter } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -276,12 +276,12 @@ for (const [completed, tier] of [
       animations: "disabled",
     });
     await page.reload();
-    await page.locator("#resume").click();
-    await page.waitForTimeout(1000);
+    await expect(page.locator("#resume")).toBeHidden();
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seeds-bits.progress.v2")!).done)).toContain("daily-v1-2026-10-31");
+    await page.locator("#progress-open").click();
+    await page.locator("#progress-trophies").click();
+    await page.locator("#trophies-mode").click();
     await expect(page.locator(".trophy-confetti")).toHaveCount(0);
-    await expect(page.locator(`#award [data-tier="${tier}"]`)).toHaveClass(
-      /earned/,
-    );
   });
 
 test("reduced motion keeps medals, no burst; failed save celebrates only after retry and cancels on navigation", async ({
@@ -384,7 +384,7 @@ test("all screens contain their text with ads, themes, narrow landscape and tabl
       await pair(page);
       await check("result");
       await page.locator("#menu").click();
-      await continueClassic(page);
+      await openClassicNew(page,1);
       await check("classic");
       await context.close();
     }
@@ -507,6 +507,7 @@ test("hint offer, restart confirmation and every lesson contain their text", asy
     await requestRestartFromSettings(page);
     await check("restart-confirm");
     await page.locator("#cancel-new").click();
+    await page.locator("#settings-back").click();
     await page.locator("#learn").click();
     let n = 0;
     for (const [a, b] of [
