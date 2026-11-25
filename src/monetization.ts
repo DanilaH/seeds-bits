@@ -31,6 +31,7 @@ export interface MonetizationBridge {
     height: number;
     viewportWidth: number;
     viewportHeight: number;
+    pixelRatio?: number;
     revision: number;
     epoch?: string;
   }): Promise<void>;
@@ -155,8 +156,9 @@ export async function syncBanner(visible: boolean) {
   if (!slot || !viewport) return;
   const r = slot.getBoundingClientRect();
   const space = viewport.getBoundingClientRect();
+  const pixelRatio = window.devicePixelRatio;
   const valid = visible && r.width >= 250 && r.height > 0;
-  const geometry = valid ? [r.x, r.y, r.width, r.height, space.width, space.height].join(":") : "hidden";
+  const geometry = valid ? [r.x, r.y, r.width, r.height, space.width, space.height, pixelRatio].join(":") : "hidden";
   if (geometry === bannerGeometry && (!valid || performance.now() - bannerSentAt < 60000)) return;
   bannerGeometry = geometry;
   bannerSentAt = performance.now();
@@ -170,6 +172,7 @@ export async function syncBanner(visible: boolean) {
       height: r.height,
       viewportWidth: space.width,
       viewportHeight: space.height,
+      pixelRatio,
       revision,
       epoch: bannerEpoch,
     });

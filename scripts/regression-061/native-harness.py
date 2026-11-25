@@ -216,6 +216,17 @@ public class AuditHarness {
   PluginCall hiddenSample=new PluginCall();p.bannerDiagnostics(hiddenSample);
   check("N51_expected_frame_counts_js_hide",Integer.valueOf(1).equals(hiddenSample.result.get("hiddenFrames")),"JS visibility cannot remove a frame from the expected denominator");
 
+  p=fresh(true);android.content.res.Resources.density=2;
+  p.bridge.web.width=p.activity.root.width=640;p.bridge.web.height=p.activity.root.height=1136;
+  PluginCall smallViewport=box();smallViewport.args.put("viewportWidth",320).put("viewportHeight",568).put("width",288).put("y",514).put("height",50).put("pixelRatio",2);
+  p.banner(smallViewport);BannerAdView beforeResize=BannerAdView.all.get(0);
+  p.bridge.web.width=p.activity.root.width=720;p.bridge.web.height=p.activity.root.height=1296;
+  smallViewport.args.put("revision",++revision);p.banner(smallViewport);
+  boolean preserved=BannerAdView.all.size()==1 && !beforeResize.destroyed && beforeResize.getParent().visibility==android.view.View.GONE;
+  PluginCall wideViewport=box();wideViewport.args.put("viewportWidth",360).put("viewportHeight",648).put("width",328).put("y",594).put("height",50).put("pixelRatio",2);
+  p.banner(wideViewport);
+  check("N52_resize_waits_for_matching_viewport",preserved && BannerAdView.all.size()==2 && beforeResize.destroyed && BannerAdView.all.get(1).requests==1,"one replacement after the native and CSS widths agree");
+
   p=fresh(true);PluginCall lab=new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","lab-only"));p.persistLabState(lab);game=p.activity.getSharedPreferences("CapacitorStorage",0);boolean isolated=lab.result!=null && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1"));boolean invalidLab=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.progress.v2").put("value","bad")));}catch(RuntimeException failure){invalidLab=true;}check("N42_lab_storage_namespace",isolated&&invalidLab&&!game.data.containsKey("seeds-bits.progress.v2"),"lab method cannot write production progress");
   game.fail=true;boolean labFailure=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","not-saved")));}catch(RuntimeException failure){labFailure=true;}check("N43_lab_storage_failure",labFailure && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1")) && "lab-only".equals(game.data.get("seeds-bits.lab.trials.v1")),"failed lab commit retains previous authority");
 

@@ -89,12 +89,13 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   private static final class BannerPlacement {
     final boolean visible;
-    final double x, y, width, height, viewportWidth, viewportHeight;
+    final double x, y, width, height, viewportWidth, viewportHeight, pixelRatio;
     BannerPlacement(PluginCall call) {
       visible = call.getBoolean("visible", false);
       x = number(call, "x"); y = number(call, "y");
       width = number(call, "width"); height = number(call, "height");
       viewportWidth = number(call, "viewportWidth"); viewportHeight = number(call, "viewportHeight");
+      pixelRatio = number(call, "pixelRatio");
     }
     boolean valid() {
       return Double.isFinite(x) && Double.isFinite(y) && Double.isFinite(width) && Double.isFinite(height)
@@ -507,6 +508,13 @@ public class SeedsMonetizationPlugin extends Plugin {
     FrameLayout root = getActivity().findViewById(android.R.id.content);
     if (web.getWidth() <= 0 || web.getHeight() <= 0 || root == null ||
         web.getWidth() != measuredWebWidth || web.getHeight() != measuredWebHeight) { hideBanner(); return; }
+    // Native bounds can resize before CSS reports its new viewport. Keep the SDK view
+    // until both measurements refer to the same width, with one CSS pixel of rounding.
+    if (Double.isFinite(placement.pixelRatio) && placement.pixelRatio > 0 &&
+        Math.abs(web.getWidth() - placement.viewportWidth * placement.pixelRatio) > Math.max(1, placement.pixelRatio)) {
+      hideBanner();
+      return;
+    }
     double scale = web.getWidth() / placement.viewportWidth;
     int[] webLocation = new int[2], rootLocation = new int[2];
     web.getLocationOnScreen(webLocation); root.getLocationOnScreen(rootLocation);

@@ -8,7 +8,7 @@ permissions:
   actions: read
 concurrency:
   group: first-session-preview-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.ref_name == 'feat/menu-audit-33-20261125' }}
 jobs:
   browser:
     runs-on: ubuntu-24.04
@@ -63,7 +63,7 @@ jobs:
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=992 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=993 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
