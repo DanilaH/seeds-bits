@@ -99,7 +99,7 @@ test("previously assigned logical slot keeps v4; reload, undo, restart and repla
  const bad=JSON.parse(wire);delete bad.bookRevisions;
  expect(()=>readProgress(JSON.stringify(bad))).toThrow(FutureProgress);
  bad.bookRevisions={[id]:99};expect(()=>readProgress(JSON.stringify(bad))).toThrow(FutureProgress);
- bad.bookRevisions={[id]:4};bad.version=10;expect(()=>readProgress(JSON.stringify(bad))).toThrow(FutureProgress);
+ bad.bookRevisions={[id]:4};bad.version=11;expect(()=>readProgress(JSON.stringify(bad))).toThrow(FutureProgress);
 });
 test("damaged optional legacy board or metadata still pins its old content rather than silently reassigning",()=>{
  const p=fresh();const q=readProgress(JSON.stringify({...p,active:"book-v1-78",sessions:{...p.sessions,"book-v1-78":{broken:true}},meta:{version:2,attempts:{"book-v1-77":{broken:true}}}}));

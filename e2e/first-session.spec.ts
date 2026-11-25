@@ -405,6 +405,7 @@ for (const [width,height] of [[320,568],[390,844]]) {
     const [a,b] = proof.forcedEdge.choices[0];
     await digit(page,a);
     expect(await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top)).toBe(top);
-    await move(page,a,b);
+    await digit(page,b);
+    await expect(page.locator("#win")).toBeVisible();
   });
 }
