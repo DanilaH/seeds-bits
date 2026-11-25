@@ -940,9 +940,21 @@
         "report": "../research/daily-notebook-design-2026-11-24/catalogue-v5/README.md",
         "model": "2400 слотов, 365 дат и 372 пробы продолжения. Для небольших полей точные профили, для больших — причинные события и ограниченная проверка развилок.",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "independentAudit": {
+          "report": "../research/daily-notebook-design-2026-11-24/catalogue-v5/independent-2026-11-25/README.md",
+          "sourceCommit": "a390b7d325ae19a3b67b147d16421532c0d25bdd",
+          "model": "2765 boards, 4 policies; 235/17/0 first-book opening outcomes; 22/98 certified winning first deviations exhaust modeled product hint budget; 1825 future dates no duplicate v5 masks/canonical starts in scoped model",
+          "status": "MODEL_PARITY_PARTIAL; actual worker and physical phone UNKNOWN",
+          "findings": [
+            "V5-Q01",
+            "V5-Q02",
+            "V5-Q03",
+            "V5-Q04"
+          ]
+        }
       },
-      "nextAction": "Подтвердить на телефоне обновление, воспринимаемую сложность и темп наград в размерных группах.",
+      "nextAction": "V5-Q02: actual solver/worker repro + validated suffix repair, then decide first 6–12 tasks with owner, physical phone upgrade and seeds/minute; no blanket regeneration, no changed existing assignments. Daily date activation requires approval.",
       "kitImpact": "REUSE: versioned content and bounded proof"
     }
   ]
