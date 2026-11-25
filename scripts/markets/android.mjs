@@ -1,5 +1,5 @@
 // Android-native font scaling and ADB touches against a debuggable build of the same web assets.
-import {execFileSync} from "node:child_process";
+import {execFileSync, spawn} from "node:child_process";
 import fs from "node:fs";
 import {resolve} from "node:path";
 import assert from "node:assert/strict";
@@ -872,14 +872,26 @@ async function verifyAppBanner() {
   adb("install",candidate);
   adb("shell","wm","density","320");
   adb("shell","wm","size","640x1232");
-  let ui, recording = false;
-  const video = resolve(out,"banner-continuity.webm");
+  let ui, recording = false, guestRecorder;
+  let video = resolve(out,"banner-continuity.webm");
+  const guestVideo = "/sdcard/seeds-banner-continuity.mp4";
   const captureStart=performance.now();
   const trace=(label, detail={})=>report.observed.push({label,ms:Math.round(performance.now()-captureStart),...detail});
   try {
     // Capture the emulator display on the host without a guest codec or desktop compositor.
-    const start=adb("emu","screenrecord","start","--time-limit","360","--size","320x616",video);
-    assert(!start.includes("KO"),start);
+    try {
+      const start=adb("emu","screenrecord","start","--time-limit","360",video);
+      assert(!start.includes("KO"),start);
+      report.recorder="emulator-console";
+    } catch(error) {
+      console.warn("Host recorder unavailable:",String(error));
+      video=resolve(out,"banner-continuity.mp4");
+      guestRecorder=spawn("adb",["shell","screenrecord","--size","320x616","--time-limit","0",guestVideo],{stdio:"ignore"});
+      await new Promise((ready,reject)=>{guestRecorder.once("spawn",ready);guestRecorder.once("error",reject);});
+      await wait(500);
+      assert.equal(guestRecorder.exitCode,null,"Android screen recorder failed before launch");
+      report.recorder="android-screenrecord";
+    }
     recording=true;
     launch();
     trace("launch");
@@ -1064,7 +1076,14 @@ async function verifyAppBanner() {
   } finally {
     if(recording) {
       try {
-        adb("emu","screenrecord","stop");
+        if(guestRecorder){
+          if(guestRecorder.exitCode===null){
+            const closed=new Promise(ready=>guestRecorder.once("exit",ready));
+            adb("shell","pkill","-2","screenrecord");
+            await closed;
+          }
+          adb("pull",guestVideo,video);
+        } else adb("emu","screenrecord","stop");
         assert(fs.existsSync(video)&&fs.statSync(video).size>1024,"No host screen recording");
         const duration=Number(execFileSync("ffprobe",["-v","error","-show_entries","format=duration","-of","csv=p=0",video],{encoding:"utf8"}));
         report.videoSeconds=duration;
