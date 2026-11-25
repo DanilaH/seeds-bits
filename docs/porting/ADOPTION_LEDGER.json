@@ -1006,6 +1006,55 @@
       "kitImpact": "REUSE",
       "consumerCommit": "0081014314d12221d5048b751d19828a34e251f0",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/25"
+    },
+    {
+      "id": "seeds-menu-transitions-20261125",
+      "scope": "Решение владельца: результат Классики, Home и явные межрежимные переходы, ordinary interstitial opportunities. Собственная адаптация.",
+      "status": "ROADMAPPED",
+      "sourceFeatureIds": [],
+      "ownerDecisionRef": "Owner chat 2026-11-25: удалить легче/сложнее и X, реклама на result to Home и Continue, рассмотреть новый старт; зафиксировано в ../research/menu-notebooks-2026-11-25/README.md",
+      "consumerCommit": "0081014314d12221d5048b751d19828a34e251f0",
+      "currentImplementation": "Три CTA результата + menu-easier; X/Resume/Android Back закрывают Home; result transition gate только next; parked Classic может замениться без confirm при входе из другого режима.",
+      "evidence": {
+        "report": "../research/menu-notebooks-2026-11-25/README.md",
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/27",
+        "code": "src/main.ts L3075–3129, 3170–3257, 3288–3347, 3382–3420, 4290–4355; native/android/SeedsMonetizationPlugin.java L25–77, 269–345",
+        "verification": "STATIC_CODE; proposed cadence retains 180s/30s gates; device/live UNKNOWN"
+      },
+      "nextAction": "Implement #27, actual before/after + transition/failure/regression; owner approves cadence changes separately.",
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-persistent-banner-20261125",
+      "scope": "Owner-requested shared native banner in our game, Home and ordinary catalog routes. Adaptation of Arrows donor, not Number Match original feature.",
+      "status": "ROADMAPPED",
+      "sourceFeatureIds": [],
+      "ownerDecisionRef": "Owner chat 2026-11-25: banner in menu as well as gameplay; recorded in ../research/menu-notebooks-2026-11-25/README.md",
+      "currentImplementation": "updateBanner excludes dialog.open; .game only ad reserve; syncBanner innerWidth; native inline max50dp, root containment and retry already present.",
+      "evidence": {
+        "report": "../research/menu-notebooks-2026-11-25/README.md",
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/28",
+        "donor": "https://github.com/DanilaH/mini-games-kit/blob/5cac32b0851c80bdff1d61069b8524b9e42170e1/docs/extraction/ARROWS_BANNER_0392.md",
+        "verification": "STATIC_CODE for Seeds; Arrows donor DEMO_NATIVE_EMULATOR evidence, Seeds new paint/phone/live UNKNOWN"
+      },
+      "nextAction": "Implement #28, one slot/generation, reason-aware guards, actual native video/geometry.",
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-notebook-ux-20261125",
+      "scope": "Our catalogue 100 main + 4 themed notebooks; UX and navigation, not new content.",
+      "status": "ROADMAPPED",
+      "sourceFeatureIds": [],
+      "ownerDecisionRef": "Owner chat 2026-11-25: audit poor notebook UI, question thematic button. Separate tab and within-book next priority proposed, not permanent exclusion.",
+      "currentImplementation": "Single book page with details, filters, duplicated thematic CTA; boot resets to 1 outside book; parked tasks not distinct, CTA text based on volume, nextTask can leave unfinished volume.",
+      "evidence": {
+        "report": "../research/menu-notebooks-2026-11-25/README.md",
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/29",
+        "code": "src/main.ts L3588–3590, 3888–3958, 4061–4107, 4239–4250, 4373–4383; src/puzzles.ts L252–264",
+        "verification": "STATIC_CODE and independent navigation model; historical 12073 screenshot inspected; current rendered pixels/device/live UNKNOWN"
+      },
+      "nextAction": "Implement #29 with catalogue/detail state separation, 2496 existing IDs/pins preserved; before/after native and accessibility gate.",
+      "kitImpact": "REUSE"
     }
   ]
 }
