@@ -24,6 +24,16 @@ function profiles() {
   const xml=adb("shell","cat",prefs);
   return {xml,values:Object.fromEntries([...xml.matchAll(/<string name="([^"]+)">([\s\S]*?)<\/string>/g)].map(m=>[m[1],JSON.parse(decode(m[2]))]))};
 }
+async function expectSavedBoard(id, board) {
+  // Undo renders before its Preferences write finishes. Check the disk state itself.
+  let saved;
+  for (let attempt=0;attempt<20;attempt++) {
+    saved=profiles().values[progress].sessions[id]?.current.board;
+    if (saved?.join("")===board.join("")) return;
+    await wait(125);
+  }
+  assert.deepEqual(saved,board);
+}
 async function fixture(values) {
   stop();
   let xml=profiles().xml;
@@ -370,7 +380,7 @@ async function update() {
       await ui.until("!document.querySelector('#dialog').open");
       await ui.tap("#undo");
       await ui.until(`document.querySelector('#remaining').textContent==='${bookV5(3).board.filter(Boolean).length}'`);
-      assert.deepEqual(profiles().values[progress].sessions["book-v1-3"].current.board,bookV5(3).board);
+      await expectSavedBoard("book-v1-3",bookV5(3).board);
       await ui.tap("#menu");
       await ui.tap("#book-mode");
       await ui.tap('[data-game="book-v1-4"]');
@@ -721,7 +731,7 @@ return (${code})(SeedsClassicQA);})()`;
     await ui.until(left(25));
     await ui.tap("#undo");
     await ui.until(left(27));
-    assert.deepEqual(profiles().values[progress].sessions.classic.current.board,oldHighBoard);
+    await expectSavedBoard("classic",oldHighBoard);
     await ui.tap("#menu");
     const { counts, holes } = await ui.evaluate(withGenerator(
       "({CLASSIC_START_COUNTS, CLASSIC_START_HOLES}) => ({counts:CLASSIC_START_COUNTS, holes:CLASSIC_START_HOLES})",
