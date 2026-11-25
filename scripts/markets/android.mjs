@@ -68,8 +68,15 @@ async function connect() {
     throw Error(expression);
   };
   await until("document.querySelector('#dialog')&&!document.querySelector('#app').inert&&!document.querySelector('.locale-pending')");
+  // Demo builds expose the native WebView rectangle. Accessibility dumps can
+  // stay busy while a creative is animated and return no hierarchy.
   let bounds;
-  for(let attempt=0;attempt<6;attempt++){
+  try {
+    const frame = await evaluate("window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics()");
+    if (frame?.webWidth > 0 && frame?.webHeight > 0)
+      bounds = [frame.webX,frame.webY,frame.webX+frame.webWidth,frame.webY+frame.webHeight];
+  } catch { /* Non-demo builds use Android's accessible hierarchy. */ }
+  for(let attempt=0;!bounds && attempt<6;attempt++){
     try {
       // uiautomator can exit successfully without writing a new dump.
       adb("shell","rm","-f","/sdcard/market.xml");
@@ -867,8 +874,19 @@ async function verifyAppBanner() {
   let ui, recorder;
   const display = process.env.DISPLAY;
   const remote = "/sdcard/seeds-banner-continuity.mp4";
+  const captureStart=performance.now();
+  const trace=(label, detail={})=>report.observed.push({label,ms:Math.round(performance.now()-captureStart),...detail});
   try {
+    recorder = display
+      ? spawn("ffmpeg",["-y","-loglevel","error","-f","x11grab","-framerate","20","-video_size","800x1300",
+          "-i",display,"-t","360","-an","-c:v","libx264","-preset","ultrafast","-threads","2",
+          "-pix_fmt","yuv420p","-movflags","+faststart",out+"/banner-continuity.mp4"],{stdio:"ignore"})
+      : spawn("adb",["shell","screenrecord","--size","320x616","--bit-rate","950000","--time-limit","360",remote],{stdio:"ignore"});
+    await new Promise((resolve,reject)=>{recorder.once("spawn",resolve);recorder.once("error",reject);});
+    await wait(500);
+    assert.equal(recorder.exitCode,null,"The continuous capture stopped before navigation");
     launch();
+    trace("launch");
     const home = adb("shell","cmd","package","resolve-activity","--brief",
       "-a","android.intent.action.MAIN","-c","android.intent.category.HOME").split("\n").at(-1);
     const launcher = home?.match(/^([a-z][a-z0-9_.]+)\//i)?.[1];
@@ -887,11 +905,18 @@ async function verifyAppBanner() {
       window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics(),
       new Promise((_,reject)=>setTimeout(()=>reject(Error("Banner diagnostics did not respond")),5000))
     ])`);
-    const paint = frame => {
-      const raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6,timeout:12_000});
-      const width=raw.readUInt32LE(0),height=raw.readUInt32LE(4),offset=raw.length-width*height*4;
+    const paint = async frame => {
+      let raw, width, height, offset;
+      for (let attempt=0;attempt<3;attempt++) {
+        raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6,timeout:12_000});
+        if (raw.length >= 12) {
+          width=raw.readUInt32LE(0); height=raw.readUInt32LE(4); offset=raw.length-width*height*4;
+          if (offset>=12) break;
+        }
+        await wait(200);
+      }
       assert(offset>=12,"Android returned an incomplete screenshot");
-      const left=ui.bounds[0]+frame.left, top=ui.bounds[1]+frame.top;
+      const left=frame.screenLeft, top=frame.screenTop;
       assert(left>=0&&top>=0&&left+frame.width<=width&&top+frame.height<=height,
         "The native banner frame is outside the screenshot");
       const colors=new Set();
@@ -904,35 +929,34 @@ async function verifyAppBanner() {
     let painted, initial;
     for(let i=0;i<36;i++) {
       initial=await diagnostics();
-      if(initial.loaded>0&&initial.visible&&(painted=paint(initial))>20)break;
+      if(initial.loaded>0&&initial.visible&&(painted=await paint(initial))>20)break;
       await wait(650);
     }
     report.initial=initial;
     report.paintColorBuckets=painted??0;
     if(!(initial.loaded>0&&initial.visible&&painted>20)){
       report.status="UNAVAILABLE";
-      return report;
+      throw Error("Android did not paint a demo banner");
     }
+    trace("first verified paint",{...initial,paintColorBuckets:painted});
     shot("banner-painted-start");
-    recorder = display
-      ? spawn("ffmpeg",["-y","-loglevel","error","-f","x11grab","-framerate","20","-video_size","800x1300",
-          "-i",display,"-t","60","-an","-c:v","libx264","-preset","ultrafast","-threads","2",
-          "-pix_fmt","yuv420p","-movflags","+faststart",out+"/banner-continuity.mp4"],{stdio:"ignore"})
-      : spawn("adb",["shell","screenrecord","--size","320x616","--bit-rate","950000","--time-limit","60",remote],{stdio:"ignore"});
-    const started=new Promise((resolve,reject)=>{recorder.once("spawn",resolve);recorder.once("error",reject);});
-    await started;
-    await wait(500);
-    assert.equal(recorder.exitCode,null,"The continuous capture stopped before navigation");
+    const expected=async(visible,reason)=>{
+      await ui.evaluate(`window.Capacitor.Plugins.SeedsMonetization.bannerExpectation({visible:${visible}})`);
+      trace(reason,{expected:visible});
+    };
     const stable=async(label)=>{
       const current=await diagnostics();
       assert.equal(current.view,initial.view,label);
       assert.equal(current.request,initial.request,label);
       assert.equal(current.visible,true,label);
       assert.equal(current.hiddenFrames,initial.hiddenFrames,label);
-      const observation={label,...current,paintColorBuckets:paint(current)};
-      report.observed.push(observation);
-      assert(observation.paintColorBuckets>20,label+" creative band lost color");
+      for (const dimension of ["screenLeft","screenTop","width","height"])
+        assert.equal(current[dimension],initial[dimension],label+" "+dimension);
+      const paintColorBuckets=await paint(current);
+      trace(label,{...current,paintColorBuckets});
+      assert(paintColorBuckets>20,label+" creative band lost color");
     };
+    await expected(true,"ordinary scene transitions begin");
     for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2],[7,14,0]]) {
       await ui.tap(digit(a)); await ui.tap(digit(b));
       await ui.until(`document.querySelector('#remaining').textContent==='${n}'`);
@@ -946,25 +970,66 @@ async function verifyAppBanner() {
     await ui.tap("#all-books"); await stable("notebook to picker");
     await ui.tap("#collection-back"); await stable("picker to notebook");
     await ui.tap("#collection-back"); await stable("notebook to Home");
+    await expected(false,"language modal opens");
     await ui.tap("#pause-language");
     await ui.until("document.querySelector('#language-sheet').open");
-    assert.equal((await diagnostics()).visible,false);
+    const hiddenByLanguage=await diagnostics();
+    assert.equal(hiddenByLanguage.visible,false);
+    trace("real language modal",{...hiddenByLanguage,expected:false});
     await ui.tap("#language-close");
     await stable("language closed");
+    await expected(true,"language modal closed");
     await ui.tap("#resume"); await stable("explicit Home to game");
-    const beforeBackground=(await diagnostics()).request;
-    adb("shell","input","keyevent","3");
+    await ui.tap("#menu"); await stable("Home before background");
+    await expected(false,"Home backgrounds");
+    adb("shell","am","start","-a","android.settings.SETTINGS");
     await wait(450);
-    assert.equal((await diagnostics()).visible,false);
+    const hiddenByBackground=await diagnostics();
+    assert.equal(hiddenByBackground.visible,false);
+    trace("Home in background",{...hiddenByBackground,expected:false});
     launch();
-    await ui.until("document.visibilityState==='visible'");
+    await ui.until("document.visibilityState==='visible' && document.hasFocus()");
     await wait(500);
-    await stable("foreground restored");
-    assert.equal((await diagnostics()).request,beforeBackground);
+    await stable("foreground restored to Home");
+    await expected(true,"Home restored");
+    // Wait for the actual initial-grace interval; this test doesn't rewrite ad policy.
+    const adPrefs=`/data/user/0/${app}/shared_prefs/seeds-monetization.xml`;
+    const lastFullscreen=Number(/name="last_fullscreen" value="(\d+)"/.exec(adb("shell","cat",adPrefs))?.[1]);
+    const deviceTime=Number(adb("shell","date","+%s"))*1000;
+    assert(lastFullscreen>0&&deviceTime>0,"Native ad interval unavailable");
+    await wait(Math.max(0,lastFullscreen+181000-deviceTime));
+    await stable("before genuine interstitial");
+    await expected(false,"fullscreen request");
+    await ui.tap("#resume");
+    let shown;
+    for (let attempt=0;attempt<24;attempt++) {
+      shown=await diagnostics();
+      if(shown.fullscreen && !shown.focused)break;
+      await wait(150);
+    }
+    assert(shown.fullscreen && !shown.focused,"SDK did not open the demo interstitial");
+    assert.equal(shown.visible,false);
+    trace("genuine interstitial hides native banner",{...shown,expected:false});
+    shot("banner-hidden-by-interstitial");
+    for (let attempt=0;attempt<8;attempt++) {
+      adb("shell","input","keyevent","4");
+      await wait(650);
+      if (!(await diagnostics()).fullscreen) break;
+    }
+    await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");
+    await stable("after genuine interstitial");
+    await expected(true,"fullscreen dismissed");
+    await ui.tap("#menu"); await stable("interstitial round trip to Home");
+    await expected(false,"reload handshake starts");
+    await ui.evaluate("setTimeout(() => location.reload(), 50); true");
+    await wait(1000);
+    await ui.until("document.querySelector('#dialog[data-screen=home]')?.open && document.hasFocus()");
+    await stable("WebView reload with retained native banner");
+    await expected(true,"reload finished");
     report.status="PASS";
     return report;
   } catch(error) {
-    report.status="ERROR";
+    if (report.status !== "UNAVAILABLE") report.status="ERROR";
     report.error=String(error);
     try { shot("banner-failure"); } catch (captureError) { console.warn(String(captureError)); }
     throw error;

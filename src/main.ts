@@ -58,7 +58,7 @@ import {
 } from "./hint-budget";
 import { jars, collectPair, jarState, jarNames, jarColors } from "./jars";
 import { volumeOf, volumeTasks, puzzleNumberInVolume, VOLUMES, themeOf } from "./notebooks";
-import { hasPlayed, unfinished, notebookStarted, notebookTarget, notebookBrowseStatus, MAIN_BOOKS } from "./notebook-navigation";
+import { hasPlayed, unfinished, notebookStarted, notebookTarget, notebookBrowseStatus, recordNotebookPlay, forgetNotebookPlay, MAIN_BOOKS } from "./notebook-navigation";
 import { loadBookV5 } from "./content-v5";
 import { dailyDay, dailyDone, dailyIdFor, versionedDay, bookRevisionFor, legacyBookNumber, validContentId, LEGACY_BOOK_TASKS } from "./content-ids";
 import { playSound, suspendSound, blockSound } from "./sound";
@@ -1764,7 +1764,7 @@ new ResizeObserver(updateBanner).observe($("ad-space"));
 new MutationObserver(updateBanner).observe(document.documentElement, {
   attributes:true, attributeFilter:["style"],
 });
-for (const event of ["resize","focus","blur"]) window.addEventListener(event, updateBanner);
+for (const event of ["resize","focus","blur","seeds:banner-refresh"]) window.addEventListener(event, updateBanner);
 let offeredIntent: HelpIntent | undefined;
 let verifiedHint: HelpIntent | undefined;
 let autoIntent: HelpIntent | undefined;
@@ -2643,6 +2643,7 @@ async function choose(i: number) {
   // Commit the accepted move before awaiting a decorative animation.
   if (lesson < 0) {
     session = commit(session, next, "pair", viewport.scrollTop);
+    recordNotebookPlay(progress, progress.active);
     markGameStarted();
     if (firstEdge) progress.seen.push("edge-trace");
     if (result.path.kind === "reading" && notebookEdgeUnseen())
@@ -3173,6 +3174,7 @@ async function reset() {
   earnedAward = "";
   const candidate = structuredClone(progress);
   startAttempt(candidate, candidate.active);
+  forgetNotebookPlay(candidate, candidate.active);
   candidate.hints[candidate.active] = 0;
   const restarted = puzzleSession(original);
   saveRecovered = false;
@@ -3870,6 +3872,7 @@ async function switchGame(id: string, route?: string) {
     candidate.sessions[id] ?? (puzzle ? puzzleSession(puzzle) : newSession());
   if (puzzle && !occupied(nextSession.current.board)) {
     startAttempt(candidate, id);
+    forgetNotebookPlay(candidate, id);
     nextSession = puzzleSession(puzzle);
     candidate.hints[id] = 0;
   }
@@ -4193,12 +4196,12 @@ function renderNotebook() {
   const { solved } = notebookBrowseStatus(progress, selectedVolume, done);
   const target = notebookTarget(progress, selectedVolume);
   const tiles = tasks.map(({id},i) => {
-    const isDone = done.has(id), isStarted = !isDone && notebookStarted(progress,id);
+    const isDone = done.has(id), isStarted = notebookStarted(progress,id);
     const isNext = id === target;
-    const status = isDone ? t("ui.solved") : isStarted ? t("nav.started") : "";
+    const status = [isDone ? t("ui.solved") : "", isStarted ? t("nav.started") : ""].filter(Boolean).join(" · ");
     const label = t("ui.puzzle-2", {"0":i + 1,"1":status}).trim();
     return `<button class="task ${isDone ? "done" : isStarted ? "started" : ""} ${isNext ? "recommended" : ""}" data-game="${id}"
-      ${isNext ? 'aria-current="true"' : ""} aria-label="${label}">${i+1}${isDone ? '<small>✓</small>' : isStarted ? '<small>▸</small>' : ""}</button>`;
+      ${isNext ? 'aria-current="true"' : ""} aria-label="${label}">${i+1}${isStarted ? '<small>▸</small>' : isDone ? '<small>✓</small>' : ""}</button>`;
   }).join("");
   const toolbar = `<div class="notebook-toolbar"><span>${t("ui.of-24-puzzles",{"0":solved})}</span><button class="text-button" id="all-books">${t("nav.booksAll")}</button></div>`;
   const cta = target ? `<button class="primary" id="continue-book" data-continue="${target}">${t("ui.puzzle", {

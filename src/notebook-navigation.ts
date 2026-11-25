@@ -15,8 +15,20 @@ export function unfinished(game: Session | undefined) {
 }
 
 export function notebookStarted(progress: Progress, id: string) {
-  return unfinished(progress.sessions[id]) && (hasPlayed(progress.sessions[id]) ||
-    Boolean(progress.meta?.attempts[id]));
+  const game = progress.sessions[id];
+  const attempt = progress.meta?.attempts[id];
+  return unfinished(game) && !attempt?.completed &&
+    (Boolean(progress.bookPlayOrder?.includes(id)) || hasPlayed(game) || Boolean(attempt?.analyticsStarted));
+}
+
+export function recordNotebookPlay(progress: Progress, id: string) {
+  if (!id.startsWith("book-") || progress.bookPlayOrder?.[0] === id) return;
+  progress.bookPlayOrder = [id, ...(progress.bookPlayOrder?.filter(task => task !== id) ?? [])];
+}
+
+export function forgetNotebookPlay(progress: Progress, id: string) {
+  if (progress.bookPlayOrder?.includes(id))
+    progress.bookPlayOrder = progress.bookPlayOrder.filter(task => task !== id);
 }
 
 export function notebookBrowseStatus(progress: Progress, volume: number, done: ReadonlySet<string>) {
@@ -29,15 +41,17 @@ export function notebookBrowseStatus(progress: Progress, volume: number, done: R
 export function notebookTarget(progress: Progress, volume?: number): string | undefined {
   const done = new Set(progress.done);
   const inBook = (id: string) => notebook.some(task => task.id === id) && (volume === undefined || volumeOf(id) === volume);
-  const recent = progress.lastBookTask ?? progress.active;
+  const choices = volume === undefined ? notebook : volumeTasks(volume);
+  const ordered = progress.bookPlayOrder?.find(id => inBook(id) && notebookStarted(progress, id));
+  if (ordered) return ordered;
+  // Before move order was saved, the catalogue is the only reliable tie-breaker.
+  const parked = choices.find(task => notebookStarted(progress, task.id));
+  if (parked) return parked.id;
+  const recent = progress.bookPlayOrder?.find(inBook) ?? progress.lastBookTask ?? progress.active;
   if (inBook(recent)) {
     if (!done.has(recent)) return recent;
     const inVolume = volumeTasks(volumeOf(recent)).find(task => !done.has(task.id));
     if (inVolume) return inVolume.id;
   }
-  const choices = volume === undefined ? notebook : volumeTasks(volume);
-  // Older saves have no ordering data. Use catalog order amongst actually parked tasks.
-  const parked = choices.find(task => !done.has(task.id) && notebookStarted(progress, task.id));
-  if (parked) return parked.id;
   return choices.find((task, i) => (volume !== undefined || i < LEGACY_BOOK_TASKS) && !done.has(task.id))?.id;
 }

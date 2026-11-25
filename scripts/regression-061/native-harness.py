@@ -60,14 +60,15 @@ put('android/os/Looper.java','package android.os;public class Looper {public sta
 put('android/os/Handler.java','''package android.os;import java.util.*;public class Handler {public static List<Runnable> tasks=new ArrayList<>();public Handler(Looper l){}public void postDelayed(Runnable r,long m){tasks.add(r);}public void removeCallbacks(Runnable r){tasks.remove(r);}public void removeCallbacksAndMessages(Object x){tasks.clear();}public static void fire(){for(Runnable r:new ArrayList<>(tasks))r.run();tasks.clear();}}''')
 put('android/os/SystemClock.java','package android.os;public class SystemClock {public static long now=1000000;public static long elapsedRealtime(){return now;}}')
 put('android/R.java','package android;public class R {public static class id {public static int content=1;}}')
-put('android/view/View.java','''package android.view;public class View {public static int GONE=8,VISIBLE=0;public int visibility=VISIBLE;public ViewGroup parent;public Object layoutParams;public int width=390,height=844;public int getVisibility(){return visibility;}public int getPaddingLeft(){return 0;}public int getPaddingRight(){return 0;}public int getPaddingTop(){return 0;}public int getPaddingBottom(){return 0;}public ViewTreeObserver observer=new ViewTreeObserver();public ViewTreeObserver getViewTreeObserver(){return observer;}public void setVisibility(int v){visibility=v;}public int getWidth(){return width;}public int getHeight(){return height;}public void getLocationOnScreen(int[] p){p[0]=0;p[1]=0;}public ViewGroup getParent(){return parent;}public void setLayoutParams(Object p){layoutParams=p;}}''')
+put('android/view/View.java','''package android.view;public class View {public interface OnLayoutChangeListener{void onLayoutChange(View v,int l,int t,int r,int b,int ol,int ot,int or_,int ob);}public void addOnLayoutChangeListener(OnLayoutChangeListener listener){}public void removeOnLayoutChangeListener(OnLayoutChangeListener listener){}public static int GONE=8,VISIBLE=0;public int visibility=VISIBLE;public ViewGroup parent;public Object layoutParams;public int width=390,height=844;public int getVisibility(){return visibility;}public int getPaddingLeft(){return 0;}public int getPaddingRight(){return 0;}public int getPaddingTop(){return 0;}public int getPaddingBottom(){return 0;}public ViewTreeObserver observer=new ViewTreeObserver();public ViewTreeObserver getViewTreeObserver(){return observer;}public void setVisibility(int v){visibility=v;}public int getWidth(){return width;}public int getHeight(){return height;}public void getLocationOnScreen(int[] p){p[0]=0;p[1]=0;}public ViewGroup getParent(){return parent;}public void setLayoutParams(Object p){layoutParams=p;}}''')
 put('android/view/ViewTreeObserver.java','''package android.view;public class ViewTreeObserver {
  public interface OnWindowFocusChangeListener{void onWindowFocusChanged(boolean focused);}
  public interface OnPreDrawListener{boolean onPreDraw();}
  public OnWindowFocusChangeListener focus;
  public void addOnWindowFocusChangeListener(OnWindowFocusChangeListener listener){focus=listener;}
  public void removeOnWindowFocusChangeListener(OnWindowFocusChangeListener listener){}
- public void addOnPreDrawListener(OnPreDrawListener listener){}
+ public OnPreDrawListener preDraw;
+ public void addOnPreDrawListener(OnPreDrawListener listener){preDraw=listener;}
  public void removeOnPreDrawListener(OnPreDrawListener listener){}
  public boolean isAlive(){return true;}
 }''')
@@ -129,7 +130,7 @@ public class AuditHarness {
  public static void main(String[]x)throws Exception{
   SeedsMonetizationPlugin p=fresh(true);RewardedAd a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);p.show(request("rewarded"));a.listener.onAdShown();a.listener.onRewarded(new Reward());String first=(String)p.events.get(0).get("token");p.acknowledge(new PluginCall(new JSObject().put("token",first)));a.listener.onRewarded(new Reward());check("N01_duplicate_reward_after_ack",p.events.size()==1,"native receipts="+p.events.size());
   p=fresh(false);p.banner(box());YandexAds.ready();check("N02_delayed_sdk_banner",BannerAdView.all.size()>0,"banner requests after SDK ready="+BannerAdView.all.size());
-  p=fresh(true);p.banner(box());BannerAdView old=BannerAdView.all.get(0);BannerAdEventListener late=old.listener;p.handleOnConfigurationChanged(new Configuration());p.banner(box());BannerAdView next=BannerAdView.all.get(1);late.onAdFailedToLoad(new AdRequestError());check("N03_stale_banner_callback",!next.destroyed,"replacement destroyed="+next.destroyed);
+  p=fresh(true);p.banner(box());BannerAdView old=BannerAdView.all.get(0);BannerAdEventListener late=old.listener;p.handleOnConfigurationChanged(new Configuration());PluginCall resized=box();resized.args.put("width",320);p.banner(resized);BannerAdView next=BannerAdView.all.get(1);late.onAdFailedToLoad(new AdRequestError());check("N03_stale_banner_callback",!next.destroyed,"replacement destroyed="+next.destroyed);
   p=fresh(true);a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);PluginCall pending=request("rewarded");p.show(pending);Handler.fire();check("N04_missing_preshow_callback",pending.result!=null,"deadline released call="+(pending.result!=null));
   p=fresh(true);int count=RewardedAdLoader.last.requests;RewardedAdLoader.last.listener.onAdFailedToLoad(new AdRequestError());p.preload(new PluginCall());check("N05_no_immediate_retry",RewardedAdLoader.last.requests==count,"requests="+RewardedAdLoader.last.requests);SystemClock.now+=60001;p.preload(new PluginCall());check("N06_retry_after_interval",RewardedAdLoader.last.requests==count+1,"requests="+RewardedAdLoader.last.requests);
   p=fresh(true);InterstitialAd i=new InterstitialAd();InterstitialAdLoader.last.listener.onAdLoaded(i);PluginCall recent=request("interstitial");p.show(recent);check("N07_initial_grace",i.shows==0,"shows="+i.shows);p.activity.prefs.edit().putLong("last_fullscreen",System.currentTimeMillis()-181000).commit();p.show(request("interstitial"));check("N08_interval_eligible",i.shows==1,"shows="+i.shows);i.listener.onAdShown();i.listener.onAdDismissed();InterstitialAd nextI=new InterstitialAd();InterstitialAdLoader.last.listener.onAdLoaded(nextI);p.show(request("interstitial"));check("N09_interval_persisted",nextI.shows==0,"shows="+nextI.shows);
@@ -140,7 +141,7 @@ public class AuditHarness {
   p=fresh(true);p.activity.prefs.edit().putString("reward_token","earned").putString("reward_attempt","native-audit").commit();p.activity.prefs.fail=true;boolean ackRejected=false;try{p.acknowledge(new PluginCall(new JSObject().put("token","earned")));}catch(RuntimeException failure){ackRejected=true;}check("N14_ack_failure_reported",ackRejected && p.activity.prefs.durable.containsKey("reward_token"),"ack rejected="+ackRejected);
   p=fresh(true);a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);p.show(request("rewarded"));RewardedAdEventListener stale=a.listener;a.listener.onAdShown();a.listener.onRewarded(new Reward());p.acknowledge(new PluginCall(new JSObject().put("token",p.events.get(0).get("token"))));a.listener.onAdDismissed();RewardedAd replacement=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(replacement);PluginCall replacementCall=request("rewarded");p.show(replacementCall);stale.onAdDismissed();stale.onRewarded(new Reward());check("N15_stale_fullscreen_callback",replacementCall.result==null && p.events.size()==1,"replacement open, receipts="+p.events.size());
   p=fresh(false);p.banner(box());PluginCall hidden=box();hidden.args.put("visible",false);p.banner(hidden);YandexAds.ready();check("N16_sdk_ready_respects_hidden",BannerAdView.all.isEmpty(),"banners="+BannerAdView.all.size());
-  p=fresh(true);BannerAdSize.testHeight=90;p.banner(box());check("N17_sdk_height_before_request",BannerAdView.all.isEmpty() && Integer.valueOf(90).equals(p.events.get(0).get("height")),"no request until 90px reserved");PluginCall taller=box();taller.args.put("height",90);p.banner(taller);check("N18_reserved_sdk_height_loads",BannerAdView.all.size()==1 && BannerAdView.all.get(0).requests==1,"banner loaded into resized shelf");BannerAdSize.testHeight=50;p.handleOnConfigurationChanged(new Configuration());p.banner(box());check("N19_rotation_recalculates_height",Integer.valueOf(50).equals(p.events.get(p.events.size()-1).get("height")),"new orientation reports its own size");
+  p=fresh(true);BannerAdSize.testHeight=90;p.banner(box());check("N17_sdk_height_before_request",BannerAdView.all.isEmpty() && Integer.valueOf(90).equals(p.events.get(0).get("height")),"no request until 90px reserved");PluginCall taller=box();taller.args.put("height",90);p.banner(taller);check("N18_reserved_sdk_height_loads",BannerAdView.all.size()==1 && BannerAdView.all.get(0).requests==1,"banner loaded into resized shelf");BannerAdSize.testHeight=50;p.handleOnConfigurationChanged(new Configuration());resized=box();resized.args.put("width",320);p.banner(resized);check("N19_rotation_recalculates_height",Integer.valueOf(50).equals(p.events.get(p.events.size()-1).get("height")),"new orientation reports its own size");
 
   p=fresh(true);a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);p.show(request("rewarded"));check("N20_fullscreen_suppresses_reminder",SeedsMonetizationPlugin.fullscreenActive,"fullscreen flag set before SDK callbacks");a.listener.onAdShown();a.listener.onAdDismissed();check("N21_dismiss_releases_reminder",!SeedsMonetizationPlugin.fullscreenActive,"fullscreen flag released after dismissal");
 
@@ -173,6 +174,47 @@ public class AuditHarness {
   a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);state=new PluginCall();p.readiness(state);check("N40_late_loaded_never_autoshows","ready".equals(state.result.get("state")) && a.shows==0,"late loaded only enables a future explicit tap");
 
   p=fresh(true);SeedsApplication.calls=0;PluginCall route=new PluginCall(new JSObject().put("name","result_transition").put("data",new JSObject().put("event_id","result-route")));p.report(route);check("N41_result_route_native_dispatch",Boolean.TRUE.equals(route.result.get("accepted")) && SeedsApplication.calls==1,"result transition reaches actual native allowlist");
+
+  // A real fullscreen is not released on host focus; delayed earned is still authoritative.
+  p=fresh(true);a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);PluginCall focusedReward=request("rewarded");
+  p.show(focusedReward);a.listener.onAdShown();p.bridge.web.observer.focus.onWindowFocusChanged(false);p.bridge.web.observer.focus.onWindowFocusChanged(true);Handler.fire();
+  check("N43_focus_does_not_dismiss_rewarded",focusedReward.result==null && SeedsMonetizationPlugin.fullscreenActive && p.events.isEmpty(),"no reward is granted for regaining focus");
+  a.listener.onRewarded(new Reward());a.listener.onRewarded(new Reward());
+  check("N44_missing_dismiss_delayed_earned",p.events.size()==1 && p.activity.prefs.durable.containsKey("reward_token") && focusedReward.result==null,"late ordinary credit is durable even while the fullscreen remains active");
+  a.listener.onAdDismissed();a.listener.onAdDismissed();
+  check("N45_sdk_dismiss_releases",focusedReward.result!=null && !SeedsMonetizationPlugin.fullscreenActive,"only SDK dismissal releases gameplay");
+
+  p=fresh(true);a=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(a);
+  PluginCall earlier=request("rewarded");earlier.args.put("ad_session_id","earlier");p.show(earlier);a.listener.onAdShown();a.listener.onAdDismissed();
+  RewardedAd later=new RewardedAd();RewardedAdLoader.last.listener.onAdLoaded(later);
+  PluginCall laterCall=request("rewarded");laterCall.args.put("ad_session_id","later");p.show(laterCall);later.listener.onAdShown();later.listener.onRewarded(new Reward());
+  a.listener.onRewarded(new Reward());a.listener.onAdDismissed();a.listener.onRewarded(new Reward());
+  check("N46_late_old_claim_queued",laterCall.result==null && p.events.size()==1 && p.activity.prefs.durable.containsKey("reward_tail_1_token"),"older earned is preserved without touching a newer fullscreen");
+  SeedsMonetizationPlugin recreated=new SeedsMonetizationPlugin();recreated.activity.prefs.durable.putAll(p.activity.prefs.durable);
+  recreated.activity.prefs.data.putAll(p.activity.prefs.durable);recreated.load();
+  PluginCall nextReceipt=new PluginCall();recreated.pending(nextReceipt);
+  JSObject recoveredHead=(JSObject)nextReceipt.result.get("reward");
+  recreated.acknowledge(new PluginCall(new JSObject().put("token",recoveredHead.get("token"))));
+  nextReceipt=new PluginCall();recreated.pending(nextReceipt);
+  check("N47_restart_keeps_both_claims","later".equals(recoveredHead.get("ad_session_id")) && "earlier".equals(((JSObject)nextReceipt.result.get("reward")).get("ad_session_id")),"both receipts recovered exactly in order across recreation");
+
+  p=fresh(true);p.activity.prefs.edit().putLong("last_fullscreen",System.currentTimeMillis()-181000).commit();
+  i=new InterstitialAd();InterstitialAdLoader.last.listener.onAdLoaded(i);PluginCall focusedInter=request("interstitial");p.show(focusedInter);i.listener.onAdShown();
+  p.bridge.web.observer.focus.onWindowFocusChanged(false);p.bridge.web.observer.focus.onWindowFocusChanged(true);Handler.fire();
+  check("N48_interstitial_focus_does_not_dismiss",focusedInter.result==null && SeedsMonetizationPlugin.fullscreenActive,"returning focus never releases the overlay");
+  i.listener.onAdDismissed();
+
+  p=fresh(true);p.banner(box());BannerAdView firstView=BannerAdView.all.get(0);
+  p.handleOnConfigurationChanged(new Configuration());p.banner(box());
+  check("N49_same_geometry_config",BannerAdView.all.size()==1 && firstView.requests==1,"same placement survives configuration event");
+  PluginCall configOne=new PluginCall();p.initialize(configOne);PluginCall placementOne=box();placementOne.args.put("epoch",configOne.result.get("bannerEpoch")).put("revision",20);p.banner(placementOne);
+  PluginCall configTwo=new PluginCall();p.initialize(configTwo);PluginCall placementTwo=box();placementTwo.args.put("epoch",configTwo.result.get("bannerEpoch")).put("revision",1);p.banner(placementTwo);
+  placementOne.args.put("visible",false).put("revision",21);p.banner(placementOne);
+  check("N50_webview_epoch_handoff",firstView.getParent().visibility==android.view.View.VISIBLE && firstView.requests==1,"revision 1 of new WebView accepted; old hidden geometry rejected");
+  p.bannerExpectation(new PluginCall(new JSObject().put("visible",true)));
+  placementTwo.args.put("visible",false).put("revision",2);p.banner(placementTwo);p.bridge.web.observer.preDraw.onPreDraw();
+  PluginCall hiddenSample=new PluginCall();p.bannerDiagnostics(hiddenSample);
+  check("N51_expected_frame_counts_js_hide",Integer.valueOf(1).equals(hiddenSample.result.get("hiddenFrames")),"JS visibility cannot remove a frame from the expected denominator");
 
   p=fresh(true);PluginCall lab=new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","lab-only"));p.persistLabState(lab);game=p.activity.getSharedPreferences("CapacitorStorage",0);boolean isolated=lab.result!=null && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1"));boolean invalidLab=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.progress.v2").put("value","bad")));}catch(RuntimeException failure){invalidLab=true;}check("N42_lab_storage_namespace",isolated&&invalidLab&&!game.data.containsKey("seeds-bits.progress.v2"),"lab method cannot write production progress");
   game.fail=true;boolean labFailure=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","not-saved")));}catch(RuntimeException failure){labFailure=true;}check("N43_lab_storage_failure",labFailure && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1")) && "lab-only".equals(game.data.get("seeds-bits.lab.trials.v1")),"failed lab commit retains previous authority");

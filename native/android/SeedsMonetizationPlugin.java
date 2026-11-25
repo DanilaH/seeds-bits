@@ -23,6 +23,8 @@ import com.yandex.mobile.ads.common.*;
 import com.yandex.mobile.ads.interstitial.*;
 import com.yandex.mobile.ads.rewarded.*;
 import org.json.JSONArray;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @CapacitorPlugin(name = "SeedsMonetization")
@@ -40,26 +42,46 @@ public class SeedsMonetizationPlugin extends Plugin {
   private RewardedAd rewarded;
   private BannerAdView banner;
   private FrameLayout bannerHost;
-  private int bannerWidth;
+  private int bannerWidth, bannerWidthDp;
   private int bannerPixelHeight;
   private int bannerCssHeight, bannerLeft = -1, bannerTop = -1;
   private long bannerRevision;
+  private String bannerEpoch = "";
+  private int measuredWebWidth, measuredWebHeight;
+  private boolean bannerExpected;
   private int bannerRequests, bannerLoads, bannerImpressions, bannerFrames, bannerHiddenFrames;
-  private boolean fullscreenLostFocus;
   private String showingRoute = "", showingTransition = "";
   private final ViewTreeObserver.OnWindowFocusChangeListener bannerFocus = this::windowFocusChanged;
+  private final View.OnLayoutChangeListener bannerLayout = (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+    if (right-left != oldRight-oldLeft || bottom-top != oldBottom-oldTop) {
+      hideBanner();
+      requestBannerRefresh();
+    }
+  };
   private final ViewTreeObserver.OnPreDrawListener bannerProbe = () -> {
-    if (this.bannerPlacement != null && this.bannerPlacement.visible && canPlaceBanner()) {
+    if (bannerExpected) {
       bannerFrames++;
       if (bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) bannerHiddenFrames++;
     }
     return true;
   };
   private PluginCall showing;
-  private String showingKind, showingAttempt, showingProduct, showingIntent, showingOffer, showingSession;
-  private boolean shown, rewardIssued;
-  private JSObject heldReceipt;
-  private boolean receiptNeedsSave;
+  private String showingKind, showingProduct, showingIntent, showingOffer, showingSession;
+  private boolean shown;
+  private final List<JSObject> earnedReceipts = new ArrayList<>();
+  private boolean receiptsNeedSave;
+  private String reportedReceipt = "";
+  private RewardClaim showingReward;
+
+  private static final class RewardClaim {
+    final JSObject receipt;
+    boolean issued, failed;
+    RewardClaim(String attempt, String product, String intent, String offer, String session) {
+      receipt = new JSObject().put("version",1).put("token",UUID.randomUUID().toString())
+        .put("attempt",attempt).put("product",product).put("intent_id",intent)
+        .put("offer_id",offer).put("ad_session_id",session);
+    }
+  }
   private BannerPlacement bannerPlacement;
   private static double number(PluginCall call, String key) {
     Object value = call.getData().opt(key);
@@ -89,7 +111,9 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (!prefs.contains("last_fullscreen")) prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
     handler.postDelayed(() -> { if (!initialized && !destroyed) { initializationWaitExpired=true; publishReadiness(); } },18000);
     getActivity().runOnUiThread(() -> {
-      ViewTreeObserver observer = getBridge().getWebView().getViewTreeObserver();
+      View web = getBridge().getWebView();
+      web.addOnLayoutChangeListener(bannerLayout);
+      ViewTreeObserver observer = web.getViewTreeObserver();
       observer.addOnWindowFocusChangeListener(bannerFocus);
       if (demoAds()) observer.addOnPreDrawListener(bannerProbe);
       YandexAds.initialize(getContext(), () -> getActivity().runOnUiThread(() -> {
@@ -116,40 +140,77 @@ public class SeedsMonetizationPlugin extends Plugin {
     }
     catch (Exception ignored) { /* Optional telemetry cannot interrupt an ad callback. */ }
   }
-  private JSObject storedReceipt() {
-    String token = prefs.getString("reward_token", "");
-    if (token.isEmpty()) return null;
-    JSObject result = new JSObject().put("token", token).put("attempt", prefs.getString("reward_attempt", ""));
-    if (prefs.contains("reward_version")) {
-      try { result.put("version", Integer.parseInt(prefs.getString("reward_version", "0"))); } catch (Exception ignored) { result.put("version", 0); }
-      result.put("product", prefs.getString("reward_product", ""));
-      result.put("intent_id", prefs.getString("reward_intent", "")); result.put("offer_id", prefs.getString("reward_offer", ""));
-      result.put("ad_session_id", prefs.getString("reward_session", ""));
-    }
-    return result;
+  private static final String[] RECEIPT_FIELDS = {"token", "attempt", "version", "product", "intent", "offer", "session"};
+  private static final String[] WIRE_FIELDS = {"token", "attempt", "version", "product", "intent_id", "offer_id", "ad_session_id"};
+
+  private int storedTailCount() {
+    return (int) prefs.getLong("reward_tail_count", 0);
   }
-  private boolean persistReceipt(JSObject reward) {
-    SharedPreferences.Editor edit = prefs.edit().putString("reward_token",reward.optString("token","")).putString("reward_attempt",reward.optString("attempt",""));
-    if (!reward.optString("version","").isEmpty()) edit.putString("reward_version",reward.optString("version",""))
-      .putString("reward_product",reward.optString("product","")).putString("reward_intent",reward.optString("intent_id",""))
-      .putString("reward_offer",reward.optString("offer_id","")).putString("reward_session",reward.optString("ad_session_id",""));
-    return edit.commit();
+  private static String receiptPrefix(int index) {
+    return index == 0 ? "reward_" : "reward_tail_" + index + "_";
+  }
+  private void loadReceipts() {
+    if (!earnedReceipts.isEmpty() || receiptsNeedSave) return;
+    for (int index = 0; index <= storedTailCount(); index++) {
+      String prefix = receiptPrefix(index);
+      if (prefs.getString(prefix + "token", "").isEmpty()) continue;
+      JSObject entry = new JSObject();
+      for (int i = 0; i < RECEIPT_FIELDS.length; i++) {
+        String key = prefix + RECEIPT_FIELDS[i];
+        if (!prefs.contains(key)) continue;
+        String value = prefs.getString(key, "");
+        if (WIRE_FIELDS[i].equals("version")) {
+          try { entry.put("version", Integer.parseInt(value)); }
+          catch (NumberFormatException ignored) { entry.put("version", 0); }
+        } else entry.put(WIRE_FIELDS[i], value);
+      }
+      earnedReceipts.add(entry);
+    }
+    // A failed commit can leave an unconfirmed update in the in-process preferences.
+    receiptsNeedSave = !earnedReceipts.isEmpty();
+  }
+  private boolean persistReceipts(List<JSObject> receipts) {
+    SharedPreferences.Editor edit = prefs.edit();
+    for (int index = 0; index < Math.max(storedTailCount() + 1, receipts.size()); index++) {
+      String prefix = receiptPrefix(index);
+      JSObject value = index < receipts.size() ? receipts.get(index) : null;
+      for (int i = 0; i < RECEIPT_FIELDS.length; i++) {
+        String key = prefix + RECEIPT_FIELDS[i];
+        if (value == null || value.optString(WIRE_FIELDS[i],"").isEmpty()) edit.remove(key);
+        else edit.putString(key,value.optString(WIRE_FIELDS[i],""));
+      }
+    }
+    return edit.putLong("reward_tail_count", Math.max(0, receipts.size() - 1)).commit();
   }
   private JSObject receipt() {
-    if (heldReceipt == null) { heldReceipt = storedReceipt(); receiptNeedsSave = heldReceipt != null; }
-    return receiptNeedsSave ? null : heldReceipt;
+    loadReceipts();
+    return receiptsNeedSave || earnedReceipts.isEmpty() ? null : earnedReceipts.get(0);
   }
-  private boolean pendingReceipt() { receipt(); return heldReceipt != null; }
+  private boolean pendingReceipt() { loadReceipts(); return !earnedReceipts.isEmpty(); }
   private void recoverReceipt() {
-    receipt();
-    if (heldReceipt == null || !receiptNeedsSave || !persistReceipt(heldReceipt)) return;
-    receiptNeedsSave = false;
+    loadReceipts();
+    if (receiptsNeedSave) {
+      if (!persistReceipts(earnedReceipts)) return;
+      receiptsNeedSave = false;
+    }
+    JSObject next = receipt();
+    if (destroyed || next == null || reportedReceipt.equals(next.optString("token",""))) return;
+    reportedReceipt = next.optString("token","");
     try { SeedsApplication.report(getContext(),"ad_reward_earned",new JSObject()
-      .put("event_id",heldReceipt.optString("token","")+":earned").put("format","rewarded")
-      .put("product",heldReceipt.optString("product","hint_pack_3")).put("receipt",heldReceipt.optString("token",""))
-      .put("intent_id",heldReceipt.optString("intent_id","legacy")).put("offer_id",heldReceipt.optString("offer_id","legacy"))
-      .put("ad_session_id",heldReceipt.optString("ad_session_id","legacy"))); } catch (Exception ignored) {}
-    notifyListeners("reward",heldReceipt,true);
+      .put("event_id",reportedReceipt+":earned").put("format","rewarded")
+      .put("product",next.optString("product","hint_pack_3")).put("receipt",reportedReceipt)
+      .put("intent_id",next.optString("intent_id","legacy")).put("offer_id",next.optString("offer_id","legacy"))
+      .put("ad_session_id",next.optString("ad_session_id","legacy"))); } catch (Exception ignored) {}
+    notifyListeners("reward",next,true);
+  }
+  private void acceptReward(RewardClaim claim) {
+    if (claim.issued || claim.failed) return;
+    claim.issued = true;
+    loadReceipts();
+    earnedReceipts.add(claim.receipt);
+    receiptsNeedSave = true;
+    recoverReceipt();
+    publishReadiness();
   }
   private JSObject rewardedState() {
     String state = "unavailable", reason = "not_loaded";
@@ -164,29 +225,32 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   private void publishReadiness() { notifyListeners("rewardedState", rewardedState(), true); }
   @PluginMethod public void readiness(PluginCall call) { getActivity().runOnUiThread(() -> call.resolve(rewardedState())); }
-  @PluginMethod public void initialize(PluginCall call) {
+  @PluginMethod public void initialize(PluginCall call) { getActivity().runOnUiThread(() -> {
     recoverReceipt();
-    JSObject result = new JSObject().put("enabled", enabled()).put("test", getContext().getResources().getBoolean(R.bool.ads_test_mode));
+    bannerEpoch = UUID.randomUUID().toString();
+    bannerRevision = 0;
+    JSObject result = new JSObject().put("enabled", enabled()).put("test", demoAds())
+      .put("bannerEpoch",bannerEpoch).put("bannerHeight",bannerCssHeight);
     JSObject reward = receipt(); if (reward != null) result.put("reward", reward);
     result.put("readiness", rewardedState()); call.resolve(result);
-  }
-  @PluginMethod public void pending(PluginCall call) {
+  }); }
+  @PluginMethod public void pending(PluginCall call) { getActivity().runOnUiThread(() -> {
     recoverReceipt();
     JSObject result = new JSObject(); JSObject reward = receipt(); if (reward != null) result.put("reward", reward); call.resolve(result);
-  }
-  @PluginMethod public void acknowledge(PluginCall call) {
+  }); }
+  @PluginMethod public void acknowledge(PluginCall call) { getActivity().runOnUiThread(() -> {
     recoverReceipt();
     JSObject reward = receipt();
-    // A failed SharedPreferences commit can mutate its in-memory map. Retain the
-    // receipt independently until a disk-backed removal has actually succeeded.
     if (reward != null && call.getString("token", "").equals(reward.optString("token", ""))) {
-      if (!prefs.edit().remove("reward_token").remove("reward_attempt").remove("reward_version").remove("reward_product").remove("reward_intent").remove("reward_offer").remove("reward_session").commit()) {
-        receiptNeedsSave = true; call.reject("Reward acknowledgement could not be saved"); return;
+      List<JSObject> remaining = new ArrayList<>(earnedReceipts.subList(1,earnedReceipts.size()));
+      if (!persistReceipts(remaining)) {
+        receiptsNeedSave = true; call.reject("Reward acknowledgement could not be saved"); return;
       }
-      heldReceipt = null; receiptNeedsSave = false;
-    } else if (heldReceipt != null) { call.reject("Pending reward is not durable"); return; }
+      earnedReceipts.remove(0);
+      recoverReceipt();
+    } else if (receiptsNeedSave) { call.reject("Pending reward is not durable"); return; }
     publishReadiness(); call.resolve();
-  }
+  }); }
   // Preferences.set uses apply(): reward receipts must wait for an actual disk commit.
   @PluginMethod public void persistState(PluginCall call) {
     String key = call.getString("key", ""), settingsKey = call.getString("settingsKey", "");
@@ -309,12 +373,16 @@ public class SeedsMonetizationPlugin extends Plugin {
     String product = call.getString("product", "hint_pack_3");
     if (kind.equals("rewarded") && !product.matches("hint_pack_3|magnet_1|plan_1")) { call.reject("Unknown reward product"); return; }
     fullscreenActive=true;
-    fullscreenLostFocus = false;
     showingRoute = call.getString("route", "");
     showingTransition = call.getString("transition_id", "");
     showingProduct = product; showingIntent = call.getString("intent_id", UUID.randomUUID().toString());
     showingOffer = call.getString("offer_id", UUID.randomUUID().toString()); showingSession = call.getString("ad_session_id", UUID.randomUUID().toString());
-    showing = call; showingKind = kind; showingAttempt = call.getString("attempt", ""); shown = false; rewardIssued = false; publishReadiness();
+    showing = call; showingKind = kind; shown = false;
+    final RewardClaim claim = kind.equals("rewarded")
+      ? new RewardClaim(call.getString("attempt",""), product, showingIntent, showingOffer, showingSession)
+      : null;
+    showingReward = claim;
+    publishReadiness();
     if (bannerHost != null) bannerHost.setVisibility(View.GONE);
     // A missing pre-show callback must not leave the game blocked indefinitely.
     showDeadline = () -> { if (!shown && showing == call) finish("error"); };
@@ -339,14 +407,8 @@ public class SeedsMonetizationPlugin extends Plugin {
           @Override public void onAdClicked() { event("ad_clicked", "rewarded"); }
           @Override public void onAdImpression(@Nullable ImpressionData data) { event("ad_impression", "rewarded"); SeedsAdRevenue.report(getContext(),"rewarded",data, impressionId, adSession); }
           @Override public void onRewarded(@NonNull Reward reward) {
-            if (showing != call || rewardIssued || pendingReceipt()) return;
-            String token = UUID.randomUUID().toString();
-            rewardIssued = true;
-            heldReceipt = new JSObject().put("version",1).put("token",token).put("attempt",showingAttempt).put("product",showingProduct)
-              .put("intent_id",showingIntent).put("offer_id",showingOffer).put("ad_session_id",showingSession);
-            receiptNeedsSave = true;
-            recoverReceipt();
-            publishReadiness();
+            // SDK dismissal can precede this callback. The listener still owns its original claim.
+            getActivity().runOnUiThread(() -> acceptReward(claim));
           }
         });
         rewarded.show(getActivity());
@@ -364,29 +426,29 @@ public class SeedsMonetizationPlugin extends Plugin {
     handler.removeCallbacks(showDeadline);
     recoverReceipt();
     JSObject result = new JSObject().put("shown", shown).put("status", status).put("ad_session_id", showingSession);
-    if (showingKind.equals("rewarded") && receipt() != null) result.put("reward", receipt());
-    else if (showingKind.equals("rewarded") && pendingReceipt()) result.put("status","reward_pending").put("reason","receipt_save");
+    if (showingReward != null) {
+      if (status.equals("error") && !shown) showingReward.failed = true;
+      JSObject pending = receipt();
+      if (pending != null && pending.optString("token","").equals(showingReward.receipt.optString("token","")))
+        result.put("reward", pending);
+      else if (showingReward.issued && receiptsNeedSave)
+        result.put("status","reward_pending").put("reason","receipt_save");
+    }
     event(status.equals("error") ? "ad_show_error" : "ad_closed", showingKind);
     if (shown) prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
-    if (showingKind.equals("rewarded")) { if (rewarded != null) rewarded.setAdEventListener(null); rewarded = null; lastRewardedRequest = 0; }
+    if (showingKind.equals("rewarded")) {
+      if (showingReward.failed && rewarded != null) rewarded.setAdEventListener(null);
+      rewarded = null; lastRewardedRequest = 0;
+    }
     else { if (interstitial != null) interstitial.setAdEventListener(null); interstitial = null; lastInterstitialRequest = 0; }
-    PluginCall call = showing; showing = null; showingAttempt = null; fullscreenActive=false; call.resolve(result);
+    PluginCall call = showing; showing = null; showingReward = null; fullscreenActive=false; call.resolve(result);
     if (bannerPlacement != null) applyBanner(bannerPlacement);
     preloadAds(); publishReadiness();
   }
   private void windowFocusChanged(boolean focused) {
-    if (!focused) {
-      hideBanner();
-      if (showing != null) fullscreenLostFocus = true;
-      return;
-    }
-    // The host window must have regained focus before recovering a lost dismissal callback.
-    final PluginCall call = showing;
-    if (shown && fullscreenLostFocus && call != null) {
-      handler.postDelayed(() -> {
-        if (showing == call && shown && resumed && getActivity().hasWindowFocus()) finish("closed");
-      }, 300);
-    } else if (call == null && bannerPlacement != null) applyBanner(bannerPlacement);
+    if (!focused) hideBanner();
+    // Only the SDK can dismiss a shown fullscreen. Focus alone can return under its overlay.
+    else if (showing == null && bannerPlacement != null) applyBanner(bannerPlacement);
   }
   private boolean canPlaceBanner() {
     return initialized && !destroyed && enabled() && !fullscreenActive && resumed && getActivity().hasWindowFocus();
@@ -403,30 +465,48 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   @PluginMethod public void banner(PluginCall call) { getActivity().runOnUiThread(() -> {
     double revision = number(call, "revision");
-    if (Double.isFinite(revision) && revision == Math.rint(revision) &&
+    if (bannerEpoch.equals(call.getString("epoch", "")) &&
+        Double.isFinite(revision) && revision == Math.rint(revision) &&
         revision > bannerRevision && revision <= 9007199254740991d) {
       bannerRevision = (long)revision;
       bannerPlacement = new BannerPlacement(call);
+      measuredWebWidth = getBridge().getWebView().getWidth();
+      measuredWebHeight = getBridge().getWebView().getHeight();
       applyBanner(bannerPlacement);
     }
     call.resolve();
   }); }
+  @PluginMethod public void bannerExpectation(PluginCall call) { getActivity().runOnUiThread(() -> {
+    if (demoAds()) bannerExpected = call.getBoolean("visible",false);
+    call.resolve();
+  }); }
   @PluginMethod public void bannerDiagnostics(PluginCall call) { getActivity().runOnUiThread(() -> {
     if (!demoAds()) { call.resolve(new JSObject()); return; }
+    View web = getBridge().getWebView();
+    int[] webLocation = new int[2], bannerLocation = new int[2];
+    web.getLocationOnScreen(webLocation);
+    if (bannerHost != null) bannerHost.getLocationOnScreen(bannerLocation);
     call.resolve(new JSObject()
       .put("measuredRevision",bannerRevision).put("request",bannerRequests)
       .put("view",banner==null?0:System.identityHashCode(banner))
       .put("loaded",bannerLoads).put("impressions",bannerImpressions)
       .put("visible",bannerHost!=null&&bannerHost.getVisibility()==View.VISIBLE)
+      .put("expected",bannerExpected).put("requestedVisible",bannerPlacement!=null&&bannerPlacement.visible)
+      .put("fullscreen",fullscreenActive).put("resumed",resumed)
+      .put("focused",getActivity().hasWindowFocus())
       .put("frames",bannerFrames).put("hiddenFrames",bannerHiddenFrames)
       .put("width",bannerWidth).put("height",bannerPixelHeight)
-      .put("left",bannerLeft).put("top",bannerTop));
+      .put("left",bannerLeft).put("top",bannerTop)
+      .put("screenLeft",bannerLocation[0]).put("screenTop",bannerLocation[1])
+      .put("webX",webLocation[0]).put("webY",webLocation[1])
+      .put("webWidth",web.getWidth()).put("webHeight",web.getHeight()));
   }); }
   private void applyBanner(BannerPlacement placement) {
     if (!canPlaceBanner() || !placement.visible || !placement.valid()) { hideBanner(); return; }
     View web = getBridge().getWebView();
     FrameLayout root = getActivity().findViewById(android.R.id.content);
-    if (web.getWidth() <= 0 || web.getHeight() <= 0 || root == null) { hideBanner(); return; }
+    if (web.getWidth() <= 0 || web.getHeight() <= 0 || root == null ||
+        web.getWidth() != measuredWebWidth || web.getHeight() != measuredWebHeight) { hideBanner(); return; }
     double scale = web.getWidth() / placement.viewportWidth;
     int[] webLocation = new int[2], rootLocation = new int[2];
     web.getLocationOnScreen(webLocation); root.getLocationOnScreen(rootLocation);
@@ -443,17 +523,17 @@ public class SeedsMonetizationPlugin extends Plugin {
       hideBanner();
       return;
     }
-    if (banner != null && bannerWidth != width) { clearBanner(); lastBannerRequest = 0; }
+    int dp = Math.max(1, (int) Math.floor(width / getContext().getResources().getDisplayMetrics().density));
+    if (banner != null && (bannerWidth != width || bannerWidthDp != dp)) { clearBanner(); lastBannerRequest = 0; }
     if (banner == null) {
       long now = SystemClock.elapsedRealtime();
       if (lastBannerRequest != 0 && now - lastBannerRequest < RETRY) { return; }
-      int dp = Math.max(1, (int) Math.floor(width / getContext().getResources().getDisplayMetrics().density));
       // Request a compact creative from the SDK; never crop a taller sticky ad.
       BannerAdSize size = BannerAdSize.inline(getContext(), dp, 50);
       int requestedHeight = size.getHeightInPixels(getContext());
       if (requestedHeight > height) { publishBannerHeight(requestedHeight + (height == requestedHeight - 1 ? 1 : 0), scale, true); return; }
       publishBannerHeight(requestedHeight, scale, false);
-      bannerWidth = width; bannerPixelHeight = requestedHeight; lastBannerRequest = now;
+      bannerWidth = width; bannerWidthDp = dp; bannerPixelHeight = requestedHeight; lastBannerRequest = now;
       bannerHost = new FrameLayout(getContext()); bannerHost.setVisibility(View.GONE); root.addView(bannerHost);
       banner = new BannerAdView(getActivity()); banner.setAdSize(size);
       bannerHost.addView(banner, new FrameLayout.LayoutParams(width, bannerPixelHeight, android.view.Gravity.CENTER));
@@ -488,7 +568,8 @@ public class SeedsMonetizationPlugin extends Plugin {
       notifyListeners("bannerSize", new JSObject().put("height", cssHeight), true);
     }
   }
-  @Override protected void handleOnConfigurationChanged(Configuration config) { bannerPlacement = null; clearBanner(); bannerCssHeight = 0; lastBannerRequest = 0; }
+  private void requestBannerRefresh() { notifyListeners("bannerRefresh",new JSObject(),false); }
+  @Override protected void handleOnConfigurationChanged(Configuration config) { requestBannerRefresh(); }
   @Override protected void handleOnPause() { resumed = false; windowFocusChanged(false); publishReadiness(); }
   @Override protected void handleOnResume() { resumed = true; recoverReceipt(); preloadAds(); publishReadiness(); }
   @Override protected void handleOnDestroy() {
@@ -498,8 +579,9 @@ public class SeedsMonetizationPlugin extends Plugin {
       observer.removeOnWindowFocusChangeListener(bannerFocus);
       observer.removeOnPreDrawListener(bannerProbe);
     }
+    getBridge().getWebView().removeOnLayoutChangeListener(bannerLayout);
     if (interstitial != null) interstitial.setAdEventListener(null);
-    if (rewarded != null) rewarded.setAdEventListener(null);
+    if (rewarded != null && (showingReward == null || showingReward.failed)) rewarded.setAdEventListener(null);
     if (showing != null) { showing.resolve(new JSObject().put("status", "interrupted")); showing = null; }
   }
 }

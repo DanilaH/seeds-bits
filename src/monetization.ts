@@ -14,6 +14,8 @@ type Result = { shown?: boolean; reward?: RewardReceipt; status?: string; reason
 type Configuration = {
   enabled: boolean;
   test: boolean;
+  bannerEpoch?: string;
+  bannerHeight?: number;
   reward?: RewardReceipt;
   readiness?: RewardedReadiness;
 };
@@ -30,6 +32,7 @@ export interface MonetizationBridge {
     viewportWidth: number;
     viewportHeight: number;
     revision: number;
+    epoch?: string;
   }): Promise<void>;
   preload(): Promise<void>;
   readiness?(): Promise<RewardedReadiness>;
@@ -54,6 +57,7 @@ export interface MonetizationBridge {
     name: "bannerSize",
     listener: (r: { height: number }) => void,
   ): Promise<PluginListenerHandle>;
+  addListener(name: "bannerRefresh", listener: () => void): Promise<PluginListenerHandle>;
 }
 declare global {
   interface Window {
@@ -80,6 +84,10 @@ export const bridge =
 export let monetized = false;
 export let adActive = false;
 let onPause = (_active: boolean) => {};
+function setBannerHeight(height: number) {
+  if (Number.isFinite(height) && height >= 1 && height < innerHeight)
+    document.documentElement.style.setProperty("--banner-height", `${Math.ceil(height)}px`);
+}
 export function track(
   name: string,
   data: Record<string, string | number | boolean> = {},
@@ -99,14 +107,14 @@ export async function initializeMonetization(
     await bridge.addListener("reward", (r) => {
       void reward(r);
     });
-    await bridge.addListener("bannerSize", ({ height }) => {
-      if (Number.isFinite(height) && height >= 1 && height < innerHeight)
-        document.documentElement.style.setProperty(
-          "--banner-height",
-          `${Math.ceil(height)}px`,
-        );
+    await bridge.addListener("bannerSize", ({ height }) => setBannerHeight(height));
+    if (bridge === nativePlugin) await bridge.addListener("bannerRefresh", () => {
+      bannerGeometry = "";
+      window.dispatchEvent(new Event("seeds:banner-refresh"));
     });
     const config = await bridge.initialize();
+    bannerEpoch = config.bannerEpoch;
+    if (config.bannerHeight !== undefined) setBannerHeight(config.bannerHeight);
     monetized = config.enabled;
     setReadiness(config.readiness ?? (bridge.readiness ? await bridge.readiness() : {state: import.meta.env.DEV && config.enabled ? "ready" : "disabled", reason: "legacy_qa_bridge"}));
     document.documentElement.classList.toggle("has-mobile-ads", monetized);
@@ -136,6 +144,7 @@ export async function showAd(
   }
 }
 let bannerRevision = 0;
+let bannerEpoch: string | undefined;
 let bannerGeometry = "";
 let bannerSentAt = -Infinity;
 
@@ -162,6 +171,7 @@ export async function syncBanner(visible: boolean) {
       viewportWidth: space.width,
       viewportHeight: space.height,
       revision,
+      epoch: bannerEpoch,
     });
   } catch {
     if (revision === bannerRevision) bannerGeometry = "";
