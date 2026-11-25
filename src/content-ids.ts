@@ -1,4 +1,5 @@
 import { validDay, dayNumber } from "./calendar";
+import { hasOpeningRevision } from "./notebook-opening";
 export const PILOT_START = "2026-12-01";
 export const PILOT_END = "2026-12-24";
 export const DAILY_V4_START = "2026-12-25";
@@ -7,7 +8,7 @@ export const DAILY_V5_START = "2026-12-25";
 export const DAILY_V5_BANK_END = "2027-12-24";
 export const LEGACY_BOOK_TASKS = 2400;
 export const PILOT_THEMES = ["links", "choice", "shift", "mix"] as const;
-export type BookRevision = 1 | 4 | 5;
+export type BookRevision = 1 | 4 | 5 | 6;
 export function legacyBookNumber(id: string) {
   if (typeof id!=="string" || !/^book-v1-[1-9]\d*$/.test(id)) return 0;
   const n=Number(id.slice(8));return n<=LEGACY_BOOK_TASKS?n:0;
@@ -62,8 +63,8 @@ export function bookRevisionFor(id:string,state:IdentityState):BookRevision {
   const n=legacyBookNumber(id);
   if(n<=1)return 1; // fixed first-session lesson and guide
   const pinned=state.bookRevisions?.[id];
-  if(pinned===1||pinned===4||pinned===5)return pinned;
-  return knownIds(state).has(id)?1:5;
+  if(pinned===1||pinned===4||pinned===5||pinned===6)return pinned;
+  return knownIds(state).has(id) ? 1 : hasOpeningRevision(n) ? 6 : 5;
 }
 export function knownBookRevisions(state:IdentityState, requireExplicit=false) {
   const pins:Record<string,BookRevision>={...state.bookRevisions};
@@ -77,7 +78,10 @@ export function readBookRevisions(value:unknown):Record<string,BookRevision> {
   if(!value||typeof value!=="object"||Array.isArray(value))throw Error("Invalid book revisions");
   const pins:Record<string,BookRevision>={};
   for(const [id,rev] of Object.entries(value)){
-    if(!legacyBookNumber(id)||(rev!==1&&rev!==4&&rev!==5)||(id==="book-v1-1"&&rev!==1))throw Error("Invalid book revision: "+id);
+    const slot = legacyBookNumber(id);
+    if (!slot || (slot === 1 && rev !== 1) ||
+        (rev !== 1 && rev !== 4 && rev !== 5 && !(rev === 6 && hasOpeningRevision(slot))))
+      throw Error("Invalid book revision: " + id);
     pins[id]=rev;
   }
   return pins;

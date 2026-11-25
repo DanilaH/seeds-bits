@@ -117,6 +117,22 @@ function bookV5(slot) {
   return {board:Array.from(cells,Number),proof};
 }
 const v5Preview=fs.existsSync("src/content-v5-books-1.json");
+const openingFile="src/notebook-opening-v6.json";
+const openingPreview=fs.existsSync(openingFile);
+function moved(board,[a,b]) {
+  const blank=board.map((value,i)=>i===a||i===b?0:value);
+  return blank.flatMap((_,i)=>i%9===0&&blank.slice(i,i+9).some(Boolean)?blank.slice(i,i+9):[]);
+}
+function packed(session) {
+  return {rules:1,current:session.current,packedHistory:[...session.history].reverse().map(state=>[
+    state.scroll,state.moves,state.additions,[state.board.join("")],
+  ])};
+}
+function v5Session(slot,first) {
+  const {board,proof}=bookV5(slot);
+  const start={board,scroll:0,moves:0,additions:0};
+  return {rules:1,current:{...start,board:moved(board,first??proof[0]),moves:1},history:[start]};
+}
 const saved={rules:1,current:{board,scroll:0,moves:1,additions:0},
   history:[{board:[5,5,0,0,0,0,0,0,6,4],scroll:0,moves:0,additions:0}]};
 const sample={version:3,active:"book-v1-5",done:[],seen:[],hints:{},sessions:{"book-v1-5":saved}};
@@ -291,8 +307,14 @@ async function update() {
   const from=installedVersionCode();
   launch();
   for(let i=0;i<50;i++){try{if(profiles().values[progress]&&installRecord())break;}catch{}await wait(200);}
-  const upgradeFixture=classicBundle ? {...sample, sessions:{...sample.sessions, classic:oldHighSession},
+  let upgradeFixture=classicBundle ? {...sample, sessions:{...sample.sessions, classic:oldHighSession},
     meta:oldHighMeta, jars:oldHighJars} : sample;
+  if(openingPreview) {
+    const sessions={...upgradeFixture.sessions,"book-v1-3":v5Session(3),"book-v1-9":v5Session(9)};
+    upgradeFixture={...upgradeFixture,version:9,
+      sessions:Object.fromEntries(Object.entries(sessions).map(([id,game])=>[id,packed(game)])),
+      bookRevisions:{"book-v1-5":1,"book-v1-3":5,"book-v1-9":5}};
+  }
   await fixture({[progress]:upgradeFixture,[settings]:{tutorialDone:true,theme:"dark",sound:false,vibration:false}});
   const before=profiles().values;
   const source=installRecord();
@@ -305,7 +327,7 @@ async function update() {
   const previousSession=before[progress].sessions["book-v1-5"];
   const restoredSession=after[progress].sessions["book-v1-5"];
   assert.deepEqual(restoredSession.current,previousSession.current);
-  assert.equal((restoredSession.packedHistory??restoredSession.history).length,previousSession.history.length);
+  assert.equal((restoredSession.packedHistory??restoredSession.history).length,(previousSession.packedHistory??previousSession.history).length);
   assert.equal(after[settings].theme,"dark");
   if (classicBundle) {
     assert.deepEqual(after[progress].sessions.classic.current,oldHighSession.current);
@@ -316,7 +338,36 @@ async function update() {
   }
   shot("updated");
   stop();
-  return {from,to,...(classicBundle?{legacyHigh27:true}:{})};
+  let overlay;
+  if(openingPreview) {
+    for(const id of ["book-v1-3","book-v1-9"]){
+      assert.equal(after[progress].bookRevisions[id],5);
+      assert.deepEqual(after[progress].sessions[id],before[progress].sessions[id]);
+    }
+    adb("install","-r",candidate);
+    launch();
+    const ui=await connect();
+    try {
+      await ui.tap("#book-mode");
+      await ui.tap('[data-game="book-v1-3"]');
+      await ui.until("!document.querySelector('#dialog').open");
+      await ui.tap("#undo");
+      await ui.until(`document.querySelector('#remaining').textContent==='${bookV5(3).board.filter(Boolean).length}'`);
+      assert.deepEqual(profiles().values[progress].sessions["book-v1-3"].current.board,bookV5(3).board);
+      await ui.tap("#menu");
+      await ui.tap("#book-mode");
+      await ui.tap('[data-game="book-v1-4"]');
+      await ui.until("!document.querySelector('#dialog').open");
+      const latest=profiles().values[progress];
+      const opening=JSON.parse(fs.readFileSync(openingFile,"utf8"));
+      assert.equal(latest.version,10);
+      assert.equal(latest.bookRevisions["book-v1-4"],6);
+      assert.deepEqual(latest.sessions["book-v1-4"].current.board,Array.from(opening[4][0],Number));
+      assert.deepEqual(latest.sessions["book-v1-9"],before[progress].sessions["book-v1-9"]);
+      overlay={previous:[3,9],undo:3,newAssignment:4,wire:10};
+    } finally {ui.close();stop();}
+  }
+  return {from,to,overlay,...(classicBundle?{legacyHigh27:true}:{})};
 }
 async function showEdge(size,order,video) {
   stop();
@@ -767,6 +818,37 @@ return (${code})(SeedsClassicQA);})()`;
       webview:adb("shell","dumpsys","webviewupdate") .split("\n").find(x=>x.includes("Current WebView package"))};
   } finally {resumed.close();stop();}
 }
+async function verifyHintRepair() {
+  const id="book-v1-1821", game=v5Session(1821,[2,3]);
+  const settingsFixture={tutorialDone:true,languageChoice:"en",sound:false,vibration:false};
+  await fixture({[progress]:{...sample,version:9,active:id,bookRevisions:{[id]:5},
+    sessions:{[id]:packed(game)}, meta:{...oldHighMeta,attempts:{[id]:{id:"hint-audit",completed:false,hintKeys:[1,2,3].map(n=>"h1:"+String(n).repeat(64))}}}},[settings]:settingsFixture});
+  const records=[];
+  for(const size of ["640x1232","780x1784"]){
+    adb("shell","wm","size",size);
+    launch();
+    const ui=await connect();
+    try {
+      await ui.tap("#resume");
+      await ui.until("document.querySelector('#remaining').textContent==='104'");
+      const before=profiles().values[progress];
+      const start=performance.now();
+      await ui.tap("#hint");
+      await ui.until("document.querySelectorAll('#board .hinted').length===2");
+      const hintMs=Math.round(performance.now()-start);
+      const pair=await ui.evaluate("[...document.querySelectorAll('#board .hinted')].map(e=>Number(e.dataset.index))");
+      const after=profiles().values[progress];
+      assert.deepEqual(after.sessions[id].current.board,before.sessions[id].current.board);
+      assert.deepEqual(after.sessions[id].packedHistory,before.sessions[id].packedHistory);
+      assert.equal(after.meta.wallet,before.meta.wallet-(size==="640x1232"?1:0));
+      assert(await ui.evaluate("document.querySelector('#recover-task').hidden"));
+      const viewport=await ui.evaluate("[innerWidth,innerHeight]");
+      shot("hint-repair-"+viewport.join("x"));
+      records.push({viewport,pair,hintMs,wallet:after.meta.wallet});
+    } finally {ui.close();stop();}
+  }
+  return records;
+}
 function assertViewportResult(view) {
   assert.deepEqual([view.w,view.h],[320,568]);
 }
@@ -810,6 +892,10 @@ try{
   if(v5Preview) {
     const catalogue=await verifyContentV5();
     fs.writeFileSync(out+"/content-v5-108.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,...catalogue},null,2));
+  }
+  if(openingPreview) {
+    const hint=await verifyHintRepair();
+    fs.writeFileSync(out+"/hint-repair.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,hint},null,2));
   }
   const waves=await verifyPairWaves();
   fs.writeFileSync(out+"/pair-waves.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode,waves},null,2));

@@ -6,7 +6,7 @@ self.onmessage = (
 ) => {
   const { board, history, puzzle } = event.data;
   const solve = createSolver(occupied(board) > 100 ? 2000 : 50000, puzzle),
-    advice = solve(board);
+    advice = solve(board, history);
   let recovery = -1;
   const recoverySolve =
     advice.kind === "unknown" ? createSolver(0, puzzle) : solve;

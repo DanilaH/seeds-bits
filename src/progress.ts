@@ -37,7 +37,7 @@ export function readProgress(
   onRecovery: () => void = () => {},
 ): Progress {
   const p = JSON.parse(raw);
-  if (p?.version > 9 || p?.meta?.version > 2 || p?.jars?.version > 2 || p?.meta?.help?.version > 1 || Object.values(p?.meta?.attempts ?? {}).some((a: any) => a?.help?.version > 1))
+  if (p?.version > 10 || p?.meta?.version > 2 || p?.jars?.version > 2 || p?.meta?.help?.version > 1 || Object.values(p?.meta?.attempts ?? {}).some((a: any) => a?.help?.version > 1))
     throw new FutureProgress("Newer save format");
   if (
     (p?.version !== 2 &&
@@ -47,7 +47,8 @@ export function readProgress(
       p?.version !== 6 &&
       p?.version !== 7 &&
       p?.version !== 8 &&
-      p?.version !== 9) ||
+      p?.version !== 9 &&
+      p?.version !== 10) ||
     !validId(p.active) ||
     !p.sessions ||
     !Array.isArray(p.done) ||
@@ -63,7 +64,8 @@ export function readProgress(
   const clean = fresh();
   try {
     const explicit=p.bookRevisions===undefined?{}:readBookRevisions(p.bookRevisions);
-    if (Object.values(explicit).some(rev => (rev === 4 && p.version < 8) || (rev === 5 && p.version < 9)))
+    if (Object.values(explicit).some(rev =>
+      (rev === 4 && p.version < 8) || (rev === 5 && p.version < 9) || (rev === 6 && p.version < 10)))
       throw Error("Unprotected notebook identity");
     // Pin identities from the raw save BEFORE optional recovery drops damaged boards/metadata.
     const books=knownBookRevisions({...p,bookRevisions:explicit},p.version>=8);
@@ -378,12 +380,14 @@ export function recordCompletion(p: Progress, task: string, now?: string) {
   return { seeds, hints: alreadyDay && !alreadyTask ? 0 : recordDaily(p, task, now) };
 }
 
-/** Wire v9 protects v5 fields from readers that only know v1 and v4. */
+/** Wire 9 protects v5 identities. Wire 10 also protects the opening overlay. */
 export function serializeProgress(p: Progress): string {
   const bookRevisions=knownBookRevisions(p);
   const dailyAssignments=knownDailyAssignments(p);
   const ids=[p.active,...Object.keys(p.sessions),...p.done,...Object.keys(p.hints),...Object.keys(p.meta?.attempts??{}),...Object.values(dailyAssignments)];
-  const version=Object.values(bookRevisions).includes(5)||ids.some(id=>id.startsWith("daily-v5-"))||
+  const revisions = Object.values(bookRevisions);
+  const version=revisions.includes(6)?10:
+    revisions.includes(5)||ids.some(id=>id.startsWith("daily-v5-"))||
     Object.keys(dailyAssignments).some(day=>!versionedDay(day))?9:
     Object.keys(bookRevisions).length||ids.some(id=>id.startsWith("daily-v4-"))?8:
     Object.keys(dailyAssignments).length||ids.some(id=>/^(book|daily)-v3-/.test(id))?7:6;

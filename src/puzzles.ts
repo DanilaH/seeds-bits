@@ -2,6 +2,7 @@ import { pilotBooks, pilotDaily } from "./content-pilot";
 import { dailyDay, dailyDone, LEGACY_BOOK_TASKS, dailyV4Index, bookRevisionFor, legacyBookNumber } from "./content-ids";
 import { bookV5, dailyV5 } from "./content-v5";
 import { bookV4, bankDailyV4 } from "./content-v4";
+import { openingPuzzle } from "./notebook-opening";
 import { validDay } from "./calendar";
 import notebookData from "./notebook.json" with { type: "json" };
 import { checkPair, removePair, pairs, occupied, type Connection, type Session } from "./core";
@@ -128,8 +129,10 @@ export const notebook: Puzzle[] = [
 ];
 /** A logical notebook ID stays constant. Its assigned start/witness must not. */
 export function notebookForTask(id:string,state:Parameters<typeof bookRevisionFor>[1]):Puzzle|undefined {
-  if (legacyBookNumber(id)) {
+  const slot = legacyBookNumber(id);
+  if (slot) {
     const revision = bookRevisionFor(id, state);
+    if (revision === 6) return openingPuzzle(id, slot);
     if (revision === 5) return bookV5(id);
     if (revision === 4) return bookV4(id);
   }

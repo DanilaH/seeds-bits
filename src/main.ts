@@ -202,6 +202,7 @@ let helpSearchStop = () => {};
 let readWarning = "";
 let protectedContent = false;
 let preV5BackedUp = false;
+let preV6BackedUp = false;
 const settingsDirty: Record<string, unknown> = {};
 let saveQueue = Promise.resolve(),
   hintIndex = 0,
@@ -954,11 +955,18 @@ function save(state = progress, game = session) {
     .then(async () => {
       if (storageConflict || futureSave) return;
       try {
-        if (!preV5BackedUp && JSON.parse(bundle).version === 9) {
+        const version = JSON.parse(bundle).version;
+        if (!preV5BackedUp && version >= 9) {
           const key = PROGRESS + ".pre-v5";
           if (lastStored && JSON.parse(lastStored).version < 9 && !(await platform.read(key)))
             await platform.write(key, lastStored);
           preV5BackedUp = true;
+        }
+        if (!preV6BackedUp && version === 10) {
+          const key = PROGRESS + ".pre-v6";
+          if (lastStored && JSON.parse(lastStored).version < 10 && !(await platform.read(key)))
+            await platform.write(key, lastStored);
+          preV6BackedUp = true;
         }
         const merged = await platform.saveState(
           PROGRESS,

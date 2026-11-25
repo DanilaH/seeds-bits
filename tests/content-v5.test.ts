@@ -118,7 +118,7 @@ test("wire identity conflicts and bad revisions fail closed", () => {
   expect(()=>readProgress(JSON.stringify({...raw,bookRevisions:{[id]:6}}))).toThrow(ProtectedContentProgress);
   expect(()=>readProgress(JSON.stringify({...raw,done:["daily-v4-"+day]}))).toThrow(ProtectedContentProgress);
   expect(()=>readProgress(JSON.stringify({...raw,dailyAssignments:{[day]:"daily-v5-2026-12-26"}}))).toThrow(ProtectedContentProgress);
-  expect(()=>readProgress(JSON.stringify({...raw,version:10}))).toThrow(FutureProgress);
+  expect(()=>readProgress(JSON.stringify({...raw,version:11}))).toThrow(FutureProgress);
   expect(()=>readProgress(JSON.stringify({...raw,version:8}))).toThrow(ProtectedContentProgress);
 });
 
