@@ -1,3 +1,5 @@
+import { installLegacyClassic } from "./restore-game";
+import { returnToGame } from "./restore-game";
 import { test, expect } from "@playwright/test";
 import { notebook } from "../src/puzzles";
 import { removePair } from "../src/core";
@@ -13,6 +15,7 @@ test.beforeEach(async ({ page }) => {
   });
 });
 async function start(page: any) {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
 }
@@ -52,6 +55,7 @@ test("landscape tutorial buttons remain reachable at every step", async ({
     { width: 568, height: 320 },
   ]) {
     await page.setViewportSize(viewport);
+    await installLegacyClassic(page);
     await page.goto("/");
     await page.locator("#learn").click();
     for (const [a, b] of [
@@ -71,6 +75,7 @@ test("landscape tutorial buttons remain reachable at every step", async ({
   }
 });
 test("failed save stays visible while settings are open", async ({ page }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#settings-open").click();
   await page.evaluate(() => {
@@ -81,7 +86,7 @@ test("failed save stays visible while settings are open", async ({ page }) => {
   await page.locator("#sound").check();
   await expect(page.locator("#save-notice")).toBeVisible();
   await expect(page.locator("#retry-save")).toBeVisible();
-  await page.locator("#close").click();
+  await returnToGame(page);
   await expect(page.locator("#save-notice")).toBeVisible();
 });
 test("stale tab cannot overwrite a newer game", async ({ page, context }) => {
@@ -117,11 +122,11 @@ test("all 24 notebook games finish by following reliable hints", async ({
   page,
 }) => {
   test.setTimeout(300000);
+  await installLegacyClassic(page);
   await page.goto("/");
   for (let n = 1; n <= 24; n++) {
     if (n > 1) await page.locator("#menu").click();
     await page.locator("#book-mode").click();
-    if (n === 13) await page.locator("#book-later-pages > summary").click();
     await page.locator(`[data-game="book-v1-${n}"]`).click();
     await expect(page.locator("#dialog")).not.toBeVisible();
     await expect(page.locator("#mode")).toHaveText(`Тетрадь 1 · задача ${n}`);

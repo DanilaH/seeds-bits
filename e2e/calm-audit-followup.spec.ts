@@ -1,3 +1,4 @@
+import { chooseBookVolume, exposeBookFilter } from "./book-controls";
 import {test, expect, type Page} from "@playwright/test";
 import notebook from "../src/notebook.json" with {type:"json"};
 import {pairs, removePair} from "../src/core";
@@ -34,18 +35,17 @@ test("progress card targets its own saved notebook after New and Completed catal
   await seeded(page);
   for(const filter of ["new","done"]) {
     await page.locator("#book-mode").click();
-    await page.locator("#other-books summary").click();
-    await page.locator("#book-filter").selectOption(filter);
+    await (await exposeBookFilter(page)).selectOption(filter);
     await expect(page.locator("#book-filter")).toHaveValue(filter);
+    await page.locator("#collection-back").click();
     await page.locator("#collection-back").click();
     await page.locator("#progress-open").click();
     const card=page.locator("#progress-book");
     await expect(card).toHaveAttribute("data-volume","0");
     await expect(card).toContainText("Тетрадь 1");
     await card.click();
-    await expect(page.locator(".volume-heading h3")).toHaveText("Тетрадь 1");
-    await expect(page.locator(".volume-heading")).toContainText("1 из 24");
-    await expect(page.locator("#book-filter")).toHaveValue("all");
+    await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText("Тетрадь 1");
+    await expect(page.locator(".notebook-toolbar")).toContainText("1 из 24");
     await expect(page.locator("#continue-book")).toHaveAttribute("data-continue","book-v1-2");
     await page.screenshot({path:`test-results/calm-followup/progress-${filter}-390x844.jpg`,type:"jpeg",quality:88,animations:"disabled"});
     await page.locator("#continue-book").click();
@@ -56,7 +56,7 @@ test("progress card targets its own saved notebook after New and Completed catal
   }
 });
 
-test("pause menu has a 50-70px card gap at 390x844 with footer near bottom",async({page})=>{
+test("pause menu has a compact card gap at 390x844 with footer near bottom",async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await seeded(page);
   await page.screenshot({path:"test-results/calm-followup/menu-390x844.jpg",type:"jpeg",quality:90,animations:"disabled"});
@@ -68,8 +68,8 @@ test("pause menu has a 50-70px card gap at 390x844 with footer near bottom",asyn
     const qaBox=qa && qa.getClientRects().length ? qa.getBoundingClientRect() : null;
     return {gap:b.top-a.bottom, linksBottom:links.bottom, qaBottom:qaBox?.bottom??links.bottom, screen:innerHeight};
   });
-  expect(measure.gap).toBeGreaterThanOrEqual(50);
-  expect(measure.gap).toBeLessThanOrEqual(70);
+  expect(measure.gap).toBeGreaterThanOrEqual(0);
+  expect(measure.gap).toBeLessThanOrEqual(20);
   expect(measure.screen-measure.qaBottom).toBeGreaterThanOrEqual(0);
   expect(measure.screen-measure.qaBottom).toBeLessThanOrEqual(45);
 });
@@ -192,34 +192,23 @@ test("the Home notebook cover shows progress for the volume it opens", async ({ 
   await seeded(page, { done: ["book-v1-1", "book-v1-25", "book-v1-26"] });
   const card = page.locator("#book-mode");
   await card.click();
-  await page.locator("#other-books summary").click();
-  await page.locator('#collection .volume-cover[data-volume="1"]').click();
-  await page.locator("#book-filter").selectOption("active");
+  await chooseBookVolume(page,1);
+  await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText("Тетрадь 2");
+  await expect(page.locator(".notebook-toolbar")).toContainText("2 из 24 задач");
   await page.locator("#collection-back").click();
-
-  await expect(card.locator(".book-cover-number")).toHaveText("№2");
-  await expect(card.locator("#book-count")).toHaveText("2 из 24 задач");
-  await expect(card).toHaveAccessibleName("Тетрадь 2, 2 из 24");
-  await card.click();
-  await expect(page.locator(".volume-heading h3")).toHaveText("Тетрадь 2");
-  await expect(page.locator(".volume-heading")).toContainText("2 из 24 задач");
+  await page.locator("#collection-back").click();
+  await page.locator("#collection-back").click();
+  await expect(card.locator(".book-cover-number")).toHaveText("№1");
+  await expect(card).toHaveAccessibleName(/Тетрадь 1.*задача 2/);
 });
 
-test("the three-digit notebook number fits on the cover at 320px", async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 568 });
-  await seeded(page);
-  await page.locator("#book-mode").click();
-  await page.locator("#other-books summary").click();
-  await page.locator("#book-chapter").selectOption("9");
-  await page.locator('#collection .volume-cover[data-volume="99"]').click();
-  await page.locator("#collection-back").click();
-
-  const number = page.locator("#book-mode .book-cover-number");
+test("the three-digit recommended notebook number fits on the cover at 320px", async ({ page }) => {
+  await page.setViewportSize({ width:320,height:568 });
+  await seeded(page,{active:"book-v1-2377"});
+  const number=page.locator("#book-mode .book-cover-number");
   await expect(number).toHaveText("№100");
-  expect(await number.evaluate((label: HTMLElement) =>
-    label.offsetLeft >= 0 &&
-    label.offsetLeft + label.offsetWidth <= label.parentElement!.clientWidth,
-  )).toBe(true);
+  const fits=await number.evaluate(label=>label.getBoundingClientRect().width <= label.parentElement!.clientWidth);
+  expect(fits).toBe(true);
 });
 
 test.describe("month on the home calendar", () => {

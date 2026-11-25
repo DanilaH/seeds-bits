@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import { test, expect, type Page } from "@playwright/test";
 const key = "seeds-bits.progress.v2",
   prefs = "seeds-bits.settings.v1";
@@ -116,6 +117,7 @@ async function seed(
     },
     { key, prefs, o: options },
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#resume")).toBeVisible();
 }

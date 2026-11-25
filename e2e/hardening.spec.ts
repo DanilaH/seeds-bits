@@ -1,3 +1,5 @@
+import { installLegacyClassic } from "./restore-game";
+import { continueClassic } from "./restore-game";
 import { test, expect } from "@playwright/test";
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() =>
@@ -10,6 +12,7 @@ test.beforeEach(async ({ page }) => {
 test("a valid move is saved before its animation finishes", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.evaluate(() => {
@@ -45,6 +48,7 @@ test("a valid move is saved before its animation finishes", async ({
 test("escape steps back from collections and settings without discarding game", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await page.keyboard.press("Escape");
@@ -87,6 +91,7 @@ test("dead end can be undone or restarted immediately", async ({
       }),
     ),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await expect(page.locator("#restart-task")).toBeVisible();
@@ -105,6 +110,7 @@ test("dead end can be undone or restarted immediately", async ({
 test("obsolete damaged save does not override current progress", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.locator('[data-index="0"]').click();
@@ -120,6 +126,7 @@ test("obsolete damaged save does not override current progress", async ({
 test("failed storage is visible and retry preserves the accepted move", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.evaluate(() => {
@@ -161,6 +168,7 @@ test("large classic board survives repeated moves, mode changes and reload", asy
       }),
     );
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   for (let n = 0; n < 30; n++) {
@@ -174,7 +182,7 @@ test("large classic board survives repeated moves, mode changes and reload", asy
   await page.locator("#book-top").click();
   await page.locator('[data-game="book-v1-1"]').click();
   await page.locator("#menu").click();
-  await page.locator("#classic-mode").click();
+  await continueClassic(page);
   await expect(page.locator("#remaining")).toHaveText("1740");
   expect(
     await page.locator("#viewport").evaluate((el) => el.scrollTop),

@@ -289,7 +289,6 @@ test("audit 12070: notebook numbers and completed streak accessible names",async
   const first=page.locator('[data-game="book-v1-25"]');
   await expect(first).toHaveText("1✓");
   await expect(first).toHaveAccessibleName("Puzzle 1, solved");
-  await page.locator("#book-later-pages > summary").click();
   await expect(page.locator('[data-game="book-v1-48"]')).toHaveAccessibleName("Puzzle 24");
   await first.click();
   await expect(page.locator("#mode")).toHaveText("Puzzle book 2 · Puzzle 1");

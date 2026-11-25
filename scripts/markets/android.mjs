@@ -103,7 +103,7 @@ async function connect() {
     adb("shell","input","swipe",x,y(p.from),x,y(p.to),"330");
     await wait(350);
   }
-  return {evaluate,until,tap,swipeBoardUp,close:()=>ws.close()};
+  return {evaluate,until,tap,swipeBoardUp,bounds,close:()=>ws.close()};
 
 }
 const board=[0,0,0,0,0,0,0,0,6,4];
@@ -250,10 +250,11 @@ async function firstNotebookEdge(order, {recordVideo=false}={}) {
     assert.match(await ui.evaluate("document.querySelector('#resume').textContent"),/2/);
     assert.match(await ui.evaluate("document.querySelector('#home-goal').textContent"),/1 of 24/);
     if(order[0]===7)shot("calm-menu-task-2");
-    adb("shell","input","keyevent","4");
+    assert(await ui.evaluate("!document.querySelector('#dialog #close')"));
+    await ui.tap("#resume");
     await ui.until("!document.querySelector('#dialog').open");
     assert.equal(await ui.evaluate("document.querySelector('#undo').disabled"),false);
-    return {order,solved:true,fieldStayedPut:true,captionFits:true,jarFilled:4,bookSolved:1,continuedTo:2,androidBackResumed:true};
+    return {order,solved:true,fieldStayedPut:true,captionFits:true,jarFilled:4,bookSolved:1,continuedTo:2,explicitContinue:true};
   } finally {
     if(recorder) {
       try{adb("shell","pkill","-2","screenrecord");}catch{}
@@ -600,15 +601,9 @@ async function verifyContentV5() {
   const remaining=n=>`document.querySelector('#remaining').textContent==='${n}'`;
   try {
     await ui.tap("#book-mode");
-    if(!await ui.evaluate("document.querySelector('#other-books').open"))await ui.tap("#other-books summary");
-    await ui.evaluate(`(()=>{
-      const chapter=document.querySelector("#book-chapter");
-      chapter.value="9";
-      chapter.dispatchEvent(new Event("change",{bubbles:true}));
-    })()`);
-    if(!await ui.evaluate("document.querySelector('#other-books').open"))await ui.tap("#other-books summary");
+    await ui.tap("#all-books");
+    await ui.tap('[data-book-range="4"]');
     await ui.tap('[data-volume="99"]');
-    await ui.tap("#book-later-pages summary");
     let at=performance.now();
     await ui.tap(`[data-game="${id}"]`);
     await ui.until(remaining(108)+" && !document.querySelector('#dialog').open");
@@ -726,7 +721,8 @@ return (${code})(SeedsClassicQA);})()`;
       const seen = new Set();
       let count;
       for (let n=0; n<3 || (level===3 && count<81); n++) {
-        await ui.tap("#next-classic");
+        await ui.tap("#classic-mode");
+        if(await ui.evaluate("!document.querySelector('#classic-entry').hidden"))await ui.tap("#next-classic");
         if (level===2 && n===0) shot("classic-four-difficulties-320-dark");
         await ui.tap(`[data-classic-level="${level}"]`);
         await ui.until("!document.querySelector('#classic-new-sheet').open && !document.querySelector('#dialog').open");
@@ -859,6 +855,98 @@ async function verifyHintRepair() {
 }
 function assertViewportResult(view) {
   assert.deepEqual([view.w,view.h],[320,568]);
+}
+async function verifyAppBanner() {
+  const report={source:process.env.GITHUB_SHA,physicalPhone:false,device:"Android API35 demo SDK",observed:[]};
+  adb("install",candidate);
+  adb("shell","wm","density","320");
+  adb("shell","wm","size","640x1232");
+  launch();
+  const ui=await connect();
+  const diagnostics=()=>ui.evaluate("window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics()");
+  let recorder;
+  try {
+    const paint = () => {
+      const raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6});
+      const width=raw.readUInt32LE(0),height=raw.readUInt32LE(4),offset=raw.length-width*height*4;
+      const [left,,right,bottom]=ui.bounds;
+      const colors=new Set();
+      for(let y=bottom-90;y<bottom-13;y+=4)for(let x=left+40;x<right-40;x+=4) {
+        const i=offset+(y*width+x)*4;
+        colors.add((raw[i]>>4)*256+(raw[i+1]>>4)*16+(raw[i+2]>>4));
+      }
+      return colors.size;
+    };
+    let painted, initial;
+    for(let i=0;i<36;i++) {
+      initial=await diagnostics();
+      if(initial.loaded>0&&initial.visible&&(painted=paint())>20)break;
+      await wait(650);
+    }
+    report.initial=initial;
+    report.paintColorBuckets=painted??0;
+    if(!(initial.loaded>0&&initial.visible&&painted>20)){
+      report.status="UNAVAILABLE";
+      return report;
+    }
+    shot("banner-painted-start");
+    const remote="/sdcard/seeds-banner-continuity.mp4";
+    recorder=spawn("adb",["shell","screenrecord","--bit-rate","1800000","--time-limit","60",remote],{stdio:"ignore"});
+    await wait(500);
+    const stable=async(label)=>{
+      const current=await diagnostics();
+      assert.equal(current.view,initial.view,label);
+      assert.equal(current.request,initial.request,label);
+      assert.equal(current.visible,true,label);
+      assert.equal(current.hiddenFrames,initial.hiddenFrames,label);
+      assert(paint()>20,label+" creative band lost color");
+      report.observed.push({label,...current});
+    };
+    for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2],[7,14,0]]) {
+      await ui.tap(digit(a)); await ui.tap(digit(b));
+      await ui.until(`document.querySelector('#remaining').textContent==='${n}'`);
+    }
+    await stable("game to result");
+    await ui.tap("#play-again");
+    await ui.until("document.querySelector('#mode').textContent.includes('2')");
+    await stable("result to game");
+    await ui.tap("#menu"); await stable("game to Home");
+    await ui.tap("#book-mode"); await stable("Home to notebook");
+    await ui.tap("#all-books"); await stable("notebook to picker");
+    await ui.tap("#collection-back"); await stable("picker to notebook");
+    await ui.tap("#collection-back"); await stable("notebook to Home");
+    await ui.tap("#home-language");
+    await ui.until("document.querySelector('#language-sheet').open");
+    assert.equal((await diagnostics()).visible,false);
+    await ui.tap("#language-close");
+    await stable("language closed");
+    await ui.tap("#resume"); await stable("explicit Home to game");
+    const beforeBackground=(await diagnostics()).request;
+    adb("shell","input","keyevent","3");
+    await wait(450);
+    assert.equal((await diagnostics()).visible,false);
+    launch();
+    await ui.until("document.visibilityState==='visible'");
+    await wait(500);
+    await stable("foreground restored");
+    assert.equal((await diagnostics()).request,beforeBackground);
+    report.status="PASS";
+    return report;
+  } finally {
+    if(recorder) {
+      try {
+        adb("shell","pkill","-2","screenrecord");
+        if(recorder.exitCode===null)await new Promise(resolve=>recorder.once("exit",resolve));
+        adb("pull","/sdcard/seeds-banner-continuity.mp4",out+"/banner-continuity.mp4");
+      } catch(error) { console.warn("Screen recording:",String(error)); }
+    }
+    ui.close();stop();adb("uninstall",app);
+    fs.writeFileSync(out+"/banner-continuity.json",JSON.stringify(report,null,2));
+  }
+}
+if(process.env.SEEDS_BANNER_ONLINE==="1"){
+  await verifyAppBanner();
+  process.exit(0);
 }
 try{
   adb("shell","wm","density","320");

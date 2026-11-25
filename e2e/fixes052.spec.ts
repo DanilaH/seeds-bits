@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -57,6 +58,7 @@ async function seed(
 const save = (name: string, value: any) =>
   writeFileSync(`${out}/${name}.json`, JSON.stringify(value, null, 2));
 async function boot(page: any) {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
 }
@@ -89,6 +91,7 @@ test("F02 book chunk failure is visible in open modal and retry clears loading",
   await page.route("**/*notebook-extra*", (r) =>
     blocked ? r.abort() : r.continue(),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await openBookPicker(page);
@@ -119,12 +122,13 @@ test("F03 completed volume filter does not silently reset when changing section"
     [5, 5],
     Array.from({ length: 24 }, (_, i) => `book-v1-${i + 1}`),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await openBookPicker(page);
   await page.locator("#book-filter").selectOption("done");
   await openBookPicker(page);
-  await page.locator("#book-chapter").selectOption("9");
+  await page.locator('[data-book-range="4"]').click();
   save("filter", {
     value: await page.locator("#book-filter").inputValue(),
     covers: await page.locator("[data-volume]").count(),
@@ -134,6 +138,7 @@ test("F03 completed volume filter does not silently reset when changing section"
 test("F04 calendar 2028 leap-day and 2125 trophies", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2028-06-20T12:00:00"));
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#calendar-open").click();
   if (
@@ -184,6 +189,7 @@ test("F06 collection pagination retains all jars across pages", async ({
   page,
 }) => {
   await seed(page, "classic", [5, 5], [], 100000);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#progress-open").click();
   await page.locator("#progress-trophies").click();
@@ -417,6 +423,7 @@ test("F14 fresh reload recovers blocked notebook chunk", async ({ page }) => {
   await page.route("**/*notebook-extra*", (r) =>
     blocked ? r.abort() : r.continue(),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await openBookPicker(page);

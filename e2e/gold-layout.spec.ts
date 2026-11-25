@@ -1,4 +1,7 @@
-import { openBookPicker } from "./book-controls";
+import { requestRestartFromSettings } from "./restore-game";
+import { installLegacyClassic } from "./restore-game";
+import { continueClassic } from "./restore-game";
+import { openBookPicker, exposeBookFilter } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 const out = "test-results/gold-layout";
@@ -88,6 +91,7 @@ async function seed(
       addListener: async () => ({ remove: async () => {} }),
     };
   }, o);
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#resume")).toBeVisible();
 }
@@ -370,16 +374,17 @@ test("all screens contain their text with ads, themes, narrow landscape and tabl
       await page.locator("#book-mode").click();
       await check("books");
       await openBookPicker(page);
-      await page.locator("#book-filter").selectOption("done");
+      await (await exposeBookFilter(page)).selectOption("done");
       await check("book-empty");
       await page.locator("#book-filter-reset").click();
+      await page.locator("#collection-back").click();
       await page.locator("#continue-book").click();
       await check("game");
       await pair(page);
       await pair(page);
       await check("result");
       await page.locator("#menu").click();
-      await page.locator("#classic-mode").click();
+      await continueClassic(page);
       await check("classic");
       await context.close();
     }
@@ -499,7 +504,7 @@ test("hint offer, restart confirmation and every lesson contain their text", asy
     await page.locator("#cancel-hints").click();
     await pair(page); // Restart confirmation belongs to a game with actual progress.
     await page.locator("#menu").click();
-    await page.locator("#new").click();
+    await requestRestartFromSettings(page);
     await check("restart-confirm");
     await page.locator("#cancel-new").click();
     await page.locator("#learn").click();

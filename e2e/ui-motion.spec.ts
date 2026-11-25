@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import {test, expect, type Page} from '@playwright/test';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {install, key} from './help-test-utils';

@@ -57,7 +57,8 @@ import {
   grantReward,
 } from "./hint-budget";
 import { jars, collectPair, jarState, jarNames, jarColors } from "./jars";
-import { volumeOf, volumeTasks, chapterNames, puzzleNumberInVolume, VOLUMES, themeOf } from "./notebooks";
+import { volumeOf, volumeTasks, puzzleNumberInVolume, VOLUMES, themeOf } from "./notebooks";
+import { hasPlayed, unfinished, notebookStarted, notebookTarget, notebookBrowseStatus, MAIN_BOOKS } from "./notebook-navigation";
 import { loadBookV5 } from "./content-v5";
 import { dailyDay, dailyDone, dailyIdFor, versionedDay, bookRevisionFor, legacyBookNumber, validContentId, LEGACY_BOOK_TASKS } from "./content-ids";
 import { playSound, suspendSound, blockSound } from "./sound";
@@ -78,6 +79,7 @@ import "./style.css";
 import "./ui-polish.css";
 import "./ui-adaptation.css";
 import "./calm-screens.css";
+import "./compact-navigation.css";
 import {
   resultKind,
   resultArtwork,
@@ -212,6 +214,9 @@ let saveQueue = Promise.resolve(),
 let jarShelfPage = 0;
 let selectedVolume = 0,
   bookFilter = "all",
+  bookRange = 0,
+  bookThemes = false,
+  bookFilterOpen = false,
   trophyYear = today().slice(0, 4);
 let rewardSeenDuringBoot = false;
 let bootComplete = false,
@@ -283,7 +288,7 @@ const lessons = [
   },
 ];
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}">${jarGlass("jar-glass")}<span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2><button id="close" class="plain" aria-label="${t("ui.close-menu")}">${icon("close")}</button></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}">${jarGlass("jar-glass")}<span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
 let refreshStaticCopy = () => {};
 const globe = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>';
 const languageFlags: Record<(typeof launchLanguages)[number], string> = {
@@ -305,6 +310,7 @@ classicNewSheet.setAttribute("aria-labelledby", "classic-new-title");
 classicNewSheet.innerHTML =
   '<div class="classic-sheet-head"><h2 id="classic-new-title"></h2><button type="button" id="classic-new-close" class="plain" aria-label="'+t("ui.close-menu")+'">'+icon("close")+'</button></div>'+
   '<p id="classic-new-help" class="classic-sheet-help"></p>'+
+  '<div id="classic-entry"><button type="button" id="classic-resume" class="primary"></button><button type="button" id="next-classic" class="secondary"></button></div>'+
   '<div id="classic-difficulty-list" class="classic-difficulty-list" role="group"></div>';
 $("app").append(classicNewSheet);
 const classicNewOptions = $("classic-difficulty-list");
@@ -318,13 +324,25 @@ for (const level of CLASSIC_LEVELS) {
     '<span class="classic-level-current" hidden></span>';
   classicNewOptions.append(button);
 }
+function classicParked() {
+  const game = progress.sessions.classic;
+  if (!unfinished(game)) return false;
+  const meta = metadata(progress);
+  return hasPlayed(game) || Boolean(meta.classicRun?.current || meta.classicDeals?.current) ||
+    game!.current.board.join("") !== classic().join("");
+}
+let choosingClassicDifficulty = false;
 function renderClassicNewSheet() {
   $("classic-new-title").textContent = t("calm.classic.choose");
   $("classic-new-close").setAttribute("aria-label", t("ui.close-menu"));
-  $("classic-new-help").textContent = progress.active === "classic" &&
-    occupied(session.current.board) && (session.current.moves > 0 || session.history.length > 0)
-    ? t("calm.classic.confirmNote")
-    : t("calm.classic.startNote");
+  $("classic-new-title").textContent = choosingClassicDifficulty ? t("calm.classic.choose") : t("home.classic");
+  $("classic-new-help").textContent = !choosingClassicDifficulty
+    ? t("nav.classicParked")
+    : classicParked() ? t("calm.classic.confirmNote") : t("calm.classic.startNote");
+  $("classic-entry").hidden = choosingClassicDifficulty;
+  classicNewOptions.hidden = !choosingClassicDifficulty;
+  $("classic-resume").textContent = t("ui.resume-classic");
+  $("next-classic").textContent = t("calm.classic.new");
   for (const button of classicNewOptions.querySelectorAll<HTMLButtonElement>("button")) {
     const level = Number(button.dataset.classicLevel) as ClassicDifficulty;
     const name = localName(classicDifficultyNames[level]);
@@ -343,11 +361,22 @@ function openClassicNewSheet() {
   if (classicNewSheet.open || !dialog.open || dialog.dataset.screen !== "home" ||
       busy || saveFailed || futureSave || storageConflict || adActive || rewardRequest ||
       engagementActive || lesson >= 0) return;
+  choosingClassicDifficulty = !classicParked();
   renderClassicNewSheet();
   classicNewSheet.showModal();
+  if (!choosingClassicDifficulty) { $("classic-resume").focus({preventScroll:true}); return; }
   classicNewOptions.querySelector<HTMLButtonElement>('button[data-classic-level="'+classicDifficulty()+'"]')?.focus({preventScroll:true});
 }
 $("classic-new-close").onclick = () => classicNewSheet.close();
+$("next-classic").onclick = () => {
+  choosingClassicDifficulty = true;
+  renderClassicNewSheet();
+  classicNewOptions.querySelector<HTMLButtonElement>("button")?.focus();
+};
+$("classic-resume").onclick = () => {
+  classicNewSheet.close();
+  void switchGame("classic", "classic-resume");
+};
 classicNewSheet.addEventListener("click", (event) => {
   if (event.target === classicNewSheet) classicNewSheet.close();
 });
@@ -411,6 +440,8 @@ function applyLanguage() {
     viewport.scrollTop=scroll;
     updateHome();
     if(dialog.dataset.screen==="home")renderHomeCurrent();
+    else if(dialog.open && (dialog.dataset.screen==="book" || dialog.dataset.screen==="book-picker"))
+      openCollection(dialog.dataset.screen,true);
     updateReminderSettings();
     showSaveState();
   }
@@ -453,9 +484,7 @@ resultNext.className = "result-next";
 resultNext.setAttribute("role", "group");
 resultNext.setAttribute("aria-label", t("ui.next-game"));
 $("play-again").before(resultNext);
-resultNext.innerHTML =
-  `<button id="classic-easier" class="difficulty-easier" hidden>${t("ui.easier")}</button><button id="classic-harder" class="difficulty-harder" hidden>${t("ui.harder")}</button>`;
-$("classic-harder").before($("play-again"));
+resultNext.append($("play-again"));
 const difficultyCaption = document.createElement("p");
 difficultyCaption.id = "classic-difficulty";
 difficultyCaption.hidden = true;
@@ -549,15 +578,17 @@ homeCurrent.innerHTML =
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
 $("new").className = "text-button restart-action";
-const classicActions = document.createElement("div");
-classicActions.className = "classic-actions";
-classicActions.innerHTML =
-  `<button id="next-classic" class="text-button classic-new-trigger" hidden>${t("calm.classic.new")}</button><button id="menu-easier" class="text-button" hidden>${t("ui.new-easier-game")}</button>`;
-classicActions.prepend($("new"));
-homeCurrent.append($("resume-context"), homeGoal, $("resume"), classicActions);
+homeCurrent.append($("resume-context"), homeGoal, $("resume"));
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
 homeModes.setAttribute("aria-label", t("ui.game-modes"));
+const homeBookCard = document.createElement("div");
+homeBookCard.className = "home-book-card";
+const bookQuick = document.createElement("button");
+bookQuick.id = "book-quick";
+bookQuick.className = "text-button";
+$("book-mode").before(homeBookCard);
+homeBookCard.append($("book-mode"), bookQuick);
 const homeCalendar = document.createElement("div");
 homeCalendar.className = "home-calendar";
 homeCalendar.append($("daily-mode"), $("calendar-open"));
@@ -578,6 +609,12 @@ for (const [id, art] of [
 }
 for (const [id, name] of [["progress-open","progress"],["learn","help"],["settings-open","settings"]] as const)
   $(id).insertAdjacentHTML("afterbegin", icon(name));
+const homeLanguage = document.createElement("button");
+homeLanguage.id = "home-language";
+homeLanguage.className = "text-button";
+homeLanguage.innerHTML = icon("settings") + `<span>${t("nav.language")}</span>`;
+homeLanguage.onclick = () => openLanguage("pause");
+document.querySelector(".home-links")!.append(homeLanguage);
 const settingsBasics = document.createElement("section");
 settingsBasics.className = "settings-basics";
 for (const node of [...$("settings-panel").children])
@@ -679,9 +716,11 @@ const calendarActions = document.createElement("div");
 calendarActions.id = "calendar-actions";
 calendarActions.hidden = true;
 dialog.append(calendarActions);
+const notebookDock = document.createElement("div");
+notebookDock.id = "notebook-dock";
+notebookDock.hidden = true;
+dialog.append(notebookDock);
 const dialogHeader = dialog.querySelector<HTMLElement>(".dialog-head")!;
-const homeTitle = dialog.querySelector<HTMLElement>(".home-title")!;
-const closeButton = $<HTMLButtonElement>("close");
 const settingsHeading =
   $("settings-panel").querySelector<HTMLElement>(".screen-heading")!;
 const confirmHeading = document.createElement("div");
@@ -704,7 +743,6 @@ function releaseDialogHeading() {
 }
 function pinDialogHeading(panel: HTMLElement) {
   releaseDialogHeading();
-  dialogHeader.append(closeButton);
   const heading = panel.querySelector<HTMLElement>(".screen-heading");
   if (heading) dialogHeader.prepend(heading);
   dialog.scrollTop = 0;
@@ -944,7 +982,7 @@ function save(state = progress, game = session) {
     return;
   metadata(state);
   // Layout may still be missing its native banner reserve during boot.
-  if (bootComplete && lesson < 0 && !busy) game.current.scroll = viewport.scrollTop;
+  if (bootComplete && enteredGame && lesson < 0 && !busy && !dialog.open) game.current.scroll = viewport.scrollTop;
   state.sessions[state.active] = game;
   const committedEvents = [...(metadata(state).analytics ?? [])];
   const bundle = serializeProgress(state),
@@ -1625,7 +1663,7 @@ let helpChoiceBusy = false;
 let bannerFrame = 0;
 $("app").insertAdjacentHTML(
   "beforeend",
-  `<div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><div class="hint-heading"><h2 id="hint-offer-title">${t("ui.more-hints")}</h2><button id="close-hints" class="plain" aria-label="${t("ui.close-offer")}">${icon("close")}</button></div><div class="hint-copy"><p id="help-offer-copy">${t("ui.watch-a-video-to-reveal-this-pair-and-get")}</p><div id="help-pack" hidden></div><div id="help-steps" hidden></div><details id="help-details"><summary>${t("ui.how-it-works")}</summary><p id="help-details-copy"></p></details></div><div class="offer-terms"><strong id="help-price"></strong><span id="help-undo"></span></div><p id="rewarded-state" role="status"></p><div class="hint-actions"><button id="watch-hints" class="primary">${t("ui.watch-video-2-hints")}</button><button id="cancel-hints" class="secondary">${t("ui.continue-without-a-hint")}</button></div></dialog>`,
+  `<div id="banner-viewport" aria-hidden="true"></div><div id="ad-space" aria-hidden="true"></div><dialog id="hint-offer" aria-labelledby="hint-offer-title"><div class="hint-heading"><h2 id="hint-offer-title">${t("ui.more-hints")}</h2><button id="close-hints" class="plain" aria-label="${t("ui.close-offer")}">${icon("close")}</button></div><div class="hint-copy"><p id="help-offer-copy">${t("ui.watch-a-video-to-reveal-this-pair-and-get")}</p><div id="help-pack" hidden></div><div id="help-steps" hidden></div><details id="help-details"><summary>${t("ui.how-it-works")}</summary><p id="help-details-copy"></p></details></div><div class="offer-terms"><strong id="help-price"></strong><span id="help-undo"></span></div><p id="rewarded-state" role="status"></p><div class="hint-actions"><button id="watch-hints" class="primary">${t("ui.watch-video-2-hints")}</button><button id="cancel-hints" class="secondary">${t("ui.continue-without-a-hint")}</button></div></dialog>`,
 );
 const hintOffer = $<HTMLDialogElement>("hint-offer");
 const helpPreview = document.createElement("div"); helpPreview.id = "help-preview"; helpPreview.hidden = true;
@@ -1705,35 +1743,34 @@ function markGameStarted() {
     task: progress.active,
     attempt: attempt.id,
   });
-  void save();
+}
+function bannerEligible() {
+  const guardedScreen = dialog.open && ["settings","confirm","privacy"].includes(dialog.dataset.screen ?? "");
+  return !paused && appForeground && !document.hidden && document.hasFocus() && lesson < 0 &&
+    !guardedScreen && !languageSheet.open && !classicNewSheet.open && !hintOffer.open &&
+    !document.querySelector("dialog[open]:not(#dialog)");
 }
 function updateBanner() {
+  if (!bannerEligible()) {
+    cancelAnimationFrame(bannerFrame);
+    bannerFrame = 0;
+    void syncBanner(false);
+    return;
+  }
   if (bannerFrame) return;
   bannerFrame = requestAnimationFrame(() => {
     bannerFrame = 0;
-    void syncBanner(
-      lesson < 0 &&
-        !dialog.open &&
-        !hintOffer.open &&
-        !paused &&
-        !document.hidden,
-    );
+    void syncBanner(bannerEligible());
   });
 }
-new MutationObserver(updateBanner).observe(dialog, {
-  attributes: true,
-  attributeFilter: ["open"],
-});
-new MutationObserver(updateBanner).observe(hintOffer, {
-  attributes: true,
-  attributeFilter: ["open"],
+new MutationObserver(updateBanner).observe($("app"), {
+  attributes:true, attributeFilter:["open","data-screen"], subtree:true,
 });
 new ResizeObserver(updateBanner).observe($("ad-space"));
 new MutationObserver(updateBanner).observe(document.documentElement, {
-  attributes: true,
-  attributeFilter: ["style"],
+  attributes:true, attributeFilter:["style"],
 });
-window.addEventListener("resize", updateBanner);
+for (const event of ["resize","focus","blur"]) window.addEventListener(event, updateBanner);
 let offeredIntent: HelpIntent | undefined;
 let verifiedHint: HelpIntent | undefined;
 let autoIntent: HelpIntent | undefined;
@@ -2148,7 +2185,7 @@ function renderWin() {
       ? t("result.nextTask", { puzzle })
       : taskLabel(next);
   } else {
-    nextButton.textContent = i >= 0 ? t("books.back") : dailyResult ? t("result.calendar") : t("result.again");
+    nextButton.textContent = i >= 0 ? t("books.back") : dailyResult ? t("result.calendar") : t("nav.menu");
   }
   $("completion-status").textContent =
     i >= 0 &&
@@ -2185,8 +2222,7 @@ function renderWin() {
         .filter(Boolean)
         .map((text) => `<span>${text}</span>`)
         .join("");
-  $("try-notebook").hidden =
-    id !== "classic" || !notebook.some((p) => !progress.done.includes(p.id));
+  $("try-notebook").hidden = !helpFlags.result || id !== "classic" || !notebookTarget(progress);
   const award = $("award");
   award.hidden = true;
   if (i >= 0) {
@@ -2224,21 +2260,6 @@ function renderClassicChoices() {
       : level === CLASSIC_MAX
         ? t("ui.difficulty-highest")
         : t("ui.difficulty", { "0": localName(classicDifficultyNames[level]) });
-  for (const [id, atLimit] of [
-    ["classic-easier", level === CLASSIC_MIN],
-    ["classic-harder", level === CLASSIC_MAX],
-  ] as const) {
-    const button = $<HTMLButtonElement>(id);
-    button.hidden = !isClassic;
-    button.disabled = blocked || atLimit;
-    button.title = atLimit
-      ? level === CLASSIC_MIN
-        ? t("ui.already-at-the-lowest-difficulty")
-        : t("ui.already-at-the-highest-difficulty")
-      : id === "classic-easier"
-        ? t("ui.start-an-easier-game")
-        : t("ui.start-a-harder-game");
-  }
   $<HTMLButtonElement>("play-again").disabled = blocked;
 }
 function compactCount(n: number) {
@@ -2535,7 +2556,6 @@ async function choose(i: number) {
     return;
   }
   if (lesson >= 0 && lessonPhase === 2) return;
-  markGameStarted();
   if (selected < 0) {
     selected = i;
     feedback("select");
@@ -2629,6 +2649,7 @@ async function choose(i: number) {
   // Commit the accepted move before awaiting a decorative animation.
   if (lesson < 0) {
     session = commit(session, next, "pair", viewport.scrollTop);
+    markGameStarted();
     if (firstEdge) progress.seen.push("edge-trace");
     if (result.path.kind === "reading" && notebookEdgeUnseen())
       progress.seen.push("reading");
@@ -2774,7 +2795,6 @@ function add() {
   saveRecovered = false;
   if (busy || paused) return;
   clearPairFeedback();
-  markGameStarted();
   const values = board();
   if (lesson >= 0 && lesson !== 5) return;
   if (!occupied(values)) return;
@@ -2796,6 +2816,7 @@ function add() {
       message(t("ui.numbers-added-now-tap-undo"));
     } else {
       session = commit(session, next, "add", viewport.scrollTop);
+      markGameStarted();
       save();
     }
     clearSelection();
@@ -2852,7 +2873,6 @@ async function hint() {
   saveRecovered = false;
   if (busy || paused || lesson >= 0 || hintPending) return;
   clearPairFeedback();
-  markGameStarted();
   const plan=currentPlan();
   if(plan?.pair){displayHint(plan.pair);message("Уберите отмеченную пару");return;}
   const available = availablePairs(board());
@@ -3002,8 +3022,11 @@ function displayHint(pair: Connection,quiet=false) {
   }
   message(hintExplanation(board(), highlight));
 }
-type CollectionScreen = "book" | "calendar" | "trophies" | "progress";
-const navigationTrail: { screen: string; scroll: number; focus: string }[] = [];
+type CollectionScreen = "book" | "book-picker" | "calendar" | "trophies" | "progress";
+const navigationTrail: {
+  screen: string; scroll: number; focus: string;
+  volume: number; range: number; themes: boolean; filter: string; filterOpen: boolean;
+}[] = [];
 let collectionTab: "jars" | "months" = "jars";
 let featuredTrophyMonth = "";
 function rememberNavigation(target: string) {
@@ -3013,6 +3036,7 @@ function rememberNavigation(target: string) {
   navigationTrail.push({
     screen,
     scroll: dialogScroller().scrollTop,
+    volume: selectedVolume, range: bookRange, themes: bookThemes, filter: bookFilter, filterOpen: bookFilterOpen,
     focus:
       element?.id ||
       (element?.dataset.month
@@ -3027,6 +3051,13 @@ function returnToPrevious() {
   if (previous?.screen === "game") {
     closeMenu();
     return;
+  }
+  if (previous) {
+    selectedVolume = previous.volume;
+    bookRange = previous.range;
+    bookThemes = previous.themes;
+    bookFilter = previous.filter;
+    bookFilterOpen = previous.filterOpen;
   }
   if (!previous || previous.screen === "home") openMenu(true);
   else if (previous.screen === "settings") openSettings(true);
@@ -3078,6 +3109,7 @@ function closeMenu() {
   navigationTrail.length = 0;
   dialog.close();
   render();
+  viewport.scrollTop = session.current.scroll;
   playBoardEntrance();
   showSaveState();
   document.body.classList.remove("navigation-open");
@@ -3096,26 +3128,29 @@ function navigateBack(native = false): boolean {
   if (busy) return true;
   if (dialog.open) {
     if ($("menu-content").hidden) returnToPrevious();
-    else if (dialog.dataset.entry === "pause") closeMenu();
     else if (native) return false;
   } else if (lesson >= 0) finishLesson();
-  else openMenu();
+  else void goHomeFromBoard();
   return true;
 }
 function openMenu(preserve: unknown = false) {
   if (busy || adActive || rewardRequest || engagementActive) return;
-  if (!dialog.open) dialog.dataset.entry = enteredGame ? "pause" : "root";
+  if (!dialog.open) {
+    if (lesson < 0 && enteredGame) session.current.scroll = viewport.scrollTop;
+    dialog.dataset.entry = enteredGame ? "pause" : "root";
+  }
   if (preserve !== true) navigationTrail.length = 0;
   settlePresentation();
   releaseDialogHeading();
   calendarActions.replaceChildren();
   calendarActions.hidden = true;
+  notebookDock.replaceChildren();
+  notebookDock.hidden = true;
   updateHome();
   cancelHint();
   if (!busy) render();
   document.body.classList.add("navigation-open");
   dialog.dataset.screen = "home";
-  homeTitle.append(closeButton);
   $("settings-panel").hidden = true;
   renderHomeCurrent();
   $("collection").hidden = true;
@@ -3126,7 +3161,7 @@ function openMenu(preserve: unknown = false) {
     dialogScroller().scrollTop = 0;
   }
   showSaveState();
-  $("resume").focus({ preventScroll: true });
+  ($("resume").hidden || homeCurrent.hidden ? $("classic-mode") : $("resume")).focus({ preventScroll: true });
   platform.gameplay(false);
 }
 async function reset() {
@@ -3151,6 +3186,7 @@ async function reset() {
   switching = true;
   dialog.inert = true;
   await save(candidate, restarted);
+  if (!saveFailed && !storageConflict && !futureSave) await transitionAd("restart");
   dialog.inert = false;
   switching = false;
   busy = false;
@@ -3200,7 +3236,7 @@ async function beginClassic(
   // Starting Classic from a notebook or daily puzzle must retain that party,
   // including its last scroll position and Undo, exactly as switchGame does.
   if (progress.active !== "classic") {
-    session.current.scroll = viewport.scrollTop;
+    if (!dialog.open && enteredGame) session.current.scroll = viewport.scrollTop;
     candidate.sessions[progress.active] = session;
   }
   const m = metadata(candidate);
@@ -3233,6 +3269,7 @@ async function beginClassic(
       m.classicRun.current.attempt = attempt;
   }
   candidate.hints.classic = 0;
+  if (progress.active.startsWith("book")) candidate.lastBookTask = progress.active;
   candidate.active = "classic";
   busy = true;
   switching = true;
@@ -3240,6 +3277,7 @@ async function beginClassic(
   try {
     await save(candidate, nextSession);
     if (saveFailed || futureSave || storageConflict) return;
+    await transitionAd(action === "next" ? "classic-new" : "restart");
     progress = candidate;
     session = nextSession;
     busy = switching = false;
@@ -3284,10 +3322,18 @@ $("board").addEventListener("keydown", (e) => {
 $("undo").onclick = undoAction;
 $("hint").onclick = hint;
 $("add").onclick = add;
-$("menu").onclick = openMenu;
-closeButton.onclick = closeMenu;
-$("resume").onclick = closeMenu;
-$("book-top").onclick = () => openCollection("book");
+$("menu").onclick = () => void goHomeFromBoard();
+$("resume").onclick = () => {
+  if (lesson >= 0 || protectedContent) { closeMenu(); return; }
+  if (progress.active.startsWith("book") && !unfinished(session)) {
+    const target = notebookTarget(progress);
+    if (target) void switchGame(target, "home-next-notebook");
+    else openHomeNotebook();
+    return;
+  }
+  void leaveScreen("home-resume", closeMenu);
+};
+$("book-top").onclick = () => openHomeNotebook();
 let confirmAction: "restart" | "next" = "restart";
 let confirmDifficulty: ClassicDifficulty = CLASSIC_DEFAULT;
 function requestRestart(
@@ -3305,22 +3351,15 @@ function requestRestart(
     return;
   confirmAction = action;
   confirmDifficulty = level;
-  if (
-    (action === "next" && !session.history.length &&
-      !session.current.moves &&
-      !session.current.additions) ||
-    !occupied(session.current.board) ||
-    (action === "restart" && !availablePairs(session.current.board).length)
-  ) {
+  if (action === "next" ? !classicParked() :
+      !unfinished(session) || !availablePairs(session.current.board).length) {
     if (action === "next") void beginClassic("next", level);
-    else reset();
+    else void reset();
     return;
   }
   const next = action === "next";
   confirmHeading.querySelector("h2")!.textContent = next
-    ? level < classicDifficulty()
-      ? t("ui.easier-game")
-      : t("ui.new-game-2")
+    ? t("ui.new-game-2")
     : t("ui.restart-2");
   $("confirm-content").querySelector("p")!.textContent = next
     ? t("ui.the-board-and-undo-history-will-be-replaced-seeds")
@@ -3336,21 +3375,14 @@ function requestRestart(
   $("confirm-back").focus({ preventScroll: true });
 }
 $("new").onclick = () => requestRestart();
-$("next-classic").onclick = openClassicNewSheet;
 classicNewOptions.addEventListener("click", (event) => {
   const button = (event.target as HTMLElement).closest<HTMLButtonElement>("button[data-classic-level]");
   if (!button || !classicNewSheet.open) return;
   const level = Number(button.dataset.classicLevel);
   if (!isClassicDifficulty(level)) return;
   classicNewSheet.close();
-  if (progress.active === "classic") requestRestart("next", level);
-  else void beginClassic("next", level);
+  requestRestart("next", level);
 });
-$("menu-easier").onclick = () => {
-  const level = classicDifficulty();
-  if (level > CLASSIC_MIN)
-    requestRestart("next", (level - 1) as ClassicDifficulty);
-};
 $("cancel-new").onclick = returnToPrevious;
 function openSettings(restoring = false) {
   if (!restoring) rememberNavigation("settings");
@@ -3383,44 +3415,63 @@ $("confirm-new").onclick = () => {
   else reset();
 };
 $("restart-task").onclick = () => requestRestart();
-async function prepareResultTransition(route: "next" | "easier" | "harder" | "short") {
-  if (busy || adActive || rewardRequest || engagementActive || lesson >= 0 || occupied(board())) return false;
-  const policy = route !== "short" || helpFlags.result;
-  const firstShort = route === "short" && !metadata(progress).flags?.includes("result_short_task_seen");
-  if(firstShort)(metadata(progress).flags ??= []).push("result_short_task_seen");
-  const assignment=helpProfile(progress).assignments.at(-1);
-  const transition = {install:helpProfile(progress).install,experiment:assignment?.experiment??"none",variant:assignment?.variant??"control",qa:Boolean(qaProfile),config:assignment?.config??"none",route,first_short_task:firstShort,attempt:hintAttempt(progress).id,mode:gameMode(),policy_enabled:policy,ad_session_id:crypto.randomUUID()};
-  busy = true;renderClassicChoices();
-  durableEvent("result_transition",{...transition,phase:"choice"});
-  await save();
-  let reason = !policy ? "variant_off" : saveFailed || storageConflict || futureSave ? "save_blocked" :
-    !appForeground || document.hidden ? "background" : skipNextInterstitial || performance.now()-lastExternalAt <= 30000 ? "external_suppression" : "request";
-  if(reason === "request") {
-    lastExternalAt=performance.now();
-    const result=await showAd("interstitial",undefined,undefined,transition.ad_session_id);
-    reason=result.reason ?? result.status ?? "unknown";
-    track("result_transition",{...transition,phase:"result",reason,shown:Boolean(result.shown)});
-  } else track("result_transition",{...transition,phase:"result",reason,shown:false});
-  if(policy)skipNextInterstitial=false;
-  busy=false;renderClassicChoices();
-  return !saveFailed&&!storageConflict&&!futureSave;
+async function transitionAd(route: string) {
+  const transitionId = crypto.randomUUID();
+  const adSession = crypto.randomUUID();
+  const detail = {route, transition_id:transitionId, ad_session_id:adSession, mode:gameMode()};
+  const reason = !monetized ? "disabled"
+    : !appForeground || document.hidden ? "background"
+    : skipNextInterstitial || performance.now() - lastExternalAt <= 30000 ? "external_suppression"
+    : "request";
+  skipNextInterstitial = false;
+  if (reason !== "request") {
+    track("result_transition", {...detail, phase:"skipped", reason, shown:false});
+    return;
+  }
+  lastExternalAt = performance.now();
+  track("result_transition", {...detail, phase:"request"});
+  const result = await showAd("interstitial",undefined,undefined,adSession,{route,transitionId});
+  lastExternalAt = performance.now();
+  track("result_transition", {...detail,
+    phase:result.status === "error" ? "error" : result.shown ? "closed" : "skipped",
+    reason:result.reason ?? result.status ?? "unknown", shown:Boolean(result.shown)});
 }
-async function playNextClassic(delta: -1 | 0 | 1 = 0) {
-  const level=classicDifficulty()+delta;
-  if(level<CLASSIC_MIN||level>CLASSIC_MAX)return;
-  const next=$("play-again").dataset.destination;
-  if(!await prepareResultTransition(delta<0 ? "easier" : delta>0 ? "harder" : "next"))return;
-  if(next)await switchGame(next);
-  else if(progress.active.startsWith("book"))openCollection("book");
-  else if(progress.active.startsWith("daily"))openCollection("calendar");
-  else await beginClassic("next",level as ClassicDifficulty);
+async function leaveScreen(route: string, destination: () => void) {
+  if (transitionBlocked() || resultAwaitingSave === session) return;
+  busy = true;
+  dialog.inert = true;
+  renderClassicChoices();
+  try {
+    await save();
+    if (saveFailed || futureSave || storageConflict) return;
+    await transitionAd(route);
+  } finally {
+    busy = false;
+    dialog.inert = false;
+    renderClassicChoices();
+  }
+  destination();
 }
-$("play-again").onclick=()=>void playNextClassic();
-$("classic-easier").onclick=()=>void playNextClassic(-1);
-$("classic-harder").onclick=()=>void playNextClassic(1);
-$("try-notebook").onclick=async()=>{
-  const next=notebook.slice(0,24).find(p=>!progress.done.includes(p.id)) ?? notebook.find(p=>!progress.done.includes(p.id));
-  if(next&&await prepareResultTransition("short"))await switchGame(next.id);
+function transitionBlocked() {
+  return busy || paused || adActive || rewardRequest || engagementActive || saveFailed || futureSave || storageConflict;
+}
+async function goHomeFromBoard() {
+  if (dialog.open || busy || paused || adActive || rewardRequest || engagementActive) return;
+  if (lesson < 0 && progress.active === "classic" && !occupied(board()))
+    await leaveScreen("classic-result-home", openMenu);
+  else openMenu();
+}
+$("play-again").onclick = () => {
+  const id = progress.active;
+  if (id === "classic") { void goHomeFromBoard(); return; }
+  const next = $("play-again").dataset.destination;
+  if (next) void switchGame(next, "next");
+  else if (id.startsWith("book")) openHomeNotebook();
+  else openCollection("calendar");
+};
+$("try-notebook").onclick = () => {
+  const next = notebookTarget(progress);
+  if (helpFlags.result && next) void switchGame(next,"short");
 };
 function seedWord(n: number) {
   return word(n,t("ui.seed"),"семечка",t("ui.seeds"));
@@ -3757,12 +3808,8 @@ function showTaskLoadError() {
   if (dialog.dataset.screen === "book") $("collection").prepend(error);
   else dialogScroller().prepend(error);
 }
-async function switchGame(id: string) {
-  earnedAward = "";
-  earnedSeeds = 0;
-  earnedHints = 0;
-  saveRecovered = false;
-  if (busy || futureSave || storageConflict) return;
+async function switchGame(id: string, route?: string) {
+  if (transitionBlocked() || resultAwaitingSave === session) return;
   if (!validContentId(id)) return;
   const day = dailyDay(id);
   if (day) {
@@ -3799,7 +3846,7 @@ async function switchGame(id: string) {
     return;
   }
 
-  if (lesson < 0 && !busy) session.current.scroll = viewport.scrollTop;
+  if (lesson < 0 && enteredGame && !dialog.open) session.current.scroll = viewport.scrollTop;
   if (lesson >= 0) {
     if (!metadata(progress).flags?.includes("tutorial_end"))
       firstEvent("tutorial_end", { outcome: "skip", step: lesson + 1 });
@@ -3807,6 +3854,7 @@ async function switchGame(id: string) {
     settingsDirty.tutorialDone = true;
   }
   progress.sessions[progress.active] = session;
+  if (progress.active.startsWith("book")) progress.lastBookTask = progress.active;
   settlePresentation();
   // Sessions are replaced on moves; retain their immutable histories and caches.
   const candidate: Progress = {
@@ -3821,6 +3869,7 @@ async function switchGame(id: string) {
     jars: progress.jars ? { ...progress.jars } : undefined,
   };
   candidate.active = id;
+  if (id.startsWith("book")) candidate.lastBookTask = id;
   if (day && versionedDay(day)) candidate.dailyAssignments = {...candidate.dailyAssignments,[day]:id};
   if (legacyBookNumber(id)) candidate.bookRevisions={...candidate.bookRevisions,[id]:bookRevisionFor(id,progress)};
   if (!candidate.sessions[id]) startAttempt(candidate, id);
@@ -3836,10 +3885,14 @@ async function switchGame(id: string) {
   switching = true;
   dialog.inert = true;
   await save(candidate, nextSession);
+  if (route && lesson < 0 && !saveFailed && !futureSave && !storageConflict) await transitionAd(route);
   switching = false;
   dialog.inert = false;
   busy = false;
-  if (saveFailed || futureSave) return;
+  if (saveFailed || futureSave || storageConflict) return;
+  earnedAward = "";
+  earnedSeeds = earnedHints = 0;
+  saveRecovered = false;
   progress = candidate;
   session = nextSession;
   if (id.startsWith("book")) selectedVolume = volumeOf(id);
@@ -3872,8 +3925,6 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     document.getElementById("calendar-picker") as HTMLDetailsElement | null
   )?.open;
   const calendarExtrasOpen = document.querySelector<HTMLDetailsElement>("#calendar-extras")?.open;
-  const bookPickerOpen = document.querySelector<HTMLDetailsElement>("#other-books")?.open;
-  const laterPagesOpen = document.querySelector<HTMLDetailsElement>("#book-later-pages")?.open;
   if (!restoring) rememberNavigation(kind);
   openMenu(true);
   dialog.dataset.screen = kind;
@@ -3894,70 +3945,9 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     ).length;
     html += `<h2>${t("home.progress")}</h2>${jarHero(j)}<button id="progress-book" class="progress-book" data-volume="${nextVolume}">${bookPicture(nextVolume + 1)}<span><strong>${volumeLabel(nextVolume)}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${volumeLabel(nextVolume)}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p><button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button>`;
   } else if (kind === "book") {
-    const finished = new Set(progress.done);
-    const status = (v: number) => {
-      const tasks = volumeTasks(v),
-        n = tasks.filter((p) => finished.has(p.id)).length;
-      return {
-        n,
-        started:
-          n > 0 || tasks.some((p) => progress.sessions[p.id]?.history.length),
-      };
-    };
-    const allowed = (v: number) =>
-      bookFilter === "all" ||
-      (bookFilter === "done"
-        ? status(v).n === 24
-        : bookFilter === "new"
-          ? !status(v).started
-          : status(v).started && status(v).n < 24);
-    const candidates = Array.from({ length: VOLUMES }, (_, i) => i).filter(allowed);
-    const chapter = Math.floor(selectedVolume / 10);
-    const chapterCandidates = candidates.filter(
-      (v) => Math.floor(v / 10) === chapter,
-    );
-    if (!chapterCandidates.includes(selectedVolume) && chapterCandidates.length)
-      selectedVolume = chapterCandidates[0];
-    const stats = status(selectedVolume);
-    html += `<h2>${t("home.books")}</h2><p class="intro book-total">${t("content.total", {books:VOLUMES,tasks:notebook.length})}</p><div class="archive-controls"><label>${t("ui.section")}<select id="book-chapter">${chapterNames.map((n, i) => `<option value="${i}" ${i === chapter ? "selected" : ""}>${i + 1}. ${localName(n)}</option>`).join("")}</select></label><label>${t("ui.show")}<select id="book-filter">${[
-      ["all", t("ui.all")],
-      ["new", t("ui.not-started")],
-      ["active", t("ui.in-progress")],
-      ["done", t("ui.completed")],
-    ]
-      .map(
-        ([v, t]) =>
-          `<option value="${v}" ${bookFilter === v ? "selected" : ""}>${t}</option>`,
-      )
-      .join("")}</select></label></div><div class="volume-shelf">${candidates
-      .filter((v) => Math.floor(v / 10) === chapter)
-      .map(
-        (v) =>
-          `<button class="volume-cover ${v === selectedVolume ? "current" : ""}" data-volume="${v}" aria-pressed="${v === selectedVolume}" aria-label="${t("ui.puzzle-book-of-24", { "0": v + 1, "1": status(v).n })}"><strong>${v + 1}${status(v).n === 24 ? '<span class="volume-done">✓</span>' : ""}</strong>${themeOf(v) ? `<small class="theme-name">${volumeLabel(v)}</small>` : ""}<small>${status(v).n}/24</small><progress max="24" value="${status(v).n}" aria-hidden="true"></progress></button>`,
-      )
-      .join("")}</div>`;
-    if (chapterCandidates.length) {
-      const tasks = volumeTasks(selectedVolume);
-      const continuing =
-        tasks.find((p) => p.id === progress.active && !finished.has(p.id)) ??
-        tasks.find(
-          (p) => progress.sessions[p.id]?.history.length && !finished.has(p.id),
-        ) ??
-        tasks.find((p) => !finished.has(p.id)) ??
-        tasks[0];
-      html += `<div class="volume-heading">${bookPicture(selectedVolume + 1)}<div><small>${t("calm.book.open")}</small><h3>${volumeLabel(selectedVolume)}</h3><span>${t("ui.of-24-puzzles", { "0": stats.n })}</span></div></div><button class="primary" id="continue-book" data-continue="${continuing.id}">${t("ui.puzzle", { "0": stats.n === 24 ? t("ui.replay") : stats.started ? t("daily.resume") : t("action.start"), "1": puzzleNumberInVolume(continuing.id) })}</button>`;
-      for (let page = 0; page < 4; page++) {
-        const group = tasks.slice(page * 6, page * 6 + 6),
-          n = group.filter((p) => finished.has(p.id)).length;
-        html += `<section class="book-page ${n === 6 ? "page-done" : ""}" data-page="${page + 1}"><div class="page-heading"><h3>${t("ui.page", { "0": page + 1 })}</h3><span>${n}/6</span></div><div class="task-grid">${group.map((p) => {
-          const number = puzzleNumberInVolume(p.id);
-          const done = finished.has(p.id);
-          return `<button class="task ${done ? "done" : ""}" data-game="${p.id}" ${p.id === progress.active ? 'aria-current="true"' : ""} aria-label="${t("ui.puzzle-2", { "0": number, "1": done ? t("ui.solved") : "" })}">${number}${done ? "<small>✓</small>" : ""}</button>`;
-        }).join("")}</div>${n === 6 ? `<p class="stamp">${t("ui.completed-2")}</p>` : ""}</section>`;
-      }
-    } else
-      html +=
-        `<div class="empty-state"><p>${t("ui.no-puzzle-books-in-this-section-have-that-status")}</p><button id="book-filter-reset" class="secondary">${t("ui.show-all-in-this-section")}</button></div>`;
+    html += renderNotebook();
+  } else if (kind === "book-picker") {
+    html += renderNotebookPicker();
   } else if (kind === "calendar") {
     if (calendarMonth > today().slice(0, 7))
       calendarMonth = today().slice(0, 7);
@@ -4054,60 +4044,15 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       ).append(node);
     jars.append(overview, history);
   }
-  if (kind === "book") {
-    const resume = document.createElement("section");
-    resume.className = "book-resume";
-    const heading = panel.querySelector(".volume-heading"),
-      button = document.getElementById("continue-book");
-    if (heading && button) {
-      resume.append(heading, button);
-      panel.append(resume);
-    }
-    const pilotAccess = document.createElement("button");
-    pilotAccess.id = "pilot-books";
-    pilotAccess.className = "secondary";
-    pilotAccess.textContent = t("content.open");
-    pilotAccess.onclick = () => {
-      selectedVolume = themeOf(selectedVolume) ? selectedVolume : LEGACY_BOOK_TASKS / 24;
-      bookFilter = "all";
-      openCollection("book");
-    };
-    panel.append(pilotAccess);
-    const browser = document.createElement("details");
-    browser.id = "other-books";
-    browser.className = "book-browser";
-    browser.open = Boolean(themeOf(selectedVolume) || bookPickerOpen || panel.querySelector(".empty-state"));
-    const summary = document.createElement("summary");
-    summary.textContent = t("calm.book.other", { count: notebook.length / 24 });
-    browser.append(summary);
-    for (const selector of [
-      ".book-total",
-      ".archive-controls",
-      ".volume-shelf",
-    ])
-      if (panel.querySelector(selector))
-        browser.append(panel.querySelector(selector)!);
-    const pages = document.createElement("div");
-    pages.className = "book-pages";
-    const groups = [...panel.querySelectorAll<HTMLElement>(".book-page")];
-    if (groups.length) {
-      const heading = document.createElement("div");
-      heading.className = "book-pages-heading";
-      heading.textContent = t("calm.book.pageCount", { pages: groups.length, size: 6 });
-      const later = document.createElement("details");
-      later.id = "book-later-pages";
-      later.open = Boolean(laterPagesOpen || groups.slice(2).some(group=>group.querySelector("[aria-current]")));
-      const summary = document.createElement("summary");
-      summary.textContent = t("calm.book.pages", { first: 3, last: groups.length });
-      later.append(summary, ...groups.slice(2));
-      pages.append(heading, ...groups.slice(0,2), later);
-    }
-    panel.append(pages, browser);
-  }
   const screenHeading = document.createElement("div");
   screenHeading.className = "screen-heading";
   screenHeading.append($("collection-back"), panel.querySelector("h2")!);
   panel.prepend(screenHeading);
+  const bookAction = panel.querySelector(".notebook-action");
+  if (bookAction) {
+    notebookDock.append(bookAction);
+    notebookDock.hidden = false;
+  }
   pinDialogHeading(panel);
   if (kind === "progress") {
     $("progress-trophies").onclick = () => openCollection("trophies");
@@ -4125,7 +4070,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     (b) =>
       (b.onclick = () => {
         const id = b.dataset.game!;
-        switchGame(id);
+        void switchGame(id, kind === "calendar" ? "archive" : "notebook-tile");
       }),
   );
   panel.querySelectorAll<HTMLElement>("[data-month]").forEach(
@@ -4137,32 +4082,33 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       }),
   );
   if (kind === "book") {
-    if ($("book-filter-reset"))
-      $("book-filter-reset").onclick = () => {
-        bookFilter = "all";
-        openCollection("book");
+    $("all-books").onclick = () => openCollection("book-picker");
+    const action = document.getElementById("continue-book");
+    if (action) action.onclick = () => void switchGame(action.dataset.continue!, "notebook-continue");
+  }
+  if (kind === "book-picker") {
+    function updatePicker() { openCollection("book-picker",true); }
+    for (const section of panel.querySelectorAll<HTMLButtonElement>("[data-book-section]")) {
+      section.onclick = () => { bookThemes = section.dataset.bookSection === "themes"; updatePicker(); };
+    }
+    for (const range of panel.querySelectorAll<HTMLButtonElement>("[data-book-range]")) {
+      range.onclick = () => { bookRange = Number(range.dataset.bookRange); updatePicker(); };
+    }
+    $("toggle-book-filter").onclick = () => { bookFilterOpen = !bookFilterOpen; updatePicker(); };
+    const filter = document.querySelector<HTMLSelectElement>("#book-filter");
+    if (filter) filter.onchange = () => { bookFilter = filter.value; updatePicker(); };
+    const reset = document.getElementById("book-filter-reset");
+    if (reset) reset.onclick = () => { bookFilter = "all"; updatePicker(); };
+    for (const button of panel.querySelectorAll<HTMLButtonElement>("[data-volume]")) {
+      button.onclick = () => {
+        rememberNavigation("book");
+        selectedVolume = Number(button.dataset.volume);
+        openCollection("book", true);
       };
-    if ($("continue-book"))
-      $("continue-book").onclick = () =>
-        switchGame($("continue-book").dataset.continue!);
-    $("book-filter").onchange = () => {
-      bookFilter = $<HTMLSelectElement>("book-filter").value;
-      openCollection("book");
-    };
-    $("book-chapter").onchange = () => {
-      selectedVolume = Number($<HTMLSelectElement>("book-chapter").value) * 10;
-      openCollection("book");
-    };
-    panel.querySelectorAll<HTMLElement>("[data-volume]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          selectedVolume = Number(b.dataset.volume);
-          openCollection("book");
-        }),
-    );
+    }
   }
   if (kind === "trophies") {
-    if ($("jar-play")) $("jar-play").onclick = () => switchGame("classic");
+    if ($("jar-play")) $("jar-play").onclick = () => { openMenu(true); openClassicNewSheet(); };
     $("jars-tab").onclick = () => {
       collectionTab = "jars";
       openCollection("trophies");
@@ -4211,7 +4157,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         openCollection("calendar");
       };
     $("today-task").onclick = () => {
-      switchGame($("today-task").dataset.continue!);
+      void switchGame($("today-task").dataset.continue!, "calendar-today");
     };
   }
   if (sameScreen) {
@@ -4224,22 +4170,73 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ?.focus({ preventScroll: true });
   } else if (!restoring) dialogScroller().scrollTop = 0;
 }
-$("classic-mode").onclick = () => switchGame("classic");
-$("book-mode").onclick = () => {
-  // The numbered cover on Home points to the selected volume.
-  bookFilter = "all";
-  openCollection("book");
+$("classic-mode").onclick = openClassicNewSheet;
+$("book-mode").onclick = openHomeNotebook;
+bookQuick.onclick = () => {
+  const target = notebookTarget(progress);
+  if (target) void switchGame(target, "home-notebook-quick");
 };
-$("daily-mode").onclick = () => switchGame(dailyIdFor(today(),progress));
+$("daily-mode").onclick = () => void switchGame(dailyIdFor(today(),progress),"home-daily");
 $("calendar-open").onclick = () => {
   calendarMonth = today().slice(0, 7);
   openCollection("calendar");
 };
 $("progress-open").onclick = () => openCollection("progress");
 function nextBookVolume() {
-  if (progress.active.startsWith("book")) return volumeOf(progress.active);
-  const first = notebook.findIndex((p) => !progress.done.includes(p.id));
-  return Math.max(0, Math.floor(first / 24));
+  const target = notebookTarget(progress);
+  return target ? volumeOf(target) : MAIN_BOOKS - 1;
+}
+function openHomeNotebook() {
+  if (busy) return;
+  rememberNavigation("book");
+  selectedVolume = nextBookVolume();
+  bookThemes = Boolean(themeOf(selectedVolume));
+  if (!bookThemes) bookRange = Math.floor(selectedVolume / 20);
+  openCollection("book", true);
+}
+function renderNotebook() {
+  const done = new Set(progress.done);
+  const tasks = volumeTasks(selectedVolume);
+  const { solved } = notebookBrowseStatus(progress, selectedVolume, done);
+  const target = notebookTarget(progress, selectedVolume);
+  const tiles = tasks.map(({id},i) => {
+    const isDone = done.has(id), isStarted = !isDone && notebookStarted(progress,id);
+    const isNext = id === target;
+    const status = isDone ? t("ui.solved") : isStarted ? t("nav.started") : "";
+    const label = t("ui.puzzle-2", {"0":i + 1,"1":status}).trim();
+    return `<button class="task ${isDone ? "done" : isStarted ? "started" : ""} ${isNext ? "recommended" : ""}" data-game="${id}"
+      ${isNext ? 'aria-current="true"' : ""} aria-label="${label}">${i+1}${isDone ? '<small>✓</small>' : isStarted ? '<small>▸</small>' : ""}</button>`;
+  }).join("");
+  const toolbar = `<div class="notebook-toolbar"><span>${t("ui.of-24-puzzles",{"0":solved})}</span><button class="text-button" id="all-books">${t("nav.booksAll")}</button></div>`;
+  const cta = target ? `<button class="primary" id="continue-book" data-continue="${target}">${t("ui.puzzle", {
+    "0":notebookStarted(progress,target) ? t("daily.resume") : t("action.start"),
+    "1":puzzleNumberInVolume(target)})}</button>` : `<p>${t("nav.pickTask")}</p>`;
+  return `<h2>${volumeLabel(selectedVolume)}</h2>${toolbar}
+    <div class="task-grid compact-task-grid">${tiles}</div><div class="notebook-action">${cta}</div>`;
+}
+function renderNotebookPicker() {
+  const done = new Set(progress.done);
+  const volumes = Array.from({length:VOLUMES},(_,volume)=>volume)
+    .filter(volume=>Boolean(themeOf(volume))===bookThemes)
+    .map(volume=>({volume, ...notebookBrowseStatus(progress,volume,done)}));
+  const matching = volumes.filter(({solved,started})=>bookFilter==="all" ||
+    (bookFilter==="new" ? !started : bookFilter==="done" ? solved===24 : started && solved<24));
+  const ranges = [...new Set(matching.map(({volume})=>Math.floor(volume/20)))];
+  if (!bookThemes && ranges.length && !ranges.includes(bookRange)) bookRange = ranges[0];
+  const rangeButtons = bookThemes ? "" : `<div class="book-ranges">${Array.from({length:5},(_,i)=>
+    `<button class="text-button" id="book-range-${i}" data-book-range="${i}" aria-pressed="${bookRange===i}" ${ranges.includes(i)?"":"disabled"}>${i*20+1}–${(i+1)*20}</button>`).join("")}</div>`;
+  const options = [["all",t("ui.all")],["active",t("ui.in-progress")],["done",t("ui.completed")],["new",t("ui.not-started")]];
+  const filterLabel=options.find(([id])=>id===bookFilter)?.[1] ?? t("ui.all");
+  const filter = `<div class="notebook-toolbar"><span>${filterLabel}</span><button id="toggle-book-filter" class="text-button" aria-expanded="${bookFilterOpen}">${t("nav.filter")}</button></div>
+    ${bookFilterOpen ? `<select id="book-filter" aria-label="${t("nav.filter")}">${options.map(([id,label])=>`<option value="${id}" ${id===bookFilter?"selected":""}>${label}</option>`).join("")}</select>`:""}`;
+  const buttons = matching.filter(({volume})=>bookThemes || Math.floor(volume/20)===bookRange)
+    .map(({volume,solved,started})=>`<button class="volume-cover ${solved===24?"done":started?"started":""}" data-volume="${volume}" aria-pressed="${volume===selectedVolume}"
+      aria-label="${bookThemes ? volumeLabel(volume)+", "+solved+"/24" : t("ui.puzzle-book-of-24",{"0":volume+1,"1":solved})}"><strong>${bookThemes?volumeLabel(volume):volume+1}</strong><small>${solved}/24${solved===24?" ✓":started?" ▸":""}</small></button>`).join("");
+  return `<h2>${t("nav.booksAll")}</h2><div class="book-sections" role="group" aria-label="${t("nav.booksAll")}">
+    <button id="book-section-main" data-book-section="main" aria-pressed="${!bookThemes}">${t("nav.bookMain")}</button>
+    <button id="book-section-themes" data-book-section="themes" aria-pressed="${bookThemes}">${t("nav.bookThemes")}</button></div>
+    ${rangeButtons}${filter}${buttons?`<div class="volume-shelf compact-volume-shelf ${bookThemes?"theme-shelf":""}">${buttons}</div>`:
+      `<p>${t("ui.no-puzzle-books-in-this-section-have-that-status")}</p><button class="secondary" id="book-filter-reset">${t("ui.show-all-in-this-section")}</button>`}`;
 }
 function volumeLabel(volume: number) {
   const theme = themeOf(volume);
@@ -4288,96 +4285,64 @@ function difficultyLabel() {
   return `${localName(classicDifficultyNames[level])}${level === CLASSIC_MIN ? " "+t("ui.lowest") : level === CLASSIC_MAX ? " "+t("ui.highest") : ""}`;
 }
 function renderHomeCurrent() {
-  const count = occupied(board()),
-    classicMode = progress.active === "classic";
-  $("home-difficulty").hidden = !classicMode || lesson >= 0;
-  $("home-difficulty").textContent =
-    t("ui.difficulty-2", { "0": localName(classicDifficultyNames[classicDifficulty()]), "1": classicDifficulty() === CLASSIC_MIN ? " "+t("ui.lowest") : classicDifficulty() === CLASSIC_MAX ? " "+t("ui.highest") : "" });
-  homeGoal.hidden = lesson >= 0;
-  $("next-classic").hidden = lesson >= 0;
-  $("next-classic").textContent = t("calm.classic.new");
-  $("menu-easier").hidden = !classicMode || lesson >= 0 || !count;
-  $<HTMLButtonElement>("menu-easier").disabled =
-    classicDifficulty() === CLASSIC_MIN;
-  $("new").hidden =
-    lesson >= 0 ||
-    (classicMode && !count) ||
-    (dialog.dataset.entry !== "pause" && count > 0 && !session.history.length);
-  $("new").textContent = classicMode
-    ? count
-      ? t("ui.restart")
-      : t("ui.new-game")
-    : count
-      ? t("ui.restart-puzzle")
-      : t("ui.replay-puzzle");
+  const id = progress.active;
+  const count = occupied(board());
+  const classic = id === "classic";
+  const book = id.startsWith("book");
+  const next = book && !count ? notebookTarget(progress) : undefined;
+  const show = lesson >= 0 || Boolean(next) ||
+    count > 0 && (classic ? classicParked() : Boolean(progress.sessions[id]));
+  homeCurrent.hidden = !show;
+  $("home-difficulty").hidden = true;
+  $("home-current-art").hidden = true;
+  $("home-eyebrow").hidden = true;
+  homeGoal.hidden = true;
+  $("new").hidden = lesson >= 0 || !unfinished(session);
+  $("new").textContent = classic ? t("ui.restart") : t("ui.restart-puzzle");
+  $("home-language").querySelector("span")!.textContent = t("nav.language");
+  if (!show) return;
+  $("resume").hidden = false;
   if (lesson >= 0) {
-    $("home-current-art").innerHTML = icon("help");
-    $("classic-mode").hidden = false;
-    $("home-eyebrow").textContent = t("home.how");
     $("home-game-title").textContent = t("ui.tutorial");
-    $("resume-context").textContent =
-      t("ui.step-of", { "0": lesson + 1, "1": shortLesson ? 2 : lessons.length });
+    $("resume-context").textContent = t("ui.step-of", {"0": lesson+1,"1":shortLesson?2:lessons.length});
     $("resume").textContent = t("ui.continue-tutorial");
     return;
   }
-  $("classic-mode").hidden = classicMode;
-  const isBook = progress.active.startsWith("book");
-  const activeDay = progress.active.startsWith("daily") ? progress.active.slice(9) : "";
-  const dateLabel = activeDay
-    ? taskDate(activeDay, activeDay.slice(0, 4) !== today().slice(0, 4))
-    : "";
-  $("home-current-art").innerHTML = classicMode
-    ? jarPicture(jarState(jars(progress).meter))
-    : isBook
-      ? bookPicture(volumeOf(progress.active) + 1)
-      : calendarPicture(progress.active.slice(9));
-  $("home-eyebrow").textContent = !count
-    ? t("ui.game-complete")
-    : session.history.length || dialog.dataset.entry === "pause"
-      ? t("ui.current-game")
-      : t("ui.game");
-  $("home-game-title").textContent = classicMode
-    ? t("home.classic")
-    : progress.active.startsWith("book")
-      ? volumeLabel(volumeOf(progress.active))
-      : progress.active.slice(9) === today() ? t("notification.channel") : t("home.daily.date", { "date": dateLabel });
-  $("resume-context").textContent = classicMode
-    ? t("ui.on-the-board", { "0": count, "1": digitWord(count) })
-    : progress.active.startsWith("book")
-      ? t("ui.puzzle-3", { "0": puzzleNumberInVolume(progress.active), "1": count, "2": digitWord(count) })
-      : `${dateLabel} · ${count} ${digitWord(count)}`;
-  $("resume").textContent = !count
-    ? t("ui.view-results")
-    : session.history.length || dialog.dataset.entry === "pause"
-      ? classicMode ? t("ui.resume-classic") : progress.active.startsWith("book") ? t("ui.resume-puzzle", { "0": puzzleNumberInVolume(progress.active) }) : progress.active.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for", { "0": dateLabel })
-      : classicMode
-        ? t("ui.start-classic")
-        : t("ui.play");
-  if (progress.active.startsWith("daily") && progress.active.slice(9) !== today())
-    $("resume").textContent = t("ui.resume-puzzle-for", { "0": dateLabel });
-  if (classicMode) {
-    const j = jarState(jars(progress).meter);
-    homeGoal.innerHTML = `${jarPicture(j)}<div><strong>${t("ui.jar-2", { "0": j.index + 1, "1": j.percent })}</strong><span>${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</span><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress></div>`;
-  } else {
-    const done = isBook
-      ? volumeTasks(volumeOf(progress.active)).filter((p) =>
-          progress.done.includes(p.id),
-        ).length
-      : trophy(progress.active.slice(9, 16), progress.done).count;
-    const total = isBook
-      ? 24
-      : days(progress.active.slice(9, 16)).length;
-    homeGoal.innerHTML = `<div><progress max="${total}" value="${done}" aria-label="${t(isBook ? "ui.completed-puzzles" : "ui.monthly-trophies")}"></progress><strong>${t(isBook ? "ui.of-puzzles" : "ui.of-days", { "0": done, "1": total })}</strong></div>`;
+  const date = !classic && !book ? taskDate(id.slice(9),id.slice(9,13)!==today().slice(0,4)) : "";
+  $("home-game-title").textContent = classic ? t("home.classic")
+    : book ? volumeLabel(volumeOf(next ?? id)) : id.slice(9) === today()
+      ? t("notification.channel") : t("home.daily.date", {date});
+  $("resume-context").textContent = classic ? `${difficultyLabel()} · ${count} ${digitWord(count)}`
+    : book ? next ? t("nav.bookTaskTarget",{book:volumeLabel(volumeOf(next)),task:puzzleNumberInVolume(next)})
+      : t("ui.puzzle-3",{"0":puzzleNumberInVolume(id),"1":count,"2":digitWord(count)})
+    : `${date} · ${count} ${digitWord(count)}`;
+  if (book && !next) {
+    homeGoal.hidden = false;
+    const done = notebookBrowseStatus(progress,volumeOf(id),new Set(progress.done)).solved;
+    homeGoal.textContent = t("ui.of-24-puzzles",{"0":done});
   }
+  $("resume").textContent = next
+    ? t("ui.puzzle",{"0":notebookStarted(progress,next)?t("daily.resume"):t("action.start"),"1":puzzleNumberInVolume(next)})
+    : classic ? t("ui.resume-classic") : book ? t("ui.resume-puzzle",{"0":puzzleNumberInVolume(id)})
+    : id.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for",{"0":date});
 }
 function updateHome() {
   const finished = new Set(progress.done);
-  const bookNumber = selectedVolume + 1;
-  const solvedInBook = volumeTasks(selectedVolume).filter((task) => finished.has(task.id)).length;
+  const target = notebookTarget(progress);
+  const volume = target ? volumeOf(target) : nextBookVolume();
+  const solved = notebookBrowseStatus(progress, volume, finished).solved;
   const bookMode = $("book-mode");
-  bookMode.querySelector(".book-picture")!.outerHTML = bookPicture(bookNumber);
-  $("book-count").textContent = t("ui.of-24-puzzles", { "0": solvedInBook });
-  bookMode.setAttribute("aria-label", t("ui.puzzle-book-of-24", { "0": bookNumber, "1": solvedInBook }));
+  bookMode.querySelector(".book-picture")!.outerHTML = bookPicture(volume + 1);
+  const context = target
+    ? t("nav.bookTaskTarget",{book:volumeLabel(volume),task:puzzleNumberInVolume(target)})
+    : t("nav.mainComplete");
+  $("book-count").textContent = target ? `${context} · ${solved}/24` : context;
+  bookMode.setAttribute("aria-label", `${t("home.books")}. ${context}`);
+  bookQuick.hidden = progress.active.startsWith("book") || !target;
+  if (target) {
+    bookQuick.textContent = notebookStarted(progress,target) ? t("daily.resume") : t("action.start");
+    bookQuick.setAttribute("aria-label",`${bookQuick.textContent}. ${context}`);
+  }
   const date = today();
   const id = dailyIdFor(date,progress);
   $("daily-mode").toggleAttribute("data-daily-pending", !dailyDone(progress.done,date));

@@ -1,3 +1,5 @@
+import { requestRestartFromSettings } from "./restore-game";
+import { installLegacyClassic } from "./restore-game";
 import { test, expect, type Page } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
 async function seed(
@@ -55,6 +57,7 @@ async function seed(
     },
     { key, permission },
   );
+  await installLegacyClassic(page);
   await page.goto("/");
 }
 async function hintedMove(page: Page) {
@@ -87,6 +90,7 @@ test("continuing a notebook retains the latest unfinished task, also after relau
 test("leaving the first lesson for a notebook is remembered", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-top").click();
   await page.locator("#continue-book").click();
@@ -115,7 +119,7 @@ test("Back and Close remain reachable after scrolling every long section", async
     await expect(
       heading.getByRole("button", { name: "Назад", exact: true }),
     ).toBeInViewport();
-    await expect(page.locator("#close")).toBeInViewport();
+    await expect(page.locator("#close")).toHaveCount(0);
     await heading.getByRole("button", { name: "Назад", exact: true }).click();
     await expect(page.locator("#menu-content")).toBeVisible();
   }
@@ -129,7 +133,7 @@ test("restart belongs to the current-game menu and cancelling preserves the boar
   await page.locator('[data-index="1"]').click();
   await expect(page.locator("#remaining")).toHaveText("4");
   await page.locator("#menu").click();
-  await page.locator("#new").click();
+  await requestRestartFromSettings(page);
   await expect(page.locator("#confirm-content")).toBeVisible();
   await page.locator("#cancel-new").click();
   await page.locator("#resume").click();

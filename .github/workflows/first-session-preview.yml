@@ -1,7 +1,7 @@
 name: First session preview
 on:
   push:
-    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125]
+    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125]
     paths: [src/**, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, tests/**, e2e/**, scripts/configure-android.mjs, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
 permissions:
   contents: read
@@ -45,7 +45,7 @@ jobs:
         if: always()
         with: {name: markets-browser-controls, path: test-results/markets/}
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=988 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=989 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
@@ -63,16 +63,16 @@ jobs:
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
       - uses: actions/download-artifact@v4
         with:
-          artifact-ids: 14957021358
+          artifact-ids: 15005703885
           merge-multiple: true
-          run-id: 45469090536
+          run-id: 45579802309
           github-token: ${{ github.token }}
           path: baseline
       - run: |
-          echo '2a026768a72ae1d8a3e0c181c8b583163146b3effcf04cacfafec942436d5e87  baseline/seeds-first-session-12087-unsigned.apk' | sha256sum -c -
+          echo '4de5a8398d5deb9748cec6c5e89b9b78a44258a2f29f0b26f18dc1096ff7daf9  baseline/seeds-first-session-12088-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
           build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12087-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12088-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" android/app/build/outputs/apk/release/app-release-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
       - run: node scripts/classic-series.mjs --before eae2bcbeaaa1a5c76872dddc7a7f79844988b60e
@@ -99,6 +99,8 @@ jobs:
             sleep 2
           done
           test "$(adb shell id -u | tr -d '\r')" = 0
+          adb shell input keyevent 82
+          SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk"
           adb shell svc wifi disable
           adb shell svc data disable
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT

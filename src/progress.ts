@@ -1,4 +1,4 @@
-import { validContentId, dailyDay, dailyDone, readDailyAssignments, knownDailyAssignments, readBookRevisions, knownBookRevisions, knownIds, versionedDay, type BookRevision } from "./content-ids";
+import { validContentId, legacyBookNumber, pilotBookId, dailyDay, dailyDone, readDailyAssignments, knownDailyAssignments, readBookRevisions, knownBookRevisions, knownIds, versionedDay, type BookRevision } from "./content-ids";
 import { freshHelp, readHelp, readHelpAttempt, type HelpProfile, type HelpAttempt } from "./help-contract";
 import { compactHintKey } from "./hint-key";
 import { readAnalytics, type AnalyticsJournal } from "./analytics";
@@ -14,6 +14,7 @@ export type Progress = {
   dailyAssignments?: Record<string,string>;
   bookRevisions?: Record<string,BookRevision>;
   active: string;
+  lastBookTask?: string;
   sessions: Record<string, Session>;
   hints: Record<string, number>;
   done: string[];
@@ -105,6 +106,9 @@ export function readProgress(
   if (p.version >= 9 && !clean.sessions[p.active])
     throw new ProtectedContentProgress("Missing assigned field");
   clean.active = clean.sessions[p.active] ? p.active : "classic";
+  if (typeof p.lastBookTask === "string" &&
+      (legacyBookNumber(p.lastBookTask) || pilotBookId(p.lastBookTask)) &&
+      clean.sessions[p.lastBookTask]) clean.lastBookTask = p.lastBookTask;
   clean.done = [
     ...new Set<string>(
       p.done.filter(

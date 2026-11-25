@@ -1,3 +1,5 @@
+import { installLegacyClassic } from "./restore-game";
+import { returnToGame } from "./restore-game";
 import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
 import { CLASSIC_START_COUNTS } from "../src/classic-generator";
@@ -58,6 +60,7 @@ test("A01 damage isolated to metadata does not discard valid tasks and boards", 
   const p = state();
   p.meta.completed = -1;
   await seed(page, p);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#progress-open").click();
   expect(
@@ -81,6 +84,7 @@ test("A02 unsupported future metadata is not overwritten by ordinary interaction
   const p = state();
   p.meta.version = 99;
   await seed(page, p);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.locator('[data-index="0"]').click();
@@ -100,6 +104,7 @@ test("A03 failed save must not open a newly selected task as if persisted", asyn
   page,
 }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.evaluate(() => {
     const orig = Storage.prototype.setItem;
@@ -126,6 +131,7 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
   page,
 }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await pair(page);
@@ -139,7 +145,7 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
     "6",
     "4",
   ]);
-  await page.locator("#close").click();
+  await returnToGame(page);
   await page.locator("#play-again").click();
   await expect(page.locator("#win")).toBeHidden();
   const saved = await data(page);
@@ -158,6 +164,7 @@ test("A05 record of solved daily remains in statistics when device clock moves b
   const p = state();
   p.done.push("daily-v1-2026-10-20");
   await seed(page, p);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#progress-open").click();
   console.log(
@@ -171,6 +178,7 @@ test("A06 midnight calendar refresh preserves keyboard focus on the current cont
 }) => {
   await page.clock.install({ time: new Date("2026-10-20T23:59:59") });
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#calendar-open").click();
   await page.locator('[data-game="daily-v1-2026-10-10"]').focus();
@@ -193,6 +201,7 @@ test("A07 completed first notebook leads to next volume and keeps reachable repl
   };
   p.done = Array.from({ length: 23 }, (_, i) => `book-v1-${i + 1}`);
   await seed(page, p);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await pair(page);
@@ -202,7 +211,6 @@ test("A07 completed first notebook leads to next volume and keeps reachable repl
   await page.locator("#book-top").click();
   await openBookPicker(page);
   await page.locator('[data-volume="0"]').click();
-  await page.locator("#book-later-pages > summary").click();
   await expect(page.locator(".task.done")).toHaveCount(24);
   await page.locator('[data-game="book-v1-24"]').click();
   await expect(page.locator("#win")).toBeHidden();
@@ -213,6 +221,7 @@ test("A08 offline already loaded APK web assets remain playable and save/reload"
   context,
 }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await context.setOffline(true);
   await page.locator("#resume").click();
@@ -228,6 +237,7 @@ test("A09 reduced motion has no running decorative animations during selection a
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.locator('[data-index="0"]').click();
@@ -253,6 +263,7 @@ test("A10 portrait, landscape, dark and enlarged type screens are reachable; cap
   page,
 }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.emulateMedia({ reducedMotion: "reduce" });
   const measurements: any[] = [];
@@ -333,6 +344,7 @@ test("A11 scrolling a long board during pair animations preserves nodes and undo
   const p: any = state();
   p.sessions.classic.current = snapshot(Array(1800).fill(1));
   await seed(page, p);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.evaluate(() => {
@@ -355,7 +367,7 @@ test("A11 scrolling a long board during pair animations preserves nodes and undo
   await page.locator("#viewport").evaluate((e) => (e.scrollTop = 1300));
   await page.locator("#menu").click();
   await page.locator("#progress-open").click();
-  await page.locator("#close").click();
+  await returnToGame(page);
   expect(
     await page.locator("#viewport").evaluate((e) => e.scrollTop),
   ).toBeGreaterThan(1000);
@@ -370,6 +382,7 @@ test("A12 fast contradictory inputs during removal cannot create extra result or
   page,
 }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   const errors: string[] = [];
@@ -413,6 +426,7 @@ test("A13 no forced audio; enabling sound creates feedback, disabling stops new 
       }
     };
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await removePair();
@@ -421,7 +435,7 @@ test("A13 no forced audio; enabling sound creates feedback, disabling stops new 
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
   await page.locator("#sound").check();
-  await page.locator("#close").click();
+  await returnToGame(page);
   await removePair();
   expect(await page.evaluate(() => (window as any).tones)).toBeGreaterThan(0);
   await page.locator("#undo").click();
@@ -429,7 +443,7 @@ test("A13 no forced audio; enabling sound creates feedback, disabling stops new 
   await page.locator("#settings-open").click();
   await page.locator("#sound").uncheck();
   const tonesBefore = await page.evaluate(() => (window as any).tones);
-  await page.locator("#close").click();
+  await returnToGame(page);
   await removePair();
   expect(await page.evaluate(() => (window as any).tones)).toBe(tonesBefore);
 });
@@ -438,6 +452,7 @@ test("A14 old tab cannot discard new statistics, and reload latest recovers them
   context,
 }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   const stale = await context.newPage();
@@ -460,6 +475,7 @@ test("A15 solved final available day leads back to usable archive without future
   p.active = "daily-v1-2025-01-01";
   p.sessions[p.active] = { rules: 1, current: snapshot([5, 5]), history: [] };
   await seed(page, p);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await pair(page);
@@ -486,6 +502,7 @@ test("A16 long saved history retains responsiveness and measures actual save cos
     snapshot(Array(1800).fill(1)),
   );
   await seed(page, p);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.evaluate(() => {
@@ -525,6 +542,7 @@ test("A17 accessibility contrast and motion timing measurements on actual built 
   page,
 }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   const results: any[] = [];
   for (const dark of [false, true]) {
@@ -566,6 +584,7 @@ test("failed switch can retry without lost attempt or rapid-click double transit
   page,
 }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
@@ -597,6 +616,7 @@ test("failed switch can retry without lost attempt or rapid-click double transit
 
 test("backup recovery is explicit and survives reload", async ({ page }) => {
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.evaluate((key) => {
     const p = JSON.parse(localStorage.getItem(key)!);
@@ -616,6 +636,7 @@ test("compact home can reach settings and its touch targets are at least 44px", 
 }) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#dialog")).toBeVisible();
   await page.locator("#settings-open").scrollIntoViewIfNeeded();

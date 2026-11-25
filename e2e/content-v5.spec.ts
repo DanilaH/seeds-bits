@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
-import { openBookPicker } from "./book-controls";
+import { chooseBookVolume } from "./book-controls";
 import { bookV5Fixture as bookV5 } from "./content-v5-fixture";
 import { dailyForTask } from "../src/puzzles";
 import { checkPair, occupied, removePair } from "../src/core";
@@ -14,11 +14,7 @@ const raw = (page:Page, suffix="") => page.evaluate(k=>localStorage.getItem(k),k
 const stored = async (page:Page) => JSON.parse((await raw(page))!);
 const digit = (page:Page, i:number) => page.locator(`#board button[data-index="${i}"]`);
 async function selectTask(page:Page,id:string) {
-  const target=page.locator(`[data-game="${id}"]`);
-  const later=page.locator("#book-later-pages");
-  if (await later.count() && await target.count() && !await target.isVisible() &&
-      await later.getAttribute("open")===null) await later.locator(":scope > summary").click();
-  await target.click();
+  await page.locator(`[data-game="${id}"]`).click();
 }
 async function install(page:Page, fixture:object=legacy) {
   await page.addInitScript(({fixture,key,prefs})=>{
@@ -29,10 +25,7 @@ async function install(page:Page, fixture:object=legacy) {
 }
 async function chooseVolume(page:Page,volume:number) {
   await page.locator("#book-mode").click();
-  await openBookPicker(page);
-  await page.locator("#book-chapter").selectOption(String(Math.floor((volume-1)/10)));
-  await openBookPicker(page);
-  await page.locator(`[data-volume="${volume-1}"]`).click();
+  await chooseBookVolume(page,volume-1);
 }
 
 test("new v5 slot works with the legacy catalogue chunk blocked",async({page})=>{
@@ -132,6 +125,7 @@ for (const [width,height] of [[320,568],[390,844]]) {
       await digit(page,task.solution[0].b).click();
       await expect(page.locator("#remaining")).toHaveText("106");
       await page.locator("#menu").click();
+      await page.locator("#settings-open").click();
       await page.locator("#new").click();
       await page.locator("#confirm-new").click();
       await expect(page.locator("#remaining")).toHaveText("108");

@@ -35,7 +35,7 @@ test("control glyphs stay centred in the same field at large text", async ({
   await expect(page.locator("#menu")).toHaveAccessibleName("Открыть меню");
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
-  for (const id of ["settings-back", "close"]) {
+  for (const id of ["settings-back"]) {
     const box = await page.locator("#" + id).boundingBox();
     expect(box!.width).toBeGreaterThanOrEqual(44);
     expect(box!.height).toBeGreaterThanOrEqual(44);

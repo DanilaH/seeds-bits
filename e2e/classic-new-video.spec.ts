@@ -13,9 +13,9 @@ test("New Classic: home -> difficulty sheet -> ordinary board -> resume",async({
     }));
   });
   await page.goto("/");
-  await expect(page.locator("#resume")).toBeVisible();
+  await expect(page.locator("#resume")).toBeHidden();
   await page.waitForTimeout(350);
-  await page.locator("#next-classic").click();
+  await page.locator("#classic-mode").click();
   await expect(page.locator("#classic-new-sheet")).toBeVisible();
   await expect(page.locator(".classic-difficulty-option")).toHaveCount(4);
   await page.waitForTimeout(650);
@@ -27,7 +27,7 @@ test("New Classic: home -> difficulty sheet -> ordinary board -> resume",async({
   await page.waitForTimeout(850);
   await page.locator("#menu").click();
   await expect(page.locator("#resume")).toBeVisible();
-  await expect(page.locator("#home-difficulty")).toBeVisible();
+  await expect(page.locator("#resume-context")).toBeVisible();
   await page.waitForTimeout(400);
   const video=page.video();
   expect(video).not.toBeNull();

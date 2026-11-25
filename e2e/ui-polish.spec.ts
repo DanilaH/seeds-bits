@@ -1,4 +1,5 @@
-import { openBookPicker } from "./book-controls";
+import { installLegacyClassic } from "./restore-game";
+import { openBookPicker, exposeBookFilter } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 async function boot(page: Page) {
   await page.addInitScript(() =>
@@ -7,6 +8,7 @@ async function boot(page: Page) {
       JSON.stringify({ tutorialDone: true }),
     ),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
 }
 test("direct game shortcuts return to the game; collection calendar returns to its origin", async ({
@@ -37,18 +39,20 @@ test("notebooks have meaningful selection, progress and a recoverable empty filt
   await page.locator("#book-mode").click();
   await openBookPicker(page);
   await page.locator('[data-volume="4"]').click();
+  await expect(page.locator(".dialog-head .screen-heading h2")).toContainText("5");
+  await page.locator("#collection-back").click();
   await expect(page.locator('[data-volume="4"]')).toHaveAttribute(
     "aria-pressed",
     "true",
   );
   await expect(page.locator('[data-volume="4"]')).toBeFocused();
   expect(await page.locator("[data-volume][style*=cover-hue]").count()).toBe(0);
-  await expect(page.locator("[data-volume] progress")).toHaveCount(10);
+  await expect(page.locator("[data-volume] small")).toHaveCount(20);
   await openBookPicker(page);
-  await page.locator("#book-filter").selectOption("done");
+  await (await exposeBookFilter(page)).selectOption("done");
   await expect(page.locator("#book-filter-reset")).toBeVisible();
   await page.locator("#book-filter-reset").click();
-  await expect(page.locator("[data-volume]")).toHaveCount(10);
+  await expect(page.locator("[data-volume]")).toHaveCount(20);
 });
 test("compact calendar picker retains focus and dates, with usable day targets at 320px", async ({
   page,
@@ -161,7 +165,7 @@ test("collection tabs and settings remain readable with enlarged text and reduce
           .getBoundingClientRect()
           .toJSON(),
         close: document
-          .querySelector("#close")!
+          .querySelector("#collection-back")!
           .getBoundingClientRect()
           .toJSON(),
       };

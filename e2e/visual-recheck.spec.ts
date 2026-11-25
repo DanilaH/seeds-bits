@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import { test, expect, type Page } from "@playwright/test";
 
 async function install(page: Page) {
@@ -20,6 +21,7 @@ async function install(page: Page) {
       show: async () => ({ status: "unavailable" }),
     };
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
 }

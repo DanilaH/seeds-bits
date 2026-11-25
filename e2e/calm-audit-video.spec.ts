@@ -1,3 +1,4 @@
+import { chooseBookVolume, exposeBookFilter } from "./book-controls";
 // Real playable browser capture for PR #11. Recording enabled at file scope,
 // as required by Playwright's worker isolation rules.
 import {test,expect} from "@playwright/test";
@@ -24,8 +25,8 @@ test("record saved task 2 after selecting New filter in catalog",async({page})=>
   await page.goto("/");
   await expect(page.locator("#dialog")).toHaveAttribute("open","");
   await page.locator("#book-mode").click();
-  await page.locator("#other-books summary").click();
-  await page.locator("#book-filter").selectOption("new");
+  await (await exposeBookFilter(page)).selectOption("new");
+  await page.locator("#collection-back").click();
   await expect(page.locator("#book-filter")).toHaveValue("new");
   await page.locator("#collection-back").click();
   await page.locator("#progress-open").click();

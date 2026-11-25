@@ -984,6 +984,25 @@
       },
       "nextAction": "Проверить первый сеанс с новичками и измерить семечки за активную минуту на телефоне.",
       "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-menu-package",
+      "sourceFeatureIds": [],
+      "scope": "Собственная навигация тетрадей, постоянный баннер и явные рекламные переходы",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/main.ts",
+        "src/notebook-navigation.ts",
+        "native/android/SeedsMonetizationPlugin.java"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/31",
+        "report": "../research/menu-package-2026-11-25/README.md",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Сверить demo SDK, затем наблюдать навигацию и баннер на физическом телефоне.",
+      "kitImpact": "REUSE"
     }
   ]
 }

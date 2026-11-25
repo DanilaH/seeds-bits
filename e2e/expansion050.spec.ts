@@ -129,10 +129,9 @@ test("100 notebooks remain navigable and a previously assigned final huge board 
     /done/,
   );
   await openBookPicker(page);
-  await page.locator("#book-chapter").selectOption("9");
+  await page.locator('[data-book-range="4"]').click();
   await openBookPicker(page);
   await page.locator('[data-volume="99"]').click();
-  await page.locator("#book-later-pages > summary").click();
   await page.locator('[data-game="book-v1-2400"]').click();
   await expect(page.locator("#dialog")).toBeHidden();
   const n = Number(await page.locator("#remaining").textContent());

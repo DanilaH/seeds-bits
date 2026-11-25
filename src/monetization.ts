@@ -28,6 +28,8 @@ export interface MonetizationBridge {
     width: number;
     height: number;
     viewportWidth: number;
+    viewportHeight: number;
+    revision: number;
   }): Promise<void>;
   preload(): Promise<void>;
   readiness?(): Promise<RewardedReadiness>;
@@ -35,6 +37,7 @@ export interface MonetizationBridge {
     kind: "interstitial" | "rewarded";
     attempt?: string;
     product?: string; intent_id?: string; offer_id?: string; ad_session_id?: string;
+    route?: string; transition_id?: string;
   }): Promise<Result>;
   pending(): Promise<{ reward?: RewardReceipt }>;
   acknowledge(options: { token: string }): Promise<void>;
@@ -118,12 +121,13 @@ export async function showAd(
   attempt?: string,
   intent?: HelpIntent,
   adSession = crypto.randomUUID(),
+  transition?: {route: string; transitionId: string},
 ): Promise<Result> {
   if (!monetized || !bridge || adActive) return { status: "unavailable", reason: adActive ? "fullscreen_busy" : "disabled" };
   adActive = true;
   onPause(true);
   try {
-    return await bridge.show({ kind, attempt, ad_session_id: adSession, ...(intent ? {product: intent.product, intent_id: intent.id, offer_id: intent.offer} : {}) });
+    return await bridge.show({ kind, attempt, ad_session_id: adSession, ...(transition ? {route:transition.route,transition_id:transition.transitionId} : {}), ...(intent ? {product: intent.product, intent_id: intent.id, offer_id: intent.offer} : {}) });
   } catch {
     return { status: "error", reason: "bridge_error" };
   } finally {
@@ -131,24 +135,36 @@ export async function showAd(
     onPause(false);
   }
 }
+let bannerRevision = 0;
+let bannerGeometry = "";
+let bannerSentAt = -Infinity;
+
 export async function syncBanner(visible: boolean) {
   if (!monetized || !bridge) return;
   const slot = document.getElementById("ad-space");
-  if (!slot) return;
+  const viewport = document.getElementById("banner-viewport");
+  if (!slot || !viewport) return;
   const r = slot.getBoundingClientRect();
+  const space = viewport.getBoundingClientRect();
+  const valid = visible && !adActive && r.width >= 250 && r.height > 0;
+  const geometry = valid ? [r.x, r.y, r.width, r.height, space.width, space.height].join(":") : "hidden";
+  if (geometry === bannerGeometry && (!valid || performance.now() - bannerSentAt < 60000)) return;
+  bannerGeometry = geometry;
+  bannerSentAt = performance.now();
+  const revision = ++bannerRevision;
   try {
     await bridge.banner({
-      // Native validates the real SDK height in pixels. CSS px can differ
-      // from Android dp when the WebView scale changes.
-      visible: visible && !adActive && r.width >= 250 && r.height > 0,
+      visible: valid,
       x: r.x,
       y: r.y,
       width: r.width,
       height: r.height,
-      viewportWidth: innerWidth,
+      viewportWidth: space.width,
+      viewportHeight: space.height,
+      revision,
     });
   } catch {
-    /* Advertising must not interrupt play. */
+    if (revision === bannerRevision) bannerGeometry = "";
   }
 }
 

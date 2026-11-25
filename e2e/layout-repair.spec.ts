@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import {test, expect, type Page} from "@playwright/test";
 import {key} from "./help-test-utils";
 
@@ -41,6 +42,7 @@ async function seed(page: Page, board: number[]) {
     localStorage.setItem("seeds-bits.settings.v1", JSON.stringify({tutorialDone: true}));
     localStorage.setItem(key, JSON.stringify({version:3, active:"classic", sessions:{classic:{rules:1,current:{board,scroll:0,moves:0,additions:0},history:[]}},hints:{},seen:[],done:[]}));
   }, {key, board});
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
 }
@@ -50,6 +52,7 @@ for (const [width, height] of [[320,568], [390,844], [568,320], [844,390]]) {
     test(`LAYOUT-01: both lessons keep their field at ${width}x${height}, text ${scale}`, async ({page}) => {
       await page.setViewportSize({width, height});
       await page.emulateMedia({reducedMotion:"reduce"});
+      await installLegacyClassic(page);
       await page.goto("/");
       await expect(page.locator("#lesson")).toBeVisible();
       await textScale(page, scale);
