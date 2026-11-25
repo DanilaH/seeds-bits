@@ -538,6 +538,7 @@ async function verifyPairWaves() {
   const ui=await connect();
   try {
     await ui.tap("#resume");
+    await ui.until("!document.querySelector('#dialog').open");
     await ui.evaluate(`(() => {
       window.seedsWaveCheck=[];
       new MutationObserver(records=>{
