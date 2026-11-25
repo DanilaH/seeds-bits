@@ -1,3 +1,5 @@
+import { requestRestartFromSettings } from "./restore-game";
+import { installLegacyClassic } from "./restore-game";
 import { test, expect } from "@playwright/test";
 test("home hides board, layouts fit and modes survive settings and restart", async ({
   page,
@@ -8,6 +10,7 @@ test("home hides board, layouts fit and modes survive settings and restart", asy
       JSON.stringify({ tutorialDone: true }),
     ),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#resume")).toBeVisible();
   await expect(page.locator("#board")).toBeHidden();
@@ -62,6 +65,6 @@ test("home hides board, layouts fit and modes survive settings and restart", asy
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
   await page.locator("#menu").click();
-  await page.locator("#new").click();
+  await requestRestartFromSettings(page);
   await expect(page.locator("#remaining")).toHaveText("8");
 });

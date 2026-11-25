@@ -258,9 +258,13 @@ export function nextTask(
   const finished = new Set(done);
   const index = notebook.findIndex((p) => p.id === id);
   if (index >= 0) {
-    const start = index < LEGACY_BOOK_TASKS ? 0 : Math.floor(index / 24) * 24;
-    const end = index < LEGACY_BOOK_TASKS ? LEGACY_BOOK_TASKS : start + 24;
-    return [...notebook.slice(index+1,end), ...notebook.slice(start,index)].find(p=>!finished.has(p.id))?.id;
+    const start = Math.floor(index / 24) * 24;
+    const end = start + 24;
+    const local = [...notebook.slice(index + 1, end), ...notebook.slice(start, index)]
+      .find(p => !finished.has(p.id));
+    if (local || index >= LEGACY_BOOK_TASKS) return local?.id;
+    return [...notebook.slice(end, LEGACY_BOOK_TASKS), ...notebook.slice(0, start)]
+      .find(p => !finished.has(p.id))?.id;
   }
   const start = dailyDay(id);
   if (!start) return;

@@ -1,7 +1,9 @@
+import { installLegacyClassic, openClassicNew } from "./restore-game";
 import { test, expect } from "@playwright/test";
 test("complete tutorial, remove a pair, undo, restore and change theme", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -38,11 +40,11 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
   await page.locator("#dark").check();
-  await page.locator("#close").click();
+  await page.locator("#settings-back").click();
   await page.reload();
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
-  if (await page.locator("#resume").isVisible())
-    await page.locator("#resume").click();
+  if (await page.locator("#resume").isVisible()) await page.locator("#resume").click();
+  else await openClassicNew(page,1);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
@@ -70,6 +72,7 @@ test("adds only when stuck, restores partial rows and rejects blocked pair", asy
       }),
     );
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -99,6 +102,7 @@ test("win state and quick repeated clicks", async ({ page }) => {
       }),
     );
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -111,12 +115,13 @@ test("win state and quick repeated clicks", async ({ page }) => {
   await expect(page.locator("#win summary")).toHaveCount(0);
   await page.locator("#play-again").click();
   await expect(page.locator("#win")).toBeHidden();
-  await expect(page.locator("footer")).toBeVisible();
+  await expect(page.locator("#classic-mode")).toBeVisible();
 });
 test("light layout has no horizontal overflow at narrow viewport", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 640 });
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())

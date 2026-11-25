@@ -1,3 +1,4 @@
+import { chooseBookVolume } from "./book-controls";
 import {test,expect} from "@playwright/test";
 import {pilotBooks} from "../src/content-pilot";
 import {dailyForTask,daily,puzzleSession} from "../src/puzzles";
@@ -17,8 +18,8 @@ test.beforeEach(async({page})=>{
 test("themed books visible from normal menu, real move, reload, Undo, next task",async({page})=>{
   await page.goto("/");
   await page.locator("#book-mode").click();
-  await page.locator("#pilot-books").click();
-  await expect(page.locator(".volume-heading h3")).toContainText("Новые связи");
+  await chooseBookVolume(page,100);
+  await expect(page.locator(".dialog-head .screen-heading h2")).toContainText("Новые связи");
   const task=pilotBooks[0];
   await page.locator('[data-game="'+task.id+'"]').click();
   await expect(page.locator("#remaining")).toHaveText(String(occupied(task.board)));

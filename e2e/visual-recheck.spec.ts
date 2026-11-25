@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import { test, expect, type Page } from "@playwright/test";
 
 async function install(page: Page) {
@@ -20,6 +21,7 @@ async function install(page: Page) {
       show: async () => ({ status: "unavailable" }),
     };
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
 }
@@ -62,10 +64,11 @@ for (const [width, height, scale] of [
       const heading = page.locator(".dialog-head .screen-heading");
       const back = heading.getByRole("button", { name: "Назад", exact: true });
       const close = page.locator("#close");
-      const a = (await back.boundingBox())!,
-        b = (await close.boundingBox())!;
-      expect(Math.abs(a.y + a.height / 2 - b.y - b.height / 2)).toBeLessThan(2);
-      expect(b.x + b.width).toBeLessThanOrEqual(width - 8);
+      await expect(close).toHaveCount(0);
+      const a = (await back.boundingBox())!;
+      expect(a.x).toBeGreaterThanOrEqual(0);
+      expect(a.x + a.width).toBeLessThanOrEqual(width);
+      expect(a.height).toBeGreaterThanOrEqual(44);
       expect(
         await heading
           .locator("h2")
@@ -93,7 +96,6 @@ for (const [width, height, scale] of [
         .locator(".dialog-scroll:not([hidden])")
         .evaluate((e) => (e.scrollTop = e.scrollHeight));
       await expect(back).toBeInViewport();
-      await expect(close).toBeInViewport();
       expect(
         await page
           .locator(".dialog-scroll:not([hidden])")

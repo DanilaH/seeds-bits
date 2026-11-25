@@ -1,15 +1,46 @@
 name: First session preview
 on:
   push:
-    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125]
+    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125]
     paths: [src/**, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, tests/**, e2e/**, scripts/configure-android.mjs, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: first-session-${{ github.ref }}
-  cancel-in-progress: true
+  group: first-session-preview-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      SEEDS_ARTIFACT_CHANNEL: rustore
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - run: npx playwright test --config playwright.first-session.config.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: first-session-browser, path: test-results/}
+      - run: npx playwright test --config playwright.markets.config.ts
+      - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: markets-yandex-qa, path: dist-yandex/}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: markets-browser-controls, path: test-results/markets/}
+
   preview:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -31,21 +62,8 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund
-      - run: npx playwright install chromium
-      - run: npx playwright test --config playwright.first-session.config.ts
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with: {name: first-session-browser, path: test-results/}
-      - run: npx playwright test --config playwright.markets.config.ts
-      - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with: {name: markets-yandex-qa, path: dist-yandex/}
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with: {name: markets-browser-controls, path: test-results/markets/}
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=988 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=991 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
@@ -61,22 +79,61 @@ jobs:
           node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:Number(process.argv[1]),firstSession:true,profile:"baseline",analytics:false},null,2))' "$version_code"
       - uses: actions/upload-artifact@v4
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
+
+  android-regression:
+    needs: preview
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [offline, demo]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SEEDS_ANDROID_TEST_MODE: ${{ matrix.mode }}
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      SEEDS_ARTIFACT_CHANNEL: rustore
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: sdkmanager "build-tools;36.0.0"
+      - name: Check the desktop capture tools
+        if: matrix.mode == 'demo'
+        run: |
+          command -v Xvfb > /dev/null && command -v ffmpeg > /dev/null && command -v xdpyinfo > /dev/null ||
+            { sudo apt-get update && sudo apt-get install -y xvfb ffmpeg x11-utils; }
+      - run: npm ci --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        with: {name: first-session-preview-unsigned, path: candidate/}
       - uses: actions/download-artifact@v4
         with:
-          artifact-ids: 14957021358
+          artifact-ids: 15005703885
           merge-multiple: true
-          run-id: 45469090536
+          run-id: 45579802309
           github-token: ${{ github.token }}
           path: baseline
       - run: |
-          echo '2a026768a72ae1d8a3e0c181c8b583163146b3effcf04cacfafec942436d5e87  baseline/seeds-first-session-12087-unsigned.apk' | sha256sum -c -
+          echo '4de5a8398d5deb9748cec6c5e89b9b78a44258a2f29f0b26f18dc1096ff7daf9  baseline/seeds-first-session-12088-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
+          version_code=$(node -p 'require("./candidate/source.json").versionCode')
           build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12087-unsigned.apk
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" android/app/build/outputs/apk/release/app-release-unsigned.apk
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12088-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" "candidate/seeds-first-session-${version_code}-unsigned.apk"
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" "candidate/seeds-first-session-${version_code}-debug.apk"
       - run: node scripts/classic-series.mjs --before eae2bcbeaaa1a5c76872dddc7a7f79844988b60e
+        if: matrix.mode == 'offline'
       - uses: actions/upload-artifact@v4
+        if: matrix.mode == 'offline'
         with: {name: classic-series-comparison, path: test-results/classic-series/}
       - run: |
           node scripts/classic-pilot.mjs --bundle "$RUNNER_TEMP/seeds-classic-pilot.bundle.js"
@@ -85,7 +142,18 @@ jobs:
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
           echo no | avdmanager create avd --force --name firstsession --package 'system-images;android-35;google_apis;x86_64'
           sudo chmod 666 /dev/kvm
-          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
+          display_args=(-no-window)
+          if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then
+            export DISPLAY=:92
+            Xvfb "$DISPLAY" -screen 0 800x1300x24 -nolisten tcp > test-results/first-session-android/xvfb.log 2>&1 &
+            for attempt in $(seq 1 20); do
+              if xdpyinfo > /dev/null 2>&1; then break; fi
+              sleep 1
+            done
+            xdpyinfo > /dev/null
+            display_args=()
+          fi
+          "$ANDROID_HOME/emulator/emulator" -avd firstsession "${display_args[@]}" -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
           emulator_pid=$!
           for attempt in $(seq 1 120); do
             if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/first-session-android/emulator.log; exit 1; fi
@@ -99,6 +167,11 @@ jobs:
             sleep 2
           done
           test "$(adb shell id -u | tr -d '\r')" = 0
+          adb shell input keyevent 82
+          if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then
+            SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk"
+            exit
+          fi
           adb shell svc wifi disable
           adb shell svc data disable
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
@@ -107,7 +180,7 @@ jobs:
           node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js"
       - uses: actions/upload-artifact@v4
         if: always()
-        with: {name: markets-android, path: test-results/markets-android/}
+        with: {name: 'markets-android-${{ matrix.mode }}', path: "test-results/markets-android/\ntest-results/first-session-android/emulator.log"}
 
   sign-preview:
     needs: preview
@@ -143,7 +216,7 @@ jobs:
       - uses: actions/download-artifact@v4
         if: steps.signing.outputs.configured == 'true'
         with: {name: first-session-preview-unsigned, path: unsigned-preview/}
-      - name: Sign and verify the tested preview APK
+      - name: Sign and verify the preview APK
         if: steps.signing.outputs.configured == 'true'
         shell: bash
         env:
@@ -164,7 +237,7 @@ jobs:
           apksigner="$build_tools/apksigner"
           test -x "$apksigner"
           if ! "$build_tools/zipalign" -c -P 16 4 "$unsigned"; then
-            echo "::error::The tested unsigned APK failed zip alignment verification."
+            echo "::error::The unsigned APK failed zip alignment verification."
             exit 1
           fi
           manifest=$("$build_tools/aapt" dump badging "$unsigned")

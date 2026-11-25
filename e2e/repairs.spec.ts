@@ -1,3 +1,5 @@
+import { installLegacyClassic } from "./restore-game";
+import { returnToGame } from "./restore-game";
 import { test, expect } from "@playwright/test";
 import { notebook } from "../src/puzzles";
 import { removePair } from "../src/core";
@@ -13,8 +15,10 @@ test.beforeEach(async ({ page }) => {
   });
 });
 async function start(page: any) {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
 }
 async function pair(page: any, a: number, b: number) {
   await page.locator(`[data-index="${a}"]`).click();
@@ -52,6 +56,7 @@ test("landscape tutorial buttons remain reachable at every step", async ({
     { width: 568, height: 320 },
   ]) {
     await page.setViewportSize(viewport);
+    await installLegacyClassic(page);
     await page.goto("/");
     await page.locator("#learn").click();
     for (const [a, b] of [
@@ -71,6 +76,7 @@ test("landscape tutorial buttons remain reachable at every step", async ({
   }
 });
 test("failed save stays visible while settings are open", async ({ page }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#settings-open").click();
   await page.evaluate(() => {
@@ -81,47 +87,37 @@ test("failed save stays visible while settings are open", async ({ page }) => {
   await page.locator("#sound").check();
   await expect(page.locator("#save-notice")).toBeVisible();
   await expect(page.locator("#retry-save")).toBeVisible();
-  await page.locator("#close").click();
-  await expect(page.locator("#save-notice")).toBeVisible();
+  await page.locator("#settings-back").click();
+  await expect(page.locator("#dialog #save-notice")).toBeVisible();
 });
 test("stale tab cannot overwrite a newer game", async ({ page, context }) => {
   await start(page);
-  const stale = await context.newPage();
-  await start(stale);
-  await pair(page, 0, 9);
-  await expect
-    .poll(() =>
-      page.evaluate(
-        () =>
-          JSON.parse(localStorage.getItem("seeds-bits.progress.v2")!).sessions
-            .classic.current.moves,
-      ),
-    )
-    .toBe(1);
-  await stale.locator("#menu").click();
-  await stale.locator("#settings-open").click();
-  await stale.locator("#dark").check();
-  await expect(stale.locator("#load-latest")).toBeVisible();
-  expect(
-    await stale.evaluate(
-      () =>
-        JSON.parse(localStorage.getItem("seeds-bits.progress.v2")!).sessions
-          .classic.current.moves,
-    ),
-  ).toBe(1);
-  await stale.locator("#load-latest").click();
-  await stale.locator("#resume").click();
-  await expect(stale.locator("#remaining")).toHaveText("26");
+  const writer = await context.newPage();
+  await start(writer);
+  await pair(writer,0,9);
+  const moves = () => page.evaluate(() =>
+    JSON.parse(localStorage.getItem("seeds-bits.progress.v2")!).sessions.classic.current.moves,
+  );
+  await expect.poll(moves).toBe(1);
+  await page.bringToFront();
+  await page.locator("#menu").click();
+  await page.locator("#settings-open").click();
+  await page.locator("#dark").check();
+  await expect(page.locator("#load-latest")).toBeVisible();
+  expect(await moves()).toBe(1);
+  await page.locator("#load-latest").click();
+  await page.locator("#resume").click();
+  await expect(page.locator("#remaining")).toHaveText("26");
 });
 test("all 24 notebook games finish by following reliable hints", async ({
   page,
 }) => {
   test.setTimeout(300000);
+  await installLegacyClassic(page);
   await page.goto("/");
   for (let n = 1; n <= 24; n++) {
     if (n > 1) await page.locator("#menu").click();
     await page.locator("#book-mode").click();
-    if (n === 13) await page.locator("#book-later-pages > summary").click();
     await page.locator(`[data-game="book-v1-${n}"]`).click();
     await expect(page.locator("#dialog")).not.toBeVisible();
     await expect(page.locator("#mode")).toHaveText(`Тетрадь 1 · задача ${n}`);

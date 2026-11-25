@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,21 +42,43 @@ public class SeedsMonetizationPlugin extends Plugin {
   private FrameLayout bannerHost;
   private int bannerWidth;
   private int bannerPixelHeight;
-  private int bannerCssHeight;
+  private int bannerCssHeight, bannerLeft = -1, bannerTop = -1;
+  private long bannerRevision;
+  private int bannerRequests, bannerLoads, bannerImpressions, bannerFrames, bannerHiddenFrames;
+  private boolean fullscreenLostFocus;
+  private String showingRoute = "", showingTransition = "";
+  private final ViewTreeObserver.OnWindowFocusChangeListener bannerFocus = this::windowFocusChanged;
+  private final ViewTreeObserver.OnPreDrawListener bannerProbe = () -> {
+    if (this.bannerPlacement != null && this.bannerPlacement.visible && canPlaceBanner()) {
+      bannerFrames++;
+      if (bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) bannerHiddenFrames++;
+    }
+    return true;
+  };
   private PluginCall showing;
   private String showingKind, showingAttempt, showingProduct, showingIntent, showingOffer, showingSession;
   private boolean shown, rewardIssued;
   private JSObject heldReceipt;
   private boolean receiptNeedsSave;
   private BannerPlacement bannerPlacement;
+  private static double number(PluginCall call, String key) {
+    Object value = call.getData().opt(key);
+    return value instanceof Number ? ((Number)value).doubleValue() : Double.NaN;
+  }
   private static final class BannerPlacement {
     final boolean visible;
-    final float x, y, width, height, viewportWidth;
+    final double x, y, width, height, viewportWidth, viewportHeight;
     BannerPlacement(PluginCall call) {
       visible = call.getBoolean("visible", false);
-      x = call.getFloat("x", 0f); y = call.getFloat("y", 0f);
-      width = call.getFloat("width", 0f); height = call.getFloat("height", 0f);
-      viewportWidth = call.getFloat("viewportWidth", 1f);
+      x = number(call, "x"); y = number(call, "y");
+      width = number(call, "width"); height = number(call, "height");
+      viewportWidth = number(call, "viewportWidth"); viewportHeight = number(call, "viewportHeight");
+    }
+    boolean valid() {
+      return Double.isFinite(x) && Double.isFinite(y) && Double.isFinite(width) && Double.isFinite(height)
+        && Double.isFinite(viewportWidth) && Double.isFinite(viewportHeight)
+        && x >= 0 && y >= 0 && width > 0 && height > 0 && viewportWidth > 0 && viewportHeight > 0
+        && x + width <= viewportWidth + 0.001 && y + height <= viewportHeight + 0.001;
     }
   }
   private Runnable showDeadline;
@@ -66,6 +89,9 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (!prefs.contains("last_fullscreen")) prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
     handler.postDelayed(() -> { if (!initialized && !destroyed) { initializationWaitExpired=true; publishReadiness(); } },18000);
     getActivity().runOnUiThread(() -> {
+      ViewTreeObserver observer = getBridge().getWebView().getViewTreeObserver();
+      observer.addOnWindowFocusChangeListener(bannerFocus);
+      if (demoAds()) observer.addOnPreDrawListener(bannerProbe);
       YandexAds.initialize(getContext(), () -> getActivity().runOnUiThread(() -> {
         if (destroyed) return;
         initialized = true;
@@ -77,15 +103,15 @@ public class SeedsMonetizationPlugin extends Plugin {
     });
   }
   private boolean enabled() { return !getContext().getString(R.string.yandex_banner_id).isEmpty(); }
+  private boolean demoAds() { return getContext().getResources().getBoolean(R.bool.ads_test_mode); }
   private String unit(String kind) {
-    boolean test = getContext().getResources().getBoolean(R.bool.ads_test_mode);
-    if (test) return "demo-" + kind + "-yandex";
+    if (demoAds()) return "demo-" + kind + "-yandex";
     return getContext().getString(kind.equals("banner") ? R.string.yandex_banner_id : kind.equals("rewarded") ? R.string.yandex_rewarded_id : R.string.yandex_interstitial_id);
   }
   private void event(String name, String kind) {
     try {
       JSObject data = new JSObject().put("format", kind);
-      if (showing != null && kind.equals(showingKind)) data.put("ad_session_id",showingSession).put("product",showingProduct).put("intent_id",showingIntent).put("offer_id",showingOffer);
+      if (showing != null && kind.equals(showingKind)) data.put("ad_session_id",showingSession).put("product",showingProduct).put("intent_id",showingIntent).put("offer_id",showingOffer).put("route",showingRoute).put("transition_id",showingTransition);
       SeedsApplication.report(getContext(), name, data);
     }
     catch (Exception ignored) { /* Optional telemetry cannot interrupt an ad callback. */ }
@@ -271,7 +297,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private void showOnMain(PluginCall call) {
     String kind = call.getString("kind", "");
     if (!kind.equals("rewarded") && !kind.equals("interstitial")) { call.reject("Invalid format"); return; }
-    if (destroyed || !resumed || showing != null || !initialized || !enabled()) { call.resolve(new JSObject().put("status", "unavailable").put("reason", rewardedState().optString("reason","unavailable"))); return; }
+    if (destroyed || !resumed || !getActivity().hasWindowFocus() || showing != null || !initialized || !enabled()) { call.resolve(new JSObject().put("status", "unavailable").put("reason", rewardedState().optString("reason","unavailable"))); return; }
     long since = System.currentTimeMillis() - prefs.getLong("last_fullscreen", System.currentTimeMillis());
     if (kind.equals("interstitial") && (since < INTERVAL || interstitial == null)) {
       call.resolve(new JSObject().put("status", "skipped").put("reason", since < INTERVAL ? "cooldown" : "not_loaded")); preloadAds(); return;
@@ -283,6 +309,9 @@ public class SeedsMonetizationPlugin extends Plugin {
     String product = call.getString("product", "hint_pack_3");
     if (kind.equals("rewarded") && !product.matches("hint_pack_3|magnet_1|plan_1")) { call.reject("Unknown reward product"); return; }
     fullscreenActive=true;
+    fullscreenLostFocus = false;
+    showingRoute = call.getString("route", "");
+    showingTransition = call.getString("transition_id", "");
     showingProduct = product; showingIntent = call.getString("intent_id", UUID.randomUUID().toString());
     showingOffer = call.getString("offer_id", UUID.randomUUID().toString()); showingSession = call.getString("ad_session_id", UUID.randomUUID().toString());
     showing = call; showingKind = kind; showingAttempt = call.getString("attempt", ""); shown = false; rewardIssued = false; publishReadiness();
@@ -298,8 +327,8 @@ public class SeedsMonetizationPlugin extends Plugin {
           @Override public void onAdShown() { if (showing == call) didShow(); }
           @Override public void onAdDismissed() { if (showing == call) finish("closed"); }
           @Override public void onAdFailedToShow(@NonNull AdError e) { if (showing == call) finish("error"); }
-          @Override public void onAdClicked() { event("ad_clicked", "interstitial"); }
-          @Override public void onAdImpression(@Nullable ImpressionData data) { event("ad_impression", "interstitial"); SeedsAdRevenue.report(getContext(),"interstitial",data, impressionId, adSession); }
+          @Override public void onAdClicked() { if (showing == call) event("ad_clicked", "interstitial"); }
+          @Override public void onAdImpression(@Nullable ImpressionData data) { if (showing == call) event("ad_impression", "interstitial"); SeedsAdRevenue.report(getContext(),"interstitial",data, impressionId, adSession); }
         });
         interstitial.show(getActivity());
       } else {
@@ -342,31 +371,78 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (showingKind.equals("rewarded")) { if (rewarded != null) rewarded.setAdEventListener(null); rewarded = null; lastRewardedRequest = 0; }
     else { if (interstitial != null) interstitial.setAdEventListener(null); interstitial = null; lastInterstitialRequest = 0; }
     PluginCall call = showing; showing = null; showingAttempt = null; fullscreenActive=false; call.resolve(result);
+    if (bannerPlacement != null) applyBanner(bannerPlacement);
     preloadAds(); publishReadiness();
+  }
+  private void windowFocusChanged(boolean focused) {
+    if (!focused) {
+      hideBanner();
+      if (showing != null) fullscreenLostFocus = true;
+      return;
+    }
+    // The host window must have regained focus before recovering a lost dismissal callback.
+    final PluginCall call = showing;
+    if (shown && fullscreenLostFocus && call != null) {
+      handler.postDelayed(() -> {
+        if (showing == call && shown && resumed && getActivity().hasWindowFocus()) finish("closed");
+      }, 300);
+    } else if (call == null && bannerPlacement != null) applyBanner(bannerPlacement);
+  }
+  private boolean canPlaceBanner() {
+    return initialized && !destroyed && enabled() && !fullscreenActive && resumed && getActivity().hasWindowFocus();
+  }
+  private void hideBanner() {
+    if (bannerHost != null) bannerHost.setVisibility(View.GONE);
   }
   private void clearBanner() {
     if (banner != null) { banner.setBannerAdEventListener(null); banner.destroy(); banner = null; }
     if (bannerHost != null) { if (bannerHost.getParent() instanceof ViewGroup) ((ViewGroup)bannerHost.getParent()).removeView(bannerHost); bannerHost = null; }
     bannerWidth = 0;
     bannerPixelHeight = 0;
+    bannerLeft = bannerTop = -1;
   }
   @PluginMethod public void banner(PluginCall call) { getActivity().runOnUiThread(() -> {
-    bannerPlacement = new BannerPlacement(call);
-    applyBanner(bannerPlacement);
+    double revision = number(call, "revision");
+    if (Double.isFinite(revision) && revision == Math.rint(revision) &&
+        revision > bannerRevision && revision <= 9007199254740991d) {
+      bannerRevision = (long)revision;
+      bannerPlacement = new BannerPlacement(call);
+      applyBanner(bannerPlacement);
+    }
     call.resolve();
   }); }
+  @PluginMethod public void bannerDiagnostics(PluginCall call) { getActivity().runOnUiThread(() -> {
+    if (!demoAds()) { call.resolve(new JSObject()); return; }
+    call.resolve(new JSObject()
+      .put("measuredRevision",bannerRevision).put("request",bannerRequests)
+      .put("view",banner==null?0:System.identityHashCode(banner))
+      .put("loaded",bannerLoads).put("impressions",bannerImpressions)
+      .put("visible",bannerHost!=null&&bannerHost.getVisibility()==View.VISIBLE)
+      .put("frames",bannerFrames).put("hiddenFrames",bannerHiddenFrames)
+      .put("width",bannerWidth).put("height",bannerPixelHeight)
+      .put("left",bannerLeft).put("top",bannerTop));
+  }); }
   private void applyBanner(BannerPlacement placement) {
-    if (!initialized || destroyed || !enabled() || showing != null || !resumed || !placement.visible) {
-      if (bannerHost != null) bannerHost.setVisibility(View.GONE); return;
-    }
+    if (!canPlaceBanner() || !placement.visible || !placement.valid()) { hideBanner(); return; }
     View web = getBridge().getWebView();
     FrameLayout root = getActivity().findViewById(android.R.id.content);
-    float scale = web.getWidth() / Math.max(1f, placement.viewportWidth);
-    int width = Math.round(placement.width * scale), height = Math.round(placement.height * scale);
-    int[] webLocation = new int[2], rootLocation = new int[2]; web.getLocationOnScreen(webLocation); root.getLocationOnScreen(rootLocation);
-    int left = webLocation[0] - rootLocation[0] + Math.round(placement.x * scale);
-    int top = webLocation[1] - rootLocation[1] + Math.round(placement.y * scale);
-    if (width < 1 || height < 1 || left < 0 || left + width > root.getWidth() || top < 0 || top + height > root.getHeight()) { if (bannerHost != null) bannerHost.setVisibility(View.GONE); return; }
+    if (web.getWidth() <= 0 || web.getHeight() <= 0 || root == null) { hideBanner(); return; }
+    double scale = web.getWidth() / placement.viewportWidth;
+    int[] webLocation = new int[2], rootLocation = new int[2];
+    web.getLocationOnScreen(webLocation); root.getLocationOnScreen(rootLocation);
+    int offsetX = webLocation[0] - rootLocation[0], offsetY = webLocation[1] - rootLocation[1];
+    int left = offsetX + (int)Math.ceil(placement.x * scale - 1e-6);
+    int top = offsetY + (int)Math.ceil(placement.y * scale - 1e-6);
+    int right = offsetX + (int)Math.floor((placement.x + placement.width) * scale + 1e-6);
+    int bottom = offsetY + (int)Math.floor((placement.y + placement.height) * scale + 1e-6);
+    int width = right - left, height = bottom - top;
+    if (width < 1 || height < 1 || left < Math.max(offsetX, root.getPaddingLeft())
+        || top < Math.max(offsetY, root.getPaddingTop())
+        || right > Math.min(offsetX + web.getWidth(), root.getWidth() - root.getPaddingRight())
+        || bottom > Math.min(offsetY + web.getHeight(), root.getHeight() - root.getPaddingBottom())) {
+      hideBanner();
+      return;
+    }
     if (banner != null && bannerWidth != width) { clearBanner(); lastBannerRequest = 0; }
     if (banner == null) {
       long now = SystemClock.elapsedRealtime();
@@ -375,39 +451,53 @@ public class SeedsMonetizationPlugin extends Plugin {
       // Request a compact creative from the SDK; never crop a taller sticky ad.
       BannerAdSize size = BannerAdSize.inline(getContext(), dp, 50);
       int requestedHeight = size.getHeightInPixels(getContext());
-      publishBannerHeight(requestedHeight, scale);
-      if (requestedHeight > height) { return; }
+      if (requestedHeight > height) { publishBannerHeight(requestedHeight + (height == requestedHeight - 1 ? 1 : 0), scale, true); return; }
+      publishBannerHeight(requestedHeight, scale, false);
       bannerWidth = width; bannerPixelHeight = requestedHeight; lastBannerRequest = now;
-      bannerHost = new FrameLayout(getContext()); root.addView(bannerHost);
+      bannerHost = new FrameLayout(getContext()); bannerHost.setVisibility(View.GONE); root.addView(bannerHost);
       banner = new BannerAdView(getActivity()); banner.setAdSize(size);
       bannerHost.addView(banner, new FrameLayout.LayoutParams(width, bannerPixelHeight, android.view.Gravity.CENTER));
       final BannerAdView currentBanner = banner;
       banner.setBannerAdEventListener(new BannerAdEventListener() {
-        @Override public void onAdLoaded() { if (banner != currentBanner) return; if (destroyed) clearBanner(); else event("ad_loaded", "banner"); }
+        @Override public void onAdLoaded() { if (banner != currentBanner) return; if (destroyed) clearBanner(); else { bannerLoads++; event("ad_loaded", "banner"); } }
         @Override public void onAdFailedToLoad(@NonNull AdRequestError e) { if (banner != currentBanner) return; event("ad_load_error", "banner"); clearBanner(); /* Retry only on a later action after RETRY. */ }
         @Override public void onAdClicked() { if (banner != currentBanner) return; event("ad_clicked", "banner"); }
-        @Override public void onImpression(@Nullable ImpressionData data) { if (banner != currentBanner) return; event("ad_impression", "banner"); SeedsAdRevenue.report(getContext(),"banner",data); }
+        @Override public void onImpression(@Nullable ImpressionData data) { if (banner != currentBanner) return; bannerImpressions++; event("ad_impression", "banner"); SeedsAdRevenue.report(getContext(),"banner",data); }
       });
-      event("ad_request", "banner"); banner.loadAd(new AdRequest.Builder(unit("banner")).build());
+      bannerRequests++; event("ad_request", "banner"); banner.loadAd(new AdRequest.Builder(unit("banner")).build());
     }
     if (bannerHost == null) return; // A synchronous load failure may have removed this view.
-    publishBannerHeight(bannerPixelHeight, scale);
-    if (bannerPixelHeight > height) { bannerHost.setVisibility(View.GONE); return; }
-    FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, bannerPixelHeight); layout.leftMargin = left; layout.topMargin = top + height - bannerPixelHeight;
-    bannerHost.setLayoutParams(layout); bannerHost.setVisibility(View.VISIBLE);
+    if (bannerPixelHeight > height) { publishBannerHeight(bannerPixelHeight + (height == bannerPixelHeight - 1 ? 1 : 0), scale, true); hideBanner(); return; }
+    int parentLeft = left - root.getPaddingLeft();
+    int parentTop = bottom - bannerPixelHeight - root.getPaddingTop();
+    if (bannerLeft != parentLeft || bannerTop != parentTop) {
+      FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, bannerPixelHeight);
+      layout.leftMargin = parentLeft;
+      layout.topMargin = parentTop;
+      bannerHost.setLayoutParams(layout);
+      bannerLeft = parentLeft;
+      bannerTop = parentTop;
+    }
+    if (bannerHost.getVisibility() != View.VISIBLE) bannerHost.setVisibility(View.VISIBLE);
   }
-  private void publishBannerHeight(int pixels, float scale) {
+  private void publishBannerHeight(int pixels, double scale, boolean grow) {
     int cssHeight = (int) Math.ceil(pixels / scale);
+    if (!grow && bannerCssHeight == cssHeight + 1) return;
     if (cssHeight != bannerCssHeight) {
       bannerCssHeight = cssHeight;
       notifyListeners("bannerSize", new JSObject().put("height", cssHeight), true);
     }
   }
   @Override protected void handleOnConfigurationChanged(Configuration config) { bannerPlacement = null; clearBanner(); bannerCssHeight = 0; lastBannerRequest = 0; }
-  @Override protected void handleOnPause() { resumed = false; publishReadiness(); if (bannerHost != null) bannerHost.setVisibility(View.GONE); }
+  @Override protected void handleOnPause() { resumed = false; windowFocusChanged(false); publishReadiness(); }
   @Override protected void handleOnResume() { resumed = true; recoverReceipt(); preloadAds(); publishReadiness(); }
   @Override protected void handleOnDestroy() {
     destroyed = true; fullscreenActive=false; handler.removeCallbacksAndMessages(null); clearBanner();
+    ViewTreeObserver observer = getBridge().getWebView().getViewTreeObserver();
+    if (observer.isAlive()) {
+      observer.removeOnWindowFocusChangeListener(bannerFocus);
+      observer.removeOnPreDrawListener(bannerProbe);
+    }
     if (interstitial != null) interstitial.setAdEventListener(null);
     if (rewarded != null) rewarded.setAdEventListener(null);
     if (showing != null) { showing.resolve(new JSObject().put("status", "interrupted")); showing = null; }

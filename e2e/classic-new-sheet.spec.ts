@@ -1,3 +1,4 @@
+import { openClassicNew } from "./restore-game";
 import {test,expect} from "@playwright/test";
 import {occupied,pairs} from "../src/core";
 import {CLASSIC_START_COUNTS} from "../src/classic-generator";
@@ -21,9 +22,8 @@ test("home separates saved Continue and New Classic with four real levels",async
   await page.setViewportSize({width:390,height:844});
   await menu(page);
   const before=await state(page);
-  await expect(page.locator("#resume")).toBeVisible();
-  await expect(page.locator("#next-classic")).toHaveText("Новая классика");
-  await page.locator("#next-classic").click();
+  await expect(page.locator("#resume")).toBeHidden();
+  await openClassicNew(page);
   await expect(page.locator("#classic-new-sheet")).toBeVisible();
   await page.screenshot({path:"test-results/classic-new-sheet/390x844-light.jpg",type:"jpeg",quality:88,animations:"disabled"});
   await expect(page.locator(".classic-difficulty-option")).toHaveCount(4);
@@ -44,14 +44,14 @@ test("home separates saved Continue and New Classic with four real levels",async
   await expect(page.locator("#classic-new-sheet")).toBeHidden();
   await expect(page.locator("#dialog")).toBeVisible();
   expect(await state(page)).toEqual(before);
-  await page.locator("#resume").click();
+  await openClassicNew(page,1);
   await expect(page.locator("#board")).toBeVisible();
 });
 
 for(const level of [0,1,2,3] as const){
   test(`fresh Classic starts a valid field after one level choice ${level}`,async({page})=>{
     await menu(page);
-    await page.locator("#next-classic").click();
+    await openClassicNew(page);
     await choice(page,level).click();
     await expect(page.locator("#classic-new-sheet")).toBeHidden();
     await expect(page.locator("#dialog")).not.toBeVisible();
@@ -63,13 +63,13 @@ for(const level of [0,1,2,3] as const){
     expect(saved.meta.classicRun.difficulty).toBe(level);
     await page.locator("#menu").click();
     await expect(page.locator("#resume")).toBeVisible();
-    await expect(page.locator("#home-difficulty")).toBeVisible();
+    await expect(page.locator("#resume-context")).toBeVisible();
   });
 }
 
 test("an unfinished Classic game is replaced only after confirmation",async({page})=>{
   await menu(page);
-  await page.locator("#resume").click();
+  await openClassicNew(page,1);
   // Choose a verified legal pair from this session, never a guessed adjacent value.
   const initial=await state(page);
   const pair=pairs(initial.sessions.classic.current.board)[0];
@@ -79,14 +79,14 @@ test("an unfinished Classic game is replaced only after confirmation",async({pag
   await expect(page.locator("#undo")).toBeEnabled();
   await page.locator("#menu").click();
   const original=await state(page);
-  await page.locator("#next-classic").click();
+  await openClassicNew(page);
   await expect(page.locator("#classic-new-help")).toContainText("подтверждения");
   await choice(page,2).click();
   await expect(page.locator("#confirm-content")).toBeVisible();
   expect((await state(page)).sessions.classic.current.board).toEqual(original.sessions.classic.current.board);
   await page.locator("#cancel-new").click();
   expect((await state(page)).sessions.classic.current.board).toEqual(original.sessions.classic.current.board);
-  await page.locator("#next-classic").click();
+  await openClassicNew(page);
   await choice(page,2).click();
   await page.locator("#confirm-new").click();
   await expect(page.locator("#dialog")).not.toBeVisible();
@@ -111,7 +111,7 @@ test("new Classic saves an unfinished notebook; it is recoverable with Undo",asy
   await menu(page);
   const before=await state(page);
   await expect(page.locator("#resume")).toContainText("задачу 2");
-  await page.locator("#next-classic").click();
+  await openClassicNew(page);
   await choice(page,0).click();
   await expect(page.locator("#mode")).toContainText("Классика");
   const after=await state(page);
@@ -127,7 +127,7 @@ test("new Classic saves an unfinished notebook; it is recoverable with Undo",asy
 test("bottom sheet is tappable on short phones and localized in English",async({page})=>{
   await page.setViewportSize({width:320,height:568});
   await menu(page,"en");
-  await page.locator("#next-classic").click();
+  await openClassicNew(page);
   await page.screenshot({path:"test-results/classic-new-sheet/320x568-english.jpg",type:"jpeg",quality:88,animations:"disabled"});
   await expect(page.locator("#classic-new-title")).toHaveText("New Game");
   for(const item of await page.locator(".classic-difficulty-option").all()){

@@ -7,6 +7,7 @@ async function position(page:Page,charges=0,demo=false,state="ready"){
   await install(page,state,"plan");
   await page.evaluate(({key,board,charges,demo})=>{const p=JSON.parse(localStorage.getItem(key)!);p.sessions.classic.current={board,scroll:0,moves:0,additions:0};p.sessions.classic.packedHistory=[];p.meta.attempts.classic.help={version:1,assisted:false};p.meta.help.inventory.plan=charges;p.meta.help.demo.plan=demo;localStorage.setItem(key,JSON.stringify(p));},{key,board,charges,demo});
   await page.reload();await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
 }
 async function preview(page:Page){await page.locator("#plan").click();await expect(page.locator("#hint-offer-title")).toHaveText("План на 3 хода");await expect(page.locator("#help-offer-copy")).toContainText("Очистить поле");}
 async function pair(page:Page,a:number,b:number,remaining:number){await page.locator(`#board [data-index="${a}"]`).click();await page.locator(`#board [data-index="${b}"]`).click();await expect(page.locator("#remaining")).toHaveText(String(remaining));}

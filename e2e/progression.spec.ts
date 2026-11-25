@@ -1,3 +1,6 @@
+import { installLegacyClassic } from "./restore-game";
+import { continueClassic } from "./restore-game";
+import { returnToGame } from "./restore-game";
 import { test, expect } from "@playwright/test";
 import { notebook, daily } from "../src/puzzles";
 import { openingPuzzle } from "../src/notebook-opening";
@@ -14,6 +17,7 @@ test.beforeEach(async ({ page }) => {
 test("notebook solution, page stamp, replay and classic restore", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -40,7 +44,8 @@ test("notebook solution, page stamp, replay and classic restore", async ({
   }
   await expect(page.locator("#award")).toContainText("Страница 1 завершена");
   await page.locator("#book-top").click();
-  await expect(page.locator(".stamp")).toHaveText("Завершено ✓");
+  await expect(page.locator(".notebook-toolbar")).toContainText("6 из 24");
+  await expect(page.locator(".task.done")).toHaveCount(6);
   await page.screenshot({
     animations: "disabled",
     path: "test-results/notebook.png",
@@ -48,7 +53,7 @@ test("notebook solution, page stamp, replay and classic restore", async ({
   await page.locator("#collection-back").click();
   await expect(page.locator("#dialog")).toBeHidden();
   await page.locator("#menu").click();
-  await page.locator("#classic-mode").click();
+  await continueClassic(page);
   await expect(page.locator("#remaining")).toHaveText("26");
   await page.reload();
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
@@ -60,6 +65,7 @@ test("notebook solution, page stamp, replay and classic restore", async ({
   await expect(page.locator(".task.done")).toHaveCount(6);
 });
 test("hint remains after first choice and settings apply", async ({ page }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -79,7 +85,7 @@ test("hint remains after first choice and settings apply", async ({ page }) => {
     animations: "disabled",
     path: "test-results/menu-dark-v2.png",
   });
-  await page.locator("#close").click();
+  await returnToGame(page);
   await page.screenshot({
     animations: "disabled",
     path: "test-results/game-dark-v2.png",
@@ -89,6 +95,7 @@ test("daily calendar closes future days and persists trophy", async ({
   page,
 }) => {
   await page.clock.setFixedTime(new Date("2026-10-15T12:00:00"));
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -109,14 +116,10 @@ test("daily calendar closes future days and persists trophy", async ({
     await expect(page.locator("#undo")).toBeEnabled();
   }
   await expect(page.locator("#award")).toContainText("1 из 31");
-  await page.reload();
-  await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
-  if (await page.locator("#resume").isVisible())
-    await page.locator("#resume").click();
   await expect(page.locator("#win")).toBeVisible();
   await page.locator("#play-again").click();
-  await expect(page.locator("#mode")).toContainText("2");
-  await page.locator("#menu").click();
+  await expect(page.locator("#mode")).toContainText("2 октября");
+  await page.reload();
   await page.locator("#calendar-open").click();
   await expect(page.locator('[data-game="daily-v1-2026-10-01"]')).toHaveClass(
     /done/,
@@ -126,6 +129,7 @@ test("quick onboarding ends after two exercises", async ({ page }) => {
   await page.addInitScript(() =>
     localStorage.removeItem("seeds-bits.settings.v1"),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -154,6 +158,7 @@ test("long hint navigates without losing selection", async ({ page }) => {
       }),
     ),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -189,6 +194,7 @@ test("bronze trophy survives replay, widths and dark calendar", async ({
       }),
     );
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())
@@ -212,7 +218,7 @@ test("bronze trophy survives replay, widths and dark calendar", async ({
         .evaluate((el) => el.scrollWidth <= el.clientWidth),
     ).toBe(true);
   }
-  await page.locator("#close").click();
+  await returnToGame(page);
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
   await page.locator("#dark").check();

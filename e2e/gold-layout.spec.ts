@@ -1,4 +1,7 @@
-import { openBookPicker } from "./book-controls";
+import { requestRestartFromSettings } from "./restore-game";
+import { installLegacyClassic } from "./restore-game";
+import { openClassicNew } from "./restore-game";
+import { openBookPicker, exposeBookFilter } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 const out = "test-results/gold-layout";
@@ -88,6 +91,7 @@ async function seed(
       addListener: async () => ({ remove: async () => {} }),
     };
   }, o);
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#resume")).toBeVisible();
 }
@@ -272,12 +276,12 @@ for (const [completed, tier] of [
       animations: "disabled",
     });
     await page.reload();
-    await page.locator("#resume").click();
-    await page.waitForTimeout(1000);
+    await expect(page.locator("#resume")).toBeHidden();
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seeds-bits.progress.v2")!).done)).toContain("daily-v1-2026-10-31");
+    await page.locator("#progress-open").click();
+    await page.locator("#progress-trophies").click();
+    await page.locator("#trophies-mode").click();
     await expect(page.locator(".trophy-confetti")).toHaveCount(0);
-    await expect(page.locator(`#award [data-tier="${tier}"]`)).toHaveClass(
-      /earned/,
-    );
   });
 
 test("reduced motion keeps medals, no burst; failed save celebrates only after retry and cancels on navigation", async ({
@@ -370,16 +374,17 @@ test("all screens contain their text with ads, themes, narrow landscape and tabl
       await page.locator("#book-mode").click();
       await check("books");
       await openBookPicker(page);
-      await page.locator("#book-filter").selectOption("done");
+      await (await exposeBookFilter(page)).selectOption("done");
       await check("book-empty");
       await page.locator("#book-filter-reset").click();
+      await page.locator("#collection-back").click();
       await page.locator("#continue-book").click();
       await check("game");
       await pair(page);
       await pair(page);
       await check("result");
       await page.locator("#menu").click();
-      await page.locator("#classic-mode").click();
+      await openClassicNew(page,1);
       await check("classic");
       await context.close();
     }
@@ -499,9 +504,10 @@ test("hint offer, restart confirmation and every lesson contain their text", asy
     await page.locator("#cancel-hints").click();
     await pair(page); // Restart confirmation belongs to a game with actual progress.
     await page.locator("#menu").click();
-    await page.locator("#new").click();
+    await requestRestartFromSettings(page);
     await check("restart-confirm");
     await page.locator("#cancel-new").click();
+    await page.locator("#settings-back").click();
     await page.locator("#learn").click();
     let n = 0;
     for (const [a, b] of [

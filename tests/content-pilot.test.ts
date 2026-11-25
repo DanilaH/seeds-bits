@@ -70,7 +70,7 @@ test("104 volumes, stable v1 order and local thematic next task / completion",()
     expect(resultKind(last,[last],notebook)).toBe("task");
   }
   expect(themeOf(99)).toBeUndefined();
-  expect(nextTask("book-v1-2400",["book-v1-2400"])).toBe("book-v1-1");
+  expect(nextTask("book-v1-2400",["book-v1-2400"])).toBe("book-v1-2377");
 });
 test("dated bank is frozen and finite, preserves v1 generation and blocks future/unknown IDs",()=>{
   const p=fresh();

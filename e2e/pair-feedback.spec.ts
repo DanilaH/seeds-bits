@@ -17,6 +17,7 @@ async function open(page: Page, board: number[], active = "classic", done: strin
   }, {key, board, active, done});
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
 }
 const savedBoard = (page: Page) => page.evaluate(key => {
   const state = JSON.parse(localStorage.getItem(key)!);
@@ -120,12 +121,12 @@ for (const reverse of [false,true]) {
     await expect(page.locator("#paths .edge-exit, #paths .edge-entry")).toHaveCount(2);
     const [a,b] = reverse ? [10,7] : [7,10];
     await digit(page,a).click();
-    await digit(page,b).click();
+    const cells = await digit(page,b).evaluate((button: HTMLButtonElement) => {
+      button.click();
+      return [...document.querySelectorAll<HTMLElement>('.pair-wave[data-kind="match"] .pair-wave-cell')]
+        .map(el=>({index:Number(el.dataset.waveIndex),delay:parseFloat(getComputedStyle(el).animationDelay)}));
+    });
     const wave = page.locator('.pair-wave[data-kind="match"]');
-    const cells = await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(el=>({
-      index: Number((el as HTMLElement).dataset.waveIndex),
-      delay: parseFloat(getComputedStyle(el).animationDelay),
-    })));
     expect(cells.map(c=>c.index)).toEqual(reverse ? [10,9,8,7] : [7,8,9,10]);
     expect(cells.map(c=>c.delay)).toEqual([0,.028,.056,.084]);
     await page.clock.runFor(270);
@@ -138,9 +139,13 @@ test("a green diagonal runs from the first tap and releases the board before it 
   await page.clock.install();
   await open(page,boardOf({0:3,12:5,13:5,30:3}));
   await digit(page,30).click();
-  await digit(page,0).click();
+  const cells = await digit(page,0).evaluate((button: HTMLButtonElement) => {
+    button.click();
+    return [...document.querySelectorAll<HTMLElement>('.pair-wave[data-kind="match"] .pair-wave-cell')]
+      .map(el=>Number(el.dataset.waveIndex));
+  });
   const wave = page.locator('.pair-wave[data-kind="match"]');
-  expect(await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(e=>Number((e as HTMLElement).dataset.waveIndex)))).toEqual([30,20,10,0]);
+  expect(cells).toEqual([30,20,10,0]);
   await page.clock.runFor(115);
   await expect(page.locator("#remaining")).toHaveText("2");
   await expect(wave).toHaveCount(1);
@@ -262,18 +267,23 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
 }
 
 for (const count of [2,24,2400,2496]) {
-  test(`classic result opens first unsolved task with ${count} already solved`,async({page})=>{
+  test(`Home action after Classic resolves the main catalogue with ${count} already solved`,async({page})=>{
     const done=Array.from({length:Math.min(count,2400)},(_,i)=>`book-v1-${i+1}`);
     if(count===2496) for(const theme of ["links","choice","shift","mix"]) for(let i=1;i<=24;i++) done.push(`book-v3-${theme}-${i}`);
     await open(page,[5,5],"classic",done);
     await digit(page,0).click(); await digit(page,1).click();
     await expect(page.locator("#win")).toBeVisible();
-    const button=page.locator("#try-notebook");
-    if (count===2496) await expect(button).toBeHidden();
-    else {
-      await expect(button).toHaveText("Открыть тетрадь");
+    await expect(page.locator("#try-notebook")).toBeHidden();
+    await page.locator("#play-again").click();
+    const button=page.locator("#book-quick");
+    if (count>=2400) {
+      await expect(button).toBeHidden();
+      await page.locator("#book-mode").click();
+      await expect(page.locator("#all-books")).toBeVisible();
+    } else {
+      await expect(button).toHaveText("Начать");
       await button.click();
-      await expect(page.locator("#mode")).toHaveText(count===2 ? "Тетрадь 1 · задача 3" : count===24 ? "Тетрадь 2 · задача 1" : "Новые связи · Задача 1");
+      await expect(page.locator("#mode")).toHaveText(count===2 ? "Тетрадь 1 · задача 3" : "Тетрадь 2 · задача 1");
     }
   });
 }

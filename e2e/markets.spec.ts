@@ -155,6 +155,7 @@ for(const [width,height] of [[320,568],[568,320]])for(const reverse of [false,tr
     await page.setViewportSize({width,height});
     await page.goto("/");
     await page.locator("#resume").click();
+    await expect(page.locator("#dialog")).toBeHidden();
     const status=page.locator("#status");
     await expect(status).toHaveText("At the right edge, go to the next row’s left.");
     await page.evaluate(()=>document.documentElement.classList.add("has-mobile-ads"));
@@ -180,6 +181,7 @@ for(const [width,height] of [[320,568],[568,320]])for(const reverse of [false,tr
     await page.locator("#language-close").click();
     await page.locator("#settings-back").click();
     await page.locator("#resume").click();
+    await expect(page.locator("#dialog")).toBeHidden();
     await expect(digit(page,first)).toHaveClass(/selected/);
     await expect(digit(page,first)).toHaveAttribute("aria-label",/fila/);
     expect(await scroll()).toBe(0);
@@ -289,7 +291,6 @@ test("audit 12070: notebook numbers and completed streak accessible names",async
   const first=page.locator('[data-game="book-v1-25"]');
   await expect(first).toHaveText("1✓");
   await expect(first).toHaveAccessibleName("Puzzle 1, solved");
-  await page.locator("#book-later-pages > summary").click();
   await expect(page.locator('[data-game="book-v1-48"]')).toHaveAccessibleName("Puzzle 24");
   await first.click();
   await expect(page.locator("#mode")).toHaveText("Puzzle book 2 · Puzzle 1");

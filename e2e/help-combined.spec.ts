@@ -124,6 +124,8 @@ test("All QA: Magnet and Plan share one attempt, Undo/replay/reload retain both 
     );
   }
   await expect(page.locator("#win")).toBeVisible();
+  await page.clock.install();
+  await page.clock.fastForward(31_000);
   await expect(page.locator("#result-assistance")).toHaveText(
     "С Планом и Магнитом",
   );

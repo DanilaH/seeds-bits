@@ -81,6 +81,8 @@ for (const [width, height] of [
     await expect(page.locator("#play-again")).toBeInViewport();
     await page.screenshot({ path: `test-results/result-${width}.png` });
     await page.locator("#play-again").click();
-    await expect(page.locator("footer")).toBeVisible();
+    await expect(page.locator("#classic-mode")).toBeVisible();
+    await expect(page.locator("#book-mode")).toBeVisible();
+    await expect(page.locator("#daily-mode")).toBeVisible();
   });
 }

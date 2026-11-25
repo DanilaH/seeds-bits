@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import { test, expect, type Page } from "@playwright/test";
 const key = "seeds-bits.progress.v2",
   prefs = "seeds-bits.settings.v1";
@@ -116,6 +117,7 @@ async function seed(
     },
     { key, prefs, o: options },
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#resume")).toBeVisible();
 }
@@ -213,7 +215,8 @@ for (const mode of ["book-v1-1", "daily-v1-2026-11-09"])
     );
     await page.reload();
     await resetEvents(page);
-    await page.locator("#resume").click();
+    if (mode.startsWith("book")) await expect(page.locator("#resume")).toHaveText("Начать · задача 2");
+    else await expect(page.locator("#resume")).toBeHidden();
     await page.waitForTimeout(1700);
     expect((await pulses(page)).filter((x: any) => Array.isArray(x))).toEqual(
       [],
@@ -225,6 +228,7 @@ test("unsaved completion stays quiet, successful retry celebrates once", async (
 }) => {
   await seed(page, { mode: "book-v1-1", board: [5, 5] });
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     (window as any).failFeel = true;
@@ -396,7 +400,7 @@ test("press feedback preserves a touch at the edge of a navigation button", asyn
   });
   await expect(page.locator("#collection")).toBeVisible();
   await expect(page.locator(".dialog-head .screen-heading h2")).toHaveText(
-    "Тетради",
+    "Тетрадь 1",
   );
 });
 
@@ -406,6 +410,7 @@ test("slow save holds the full jar through its spill instead of shaking the next
 }) => {
   await seed(page, { meter: 22 });
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const state = window as any;
     const request = navigator.locks.request.bind(navigator.locks) as any;
@@ -427,7 +432,6 @@ test("slow save holds the full jar through its spill instead of shaking the next
   await expect(page.locator("#jar-spill")).toHaveCount(0);
   await page.evaluate(() => (window as any).releaseJarSave());
   await expect(page.locator("#jar-spill i")).toHaveCount(24);
-  await page.waitForTimeout(900);
   await expect(page.locator("#jar-percent")).toHaveText("100%");
   await expect(page.locator("#jar-name")).toHaveText("Баночка 1");
   await expect(page.locator("#jar-name")).toHaveText("Баночка 2");
@@ -521,6 +525,7 @@ test("reduced motion and failed saves do not start a full jar spill", async ({
   await page.emulateMedia({ reducedMotion: "reduce" });
   await seed(page, { meter: 22 });
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const write = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key, value) {

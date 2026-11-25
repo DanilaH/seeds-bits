@@ -2434,5 +2434,82 @@
     "es": "{theme} · {solved} de 24",
     "tr": "{theme} · {solved}/24",
     "pt-BR": "{theme} · {solved} de 24"
+  },
+  "nav.menu": {
+    "ru": "В меню",
+    "en": "Main menu",
+    "es": "Menú principal",
+    "tr": "Ana menü",
+    "pt-BR": "Menu principal"
+  },
+  "nav.booksAll": {
+    "ru": "Все тетради",
+    "en": "All notebooks",
+    "es": "Todos los cuadernos",
+    "tr": "Tüm defterler",
+    "pt-BR": "Todos os cadernos"
+  },
+  "nav.bookMain": {
+    "ru": "Основные",
+    "en": "Main",
+    "es": "Principales",
+    "tr": "Ana",
+    "pt-BR": "Principais"
+  },
+  "nav.bookThemes": {
+    "ru": "Темы",
+    "en": "Themes",
+    "es": "Temas",
+    "tr": "Temalar",
+    "pt-BR": "Temas"
+  },
+  "nav.filter": {
+    "ru": "Фильтр",
+    "en": "Filter",
+    "es": "Filtro",
+    "tr": "Filtre",
+    "pt-BR": "Filtro"
+  },
+  "nav.started": {
+    "ru": "Начата",
+    "en": "In progress",
+    "es": "En curso",
+    "tr": "Başlandı",
+    "pt-BR": "Em andamento"
+  },
+  "nav.recommended": {
+    "ru": "Следующая",
+    "en": "Up next",
+    "es": "Siguiente",
+    "tr": "Sıradaki",
+    "pt-BR": "Próxima"
+  },
+  "nav.bookTaskTarget": {
+    "ru": "{book} · задача {task}",
+    "en": "{book} · puzzle {task}",
+    "es": "{book} · reto {task}",
+    "tr": "{book} · bulmaca {task}",
+    "pt-BR": "{book} · desafio {task}"
+  },
+  "nav.mainComplete": {
+    "ru": "Все основные тетради решены",
+    "en": "All main notebooks complete",
+    "es": "Cuadernos principales completados",
+    "tr": "Ana defterlerin hepsi tamamlandı",
+    "pt-BR": "Cadernos principais concluídos"
+  },
+  "nav.pickTask": {
+    "ru": "Выберите задачу для повтора",
+    "en": "Choose a puzzle to replay",
+    "es": "Elige un reto para repetir",
+    "tr": "Tekrar için bulmaca seç",
+    "pt-BR": "Escolha um desafio para repetir"
+  },
+  "nav.classicParked": {
+    "ru": "Начатая партия",
+    "en": "Saved game",
+    "es": "Partida guardada",
+    "tr": "Kayıtlı oyun",
+    "pt-BR": "Partida salva"
   }
 }

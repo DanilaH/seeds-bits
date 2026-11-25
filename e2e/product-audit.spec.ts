@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import { test, expect, type Page } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
 test("a late settings snapshot is repaired from canonical fields without overwriting the game", async ({
@@ -178,9 +179,13 @@ async function install(
     },
     { key, opts },
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
-  await page.locator("#resume").click();
+  if (!opts.blockBoot) {
+    await page.locator("#resume").click();
+    await expect(page.locator("#dialog")).toBeHidden();
+  }
 }
 async function finish(page: Page) {
   await page.locator('[data-index="0"]').click();
@@ -359,6 +364,7 @@ test("reward redelivery across a failed game write is acknowledged only after on
 test("short first task is optional, persists tutorial exit and explains a revealed pair", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   for (let step = 0; step < 2; step++) {

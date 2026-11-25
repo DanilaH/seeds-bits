@@ -1,3 +1,4 @@
+import { installLegacyClassic } from "./restore-game";
 import {test, expect, type Page} from '@playwright/test';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {install, key} from './help-test-utils';
@@ -95,7 +96,8 @@ test('QA identity stays in menu flow and cannot cover the gameplay header',async
   if(!snapshot){expect(data.parent).toBe('menu-content');expect(data.visible).toBe(false);}
   await rawClick(page,'#menu');
   if(!snapshot)await expect(page.locator('#qa-profile')).toHaveCSS('position','static');
-  await page.keyboard.press('Escape');await expect(page.locator('#dialog')).not.toBeVisible();
+  await page.keyboard.press('Escape');await expect(page.locator('#dialog')).toBeVisible();
+  await page.locator('#resume').click();await expect(page.locator('#dialog')).not.toBeVisible();
 });
 
 test('rapid accepted pair keeps the removal/index-remapping gate and Undo',async({page})=>{
@@ -123,7 +125,8 @@ test('press cancellation and edge release retain original hit geometry',async({p
   await expect(page.locator('#menu')).not.toHaveClass(/is-pressed/);
   await expect(page.locator('#dialog')).not.toBeVisible();
   await page.mouse.click(r.x+1,r.y+r.height/2);await expect(page.locator('#dialog')).toBeVisible();
-  await page.keyboard.press('Escape');await expect(page.locator('#dialog')).not.toBeVisible();
+  await page.keyboard.press('Escape');await expect(page.locator('#dialog')).toBeVisible();
+  await page.locator('#resume').click();await expect(page.locator('#dialog')).not.toBeVisible();
   const c=await page.context().newCDPSession(page);
   const b=(await cell(page,0).boundingBox())!;
   await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:b.x+b.width/2,y:b.y+b.height/2}]});

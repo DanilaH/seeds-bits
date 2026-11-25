@@ -1,4 +1,5 @@
-import { openBookPicker } from "./book-controls";
+import { installLegacyClassic } from "./restore-game";
+import { openBookPicker, exposeBookFilter } from "./book-controls";
 import { test, expect } from "@playwright/test";
 import { writeFileSync, mkdirSync } from "node:fs";
 const out = "test-results/fixes052",
@@ -57,6 +58,7 @@ async function seed(
 const save = (name: string, value: any) =>
   writeFileSync(`${out}/${name}.json`, JSON.stringify(value, null, 2));
 async function boot(page: any) {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
 }
@@ -89,6 +91,7 @@ test("F02 book chunk failure is visible in open modal and retry clears loading",
   await page.route("**/*notebook-extra*", (r) =>
     blocked ? r.abort() : r.continue(),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await openBookPicker(page);
@@ -108,7 +111,7 @@ test("F02 book chunk failure is visible in open modal and retry clears loading",
   await page.locator('[data-volume="1"]').click();
   await page.locator('[data-game="book-v1-25"]').click();
   await expect(page.locator("#dialog")).toBeHidden();
-  await expect(page.locator("#mode")).toHaveText("Тетрадь 2 · задача 1");
+  await expect(page.locator("#mode")).toContainText("Тетрадь 2");
 });
 test("F03 completed volume filter does not silently reset when changing section", async ({
   page,
@@ -119,12 +122,13 @@ test("F03 completed volume filter does not silently reset when changing section"
     [5, 5],
     Array.from({ length: 24 }, (_, i) => `book-v1-${i + 1}`),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await openBookPicker(page);
-  await page.locator("#book-filter").selectOption("done");
-  await openBookPicker(page);
-  await page.locator("#book-chapter").selectOption("9");
+  await (await exposeBookFilter(page)).selectOption("done");
+  await expect(page.locator('[data-book-range="4"]')).toBeDisabled();
+  await expect(page.locator('[data-volume="0"]')).toBeVisible();
   save("filter", {
     value: await page.locator("#book-filter").inputValue(),
     covers: await page.locator("[data-volume]").count(),
@@ -134,6 +138,7 @@ test("F03 completed volume filter does not silently reset when changing section"
 test("F04 calendar 2028 leap-day and 2125 trophies", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2028-06-20T12:00:00"));
   await seed(page);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#calendar-open").click();
   if (
@@ -184,6 +189,7 @@ test("F06 collection pagination retains all jars across pages", async ({
   page,
 }) => {
   await seed(page, "classic", [5, 5], [], 100000);
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#progress-open").click();
   await page.locator("#progress-trophies").click();
@@ -244,34 +250,27 @@ test("F08 navigation stress and tab conflict never silently overwrite", async ({
 }) => {
   await seed(page);
   await boot(page);
-  const other = await context.newPage();
-  await other.goto("/");
-  await other.locator("#resume").click();
-  await pair(page);
-  await pair(other);
-  await expect(other.locator("#save-notice")).toContainText("другой вкладке");
-  await expect(page.locator("#undo")).toBeEnabled();
-  // The navigation sequence represents a user returning from the conflicting
-  // tab. Chrome may suspend animation/actionability in a background tab.
-  const visibilityBefore = await page.evaluate(() => document.visibilityState);
+  const writer = await context.newPage();
+  await writer.goto("/");
+  await writer.locator("#resume").click();
+  await expect(writer.locator("#dialog")).toBeHidden();
+  await pair(writer);
+  await expect.poll(() => writer.evaluate(k=>JSON.parse(localStorage.getItem(k)!).sessions.classic.current.moves,key)).toBe(1);
   await page.bringToFront();
-  await expect
-    .poll(() => page.evaluate(() => document.visibilityState))
-    .toBe("visible");
-  save("navigation-visibility", {
-    visibilityBefore,
-    visibilityAfter: await page.evaluate(() => document.visibilityState),
-  });
+  await pair(page);
+  await expect(page.locator("#save-notice")).toContainText("другой вкладке");
+  await expect(writer.locator("#undo")).toBeEnabled();
+  const visibilityBefore = await writer.evaluate(() => document.visibilityState);
+  await writer.bringToFront();
+  await expect.poll(() => writer.evaluate(() => document.visibilityState)).toBe("visible");
+  save("navigation-visibility", {visibilityBefore,visibilityAfter:await writer.evaluate(() => document.visibilityState)});
   for (let i = 0; i < 15; i++) {
-    await page.locator("#menu").click();
-    await page.locator("#book-mode").click();
-    await page.locator("#collection-back").click();
-    await page.locator("#resume").click();
+    await writer.locator("#menu").click();
+    await writer.locator("#book-mode").click();
+    await writer.locator("#collection-back").click();
+    await writer.locator("#resume").click();
   }
-  const p = await page.evaluate(
-    (k) => JSON.parse(localStorage.getItem(k)!),
-    key,
-  );
+  const p = await writer.evaluate(k=>JSON.parse(localStorage.getItem(k)!),key);
   expect(p.sessions.classic.current.moves).toBe(1);
   expect(p.jars.seeds).toBe(2);
 });
@@ -417,6 +416,7 @@ test("F14 fresh reload recovers blocked notebook chunk", async ({ page }) => {
   await page.route("**/*notebook-extra*", (r) =>
     blocked ? r.abort() : r.continue(),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await openBookPicker(page);

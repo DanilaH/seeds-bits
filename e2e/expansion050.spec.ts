@@ -68,7 +68,7 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
   );
   await expect(page.locator("footer")).toBeHidden();
   await page.reload();
-  await page.locator("#resume").click();
+  await expect(page.locator("#resume")).toBeHidden();
   const p = await page.evaluate(
     (k) => JSON.parse(localStorage.getItem(k)!),
     key,
@@ -81,7 +81,8 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
     "data-capacity",
     "60",
   );
-  await page.locator("#jar-meter").click();
+  await page.locator("#progress-open").click();
+  await page.locator("#progress-trophies").click();
   await expect(page.locator(".jar-keepsake")).toHaveCount(1);
 });
 test("archive exposes January 2025 and keeps future dates closed in 2028", async ({
@@ -129,10 +130,9 @@ test("100 notebooks remain navigable and a previously assigned final huge board 
     /done/,
   );
   await openBookPicker(page);
-  await page.locator("#book-chapter").selectOption("9");
+  await page.locator('[data-book-range="4"]').click();
   await openBookPicker(page);
   await page.locator('[data-volume="99"]').click();
-  await page.locator("#book-later-pages > summary").click();
   await page.locator('[data-game="book-v1-2400"]').click();
   await expect(page.locator("#dialog")).toBeHidden();
   const n = Number(await page.locator("#remaining").textContent());

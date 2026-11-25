@@ -1,3 +1,5 @@
+import { installLegacyClassic, openClassicNew } from "./restore-game";
+import { continueClassic } from "./restore-game";
 import { test, expect } from "@playwright/test";
 test.beforeEach(async ({ page }) =>
   page.addInitScript(() => {
@@ -17,6 +19,7 @@ test("corrupt save notice remains visible until dismissed and original bytes are
       localStorage.setItem("seeds-bits.progress.v2", "{broken");
     }
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await expect(page.locator("#dialog #read-notice")).toBeVisible();
   await expect(page.locator("#read-notice")).toContainText(
@@ -27,7 +30,8 @@ test("corrupt save notice remains visible until dismissed and original bytes are
       localStorage.getItem("seeds-bits.progress.v2.recovery"),
     ),
   ).toBe("{broken");
-  await page.locator("#resume").click();
+  await expect(page.locator("#resume")).toBeHidden();
+  await openClassicNew(page,1);
   await page.locator('[data-index="0"]').click();
   await expect(page.locator("#read-notice")).toBeVisible();
   await page.locator("#menu").click();
@@ -42,6 +46,7 @@ test("different settings fields merge across tabs and update both interfaces", a
   page,
   context,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.locator("#hint").click();
@@ -72,6 +77,7 @@ for (const date of ["2028-03-19", "2028-08-16"])
     page,
   }) => {
     await page.clock.setFixedTime(new Date(date + "T12:00:00+05:00"));
+    await installLegacyClassic(page);
     await page.goto("/");
     await page.locator("#calendar-open").click();
     await page.locator("#today-task").click();
@@ -103,6 +109,7 @@ test("late worker result cannot affect another task", async ({ page }) => {
       }
     };
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await page.locator('[data-game="book-v1-1"]').click();
@@ -123,6 +130,7 @@ test("unavailable worker provides usable fallback without nonexistent undo", asy
       }
     } as any;
   });
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await page.locator('[data-game="book-v1-1"]').click();
@@ -149,6 +157,7 @@ test("background and resume during pair animation preserve the next playable row
       }),
     ),
   );
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await page.evaluate(() => {
@@ -175,6 +184,7 @@ test("background and resume during pair animation preserve the next playable row
 test("mode is persisted before its board appears even when the save lock is delayed", async ({
   page,
 }) => {
+  await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#book-mode").click();
   await page.locator('[data-game="book-v1-1"]').click();
@@ -187,7 +197,7 @@ test("mode is persisted before its board appears even when the save lock is dela
         return callback(lock);
       })) as typeof navigator.locks.request;
   });
-  await page.locator("#classic-mode").click();
+  await continueClassic(page);
   await expect(page.locator("#mode")).toHaveText("Классика");
   expect(
     await page.evaluate(

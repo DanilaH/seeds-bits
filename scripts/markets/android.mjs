@@ -55,7 +55,7 @@ async function connect() {
   const evaluate=async expression=>{
     const seq=++id;
     const promise=new Promise((resolve,reject)=>{
-      const timer=setTimeout(()=>{pending.delete(seq);reject(Error("CDP timeout"));},12000);
+      const timer=setTimeout(()=>{pending.delete(seq);reject(Error("CDP timeout: "+expression.slice(0,150)));},12000);
       pending.set(seq,response=>{clearTimeout(timer);pending.delete(seq);resolve(response);});
     });
     ws.send(JSON.stringify({id:seq,method:"Runtime.evaluate",params:{expression,returnByValue:true,awaitPromise:true}}));
@@ -103,7 +103,7 @@ async function connect() {
     adb("shell","input","swipe",x,y(p.from),x,y(p.to),"330");
     await wait(350);
   }
-  return {evaluate,until,tap,swipeBoardUp,close:()=>ws.close()};
+  return {evaluate,until,tap,swipeBoardUp,bounds,close:()=>ws.close()};
 
 }
 const board=[0,0,0,0,0,0,0,0,6,4];
@@ -250,10 +250,11 @@ async function firstNotebookEdge(order, {recordVideo=false}={}) {
     assert.match(await ui.evaluate("document.querySelector('#resume').textContent"),/2/);
     assert.match(await ui.evaluate("document.querySelector('#home-goal').textContent"),/1 of 24/);
     if(order[0]===7)shot("calm-menu-task-2");
-    adb("shell","input","keyevent","4");
+    assert(await ui.evaluate("!document.querySelector('#dialog #close')"));
+    await ui.tap("#resume");
     await ui.until("!document.querySelector('#dialog').open");
     assert.equal(await ui.evaluate("document.querySelector('#undo').disabled"),false);
-    return {order,solved:true,fieldStayedPut:true,captionFits:true,jarFilled:4,bookSolved:1,continuedTo:2,androidBackResumed:true};
+    return {order,solved:true,fieldStayedPut:true,captionFits:true,jarFilled:4,bookSolved:1,continuedTo:2,explicitContinue:true};
   } finally {
     if(recorder) {
       try{adb("shell","pkill","-2","screenrecord");}catch{}
@@ -600,15 +601,9 @@ async function verifyContentV5() {
   const remaining=n=>`document.querySelector('#remaining').textContent==='${n}'`;
   try {
     await ui.tap("#book-mode");
-    if(!await ui.evaluate("document.querySelector('#other-books').open"))await ui.tap("#other-books summary");
-    await ui.evaluate(`(()=>{
-      const chapter=document.querySelector("#book-chapter");
-      chapter.value="9";
-      chapter.dispatchEvent(new Event("change",{bubbles:true}));
-    })()`);
-    if(!await ui.evaluate("document.querySelector('#other-books').open"))await ui.tap("#other-books summary");
+    await ui.tap("#all-books");
+    await ui.tap('[data-book-range="4"]');
     await ui.tap('[data-volume="99"]');
-    await ui.tap("#book-later-pages summary");
     let at=performance.now();
     await ui.tap(`[data-game="${id}"]`);
     await ui.until(remaining(108)+" && !document.querySelector('#dialog').open");
@@ -714,6 +709,7 @@ return (${code})(SeedsClassicQA);})()`;
   try {
     assertViewportResult(await depth());
     await ui.tap("#resume");
+    await ui.until("!document.querySelector('#dialog').open");
     await ui.until(left(25));
     await ui.tap("#undo");
     await ui.until(left(27));
@@ -726,9 +722,12 @@ return (${code})(SeedsClassicQA);})()`;
       const seen = new Set();
       let count;
       for (let n=0; n<3 || (level===3 && count<81); n++) {
-        await ui.tap("#next-classic");
+        await ui.tap("#classic-mode");
+        if(await ui.evaluate("!document.querySelector('#classic-entry').hidden"))await ui.tap("#next-classic");
         if (level===2 && n===0) shot("classic-four-difficulties-320-dark");
         await ui.tap(`[data-classic-level="${level}"]`);
+        if (await ui.evaluate("!document.querySelector('#confirm-content').hidden"))
+          await ui.tap("#confirm-new");
         await ui.until("!document.querySelector('#classic-new-sheet').open && !document.querySelector('#dialog').open");
         const board=profiles().values[progress].sessions.classic.current.board;
         count=board.filter(Boolean).length;
@@ -859,6 +858,136 @@ async function verifyHintRepair() {
 }
 function assertViewportResult(view) {
   assert.deepEqual([view.w,view.h],[320,568]);
+}
+async function verifyAppBanner() {
+  const report={source:process.env.GITHUB_SHA,physicalPhone:false,device:"Android API35 demo SDK",observed:[]};
+  adb("install",candidate);
+  adb("shell","wm","density","320");
+  adb("shell","wm","size","640x1232");
+  let ui, recorder;
+  const display = process.env.DISPLAY;
+  const remote = "/sdcard/seeds-banner-continuity.mp4";
+  try {
+    launch();
+    const home = adb("shell","cmd","package","resolve-activity","--brief",
+      "-a","android.intent.action.MAIN","-c","android.intent.category.HOME").split("\n").at(-1);
+    const launcher = home?.match(/^([a-z][a-z0-9_.]+)\//i)?.[1];
+    if (launcher && launcher !== app) adb("shell","am","force-stop",launcher);
+    for(let attempt=1;attempt<=3;attempt++){
+      try { ui=await connect(); break; }
+      catch(error) {
+        if(attempt===3) throw error;
+        if (launcher && launcher !== app) adb("shell","am","force-stop",launcher);
+        stop();
+        launch();
+        await wait(1000);
+      }
+    }
+    const diagnostics=()=>ui.evaluate(`Promise.race([
+      window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics(),
+      new Promise((_,reject)=>setTimeout(()=>reject(Error("Banner diagnostics did not respond")),5000))
+    ])`);
+    const paint = frame => {
+      const raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6,timeout:12_000});
+      const width=raw.readUInt32LE(0),height=raw.readUInt32LE(4),offset=raw.length-width*height*4;
+      assert(offset>=12,"Android returned an incomplete screenshot");
+      const left=ui.bounds[0]+frame.left, top=ui.bounds[1]+frame.top;
+      assert(left>=0&&top>=0&&left+frame.width<=width&&top+frame.height<=height,
+        "The native banner frame is outside the screenshot");
+      const colors=new Set();
+      for(let y=top+4;y<top+frame.height-4;y+=3)for(let x=left+4;x<left+frame.width-4;x+=3) {
+        const i=offset+(y*width+x)*4;
+        colors.add((raw[i]>>4)*256+(raw[i+1]>>4)*16+(raw[i+2]>>4));
+      }
+      return colors.size;
+    };
+    let painted, initial;
+    for(let i=0;i<36;i++) {
+      initial=await diagnostics();
+      if(initial.loaded>0&&initial.visible&&(painted=paint(initial))>20)break;
+      await wait(650);
+    }
+    report.initial=initial;
+    report.paintColorBuckets=painted??0;
+    if(!(initial.loaded>0&&initial.visible&&painted>20)){
+      report.status="UNAVAILABLE";
+      return report;
+    }
+    shot("banner-painted-start");
+    recorder = display
+      ? spawn("ffmpeg",["-y","-loglevel","error","-f","x11grab","-framerate","20","-video_size","800x1300",
+          "-i",display,"-t","60","-an","-c:v","libx264","-preset","ultrafast","-threads","2",
+          "-pix_fmt","yuv420p","-movflags","+faststart",out+"/banner-continuity.mp4"],{stdio:"ignore"})
+      : spawn("adb",["shell","screenrecord","--size","320x616","--bit-rate","950000","--time-limit","60",remote],{stdio:"ignore"});
+    const started=new Promise((resolve,reject)=>{recorder.once("spawn",resolve);recorder.once("error",reject);});
+    await started;
+    await wait(500);
+    assert.equal(recorder.exitCode,null,"The continuous capture stopped before navigation");
+    const stable=async(label)=>{
+      const current=await diagnostics();
+      assert.equal(current.view,initial.view,label);
+      assert.equal(current.request,initial.request,label);
+      assert.equal(current.visible,true,label);
+      assert.equal(current.hiddenFrames,initial.hiddenFrames,label);
+      const observation={label,...current,paintColorBuckets:paint(current)};
+      report.observed.push(observation);
+      assert(observation.paintColorBuckets>20,label+" creative band lost color");
+    };
+    for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2],[7,14,0]]) {
+      await ui.tap(digit(a)); await ui.tap(digit(b));
+      await ui.until(`document.querySelector('#remaining').textContent==='${n}'`);
+    }
+    await stable("game to result");
+    await ui.tap("#play-again");
+    await ui.until("document.querySelector('#mode').textContent.includes('2')");
+    await stable("result to game");
+    await ui.tap("#menu"); await stable("game to Home");
+    await ui.tap("#book-mode"); await stable("Home to notebook");
+    await ui.tap("#all-books"); await stable("notebook to picker");
+    await ui.tap("#collection-back"); await stable("picker to notebook");
+    await ui.tap("#collection-back"); await stable("notebook to Home");
+    await ui.tap("#pause-language");
+    await ui.until("document.querySelector('#language-sheet').open");
+    assert.equal((await diagnostics()).visible,false);
+    await ui.tap("#language-close");
+    await stable("language closed");
+    await ui.tap("#resume"); await stable("explicit Home to game");
+    const beforeBackground=(await diagnostics()).request;
+    adb("shell","input","keyevent","3");
+    await wait(450);
+    assert.equal((await diagnostics()).visible,false);
+    launch();
+    await ui.until("document.visibilityState==='visible'");
+    await wait(500);
+    await stable("foreground restored");
+    assert.equal((await diagnostics()).request,beforeBackground);
+    report.status="PASS";
+    return report;
+  } catch(error) {
+    report.status="ERROR";
+    report.error=String(error);
+    try { shot("banner-failure"); } catch (captureError) { console.warn(String(captureError)); }
+    throw error;
+  } finally {
+    if(recorder) {
+      try {
+        if (recorder.exitCode === null) {
+          const closed = new Promise(resolve=>recorder.once("exit",resolve));
+          if (display) recorder.kill("SIGINT");
+          else adb("shell","pkill","-2","screenrecord");
+          await closed;
+        }
+        if (!display) adb("pull",remote,out+"/banner-continuity.mp4");
+      } catch(error) { console.warn("Screen recording:",String(error)); }
+    }
+    fs.writeFileSync(out+"/banner-continuity.json",JSON.stringify(report,null,2));
+    ui?.close();
+    try { stop(); adb("uninstall",app); } catch (cleanupError) { console.warn(String(cleanupError)); }
+  }
+}
+if(process.env.SEEDS_BANNER_ONLINE==="1"){
+  await verifyAppBanner();
+  process.exit(0);
 }
 try{
   adb("shell","wm","density","320");

@@ -36,8 +36,8 @@ test("reload and undo/re-win cannot duplicate a result; explicit repeat can", ()
 });
 test("next notebook skips wins and wraps; exhausted notebook has no next", () => {
   expect(nextTask("book-v1-1", ["book-v1-1", "book-v1-2"])).toBe("book-v1-3");
-  expect(nextTask("book-v1-24", ["book-v1-24"])).toBe("book-v1-25");
-  expect(nextTask("book-v1-2400", ["book-v1-2400"])).toBe("book-v1-1");
+  expect(nextTask("book-v1-24", ["book-v1-24"])).toBe("book-v1-1");
+  expect(nextTask("book-v1-2400", ["book-v1-2400"])).toBe("book-v1-2377");
   expect(
     nextTask(
       "book-v1-2400",

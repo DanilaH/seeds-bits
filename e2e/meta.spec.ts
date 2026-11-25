@@ -1,3 +1,4 @@
+import { openClassicNew } from "./restore-game";
 import { test, expect } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
 test.beforeEach(async ({ page }) => {
@@ -148,6 +149,10 @@ test("failed result save blocks next party; retry persists one result", async ({
     (button as HTMLButtonElement).click();
     (button as HTMLButtonElement).click();
   });
+  await expect(page.locator("#classic-mode")).toBeVisible();
+  const won = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).sessions.classic.current.board,key);
+  expect(won.filter(Boolean)).toEqual([]);
+  await openClassicNew(page,1);
   await expect(page.locator("#win")).toBeHidden();
   const next = await page.evaluate(
     (k) => JSON.parse(localStorage.getItem(k)!),

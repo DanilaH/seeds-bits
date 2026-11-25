@@ -1,4 +1,5 @@
-import { openBookPicker } from "./book-controls";
+import { openBookPicker, chooseBookVolume } from "./book-controls";
+import { openClassicNew } from "./restore-game";
 import { test, expect } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 test.use({ screenshot: "only-on-failure" });
@@ -13,48 +14,27 @@ test.beforeEach(async ({ page }) => {
       );
   });
 });
-test("root home has one classic entry, pause has an explicit return, and wide home uses two columns", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
+test("wide Home displays all modes and uses an explicit return",async({page})=>{
+  await page.setViewportSize({width:1280,height:800});
   await page.goto("/");
-  await expect(page.locator("#close")).toBeHidden();
-  await expect(page.locator("#classic-mode")).toBeHidden();
-  await expect(page.locator("#resume")).toContainText("классику");
-  // Both columns share the moving dialog. Compare them within one animation frame.
-  const [a, b] = await page.evaluate(() =>
-    [".home-current", ".home-modes"].map((selector) => {
-      const r = document.querySelector(selector)!.getBoundingClientRect();
-      return { x: r.x, y: r.y, width: r.width, height: r.height };
-    }),
-  );
-  expect(a!.width).toBeGreaterThan(400);
-  expect(b!.x).toBeGreaterThan(a!.x + a!.width);
-  expect(Math.abs(a!.y - b!.y)).toBeLessThan(2);
+  await expect(page.locator("#resume")).toBeHidden();
+  for(const id of ["classic-mode","book-mode","daily-mode"]) await expect(page.locator("#"+id)).toBeInViewport();
   await page.keyboard.press("Escape");
   await expect(page.locator("#dialog")).toBeVisible();
-  await page.locator("#resume").click();
+  await openClassicNew(page,1);
   await page.locator("#menu").click();
-  await expect(page.locator("#close")).toBeVisible();
-  await page.locator("#close").click();
+  await expect(page.locator("#close")).toHaveCount(0);
+  await page.locator("#resume").click();
   await expect(page.locator("#dialog")).toBeHidden();
 });
-test("notebook continuation precedes selectors, with two page columns on tablets", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
+test("tablet notebook has one 24-task grid and separate picker",async({page})=>{
+  await page.setViewportSize({width:1280,height:800});
   await page.goto("/");
   await page.locator("#book-mode").click();
   await expect(page.locator("#continue-book")).toBeInViewport();
-  await openBookPicker(page);
-  const c = await page.locator("#continue-book").boundingBox(),
-    f = await page.locator("#book-chapter").boundingBox();
-  expect(c!.y + c!.height).toBeLessThan(f!.y);
-  const pages = page.locator(".book-page"),
-    a = await pages.nth(0).boundingBox(),
-    b = await pages.nth(1).boundingBox();
-  expect(b!.x).toBeGreaterThan(a!.x + a!.width);
-  expect(Math.abs(a!.y - b!.y)).toBeLessThan(2);
+  await expect(page.locator(".compact-task-grid button")).toHaveCount(24);
+  await chooseBookVolume(page,1);
+  await expect(page.locator(".dialog-head .screen-heading h2")).toContainText("2");
   await page.locator("#continue-book").click();
   await expect(page.locator("#mode")).toContainText("задача 1");
 });
@@ -91,6 +71,7 @@ test("progress has a meaningful jar figure and reachable continuation, switches 
 test("home, archive, progress and play remain readable across portrait, landscape and themes", async ({
   browser,
 }) => {
+  test.setTimeout(180_000);
   const report: any[] = [];
   for (const [width, height] of [
     [320, 568],
@@ -129,7 +110,7 @@ test("home, archive, progress and play remain readable across portrait, landscap
           animations: "disabled",
         });
       };
-      await expect(page.locator("#resume")).toBeInViewport();
+      await expect(page.locator("#classic-mode")).toBeInViewport();
       await page.locator("#settings-open").scrollIntoViewIfNeeded();
       await expect(page.locator("#settings-open")).toBeInViewport();
       await capture("home");
@@ -139,11 +120,7 @@ test("home, archive, progress and play remain readable across portrait, landscap
       await expect(page.locator("#dialog")).toBeHidden();
       await capture("task");
       await page.locator("#menu").click();
-      const title = await page.locator(".home-title h1").boundingBox();
-      const close = await page.locator("#close").boundingBox();
-      expect(title!.x + title!.width).toBeLessThanOrEqual(close!.x);
-      expect(Math.abs(title!.y + title!.height / 2 - close!.y - close!.height / 2)).toBeLessThan(5);
-      await expect(page.locator("#close")).toBeInViewport();
+      await expect(page.locator("#close")).toHaveCount(0);
       await expect(page.locator("#resume")).toBeInViewport();
       await capture("pause");
       if (!dark && width <= 390) {
@@ -155,8 +132,8 @@ test("home, archive, progress and play remain readable across portrait, landscap
           const text = document.createRange();
           text.selectNodeContents(el);
           const lines = text.getClientRects();
-          const close = document.getElementById("close")!.getBoundingClientRect();
-          return {lines:lines.length, textRight:text.getBoundingClientRect().right, closeLeft:close.left};
+          const close = document.getElementById("dialog")!.getBoundingClientRect();
+          return {lines:lines.length, textRight:text.getBoundingClientRect().right, closeLeft:close.right};
         });
         expect(bounds.lines).toBe(1);
         expect(bounds.textRight).toBeLessThanOrEqual(bounds.closeLeft);

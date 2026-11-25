@@ -1,0 +1,178 @@
+:root { --shell-height: calc(100dvh - var(--ad-reserve)); }
+
+#banner-viewport {
+  position: fixed;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#ad-space { background: var(--paper); }
+:root.has-mobile-ads #dialog[open] {
+  inset: 0 0 auto;
+  margin: 0 auto;
+  box-sizing: border-box;
+  animation-name: shell-fade-in;
+  height: var(--shell-height);
+  max-height: var(--shell-height);
+  padding-bottom: 8px;
+}
+@keyframes shell-fade-in { from { opacity: 0; } to { opacity: 1; } }
+:root.has-mobile-ads #dialog::backdrop { background: transparent; }
+
+#dialog[data-screen="home"] {
+  padding-inline: max(14px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px));
+  padding-top: max(8px, var(--safe-area-inset-top, 0px));
+}
+#dialog[data-screen="home"] #menu-content {
+  min-height: 100%;
+  justify-content: flex-start;
+}
+#dialog[data-screen="home"] .home-title {
+  min-height: 45px;
+  justify-content: center;
+}
+#dialog[data-screen="home"] .home-title h1 {
+  flex: 0 auto;
+  font-size: clamp(22px, 6vw, 30px);
+  letter-spacing: -.03em;
+}
+#dialog[data-screen="home"] .home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  max-width: 628px;
+  padding-block: 6px 8px;
+  width: 100%;
+  margin-inline: auto;
+}
+#dialog[data-screen="home"] .home-current {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 4px;
+  padding: 9px 12px;
+}
+#dialog[data-screen="home"] .home-current[hidden] { display: none; }
+#dialog[data-screen="home"] #home-game-title { font-size: 18px; min-height: auto; line-height: 1.2; }
+#dialog[data-screen="home"] #resume-context { min-height: auto; margin: 0; font-size: 13px; line-height: 1.2; }
+#dialog[data-screen="home"] #resume { min-height: 48px; margin-top: 3px; }
+#dialog[data-screen="home"] .home-modes { display: grid; gap: 6px; min-width: 0; }
+#dialog[data-screen="home"] .mode-nav { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+#dialog[data-screen="home"] .mode-link {
+  flex-direction: row;
+  align-items: center;
+  min-height: 54px;
+  padding: 4px 7px;
+  font-size: 15px;
+  gap: 8px;
+}
+#dialog[data-screen="home"] .mode-link small { font-size: 12px; }
+#dialog[data-screen="home"] #classic-mode small { display: none; }
+#dialog[data-screen="home"] :is(#book-mode,#daily-mode) {
+  border: 0;
+  background: transparent;
+  min-width: 0;
+  min-height: 54px;
+  border-radius: inherit;
+}
+#dialog[data-screen="home"] .tile-picture { width: 39px; flex: 0 0 39px; height: 40px; margin: 0; }
+#dialog[data-screen="home"] :is(#book-mode > .book-picture,#home-today-art) {
+  width: 39px;
+  flex: 0 0 39px;
+  margin: 0;
+  font-size: 21px;
+}
+.home-book-card, #dialog[data-screen="home"] .home-calendar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--calm-surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  margin-top: 0;
+  padding-inline-end: 4px;
+}
+.home-book-card #book-mode { flex: 1; }
+#dialog[data-screen="home"] :is(#book-quick,#calendar-open) {
+  min-height: 48px;
+  max-width: 42%;
+  font-size: 12px;
+  padding: 4px 7px;
+  border-radius: 9px;
+  font-weight: 640;
+  background: var(--calm-soft);
+  text-align: center;
+}
+#dialog[data-screen="home"] .home-links {
+  max-width: 628px;
+  margin: auto auto 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 2px;
+}
+#dialog[data-screen="home"] .home-links > button { min-height: 48px; font-size: 11px; padding: 4px 0; }
+#dialog[data-screen="home"] #progress-open svg { display: block; }
+#classic-entry:not([hidden]) { display: grid; gap: 8px; }
+#classic-entry button { min-height: 48px; }
+
+#dialog:is([data-screen="book"],[data-screen="book-picker"]) {
+  --notebook-width: 550px;
+}
+#dialog :is(.notebook-toolbar,.book-sections,.book-ranges) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-block-end: 5px;
+  color: var(--muted);
+}
+#dialog :is(.notebook-toolbar,.book-sections,.book-ranges) button { min-height: 48px; }
+#dialog .book-sections { padding: 2px; border-radius: 11px; background: var(--calm-soft); }
+#dialog :is(.book-sections,.book-ranges) button { flex: 1; min-width: 0; padding-inline: 2px; }
+#dialog :is(.book-sections,.book-ranges) [aria-pressed="true"] { background: var(--calm-surface); font-weight: 650; }
+#dialog .book-ranges button { font-size: 12px; }
+#dialog #book-filter { max-width: 100%; min-height: 48px; margin-bottom: 6px; }
+#dialog [data-book-range]:disabled { opacity: .45; }
+#dialog #collection :is(.compact-task-grid,.compact-volume-shelf) {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 6px;
+  margin: 1px 0 6px;
+}
+#dialog #collection .theme-shelf { grid-template-columns: repeat(2,minmax(0,1fr)); }
+#dialog #collection .compact-task-grid .task,
+#dialog #collection .compact-volume-shelf .volume-cover {
+  min-width: 0;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--calm-surface);
+  padding: 4px;
+  box-shadow: none;
+}
+#dialog #collection .compact-task-grid .task { font-size: 19px; position: relative; }
+#dialog #collection .compact-task-grid .task small { position: absolute; right: 5px; top: 3px; }
+#dialog #collection :is(.task,.volume-cover).done { background: var(--calm-soft); }
+#dialog #collection :is(.task,.volume-cover).started { border-style: dashed; border-color: var(--accent); }
+#dialog #collection :is(.task.recommended,.volume-cover[aria-pressed="true"]) {
+  color: var(--calm-action-ink);
+  border: 1px solid var(--calm-book);
+  background: var(--calm-action);
+}
+#dialog .compact-volume-shelf .volume-cover strong { font-size: 17px; }
+#dialog .compact-volume-shelf .volume-cover small { font-size: 11px; }
+#dialog .theme-shelf .volume-cover strong { font-size: 15px; overflow-wrap: anywhere; }
+#notebook-dock { width: 100%; max-width: var(--notebook-width,550px); align-self: center; padding-block: 6px; }
+#notebook-dock button { min-height: 48px; width: 100%; }
+@media (min-width: 380px) {
+  #dialog #collection .compact-task-grid { grid-template-columns: repeat(6,minmax(0,1fr)); }
+  #dialog #collection .compact-volume-shelf:not(.theme-shelf) { grid-template-columns: repeat(5,minmax(0,1fr)); }
+}
+@media (max-width: 345px) {
+  #dialog[data-screen="home"] .mode-link small { overflow-wrap: normal; }
+}
+@media (orientation:landscape) and (max-height:420px) {
+  #dialog[data-screen="home"] #menu-content { min-height: auto; }
+  #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) {grid-template-columns: 1fr 1fr;}
+}
