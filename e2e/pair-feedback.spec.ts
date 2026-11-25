@@ -128,7 +128,7 @@ for (const reverse of [false,true]) {
     });
     const wave = page.locator('.pair-wave[data-kind="match"]');
     expect(cells.map(c=>c.index)).toEqual(reverse ? [10,9,8,7] : [7,8,9,10]);
-    expect(cells.map(c=>c.delay)).toEqual([0,.028,.056,.084]);
+    expect(cells.map(c=>c.delay)).toEqual([0,.019,.038,.057]);
     await page.clock.runFor(270);
     await expect(page.locator("#win")).toBeVisible();
     await expect(wave).toHaveCount(0);
@@ -245,10 +245,14 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
       const dealt: [number, number][] = [];
       Animation.prototype.play = function () {
         const effect = this.effect;
-        if (effect instanceof KeyframeEffect && effect.target?.matches(".digit")
-          && effect.getKeyframes()[0].translate === "0px -4px") {
-          dealt.push([Number((effect.target.parentElement as HTMLElement).dataset.index), effect.getTiming().delay]);
-          board.dataset.dealt = JSON.stringify(dealt);
+        if (effect instanceof KeyframeEffect && effect.target?.matches(".digit")) {
+          const index = Number((effect.target.parentElement as HTMLElement).dataset.index);
+          const delay = effect.getTiming().delay;
+          queueMicrotask(() => {
+            if (this.id !== "board-add") return;
+            dealt.push([index, delay]);
+            board.dataset.dealt = JSON.stringify(dealt);
+          });
         }
         return originalPlay.call(this);
       };
@@ -258,7 +262,7 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await expect.poll(() => page.locator("#viewport").evaluate(el => el.scrollTop)).toBeGreaterThan(1);
     if (reducedMotion === "reduce") await expect(page.locator("#board")).not.toHaveAttribute("data-dealt");
     else await expect(page.locator("#board")).toHaveAttribute("data-dealt",
-      JSON.stringify(Array.from({ length: 9 }, (_, i) => [108 + i, i * 23])));
+      JSON.stringify(Array.from({ length: 9 }, (_, i) => [108 + i, i * 9])));
     await page.locator("#undo").click();
     await expect.poll(() => savedBoard(page)).toEqual(board);
     await expect(page.locator(".add-pending")).toHaveCount(0);

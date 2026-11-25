@@ -54,7 +54,8 @@ export function playSound(kind: SoundCue, enabled: boolean, stage?: number) {
   const cue = kind in aliases ? aliases[kind as keyof typeof aliases] : kind as RecordedCue;
   const now = performance.now();
   const accent = ["task", "page", "book", "win", "full"].includes(cue);
-  const priority = accent ? 3 : cue === "land" ? 0 : ["select", "button", "hint", "plan-step"].includes(cue) ? 1 : 2;
+  const priority = accent || cue === "plan-step" ? 3 :
+    cue === "land" ? 0 : ["select", "button", "hint"].includes(cue) ? 1 : 2;
   if (cue === "select" && now - lastSelection < 45) return;
   if (!accent && now - lastAccent < (priority === 0 ? 310 : 92)) return;
   if (cue === "land" && (now - lastLand < 125 || [...active.values()].some(value => value >= 2))) return;
