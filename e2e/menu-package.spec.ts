@@ -17,13 +17,14 @@ const classicGame = (board = classic()): Session => ({
 const read = (page:Page) => page.evaluate(key => JSON.parse(localStorage.getItem(key)!),key);
 const home = (page:Page) => page.locator('#dialog[data-screen="home"][open]');
 async function install(page:Page, fields:Record<string,Session>={}, active="classic", done:string[]=[],
-    ads=false, theme="light", lang="ru") {
+    ads=false, theme="light", lang="ru", resumeState: {lastBookTask?:string;bookPlayOrder?:string[]} = {}) {
   const bookRevisions = Object.fromEntries([...new Set([...Object.keys(fields),...done])]
     .filter(id=>id.startsWith("book-v1-")).map(id=>[id,id===retainedId?5:1]));
   const save = Object.keys(fields).length ? {
     version:9,active,done,seen:[],hints:{},bookRevisions,
     sessions:Object.fromEntries(Object.entries(fields).map(([id,s])=>[id,packSession(s)])),
     lastBookTask:fields[retainedId]?retainedId:undefined,
+    ...resumeState,
   } : null;
   await page.addInitScript(({save,prefs,key,ads,theme,lang})=>{
     if (!localStorage.getItem(prefs))
@@ -104,6 +105,68 @@ test("last played Notebook 91/20 survives reload, browsing and a direct resume",
   expect(unpackSession((await read(page)).sessions[retainedId]).history).toEqual(started.history);
   await page.locator("#undo").click();
   await expect.poll(async()=>unpackSession((await read(page)).sessions[retainedId]).current.board).toEqual(original.current.board);
+});
+test("assignment, completion and catalogue order cannot beat the last genuinely played notebook",async({page})=>{
+  const assigned = "book-v1-25";
+  const completed = "book-v1-26";
+  const older = "book-v1-2170";
+  const finishedSession: Session = {...started,current:{...started.current,board:[]}};
+  await install(page,{classic:classicGame(),[retainedId]:started,[assigned]:original,
+    [completed]:finishedSession,[older]:started},"classic",[completed],false,"light","ru",
+    {lastBookTask:assigned,bookPlayOrder:[completed,retainedId,older]});
+  await expect(page.locator("#book-mode")).toHaveAccessibleName(/91.*20/);
+  await page.locator("#book-quick").click();
+  await expect(page.locator("#mode")).toContainText("задача 20");
+  await expect(page.locator("#undo")).toBeEnabled();
+  await page.locator("#undo").click();
+  await page.locator("#menu").click();
+  await page.locator("#classic-mode").click();
+  await page.locator("#classic-resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  await page.reload();
+  await expect(page.locator("#book-mode")).toHaveAccessibleName(/91.*20/);
+  expect((await read(page)).bookPlayOrder).toEqual([completed,retainedId,older]);
+});
+
+test("entering a solved replay does not promote it until a legal move, even if that move is undone",async({page})=>{
+  const replay = "book-v3-links-1";
+  await install(page,{classic:classicGame(),[retainedId]:started},"classic",[replay]);
+  await page.locator("#book-mode").click();
+  await page.locator("#all-books").click();
+  await page.locator("#book-section-themes").click();
+  await page.locator('[data-volume="100"]').click();
+  await page.locator(`[data-game="${replay}"]`).click();
+  await page.locator("#menu").click();
+  await page.locator("#classic-mode").click();
+  await page.locator("#classic-resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  await page.reload();
+  await expect(page.locator("#book-mode")).toHaveAccessibleName(/91.*20/);
+  await page.locator("#book-mode").click();
+  await page.locator("#all-books").click();
+  await page.locator("#book-section-themes").click();
+  await page.locator('[data-volume="100"]').click();
+  await page.locator(`[data-game="${replay}"]`).click();
+  const initial = unpackSession((await read(page)).sessions[replay]);
+  await page.locator("#hint").click();
+  await expect(page.locator("#board .hinted")).toHaveCount(2);
+  expect((await read(page)).bookPlayOrder?.includes(replay)).toBeFalsy();
+  await page.locator("#board .hinted").first().click();
+  await page.locator("#board .hinted").last().click();
+  await expect(page.locator("#undo")).toBeEnabled();
+  await page.locator("#undo").click();
+  await page.locator("#menu").click();
+  await page.locator("#classic-mode").click();
+  await page.locator("#classic-resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  await page.reload();
+  await expect(page.locator("#book-quick")).toHaveText("Продолжить");
+  await page.locator("#book-quick").click();
+  await expect(page.locator("#mode")).toContainText("Новые связи");
+  const saved = await read(page);
+  expect(saved.bookPlayOrder[0]).toBe(replay);
+  expect(saved.done).toEqual([replay]);
+  expect(unpackSession(saved.sessions[replay]).current.board).toEqual(initial.current.board);
 });
 test("result to menu uses one fullscreen route, with stable banner and no immediate repeat",async({page})=>{
   await install(page,{classic:classicGame([5,5]),[retainedId]:started},"classic",[],true);

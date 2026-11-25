@@ -204,6 +204,7 @@ test("decorative seed flights stay bounded and clear on background without losin
 }) => {
   await start(page);
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     (document.querySelector('[data-index="0"]') as HTMLElement).click();
     (document.querySelector('[data-index="1"]') as HTMLElement).click();

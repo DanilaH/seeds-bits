@@ -132,6 +132,7 @@ test("failed storage is visible and retry preserves the accepted move", async ({
   await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     (window as any).restoreStorage = () =>

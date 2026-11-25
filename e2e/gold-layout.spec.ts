@@ -289,6 +289,7 @@ test("reduced motion keeps medals, no burst; failed save celebrates only after r
 }) => {
   await seed(page, { active: "daily-v1-2026-10-31", completed: 6 });
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const set = Storage.prototype.setItem;
     (window as any).failGold = true;
@@ -553,6 +554,7 @@ test("two reward lines keep their space while a failed save is retried", async (
   });
   await page.reload();
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const set = Storage.prototype.setItem;
     (window as any).failGold = true;

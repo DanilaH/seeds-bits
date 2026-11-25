@@ -15,6 +15,7 @@ export type Progress = {
   bookRevisions?: Record<string,BookRevision>;
   active: string;
   lastBookTask?: string;
+  bookPlayOrder?: string[];
   sessions: Record<string, Session>;
   hints: Record<string, number>;
   done: string[];
@@ -109,6 +110,11 @@ export function readProgress(
   if (typeof p.lastBookTask === "string" &&
       (legacyBookNumber(p.lastBookTask) || pilotBookId(p.lastBookTask)) &&
       clean.sessions[p.lastBookTask]) clean.lastBookTask = p.lastBookTask;
+  if (Array.isArray(p.bookPlayOrder)) {
+    clean.bookPlayOrder = [...new Set<string>(p.bookPlayOrder.filter((id: unknown) =>
+      typeof id === "string" && (legacyBookNumber(id) || pilotBookId(id)) &&
+      Object.hasOwn(clean.sessions, id)))];
+  }
   clean.done = [
     ...new Set<string>(
       p.done.filter(

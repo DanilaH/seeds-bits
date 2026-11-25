@@ -48,6 +48,7 @@ async function lastTask(page: Page) {
   });
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
 }
 test("book celebration waits for a successful save and is not replayed on menu return", async ({
   page,

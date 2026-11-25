@@ -75,7 +75,19 @@
   min-height: 54px;
   border-radius: inherit;
 }
-#dialog[data-screen="home"] .tile-picture { width: 39px; flex: 0 0 39px; height: 40px; margin: 0; }
+#dialog[data-screen="home"] .tile-picture {
+  width: 58px;
+  flex: 0 0 58px;
+  height: 40px;
+  margin: 0;
+  padding: 2px 3px;
+  gap: 2px;
+}
+#dialog[data-screen="home"] .tile-picture i {
+  flex: 0 0 25px;
+  width: 25px;
+  height: 31px;
+}
 #dialog[data-screen="home"] :is(#book-mode > .book-picture,#home-today-art) {
   width: 39px;
   flex: 0 0 39px;
@@ -90,8 +102,8 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   margin-top: 0;
-  padding-inline-end: 4px;
 }
+.home-book-card { padding-inline-end: 4px; }
 .home-book-card #book-mode { flex: 1; }
 #dialog[data-screen="home"] :is(#book-quick,#calendar-open) {
   min-height: 48px;
@@ -102,6 +114,12 @@
   font-weight: 640;
   background: var(--calm-soft);
   text-align: center;
+}
+#dialog[data-screen="home"] .home-calendar #calendar-open {
+  align-self: stretch;
+  min-width: 48px;
+  margin: 0;
+  border-radius: 0 13px 13px 0;
 }
 #dialog[data-screen="home"] .home-links {
   max-width: 628px;
