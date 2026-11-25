@@ -61,7 +61,8 @@ import { volumeOf, volumeTasks, puzzleNumberInVolume, VOLUMES, themeOf } from ".
 import { hasPlayed, unfinished, notebookStarted, notebookTarget, notebookBrowseStatus, recordNotebookPlay, forgetNotebookPlay, MAIN_BOOKS } from "./notebook-navigation";
 import { loadBookV5 } from "./content-v5";
 import { dailyDay, dailyDone, dailyIdFor, versionedDay, bookRevisionFor, legacyBookNumber, validContentId, LEGACY_BOOK_TASKS } from "./content-ids";
-import { playSound, suspendSound, blockSound } from "./sound";
+import { playSound, suspendSound, blockSound, warmPilotSound, type SoundCue } from "./sound";
+import { coreFeelPilot, feelMotion, feelSoundPack, mountFeelPilot } from "./feel-pilot";
 import { SeedFlight } from "./seed-flight";
 import { JarSpill } from "./jar-spill";
 import { icon } from "./icons";
@@ -1133,11 +1134,21 @@ function setTheme(dark: boolean) {
   feedback("button");
   save();
 }
-function feedback(kind: Exclude<HapticCue, "deal"> | "add" = "pair", tactile = true) {
+type PilotHaptic = Extract<HapticCue, `feel-${string}`>;
+function feedback(
+  kind: Exclude<HapticCue, "deal" | PilotHaptic> | "add" = "pair",
+  tactile = true,
+  sound?: SoundCue,
+  touch?: PilotHaptic,
+) {
   if (paused || document.hidden) return;
+  const nextTouch = kind === "select" ? "feel-select" : kind === "undo" ? "feel-undo" :
+    kind === "add" ? "feel-add" : kind === "reject" ? "feel-reject" : undefined;
   if (settings.vibration && tactile)
-    void platform.haptic(kind === "add" ? "button" : kind).catch(() => {});
-  if (kind !== "reject") playSound(kind, settings.sound);
+    void platform.haptic((feelMotion() && (touch ?? nextTouch)) ||
+      (kind === "add" ? "button" : kind)).catch(() => {});
+  if (sound && feelSoundPack()) playSound(sound, settings.sound);
+  else if (kind !== "reject") playSound(kind, settings.sound);
 }
 function visibleCellEffects(
   indices: readonly number[],
@@ -1170,6 +1181,7 @@ function revealAddedCells(start: number, end: number) {
     Math.max(0, scroll + (first.top + first.bottom - view.top - view.bottom) / 2),
     viewport.scrollHeight - viewport.clientHeight,
   );
+  const pilot = feelMotion();
   if (reduced() || document.hidden) {
     viewport.scrollTop = target;
     feedback("add");
@@ -1184,7 +1196,7 @@ function revealAddedCells(start: number, end: number) {
     if (!digit) continue;
     const row = Math.floor(index / WIDTH) - firstRow;
     const column = index % WIDTH - (row === 0 ? start % WIDTH : 0);
-    digits.push({ digit, delay: column * 23 + Math.min(row, 3) * 25, index });
+    digits.push({ digit, delay: column * (pilot ? 9 : 23) + Math.min(row, 3) * (pilot ? 12 : 25), index });
     digit.classList.add("add-pending");
   }
   const current = board();
@@ -1192,14 +1204,18 @@ function revealAddedCells(start: number, end: number) {
     clearBoardReveal();
     if (board() !== current || dialog.open || paused || document.hidden || reduced()) return;
     const animations: Animation[] = [];
-    const duration = 140;
+    const duration = pilot ? 122 : 140;
     const bounds = viewport.getBoundingClientRect();
     const visible = digits.filter(({ digit }) => {
       const box = digit.getBoundingClientRect();
       return box.bottom > bounds.top && box.top < bounds.bottom;
     });
     for (const { digit, delay } of visible) {
-      const animation = ownedDomMotion.animate(digit, [
+      const animation = ownedDomMotion.animate(digit, pilot ? [
+        { opacity: 0, transform: "translateY(-6px) scale(.82)" },
+        { opacity: 1, transform: "translateY(1px) scale(1.05)", offset: .62 },
+        { opacity: 1, transform: "none" },
+      ] : [
         { opacity: 0, translate: "0 -4px" },
         { opacity: 1, translate: "0 1px", offset: .72 },
         { opacity: 1, translate: "none" },
@@ -1210,7 +1226,7 @@ function revealAddedCells(start: number, end: number) {
       }
     }
     const lastFirstRow = visible.filter(({ index }) => Math.floor(index / WIDTH) === firstRow).at(-1);
-    if (lastFirstRow && settings.vibration && animations.length)
+    if (!pilot && lastFirstRow && settings.vibration && animations.length)
       boardRevealTimer = setTimeout(() => {
         if (settings.vibration && !paused && !dialog.open && !document.hidden)
           void platform.haptic("button").catch(() => {});
@@ -1224,9 +1240,12 @@ function revealAddedCells(start: number, end: number) {
     viewport.removeEventListener("scrollend", arrived);
     for (const { digit } of digits) digit.classList.remove("add-pending");
   };
-  feedback("add", false);
+  feedback("add", pilot);
   if (Math.abs(scroll - target) < 2) reveal();
-  else {
+  else if (pilot) {
+    viewport.scrollTop = target;
+    reveal();
+  } else {
     // A queued scrollend from the prior move may arrive first.
     viewport.addEventListener("scrollend", arrived);
     boardRevealTimer = setTimeout(reveal, 500);
@@ -1477,7 +1496,8 @@ function showPairWave(path: Connection, blocked = false) {
   const firstRow = Math.floor((view.top - firstCell.top) / firstCell.height) - 1;
   const lastRow = Math.floor((view.bottom - firstCell.top) / firstCell.height) + 1;
   const indices = connectionCells(path);
-  const step = Math.min(28, (blocked ? 126 : 92) / (indices.length - 1));
+  const pilot = feelMotion();
+  const step = Math.min(pilot ? 19 : 28, (blocked ? (pilot ? 90 : 126) : (pilot ? 67 : 92)) / (indices.length - 1));
   const wave = document.createElement("div");
   wave.className = "pair-wave";
   wave.dataset.kind = blocked ? "blocked" : "match";
@@ -1530,6 +1550,54 @@ function clearMotions() {
   cellColorMotions.clear();
   resetRowSlideClip();
 }
+let eraseLayer: HTMLElement | undefined;
+function eraseFeelPair(indices: readonly number[]) {
+  if (reduced() || document.hidden) return;
+  if (eraseLayer) {
+    eraseLayer.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
+    eraseLayer.remove();
+  }
+  const view = viewport.getBoundingClientRect();
+  const layer = document.createElement("div");
+  layer.className = "feel-erase-layer";
+  layer.setAttribute("aria-hidden", "true");
+  Object.assign(layer.style, {
+    top: `${view.top}px`, left: `${view.left}px`,
+    width: `${view.width}px`, height: `${view.height}px`,
+  });
+  $("app").append(layer);
+  const animations: Animation[] = [];
+  for (const [index, value] of indices.entries()) {
+    const digit = cell(value)?.querySelector<HTMLElement>(".digit");
+    if (!digit) continue;
+    const rect = digit.getBoundingClientRect();
+    if (rect.bottom <= view.top || rect.top >= view.bottom) continue;
+    const ghost = document.createElement("span");
+    const style = getComputedStyle(digit);
+    ghost.textContent = digit.textContent;
+    Object.assign(ghost.style, {
+      top: `${rect.top - view.top}px`, left: `${rect.left - view.left}px`,
+      width: `${rect.width}px`, height: `${rect.height}px`, font: style.font,
+      letterSpacing: style.letterSpacing, color: style.color,
+    });
+    layer.append(ghost);
+    const animation = ownedDomMotion.animate(ghost, [
+      { opacity: .9, transform: "scale(1)" },
+      { opacity: 1, transform: "translateY(-2px) scale(1.16)", offset: .29 },
+      { opacity: 0, transform: "translateY(-6px) scale(.62)" },
+    ], { duration: 128, delay: index * 21, easing: "ease-out", fill: "backwards" });
+    if (animation) animations.push(animation);
+  }
+  if (!animations.length) {
+    layer.remove();
+    return;
+  }
+  eraseLayer = layer;
+  void Promise.allSettled(animations.map(animation => animation.finished)).then(() => {
+    layer.remove();
+    if (eraseLayer === layer) eraseLayer = undefined;
+  });
+}
 let collapseScroll = 0;
 let rowSlideClipTimer: ReturnType<typeof setTimeout>;
 const collapseRows = new Set<HTMLElement>();
@@ -1559,10 +1627,15 @@ function showCollapsedRows(rows: readonly DOMRect[], view: DOMRect) {
       collapseRows.delete(row);
       row.remove();
     };
-    const animation = ownedDomMotion.animate(row, [
+    const pilot = feelMotion();
+    const animation = ownedDomMotion.animate(row, pilot ? [
+      { opacity: .89, transform: "scaleY(.95) scaleX(.99)" },
+      { opacity: .72, transform: "scaleY(.42) scaleX(1)", offset: .39 },
+      { opacity: 0, transform: "scaleY(.06) scaleX(.94)" },
+    ] : [
       { opacity: .9, transform: "scaleY(1)" },
       { opacity: 0, transform: "scaleY(0)" },
-    ], { duration: 155, easing: "ease-out" });
+    ], { duration: pilot ? (rows.length > 1 ? 155 : 132) : 155, easing: "ease-out" });
     if (animation) void animation.finished.then(remove, remove);
     else remove();
   }
@@ -1577,6 +1650,7 @@ function motion(el: Element | null, frames: Keyframe[], duration = 160) {
     if (animation) cellColorMotions.set(el, {animation, selection: cellSelection(el)});
     else cellColorMotions.delete(el);
   }
+  return animation;
 }
 function reconcileCellMotions() {
   for (const [el, owner] of cellColorMotions) {
@@ -2562,8 +2636,12 @@ async function choose(i: number) {
     render();
     motion(
       cell(i)?.querySelector(".digit") ?? null,
-      [{ transform: "scale(.88)" }, { transform: "scale(1)" }],
-      120,
+      feelMotion() ? [
+        { transform: "scale(.82)" },
+        { transform: "scale(1.10)", offset: .46 },
+        { transform: "scale(1)" },
+      ] : [{ transform: "scale(.88)" }, { transform: "scale(1)" }],
+      feelMotion() ? 136 : 120,
     );
     return;
   }
@@ -2576,8 +2654,8 @@ async function choose(i: number) {
     const blockers = lesson < 0 ? pairBlockers(values, a, i, result.reason) : [];
     showPairBlockers(blockers);
     const blockedEdge = result.reason === "direction" && blockers.length > 0;
-    feedback("reject");
     const firstBlocker = a < i ? blockers[0] : blockers.at(-1);
+    feedback("reject", true, firstBlocker !== undefined ? "blocked" : "reject-value");
     if (firstBlocker !== undefined) {
       showPairWave({a, b: firstBlocker, kind: blockedEdge ? "reading" : "straight"}, true);
     } else {
@@ -2641,10 +2719,32 @@ async function choose(i: number) {
   const wave = showPairWave(result.path);
   if (wave && result.path.kind === "reading") $("paths").replaceChildren();
   if (traceMove && !wave) showPairTrace(result.path);
-  for (const n of [a, i]) cell(n)?.classList.add("erasing");
   const next = removePair(values, a, i);
   const ending = lesson < 0 && !occupied(next);
-  if (!ending) feedback("pair");
+  const fast = feelMotion() && lesson < 0 && !ending;
+  if (feelMotion() && !reduced() && !document.hidden) eraseFeelPair([a, i]);
+  if (!fast) for (const n of [a, i]) cell(n)?.classList.add("erasing");
+
+  const blank = [...values];
+  blank[a] = blank[i] = 0;
+  const positions = new Map<number, number>();
+  const removedRows: number[] = [];
+  let offset = 0;
+  for (let row = 0; row < blank.length; row += WIDTH) {
+    if (!blank.slice(row, row + WIDTH).some(Boolean)) {
+      removedRows.push(row);
+      offset += WIDTH;
+      continue;
+    }
+    for (let c = row; c < Math.min(row + WIDTH, blank.length); c++)
+      positions.set(c - offset, c);
+  }
+  if (!ending) {
+    const sound = removedRows.length > 1 ? "multi-row" : removedRows.length ? "row-clear" :
+      (result.path.kind === "reading" || connectionCells(result.path).length >= 4) ? "long-pair" : "pair";
+    const touch = removedRows.length > 1 ? "feel-rows" : removedRows.length ? "feel-row" : "feel-pair";
+    feedback("pair", true, sound, touch);
+  }
   // Commit the accepted move before awaiting a decorative animation.
   if (lesson < 0) {
     session = commit(session, next, "pair", viewport.scrollTop);
@@ -2662,24 +2762,11 @@ async function choose(i: number) {
     if (!occupied(next)) complete(flightRects);
     save();
   }
-  // A finishing route is shown on the old field before it gives way to the result.
-  // Non-finishing moves keep the usual erase/remap interval.
-  await new Promise((r) => setTimeout(r, ending && (wave || traceMove) ? 240 : reduced() ? 0 : 100));
+  // Lessons and finishing routes get their full explanation. Ordinary Feel
+  // moves swap the hit targets immediately, independently of the erase ghosts.
+  if (!fast)
+    await new Promise((r) => setTimeout(r, ending && (wave || traceMove) ? 240 : reduced() ? 0 : 100));
   if (ending) clearPairFeedback();
-  const blank = [...values];
-  blank[a] = blank[i] = 0;
-  const positions = new Map<number, number>();
-  const removedRows: number[] = [];
-  let offset = 0;
-  for (let row = 0; row < blank.length; row += WIDTH) {
-    if (!blank.slice(row, row + WIDTH).some(Boolean)) {
-      removedRows.push(row);
-      offset += WIDTH;
-      continue;
-    }
-    for (let c = row; c < Math.min(row + WIDTH, blank.length); c++)
-      positions.set(c - offset, c);
-  }
   const oldTops = new Map<HTMLElement, number>();
   const collapsed: DOMRect[] = [];
   let anchor: HTMLElement | undefined;
@@ -2723,7 +2810,8 @@ async function choose(i: number) {
     lessonQuick.hidden = !(shortLesson && lesson === 1);
   }
   clearSelection();
-  busy = false;
+  const guard = fast && animateCollapse;
+  busy = guard;
   render();
   if (anchor?.isConnected) {
     const delta = anchor.getBoundingClientRect().top - oldTops.get(anchor)!;
@@ -2751,6 +2839,7 @@ async function choose(i: number) {
         dy: top - node.getBoundingClientRect().top,
       }));
     const view = viewport.getBoundingClientRect();
+    const duration = fast ? (removedRows.length > 1 ? 78 : 64) : 170;
     clearCollapseRows();
     showCollapsedRows(collapsed, view);
     const span = Math.min(view.height, Math.max(0, ...movements.map(({ dy }) => dy)));
@@ -2758,11 +2847,20 @@ async function choose(i: number) {
       // The bottom cells start below the newly shortened grid for this slide.
       resetRowSlideClip();
       $("board").style.setProperty("overflow-clip-margin", `${Math.ceil(span)}px`);
-      rowSlideClipTimer = setTimeout(resetRowSlideClip, 170);
+      rowSlideClipTimer = setTimeout(resetRowSlideClip, duration);
     }
+    const slides: Animation[] = [];
     for (const { node, dy } of movements) {
-      if (Math.abs(dy) > 1)
-        motion(node, [{ translate: `0 ${dy}px` }, { translate: "0 0" }], 170);
+      if (Math.abs(dy) <= 1) continue;
+      const slide = motion(node, [{ translate: `0 ${dy}px` }, { translate: "0 0" }], duration);
+      if (slide) slides.push(slide);
+    }
+    if (guard) {
+      // Clicks during a physical slide cannot select a stale position. Unlock
+      // on finish or cancellation, including pause and motion preference changes.
+      if (slides.length) await Promise.allSettled(slides.map(slide => slide.finished));
+      busy = false;
+      render();
     }
   }
   maybeCelebrateResult();
@@ -2847,7 +2945,8 @@ function undoAction() {
   }
   if (lesson >= 0) return;
   if (!session.history.length) return;
-  const restored = removedPairs.get(session.current.board);
+  const previous = session.current;
+  const restored = removedPairs.get(previous.board);
   session = undo(session);
   clearSelection();
   render();
@@ -2855,6 +2954,16 @@ function undoAction() {
   if(plan?.pair)message("Уберите отмеченную пару");
   viewport.scrollTop = session.current.scroll;
   feedback("undo");
+  if (feelMotion() && previous.moves > session.current.moves && !reduced() && !document.hidden) {
+    const indices = restored ?? session.current.board.flatMap((value, index) =>
+      value && value !== previous.board[index] ? [index] : []).slice(0, 2);
+    for (const index of indices)
+      motion(cell(index)?.querySelector(".digit") ?? null, [
+        { opacity: .42, transform: "translateY(3px) scale(.68)" },
+        { opacity: 1, transform: "translateY(-1px) scale(1.08)", offset: .63 },
+        { opacity: 1, transform: "none" },
+      ], 132);
+  }
   if (restored)
     visibleCellEffects(
       restored,
@@ -3102,6 +3211,7 @@ function playBoardEntrance() {
     }
   }
   if (settings.vibration) void platform.haptic("deal").catch(() => {});
+  if (coreFeelPilot && !paused && !document.hidden) playSound("deal", settings.sound);
 }
 function closeMenu() {
   if (protectedContent) return;
@@ -3496,6 +3606,7 @@ for (const key of ["sound", "vibration"] as const)
     platform.setHapticState(settings.vibration, paused);
     if (settings[key] || key === "sound") feedback("button");
     if (key === "sound" && !settings.sound) suspendSound();
+    if (key === "sound" && settings.sound) warmPilotSound();
     save();
   };
 $("retry-save").onclick = async () => {
@@ -4774,6 +4885,17 @@ setInterval(() => {
   }
   if (pendingDailyOpen) void openDailyNotification();
 }, 5000);
+
+if (coreFeelPilot) {
+  mountFeelPilot($("settings-panel").querySelector(".settings")!, () => {
+    suspendSound();
+    clearMotions();
+    clearPairFeedback();
+    platform.setHapticState(settings.vibration, paused, true);
+    if (settings.sound) warmPilotSound();
+  });
+  if (settings.sound) warmPilotSound();
+}
 
 if (import.meta.env.DEV || import.meta.env.VITE_SEEDS_QA_PROFILE) {
   const qaTools=document.createElement("section");qaTools.id="qa-help-tools";

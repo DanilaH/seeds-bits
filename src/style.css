@@ -272,6 +272,57 @@ header {
   28% { opacity: .95; transform: scale(1.12); }
   100% { opacity: 0; transform: scale(1.2); }
 }
+.feel-pilot {
+  display: grid;
+  gap: 8px;
+  min-inline-size: 0;
+  padding: 9px 12px 12px;
+  margin: 8px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.feel-pilot label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+.feel-pilot select {
+  min-height: 36px;
+  max-width: 100%;
+  padding-inline: 8px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+}
+.feel-erase-layer {
+  position: fixed;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+}
+.feel-erase-layer > span {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-core-feel="feel"] .cell.erasing .digit { opacity: 0; }
+}
+:root[data-core-feel="feel"] .pair-wave[data-kind="match"] .pair-wave-cell {
+  background: color-mix(in srgb, currentColor 55%, transparent);
+  animation-name: feel-wave-step;
+}
+@keyframes feel-wave-step {
+  0% { opacity: .50; transform: scale(.91); }
+  28% { opacity: 1; transform: scale(1.045); }
+  52% { opacity: .68; transform: scale(.985); }
+  100% { opacity: 0; transform: scale(.94); }
+}
 #paths circle {
   fill: currentColor;
 }

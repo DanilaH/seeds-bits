@@ -1,7 +1,7 @@
 name: First session preview
 on:
   push:
-    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125, feat/menu-rails-20261125]
+    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125, feat/menu-rails-20261125, feat/core-feel-pilot-20261125]
     paths: [src/**, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, tests/**, e2e/**, scripts/configure-android.mjs, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
 permissions:
   contents: read
@@ -47,6 +47,8 @@ jobs:
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
+      VITE_SEEDS_CORE_FEEL: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '1' || '0' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '995' || '994' }}
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
       SEEDS_ARTIFACT_CHANNEL: rustore
@@ -63,7 +65,7 @@ jobs:
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=994 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER="$GITHUB_RUN_NUMBER_PREVIEW" node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
@@ -76,7 +78,7 @@ jobs:
           test -n "$version_code"
           cp android/app/build/outputs/apk/release/app-release-unsigned.apk "test-results/first-session-apk/seeds-first-session-${version_code}-unsigned.apk"
           cp android/app/build/outputs/apk/debug/app-debug.apk "test-results/first-session-apk/seeds-first-session-${version_code}-debug.apk"
-          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:Number(process.argv[1]),firstSession:true,profile:"baseline",analytics:false},null,2))' "$version_code"
+          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:Number(process.argv[1]),firstSession:true,profile:"baseline",coreFeel:process.env.VITE_SEEDS_CORE_FEEL==="1",analytics:false},null,2))' "$version_code"
       - uses: actions/upload-artifact@v4
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
 
@@ -216,7 +218,9 @@ jobs:
             const source = require("./unsigned-preview/source.json");
             if (source.source !== process.env.GITHUB_SHA || !Number.isSafeInteger(source.versionCode) ||
                 source.profile !== "baseline" || source.analytics !== false ||
-                source.firstSession !== true) throw Error("Unexpected preview build manifest");
+                source.firstSession !== true ||
+                source.coreFeel !== (process.env.GITHUB_REF_NAME === "feat/core-feel-pilot-20261125"))
+              throw Error("Unexpected preview build manifest");
             process.stdout.write(String(source.versionCode));
           ')
           unsigned="unsigned-preview/seeds-first-session-${version_code}-unsigned.apk"
