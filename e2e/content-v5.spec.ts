@@ -211,3 +211,63 @@ test("assigned v4 is retained at the date boundary and two isolated profiles get
     expect(fields[0]).toEqual(dailyForTask(next)!.board);
   } finally { await Promise.all(contexts.map(ctx=>ctx.close())); }
 });
+
+test("wire9 upgrade keeps assigned v5 tasks 3 and 9 while a new slot receives the opening revision", async ({page})=>{
+  const { openingPuzzle } = await import("../src/notebook-opening");
+  const { puzzleSession } = await import("../src/puzzles");
+  const { commit } = await import("../src/core");
+  const { fresh, metadata, helpProfile, serializeProgress, startAttempt, recordCompletion } = await import("../src/progress");
+  const { jars } = await import("../src/jars");
+  const three = bookV5("book-v1-3"), nine = bookV5("book-v1-9");
+  const profile = fresh();
+  profile.active = three.id;
+  profile.bookRevisions = {[three.id]:5,[nine.id]:5};
+  const step = three.solution[0];
+  const started = commit(puzzleSession(three),removePair(three.board,step.a,step.b),"pair",0);
+  profile.sessions[three.id] = started;
+  startAttempt(profile,nine.id);
+  recordCompletion(profile,nine.id);
+  metadata(profile).wallet = 37;
+  helpProfile(profile).inventory = {magnet:4,plan:3};
+  helpProfile(profile).grant = {token:"old-receipt",intent:"old-intent",product:"plan_1"};
+  profile.hints[three.id] = 2;
+  const prior = JSON.parse(serializeProgress(profile));
+  expect(prior.version).toBe(9);
+  await install(page,prior);
+  await page.emulateMedia({reducedMotion:"reduce"});
+  await page.goto("/");
+  await page.locator("#resume").click();
+  await expect(page.locator("#mode")).toContainText("задача 3");
+  expect(unpackSession((await stored(page)).sessions[three.id])).toEqual(started);
+  await page.locator("#undo").click();
+  await expect.poll(async ()=>(await stored(page)).sessions[three.id].current.board).toEqual(three.board);
+  await page.locator("#menu").click();
+  await chooseVolume(page,1);
+  await selectTask(page,"book-v1-4");
+  const opened = openingPuzzle("book-v1-4",4)!;
+  await expect.poll(async ()=>(await stored(page)).sessions[opened.id]?.current.board).toEqual(opened.board);
+  const newSave = await stored(page);
+  expect(newSave.version).toBe(10);
+  expect(newSave.bookRevisions).toMatchObject({[three.id]:5,[nine.id]:5,[opened.id]:6});
+  const backup = JSON.parse((await raw(page,".pre-v6"))!);
+  expect(backup.version).toBe(9);
+  expect(backup.bookRevisions[nine.id]).toBe(5);
+  await page.locator("#menu").click();
+  await chooseVolume(page,1);
+  await selectTask(page,nine.id);
+  await expect.poll(async ()=>(await stored(page)).sessions[nine.id]?.current.board).toEqual(nine.board);
+  await page.locator("#magnet").waitFor({state:"hidden"});
+  await page.locator("#plan").waitFor({state:"hidden"});
+  for (const [i,{a,b}] of nine.solution.entries()) {
+    await digit(page,a).click(); await digit(page,b).click();
+    await expect(page.locator("#remaining")).toHaveText(String(occupied(nine.board)-2*(i+1)));
+  }
+  await expect(page.locator("#win")).toBeVisible();
+  const after = await stored(page);
+  expect(after.done.filter((id:string)=>id===nine.id)).toHaveLength(1);
+  expect(after.jars.seeds).toBe(jars(profile).seeds);
+  expect(after.meta.wallet).toBe(37);
+  expect(after.meta.help.inventory).toEqual({magnet:4,plan:3});
+  expect(after.meta.help.grant).toEqual(helpProfile(profile).grant);
+  expect(after.hints[three.id]).toBe(2);
+});

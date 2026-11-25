@@ -944,6 +944,46 @@
       },
       "nextAction": "Подтвердить на телефоне обновление, воспринимаемую сложность и темп наград в размерных группах.",
       "kitImpact": "REUSE: versioned content and bounded proof"
+    },
+    {
+      "id": "seeds-v5-hint-repair",
+      "sourceFeatureIds": [],
+      "scope": "Обычная подсказка в тетрадях на больших полях",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/solver.ts",
+        "src/repair-witness.ts",
+        "src/advice-worker.ts"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/23",
+        "report": "../research/v5-quality/README.md",
+        "model": "Chromium: 98/98 альтернатив с выигрышным продолжением. При отсутствии истории сохраняется возможность UNKNOWN.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Замерить задержку на физическом телефоне.",
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-v6-opening",
+      "sourceFeatureIds": [],
+      "scope": "Собственные первые 12 задач первой тетради",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/notebook-opening.ts",
+        "src/content-ids.ts",
+        "src/progress.ts"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/24",
+        "report": "../research/v5-quality/README.md",
+        "model": "Полный граф 15 664 состояний. Ревизия 6 для неназначенных слотов 3–12.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Проверить первый сеанс с новичками и измерить семечки за активную минуту на телефоне.",
+      "kitImpact": "REUSE"
     }
   ]
 }

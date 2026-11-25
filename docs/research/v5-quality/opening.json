@@ -1,0 +1,5923 @@
+{
+  "retained": [
+    "book-v1-1",
+    "book-v1-2"
+  ],
+  "before": {
+    "safe": 114,
+    "dead": 6,
+    "unknown": 0,
+    "totalStates": 85477,
+    "wins": 49,
+    "runs": 72
+  },
+  "after": {
+    "safe": 102,
+    "dead": 1,
+    "unknown": 0,
+    "totalStates": 15664,
+    "wins": 66,
+    "runs": 72
+  },
+  "slots": [
+    {
+      "id": "book-v1-1",
+      "revision": 1,
+      "rows": [
+        "000091016",
+        "303009004"
+      ],
+      "witness": [
+        8,
+        17,
+        4,
+        5,
+        9,
+        11,
+        7,
+        14
+      ],
+      "geometry": {
+        "n": 8,
+        "rows": 2,
+        "cells": 18,
+        "density": 0.4444444444444444,
+        "rowCounts": [
+          4,
+          4
+        ],
+        "cols": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          2,
+          0,
+          1,
+          2
+        ],
+        "edge": 0.5,
+        "dispersion": 0,
+        "adjacency": 0.5,
+        "observed": "2/2/0"
+      },
+      "proof": {
+        "profile": "FLOW",
+        "states": 25,
+        "deadStates": 0,
+        "terminalDead": 0,
+        "opening": {
+          "legal": 6,
+          "safe": 6,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "edgeObligatory": false,
+        "forcedEdge": {
+          "board": "000000010000009000",
+          "prefix": [
+            [
+              4,
+              5
+            ],
+            [
+              8,
+              17
+            ],
+            [
+              9,
+              11
+            ]
+          ],
+          "choices": [
+            [
+              7,
+              14
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 1,
+        "compression": 0,
+        "chain": 1,
+        "distant": 2,
+        "reading": 1
+      },
+      "episodes": [
+        {
+          "step": 2,
+          "type": "reveal",
+          "interZone": true,
+          "before": "000000010303009000",
+          "uncompressed": "000000010000009000",
+          "after": "000000010000009000",
+          "move": [
+            9,
+            11
+          ],
+          "removed": [
+            9,
+            11
+          ],
+          "opened": [
+            7,
+            14
+          ],
+          "stable": [
+            7,
+            14
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "step": 2,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": true,
+          "before": "000000010303009000",
+          "uncompressed": "000000010000009000",
+          "after": "000000010000009000",
+          "move": [
+            9,
+            11
+          ],
+          "removed": [
+            9,
+            11
+          ],
+          "opened": [
+            7,
+            14
+          ],
+          "stable": [
+            7,
+            14
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        }
+      ],
+      "before": {
+        "board": "000091016303009004",
+        "geometry": {
+          "n": 8,
+          "rows": 2,
+          "cells": 18,
+          "density": 0.4444444444444444,
+          "rowCounts": [
+            4,
+            4
+          ],
+          "cols": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            2,
+            0,
+            1,
+            2
+          ],
+          "edge": 0.5,
+          "dispersion": 0,
+          "adjacency": 0.5,
+          "observed": "2/2/0"
+        },
+        "proof": {
+          "profile": "FLOW",
+          "states": 25,
+          "deadStates": 0,
+          "terminalDead": 0,
+          "opening": {
+            "legal": 6,
+            "safe": 6,
+            "dead": 0,
+            "unknown": 0,
+            "losing": []
+          },
+          "edgeObligatory": false,
+          "forcedEdge": {
+            "board": "000000010000009000",
+            "prefix": [
+              [
+                4,
+                5
+              ],
+              [
+                8,
+                17
+              ],
+              [
+                9,
+                11
+              ]
+            ],
+            "choices": [
+              [
+                7,
+                14
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 4
+          },
+          "near": {
+            "win": true,
+            "remaining": 0,
+            "steps": 4
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 4
+          },
+          "random": [
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 4
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 4
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 4
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 4
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 4
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 4
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 4
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 4
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-2",
+      "revision": 5,
+      "rows": [
+        "400000000",
+        "000000050",
+        "000500000",
+        "000005000",
+        "403075091"
+      ],
+      "witness": [
+        32,
+        41,
+        0,
+        27,
+        25,
+        26,
+        7,
+        12,
+        2,
+        4
+      ],
+      "geometry": {
+        "n": 10,
+        "rows": 5,
+        "cells": 45,
+        "density": 0.2222222222222222,
+        "rowCounts": [
+          1,
+          1,
+          1,
+          1,
+          6
+        ],
+        "cols": [
+          2,
+          0,
+          1,
+          1,
+          1,
+          2,
+          0,
+          2,
+          1
+        ],
+        "edge": 0.5,
+        "dispersion": 2,
+        "adjacency": 0.3,
+        "observed": "1/2/2"
+      },
+      "proof": {
+        "profile": "FLOW",
+        "states": 55,
+        "deadStates": 0,
+        "terminalDead": 0,
+        "opening": {
+          "legal": 8,
+          "safe": 8,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "edgeObligatory": true,
+        "forcedEdge": {
+          "board": "000500000000005000",
+          "prefix": [
+            [
+              0,
+              36
+            ],
+            [
+              7,
+              23
+            ],
+            [
+              11,
+              13
+            ],
+            [
+              16,
+              17
+            ]
+          ],
+          "choices": [
+            [
+              3,
+              14
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 0,
+        "compression": 0,
+        "chain": 0,
+        "distant": 3,
+        "reading": 1
+      },
+      "episodes": [],
+      "before": {
+        "board": "400000000000000050000500000000005000403075091",
+        "geometry": {
+          "n": 10,
+          "rows": 5,
+          "cells": 45,
+          "density": 0.2222222222222222,
+          "rowCounts": [
+            1,
+            1,
+            1,
+            1,
+            6
+          ],
+          "cols": [
+            2,
+            0,
+            1,
+            1,
+            1,
+            2,
+            0,
+            2,
+            1
+          ],
+          "edge": 0.5,
+          "dispersion": 2,
+          "adjacency": 0.3,
+          "observed": "1/2/2"
+        },
+        "proof": {
+          "profile": "FLOW",
+          "states": 55,
+          "deadStates": 0,
+          "terminalDead": 0,
+          "opening": {
+            "legal": 8,
+            "safe": 8,
+            "dead": 0,
+            "unknown": 0,
+            "losing": []
+          },
+          "edgeObligatory": true,
+          "forcedEdge": {
+            "board": "000500000000005000",
+            "prefix": [
+              [
+                0,
+                36
+              ],
+              [
+                7,
+                23
+              ],
+              [
+                11,
+                13
+              ],
+              [
+                16,
+                17
+              ]
+            ],
+            "choices": [
+              [
+                3,
+                14
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          },
+          "near": {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          },
+          "random": [
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 5
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 5
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 5
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 5
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 5
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 5
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-3",
+      "revision": 6,
+      "rows": [
+        "070200000",
+        "705585100",
+        "000500900",
+        "000044000"
+      ],
+      "witness": [
+        11,
+        12,
+        15,
+        24,
+        1,
+        9,
+        3,
+        13,
+        22,
+        23,
+        5,
+        12
+      ],
+      "geometry": {
+        "n": 12,
+        "rows": 4,
+        "cells": 36,
+        "density": 0.3333333333333333,
+        "rowCounts": [
+          2,
+          6,
+          2,
+          2
+        ],
+        "cols": [
+          1,
+          1,
+          1,
+          3,
+          2,
+          2,
+          2,
+          0,
+          0
+        ],
+        "edge": 0.16666666666666666,
+        "dispersion": 1.7320508075688772,
+        "adjacency": 0.6666666666666666,
+        "observed": "2/0/1"
+      },
+      "proof": {
+        "profile": "FLOW",
+        "states": 92,
+        "deadStates": 0,
+        "terminalDead": 0,
+        "opening": {
+          "legal": 7,
+          "safe": 7,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "edgeObligatory": false,
+        "forcedEdge": {
+          "board": "000005000000500000",
+          "prefix": [
+            [
+              1,
+              9
+            ],
+            [
+              3,
+              13
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              6,
+              15
+            ],
+            [
+              22,
+              23
+            ]
+          ],
+          "choices": [
+            [
+              5,
+              12
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 1,
+        "compression": 0,
+        "chain": 0,
+        "distant": 1,
+        "reading": 1
+      },
+      "episodes": [
+        {
+          "step": 1,
+          "type": "reveal",
+          "interZone": true,
+          "before": "070200000700085100000500900000044000",
+          "uncompressed": "070200000700085000000500000000044000",
+          "after": "070200000700085000000500000000044000",
+          "move": [
+            15,
+            24
+          ],
+          "removed": [
+            15,
+            24
+          ],
+          "opened": [
+            14,
+            21
+          ],
+          "stable": [
+            14,
+            21
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        }
+      ],
+      "before": {
+        "board": "147278050208005276910050403055966652",
+        "geometry": {
+          "n": 26,
+          "rows": 4,
+          "cells": 36,
+          "density": 0.7222222222222222,
+          "rowCounts": [
+            7,
+            6,
+            5,
+            8
+          ],
+          "cols": [
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "edge": 0.46153846153846156,
+          "dispersion": 1.118033988749895,
+          "adjacency": 1.0384615384615385,
+          "observed": "4/2/1"
+        },
+        "proof": {
+          "profile": "TACTICAL",
+          "states": 18765,
+          "deadStates": 9827,
+          "terminalDead": 389,
+          "opening": {
+            "legal": 14,
+            "safe": 13,
+            "dead": 1,
+            "unknown": 0,
+            "losing": [
+              [
+                9,
+                11
+              ]
+            ]
+          },
+          "laterRisk": {
+            "board": "047278050208005276910050403055066652",
+            "path": [
+              [
+                0,
+                30
+              ]
+            ],
+            "pair": [
+              9,
+              11
+            ]
+          },
+          "edgeObligatory": false,
+          "forcedEdge": {
+            "board": "200000000000000002",
+            "prefix": [
+              [
+                0,
+                30
+              ],
+              [
+                3,
+                11
+              ],
+              [
+                1,
+                31
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                5,
+                15
+              ],
+              [
+                14,
+                22
+              ],
+              [
+                16,
+                26
+              ],
+              [
+                7,
+                34
+              ],
+              [
+                8,
+                24
+              ],
+              [
+                9,
+                10
+              ],
+              [
+                15,
+                23
+              ],
+              [
+                10,
+                11
+              ]
+            ],
+            "choices": [
+              [
+                0,
+                17
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 13
+          },
+          "near": {
+            "win": false,
+            "remaining": 6,
+            "steps": 10
+          },
+          "mobility": {
+            "win": false,
+            "remaining": 4,
+            "steps": 11
+          },
+          "random": [
+            {
+              "win": false,
+              "remaining": 8,
+              "steps": 9
+            },
+            {
+              "win": false,
+              "remaining": 6,
+              "steps": 10
+            },
+            {
+              "win": false,
+              "remaining": 6,
+              "steps": 10
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 6
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 6
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 6
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-4",
+      "revision": 6,
+      "rows": [
+        "000100000",
+        "000007007",
+        "950032060",
+        "645084003"
+      ],
+      "witness": [
+        19,
+        29,
+        17,
+        35,
+        23,
+        31,
+        14,
+        22,
+        3,
+        9,
+        9,
+        10,
+        7,
+        14
+      ],
+      "geometry": {
+        "n": 14,
+        "rows": 4,
+        "cells": 36,
+        "density": 0.3888888888888889,
+        "rowCounts": [
+          1,
+          2,
+          5,
+          6
+        ],
+        "cols": [
+          2,
+          2,
+          1,
+          1,
+          2,
+          3,
+          0,
+          1,
+          2
+        ],
+        "edge": 0.5,
+        "dispersion": 2.0615528128088303,
+        "adjacency": 0.7142857142857143,
+        "observed": "2/2/2"
+      },
+      "proof": {
+        "profile": "FLOW",
+        "states": 99,
+        "deadStates": 0,
+        "terminalDead": 0,
+        "opening": {
+          "legal": 7,
+          "safe": 7,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "edgeObligatory": true,
+        "forcedEdge": {
+          "board": "000030000000000003",
+          "prefix": [
+            [
+              14,
+              17
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              1,
+              11
+            ],
+            [
+              5,
+              13
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              10,
+              14
+            ]
+          ],
+          "choices": [
+            [
+              4,
+              17
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 3,
+        "compression": 0,
+        "chain": 2,
+        "distant": 3,
+        "reading": 2
+      },
+      "episodes": [
+        {
+          "step": 2,
+          "type": "reveal",
+          "interZone": false,
+          "before": "000100000000007000900032060640084000",
+          "uncompressed": "000100000000007000900030060640004000",
+          "after": "000100000000007000900030060640004000",
+          "move": [
+            23,
+            31
+          ],
+          "removed": [
+            23,
+            31
+          ],
+          "opened": [
+            28,
+            32
+          ],
+          "stable": [
+            28,
+            32
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        },
+        {
+          "step": 3,
+          "type": "reveal",
+          "interZone": true,
+          "before": "000100000000007000900030060640004000",
+          "uncompressed": "000100000000000000900000060640004000",
+          "after": "000100000900000060640004000",
+          "move": [
+            14,
+            22
+          ],
+          "removed": [
+            14,
+            22
+          ],
+          "opened": [
+            3,
+            9
+          ],
+          "stable": [
+            3,
+            18
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        },
+        {
+          "step": 3,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": true,
+          "before": "000100000000007000900030060640004000",
+          "uncompressed": "000100000000000000900000060640004000",
+          "after": "000100000900000060640004000",
+          "move": [
+            14,
+            22
+          ],
+          "removed": [
+            14,
+            22
+          ],
+          "opened": [
+            3,
+            9
+          ],
+          "stable": [
+            3,
+            18
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        },
+        {
+          "step": 5,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": false,
+          "before": "000000060640004000",
+          "uncompressed": "000000060000004000",
+          "after": "000000060000004000",
+          "move": [
+            9,
+            10
+          ],
+          "removed": [
+            27,
+            28
+          ],
+          "opened": [
+            7,
+            14
+          ],
+          "stable": [
+            25,
+            32
+          ],
+          "beforeIds": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        }
+      ],
+      "before": {
+        "board": "504000000700000600000007405000010050005006000088010000",
+        "geometry": {
+          "n": 14,
+          "rows": 6,
+          "cells": 54,
+          "density": 0.25925925925925924,
+          "rowCounts": [
+            2,
+            2,
+            3,
+            2,
+            2,
+            3
+          ],
+          "cols": [
+            2,
+            1,
+            3,
+            0,
+            2,
+            2,
+            2,
+            1,
+            1
+          ],
+          "edge": 0.35714285714285715,
+          "dispersion": 0.4714045207910317,
+          "adjacency": 0.35714285714285715,
+          "observed": "1/1/0"
+        },
+        "proof": {
+          "profile": "MODERATE",
+          "states": 62,
+          "deadStates": 10,
+          "terminalDead": 4,
+          "opening": {
+            "legal": 5,
+            "safe": 5,
+            "dead": 0,
+            "unknown": 0,
+            "losing": []
+          },
+          "laterRisk": {
+            "board": "504000000000000005000010050005006000088010000",
+            "path": [
+              [
+                15,
+                24
+              ],
+              [
+                9,
+                23
+              ]
+            ],
+            "pair": [
+              25,
+              29
+            ]
+          },
+          "edgeObligatory": true,
+          "forcedEdge": {
+            "board": "004000000000006000",
+            "prefix": [
+              [
+                15,
+                24
+              ],
+              [
+                9,
+                23
+              ],
+              [
+                17,
+                25
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                13,
+                31
+              ],
+              [
+                19,
+                20
+              ]
+            ],
+            "choices": [
+              [
+                2,
+                14
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          },
+          "near": {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          },
+          "random": [
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 7
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 7
+            },
+            {
+              "win": false,
+              "remaining": 4,
+              "steps": 5
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 7
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 7
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 7
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-5",
+      "revision": 6,
+      "rows": [
+        "555257624",
+        "117837020"
+      ],
+      "witness": [
+        3,
+        12,
+        0,
+        1,
+        5,
+        13,
+        7,
+        16,
+        2,
+        4,
+        9,
+        10,
+        11,
+        14,
+        6,
+        8
+      ],
+      "geometry": {
+        "n": 16,
+        "rows": 2,
+        "cells": 18,
+        "density": 0.8888888888888888,
+        "rowCounts": [
+          9,
+          7
+        ],
+        "cols": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          2,
+          1
+        ],
+        "edge": 0.4375,
+        "dispersion": 1,
+        "adjacency": 1.25,
+        "observed": "5/2/1"
+      },
+      "proof": {
+        "profile": "MODERATE",
+        "states": 269,
+        "deadStates": 6,
+        "terminalDead": 2,
+        "opening": {
+          "legal": 8,
+          "safe": 8,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "laterRisk": {
+          "board": "005257624007800020",
+          "path": [
+            [
+              0,
+              1
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              13,
+              14
+            ]
+          ],
+          "pair": [
+            12,
+            16
+          ]
+        },
+        "edgeObligatory": false,
+        "forcedEdge": {
+          "board": "000007000007000000",
+          "prefix": [
+            [
+              0,
+              1
+            ],
+            [
+              3,
+              12
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              7,
+              16
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              9,
+              10
+            ],
+            [
+              13,
+              14
+            ]
+          ],
+          "choices": [
+            [
+              5,
+              11
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 4,
+        "compression": 0,
+        "chain": 0,
+        "distant": 3,
+        "reading": 0
+      },
+      "episodes": [
+        {
+          "step": 0,
+          "type": "reveal",
+          "interZone": false,
+          "before": "555257624117837020",
+          "uncompressed": "555057624117037020",
+          "after": "555057624117037020",
+          "move": [
+            3,
+            12
+          ],
+          "removed": [
+            3,
+            12
+          ],
+          "opened": [
+            2,
+            4
+          ],
+          "stable": [
+            2,
+            4
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        }
+      ],
+      "before": {
+        "board": "000040090055800090019000050560000500006400582084000000007300000000000006",
+        "geometry": {
+          "n": 22,
+          "rows": 8,
+          "cells": 72,
+          "density": 0.3055555555555556,
+          "rowCounts": [
+            2,
+            4,
+            3,
+            3,
+            5,
+            2,
+            2,
+            1
+          ],
+          "cols": [
+            1,
+            4,
+            5,
+            3,
+            1,
+            0,
+            2,
+            4,
+            2
+          ],
+          "edge": 0.5,
+          "dispersion": 1.1989578808281798,
+          "adjacency": 0.7727272727272727,
+          "observed": "1/2/1"
+        },
+        "proof": {
+          "profile": "TACTICAL",
+          "states": 3084,
+          "deadStates": 1098,
+          "terminalDead": 43,
+          "opening": {
+            "legal": 14,
+            "safe": 13,
+            "dead": 1,
+            "unknown": 0,
+            "losing": [
+              [
+                16,
+                19
+              ]
+            ]
+          },
+          "laterRisk": {
+            "board": "000040000000800000000400080004000000000000006",
+            "path": [
+              [
+                7,
+                16
+              ],
+              [
+                10,
+                11
+              ],
+              [
+                19,
+                20
+              ],
+              [
+                25,
+                27
+              ],
+              [
+                19,
+                29
+              ],
+              [
+                24,
+                33
+              ],
+              [
+                26,
+                28
+              ],
+              [
+                38,
+                39
+              ]
+            ],
+            "pair": [
+              29,
+              44
+            ]
+          },
+          "edgeObligatory": false,
+          "forcedEdge": {
+            "board": "004000000000000006",
+            "prefix": [
+              [
+                7,
+                16
+              ],
+              [
+                10,
+                11
+              ],
+              [
+                19,
+                20
+              ],
+              [
+                25,
+                27
+              ],
+              [
+                19,
+                29
+              ],
+              [
+                24,
+                33
+              ],
+              [
+                12,
+                28
+              ],
+              [
+                4,
+                12
+              ],
+              [
+                7,
+                8
+              ],
+              [
+                11,
+                12
+              ]
+            ],
+            "choices": [
+              [
+                2,
+                17
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 11
+          },
+          "near": {
+            "win": true,
+            "remaining": 0,
+            "steps": 11
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 11
+          },
+          "random": [
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 11
+            },
+            {
+              "win": false,
+              "remaining": 4,
+              "steps": 9
+            },
+            {
+              "win": false,
+              "remaining": 4,
+              "steps": 9
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-6",
+      "revision": 6,
+      "rows": [
+        "000230082",
+        "790020006",
+        "001000455"
+      ],
+      "witness": [
+        25,
+        26,
+        7,
+        8,
+        4,
+        9,
+        10,
+        20,
+        17,
+        24,
+        3,
+        13
+      ],
+      "geometry": {
+        "n": 12,
+        "rows": 3,
+        "cells": 27,
+        "density": 0.4444444444444444,
+        "rowCounts": [
+          4,
+          4,
+          4
+        ],
+        "cols": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          0,
+          1,
+          2,
+          3
+        ],
+        "edge": 0.5833333333333334,
+        "dispersion": 0,
+        "adjacency": 0.6666666666666666,
+        "observed": "2/2/0"
+      },
+      "proof": {
+        "profile": "FLOW",
+        "states": 36,
+        "deadStates": 0,
+        "terminalDead": 0,
+        "opening": {
+          "legal": 4,
+          "safe": 4,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "edgeObligatory": true,
+        "forcedEdge": {
+          "board": "000000006000000400",
+          "prefix": [
+            [
+              3,
+              13
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              1,
+              11
+            ],
+            [
+              16,
+              17
+            ]
+          ],
+          "choices": [
+            [
+              8,
+              15
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 2,
+        "compression": 0,
+        "chain": 2,
+        "distant": 2,
+        "reading": 2
+      },
+      "episodes": [
+        {
+          "step": 1,
+          "type": "reveal",
+          "interZone": true,
+          "before": "000230082790020006001000400",
+          "uncompressed": "000230000790020006001000400",
+          "after": "000230000790020006001000400",
+          "move": [
+            7,
+            8
+          ],
+          "removed": [
+            7,
+            8
+          ],
+          "opened": [
+            4,
+            9
+          ],
+          "stable": [
+            4,
+            9
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        },
+        {
+          "step": 1,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": true,
+          "before": "000230082790020006001000400",
+          "uncompressed": "000230000790020006001000400",
+          "after": "000230000790020006001000400",
+          "move": [
+            7,
+            8
+          ],
+          "removed": [
+            7,
+            8
+          ],
+          "opened": [
+            4,
+            9
+          ],
+          "stable": [
+            4,
+            9
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        }
+      ],
+      "before": {
+        "board": "000000500026544251900090690150790000824633764",
+        "geometry": {
+          "n": 26,
+          "rows": 5,
+          "cells": 45,
+          "density": 0.5777777777777777,
+          "rowCounts": [
+            1,
+            8,
+            4,
+            4,
+            9
+          ],
+          "cols": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            2,
+            4,
+            3,
+            2
+          ],
+          "edge": 0.4230769230769231,
+          "dispersion": 2.925747767665559,
+          "adjacency": 1.0769230769230769,
+          "observed": "3/2/2"
+        },
+        "proof": {
+          "profile": "MODERATE",
+          "states": 48066,
+          "deadStates": 9478,
+          "terminalDead": 185,
+          "opening": {
+            "legal": 19,
+            "safe": 19,
+            "dead": 0,
+            "unknown": 0,
+            "losing": []
+          },
+          "laterRisk": {
+            "board": "000044201900090690100790000800633764",
+            "path": [
+              [
+                6,
+                16
+              ],
+              [
+                2,
+                29
+              ],
+              [
+                3,
+                19
+              ],
+              [
+                1,
+                28
+              ]
+            ],
+            "pair": [
+              31,
+              32
+            ]
+          },
+          "edgeObligatory": false,
+          "forcedEdge": {
+            "board": "000000200800000000",
+            "prefix": [
+              [
+                6,
+                16
+              ],
+              [
+                2,
+                29
+              ],
+              [
+                3,
+                19
+              ],
+              [
+                1,
+                28
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                8,
+                9
+              ],
+              [
+                13,
+                22
+              ],
+              [
+                15,
+                35
+              ],
+              [
+                16,
+                18
+              ],
+              [
+                12,
+                22
+              ],
+              [
+                14,
+                15
+              ],
+              [
+                12,
+                16
+              ]
+            ],
+            "choices": [
+              [
+                6,
+                9
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 13
+          },
+          "near": {
+            "win": false,
+            "remaining": 4,
+            "steps": 11
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 13
+          },
+          "random": [
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 13
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 13
+            },
+            {
+              "win": false,
+              "remaining": 4,
+              "steps": 11
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 6
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 6
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 6
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-7",
+      "revision": 6,
+      "rows": [
+        "422392015",
+        "556306854"
+      ],
+      "witness": [
+        5,
+        15,
+        8,
+        16,
+        14,
+        17,
+        3,
+        12,
+        9,
+        10,
+        1,
+        2,
+        4,
+        7,
+        0,
+        11
+      ],
+      "geometry": {
+        "n": 16,
+        "rows": 2,
+        "cells": 18,
+        "density": 0.8888888888888888,
+        "rowCounts": [
+          8,
+          8
+        ],
+        "cols": [
+          2,
+          2,
+          2,
+          2,
+          1,
+          2,
+          1,
+          2,
+          2
+        ],
+        "edge": 0.5,
+        "dispersion": 0,
+        "adjacency": 1.1875,
+        "observed": "5/2/0"
+      },
+      "proof": {
+        "profile": "FLOW",
+        "states": 112,
+        "deadStates": 0,
+        "terminalDead": 0,
+        "opening": {
+          "legal": 6,
+          "safe": 6,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "edgeObligatory": true,
+        "forcedEdge": {
+          "board": "400000000000000004",
+          "prefix": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              12
+            ],
+            [
+              5,
+              15
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              11,
+              14
+            ],
+            [
+              10,
+              16
+            ]
+          ],
+          "choices": [
+            [
+              0,
+              17
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 3,
+        "compression": 0,
+        "chain": 2,
+        "distant": 3,
+        "reading": 1
+      },
+      "episodes": [
+        {
+          "step": 0,
+          "type": "reveal",
+          "interZone": false,
+          "before": "422392015556306854",
+          "uncompressed": "422390015556306054",
+          "after": "422390015556306054",
+          "move": [
+            5,
+            15
+          ],
+          "removed": [
+            5,
+            15
+          ],
+          "opened": [
+            4,
+            7
+          ],
+          "stable": [
+            4,
+            7
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "step": 1,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": false,
+          "before": "422390015556306054",
+          "uncompressed": "422390010556306004",
+          "after": "422390010556306004",
+          "move": [
+            8,
+            16
+          ],
+          "removed": [
+            8,
+            16
+          ],
+          "opened": [
+            14,
+            17
+          ],
+          "stable": [
+            14,
+            17
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "step": 6,
+          "type": "reveal",
+          "interZone": true,
+          "before": "400090010006000000",
+          "uncompressed": "400000000006000000",
+          "after": "400000000006000000",
+          "move": [
+            4,
+            7
+          ],
+          "removed": [
+            4,
+            7
+          ],
+          "opened": [
+            0,
+            11
+          ],
+          "stable": [
+            0,
+            11
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        {
+          "step": 6,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": true,
+          "before": "400090010006000000",
+          "uncompressed": "400000000006000000",
+          "after": "400000000006000000",
+          "move": [
+            4,
+            7
+          ],
+          "removed": [
+            4,
+            7
+          ],
+          "opened": [
+            0,
+            11
+          ],
+          "stable": [
+            0,
+            11
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        }
+      ],
+      "before": {
+        "board": "300000010090000060050000060570000000020000002",
+        "geometry": {
+          "n": 10,
+          "rows": 5,
+          "cells": 45,
+          "density": 0.2222222222222222,
+          "rowCounts": [
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "cols": [
+            2,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1
+          ],
+          "edge": 1,
+          "dispersion": 0,
+          "adjacency": 0.6,
+          "observed": "1/5/0"
+        },
+        "proof": {
+          "profile": "FLOW",
+          "states": 18,
+          "deadStates": 0,
+          "terminalDead": 0,
+          "opening": {
+            "legal": 4,
+            "safe": 4,
+            "dead": 0,
+            "unknown": 0,
+            "losing": []
+          },
+          "edgeObligatory": true,
+          "forcedEdge": {
+            "board": "300000010090000000070000000",
+            "prefix": [
+              [
+                16,
+                25
+              ],
+              [
+                19,
+                27
+              ],
+              [
+                28,
+                35
+              ]
+            ],
+            "choices": [
+              [
+                7,
+                10
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          },
+          "near": {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 5
+          },
+          "random": [
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 5
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 5
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 5
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-8",
+      "revision": 6,
+      "rows": [
+        "121000460",
+        "090000070",
+        "030000080",
+        "170000005",
+        "026600857"
+      ],
+      "witness": [
+        2,
+        10,
+        38,
+        39,
+        0,
+        27,
+        37,
+        42,
+        6,
+        7,
+        35,
+        43,
+        16,
+        19,
+        19,
+        35,
+        1,
+        16
+      ],
+      "geometry": {
+        "n": 18,
+        "rows": 5,
+        "cells": 45,
+        "density": 0.4,
+        "rowCounts": [
+          5,
+          2,
+          2,
+          3,
+          6
+        ],
+        "cols": [
+          2,
+          5,
+          2,
+          1,
+          0,
+          0,
+          2,
+          4,
+          2
+        ],
+        "edge": 0.7222222222222222,
+        "dispersion": 1.624807680927192,
+        "adjacency": 0.8333333333333334,
+        "observed": "2/3/1"
+      },
+      "proof": {
+        "profile": "MODERATE",
+        "states": 390,
+        "deadStates": 62,
+        "terminalDead": 6,
+        "opening": {
+          "legal": 10,
+          "safe": 10,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "laterRisk": {
+          "board": "021000460000000070030000080170000005026600857",
+          "path": [
+            [
+              0,
+              10
+            ]
+          ],
+          "pair": [
+            19,
+            28
+          ]
+        },
+        "edgeObligatory": false,
+        "forcedEdge": {
+          "board": "070000000000000007",
+          "prefix": [
+            [
+              0,
+              10
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              16,
+              19
+            ],
+            [
+              2,
+              18
+            ],
+            [
+              1,
+              16
+            ],
+            [
+              8,
+              16
+            ],
+            [
+              11,
+              12
+            ],
+            [
+              10,
+              15
+            ]
+          ],
+          "choices": [
+            [
+              1,
+              17
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 3,
+        "compression": 0,
+        "chain": 0,
+        "distant": 5,
+        "reading": 3
+      },
+      "episodes": [
+        {
+          "step": 1,
+          "type": "reveal",
+          "interZone": false,
+          "before": "120000460000000070030000080170000005026600857",
+          "uncompressed": "120000460000000070030000080170000005020000857",
+          "after": "120000460000000070030000080170000005020000857",
+          "move": [
+            38,
+            39
+          ],
+          "removed": [
+            38,
+            39
+          ],
+          "opened": [
+            37,
+            42
+          ],
+          "stable": [
+            37,
+            42
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        {
+          "step": 5,
+          "type": "reveal",
+          "interZone": true,
+          "before": "020000000000000070030000080070000005000000057",
+          "uncompressed": "020000000000000070030000080070000000000000007",
+          "after": "020000000000000070030000080070000000000000007",
+          "move": [
+            35,
+            43
+          ],
+          "removed": [
+            35,
+            43
+          ],
+          "opened": [
+            28,
+            44
+          ],
+          "stable": [
+            28,
+            44
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        }
+      ],
+      "before": {
+        "board": "000000019003009000070400400000000025501004200800000800000040000",
+        "geometry": {
+          "n": 16,
+          "rows": 7,
+          "cells": 63,
+          "density": 0.25396825396825395,
+          "rowCounts": [
+            2,
+            2,
+            3,
+            2,
+            4,
+            2,
+            1
+          ],
+          "cols": [
+            2,
+            1,
+            2,
+            1,
+            1,
+            2,
+            3,
+            2,
+            2
+          ],
+          "edge": 0.4375,
+          "dispersion": 0.880630571852711,
+          "adjacency": 0.3125,
+          "observed": "1/2/0"
+        },
+        "proof": {
+          "profile": "MODERATE",
+          "states": 418,
+          "deadStates": 54,
+          "terminalDead": 10,
+          "opening": {
+            "legal": 10,
+            "safe": 10,
+            "dead": 0,
+            "unknown": 0,
+            "losing": []
+          },
+          "laterRisk": {
+            "board": "000000025500004200800000800000040000",
+            "path": [
+              [
+                7,
+                8
+              ],
+              [
+                2,
+                10
+              ],
+              [
+                5,
+                29
+              ],
+              [
+                3,
+                6
+              ]
+            ],
+            "pair": [
+              15,
+              18
+            ]
+          },
+          "edgeObligatory": true,
+          "forcedEdge": {
+            "board": "000000005500000000",
+            "prefix": [
+              [
+                7,
+                8
+              ],
+              [
+                2,
+                10
+              ],
+              [
+                5,
+                29
+              ],
+              [
+                3,
+                6
+              ],
+              [
+                7,
+                15
+              ],
+              [
+                18,
+                24
+              ],
+              [
+                14,
+                22
+              ]
+            ],
+            "choices": [
+              [
+                8,
+                9
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          "near": {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          "random": [
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 8
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 8
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 8
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 9
+        },
+        "near": {
+          "win": false,
+          "remaining": 6,
+          "steps": 6
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 9
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 9
+          },
+          {
+            "win": false,
+            "remaining": 4,
+            "steps": 7
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 9
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-9",
+      "revision": 6,
+      "rows": [
+        "000005005",
+        "786436065",
+        "380030000",
+        "000005000"
+      ],
+      "witness": [
+        9,
+        18,
+        8,
+        17,
+        11,
+        12,
+        10,
+        19,
+        14,
+        16,
+        5,
+        32,
+        4,
+        13
+      ],
+      "geometry": {
+        "n": 14,
+        "rows": 4,
+        "cells": 36,
+        "density": 0.3888888888888889,
+        "rowCounts": [
+          2,
+          8,
+          3,
+          1
+        ],
+        "cols": [
+          2,
+          2,
+          1,
+          1,
+          2,
+          3,
+          0,
+          1,
+          2
+        ],
+        "edge": 0.5,
+        "dispersion": 2.692582403567252,
+        "adjacency": 0.8571428571428571,
+        "observed": "2/2/2"
+      },
+      "proof": {
+        "profile": "FLOW",
+        "states": 212,
+        "deadStates": 0,
+        "terminalDead": 0,
+        "opening": {
+          "legal": 7,
+          "safe": 7,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "edgeObligatory": false,
+        "forcedEdge": {
+          "board": "000000005000005000",
+          "prefix": [
+            [
+              5,
+              8
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              1,
+              10
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              4,
+              13
+            ],
+            [
+              5,
+              7
+            ]
+          ],
+          "choices": [
+            [
+              8,
+              14
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 1,
+        "compression": 0,
+        "chain": 1,
+        "distant": 2,
+        "reading": 0
+      },
+      "episodes": [
+        {
+          "step": 4,
+          "type": "reveal",
+          "interZone": true,
+          "before": "000005000000036060000030000000005000",
+          "uncompressed": "000005000000030000000030000000005000",
+          "after": "000005000000030000000030000000005000",
+          "move": [
+            14,
+            16
+          ],
+          "removed": [
+            14,
+            16
+          ],
+          "opened": [
+            5,
+            32
+          ],
+          "stable": [
+            5,
+            32
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        },
+        {
+          "step": 4,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": true,
+          "before": "000005000000036060000030000000005000",
+          "uncompressed": "000005000000030000000030000000005000",
+          "after": "000005000000030000000030000000005000",
+          "move": [
+            14,
+            16
+          ],
+          "removed": [
+            14,
+            16
+          ],
+          "opened": [
+            5,
+            32
+          ],
+          "stable": [
+            5,
+            32
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        }
+      ],
+      "before": {
+        "board": "030990004559600063288059700105510530600703200",
+        "geometry": {
+          "n": 26,
+          "rows": 5,
+          "cells": 45,
+          "density": 0.5777777777777777,
+          "rowCounts": [
+            4,
+            6,
+            6,
+            6,
+            4
+          ],
+          "cols": [
+            4,
+            3,
+            3,
+            4,
+            3,
+            2,
+            3,
+            2,
+            2
+          ],
+          "edge": 0.4230769230769231,
+          "dispersion": 0.9797958971132712,
+          "adjacency": 1,
+          "observed": "3/2/0"
+        },
+        "proof": {
+          "profile": "TACTICAL",
+          "states": 12756,
+          "deadStates": 8954,
+          "terminalDead": 294,
+          "opening": {
+            "legal": 14,
+            "safe": 12,
+            "dead": 2,
+            "unknown": 0,
+            "losing": [
+              [
+                12,
+                16
+              ],
+              [
+                18,
+                19
+              ]
+            ]
+          },
+          "laterRisk": {
+            "board": "030000004559600063288059700105510530600703200",
+            "path": [
+              [
+                3,
+                4
+              ]
+            ],
+            "pair": [
+              12,
+              16
+            ]
+          },
+          "edgeObligatory": true,
+          "forcedEdge": {
+            "board": "200000000000000200",
+            "prefix": [
+              [
+                3,
+                4
+              ],
+              [
+                8,
+                16
+              ],
+              [
+                9,
+                10
+              ],
+              [
+                11,
+                31
+              ],
+              [
+                19,
+                20
+              ],
+              [
+                12,
+                36
+              ],
+              [
+                1,
+                17
+              ],
+              [
+                4,
+                12
+              ],
+              [
+                6,
+                16
+              ],
+              [
+                5,
+                9
+              ],
+              [
+                11,
+                15
+              ],
+              [
+                12,
+                14
+              ]
+            ],
+            "choices": [
+              [
+                0,
+                15
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": false,
+            "remaining": 6,
+            "steps": 10
+          },
+          "near": {
+            "win": false,
+            "remaining": 6,
+            "steps": 10
+          },
+          "mobility": {
+            "win": false,
+            "remaining": 4,
+            "steps": 11
+          },
+          "random": [
+            {
+              "win": false,
+              "remaining": 6,
+              "steps": 10
+            },
+            {
+              "win": false,
+              "remaining": 8,
+              "steps": 9
+            },
+            {
+              "win": false,
+              "remaining": 6,
+              "steps": 10
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 7
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 7
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 7
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 7
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-10",
+      "revision": 6,
+      "rows": [
+        "000028090",
+        "000085009",
+        "018059004",
+        "000299053",
+        "005084003"
+      ],
+      "witness": [
+        4,
+        20,
+        7,
+        17,
+        30,
+        40,
+        35,
+        44,
+        31,
+        32,
+        22,
+        38,
+        19,
+        23,
+        5,
+        13,
+        5,
+        25,
+        8,
+        14
+      ],
+      "geometry": {
+        "n": 20,
+        "rows": 5,
+        "cells": 45,
+        "density": 0.4444444444444444,
+        "rowCounts": [
+          3,
+          3,
+          5,
+          5,
+          4
+        ],
+        "cols": [
+          0,
+          1,
+          2,
+          1,
+          5,
+          5,
+          0,
+          2,
+          4
+        ],
+        "edge": 0.35,
+        "dispersion": 0.8944271909999159,
+        "adjacency": 0.95,
+        "observed": "2/1/0"
+      },
+      "proof": {
+        "profile": "MODERATE",
+        "states": 3006,
+        "deadStates": 775,
+        "terminalDead": 46,
+        "opening": {
+          "legal": 15,
+          "safe": 15,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "laterRisk": {
+          "board": "000085000018059004000299053005084003",
+          "path": [
+            [
+              4,
+              5
+            ],
+            [
+              7,
+              17
+            ]
+          ],
+          "pair": [
+            14,
+            22
+          ]
+        },
+        "edgeObligatory": true,
+        "forcedEdge": {
+          "board": "000000004000000050005004000",
+          "prefix": [
+            [
+              4,
+              5
+            ],
+            [
+              7,
+              17
+            ],
+            [
+              5,
+              13
+            ],
+            [
+              11,
+              21
+            ],
+            [
+              10,
+              14
+            ],
+            [
+              22,
+              23
+            ],
+            [
+              4,
+              31
+            ],
+            [
+              17,
+              26
+            ]
+          ],
+          "choices": [
+            [
+              16,
+              20
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 4,
+        "compression": 0,
+        "chain": 2,
+        "distant": 5,
+        "reading": 1
+      },
+      "episodes": [
+        {
+          "step": 2,
+          "type": "reveal",
+          "interZone": true,
+          "before": "000008000000085000010059004000299053005084003",
+          "uncompressed": "000008000000085000010059004000099053005004003",
+          "after": "000008000000085000010059004000099053005004003",
+          "move": [
+            30,
+            40
+          ],
+          "removed": [
+            30,
+            40
+          ],
+          "opened": [
+            22,
+            38
+          ],
+          "stable": [
+            22,
+            38
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        {
+          "step": 5,
+          "type": "reveal",
+          "interZone": false,
+          "before": "000008000000085000010059004000000050005004000",
+          "uncompressed": "000008000000085000010009004000000050000004000",
+          "after": "000008000000085000010009004000000050000004000",
+          "move": [
+            22,
+            38
+          ],
+          "removed": [
+            22,
+            38
+          ],
+          "opened": [
+            19,
+            23
+          ],
+          "stable": [
+            19,
+            23
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        {
+          "step": 5,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": false,
+          "before": "000008000000085000010059004000000050005004000",
+          "uncompressed": "000008000000085000010009004000000050000004000",
+          "after": "000008000000085000010009004000000050000004000",
+          "move": [
+            22,
+            38
+          ],
+          "removed": [
+            22,
+            38
+          ],
+          "opened": [
+            19,
+            23
+          ],
+          "stable": [
+            19,
+            23
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        {
+          "step": 8,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": true,
+          "before": "000005000000000004000000050000004000",
+          "uncompressed": "000000000000000004000000000000004000",
+          "after": "000000004000004000",
+          "move": [
+            5,
+            25
+          ],
+          "removed": [
+            14,
+            34
+          ],
+          "opened": [
+            8,
+            14
+          ],
+          "stable": [
+            26,
+            41
+          ],
+          "beforeIds": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ],
+          "afterIds": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ]
+        }
+      ],
+      "before": {
+        "board": "003000000000100000850590728806000040",
+        "geometry": {
+          "n": 12,
+          "rows": 4,
+          "cells": 36,
+          "density": 0.3333333333333333,
+          "rowCounts": [
+            1,
+            1,
+            7,
+            3
+          ],
+          "cols": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            1
+          ],
+          "edge": 0.5,
+          "dispersion": 2.449489742783178,
+          "adjacency": 0.5833333333333334,
+          "observed": "2/2/2"
+        },
+        "proof": {
+          "profile": "TACTICAL",
+          "states": 44,
+          "deadStates": 8,
+          "terminalDead": 1,
+          "opening": {
+            "legal": 6,
+            "safe": 5,
+            "dead": 1,
+            "unknown": 0,
+            "losing": [
+              [
+                26,
+                27
+              ]
+            ]
+          },
+          "laterRisk": {
+            "board": "003000000850500728806000040",
+            "path": [
+              [
+                12,
+                22
+              ]
+            ],
+            "pair": [
+              17,
+              18
+            ]
+          },
+          "edgeObligatory": true,
+          "forcedEdge": {
+            "board": "003000000000000700",
+            "prefix": [
+              [
+                12,
+                22
+              ],
+              [
+                9,
+                18
+              ],
+              [
+                10,
+                12
+              ],
+              [
+                16,
+                17
+              ],
+              [
+                20,
+                25
+              ]
+            ],
+            "choices": [
+              [
+                2,
+                15
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          },
+          "near": {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 6
+          },
+          "random": [
+            {
+              "win": false,
+              "remaining": 4,
+              "steps": 4
+            },
+            {
+              "win": false,
+              "remaining": 4,
+              "steps": 4
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 6
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 10
+        },
+        "near": {
+          "win": false,
+          "remaining": 4,
+          "steps": 8
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 10
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 10
+          },
+          {
+            "win": false,
+            "remaining": 6,
+            "steps": 7
+          },
+          {
+            "win": false,
+            "remaining": 4,
+            "steps": 8
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-11",
+      "revision": 6,
+      "rows": [
+        "730890800",
+        "506690076",
+        "509001607"
+      ],
+      "witness": [
+        16,
+        26,
+        4,
+        13,
+        12,
+        17,
+        20,
+        23,
+        3,
+        6,
+        0,
+        1,
+        0,
+        9,
+        2,
+        15
+      ],
+      "geometry": {
+        "n": 16,
+        "rows": 3,
+        "cells": 27,
+        "density": 0.5925925925925926,
+        "rowCounts": [
+          5,
+          6,
+          5
+        ],
+        "cols": [
+          3,
+          1,
+          2,
+          2,
+          2,
+          1,
+          2,
+          1,
+          2
+        ],
+        "edge": 0.4375,
+        "dispersion": 0.4714045207910317,
+        "adjacency": 0.75,
+        "observed": "3/2/0"
+      },
+      "proof": {
+        "profile": "FLOW",
+        "states": 175,
+        "deadStates": 0,
+        "terminalDead": 0,
+        "opening": {
+          "legal": 7,
+          "safe": 7,
+          "dead": 0,
+          "unknown": 0,
+          "losing": []
+        },
+        "edgeObligatory": true,
+        "forcedEdge": {
+          "board": "000000006000000600",
+          "prefix": [
+            [
+              0,
+              1
+            ],
+            [
+              4,
+              13
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              0,
+              9
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              7,
+              17
+            ],
+            [
+              11,
+              14
+            ]
+          ],
+          "choices": [
+            [
+              8,
+              15
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 3,
+        "compression": 0,
+        "chain": 2,
+        "distant": 4,
+        "reading": 1
+      },
+      "episodes": [
+        {
+          "step": 1,
+          "type": "reveal",
+          "interZone": false,
+          "before": "730890800506690006509001600",
+          "uncompressed": "730800800506600006509001600",
+          "after": "730800800506600006509001600",
+          "move": [
+            4,
+            13
+          ],
+          "removed": [
+            4,
+            13
+          ],
+          "opened": [
+            3,
+            6
+          ],
+          "stable": [
+            3,
+            6
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        },
+        {
+          "step": 1,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": false,
+          "before": "730890800506690006509001600",
+          "uncompressed": "730800800506600006509001600",
+          "after": "730800800506600006509001600",
+          "move": [
+            4,
+            13
+          ],
+          "removed": [
+            4,
+            13
+          ],
+          "opened": [
+            12,
+            17
+          ],
+          "stable": [
+            12,
+            17
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        },
+        {
+          "step": 6,
+          "type": "reveal",
+          "interZone": true,
+          "before": "506000000500000600",
+          "uncompressed": "006000000000000600",
+          "after": "006000000000000600",
+          "move": [
+            0,
+            9
+          ],
+          "removed": [
+            9,
+            18
+          ],
+          "opened": [
+            2,
+            15
+          ],
+          "stable": [
+            11,
+            24
+          ],
+          "beforeIds": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "afterIds": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        },
+        {
+          "step": 6,
+          "type": "chain",
+          "cause": "reveal",
+          "interZone": true,
+          "before": "506000000500000600",
+          "uncompressed": "006000000000000600",
+          "after": "006000000000000600",
+          "move": [
+            0,
+            9
+          ],
+          "removed": [
+            9,
+            18
+          ],
+          "opened": [
+            2,
+            15
+          ],
+          "stable": [
+            11,
+            24
+          ],
+          "beforeIds": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "afterIds": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        }
+      ],
+      "before": {
+        "board": "171207006000006504081015628",
+        "geometry": {
+          "n": 16,
+          "rows": 3,
+          "cells": 27,
+          "density": 0.5925925925925926,
+          "rowCounts": [
+            6,
+            3,
+            7
+          ],
+          "cols": [
+            1,
+            2,
+            2,
+            1,
+            1,
+            3,
+            2,
+            1,
+            3
+          ],
+          "edge": 0.4375,
+          "dispersion": 1.699673171197595,
+          "adjacency": 0.875,
+          "observed": "3/2/1"
+        },
+        "proof": {
+          "profile": "TACTICAL",
+          "states": 402,
+          "deadStates": 106,
+          "terminalDead": 18,
+          "opening": {
+            "legal": 11,
+            "safe": 10,
+            "dead": 1,
+            "unknown": 0,
+            "losing": [
+              [
+                20,
+                22
+              ]
+            ]
+          },
+          "laterRisk": {
+            "board": "070207000000000500080005028",
+            "path": [
+              [
+                0,
+                20
+              ],
+              [
+                2,
+                22
+              ],
+              [
+                8,
+                17
+              ],
+              [
+                14,
+                24
+              ]
+            ],
+            "pair": [
+              15,
+              23
+            ]
+          },
+          "edgeObligatory": false,
+          "forcedEdge": {
+            "board": "000000004000000600",
+            "prefix": [
+              [
+                0,
+                20
+              ],
+              [
+                2,
+                22
+              ],
+              [
+                3,
+                19
+              ],
+              [
+                1,
+                5
+              ],
+              [
+                8,
+                14
+              ],
+              [
+                6,
+                14
+              ],
+              [
+                16,
+                17
+              ]
+            ],
+            "choices": [
+              [
+                8,
+                15
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          "near": {
+            "win": false,
+            "remaining": 6,
+            "steps": 5
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          "random": [
+            {
+              "win": false,
+              "remaining": 4,
+              "steps": 6
+            },
+            {
+              "win": false,
+              "remaining": 6,
+              "steps": 5
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 8
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 8
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 8
+          }
+        ]
+      }
+    },
+    {
+      "id": "book-v1-12",
+      "revision": 6,
+      "rows": [
+        "855074090",
+        "155045050",
+        "830039740",
+        "637000900"
+      ],
+      "witness": [
+        4,
+        28,
+        14,
+        16,
+        25,
+        27,
+        7,
+        9,
+        19,
+        22,
+        23,
+        33,
+        1,
+        2,
+        24,
+        29,
+        5,
+        13,
+        10,
+        11,
+        0,
+        9
+      ],
+      "geometry": {
+        "n": 22,
+        "rows": 4,
+        "cells": 36,
+        "density": 0.6111111111111112,
+        "rowCounts": [
+          6,
+          6,
+          6,
+          4
+        ],
+        "cols": [
+          4,
+          4,
+          3,
+          0,
+          3,
+          3,
+          2,
+          3,
+          0
+        ],
+        "edge": 0.5,
+        "dispersion": 0.8660254037844386,
+        "adjacency": 1.1818181818181819,
+        "observed": "3/2/0"
+      },
+      "proof": {
+        "profile": "TACTICAL",
+        "states": 11193,
+        "deadStates": 2036,
+        "terminalDead": 21,
+        "opening": {
+          "legal": 18,
+          "safe": 17,
+          "dead": 1,
+          "unknown": 0,
+          "losing": [
+            [
+              7,
+              23
+            ]
+          ]
+        },
+        "laterRisk": {
+          "board": "800074090155045050830039740637000900",
+          "path": [
+            [
+              1,
+              2
+            ]
+          ],
+          "pair": [
+            7,
+            23
+          ]
+        },
+        "edgeObligatory": true,
+        "forcedEdge": {
+          "board": "000000740607000000",
+          "prefix": [
+            [
+              1,
+              2
+            ],
+            [
+              4,
+              28
+            ],
+            [
+              5,
+              13
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              0,
+              18
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              5,
+              15
+            ]
+          ],
+          "choices": [
+            [
+              7,
+              9
+            ]
+          ]
+        }
+      },
+      "events": {
+        "reveal": 2,
+        "compression": 0,
+        "chain": 0,
+        "distant": 6,
+        "reading": 3
+      },
+      "episodes": [
+        {
+          "step": 2,
+          "type": "reveal",
+          "interZone": false,
+          "before": "855004090155040000830039740607000900",
+          "uncompressed": "855004090155040000830039700007000900",
+          "after": "855004090155040000830039700007000900",
+          "move": [
+            25,
+            27
+          ],
+          "removed": [
+            25,
+            27
+          ],
+          "opened": [
+            24,
+            29
+          ],
+          "stable": [
+            24,
+            29
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        },
+        {
+          "step": 3,
+          "type": "reveal",
+          "interZone": true,
+          "before": "855004090155040000830039700007000900",
+          "uncompressed": "855004000055040000830039700007000900",
+          "after": "855004000055040000830039700007000900",
+          "move": [
+            7,
+            9
+          ],
+          "removed": [
+            7,
+            9
+          ],
+          "opened": [
+            0,
+            18
+          ],
+          "stable": [
+            0,
+            18
+          ],
+          "beforeIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "afterIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        }
+      ],
+      "before": {
+        "board": "050500000004100506000010000040009030407050325500100270",
+        "geometry": {
+          "n": 20,
+          "rows": 6,
+          "cells": 54,
+          "density": 0.37037037037037035,
+          "rowCounts": [
+            2,
+            4,
+            1,
+            3,
+            6,
+            4
+          ],
+          "cols": [
+            2,
+            2,
+            2,
+            3,
+            2,
+            1,
+            3,
+            3,
+            2
+          ],
+          "edge": 0.45,
+          "dispersion": 1.5986105077709065,
+          "adjacency": 0.45,
+          "observed": "2/2/1"
+        },
+        "proof": {
+          "profile": "MODERATE",
+          "states": 1782,
+          "deadStates": 444,
+          "terminalDead": 40,
+          "opening": {
+            "legal": 9,
+            "safe": 9,
+            "dead": 0,
+            "unknown": 0,
+            "losing": []
+          },
+          "laterRisk": {
+            "board": "004000506040009030407050325500100270",
+            "path": [
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                13
+              ]
+            ],
+            "pair": [
+              26,
+              27
+            ]
+          },
+          "edgeObligatory": false,
+          "forcedEdge": {
+            "board": "000000006000009000407050000500100070",
+            "prefix": [
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                13
+              ],
+              [
+                2,
+                10
+              ],
+              [
+                16,
+                24
+              ],
+              [
+                6,
+                26
+              ],
+              [
+                25,
+                33
+              ]
+            ],
+            "choices": [
+              [
+                22,
+                27
+              ]
+            ]
+          }
+        },
+        "policies": {
+          "scan": {
+            "win": true,
+            "remaining": 0,
+            "steps": 10
+          },
+          "near": {
+            "win": true,
+            "remaining": 0,
+            "steps": 10
+          },
+          "mobility": {
+            "win": true,
+            "remaining": 0,
+            "steps": 10
+          },
+          "random": [
+            {
+              "win": false,
+              "remaining": 6,
+              "steps": 7
+            },
+            {
+              "win": true,
+              "remaining": 0,
+              "steps": 10
+            },
+            {
+              "win": false,
+              "remaining": 6,
+              "steps": 7
+            }
+          ]
+        }
+      },
+      "policies": {
+        "scan": {
+          "win": true,
+          "remaining": 0,
+          "steps": 11
+        },
+        "near": {
+          "win": true,
+          "remaining": 0,
+          "steps": 11
+        },
+        "mobility": {
+          "win": true,
+          "remaining": 0,
+          "steps": 11
+        },
+        "random": [
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 11
+          },
+          {
+            "win": true,
+            "remaining": 0,
+            "steps": 11
+          },
+          {
+            "win": false,
+            "remaining": 4,
+            "steps": 9
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -334,3 +334,78 @@ for (const trigger of ["timer", "focus"]) {
     expect(done).not.toContain("daily-v1-2026-11-21");
   });
 }
+
+for (const [width,height] of [[320,568],[390,844]]) {
+  test(`new player can voluntarily finish the first 12 tasks at ${width}×${height}`, async ({page}) => {
+    await page.setViewportSize({width,height});
+    await start(page);
+    const { openingPuzzle } = await import("../src/notebook-opening");
+    const { checkPair, occupied } = await import("../src/core");
+    const { unpackSession } = await import("../src/history-codec");
+    const saved = () => page.evaluate(k=>JSON.parse(localStorage.getItem(k)!),key);
+    for (let n = 1; n <= 12; n++) {
+      const id = "book-v1-"+n;
+      const task = n === 1 ? notebook[0] : openingPuzzle(id,n) ?? bookV5(id)!;
+      await expect(page.locator("#mode")).toContainText(`задача ${n}`);
+      await expect.poll(async ()=>(await saved()).sessions[id]?.current.board).toEqual(task.board);
+      let board = task.board;
+      for (const [i,{a,b}] of task.solution.entries()) {
+        expect(checkPair(board,a,b).ok).toBe(true);
+        await move(page,a,b);
+        if (n === 3 && i === 0) {
+          await page.locator("#undo").click();
+          await expect(page.locator("#remaining")).toHaveText(String(occupied(board)));
+          await page.locator("#hint").click();
+          await expect(page.locator("#board .hinted")).toHaveCount(2);
+          await move(page,a,b);
+          const active = await saved();
+          await page.locator("#menu").click();
+          await expect(page.locator("#resume")).toContainText("задачу 3");
+          await page.reload();
+          await page.locator("#resume").click();
+          expect(unpackSession((await saved()).sessions[id]).history).toEqual(unpackSession(active.sessions[id]).history);
+        }
+        board = removePair(board,a,b);
+      }
+      await expect(page.locator("#win")).toBeVisible();
+      await expect(page.locator("#play-again")).toHaveText(`К задаче ${n+1}`);
+      await expect.poll(async ()=>(await saved()).done).toContain(id);
+      expect((await saved()).active).toBe(id);
+      if (n !== 12) await page.locator("#play-again").click();
+    }
+    const state = await saved();
+    expect(state.version).toBe(10);
+    expect(state.bookRevisions["book-v1-2"]).toBe(5);
+    expect(state.bookRevisions["book-v1-3"]).toBe(6);
+    expect(state.done).toHaveLength(12);
+  });
+
+  test(`mandatory row edge explained in unassigned task 2 at ${width}×${height}`, async ({page}) => {
+    await page.setViewportSize({width,height});
+    await page.addInitScript(({key,settings})=>{
+      if (localStorage.getItem(key)) return;
+      localStorage.setItem(settings,JSON.stringify({tutorialDone:true,languageChoice:"ru"}));
+      localStorage.setItem(key,JSON.stringify({version:3,active:"classic",done:[],seen:[],hints:{},
+        sessions:{classic:{rules:1,current:{board:[5,5],moves:0,additions:0,scroll:0},history:[]}}}));
+    },{key,settings});
+    await page.emulateMedia({reducedMotion:"reduce"});
+    await page.goto("/");
+    await page.locator("#book-mode").click();
+    await page.locator('[data-game="book-v1-2"]').click();
+    await expect(page.locator("#remaining")).toHaveText("10");
+    // This route reaches a position with no straight win before showing the actual edge move.
+    const { readFileSync } = await import("node:fs");
+    const evidence = JSON.parse(readFileSync("docs/research/v5-quality/opening.json","utf8"));
+    const proof = evidence.slots[1].proof;
+    expect(proof.edgeObligatory).toBe(true);
+    for (const [a,b] of proof.forcedEdge.prefix) await move(page,a,b);
+    await expect(page.locator("#status")).toHaveText("От правого края — в начало строки ниже.");
+    await fullyVisible(page,"#status",".status-wrap");
+    const top = await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top);
+    const [a,b] = proof.forcedEdge.choices[0];
+    await digit(page,a);
+    expect(await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top)).toBe(top);
+    await digit(page,b);
+    await expect(page.locator("#win")).toBeVisible();
+  });
+}

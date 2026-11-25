@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { notebook, daily } from "../src/puzzles";
+import { openingPuzzle } from "../src/notebook-opening";
+import { occupied } from "../src/core";
 import { bookV5Fixture as bookV5 } from "./content-v5-fixture";
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() =>
@@ -24,10 +26,14 @@ test("notebook solution, page stamp, replay and classic restore", async ({
       await page.locator("#book-top").click();
       await page.locator(`[data-game="${notebook[n].id}"]`).click();
     }
-    for (const p of (n===0?notebook[n]:bookV5(notebook[n].id)!).solution) {
+    const id = notebook[n].id;
+    const puzzle = n === 0 ? notebook[n] : openingPuzzle(id, n + 1) ?? bookV5(id);
+    const digits = occupied(puzzle.board);
+    await expect(page.locator("#remaining")).toHaveText(String(digits));
+    for (const [index, p] of puzzle.solution.entries()) {
       await page.locator(`[data-index="${p.a}"]`).click();
       await page.locator(`[data-index="${p.b}"]`).click();
-      await expect(page.locator("#undo")).toBeEnabled();
+      await expect(page.locator("#remaining")).toHaveText(String(digits - 2 * (index + 1)));
     }
     await expect(page.locator("#win")).toBeVisible();
     if (n < 5) await page.locator("#play-again").click();
