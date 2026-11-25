@@ -960,10 +960,21 @@
         "report": "../research/v5-quality/README.md",
         "model": "Chromium: 98/98 альтернатив с выигрышным продолжением. При отсутствии истории сохраняется возможность UNKNOWN.",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "independentReview": {
+          "ref": "https://github.com/DanilaH/seeds-bits/pull/25#issuecomment-7158022011",
+          "model": "98/98 independently replayed certificates; 76/98 before and 98/98 after initial advice; 5079 fresh-solver hint-driven steps and 5079 fresh-solver certificate-route steps, zero UNKNOWN/dead on sampled states. Independent JS model, not local runtime.",
+          "ci": [
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45579817919",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45579802309"
+          ],
+          "bounds": "CI SUCCESS at pinned SHA; device/emulator reported by developer, APK exists but bytes not independently rehashed; physical phone and live audience UNKNOWN. No original reference parity claim."
+        }
       },
       "nextAction": "Замерить задержку на физическом телефоне.",
-      "kitImpact": "REUSE"
+      "kitImpact": "REUSE",
+      "consumerCommit": "0081014314d12221d5048b751d19828a34e251f0",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/25"
     },
     {
       "id": "seeds-v6-opening",
@@ -980,10 +991,21 @@
         "report": "../research/v5-quality/README.md",
         "model": "Полный граф 15 664 состояний. Ревизия 6 для неназначенных слотов 3–12.",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "independentReview": {
+          "ref": "https://github.com/DanilaH/seeds-bits/pull/25#issuecomment-7158022011",
+          "model": "Full reachable graph of slots 1–12: 15664 states, 102 safe / 1 dead / 0 UNKNOWN openings, exact match with reported passports; first four FLOW; slot 12 losing pair [7,23].",
+          "ci": [
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45579817919",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45579802309"
+          ],
+          "bounds": "CI SUCCESS at pinned SHA; device/emulator reported by developer, APK exists but bytes not independently rehashed; physical phone and live audience UNKNOWN. No original reference parity claim."
+        }
       },
       "nextAction": "Проверить первый сеанс с новичками и измерить семечки за активную минуту на телефоне.",
-      "kitImpact": "REUSE"
+      "kitImpact": "REUSE",
+      "consumerCommit": "0081014314d12221d5048b751d19828a34e251f0",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/25"
     }
   ]
 }
