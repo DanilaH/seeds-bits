@@ -160,6 +160,7 @@ test("background and resume during pair animation preserve the next playable row
   await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     let hidden = false;
     Object.defineProperty(document, "hidden", {

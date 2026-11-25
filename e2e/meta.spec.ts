@@ -118,6 +118,7 @@ test("failed result save blocks next party; retry persists one result", async ({
 }) => {
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const original = Storage.prototype.setItem;
     (window as any).restoreWrites = () => {

@@ -122,6 +122,7 @@ test("assignment, completion and catalogue order cannot beat the last genuinely 
   await page.locator("#menu").click();
   await page.locator("#classic-mode").click();
   await page.locator("#classic-resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.reload();
   await expect(page.locator("#book-mode")).toHaveAccessibleName(/91.*20/);
   expect((await read(page)).bookPlayOrder).toEqual([completed,retainedId,older]);
@@ -138,6 +139,7 @@ test("entering a solved replay does not promote it until a legal move, even if t
   await page.locator("#menu").click();
   await page.locator("#classic-mode").click();
   await page.locator("#classic-resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.reload();
   await expect(page.locator("#book-mode")).toHaveAccessibleName(/91.*20/);
   await page.locator("#book-mode").click();
@@ -156,6 +158,7 @@ test("entering a solved replay does not promote it until a legal move, even if t
   await page.locator("#menu").click();
   await page.locator("#classic-mode").click();
   await page.locator("#classic-resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.reload();
   await expect(page.locator("#book-quick")).toHaveText("Продолжить");
   await page.locator("#book-quick").click();
