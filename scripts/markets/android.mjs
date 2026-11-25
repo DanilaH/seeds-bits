@@ -725,6 +725,8 @@ return (${code})(SeedsClassicQA);})()`;
         if(await ui.evaluate("!document.querySelector('#classic-entry').hidden"))await ui.tap("#next-classic");
         if (level===2 && n===0) shot("classic-four-difficulties-320-dark");
         await ui.tap(`[data-classic-level="${level}"]`);
+        if (await ui.evaluate("!document.querySelector('#confirm-content').hidden"))
+          await ui.tap("#confirm-new");
         await ui.until("!document.querySelector('#classic-new-sheet').open && !document.querySelector('#dialog').open");
         const board=profiles().values[progress].sessions.classic.current.board;
         count=board.filter(Boolean).length;
