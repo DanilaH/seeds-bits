@@ -1,7 +1,7 @@
 name: First session preview
 on:
   push:
-    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125]
+    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125, feat/menu-rails-20261125]
     paths: [src/**, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, tests/**, e2e/**, scripts/configure-android.mjs, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
 permissions:
   contents: read
@@ -63,7 +63,7 @@ jobs:
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=993 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=994 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
