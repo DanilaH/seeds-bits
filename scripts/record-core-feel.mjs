@@ -119,18 +119,22 @@ try {
     const audioStart = await page.evaluate(() => window.recordFeelSound());
     let at = audioStart + 440;
     let maxTapDrift = 0;
+    let remaining = board.filter(Boolean).length;
     for (const [move, steps] of route.entries()) {
       for (const [index, step] of steps.entries()) {
         const scheduled = at + 165 * index;
         await sleep(scheduled - Date.now());
         const target = step === "undo" ? page.locator("#undo") : get(step);
         try {
-          await target.tap({force: true, timeout: 1500});
+          await target.click({force: true, timeout: 1500});
         } catch (error) {
           throw new Error(`${profile}, action ${move + 1}, input ${step}`, {cause: error});
         }
         maxTapDrift = Math.max(maxTapDrift, Date.now() - scheduled);
       }
+      remaining += steps.length === 1 ? 2 : steps.length === 2 ? -2 : 0;
+      await page.waitForFunction(count =>
+        document.querySelector("#remaining").textContent === String(count), remaining, {timeout: 1100});
       at += steps.length > 2 ? 670 : 500;
     }
     await page.locator("#win").waitFor({state: "visible", timeout: 2500});
