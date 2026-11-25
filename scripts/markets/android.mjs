@@ -128,6 +128,14 @@ function packed(session) {
     state.scroll,state.moves,state.additions,[state.board.join("")],
   ])};
 }
+function unpacked(session) {
+  let board=session.current.board;
+  const history=session.packedHistory.map(([scroll,moves,additions,segments])=>{
+    board=segments.flatMap(part=>typeof part==="string"?Array.from(part,Number):board.slice(part[0],part[0]+part[1]));
+    return {board,scroll,moves,additions};
+  }).reverse();
+  return {current:session.current,history};
+}
 function v5Session(slot,first) {
   const {board,proof}=bookV5(slot);
   const start={board,scroll:0,moves:0,additions:0};
@@ -342,7 +350,7 @@ async function update() {
   if(openingPreview) {
     for(const id of ["book-v1-3","book-v1-9"]){
       assert.equal(after[progress].bookRevisions[id],5);
-      assert.deepEqual(after[progress].sessions[id],before[progress].sessions[id]);
+      assert.deepEqual(unpacked(after[progress].sessions[id]),unpacked(before[progress].sessions[id]));
     }
     adb("install","-r",candidate);
     launch();
@@ -363,7 +371,7 @@ async function update() {
       assert.equal(latest.version,10);
       assert.equal(latest.bookRevisions["book-v1-4"],6);
       assert.deepEqual(latest.sessions["book-v1-4"].current.board,Array.from(opening[4][0],Number));
-      assert.deepEqual(latest.sessions["book-v1-9"],before[progress].sessions["book-v1-9"]);
+      assert.deepEqual(unpacked(latest.sessions["book-v1-9"]),unpacked(before[progress].sessions["book-v1-9"]));
       overlay={previous:[3,9],undo:3,newAssignment:4,wire:10};
     } finally {ui.close();stop();}
   }
@@ -839,7 +847,7 @@ async function verifyHintRepair() {
       const pair=await ui.evaluate("[...document.querySelectorAll('#board .hinted')].map(e=>Number(e.dataset.index))");
       const after=profiles().values[progress];
       assert.deepEqual(after.sessions[id].current.board,before.sessions[id].current.board);
-      assert.deepEqual(after.sessions[id].packedHistory,before.sessions[id].packedHistory);
+      assert.deepEqual(unpacked(after.sessions[id]).history,unpacked(before.sessions[id]).history);
       assert.equal(after.meta.wallet,before.meta.wallet-(size==="640x1232"?1:0));
       assert(await ui.evaluate("document.querySelector('#recover-task').hidden"));
       const viewport=await ui.evaluate("[innerWidth,innerHeight]");
