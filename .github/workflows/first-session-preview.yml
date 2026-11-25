@@ -33,10 +33,8 @@ jobs:
         if: always()
         with: {name: first-session-browser, path: test-results/}
       - run: npx playwright test --config playwright.markets.config.ts
-      - name: Compare the three Core Feel profiles
+      - name: Verify default sound and board feedback
         if: github.ref_name == 'feat/core-feel-pilot-20261125'
-        env:
-          VITE_SEEDS_CORE_FEEL: "1"
         run: npx playwright test --config playwright.core-feel.config.ts
       - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
       - uses: actions/upload-artifact@v4
@@ -52,8 +50,7 @@ jobs:
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
-      VITE_SEEDS_CORE_FEEL: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '1' || '0' }}
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '996' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
       SEEDS_ARTIFACT_CHANNEL: rustore
@@ -83,7 +80,7 @@ jobs:
           test -n "$version_code"
           cp android/app/build/outputs/apk/release/app-release-unsigned.apk "test-results/first-session-apk/seeds-first-session-${version_code}-unsigned.apk"
           cp android/app/build/outputs/apk/debug/app-debug.apk "test-results/first-session-apk/seeds-first-session-${version_code}-debug.apk"
-          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:Number(process.argv[1]),firstSession:true,profile:"baseline",coreFeel:process.env.VITE_SEEDS_CORE_FEEL==="1",analytics:false},null,2))' "$version_code"
+          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:Number(process.argv[1]),firstSession:true,helpProfile:"baseline",analytics:false},null,2))' "$version_code"
       - uses: actions/upload-artifact@v4
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
 
@@ -223,14 +220,14 @@ jobs:
           version_code=$(node -e '
             const source = require("./unsigned-preview/source.json");
             if (source.source !== process.env.GITHUB_SHA || !Number.isSafeInteger(source.versionCode) ||
-                source.profile !== "baseline" || source.analytics !== false ||
-                source.firstSession !== true ||
-                source.coreFeel !== (process.env.GITHUB_REF_NAME === "feat/core-feel-pilot-20261125"))
+                source.helpProfile !== "baseline" || source.analytics !== false ||
+                source.firstSession !== true)
               throw Error("Unexpected preview build manifest");
             process.stdout.write(String(source.versionCode));
           ')
           unsigned="unsigned-preview/seeds-first-session-${version_code}-unsigned.apk"
           signed="signed-preview/seeds-preview-${version_code}-portrait.apk"
+          unzip -Z1 "$unsigned" | awk '/assets\/public\/assets\/seeds-foley-.*\.ogg$/ { found=1 } END { exit !found }'
           build_tools="$ANDROID_HOME/build-tools/$SIGNING_BUILD_TOOLS"
           apksigner="$build_tools/apksigner"
           test -x "$apksigner"

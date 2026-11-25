@@ -6,7 +6,6 @@ import { chromium } from "@playwright/test";
 
 const baseURL = process.env.SEEDS_FEEL_URL ?? "http://127.0.0.1:5191";
 const output = path.resolve(process.argv[2] ?? "test-results/core-feel-video");
-const pack = process.env.SEEDS_FEEL_PACK === "dry" ? "dry" : "pop";
 const staging = await fs.mkdtemp(path.join(os.tmpdir(), "seeds-feel-video-"));
 const browser = await chromium.launch({
   executablePath: process.env.SEEDS_CHROMIUM,
@@ -32,18 +31,17 @@ const ffmpeg = (...args) => {
   if (result.status !== 0) throw new Error("ffmpeg failed");
 };
 
-async function fixture(profile) {
+async function fixture() {
   const context = await browser.newContext({
     viewport: {width: 390, height: 844}, deviceScaleFactor: 2, hasTouch: true,
     locale: "ru-RU",
   });
   const page = await context.newPage();
-  await page.addInitScript(({ profile, pack, board }) => {
+  await page.addInitScript(({ board }) => {
     const key = "seeds-bits.progress.v2";
     if (!localStorage.getItem(key)) {
-      localStorage.setItem("seeds-bits.feel-pilot.v1", JSON.stringify({profile, pack}));
       localStorage.setItem("seeds-bits.settings.v1", JSON.stringify({
-        tutorialDone: true, sound: true, vibration: false, theme: "dark", languageChoice: "ru",
+        tutorialDone: true, vibration: false, theme: "dark", languageChoice: "ru",
       }));
       localStorage.setItem(key, JSON.stringify({
         version: 3, active: "classic", done: [], seen: [], hints: {},
@@ -82,13 +80,13 @@ async function fixture(profile) {
       };
       recorder.stop();
     });
-  }, {profile, pack, board});
+  }, {board});
   await page.goto(baseURL);
   await page.locator("#resume").click();
   await page.locator("#dialog").waitFor({state: "hidden"});
   const get = index => page.locator(`#board button[data-index="${index}"]`);
-  if (profile !== "baseline")
-    await page.waitForFunction(pack => performance.getEntriesByType("resource").some(r => r.name.endsWith(`feel-${pack}.ogg`)), pack);
+  await page.waitForFunction(() => performance.getEntriesByType("resource")
+    .some(resource => /seeds-foley(?:-[^/]+)?[.]ogg$/.test(resource.name)));
   await sleep(350);
   // Two taps warm the native audio graph and leave the starting board intact.
   await get(0).tap();
@@ -100,69 +98,66 @@ async function fixture(profile) {
 
 try {
   await fs.mkdir(output, {recursive: true});
-  for (const profile of ["baseline", "audio", "feel"]) {
-    const {context, page, get} = await fixture(profile);
-    const dir = path.join(staging, profile);
-    await fs.mkdir(dir);
-    const cdp = await context.newCDPSession(page);
-    const frames = [];
-    let firstFrame;
-    const captureReady = new Promise(resolve => { firstFrame = resolve; });
-    cdp.on("Page.screencastFrame", ({data, metadata, sessionId}) => {
-      const file = path.join(dir, `${frames.length}.jpg`);
-      frames.push({time: metadata.timestamp, file, saved: fs.writeFile(file, Buffer.from(data, "base64"))});
-      firstFrame();
-      void cdp.send("Page.screencastFrameAck", {sessionId}).catch(() => {});
-    });
-    await cdp.send("Page.startScreencast", {format: "jpeg", quality: 90, everyNthFrame: 1});
-    await captureReady;
-    const audioStart = await page.evaluate(() => window.recordFeelSound());
-    let at = audioStart + 440;
-    let maxTapDrift = 0;
-    let remaining = board.filter(Boolean).length;
-    for (const [move, steps] of route.entries()) {
-      for (const [index, step] of steps.entries()) {
-        const scheduled = at + 165 * index;
-        await sleep(scheduled - Date.now());
-        const target = step === "undo" ? page.locator("#undo") : get(step);
-        try {
-          await target.click({force: true, timeout: 1500});
-        } catch (error) {
-          throw new Error(`${profile}, action ${move + 1}, input ${step}`, {cause: error});
-        }
-        maxTapDrift = Math.max(maxTapDrift, Date.now() - scheduled);
+  const {context, page, get} = await fixture();
+  const dir = staging;
+  const cdp = await context.newCDPSession(page);
+  const frames = [];
+  let firstFrame;
+  const captureReady = new Promise(resolve => { firstFrame = resolve; });
+  cdp.on("Page.screencastFrame", ({data, metadata, sessionId}) => {
+    const file = path.join(dir, `${frames.length}.jpg`);
+    frames.push({time: metadata.timestamp, file, saved: fs.writeFile(file, Buffer.from(data, "base64"))});
+    firstFrame();
+    void cdp.send("Page.screencastFrameAck", {sessionId}).catch(() => {});
+  });
+  await cdp.send("Page.startScreencast", {format: "jpeg", quality: 90, everyNthFrame: 1});
+  await captureReady;
+  const audioStart = await page.evaluate(() => window.recordFeelSound());
+  let at = audioStart + 440;
+  let maxTapDrift = 0;
+  let remaining = board.filter(Boolean).length;
+  for (const [move, steps] of route.entries()) {
+    for (const [index, step] of steps.entries()) {
+      const scheduled = at + 165 * index;
+      await sleep(scheduled - Date.now());
+      const target = step === "undo" ? page.locator("#undo") : get(step);
+      try {
+        await target.click({force: true, timeout: 1500});
+      } catch (error) {
+        throw new Error(`Action ${move + 1}, input ${step}`, {cause: error});
       }
-      remaining += steps.length === 1 ? 2 : steps.length === 2 ? -2 : 0;
-      await page.waitForFunction(count =>
-        document.querySelector("#remaining").textContent === String(count), remaining, {timeout: 1100});
-      at += steps.length > 2 ? 670 : 500;
+      maxTapDrift = Math.max(maxTapDrift, Date.now() - scheduled);
     }
-    await page.locator("#win").waitFor({state: "visible", timeout: 2500});
-    const clipLength = (at - audioStart + 1300) / 1000;
-    await sleep(audioStart + clipLength * 1000 - Date.now());
-    const wallEnd = Date.now() / 1000;
-    const audio = path.join(dir, "mix.webm");
-    const b64 = await page.evaluate(() => window.finishFeelSound());
-    await fs.writeFile(audio, Buffer.from(b64, "base64"));
-    await cdp.send("Page.stopScreencast");
-    await Promise.all(frames.map(frame => frame.saved));
-    if (frames.length < 30) throw new Error(`Too few frames for ${profile}`);
-    const originalStart = frames[0].time;
-    const timeline = frames.map(({file, time}, index) =>
-      `file '${file}'\nduration ${Math.max(.001, (frames[index + 1]?.time ?? wallEnd) - time).toFixed(6)}`);
-    timeline.push(`file '${frames.at(-1).file}'`);
-    const sequence = path.join(dir, "sequence.ffconcat");
-    await fs.writeFile(sequence, ["ffconcat version 1.0", ...timeline].join("\n") + "\n");
-    const audioOffset = (audioStart / 1000 - originalStart).toFixed(5);
-    const target = path.join(output, `seeds-core-${profile}.mp4`);
-    ffmpeg("-f", "concat", "-safe", "0", "-i", sequence, "-itsoffset", audioOffset, "-i", audio,
-      "-map", "0:v", "-map", "1:a", "-vf", "fps=60,scale=780:1688:flags=lanczos",
-      "-c:v", "libx264", "-preset", "fast", "-crf", "20", "-pix_fmt", "yuv420p",
-      "-af", `volume=${profile === "baseline" ? 15 : 0}dB,apad`,
-      "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", "-t", String(clipLength), target);
-    console.log(profile, frames.length, `audio alignment ${audioOffset}s, max tap drift ${maxTapDrift}ms`, target);
-    await context.close();
+    remaining += steps.length === 1 ? 2 : steps.length === 2 ? -2 : 0;
+    await page.waitForFunction(count =>
+      document.querySelector("#remaining").textContent === String(count), remaining, {timeout: 1100});
+    at += steps.length > 2 ? 670 : 500;
   }
+  await page.locator("#win").waitFor({state: "visible", timeout: 2500});
+  const clipLength = (at - audioStart + 1300) / 1000;
+  await sleep(audioStart + clipLength * 1000 - Date.now());
+  const wallEnd = Date.now() / 1000;
+  const audio = path.join(dir, "mix.webm");
+  const b64 = await page.evaluate(() => window.finishFeelSound());
+  await fs.writeFile(audio, Buffer.from(b64, "base64"));
+  await cdp.send("Page.stopScreencast");
+  await Promise.all(frames.map(frame => frame.saved));
+  if (frames.length < 30) throw new Error("Too few frames");
+  const originalStart = frames[0].time;
+  const timeline = frames.map(({file, time}, index) =>
+    `file '${file}'\nduration ${Math.max(.001, (frames[index + 1]?.time ?? wallEnd) - time).toFixed(6)}`);
+  timeline.push(`file '${frames.at(-1).file}'`);
+  const sequence = path.join(dir, "sequence.ffconcat");
+  await fs.writeFile(sequence, ["ffconcat version 1.0", ...timeline].join("\n") + "\n");
+  const audioOffset = (audioStart / 1000 - originalStart).toFixed(5);
+  const target = path.join(output, "seeds-foley-gameplay.mp4");
+  ffmpeg("-f", "concat", "-safe", "0", "-i", sequence, "-itsoffset", audioOffset, "-i", audio,
+    "-map", "0:v", "-map", "1:a", "-vf", "fps=60,scale=780:1688:flags=lanczos",
+    "-c:v", "libx264", "-preset", "fast", "-crf", "20", "-pix_fmt", "yuv420p",
+    "-af", "apad",
+    "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", "-t", String(clipLength), target);
+  console.log(frames.length, `audio alignment ${audioOffset}s, max tap drift ${maxTapDrift}ms`, target);
+  await context.close();
 } finally {
   await browser.close();
   await fs.rm(staging, {force: true, recursive: true});

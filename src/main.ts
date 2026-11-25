@@ -61,8 +61,7 @@ import { volumeOf, volumeTasks, puzzleNumberInVolume, VOLUMES, themeOf } from ".
 import { hasPlayed, unfinished, notebookStarted, notebookTarget, notebookBrowseStatus, recordNotebookPlay, forgetNotebookPlay, MAIN_BOOKS } from "./notebook-navigation";
 import { loadBookV5 } from "./content-v5";
 import { dailyDay, dailyDone, dailyIdFor, versionedDay, bookRevisionFor, legacyBookNumber, validContentId, LEGACY_BOOK_TASKS } from "./content-ids";
-import { playSound, suspendSound, blockSound, warmPilotSound, type SoundCue } from "./sound";
-import { coreFeelPilot, feelMotion, feelSoundPack, mountFeelPilot } from "./feel-pilot";
+import { playSound, suspendSound, blockSound, warmSound, type SoundCue } from "./sound";
 import { SeedFlight } from "./seed-flight";
 import { JarSpill } from "./jar-spill";
 import { icon } from "./icons";
@@ -149,7 +148,7 @@ let session: Session = newSession(),
   saveRecovered = false;
 let settings = {
   theme: "light",
-  sound: false,
+  sound: true,
   vibration: true,
   tutorialDone: false,
   reminders: true,
@@ -241,7 +240,6 @@ let clearTrophyCelebration = () => {};
 let clearResultCelebration = () => {};
 let resultArtKey = "";
 let fullJarTimer: ReturnType<typeof setTimeout> | undefined;
-let boardRevealTimer: ReturnType<typeof setTimeout> | undefined;
 let boardRevealCancel: (() => void) | undefined;
 let pendingResult:
   { session: Session; rects: DOMRect[]; saved: boolean } | undefined;
@@ -1145,9 +1143,9 @@ function feedback(
   const nextTouch = kind === "select" ? "feel-select" : kind === "undo" ? "feel-undo" :
     kind === "add" ? "feel-add" : kind === "reject" ? "feel-reject" : undefined;
   if (settings.vibration && tactile)
-    void platform.haptic((feelMotion() && (touch ?? nextTouch)) ||
+    void platform.haptic(touch ?? nextTouch ??
       (kind === "add" ? "button" : kind)).catch(() => {});
-  if (sound && feelSoundPack()) playSound(sound, settings.sound);
+  if (sound) playSound(sound, settings.sound);
   else if (kind !== "reject") playSound(kind, settings.sound);
 }
 function visibleCellEffects(
@@ -1167,7 +1165,6 @@ function visibleCellEffects(
   return visible.length;
 }
 function clearBoardReveal() {
-  clearTimeout(boardRevealTimer);
   boardRevealCancel?.();
   boardRevealCancel = undefined;
 }
@@ -1181,7 +1178,6 @@ function revealAddedCells(start: number, end: number) {
     Math.max(0, scroll + (first.top + first.bottom - view.top - view.bottom) / 2),
     viewport.scrollHeight - viewport.clientHeight,
   );
-  const pilot = feelMotion();
   if (reduced() || document.hidden) {
     viewport.scrollTop = target;
     feedback("add");
@@ -1190,13 +1186,13 @@ function revealAddedCells(start: number, end: number) {
   const firstRow = Math.floor(start / WIDTH);
   const lastRow = firstRow + Math.ceil((view.bottom - first.top - scroll + target) / first.height);
   const last = Math.min(end, lastRow * WIDTH, start + 54);
-  const digits: { digit: HTMLElement; delay: number; index: number }[] = [];
+  const digits: { digit: HTMLElement; delay: number }[] = [];
   for (let index = start; index < last; index++) {
     const digit = cell(index)?.querySelector<HTMLElement>(".digit");
     if (!digit) continue;
     const row = Math.floor(index / WIDTH) - firstRow;
     const column = index % WIDTH - (row === 0 ? start % WIDTH : 0);
-    digits.push({ digit, delay: column * (pilot ? 9 : 23) + Math.min(row, 3) * (pilot ? 12 : 25), index });
+    digits.push({ digit, delay: column * 9 + Math.min(row, 3) * 12 });
     digit.classList.add("add-pending");
   }
   const current = board();
@@ -1204,53 +1200,30 @@ function revealAddedCells(start: number, end: number) {
     clearBoardReveal();
     if (board() !== current || dialog.open || paused || document.hidden || reduced()) return;
     const animations: Animation[] = [];
-    const duration = pilot ? 122 : 140;
     const bounds = viewport.getBoundingClientRect();
     const visible = digits.filter(({ digit }) => {
       const box = digit.getBoundingClientRect();
       return box.bottom > bounds.top && box.top < bounds.bottom;
     });
     for (const { digit, delay } of visible) {
-      const animation = ownedDomMotion.animate(digit, pilot ? [
+      const animation = ownedDomMotion.animate(digit, [
         { opacity: 0, transform: "translateY(-6px) scale(.82)" },
         { opacity: 1, transform: "translateY(1px) scale(1.05)", offset: .62 },
         { opacity: 1, transform: "none" },
-      ] : [
-        { opacity: 0, translate: "0 -4px" },
-        { opacity: 1, translate: "0 1px", offset: .72 },
-        { opacity: 1, translate: "none" },
-      ], { duration, delay, easing: "ease-out", fill: "backwards" });
+      ], { duration: 122, delay, easing: "ease-out", fill: "backwards" });
       if (animation) {
         animation.id = "board-add";
         animations.push(animation);
       }
     }
-    const lastFirstRow = visible.filter(({ index }) => Math.floor(index / WIDTH) === firstRow).at(-1);
-    if (!pilot && lastFirstRow && settings.vibration && animations.length)
-      boardRevealTimer = setTimeout(() => {
-        if (settings.vibration && !paused && !dialog.open && !document.hidden)
-          void platform.haptic("button").catch(() => {});
-      }, lastFirstRow.delay + duration);
     boardRevealCancel = () => animations.forEach(animation => animation.cancel());
   };
-  const arrived = () => {
-    if (Math.abs(viewport.scrollTop - target) < 2) reveal();
-  };
   boardRevealCancel = () => {
-    viewport.removeEventListener("scrollend", arrived);
     for (const { digit } of digits) digit.classList.remove("add-pending");
   };
-  feedback("add", pilot);
-  if (Math.abs(scroll - target) < 2) reveal();
-  else if (pilot) {
-    viewport.scrollTop = target;
-    reveal();
-  } else {
-    // A queued scrollend from the prior move may arrive first.
-    viewport.addEventListener("scrollend", arrived);
-    boardRevealTimer = setTimeout(reveal, 500);
-    viewport.scrollTo({ top: target, behavior: "smooth" });
-  }
+  feedback("add");
+  if (Math.abs(scroll - target) >= 2) viewport.scrollTop = target;
+  reveal();
 }
 function settlePresentation() {
   presentationRevision++;
@@ -1496,8 +1469,7 @@ function showPairWave(path: Connection, blocked = false) {
   const firstRow = Math.floor((view.top - firstCell.top) / firstCell.height) - 1;
   const lastRow = Math.floor((view.bottom - firstCell.top) / firstCell.height) + 1;
   const indices = connectionCells(path);
-  const pilot = feelMotion();
-  const step = Math.min(pilot ? 19 : 28, (blocked ? (pilot ? 90 : 126) : (pilot ? 67 : 92)) / (indices.length - 1));
+  const step = Math.min(19, (blocked ? 90 : 67) / (indices.length - 1));
   const wave = document.createElement("div");
   wave.className = "pair-wave";
   wave.dataset.kind = blocked ? "blocked" : "match";
@@ -1635,15 +1607,11 @@ function showCollapsedRows(rows: readonly DOMRect[], view: DOMRect) {
       collapseRows.delete(row);
       row.remove();
     };
-    const pilot = feelMotion();
-    const animation = ownedDomMotion.animate(row, pilot ? [
+    const animation = ownedDomMotion.animate(row, [
       { opacity: .89, transform: "scaleY(.95) scaleX(.99)" },
       { opacity: .72, transform: "scaleY(.42) scaleX(1)", offset: .39 },
       { opacity: 0, transform: "scaleY(.06) scaleX(.94)" },
-    ] : [
-      { opacity: .9, transform: "scaleY(1)" },
-      { opacity: 0, transform: "scaleY(0)" },
-    ], { duration: pilot ? (rows.length > 1 ? 155 : 132) : 155, easing: "ease-out" });
+    ], { duration: rows.length > 1 ? 155 : 132, easing: "ease-out" });
     if (animation) void animation.finished.then(remove, remove);
     else remove();
   }
@@ -2645,12 +2613,12 @@ async function choose(i: number) {
     render();
     motion(
       cell(i)?.querySelector(".digit") ?? null,
-      feelMotion() ? [
+      [
         { transform: "scale(.82)" },
         { transform: "scale(1.10)", offset: .46 },
         { transform: "scale(1)" },
-      ] : [{ transform: "scale(.88)" }, { transform: "scale(1)" }],
-      feelMotion() ? 136 : 120,
+      ],
+      136,
     );
     return;
   }
@@ -2722,7 +2690,7 @@ async function choose(i: number) {
     .map((n) => n!.getBoundingClientRect());
   const next = removePair(values, a, i);
   const ending = lesson < 0 && !occupied(next);
-  const fast = feelMotion() && lesson < 0 && !ending;
+  const fast = lesson < 0 && !ending;
   busy = true;
   highlight = result.path;
   if (!fast) render();
@@ -2731,7 +2699,7 @@ async function choose(i: number) {
   const wave = showPairWave(result.path);
   if (wave && result.path.kind === "reading") $("paths").replaceChildren();
   if (traceMove && !wave) showPairTrace(result.path);
-  if (feelMotion() && !reduced() && !document.hidden) eraseFeelPair([a, i]);
+  if (!reduced() && !document.hidden) eraseFeelPair([a, i]);
   if (!fast) for (const n of [a, i]) cell(n)?.classList.add("erasing");
 
   const blank = [...values];
@@ -2956,7 +2924,7 @@ function undoAction() {
   if(plan?.pair)message("Уберите отмеченную пару");
   viewport.scrollTop = session.current.scroll;
   feedback("undo");
-  if (feelMotion() && previous.moves > session.current.moves && !reduced() && !document.hidden) {
+  if (previous.moves > session.current.moves && !reduced() && !document.hidden) {
     const indices = restored ?? session.current.board.flatMap((value, index) =>
       value && value !== previous.board[index] ? [index] : []).slice(0, 2);
     for (const index of indices)
@@ -3213,7 +3181,7 @@ function playBoardEntrance() {
     }
   }
   if (settings.vibration) void platform.haptic("deal").catch(() => {});
-  if (coreFeelPilot && !paused && !document.hidden) playSound("deal", settings.sound);
+  if (!paused) playSound("deal", settings.sound);
 }
 function closeMenu() {
   if (protectedContent) return;
@@ -3610,7 +3578,7 @@ for (const key of ["sound", "vibration"] as const)
     platform.setHapticState(settings.vibration, paused);
     if (settings[key] || key === "sound") feedback("button");
     if (key === "sound" && !settings.sound) suspendSound();
-    if (key === "sound" && settings.sound) warmPilotSound();
+    if (key === "sound" && settings.sound) void warmSound();
     save();
   };
 $("retry-save").onclick = async () => {
@@ -3712,7 +3680,7 @@ async function boot() {
       const s = JSON.parse(raw);
       settings = {
         theme: s.theme === "dark" ? "dark" : "light",
-        sound: s.sound === true,
+        sound: s.sound !== false,
         vibration: s.vibration !== false,
         tutorialDone: s.tutorialDone === true,
         reminders: s.reminders !== false,
@@ -3732,7 +3700,7 @@ async function boot() {
     hadBackup = backup !== null || (await platform.read(PROGRESS + ".damaged")) !== null;
     recoveryAvailable = restorable(backup);
   } catch { hadBackup = true; }
-  if (coreFeelPilot && settings.sound) warmPilotSound();
+  if (settings.sound) void warmSound();
   if (recoveryAvailable && !readWarning)
     readWarning =
       t("ui.a-backup-is-available-restoring-it-will-replace-your");
@@ -4890,17 +4858,6 @@ setInterval(() => {
   }
   if (pendingDailyOpen) void openDailyNotification();
 }, 5000);
-
-if (coreFeelPilot) {
-  mountFeelPilot($("settings-panel").querySelector(".settings")!, () => {
-    suspendSound();
-    clearMotions();
-    clearPairFeedback();
-    platform.setHapticState(settings.vibration, paused, true);
-    if (settings.sound) warmPilotSound();
-  });
-  if (settings.sound) warmPilotSound();
-}
 
 if (import.meta.env.DEV || import.meta.env.VITE_SEEDS_QA_PROFILE) {
   const qaTools=document.createElement("section");qaTools.id="qa-help-tools";

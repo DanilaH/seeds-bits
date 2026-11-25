@@ -272,32 +272,6 @@ header {
   28% { opacity: .95; transform: scale(1.12); }
   100% { opacity: 0; transform: scale(1.2); }
 }
-.feel-pilot {
-  display: grid;
-  gap: 8px;
-  min-inline-size: 0;
-  padding: 9px 12px 12px;
-  margin: 8px 0 0;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
-.feel-pilot label {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px 12px;
-}
-.feel-pilot select {
-  min-height: 36px;
-  max-width: 100%;
-  padding-inline: 8px;
-  font: inherit;
-  color: var(--ink);
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 7px;
-}
 .feel-erase-layer {
   position: fixed;
   overflow: hidden;
@@ -311,9 +285,9 @@ header {
   opacity: 0;
 }
 @media (prefers-reduced-motion: no-preference) {
-  :root[data-core-feel="feel"] .cell.erasing .digit { opacity: 0; }
+  #board .cell.erasing .digit { opacity: 0; }
 }
-:root[data-core-feel="feel"] .pair-wave[data-kind="match"] .pair-wave-cell {
+.pair-wave[data-kind="match"] .pair-wave-cell {
   background: color-mix(in srgb, currentColor 55%, transparent);
   animation-name: feel-wave-step;
 }

@@ -100,16 +100,12 @@ for (const volume of [5,20,40,65,95]) {
 for (const [width,height] of [[320,568],[390,844]]) {
   test(`108 digits at ${width}×${height}: scrolling, a hint, compression Undo and full win`, async({page})=>{
     test.setTimeout(100_000);
-    const feel = process.env.VITE_SEEDS_CORE_FEEL === "1";
-    if (feel) await page.addInitScript(() =>
-      localStorage.setItem("seeds-bits.feel-pilot.v1", JSON.stringify({profile:"feel", pack:"pop"})));
     await page.setViewportSize({width,height});
     const slot=width === 320 ? 2397 : 2027;
     const id="book-v1-"+slot;
     const task=bookV5(id)!;
     await install(page);
     await page.goto("/");
-    if (feel) await expect(page.locator("html")).toHaveAttribute("data-core-feel", "feel");
     await chooseVolume(page,Math.ceil(slot/24));
     await selectTask(page,id);
     await expect(page.locator("#remaining")).toHaveText("108");

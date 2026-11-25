@@ -1164,23 +1164,16 @@ async function verifyCoreFeel() {
   await fixture({
     [progress]: {version:3, active:"classic", done:[], seen:[], hints:{},
       sessions:{classic:{rules:1, current:{board:initial, moves:0, additions:0, scroll:0}, history:[]}}},
-    [settings]: {tutorialDone:true, sound:true, vibration:false, theme:"dark", languageChoice:"en"},
+    [settings]: {tutorialDone:true, vibration:false, theme:"dark", languageChoice:"en"},
   });
   launch();
   let ui=await connect();
   try {
-    await ui.until("document.documentElement.dataset.coreFeel === 'baseline'");
+    await ui.until("performance.getEntriesByType('resource').some(entry=>/seeds-foley-.*[.]ogg$/.test(entry.name))");
     await ui.tap("#settings-open");
-    const select=async value=>ui.evaluate(`(()=>{
-      const profile=document.querySelector("#core-feel-profile");
-      profile.value=${JSON.stringify(value)};
-      profile.dispatchEvent(new Event("change",{bubbles:true}));
-    })()`);
-    await select("audio");
-    await ui.until("document.documentElement.dataset.coreFeel === 'audio'");
-    await ui.until("performance.getEntriesByType('resource').some(entry=>/feel-pop-.*[.]ogg$/.test(entry.name))");
+    assert(await ui.evaluate("!document.querySelector('#core-feel-profile, #core-feel-pack')"));
     assert(await ui.evaluate("document.querySelector('#sound').checked && !document.querySelector('#vibration').checked"));
-    await select("feel");
+    await ui.tap("#sound");
     await ui.tap("#settings-back");
     await ui.tap("#resume");
     await ui.tap(digit(0));
@@ -1190,12 +1183,14 @@ async function verifyCoreFeel() {
     stop();
     launch();
     ui=await connect();
-    await ui.until("document.documentElement.dataset.coreFeel === 'feel'");
+    await ui.tap("#settings-open");
+    assert(await ui.evaluate("!document.querySelector('#sound').checked && !document.querySelector('#vibration').checked"));
+    await ui.tap("#settings-back");
     await ui.tap("#resume");
     await ui.tap("#undo");
     await expectSavedBoard("classic",initial);
-    return {profiles:["baseline","audio","feel"], popLoadedOffline:true, settingsIndependent:true,
-      rebootRetainedProfile:true, undoRetained:true, physicalPhone:false};
+    return {profileSelectorsAbsent:true, soundOnByDefault:true, foleyLoadedOffline:true,
+      muteRetainedAfterRestart:true, undoRetained:true, physicalPhone:false};
   } finally {
     ui.close();
   }
