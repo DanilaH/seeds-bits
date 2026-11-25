@@ -75,22 +75,22 @@ for (const profile of ["baseline", "audio", "feel"] as const) {
   });
 }
 
-test("Feel clears two rows without applying a tap to a migrating digit", async ({page}) => {
+test("a tap during a two-row Feel slide selects the live surviving digit", async ({page}) => {
   const board = field({8:6, 9:4, 18:7, 19:3, 20:2, 21:8});
   await open(page, "feel", board);
-  const locked = await page.evaluate(() => {
+  const duringSlide = await page.evaluate(() => {
     const at = (index: number) => document.querySelector<HTMLButtonElement>(`#board button[data-index="${index}"]`)!;
     at(8).click();
     at(9).click();
     const survivor = at(0);
     survivor.click();
     return {number: survivor.textContent, selected: survivor.classList.contains("selected"),
+      index: survivor.dataset.index,
       ghosts: document.querySelectorAll(".feel-erase-layer span").length,
       rows: document.querySelectorAll(".collapsed-row").length};
   });
-  expect(locked).toEqual({number: "7", selected: false, ghosts: 2, rows: 2});
-  await expect(page.locator(".collapsed-row")).toHaveCount(0);
-  await move(page, 0, 1);
+  expect(duringSlide).toEqual({number: "7", selected: true, index: "0", ghosts: 2, rows: 2});
+  await cell(page, 1).click();
   await expect.poll(async () => (await snapshot(page)).moves).toBe(2);
   await page.locator("#undo").click();
   await expect.poll(async () => (await snapshot(page)).board).toEqual(removePair(board, 8, 9));

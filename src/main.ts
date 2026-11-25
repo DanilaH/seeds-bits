@@ -1547,6 +1547,7 @@ const cellSelection = (el: Element) =>
   `${el.classList.contains("selected")}/${el.classList.contains("hinted")}`;
 function clearMotions() {
   ownedDomMotion.cancelAll();
+  feelRowSlides = [];
   cellColorMotions.clear();
   resetRowSlideClip();
 }
@@ -1599,11 +1600,18 @@ function eraseFeelPair(indices: readonly number[]) {
   });
 }
 let collapseScroll = 0;
+let feelRowSlides: Animation[] = [];
 let rowSlideClipTimer: ReturnType<typeof setTimeout>;
 const collapseRows = new Set<HTMLElement>();
 function resetRowSlideClip() {
   clearTimeout(rowSlideClipTimer);
   $("board").style.removeProperty("overflow-clip-margin");
+}
+function finishFeelRowSlide() {
+  if (!feelRowSlides.length) return;
+  for (const slide of feelRowSlides) slide.cancel();
+  feelRowSlides = [];
+  resetRowSlideClip();
 }
 function clearCollapseRows() {
   for (const row of collapseRows) row.getAnimations().forEach(animation => animation.cancel());
@@ -2620,6 +2628,7 @@ async function choose(i: number) {
   cancelHint();
   saveRecovered = false;
   if (busy || paused || dialog.open) return;
+  finishFeelRowSlide();
   clearBoardReveal();
   clearPairFeedback();
   const values = board();
@@ -2810,8 +2819,7 @@ async function choose(i: number) {
     lessonQuick.hidden = !(shortLesson && lesson === 1);
   }
   clearSelection();
-  const guard = fast && animateCollapse;
-  busy = guard;
+  busy = false;
   render();
   if (anchor?.isConnected) {
     const delta = anchor.getBoundingClientRect().top - oldTops.get(anchor)!;
@@ -2849,18 +2857,10 @@ async function choose(i: number) {
       $("board").style.setProperty("overflow-clip-margin", `${Math.ceil(span)}px`);
       rowSlideClipTimer = setTimeout(resetRowSlideClip, duration);
     }
-    const slides: Animation[] = [];
     for (const { node, dy } of movements) {
       if (Math.abs(dy) <= 1) continue;
       const slide = motion(node, [{ translate: `0 ${dy}px` }, { translate: "0 0" }], duration);
-      if (slide) slides.push(slide);
-    }
-    if (guard) {
-      // Clicks during a physical slide cannot select a stale position. Unlock
-      // on finish or cancellation, including pause and motion preference changes.
-      if (slides.length) await Promise.allSettled(slides.map(slide => slide.finished));
-      busy = false;
-      render();
+      if (fast && slide) feelRowSlides.push(slide);
     }
   }
   maybeCelebrateResult();
@@ -2892,6 +2892,7 @@ async function choose(i: number) {
 function add() {
   saveRecovered = false;
   if (busy || paused) return;
+  finishFeelRowSlide();
   clearPairFeedback();
   const values = board();
   if (lesson >= 0 && lesson !== 5) return;
@@ -2930,6 +2931,7 @@ function add() {
 function undoAction() {
   saveRecovered = false;
   if (busy || paused || (lesson < 0 && !occupied(board()))) return;
+  finishFeelRowSlide();
   clearPairFeedback();
   clearCollapseRows();
   resetRowSlideClip();
@@ -3409,6 +3411,8 @@ async function beginClassic(
 }
 $("board").addEventListener("click", (e) => {
   const target = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
+  // FLIP moves the live button. Resolve the hit on that button's current
+  // index before the next move settles the decorative translation.
   if (target) void choose(Number(target.dataset.index));
 });
 $("board").addEventListener("keydown", (e) => {

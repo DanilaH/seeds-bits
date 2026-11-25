@@ -53,7 +53,7 @@ jobs:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
       VITE_SEEDS_CORE_FEEL: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '1' || '0' }}
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '995' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '996' || '994' }}
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
       SEEDS_ARTIFACT_CHANNEL: rustore

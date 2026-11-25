@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 import base from "./playwright.config";
 
 export default defineConfig(base, {
-  testMatch: "**/core-feel.spec.ts",
+  testMatch: ["**/core-feel.spec.ts", "**/content-v5.spec.ts"],
   outputDir: "test-results/core-feel",
   workers: 1,
   use: { baseURL: "http://127.0.0.1:5195" },
