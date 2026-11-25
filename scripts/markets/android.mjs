@@ -924,28 +924,27 @@ async function verifyAppBanner() {
       new Promise((_,reject)=>setTimeout(()=>reject(Error("Banner diagnostics did not respond")),5000))
     ])`);
     const paint = async frame => {
-      let raw, width, height, offset;
+      let raw, width, height;
       for (let attempt=0;attempt<3;attempt++) {
         try {
-          raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6,timeout:12_000});
+          const png=execFileSync("adb",["exec-out","screencap","-p"],{maxBuffer:20e6,timeout:12000});
+          assert(png.length>24&&png.toString("ascii",1,4)==="PNG","Android returned an incomplete PNG");
+          width=png.readUInt32BE(16); height=png.readUInt32BE(20);
+          raw=execFileSync("ffmpeg",["-v","error","-threads","1","-f","image2pipe","-vcodec","png","-i","pipe:0",
+            "-frames:v","1","-f","rawvideo","-pix_fmt","rgba","-threads","1","pipe:1"],{input:png,maxBuffer:20e6,timeout:12000});
+          assert.equal(raw.length,width*height*4,"Android returned an incomplete screenshot");
+          break;
         } catch(error) {
           if(attempt===2)throw error;
-          await wait(1000);
-          continue;
+          await wait(650);
         }
-        if (raw.length >= 12) {
-          width=raw.readUInt32LE(0); height=raw.readUInt32LE(4); offset=raw.length-width*height*4;
-          if (offset>=12) break;
-        }
-        await wait(200);
       }
-      assert(offset>=12,"Android returned an incomplete screenshot");
       const left=frame.screenLeft, top=frame.screenTop;
       assert(left>=0&&top>=0&&left+frame.width<=width&&top+frame.height<=height,
         "The native banner frame is outside the screenshot");
       const colors=new Set();
       for(let y=top+4;y<top+frame.height-4;y+=3)for(let x=left+4;x<left+frame.width-4;x+=3) {
-        const i=offset+(y*width+x)*4;
+        const i=(y*width+x)*4;
         colors.add((raw[i]>>4)*256+(raw[i+1]>>4)*16+(raw[i+2]>>4));
       }
       return colors.size;
