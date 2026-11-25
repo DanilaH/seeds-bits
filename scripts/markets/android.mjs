@@ -994,8 +994,9 @@ async function verifyAppBanner() {
     await wait(500);
     await stable("foreground restored to Home");
     await expected(true,"Home restored");
-    adb("shell","settings","put","system","font_scale","1.1");
-    await wait(500);
+    // uiMode is handled by MainActivity. Changing fontScale can recreate it.
+    adb("shell","cmd","uimode","night","yes");
+    await ui.until("document.hasFocus() && document.querySelector('#dialog[data-screen=home]')?.open");
     await stable("Android reconfiguration with the same slot geometry");
     // Wait for the actual initial-grace interval; this test doesn't rewrite ad policy.
     const adPrefs=`/data/user/0/${app}/shared_prefs/seeds-monetization.xml`;
@@ -1020,6 +1021,14 @@ async function verifyAppBanner() {
       adb("shell","input","keyevent","4");
       await wait(650);
       if (!(await diagnostics()).fullscreen) break;
+      if (attempt===3 || attempt===6) {
+        try {
+          adb("shell","uiautomator","dump","/sdcard/demo-fullscreen.xml");
+          const hierarchy=adb("shell","cat","/sdcard/demo-fullscreen.xml");
+          const close=hierarchy.match(/<node [^>]*(?:text|content-desc)="(?:Close|Close ad|Skip|Skip ad|Закрыть|Пропустить)"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/i);
+          if(close)adb("shell","input","tap",String((+close[1]+ +close[3])>>1),String((+close[2]+ +close[4])>>1));
+        } catch(error) { console.warn("Reading the ad close control:",String(error)); }
+      }
     }
     await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");
     await stable("after genuine interstitial");
@@ -1057,6 +1066,9 @@ async function verifyAppBanner() {
       try {
         adb("emu","screenrecord","stop");
         assert(fs.existsSync(video)&&fs.statSync(video).size>1024,"No host screen recording");
+        const duration=Number(execFileSync("ffprobe",["-v","error","-show_entries","format=duration","-of","csv=p=0",video],{encoding:"utf8"}));
+        report.videoSeconds=duration;
+        if(report.status==="PASS")assert(duration>report.observed.at(-1).ms/1000-2,"The video ends before the last measured transition");
       } catch(error) {
         console.warn("Screen recording:",String(error));
         if(report.status==="PASS") { report.status="ERROR"; report.error=String(error); }
