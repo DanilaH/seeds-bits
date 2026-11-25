@@ -63,7 +63,7 @@ jobs:
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=989 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=990 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
@@ -115,10 +115,11 @@ jobs:
       - run: |
           echo '4de5a8398d5deb9748cec6c5e89b9b78a44258a2f29f0b26f18dc1096ff7daf9  baseline/seeds-first-session-12088-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
+          version_code=$(node -p 'require("./candidate/source.json").versionCode')
           build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12088-unsigned.apk
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" candidate/seeds-first-session-12089-unsigned.apk
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" candidate/seeds-first-session-12089-debug.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" "candidate/seeds-first-session-${version_code}-unsigned.apk"
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" "candidate/seeds-first-session-${version_code}-debug.apk"
       - run: node scripts/classic-series.mjs --before eae2bcbeaaa1a5c76872dddc7a7f79844988b60e
       - uses: actions/upload-artifact@v4
         with: {name: classic-series-comparison, path: test-results/classic-series/}

@@ -146,7 +146,7 @@ export async function syncBanner(visible: boolean) {
   if (!slot || !viewport) return;
   const r = slot.getBoundingClientRect();
   const space = viewport.getBoundingClientRect();
-  const valid = visible && !adActive && r.width >= 250 && r.height > 0;
+  const valid = visible && r.width >= 250 && r.height > 0;
   const geometry = valid ? [r.x, r.y, r.width, r.height, space.width, space.height].join(":") : "hidden";
   if (geometry === bannerGeometry && (!valid || performance.now() - bannerSentAt < 60000)) return;
   bannerGeometry = geometry;

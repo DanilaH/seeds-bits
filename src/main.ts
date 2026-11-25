@@ -1746,8 +1746,8 @@ function markGameStarted() {
 }
 function bannerEligible() {
   const guardedScreen = dialog.open && ["settings","confirm","privacy"].includes(dialog.dataset.screen ?? "");
-  return !paused && appForeground && !document.hidden && document.hasFocus() && lesson < 0 &&
-    !guardedScreen && !languageSheet.open && !classicNewSheet.open && !hintOffer.open &&
+  return appForeground && !platformPaused && !rewardRequest && !engagementActive &&
+    !document.hidden && document.hasFocus() && lesson < 0 && !guardedScreen && !languageSheet.open && !classicNewSheet.open && !hintOffer.open &&
     !document.querySelector("dialog[open]:not(#dialog)");
 }
 function updateBanner() {
@@ -3428,10 +3428,9 @@ async function transitionAd(route: string) {
     track("result_transition", {...detail, phase:"skipped", reason, shown:false});
     return;
   }
-  lastExternalAt = performance.now();
   track("result_transition", {...detail, phase:"request"});
   const result = await showAd("interstitial",undefined,undefined,adSession,{route,transitionId});
-  lastExternalAt = performance.now();
+  if (result.shown) lastExternalAt = performance.now();
   track("result_transition", {...detail,
     phase:result.status === "error" ? "error" : result.shown ? "closed" : "skipped",
     reason:result.reason ?? result.status ?? "unknown", shown:Boolean(result.shown)});

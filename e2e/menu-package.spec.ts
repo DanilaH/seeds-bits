@@ -120,7 +120,8 @@ test("result to menu uses one fullscreen route, with stable banner and no immedi
   await page.locator("#play-again").click();
   await expect.poll(async()=>(await qa()).requests.length).toBe(2);
   expect((await qa()).requests.at(-1).route).toBe("classic-result-home");
-  expect((await qa()).banner.at(-1).visible).toBe(false);
+  // Web reserves the slot while native decides whether a fullscreen will start.
+  expect((await qa()).banner.at(-1).visible).toBe(true);
   await page.keyboard.press("Escape");
   await expect(page.locator("#app")).toHaveAttribute("inert","");
   await page.evaluate(()=>(window as any).menuQA.finish({shown:true,status:"closed"}));
@@ -137,6 +138,21 @@ test("result to menu uses one fullscreen route, with stable banner and no immedi
   await page.locator("#book-quick").click();
   await expect(page.locator("#dialog")).toBeHidden();
   expect((await qa()).requests).toHaveLength(2);
+});
+test("no-fill keeps the app banner and does not consume the external cooldown",async({page})=>{
+  await install(page,{classic:classicGame([5,5])},"classic",[],true);
+  const ads = () => page.evaluate(()=>(window as any).menuQA);
+  await page.locator("#resume").click();
+  await expect.poll(async()=>(await ads()).requests.length).toBe(1);
+  await page.evaluate(()=>(window as any).menuQA.finish({status:"skipped",reason:"not_loaded"}));
+  await expect(page.locator("#dialog")).toBeHidden();
+  await page.locator('[data-index="0"]').click();
+  await page.locator('[data-index="1"]').click();
+  await page.locator("#play-again").click();
+  await expect.poll(async()=>(await ads()).requests.length).toBe(2);
+  await page.evaluate(()=>(window as any).menuQA.finish({status:"skipped",reason:"cooldown"}));
+  await expect(home(page)).toBeVisible();
+  expect((await ads()).banner.every((call: {visible:boolean})=>call.visible)).toBe(true);
 });
 test("failed target write preserves previous session and sends no ad request",async({page})=>{
   await install(page,{classic:classicGame(),[retainedId]:started},"classic",[],true);

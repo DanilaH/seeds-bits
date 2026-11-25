@@ -371,6 +371,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (showingKind.equals("rewarded")) { if (rewarded != null) rewarded.setAdEventListener(null); rewarded = null; lastRewardedRequest = 0; }
     else { if (interstitial != null) interstitial.setAdEventListener(null); interstitial = null; lastInterstitialRequest = 0; }
     PluginCall call = showing; showing = null; showingAttempt = null; fullscreenActive=false; call.resolve(result);
+    if (bannerPlacement != null) applyBanner(bannerPlacement);
     preloadAds(); publishReadiness();
   }
   private void windowFocusChanged(boolean focused) {
