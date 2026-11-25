@@ -119,17 +119,19 @@ try {
     const audioStart = await page.evaluate(() => window.recordFeelSound());
     let at = audioStart + 440;
     let maxTapDrift = 0;
-    for (const steps of route) {
+    for (const [move, steps] of route.entries()) {
       for (const [index, step] of steps.entries()) {
-        const scheduled = at + 130 * index;
+        const scheduled = at + 165 * index;
         await sleep(scheduled - Date.now());
         const target = step === "undo" ? page.locator("#undo") : get(step);
-        const rect = await target.boundingBox({timeout: 650});
-        if (!rect) throw new Error(`Missing action ${step} in ${profile}`);
-        await page.touchscreen.tap(rect.x + rect.width / 2, rect.y + rect.height / 2);
+        try {
+          await target.tap({force: true, timeout: 1500});
+        } catch (error) {
+          throw new Error(`${profile}, action ${move + 1}, input ${step}`, {cause: error});
+        }
         maxTapDrift = Math.max(maxTapDrift, Date.now() - scheduled);
       }
-      at += steps.length > 2 ? 620 : 430;
+      at += steps.length > 2 ? 670 : 500;
     }
     await page.locator("#win").waitFor({state: "visible", timeout: 2500});
     const clipLength = (at - audioStart + 1300) / 1000;
