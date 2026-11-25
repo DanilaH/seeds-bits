@@ -60,3 +60,7 @@ Owner requested integration after standalone pilot. 96 thematic tasks appended (
 ## 25.11.2026 · Выигрышная подсказка и начало первой тетради
 
 [№23](https://github.com/DanilaH/seeds-bits/issues/23) · [№24](https://github.com/DanilaH/seeds-bits/issues/24) · [Реализация и проверки](../../research/v5-quality/README.md). Обычная подсказка на больших полях перестраивает проверенное решение после альтернативных ходов. Первые четыре задачи не имеют проигрышных развилок. В слотах 3–12 новая раскладка выдаётся только до первого назначения. Плейтест новичков и замеры семечек в минуту на телефоне остаются открыты.
+
+## 25.11.2026 · Меню, баннер и каталог
+
+[Независимый аудит](../../research/menu-notebooks-2026-11-25/README.md): #27 — Home/result/Resume/new-game и единая рекламная возможность, #28 — persistent app-wide banner по Arrows, #29 — разделение каталога и экрана тетради. Сохраняются все 104 тома и 2496 задач, шесть paused features и Wire10. Исключение тематик не принято; таб предложен вместо отдельной кнопки. Приёмка новой сборки, device и live UNKNOWN. KIT IMPACT — REUSE.
