@@ -495,7 +495,7 @@ async function verifyReport78Taps() {
   };
   try {
     await ui.tap("#resume");
-    await ui.until(left(12));
+    await ui.until("!document.querySelector('#dialog').open && !document.querySelector('#app').inert && "+left(12));
     assert.match(await ui.evaluate("document.querySelector('#mode').textContent"),/Тетрадь 4.*задача 6/);
     const values=await ui.evaluate("Array.from(document.querySelectorAll('#board button')).map(b=>[Number(b.dataset.index),Number(b.textContent)])");
     assert.deepEqual(values,report78Board.flatMap((v,i)=>v?[[i,v]]:[]),"Exact screenshot board");
