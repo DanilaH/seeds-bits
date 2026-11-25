@@ -35,10 +35,12 @@ async function seed(
         const target = effect?.target as HTMLElement | null;
         if (!target) return;
         recorded.add(animation);
-        w.effects.push({target: target.id || target.className,
+        const entry = {target: target.id || target.className,
           duration: effect!.getTiming().duration, index: target.dataset.index,
           digitIndex: target.matches(".digit") ? target.parentElement?.dataset.index : undefined,
-          translate: effect!.getKeyframes()[0]?.translate});
+          id: animation.id, translate: effect!.getKeyframes()[0]?.translate};
+        w.effects.push(entry);
+        queueMicrotask(() => { entry.id = animation.id; });
       };
       Element.prototype.animate = function (frames: any, opts: any) {
         const animation = animate.call(this, frames, opts);
@@ -290,7 +292,7 @@ test("large addition animates a bounded visible portion and preserves all 1800 c
   await expect(page.locator("#remaining")).toHaveText("1800");
   const addedEffects = () => page.evaluate(() =>
     (window as any).effects.filter(
-      (e: any) => e.digitIndex !== undefined && e.translate === "0px -4px",
+      (e: any) => e.digitIndex !== undefined && e.id === "board-add",
     ).map((e: any) => Number(e.digitIndex)) as number[],
   );
   await expect.poll(async () => (await addedEffects()).length).toBeGreaterThan(0);

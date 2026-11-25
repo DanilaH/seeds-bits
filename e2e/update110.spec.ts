@@ -499,14 +499,8 @@ test("saturated optional audio recovers after suspend even if ended callbacks ar
   await seed(page);
   const count = await page.evaluate(async () => {
     let made = 0;
-    const param = {
-      setValueAtTime() {},
-      exponentialRampToValueAtTime() {},
-      linearRampToValueAtTime() {},
-    };
     (window as any).AudioContext = class {
       state = "running";
-      currentTime = 0;
       destination = {};
       resume() {
         this.state = "running";
@@ -516,30 +510,27 @@ test("saturated optional audio recovers after suspend even if ended callbacks ar
         this.state = "suspended";
         return Promise.resolve();
       }
-      createOscillator() {
+      decodeAudioData() {
+        return Promise.resolve({});
+      }
+      createBufferSource() {
         made++;
-        return {
-          type: "sine",
-          frequency: param,
-          connect() {},
-          disconnect() {},
-          start() {},
-          stop() {},
-          onended: null,
-        };
+        return {connect() {}, disconnect() {}, start() {}, stop() {}, onended: null};
       }
       createGain() {
-        return { gain: param, connect() {}, disconnect() {} };
+        return {gain: {value: 0}, connect() {}, disconnect() {}};
       }
     };
-    const sound = await import("/src/sound.ts");
+    const sound = await import("/src/sound.ts?isolated-audio");
+    await sound.warmSound();
     for (let i = 0; i < 6; i++) sound.playSound("pair", true);
+    const saturated = made;
     sound.blockSound(true);
     sound.blockSound(false);
     sound.playSound("pair", true);
-    return made;
+    return {saturated, resumed: made};
   });
-  expect(count).toBe(7);
+  expect(count).toEqual({saturated: 3, resumed: 4});
 });
 
 test("denied notifications leave reminders off and provide a system settings route", async ({

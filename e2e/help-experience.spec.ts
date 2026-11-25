@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { test, expect, type Page } from "@playwright/test";
 import { install, key } from "./help-test-utils";
 test.use({ video: process.env.SEEDS_RECORD_HELP === "1" ? "on" : "off" });
@@ -260,22 +261,14 @@ test("Sound off also silences new lab feedback", async ({ page }) => {
   await expect(page.locator("#shuffle-count")).toHaveText("Цифр: 6");
   expect(await page.evaluate(() => (window as any).audioCreations)).toBe(0);
 });
-test("Plan tone rises only as the real player advances the paid path", async ({
-  page,
-}) => {
+test("Plan advances its sound cue only when the player advances the paid path", async ({page}) => {
+  const slices = JSON.parse(readFileSync(new URL("../src/audio/foley-slices.json", import.meta.url), "utf8")) as Record<string, number[][]>;
   await page.addInitScript(() => {
-    const Original = window.AudioContext;
-    (window as any).tones = [];
-    window.AudioContext = class extends Original {
-      createOscillator() {
-        const osc = super.createOscillator(),
-          original = osc.frequency.setValueAtTime.bind(osc.frequency);
-        osc.frequency.setValueAtTime = (v, t) => {
-          (window as any).tones.push(v);
-          return original(v, t);
-        };
-        return osc;
-      }
+    (window as any).soundOffsets = [];
+    const start = AudioBufferSourceNode.prototype.start;
+    AudioBufferSourceNode.prototype.start = function (...args) {
+      (window as any).soundOffsets.push(args[1]);
+      start.apply(this, args);
     };
   });
   await install(page, "ready", "plan");
@@ -290,13 +283,14 @@ test("Plan tone rises only as the real player advances the paid path", async ({
   await page.locator("#menu").click();
   await page.locator("#qa-help-scene").click();
   await page.locator("#plan").click();
-  expect(await page.evaluate(() => (window as any).tones.includes(440))).toBe(
-    false,
+  const target = slices["plan-step"].map(([offset]) => offset);
+  const playedSteps = () => page.evaluate(
+    offsets => (window as any).soundOffsets.filter((offset: number) => offsets.includes(offset)),
+    target,
   );
+  expect(await playedSteps()).toEqual([]);
   await page.locator("#watch-hints").click();
-  await expect
-    .poll(() => page.evaluate(() => (window as any).tones.includes(440)))
-    .toBe(true);
+  await expect.poll(playedSteps).toEqual(target.slice(0, 1));
   for (const pair of [
     [0, 1],
     [0, 1],
@@ -305,18 +299,7 @@ test("Plan tone rises only as the real player advances the paid path", async ({
     await expect(page.locator("#undo")).toBeEnabled();
   }
   await expect(page.locator("#plan-count")).toHaveText("3/3");
-  const target = [440, 440 * 2 ** (2 / 12), 440 * 2 ** (4 / 12)];
-  await expect
-    .poll(() =>
-      page.evaluate(
-        (target) =>
-          target.every((v) =>
-            (window as any).tones.some((n: number) => Math.abs(n - v) < 0.001),
-          ),
-        target,
-      ),
-    )
-    .toBe(true);
+  await expect.poll(playedSteps).toEqual(target);
 });
 
 test("Repeated offer acceptance during slow readiness starts one video and resumes once", async ({

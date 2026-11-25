@@ -403,14 +403,14 @@ async function update() {
   }
   return {from,to,overlay,...(classicBundle?{legacyHigh27:true}:{})};
 }
-async function showEdge(size,order,video) {
+async function showEdge(size,order,rotate,recordVideo=rotate) {
   stop();
-  lockDeviceRotation(video?1:0);
+  lockDeviceRotation(rotate?1:0);
   adb("shell","wm","size",size);
   adb("shell","settings","put","system","font_scale","2");
   await fixture({[progress]:sample,[settings]:{tutorialDone:true,languageChoice:"en",sound:false,vibration:false}});
   launch();const ui=await connect();
-  const recorder=video?spawn("adb",["shell","screenrecord","--bit-rate","1800000","--time-limit","40","/sdcard/market-language.mp4"],{stdio:"ignore"}):null;
+  const recorder=recordVideo?spawn("adb",["shell","screenrecord","--bit-rate","1800000","--time-limit","40","/sdcard/market-language.mp4"],{stdio:"ignore"}):null;
   try {
     await ui.tap("#resume");
     const viewSize=()=>ui.evaluate("[innerWidth,innerHeight]");
@@ -431,7 +431,7 @@ async function showEdge(size,order,video) {
     await ui.tap(digit(order[0]),false);
     assert.equal(await ui.evaluate("document.querySelector('#viewport').scrollTop"),0);
     assert.deepEqual(await geometry(),before);
-    if(video) {
+    if(rotate) {
       for (const rotation of [0,1,3]) {
         lockDeviceRotation(rotation);
         await wait(500);
@@ -457,9 +457,9 @@ async function showEdge(size,order,video) {
     await ui.tap(digit(order[1]),false);
     await ui.until("!document.querySelector('#win').hidden");
     shot("solved-"+size+"-"+order[0]);
-    if(video)await wait(1200);
+    if(recorder)await wait(1200);
     return {viewport:dimensions,order,languageSwitch:true,selectionPreserved:true,solved:true,
-      requestedDeviceRotations:video?[1,0,1,3]:[0]};
+      requestedDeviceRotations:rotate?[1,0,1,3]:[0]};
   } finally {
     ui.close();
     if(recorder) {
@@ -593,10 +593,12 @@ async function verifyBoardMotion() {
       const play=Animation.prototype.play;
       Animation.prototype.play=function(){
         const effect=this.effect;
-        if(effect instanceof KeyframeEffect && effect.target?.matches(".digit") &&
-          effect.getTiming().duration===140 && Number(effect.getKeyframes()[0].opacity)===0 &&
-          effect.getKeyframes()[0].translate)
-          window.boardMotion.added.push([Number(effect.target.parentElement.dataset.index),effect.getTiming().delay]);
+        if(effect instanceof KeyframeEffect && effect.target?.matches(".digit")) {
+          const index=Number(effect.target.parentElement.dataset.index), delay=effect.getTiming().delay;
+          queueMicrotask(()=>{
+            if(this.id==="board-add") window.boardMotion.added.push([index,delay]);
+          });
+        }
         return play.call(this);
       };
     })()`);
@@ -607,7 +609,7 @@ async function verifyBoardMotion() {
     await ui.until("window.boardMotion.added.length===9");
     assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"18");
     const result=await ui.evaluate("window.boardMotion");
-    assert.deepEqual(result,{collapsed:1,added:remaining.map((_,i)=>[i+9,i*23])});
+    assert.deepEqual(result,{collapsed:1,added:remaining.map((_,i)=>[i+9,i*9])});
     await ui.tap("#undo");
     await ui.until("document.querySelector('#remaining').textContent==='9' && !document.querySelector('.add-pending')");
     return result;
@@ -1158,6 +1160,43 @@ async function verifyAppBanner() {
     if(report.status==="ERROR")process.exitCode=1;
   }
 }
+async function verifyCoreFeel() {
+  const initial = [2,8,4,4,1,9];
+  const after = [0,0,4,4,1,9];
+  await fixture({
+    [progress]: {version:3, active:"classic", done:[], seen:[], hints:{},
+      sessions:{classic:{rules:1, current:{board:initial, moves:0, additions:0, scroll:0}, history:[]}}},
+    [settings]: {tutorialDone:true, vibration:false, theme:"dark", languageChoice:"en"},
+  });
+  launch();
+  let ui=await connect();
+  try {
+    await ui.until("performance.getEntriesByType('resource').some(entry=>/seeds-foley-.*[.]ogg$/.test(entry.name))");
+    await ui.tap("#settings-open");
+    assert(await ui.evaluate("!document.querySelector('#core-feel-profile, #core-feel-pack')"));
+    assert(await ui.evaluate("document.querySelector('#sound').checked && !document.querySelector('#vibration').checked"));
+    await ui.tap("#sound");
+    await ui.tap("#settings-back");
+    await ui.tap("#resume");
+    await ui.tap(digit(0));
+    await ui.tap(digit(1));
+    await expectSavedBoard("classic",after);
+    ui.close();
+    stop();
+    launch();
+    ui=await connect();
+    await ui.tap("#settings-open");
+    assert(await ui.evaluate("!document.querySelector('#sound').checked && !document.querySelector('#vibration').checked"));
+    await ui.tap("#settings-back");
+    await ui.tap("#resume");
+    await ui.tap("#undo");
+    await expectSavedBoard("classic",initial);
+    return {profileSelectorsAbsent:true, soundOnByDefault:true, foleyLoadedOffline:true,
+      muteRetainedAfterRestart:true, undoRetained:true, physicalPhone:false};
+  } finally {
+    ui.close();
+  }
+}
 if(process.env.SEEDS_BANNER_ONLINE==="1"){
   await verifyAppBanner();
   process.exit(process.exitCode??0);
@@ -1167,6 +1206,10 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
+  if (process.env.SEEDS_ANDROID_CORE_FEEL === "1") {
+    const pilot=await verifyCoreFeel();
+    fs.writeFileSync(out+"/core-feel.json",JSON.stringify({source:process.env.GITHUB_SHA,...pilot},null,2));
+  }
   adb("uninstall",app);
   adb("install",candidate);
   const versionCode=installedVersionCode();
@@ -1192,7 +1235,12 @@ try{
   archives.push(await archiveAtLargeFont("es","Reto del archivo · 13 de noviembre","Deshacer"));
   archives.push(await archiveAtLargeFont("pt-BR","Desafio do arquivo · 13 de novembro","Desfazer"));
   const controls=[];
-  for(const order of [[8,9],[9,8]]) controls.push(await showEdge("640x1232",order,order[0]===8));
+  for(const order of [[8,9],[9,8]]) {
+    const rotate=order[0]===8;
+    // Keep the orientation and touch assertions in the Foley run without the
+    // old screen recorder that disconnected its emulator during capture.
+    controls.push(await showEdge("640x1232",order,rotate,rotate&&process.env.SEEDS_ANDROID_CORE_FEEL!=="1"));
+  }
   fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode,
     physicalPhone:false,systemFont:2,forwardedFile:file,upgrade,updatePreservedSave:true,opening,archives,controls,
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));

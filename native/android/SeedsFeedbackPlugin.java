@@ -32,8 +32,14 @@ public class SeedsFeedbackPlugin extends Plugin {
     Long revision=call.getLong("epoch"), issued=call.getLong("issuedAt");
     if(revision==null||revision!=epoch||issued==null||Math.abs(System.currentTimeMillis()-issued)>350||!foreground||!enabled){call.resolve();return;}
     String cue=call.getString("cue","button");
-    int priority=("win".equals(cue)||"task".equals(cue)||"page".equals(cue)||"book".equals(cue))?4:("full".equals(cue)||"deal".equals(cue))?3:("pair".equals(cue)||"undo".equals(cue)||"hint".equals(cue)||"reject".equals(cue))?2:"land".equals(cue)?0:1;
-    long now=SystemClock.uptimeMillis(), gap="land".equals(cue)?90:70;
+    int priority=switch(cue){
+      case "win", "task", "page", "book" -> 4;
+      case "full", "deal", "feel-row", "feel-rows" -> 3;
+      case "pair", "undo", "hint", "reject", "feel-pair", "feel-add", "feel-undo", "feel-reject" -> 2;
+      case "land" -> 0;
+      default -> 1;
+    };
+    long now=SystemClock.uptimeMillis(), gap="land".equals(cue)?90:cue.startsWith("feel-")?42:70;
     if((now<protectedUntil && priority<3)||(now-lastPulse<gap && !(priority>lastPriority&&(priority>=3||now-lastPulse>=18)))){call.resolve();return;}
     Vibrator v=vibrator();if(v==null||!v.hasVibrator()){call.resolve();return;}
     lastPulse=now;lastPriority=priority;
@@ -49,13 +55,31 @@ public class SeedsFeedbackPlugin extends Plugin {
       else if("undo".equals(cue)){timings=new long[]{0,14,22,20};amplitudes=new int[]{0,160,0,230};}
       else if("hint".equals(cue)){timings=new long[]{0,16,20,18};amplitudes=new int[]{0,180,0,220};}
       else if("reject".equals(cue)){timings=new long[]{0,18,24,18};amplitudes=new int[]{0,180,0,190};}
+      else if("feel-rows".equals(cue)){timings=new long[]{0,17,27,23};amplitudes=new int[]{0,160,0,210};protectedUntil=now+70;}
+      else if("feel-add".equals(cue)){timings=new long[]{0,10,25,15};amplitudes=new int[]{0,85,0,145};}
+      else if("feel-undo".equals(cue)){timings=new long[]{0,11,22,14};amplitudes=new int[]{0,105,0,155};}
       if(timings!=null){
         if(Build.VERSION.SDK_INT>=26&&v.hasAmplitudeControl())v.vibrate(VibrationEffect.createWaveform(timings,amplitudes,-1),attributes);
         else if(Build.VERSION.SDK_INT>=26)v.vibrate(VibrationEffect.createWaveform(timings,-1),attributes);
         else v.vibrate(timings,-1,attributes);
       }else{
-        int duration="select".equals(cue)||"pair".equals(cue)?24:"land".equals(cue)?10:14;
-        int amplitude="pair".equals(cue)?230:"select".equals(cue)?200:"land".equals(cue)?140:160;
+        int duration=switch(cue){
+          case "select", "pair", "feel-row" -> 24;
+          case "land", "feel-select" -> 10;
+          case "feel-pair" -> 18;
+          case "feel-reject" -> 13;
+          default -> 14;
+        };
+        int amplitude=switch(cue){
+          case "pair" -> 230;
+          case "select" -> 200;
+          case "feel-select" -> 75;
+          case "feel-pair" -> 157;
+          case "feel-row" -> 195;
+          case "feel-reject" -> 105;
+          case "land" -> 140;
+          default -> 160;
+        };
         if(Build.VERSION.SDK_INT>=26)v.vibrate(VibrationEffect.createOneShot(duration,v.hasAmplitudeControl()?amplitude:VibrationEffect.DEFAULT_AMPLITUDE),attributes);
         else v.vibrate(duration,attributes);
       }

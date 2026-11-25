@@ -14,7 +14,14 @@ export type HapticCue =
   | "win"
   | "task"
   | "page"
-  | "book";
+  | "book"
+  | "feel-select"
+  | "feel-pair"
+  | "feel-row"
+  | "feel-rows"
+  | "feel-add"
+  | "feel-undo"
+  | "feel-reject";
 interface NativeFeedback {
   configure(options: { enabled: boolean; epoch: number }): Promise<void>;
   pulse(options: {
@@ -49,6 +56,13 @@ const profiles: Record<
   page: { pattern: [26, 38, 42], priority: 4, hold: 250 },
   book: { pattern: [30, 42, 38, 52, 54], priority: 4, hold: 350 },
   win: { pattern: [34, 45, 42, 55, 62], priority: 4, hold: 300 },
+  "feel-select": { pattern: 10, priority: 1 },
+  "feel-pair": { pattern: 18, priority: 2 },
+  "feel-row": { pattern: 24, priority: 3 },
+  "feel-rows": { pattern: [17, 27, 23], priority: 3, hold: 70 },
+  "feel-add": { pattern: [10, 25, 15], priority: 2 },
+  "feel-undo": { pattern: [11, 22, 14], priority: 2 },
+  "feel-reject": { pattern: 13, priority: 2 },
 };
 export function setHapticState(on: boolean, paused: boolean, refresh = false) {
   if (enabled === on && blocked === paused && epoch && !refresh) return;
@@ -75,7 +89,7 @@ export async function haptic(cue: HapticCue = "pair") {
   if (!enabled || blocked || document.hidden) return;
   const now = performance.now(),
     p = profiles[cue],
-    gap = cue === "land" ? 90 : 70;
+    gap = cue === "land" ? 90 : cue.startsWith("feel-") ? 42 : 70;
   if (now < protectedUntil && p.priority < 3) return;
   if (
     now - last < gap &&

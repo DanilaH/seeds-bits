@@ -27,19 +27,19 @@ const state = () => ({
     unassisted: 3,
   },
 });
-async function seed(page: any, p: any = state()) {
+async function seed(page: any, p: any = state(), sound?: boolean) {
   await page.addInitScript(
-    ({ key, p }: any) => {
+    ({ key, p, sound }: any) => {
       if (!sessionStorage.getItem("seeded")) {
         sessionStorage.setItem("seeded", "yes");
         localStorage.setItem(
           "seeds-bits.settings.v1",
-          JSON.stringify({ tutorialDone: true }),
+          JSON.stringify({ tutorialDone: true, sound }),
         );
         localStorage.setItem(key, JSON.stringify(p));
       }
     },
-    { key: KEY, p },
+    { key: KEY, p, sound },
   );
 }
 async function data(page: any) {
@@ -407,12 +407,12 @@ test("A12 fast contradictory inputs during removal cannot create extra result or
   expect((await data(page)).meta.completed).toBe(6);
   expect(errors).toEqual([]);
 });
-test("A13 no forced audio; enabling sound creates feedback, disabling stops new sounds", async ({
+test("A13 explicit mute is honored and enabling sound plays the recorded feedback", async ({
   page,
 }) => {
   const p = state();
   p.sessions.classic.current = snapshot([5, 5, 5, 5]);
-  await seed(page, p);
+  await seed(page, p, false);
   const removePair = async () => {
     await page.locator('[data-index="0"]').click();
     await page.locator('[data-index="1"]').click();
@@ -420,35 +420,33 @@ test("A13 no forced audio; enabling sound creates feedback, disabling stops new 
     await expect(page.locator("#undo")).toBeEnabled();
   };
   await page.addInitScript(() => {
-    (window as any).tones = 0;
-    const Original = window.AudioContext;
-    window.AudioContext = class extends Original {
-      createOscillator() {
-        (window as any).tones++;
-        return super.createOscillator();
-      }
+    (window as any).plays = 0;
+    const start = AudioBufferSourceNode.prototype.start;
+    AudioBufferSourceNode.prototype.start = function (...args) {
+      (window as any).plays++;
+      start.apply(this, args);
     };
   });
   await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
   await removePair();
-  expect(await page.evaluate(() => (window as any).tones)).toBe(0);
+  expect(await page.evaluate(() => (window as any).plays)).toBe(0);
   await page.locator("#undo").click();
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
   await page.locator("#sound").check();
   await returnToGame(page);
   await removePair();
-  expect(await page.evaluate(() => (window as any).tones)).toBeGreaterThan(0);
+  await expect.poll(() => page.evaluate(() => (window as any).plays)).toBeGreaterThan(0);
   await page.locator("#undo").click();
   await page.locator("#menu").click();
   await page.locator("#settings-open").click();
   await page.locator("#sound").uncheck();
-  const tonesBefore = await page.evaluate(() => (window as any).tones);
+  const playsBefore = await page.evaluate(() => (window as any).plays);
   await returnToGame(page);
   await removePair();
-  expect(await page.evaluate(() => (window as any).tones)).toBe(tonesBefore);
+  expect(await page.evaluate(() => (window as any).plays)).toBe(playsBefore);
 });
 test("A14 old tab cannot discard new statistics, and reload latest recovers them", async ({
   page,
