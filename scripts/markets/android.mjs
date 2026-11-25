@@ -709,6 +709,7 @@ return (${code})(SeedsClassicQA);})()`;
   try {
     assertViewportResult(await depth());
     await ui.tap("#resume");
+    await ui.until("!document.querySelector('#dialog').open");
     await ui.until(left(25));
     await ui.tap("#undo");
     await ui.until(left(27));
