@@ -99,13 +99,20 @@ async function connect() {
   }
   assert(bounds,"No WebView bounds");
   async function tap(selector,scroll=true) {
-    const p=await evaluate(`(()=>{
+    const hitTest=`(()=>{
       const e=document.querySelector(${JSON.stringify(selector)});
+      if(!e || e.matches(':disabled') || e.closest('[inert]')) return {ok:false};
       const point=()=>{const b=e.getBoundingClientRect(),x=b.x+b.width/2,y=b.y+b.height/2;
         return {x,y,w:innerWidth,h:innerHeight,ok:e.contains(document.elementFromPoint(x,y))};};
       if(${scroll}&&!point().ok)e.scrollIntoView({block:"center",behavior:"instant"});
       return point();
-    })()`);
+    })()`;
+    let p;
+    for(let attempt=0;attempt<50;attempt++){
+      p=await evaluate(hitTest);
+      if(p.ok)break;
+      await wait(100);
+    }
     assert(p.ok,selector+" "+JSON.stringify(p));
     adb("shell","input","tap",String(Math.round(bounds[0]+p.x*(bounds[2]-bounds[0])/p.w)),
       String(Math.round(bounds[1]+p.y*(bounds[3]-bounds[1])/p.h)));

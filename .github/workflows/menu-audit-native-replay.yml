@@ -1,4 +1,4 @@
-name: Seeds 12092 native demo replay
+name: Seeds 12093 native demo replay
 on:
   push:
     branches: [qa/menu-audit-native-12092]
@@ -18,14 +18,14 @@ jobs:
       - uses: android-actions/setup-android@v4
       - uses: actions/download-artifact@v4
         with:
-          artifact-ids: 15031598489
+          artifact-ids: 15037251845
           merge-multiple: true
-          run-id: 45633729838
+          run-id: 45644681017
           github-token: ${{ github.token }}
           path: candidate
-      - name: Start Android and run the native demo against the verified 12092 runtime
+      - name: Start Android and run the native demo against the verified 12093 runtime
         run: |
-          echo 'dec307f0912a2c7426358e2113bb239cf7379d45ef192443c6369a54bde53c6e  candidate/seeds-first-session-12092-debug.apk' | sha256sum -c -
+          echo 'bd975aa673403c5f6367964c38faa377abbb5ed4e9e01aa6e226b7c1f74a3a58  candidate/seeds-first-session-12093-debug.apk' | sha256sum -c -
           export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-audit-demo-avd"
           mkdir -p "$ANDROID_AVD_HOME" test-results/first-session-android
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
@@ -47,7 +47,7 @@ jobs:
           test "$(adb shell id -u | tr -d '\r')" = 0
           adb shell input keyevent 82
           command -v ffprobe > /dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
-          SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs candidate/seeds-first-session-12092-debug.apk
+          SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs candidate/seeds-first-session-12093-debug.apk
       - uses: actions/upload-artifact@v4
         if: always()
         with:
