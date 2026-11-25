@@ -10,6 +10,37 @@ concurrency:
   group: first-session-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      SEEDS_ARTIFACT_CHANNEL: rustore
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - run: npx playwright test --config playwright.first-session.config.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: first-session-browser, path: test-results/}
+      - run: npx playwright test --config playwright.markets.config.ts
+      - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: markets-yandex-qa, path: dist-yandex/}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: markets-browser-controls, path: test-results/markets/}
+
   preview:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -31,19 +62,6 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund
-      - run: npx playwright install chromium
-      - run: npx playwright test --config playwright.first-session.config.ts
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with: {name: first-session-browser, path: test-results/}
-      - run: npx playwright test --config playwright.markets.config.ts
-      - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with: {name: markets-yandex-qa, path: dist-yandex/}
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with: {name: markets-browser-controls, path: test-results/markets/}
       - run: npm run setup:android
       - run: GITHUB_RUN_NUMBER=989 node scripts/configure-android.mjs
       - run: |
@@ -61,6 +79,32 @@ jobs:
           node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync("test-results/first-session-apk/source.json",JSON.stringify({source:process.env.GITHUB_SHA,versionCode:Number(process.argv[1]),firstSession:true,profile:"baseline",analytics:false},null,2))' "$version_code"
       - uses: actions/upload-artifact@v4
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
+
+  android-regression:
+    needs: preview
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      SEEDS_ARTIFACT_CHANNEL: rustore
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: sdkmanager "build-tools;36.0.0"
+      - run: npm ci --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        with: {name: first-session-preview-unsigned, path: candidate/}
       - uses: actions/download-artifact@v4
         with:
           artifact-ids: 15005703885
@@ -73,8 +117,8 @@ jobs:
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
           build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12088-unsigned.apk
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" android/app/build/outputs/apk/release/app-release-unsigned.apk
-          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" android/app/build/outputs/apk/debug/app-debug.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" candidate/seeds-first-session-12089-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" candidate/seeds-first-session-12089-debug.apk
       - run: node scripts/classic-series.mjs --before eae2bcbeaaa1a5c76872dddc7a7f79844988b60e
       - uses: actions/upload-artifact@v4
         with: {name: classic-series-comparison, path: test-results/classic-series/}
@@ -145,7 +189,7 @@ jobs:
       - uses: actions/download-artifact@v4
         if: steps.signing.outputs.configured == 'true'
         with: {name: first-session-preview-unsigned, path: unsigned-preview/}
-      - name: Sign and verify the tested preview APK
+      - name: Sign and verify the preview APK
         if: steps.signing.outputs.configured == 'true'
         shell: bash
         env:
@@ -166,7 +210,7 @@ jobs:
           apksigner="$build_tools/apksigner"
           test -x "$apksigner"
           if ! "$build_tools/zipalign" -c -P 16 4 "$unsigned"; then
-            echo "::error::The tested unsigned APK failed zip alignment verification."
+            echo "::error::The unsigned APK failed zip alignment verification."
             exit 1
           fi
           manifest=$("$build_tools/aapt" dump badging "$unsigned")
