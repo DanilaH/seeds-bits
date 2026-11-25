@@ -1,6 +1,7 @@
 // Android-native font scaling and ADB touches against a debuggable build of the same web assets.
-import {execFileSync, spawn} from "node:child_process";
+import {execFileSync} from "node:child_process";
 import fs from "node:fs";
+import {resolve} from "node:path";
 import assert from "node:assert/strict";
 
 const app="com.seedsbits.game.preview", out="test-results/markets-android";
@@ -871,20 +872,15 @@ async function verifyAppBanner() {
   adb("install",candidate);
   adb("shell","wm","density","320");
   adb("shell","wm","size","640x1232");
-  let ui, recorder;
-  const display = process.env.DISPLAY;
-  const remote = "/sdcard/seeds-banner-continuity.mp4";
+  let ui, recording = false;
+  const video = resolve(out,"banner-continuity.webm");
   const captureStart=performance.now();
   const trace=(label, detail={})=>report.observed.push({label,ms:Math.round(performance.now()-captureStart),...detail});
   try {
-    recorder = display
-      ? spawn("ffmpeg",["-y","-loglevel","error","-f","x11grab","-framerate","20","-video_size","800x1300",
-          "-i",display,"-t","360","-an","-c:v","libx264","-preset","ultrafast","-threads","2",
-          "-pix_fmt","yuv420p","-movflags","+faststart",out+"/banner-continuity.mp4"],{stdio:"ignore"})
-      : spawn("adb",["shell","screenrecord","--size","320x616","--bit-rate","950000","--time-limit","360",remote],{stdio:"ignore"});
-    await new Promise((resolve,reject)=>{recorder.once("spawn",resolve);recorder.once("error",reject);});
-    await wait(500);
-    assert.equal(recorder.exitCode,null,"The continuous capture stopped before navigation");
+    // Capture the emulator display on the host without a guest codec or desktop compositor.
+    const start=adb("emu","screenrecord","start","--time-limit","360","--size","320x616",video);
+    assert(!start.includes("KO"),start);
+    recording=true;
     launch();
     trace("launch");
     const home = adb("shell","cmd","package","resolve-activity","--brief",
@@ -908,7 +904,13 @@ async function verifyAppBanner() {
     const paint = async frame => {
       let raw, width, height, offset;
       for (let attempt=0;attempt<3;attempt++) {
-        raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6,timeout:12_000});
+        try {
+          raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6,timeout:12_000});
+        } catch(error) {
+          if(attempt===2)throw error;
+          await wait(1000);
+          continue;
+        }
         if (raw.length >= 12) {
           width=raw.readUInt32LE(0); height=raw.readUInt32LE(4); offset=raw.length-width*height*4;
           if (offset>=12) break;
@@ -992,6 +994,9 @@ async function verifyAppBanner() {
     await wait(500);
     await stable("foreground restored to Home");
     await expected(true,"Home restored");
+    adb("shell","settings","put","system","font_scale","1.1");
+    await wait(500);
+    await stable("Android reconfiguration with the same slot geometry");
     // Wait for the actual initial-grace interval; this test doesn't rewrite ad policy.
     const adPrefs=`/data/user/0/${app}/shared_prefs/seeds-monetization.xml`;
     const lastFullscreen=Number(/name="last_fullscreen" value="(\d+)"/.exec(adb("shell","cat",adPrefs))?.[1]);
@@ -1026,6 +1031,20 @@ async function verifyAppBanner() {
     await ui.until("document.querySelector('#dialog[data-screen=home]')?.open && document.hasFocus()");
     await stable("WebView reload with retained native banner");
     await expected(true,"reload finished");
+    await expected(false,"Android viewport resize begins");
+    adb("shell","wm","size","720x1392");
+    let resized;
+    for(let i=0;i<30;i++){
+      resized=await diagnostics();
+      if(resized.width!==initial.width&&resized.loaded>initial.loaded&&resized.visible)break;
+      await wait(450);
+    }
+    assert(resized.width>initial.width && resized.loaded>initial.loaded && resized.visible,"No creative in the resized viewport");
+    assert.equal(resized.request,initial.request+1,"One replacement request after resizing");
+    assert.notEqual(resized.view,initial.view,"The resized slot has a fresh SDK view");
+    trace("native banner repainted for the wider slot",{...resized,paintColorBuckets:await paint(resized)});
+    assert((await paint(resized))>20,"Resized creative did not paint");
+    shot("banner-resized");
     report.status="PASS";
     return report;
   } catch(error) {
@@ -1034,25 +1053,24 @@ async function verifyAppBanner() {
     try { shot("banner-failure"); } catch (captureError) { console.warn(String(captureError)); }
     throw error;
   } finally {
-    if(recorder) {
+    if(recording) {
       try {
-        if (recorder.exitCode === null) {
-          const closed = new Promise(resolve=>recorder.once("exit",resolve));
-          if (display) recorder.kill("SIGINT");
-          else adb("shell","pkill","-2","screenrecord");
-          await closed;
-        }
-        if (!display) adb("pull",remote,out+"/banner-continuity.mp4");
-      } catch(error) { console.warn("Screen recording:",String(error)); }
+        adb("emu","screenrecord","stop");
+        assert(fs.existsSync(video)&&fs.statSync(video).size>1024,"No host screen recording");
+      } catch(error) {
+        console.warn("Screen recording:",String(error));
+        if(report.status==="PASS") { report.status="ERROR"; report.error=String(error); }
+      }
     }
     fs.writeFileSync(out+"/banner-continuity.json",JSON.stringify(report,null,2));
     ui?.close();
     try { stop(); adb("uninstall",app); } catch (cleanupError) { console.warn(String(cleanupError)); }
+    if(report.status==="ERROR")process.exitCode=1;
   }
 }
 if(process.env.SEEDS_BANNER_ONLINE==="1"){
   await verifyAppBanner();
-  process.exit(0);
+  process.exit(process.exitCode??0);
 }
 try{
   adb("shell","wm","density","320");
