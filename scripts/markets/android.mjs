@@ -924,7 +924,7 @@ async function verifyAppBanner() {
       window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics(),
       new Promise((_,reject)=>setTimeout(()=>reject(Error("Banner diagnostics did not respond")),5000))
     ])`);
-    const paint = async frame => {
+    const capturePixels = async () => {
       let raw, width, height;
       for (let attempt=0;attempt<3;attempt++) {
         try {
@@ -940,6 +940,10 @@ async function verifyAppBanner() {
           await wait(650);
         }
       }
+      return {raw,width,height};
+    };
+    const paint = async frame => {
+      const {raw,width,height}=await capturePixels();
       const left=frame.screenLeft, top=frame.screenTop;
       assert(left>=0&&top>=0&&left+frame.width<=width&&top+frame.height<=height,
         "The native banner frame is outside the screenshot");
@@ -976,14 +980,15 @@ async function verifyAppBanner() {
       }
       trace(reason,{expected:visible});
     };
+    let retained=initial;
     const stable=async(label)=>{
       const current=await diagnostics();
-      assert.equal(current.view,initial.view,label);
-      assert.equal(current.request,initial.request,label);
+      assert.equal(current.view,retained.view,label);
+      assert.equal(current.request,retained.request,label);
       assert.equal(current.visible,true,label);
-      assert.equal(current.hiddenFrames,initial.hiddenFrames,label);
+      assert.equal(current.hiddenFrames,retained.hiddenFrames,label);
       for (const dimension of ["screenLeft","screenTop","width","height"])
-        assert.equal(current[dimension],initial[dimension],label+" "+dimension);
+        assert.equal(current[dimension],retained[dimension],label+" "+dimension);
       const paintColorBuckets=await paint(current);
       trace(label,{...current,paintColorBuckets});
       assert(paintColorBuckets>20,label+" creative band lost color");
@@ -1028,6 +1033,28 @@ async function verifyAppBanner() {
     adb("shell","cmd","uimode","night","yes");
     await ui.until("document.hasFocus() && document.querySelector('#dialog[data-screen=home]')?.open");
     await stable("Android reconfiguration with the same slot geometry");
+    await expected(false,"reload handshake starts");
+    await ui.evaluate("setTimeout(() => location.reload(), 50); true");
+    await wait(1000);
+    await ui.until("document.querySelector('#dialog[data-screen=home]')?.open && document.hasFocus()");
+    await stable("WebView reload with retained native banner");
+    await expected(false,"Android viewport resize begins");
+    adb("shell","wm","size","720x1392");
+    let resized;
+    for(let i=0;i<30;i++){
+      resized=await diagnostics();
+      if(resized.width!==initial.width&&resized.loaded>initial.loaded&&resized.visible)break;
+      await wait(450);
+    }
+    assert(resized.width>initial.width && resized.loaded>initial.loaded && resized.visible,"No creative in the resized viewport");
+    assert.equal(resized.request,initial.request+1,"One replacement request after resizing");
+    assert.notEqual(resized.view,initial.view,"The resized slot has a fresh SDK view");
+    ui.close();
+    ui=await connect();
+    retained=resized;
+    await stable("native banner repainted for the wider slot");
+    shot("banner-resized");
+    await expected(true,"resized creative visible");
     // Wait for the actual initial-grace interval; this test doesn't rewrite ad policy.
     const adPrefs=`/data/user/0/${app}/shared_prefs/seeds-monetization.xml`;
     const lastFullscreen=Number(/name="last_fullscreen" value="(\d+)"/.exec(adb("shell","cat",adPrefs))?.[1]);
@@ -1065,37 +1092,32 @@ async function verifyAppBanner() {
       try {
         adb("shell","uiautomator","dump","/sdcard/demo-fullscreen.xml");
         const hierarchy=adb("shell","cat","/sdcard/demo-fullscreen.xml");
-        const action=String.raw`Close(?: ad| video)?|Dismiss|Skip(?: ad| video)?|Закрыть(?: рекламу| видео)?|Пропустить(?: рекламу| видео)?`;
+        const action=String.raw`Close(?: ad| video)?|Dismiss|Skip(?: ad| video)?|Next|Закрыть(?: рекламу| видео)?|Пропустить(?: рекламу| видео)?|Далее|Следующее видео`;
         const close=hierarchy.match(new RegExp(String.raw`<node [^>]*(?:text|content-desc)="(?:${action})"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"`,"i"));
-        if(close)adb("shell","input","tap",String((+close[1]+ +close[3])>>1),String((+close[2]+ +close[4])>>1));
-        else adb("shell","input","keyevent","4");
+        if(close){
+          adb("shell","input","tap",String((+close[1]+ +close[3])>>1),String((+close[2]+ +close[4])>>1));
+          continue;
+        }
       } catch(error) { console.warn("Reading the ad close control:",String(error)); }
+      if(!(await diagnostics()).fullscreen)break;
+      // Yandex's demo story also displays an unlabelled light Next/Close icon in this rail.
+      const {raw,width}=await capturePixels();
+      const x=Math.round(width*.922), y=Math.round(width*.100), half=Math.round(width*.023);
+      let lightPixels=0;
+      for(let row=y-half;row<=y+half;row++)for(let col=x-half;col<=x+half;col++){
+        const i=(row*width+col)*4;
+        if(Math.min(raw[i],raw[i+1],raw[i+2])>=132)lightPixels++;
+      }
+      if(lightPixels>=40){
+        trace("visible SDK player control tapped",{x,y,lightPixels});
+        adb("shell","input","tap",String(x),String(y));
+      } else adb("shell","input","keyevent","4");
     }
     assert(!(await diagnostics()).fullscreen,"Demo creative has not provided an SDK dismissal");
     await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");
     await stable("after genuine interstitial");
     await expected(true,"fullscreen dismissed");
     await ui.tap("#menu"); await stable("interstitial round trip to Home");
-    await expected(false,"reload handshake starts");
-    await ui.evaluate("setTimeout(() => location.reload(), 50); true");
-    await wait(1000);
-    await ui.until("document.querySelector('#dialog[data-screen=home]')?.open && document.hasFocus()");
-    await stable("WebView reload with retained native banner");
-    await expected(true,"reload finished");
-    await expected(false,"Android viewport resize begins");
-    adb("shell","wm","size","720x1392");
-    let resized;
-    for(let i=0;i<30;i++){
-      resized=await diagnostics();
-      if(resized.width!==initial.width&&resized.loaded>initial.loaded&&resized.visible)break;
-      await wait(450);
-    }
-    assert(resized.width>initial.width && resized.loaded>initial.loaded && resized.visible,"No creative in the resized viewport");
-    assert.equal(resized.request,initial.request+1,"One replacement request after resizing");
-    assert.notEqual(resized.view,initial.view,"The resized slot has a fresh SDK view");
-    trace("native banner repainted for the wider slot",{...resized,paintColorBuckets:await paint(resized)});
-    assert((await paint(resized))>20,"Resized creative did not paint");
-    shot("banner-resized");
     report.status="PASS";
     return report;
   } catch(error) {
