@@ -999,10 +999,27 @@
         "issue": "https://github.com/DanilaH/seeds-bits/issues/31",
         "report": "../research/menu-package-2026-11-25/README.md",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "independentReview": {
+          "issue": "https://github.com/DanilaH/seeds-bits/issues/33",
+          "comment": "https://github.com/DanilaH/seeds-bits/pull/32#issuecomment-7164666416",
+          "result": "PARTIAL: code/UI architecture present; recency resolver counterexamples, conditional rewarded callback loss risk, native continuity incomplete",
+          "apk": {
+            "versionCode": 12091,
+            "package": "com.seedsbits.game.preview",
+            "source": "37c3108a712b5224eda3fadf606c614fb87266dc",
+            "sha256": "c8800ba7606684a4ff5aa8a995d78e96834dc3ee0c68edd4e2c55378a6ea84c4",
+            "verification": "Independently downloaded and hashed; signature certificate per developer; no physical installation"
+          },
+          "model": "8 source resolver cases: 4 conform, 3 strict recency/CTA mismatches, 1 replay semantics to resolve; no actual independent browser runtime (navigation blocked)",
+          "demoNative": "Downloaded 15026829008: four transitions, stable view/request, sampled frames 17→213, hidden 0, impressions 0, capture ERROR; no full continuity pass",
+          "ci": "45624902479 FAILURE (offline #undo/launcher transition, no proof of actual Undo defect); 45628706563 pending/in_progress at review; final gate open"
+        }
       },
-      "nextAction": "Сверить demo SDK, затем наблюдать навигацию и баннер на физическом телефоне.",
-      "kitImpact": "REUSE"
+      "nextAction": "Resolve #33: correct played recency and quick CTA, protect delayed earned receipts across focus recovery, complete ≥6 native transitions and final exact-source CI, publish visual evidence, physical phone/TalkBack.",
+      "kitImpact": "REUSE",
+      "consumerCommit": "607f6085aa8a31feb6db14b8a2c6ceeb551c7e12",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/32"
     }
   ]
 }
