@@ -609,12 +609,6 @@ for (const [id, art] of [
 }
 for (const [id, name] of [["progress-open","progress"],["learn","help"],["settings-open","settings"]] as const)
   $(id).insertAdjacentHTML("afterbegin", icon(name));
-const homeLanguage = document.createElement("button");
-homeLanguage.id = "home-language";
-homeLanguage.className = "text-button";
-homeLanguage.innerHTML = icon("settings") + `<span>${t("nav.language")}</span>`;
-homeLanguage.onclick = () => openLanguage("pause");
-document.querySelector(".home-links")!.append(homeLanguage);
 const settingsBasics = document.createElement("section");
 settingsBasics.className = "settings-basics";
 for (const node of [...$("settings-panel").children])
@@ -4298,7 +4292,6 @@ function renderHomeCurrent() {
   homeGoal.hidden = true;
   $("new").hidden = lesson >= 0 || !unfinished(session);
   $("new").textContent = classic ? t("ui.restart") : t("ui.restart-puzzle");
-  $("home-language").querySelector("span")!.textContent = t("nav.language");
   if (!show) return;
   $("resume").hidden = false;
   if (lesson >= 0) {

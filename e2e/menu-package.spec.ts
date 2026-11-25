@@ -54,6 +54,8 @@ test("fresh Home presents three modes with no fake resume; Escape cannot enter t
   await expect(page.locator("#book-quick")).toHaveText("Начать");
   for(const id of ["classic-mode","book-mode","daily-mode"]) await expect(page.locator("#"+id)).toBeInViewport();
   await expect(page.locator("#dialog #close")).toHaveCount(0);
+  await expect(page.locator(".home-links button")).toHaveCount(4);
+  await expect(page.locator(".home-links").getByRole("button",{name:"Язык",exact:true})).toHaveCount(1);
   await page.keyboard.press("Escape");
   await expect(home(page)).toBeVisible();
   await classicNew(page);

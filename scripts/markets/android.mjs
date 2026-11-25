@@ -930,7 +930,7 @@ async function verifyAppBanner() {
     await ui.tap("#all-books"); await stable("notebook to picker");
     await ui.tap("#collection-back"); await stable("picker to notebook");
     await ui.tap("#collection-back"); await stable("notebook to Home");
-    await ui.tap("#home-language");
+    await ui.tap("#pause-language");
     await ui.until("document.querySelector('#language-sheet').open");
     assert.equal((await diagnostics()).visible,false);
     await ui.tap("#language-close");

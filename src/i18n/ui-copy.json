@@ -2505,13 +2505,6 @@
     "tr": "Tekrar için bulmaca seç",
     "pt-BR": "Escolha um desafio para repetir"
   },
-  "nav.language": {
-    "ru": "Язык",
-    "en": "Language",
-    "es": "Idioma",
-    "tr": "Dil",
-    "pt-BR": "Idioma"
-  },
   "nav.classicParked": {
     "ru": "Начатая партия",
     "en": "Saved game",

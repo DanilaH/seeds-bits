@@ -7,7 +7,7 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  group: first-session-${{ github.ref }}
+  group: first-session-preview-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   browser:
@@ -63,7 +63,7 @@ jobs:
       - uses: android-actions/setup-android@v4
       - run: npm ci --no-audit --no-fund
       - run: npm run setup:android
-      - run: GITHUB_RUN_NUMBER=990 node scripts/configure-android.mjs
+      - run: GITHUB_RUN_NUMBER=991 node scripts/configure-android.mjs
       - run: |
           chmod +x android/gradlew
           cd android
