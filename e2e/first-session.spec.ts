@@ -17,7 +17,7 @@ async function click(p:Page,selector:string,region?:string){
   expect(xy.ok,selector+JSON.stringify(xy)).toBe(true);await p.mouse.click(xy.x,xy.y);
 }
 async function digit(p:Page,i:number){await click(p,`#board [data-index="${i}"]`,"#viewport");}
-async function move(p:Page,a:number,b:number){const before=+(await p.locator("#remaining").innerText());await digit(p,a);await digit(p,b);await expect(p.locator("#remaining")).toHaveText(String(before-2));await stable(p);}
+async function move(p:Page,a:number,b:number){await expect(p.locator("#dialog")).toBeHidden();const before=+(await p.locator("#remaining").innerText());await digit(p,a);await digit(p,b);await expect(p.locator("#remaining")).toHaveText(String(before-2));await stable(p);}
 async function start(p:Page){await p.emulateMedia({reducedMotion:"reduce"});await p.goto("/");await expect(cue(p)).toHaveText("Нажмите любую цифру.");}
 async function scale(p:Page,z:number){await p.evaluate(z=>{
   const es=[...document.querySelectorAll<HTMLElement>("body *")],sizes=es.map(e=>parseFloat(getComputedStyle(e).fontSize));es.forEach((e,i)=>e.style.fontSize=`${sizes[i]*z}px`);
@@ -40,7 +40,7 @@ test("clean first run is a real saved task, voluntary task 2 and no duplicate re
   await expect(page.locator("#result-gains")).toContainText("+4");
   await page.waitForTimeout(1700);expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).active,key)).toBe("book-v1-1");
   const before=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).meta.completed,key);
-  await page.reload();await expect(page.locator("#resume")).toHaveText("Начать задачу 2");
+  await page.reload();await expect(page.locator("#resume")).toHaveText("Начать · задача 2");
   expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).meta.completed,key)).toBe(before);
   await page.locator("#resume").click();await expect(page.locator("#mode")).toContainText("задача 2");
   const pair=pairs(bookV5("book-v1-2")!.board)[0];await move(page,pair.a,pair.b);

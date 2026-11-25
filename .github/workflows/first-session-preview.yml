@@ -144,16 +144,18 @@ jobs:
           done
           test "$(adb shell id -u | tr -d '\r')" = 0
           adb shell input keyevent 82
-          SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk"
+          banner_status=0
+          SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" || banner_status=$?
           adb shell svc wifi disable
           adb shell svc data disable
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
           adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
           adb shell input keyevent 82
           node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js"
+          exit "$banner_status"
       - uses: actions/upload-artifact@v4
         if: always()
-        with: {name: markets-android, path: test-results/markets-android/}
+        with: {name: markets-android, path: "test-results/markets-android/\ntest-results/first-session-android/emulator.log"}
 
   sign-preview:
     needs: preview

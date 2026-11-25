@@ -55,7 +55,7 @@ async function connect() {
   const evaluate=async expression=>{
     const seq=++id;
     const promise=new Promise((resolve,reject)=>{
-      const timer=setTimeout(()=>{pending.delete(seq);reject(Error("CDP timeout"));},12000);
+      const timer=setTimeout(()=>{pending.delete(seq);reject(Error("CDP timeout: "+expression.slice(0,150)));},12000);
       pending.set(seq,response=>{clearTimeout(timer);pending.delete(seq);resolve(response);});
     });
     ws.send(JSON.stringify({id:seq,method:"Runtime.evaluate",params:{expression,returnByValue:true,awaitPromise:true}}));
@@ -861,11 +861,22 @@ async function verifyAppBanner() {
   adb("install",candidate);
   adb("shell","wm","density","320");
   adb("shell","wm","size","640x1232");
-  launch();
-  const ui=await connect();
-  const diagnostics=()=>ui.evaluate("window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics()");
-  let recorder;
+  let ui, recorder;
   try {
+    launch();
+    for(let attempt=1;attempt<=3;attempt++){
+      try { ui=await connect(); break; }
+      catch(error) {
+        if(attempt===3) throw error;
+        stop();
+        launch();
+        await wait(1000);
+      }
+    }
+    const diagnostics=()=>ui.evaluate(`Promise.race([
+      window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics(),
+      new Promise((_,reject)=>setTimeout(()=>reject(Error("Banner diagnostics did not respond")),5000))
+    ])`);
     const paint = () => {
       const raw=execFileSync("adb",["exec-out","screencap"],{maxBuffer:20e6});
       const width=raw.readUInt32LE(0),height=raw.readUInt32LE(4),offset=raw.length-width*height*4;
@@ -932,6 +943,11 @@ async function verifyAppBanner() {
     assert.equal((await diagnostics()).request,beforeBackground);
     report.status="PASS";
     return report;
+  } catch(error) {
+    report.status="ERROR";
+    report.error=String(error);
+    shot("banner-failure");
+    throw error;
   } finally {
     if(recorder) {
       try {
@@ -940,8 +956,10 @@ async function verifyAppBanner() {
         adb("pull","/sdcard/seeds-banner-continuity.mp4",out+"/banner-continuity.mp4");
       } catch(error) { console.warn("Screen recording:",String(error)); }
     }
-    ui.close();stop();adb("uninstall",app);
     fs.writeFileSync(out+"/banner-continuity.json",JSON.stringify(report,null,2));
+    ui?.close();
+    stop();
+    adb("uninstall",app);
   }
 }
 if(process.env.SEEDS_BANNER_ONLINE==="1"){
