@@ -154,7 +154,7 @@ try {
   ffmpeg("-f", "concat", "-safe", "0", "-i", sequence, "-itsoffset", audioOffset, "-i", audio,
     "-map", "0:v", "-map", "1:a", "-vf", "fps=60,scale=780:1688:flags=lanczos",
     "-c:v", "libx264", "-preset", "fast", "-crf", "20", "-pix_fmt", "yuv420p",
-    "-af", "apad",
+    "-af", "aresample=async=1:first_pts=0,apad",
     "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", "-t", String(clipLength), target);
   console.log(frames.length, `audio alignment ${audioOffset}s, max tap drift ${maxTapDrift}ms`, target);
   await context.close();
