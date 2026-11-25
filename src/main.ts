@@ -574,11 +574,13 @@ const homeCurrent = document.createElement("section");
 homeCurrent.className = "home-current";
 homeCurrent.setAttribute("aria-labelledby", "home-game-title");
 homeCurrent.innerHTML =
-  '<div id="home-current-art" aria-hidden="true"></div><p class="home-eyebrow" id="home-eyebrow"></p><h2 id="home-game-title"></h2><p id="home-difficulty" hidden></p>';
+  '<div class="home-current-copy"><h2 id="home-game-title"></h2></div><div id="home-current-art" aria-hidden="true"></div>';
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
+homeGoal.innerHTML = '<span id="home-goal-caption"></span><progress max="24" aria-hidden="true"></progress>';
 $("new").className = "text-button restart-action";
-homeCurrent.append($("resume-context"), homeGoal, $("resume"));
+homeCurrent.querySelector(".home-current-copy")!.append($("resume-context"), homeGoal);
+homeCurrent.append($("resume"));
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
 homeModes.setAttribute("aria-label", t("ui.game-modes"));
@@ -592,14 +594,17 @@ homeBookCard.append($("book-mode"), bookQuick);
 const homeCalendar = document.createElement("div");
 homeCalendar.className = "home-calendar";
 homeCalendar.append($("daily-mode"), $("calendar-open"));
-homeModes.append(document.querySelector(".mode-nav")!, homeCalendar);
+const homeModeGrid = document.querySelector(".mode-nav")!;
+homeModeGrid.append(homeCalendar);
+homeModes.append(homeModeGrid);
 homeLayout.append(homeCurrent, homeModes);
 $("menu-content").insertBefore(
   homeLayout,
   document.querySelector(".home-links"),
 );
+const classicPicture = '<span class="tile-picture" aria-hidden="true"><i>3</i><i>7</i></span>';
 for (const [id, art] of [
-  ["classic-mode", '<span class="tile-picture" aria-hidden="true"><i>3</i><i>7</i></span>'],
+  ["classic-mode", classicPicture],
   ["book-mode", bookPicture(selectedVolume + 1)],
   ["daily-mode", '<span id="home-today-art" aria-hidden="true"></span>'],
 ] as const) {
@@ -4289,21 +4294,21 @@ function renderHomeCurrent() {
   const show = lesson >= 0 || Boolean(next) ||
     count > 0 && (classic ? classicParked() : Boolean(progress.sessions[id]));
   homeCurrent.hidden = !show;
-  $("home-difficulty").hidden = true;
-  $("home-current-art").hidden = true;
-  $("home-eyebrow").hidden = true;
   homeGoal.hidden = true;
   $("new").hidden = lesson >= 0 || !unfinished(session);
   $("new").textContent = classic ? t("ui.restart") : t("ui.restart-puzzle");
   if (!show) return;
   $("resume").hidden = false;
   if (lesson >= 0) {
+    $("home-current-art").innerHTML = `<span class="home-lesson-art">${icon("help")}</span>`;
     $("home-game-title").textContent = t("ui.tutorial");
     $("resume-context").textContent = t("ui.step-of", {"0": lesson+1,"1":shortLesson?2:lessons.length});
     $("resume").textContent = t("ui.continue-tutorial");
     return;
   }
   const date = !classic && !book ? taskDate(id.slice(9),id.slice(9,13)!==today().slice(0,4)) : "";
+  $("home-current-art").innerHTML = classic ? classicPicture
+    : book ? bookPicture(volumeOf(next ?? id) + 1) : calendarPicture(id.slice(9), true);
   $("home-game-title").textContent = classic ? t("home.classic")
     : book ? volumeLabel(volumeOf(next ?? id)) : id.slice(9) === today()
       ? t("notification.channel") : t("home.daily.date", {date});
@@ -4314,7 +4319,8 @@ function renderHomeCurrent() {
   if (book && !next) {
     homeGoal.hidden = false;
     const done = notebookBrowseStatus(progress,volumeOf(id),new Set(progress.done)).solved;
-    homeGoal.textContent = t("ui.of-24-puzzles",{"0":done});
+    $("home-goal-caption").textContent = t("ui.of-24-puzzles",{"0":done});
+    homeGoal.querySelector("progress")!.value = done;
   }
   $("resume").textContent = next
     ? t("ui.puzzle",{"0":notebookStarted(progress,next)?t("daily.resume"):t("action.start"),"1":puzzleNumberInVolume(next)})

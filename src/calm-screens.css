@@ -55,17 +55,6 @@
 .game .game-top > header {
   padding-inline: 0;
 }
-.game-top header > #menu {
-  justify-items: start;
-  padding-inline: 0;
-}
-.game-top header > #menu svg {
-  transform: translateX(-2px);
-}
-.game-top header > #book-top {
-  justify-items: end;
-  padding-inline: 0;
-}
 #dialog[data-screen="home"] {
   padding: max(20px, env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px))
     max(20px, env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
@@ -228,10 +217,11 @@
 }
 .book-cover {
   position: absolute;
-  inset: 4% 8% 4% 12%;
+  inset: 4% 6% 4% 9%;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
-  padding-inline-start: .14em;
+  padding-inline: .27em .06em;
   border: 1px solid #789075;
   border-radius: .14em .23em .23em .14em;
   background: linear-gradient(90deg, var(--calm-book) .31em, var(--calm-illustration) .31em);
@@ -251,9 +241,10 @@
 .book-cover-number {
   font-size: .49em;
   font-weight: 650;
+  line-height: 1;
   white-space: nowrap;
 }
-.book-cover-number-compact { font-size: .42em; }
+.book-cover-number-compact { font-size: .39em; }
 .calendar-picture {
   width: 1.85em;
   height: 1.8em;

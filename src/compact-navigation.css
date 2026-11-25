@@ -19,6 +19,11 @@
 @keyframes shell-fade-in { from { opacity: 0; } to { opacity: 1; } }
 :root.has-mobile-ads #dialog::backdrop { background: transparent; }
 
+.game .game-top header > :is(#menu,#book-top) {
+  padding: 0;
+  place-items: center;
+}
+
 #dialog[data-screen="home"] {
   padding-inline: max(14px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px));
   padding-top: max(8px, var(--safe-area-inset-top, 0px));
@@ -37,33 +42,85 @@
   letter-spacing: -.03em;
 }
 #dialog[data-screen="home"] .home-layout {
+  --home-gap: 8px;
+  --mode-art-width: 58px;
+  --mode-height: 60px;
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 8px;
+  align-items: start;
+  align-content: start;
+  gap: var(--home-gap);
   max-width: 628px;
   padding-block: 6px 8px;
   width: 100%;
   margin-inline: auto;
 }
 #dialog[data-screen="home"] .home-current {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(58px, 23%, 80px);
+  align-items: center;
   min-height: 0;
-  gap: 4px;
-  padding: 9px 12px;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at 100% 0%, #b5c7a65c, transparent 56%),
+    var(--calm-card);
 }
 #dialog[data-screen="home"] .home-current[hidden] { display: none; }
+.home-current-copy { display: grid; align-content: center; gap: 3px; min-width: 0; }
 #dialog[data-screen="home"] #home-game-title { font-size: 18px; min-height: auto; line-height: 1.2; }
 #dialog[data-screen="home"] #resume-context { min-height: auto; margin: 0; font-size: 13px; line-height: 1.2; }
-#dialog[data-screen="home"] #resume { min-height: 48px; margin-top: 3px; }
-#dialog[data-screen="home"] .home-modes { display: grid; gap: 6px; min-width: 0; }
-#dialog[data-screen="home"] .mode-nav { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
-#dialog[data-screen="home"] .mode-link {
-  flex-direction: row;
+#dialog[data-screen="home"] #home-current-art {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  height: 52px;
+  font-size: 24px;
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse 1px 1.6px at 3px 4px, #dce6ca44 90%, transparent) 0 0 / 10px 10px,
+    radial-gradient(ellipse 1px 1.6px at 8px 9px, #dce6ca28 90%, transparent) 0 0 / 10px 10px;
+}
+#home-current-art .tile-picture { justify-content: center; padding: 0; gap: 2px; }
+#home-current-art .tile-picture i {
+  flex: 0 0 25px;
+  width: 25px;
+  height: 31px;
+  color: #30473d;
+  background: var(--calm-illustration);
+}
+.home-lesson-art { display: grid; place-items: center; }
+.home-lesson-art svg { width: 32px; height: 32px; }
+#dialog[data-screen="home"] #home-goal {
+  display: flex;
   align-items: center;
-  min-height: 54px;
-  padding: 4px 7px;
+  gap: 8px;
+  margin: 1px 0 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--calm-card-muted);
+}
+#dialog[data-screen="home"] #home-goal[hidden] { display: none; }
+#dialog[data-screen="home"] #home-goal progress { flex: 0 1 55px; min-width: 18px; }
+#dialog[data-screen="home"] #resume { grid-column: 1 / -1; min-height: 48px; margin: 0; }
+#dialog[data-screen="home"] .home-modes { display: block; min-width: 0; }
+#dialog[data-screen="home"] .mode-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: minmax(var(--mode-height), 1fr);
+  gap: var(--home-gap);
+}
+#dialog[data-screen="home"] .mode-link {
+  display: grid;
+  grid-template-columns: var(--mode-art-width) minmax(0, 1fr);
+  align-items: center;
+  min-height: var(--mode-height);
+  padding: 5px 7px;
   font-size: 15px;
+  line-height: 1.2;
   gap: 8px;
 }
 #dialog[data-screen="home"] .mode-link small { font-size: 12px; }
@@ -72,41 +129,45 @@
   border: 0;
   background: transparent;
   min-width: 0;
-  min-height: 54px;
+  min-height: 0;
+  gap: 8px;
+  padding: 5px 7px;
   border-radius: inherit;
 }
-#dialog[data-screen="home"] .tile-picture {
-  width: 58px;
-  flex: 0 0 58px;
+#dialog[data-screen="home"] .mode-link > .tile-picture {
+  width: var(--mode-art-width);
   height: 40px;
   margin: 0;
   padding: 2px 3px;
   gap: 2px;
 }
-#dialog[data-screen="home"] .tile-picture i {
+#dialog[data-screen="home"] .mode-link > .tile-picture i {
   flex: 0 0 25px;
   width: 25px;
   height: 31px;
 }
 #dialog[data-screen="home"] :is(#book-mode > .book-picture,#home-today-art) {
-  width: 39px;
-  flex: 0 0 39px;
+  width: 46px;
+  justify-self: center;
   margin: 0;
   font-size: 21px;
 }
-.home-book-card, #dialog[data-screen="home"] .home-calendar {
+#dialog[data-screen="home"] :is(.home-book-card,.home-calendar) {
   display: flex;
-  align-items: center;
-  gap: 3px;
+  align-items: stretch;
+  gap: 0;
+  min-width: 0;
   background: var(--calm-surface);
   border: 1px solid var(--line);
   border-radius: 14px;
   margin-top: 0;
 }
-.home-book-card { padding-inline-end: 4px; }
-.home-book-card #book-mode { flex: 1; }
+#dialog[data-screen="home"] .home-book-card { padding-inline-end: 4px; }
+#dialog[data-screen="home"] .home-book-card #book-mode { flex: 1; }
+#dialog[data-screen="home"] .home-calendar #daily-mode { flex: 1; }
 #dialog[data-screen="home"] :is(#book-quick,#calendar-open) {
   min-height: 48px;
+  min-width: 48px;
   max-width: 42%;
   font-size: 12px;
   padding: 4px 7px;
@@ -117,10 +178,10 @@
 }
 #dialog[data-screen="home"] .home-calendar #calendar-open {
   align-self: stretch;
-  min-width: 48px;
   margin: 0;
   border-radius: 0 13px 13px 0;
 }
+#dialog[data-screen="home"] #book-quick { align-self: center; }
 #dialog[data-screen="home"] .home-links {
   max-width: 628px;
   margin: auto auto 0;
@@ -129,7 +190,16 @@
   grid-template-columns: repeat(4,minmax(0,1fr));
   gap: 2px;
 }
-#dialog[data-screen="home"] .home-links > button { min-height: 48px; font-size: 11px; padding: 4px 0; }
+#dialog[data-screen="home"] .home-links > button {
+  display: grid;
+  grid-template-rows: 18px auto;
+  align-content: start;
+  justify-items: center;
+  gap: 4px;
+  min-height: 48px;
+  font-size: 11px;
+  padding: 6px 0 4px;
+}
 #dialog[data-screen="home"] #progress-open svg { display: block; }
 #classic-entry:not([hidden]) { display: grid; gap: 8px; }
 #classic-entry button { min-height: 48px; }
@@ -192,5 +262,22 @@
 }
 @media (orientation:landscape) and (max-height:420px) {
   #dialog[data-screen="home"] #menu-content { min-height: auto; }
-  #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) {grid-template-columns: 1fr 1fr;}
+  #dialog[data-screen="home"] .home-layout {
+    --home-gap: 6px;
+    --mode-art-width: 44px;
+    --mode-height: 52px;
+  }
+  #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) {
+    grid-template-columns: minmax(0,2fr) minmax(0,3fr);
+  }
+  #dialog[data-screen="home"] .mode-link > .tile-picture { padding-inline: 1px; }
+  #dialog[data-screen="home"] .mode-link > .tile-picture i {
+    flex-basis: 19px;
+    height: 25px;
+    font-size: 16px;
+  }
+  #dialog[data-screen="home"] :is(#book-mode > .book-picture,#home-today-art) {
+    width: 38px;
+    font-size: 18px;
+  }
 }
