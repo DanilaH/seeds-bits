@@ -410,6 +410,7 @@ test("slow save holds the full jar through its spill instead of shaking the next
 }) => {
   await seed(page, { meter: 22 });
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const state = window as any;
     const request = navigator.locks.request.bind(navigator.locks) as any;
@@ -431,7 +432,6 @@ test("slow save holds the full jar through its spill instead of shaking the next
   await expect(page.locator("#jar-spill")).toHaveCount(0);
   await page.evaluate(() => (window as any).releaseJarSave());
   await expect(page.locator("#jar-spill i")).toHaveCount(24);
-  await page.waitForTimeout(900);
   await expect(page.locator("#jar-percent")).toHaveText("100%");
   await expect(page.locator("#jar-name")).toHaveText("Баночка 1");
   await expect(page.locator("#jar-name")).toHaveText("Баночка 2");

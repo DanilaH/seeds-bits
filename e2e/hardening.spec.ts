@@ -15,6 +15,7 @@ test("a valid move is saved before its animation finishes", async ({
   await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await page.evaluate(() => {
     const original = window.setTimeout;
     window.setTimeout = ((

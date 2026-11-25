@@ -8,7 +8,7 @@ permissions:
   actions: read
 concurrency:
   group: first-session-preview-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   browser:
     runs-on: ubuntu-24.04
@@ -107,6 +107,11 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
       - run: sdkmanager "build-tools;36.0.0"
+      - name: Check the desktop capture tools
+        if: matrix.mode == 'demo'
+        run: |
+          command -v Xvfb > /dev/null && command -v ffmpeg > /dev/null && command -v xdpyinfo > /dev/null ||
+            { sudo apt-get update && sudo apt-get install -y xvfb ffmpeg x11-utils; }
       - run: npm ci --no-audit --no-fund
       - uses: actions/download-artifact@v4
         with: {name: first-session-preview-unsigned, path: candidate/}
@@ -137,7 +142,18 @@ jobs:
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
           echo no | avdmanager create avd --force --name firstsession --package 'system-images;android-35;google_apis;x86_64'
           sudo chmod 666 /dev/kvm
-          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
+          display_args=(-no-window)
+          if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then
+            export DISPLAY=:92
+            Xvfb "$DISPLAY" -screen 0 800x1300x24 -nolisten tcp > test-results/first-session-android/xvfb.log 2>&1 &
+            for attempt in $(seq 1 20); do
+              if xdpyinfo > /dev/null 2>&1; then break; fi
+              sleep 1
+            done
+            xdpyinfo > /dev/null
+            display_args=()
+          fi
+          "$ANDROID_HOME/emulator/emulator" -avd firstsession "${display_args[@]}" -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
           emulator_pid=$!
           for attempt in $(seq 1 120); do
             if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/first-session-android/emulator.log; exit 1; fi

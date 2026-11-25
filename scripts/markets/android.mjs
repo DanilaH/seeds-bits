@@ -862,6 +862,8 @@ async function verifyAppBanner() {
   adb("shell","wm","density","320");
   adb("shell","wm","size","640x1232");
   let ui, recorder;
+  const display = process.env.DISPLAY;
+  const remote = "/sdcard/seeds-banner-continuity.mp4";
   try {
     launch();
     for(let attempt=1;attempt<=3;attempt++){
@@ -904,9 +906,15 @@ async function verifyAppBanner() {
       return report;
     }
     shot("banner-painted-start");
-    const remote="/sdcard/seeds-banner-continuity.mp4";
-    recorder=spawn("adb",["shell","screenrecord","--size","320x616","--bit-rate","950000","--time-limit","60",remote],{stdio:"ignore"});
+    recorder = display
+      ? spawn("ffmpeg",["-y","-loglevel","error","-f","x11grab","-framerate","20","-video_size","800x1300",
+          "-i",display,"-t","60","-an","-c:v","libx264","-preset","ultrafast","-threads","2",
+          "-pix_fmt","yuv420p","-movflags","+faststart",out+"/banner-continuity.mp4"],{stdio:"ignore"})
+      : spawn("adb",["shell","screenrecord","--size","320x616","--bit-rate","950000","--time-limit","60",remote],{stdio:"ignore"});
+    const started=new Promise((resolve,reject)=>{recorder.once("spawn",resolve);recorder.once("error",reject);});
+    await started;
     await wait(500);
+    assert.equal(recorder.exitCode,null,"The continuous capture stopped before navigation");
     const stable=async(label)=>{
       const current=await diagnostics();
       assert.equal(current.view,initial.view,label);
@@ -955,9 +963,13 @@ async function verifyAppBanner() {
   } finally {
     if(recorder) {
       try {
-        adb("shell","pkill","-2","screenrecord");
-        if(recorder.exitCode===null)await new Promise(resolve=>recorder.once("exit",resolve));
-        adb("pull","/sdcard/seeds-banner-continuity.mp4",out+"/banner-continuity.mp4");
+        if (recorder.exitCode === null) {
+          const closed = new Promise(resolve=>recorder.once("exit",resolve));
+          if (display) recorder.kill("SIGINT");
+          else adb("shell","pkill","-2","screenrecord");
+          await closed;
+        }
+        if (!display) adb("pull",remote,out+"/banner-continuity.mp4");
       } catch(error) { console.warn("Screen recording:",String(error)); }
     }
     fs.writeFileSync(out+"/banner-continuity.json",JSON.stringify(report,null,2));

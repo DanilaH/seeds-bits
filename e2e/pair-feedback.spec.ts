@@ -17,6 +17,7 @@ async function open(page: Page, board: number[], active = "classic", done: strin
   }, {key, board, active, done});
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
 }
 const savedBoard = (page: Page) => page.evaluate(key => {
   const state = JSON.parse(localStorage.getItem(key)!);
@@ -120,12 +121,12 @@ for (const reverse of [false,true]) {
     await expect(page.locator("#paths .edge-exit, #paths .edge-entry")).toHaveCount(2);
     const [a,b] = reverse ? [10,7] : [7,10];
     await digit(page,a).click();
-    await digit(page,b).click();
+    const cells = await digit(page,b).evaluate((button: HTMLButtonElement) => {
+      button.click();
+      return [...document.querySelectorAll<HTMLElement>('.pair-wave[data-kind="match"] .pair-wave-cell')]
+        .map(el=>({index:Number(el.dataset.waveIndex),delay:parseFloat(getComputedStyle(el).animationDelay)}));
+    });
     const wave = page.locator('.pair-wave[data-kind="match"]');
-    const cells = await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(el=>({
-      index: Number((el as HTMLElement).dataset.waveIndex),
-      delay: parseFloat(getComputedStyle(el).animationDelay),
-    })));
     expect(cells.map(c=>c.index)).toEqual(reverse ? [10,9,8,7] : [7,8,9,10]);
     expect(cells.map(c=>c.delay)).toEqual([0,.028,.056,.084]);
     await page.clock.runFor(270);
@@ -138,9 +139,13 @@ test("a green diagonal runs from the first tap and releases the board before it 
   await page.clock.install();
   await open(page,boardOf({0:3,12:5,13:5,30:3}));
   await digit(page,30).click();
-  await digit(page,0).click();
+  const cells = await digit(page,0).evaluate((button: HTMLButtonElement) => {
+    button.click();
+    return [...document.querySelectorAll<HTMLElement>('.pair-wave[data-kind="match"] .pair-wave-cell')]
+      .map(el=>Number(el.dataset.waveIndex));
+  });
   const wave = page.locator('.pair-wave[data-kind="match"]');
-  expect(await wave.locator(".pair-wave-cell").evaluateAll(nodes=>nodes.map(e=>Number((e as HTMLElement).dataset.waveIndex)))).toEqual([30,20,10,0]);
+  expect(cells).toEqual([30,20,10,0]);
   await page.clock.runFor(115);
   await expect(page.locator("#remaining")).toHaveText("2");
   await expect(wave).toHaveCount(1);
