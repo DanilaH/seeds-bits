@@ -1057,19 +1057,21 @@ async function verifyAppBanner() {
     assert.equal(shown.visible,false);
     trace("genuine interstitial hides native banner",{...shown,expected:false});
     shot("banner-hidden-by-interstitial");
-    for (let attempt=0;attempt<8;attempt++) {
-      adb("shell","input","keyevent","4");
-      await wait(650);
-      if (!(await diagnostics()).fullscreen) break;
-      if (attempt===3 || attempt===6) {
-        try {
-          adb("shell","uiautomator","dump","/sdcard/demo-fullscreen.xml");
-          const hierarchy=adb("shell","cat","/sdcard/demo-fullscreen.xml");
-          const close=hierarchy.match(/<node [^>]*(?:text|content-desc)="(?:Close|Close ad|Skip|Skip ad|Закрыть|Пропустить)"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/i);
-          if(close)adb("shell","input","tap",String((+close[1]+ +close[3])>>1),String((+close[2]+ +close[4])>>1));
-        } catch(error) { console.warn("Reading the ad close control:",String(error)); }
-      }
+    const sdkPlayerDeadline=performance.now()+100000;
+    // The demo can serve a multi-part video. Give its own close control time to appear.
+    while((await diagnostics()).fullscreen && performance.now()<sdkPlayerDeadline) {
+      await wait(6000);
+      if(!(await diagnostics()).fullscreen)break;
+      try {
+        adb("shell","uiautomator","dump","/sdcard/demo-fullscreen.xml");
+        const hierarchy=adb("shell","cat","/sdcard/demo-fullscreen.xml");
+        const action=String.raw`Close(?: ad| video)?|Dismiss|Skip(?: ad| video)?|Закрыть(?: рекламу| видео)?|Пропустить(?: рекламу| видео)?`;
+        const close=hierarchy.match(new RegExp(String.raw`<node [^>]*(?:text|content-desc)="(?:${action})"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"`,"i"));
+        if(close)adb("shell","input","tap",String((+close[1]+ +close[3])>>1),String((+close[2]+ +close[4])>>1));
+        else adb("shell","input","keyevent","4");
+      } catch(error) { console.warn("Reading the ad close control:",String(error)); }
     }
+    assert(!(await diagnostics()).fullscreen,"Demo creative has not provided an SDK dismissal");
     await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");
     await stable("after genuine interstitial");
     await expected(true,"fullscreen dismissed");

@@ -1,0 +1,57 @@
+name: Seeds 12092 native demo replay
+on:
+  push:
+    branches: [qa/menu-audit-native-12092]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  demo:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: 15031598489
+          merge-multiple: true
+          run-id: 45633729838
+          github-token: ${{ github.token }}
+          path: candidate
+      - name: Start Android and run the native demo against the verified 12092 runtime
+        run: |
+          echo 'dec307f0912a2c7426358e2113bb239cf7379d45ef192443c6369a54bde53c6e  candidate/seeds-first-session-12092-debug.apk' | sha256sum -c -
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-audit-demo-avd"
+          mkdir -p "$ANDROID_AVD_HOME" test-results/first-session-android
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
+          echo no | avdmanager create avd --force --name firstsession --package 'system-images;android-35;google_apis;x86_64'
+          sudo chmod 666 /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
+          emulator_pid=$!
+          for attempt in $(seq 1 100); do
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/first-session-android/emulator.log; exit 1; fi
+            if [ "$(timeout 4 adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then break; fi
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          for attempt in $(seq 1 12); do
+            if [ "$(timeout 4 adb shell id -u 2>/dev/null | tr -d '\r')" = 0 ]; then break; fi
+            timeout 4 adb root || true
+            sleep 2
+          done
+          test "$(adb shell id -u | tr -d '\r')" = 0
+          adb shell input keyevent 82
+          command -v ffprobe > /dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs candidate/seeds-first-session-12092-debug.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: markets-android-demo
+          path: |
+            test-results/markets-android/
+            test-results/first-session-android/emulator.log
