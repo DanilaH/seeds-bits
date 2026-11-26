@@ -80,9 +80,22 @@ for(const language of ['ru','en','es','tr','pt-BR'])for(const theme of ['light',
   await seed(page,'menu',5600,language,theme);
   for(const [width,height] of [[320,568],[390,844],[844,390]])for(const font of [16,24,32]){
     await page.setViewportSize({width,height});await page.evaluate(font=>document.documentElement.style.fontSize=font+'px',font);
-    const lines=await page.locator('#book-quick').evaluate(e=>{const r=document.createRange();r.selectNodeContents(e);return [...r.getClientRects()].filter(r=>r.width>0).map(r=>({x:r.x,right:r.right,y:r.y}));});
+    const words=await page.locator('#book-quick').evaluate(e=>{
+      const node=e.firstChild!,text=e.textContent??"",box=e.getBoundingClientRect();
+      return [...text.matchAll(/\S+/g)].map(word=>{
+        const range=document.createRange();range.setStart(node,word.index!);range.setEnd(node,word.index!+word[0].length);
+        return {word:word[0],box:{left:box.left,right:box.right,top:box.top,bottom:box.bottom},rects:[...range.getClientRects()].filter(r=>r.width>0).map(r=>({left:r.left,right:r.right,top:r.top,bottom:r.bottom}))};
+      });
+    });
     await page.screenshot({path:test.info().outputPath(`home-${width}-${font}.png`),animations:"disabled"});
-    expect(lines.length).toBe(1);expect(lines[0].x).toBeGreaterThanOrEqual(0);expect(lines[0].right).toBeLessThanOrEqual(width);
+    expect(words.length).toBeGreaterThan(0);
+    for(const word of words) {
+      expect(new Set(word.rects.map(r=>Math.round(r.top))).size,word.word).toBe(1);
+      for(const r of word.rects) {
+        expect(r.left).toBeGreaterThanOrEqual(Math.max(0,word.box.left)-1);
+        expect(r.right).toBeLessThanOrEqual(Math.min(width,word.box.right)+1);
+      }
+    }
   }
   await page.setViewportSize({width:320,height:568});await page.evaluate(()=>document.documentElement.style.fontSize='16px');
   await raw(page,'#book-quick');await expect(page.locator('#dialog')).toBeHidden();await raw(page,'#menu');

@@ -1288,3 +1288,14 @@
   align-items: center;
   text-align: start;
 }
+
+@media (orientation: landscape) {
+  #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) {
+    grid-template-columns: repeat(auto-fit,minmax(min(100%,13em),1fr));
+  }
+}
+@media (orientation: portrait) and (max-height:650px) {
+  #app #win[data-result-kind="classic"] .quiet-result-page { padding-block:8px 10px; }
+  #app #win[data-result-kind="classic"] .quiet-result-page .win-symbol { width:48px; height:48px; }
+  #app #win[data-result-kind="classic"] #result-jar-card { padding-block:2px; margin-block:2px; }
+}
