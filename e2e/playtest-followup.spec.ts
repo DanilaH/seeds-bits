@@ -65,6 +65,38 @@ test("the daily nudge stops after entering today's game and survives reload",asy
   await expect(page.locator("#daily-mode")).toHaveAttribute("data-daily-started","");
 });
 
+test("the illustrated notebook resumes the saved board with a stationary touch target", async ({page}) => {
+  await seed(page,"classic");
+  await page.locator("#menu").click();
+  const notebook = page.locator("#home-notebook");
+  const start = (await notebook.boundingBox())!;
+  await page.waitForTimeout(350);
+  expect(await notebook.boundingBox()).toEqual(start);
+  // Raw coordinates exercise the target while its visual child is floating.
+  await page.mouse.click(start.x + start.width / 2, start.y + start.height / 2);
+  await expect(page.locator("#dialog")).toBeHidden();
+  await expect(page.locator("#remaining")).toHaveText("2");
+});
+
+test("empty notebook starts the difficulty choice and keyboard cancellation preserves it", async ({page}) => {
+  await seed(page,"classic");
+  await page.locator('[data-index="0"]').click();
+  await page.locator('[data-index="1"]').click();
+  await page.locator("#result-home").click();
+  await expect(page.locator(".home-current")).toHaveAttribute("data-new-game", "");
+  const notebook = page.locator("#home-notebook");
+  await page.emulateMedia({reducedMotion:"reduce"});
+  expect(await notebook.locator(".home-current-copy").evaluate(el => el.getAnimations().length)).toBe(0);
+  await notebook.focus();
+  await page.keyboard.down(" ");
+  await page.locator("#classic-mode").focus();
+  await page.keyboard.up(" ");
+  await expect(page.locator("#classic-new-sheet")).toBeHidden();
+  await notebook.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#classic-new-sheet")).toBeVisible();
+});
+
 for(const completedDays of [6,13,29]) for(const lang of ["ru","en","pt-BR"]) {
   test(`earned daily medal and next goal fit at 320, previous=${completedDays}, ${lang}`,async({page})=>{
     await page.setViewportSize({width:320,height:568});

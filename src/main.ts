@@ -603,6 +603,35 @@ homeGoal.id = "home-goal";
 homeGoal.innerHTML = '<span id="home-goal-caption"></span><progress max="24" aria-hidden="true"></progress>';
 $("new").className = "text-button restart-action";
 homeCurrent.querySelector(".home-current-copy")!.append($("resume-context"), homePreview, homeGoal);
+// The hit target stays on the table; only the illustrated child floats.
+const homeNotebook = document.createElement("div");
+homeNotebook.id = "home-notebook";
+homeNotebook.className = "home-notebook-hit";
+homeNotebook.setAttribute("role", "button");
+homeNotebook.setAttribute("aria-labelledby", "home-game-title resume");
+homeNotebook.tabIndex = 0;
+const homeNotebookArt = homeCurrent.querySelector<HTMLElement>(".home-current-copy")!;
+homeNotebookArt.before(homeNotebook);
+homeNotebook.append(homeNotebookArt);
+homeNotebook.onclick = () => {
+  const resume = $<HTMLButtonElement>("resume");
+  if (dialog.open && dialog.dataset.screen === "home" && !busy &&
+      !paused && !resume.hidden && !resume.disabled) resume.click();
+};
+homeNotebook.addEventListener("keydown", event => {
+  if (event.repeat || !["Enter", " "].includes(event.key)) return;
+  event.preventDefault();
+  if (event.key === "Enter") homeNotebook.click();
+  else homeNotebook.setAttribute("data-held", "");
+});
+homeNotebook.addEventListener("keyup", event => {
+  if (event.key !== " ") return;
+  event.preventDefault();
+  const held = homeNotebook.hasAttribute("data-held");
+  homeNotebook.removeAttribute("data-held");
+  if (held) homeNotebook.click();
+});
+homeNotebook.addEventListener("blur", () => homeNotebook.removeAttribute("data-held"));
 homeCurrent.append($("resume"));
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
@@ -1732,6 +1761,8 @@ function syncPauseState() {
     rewardRequest ||
     engagementActive;
   $("app").inert = adActive || rewardRequest || engagementActive;
+  homeNotebook.toggleAttribute("data-paused", paused);
+  if (paused) homeNotebook.removeAttribute("data-held");
   blockSound(paused);
   platform.setHapticState(settings.vibration, paused, !paused);
   if (paused) {

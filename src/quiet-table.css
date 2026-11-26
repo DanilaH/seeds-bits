@@ -158,6 +158,60 @@
   background: var(--table-hero-art) center / 100% 100% no-repeat;
   transform: rotate(-5deg);
 }
+#dialog[data-screen="home"] .home-notebook-hit {
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 12px;
+}
+#dialog[data-screen="home"] .home-notebook-hit:focus-visible {
+  outline: 2px solid var(--table-cover);
+  outline-offset: 8px;
+}
+#dialog[data-screen="home"] .home-notebook-hit::before {
+  content: "";
+  position: absolute;
+  inset: auto 5% -5px;
+  height: 25px;
+  border-radius: 50%;
+  background: var(--table-shadow);
+  filter: blur(5px);
+  opacity: .55;
+  pointer-events: none;
+}
+#dialog[data-screen="home"] .home-notebook-hit .home-current-copy {
+  z-index: 1;
+  transform: translateY(0) rotate(-5deg);
+  transition: filter 100ms ease;
+}
+#dialog[data-screen="home"] .home-notebook-hit:is(:active,[data-held]) .home-current-copy {
+  filter: brightness(.94);
+}
+@keyframes home-notebook-float {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-4px) rotate(-4.7deg); }
+}
+@keyframes home-notebook-shadow {
+  0%,100% { transform: scaleX(.96); opacity: .55; }
+  50% { transform: scaleX(1.05); opacity: .34; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #dialog[data-screen="home"] .home-notebook-hit .home-current-copy {
+    animation: home-notebook-float 5s ease-in-out infinite;
+  }
+  #dialog[data-screen="home"] .home-notebook-hit::before {
+    animation: home-notebook-shadow 5s ease-in-out infinite;
+  }
+  #dialog[data-screen="home"] .home-notebook-hit[data-paused] .home-current-copy,
+  #dialog[data-screen="home"] .home-notebook-hit[data-paused]::before,
+  #dialog[data-screen="home"] .home-notebook-hit:is(:active,[data-held]) .home-current-copy,
+  #dialog[data-screen="home"] .home-notebook-hit:is(:active,[data-held])::before {
+    animation-play-state: paused;
+  }
+}
 #dialog[data-screen="home"] #home-game-title {
   order: 2;
   font-weight: 750;
