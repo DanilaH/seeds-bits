@@ -1126,6 +1126,18 @@ function save(state = progress, game = session) {
     });
   return saveQueue;
 }
+async function persistMove() {
+  // Count/hit-target publication acknowledges storage, independently of motion.
+  $("board").setAttribute("aria-busy", "true");
+  document.querySelector<HTMLElement>(".game")!.dataset.persistence = "pending";
+  message(t("ui.saving-game"));
+  try { await save(); }
+  finally {
+    $("board").removeAttribute("aria-busy");
+    document.querySelector<HTMLElement>(".game")!.dataset.persistence =
+      saveFailed || storageConflict || futureSave ? "failed" : "saved";
+  }
+}
 function applySettings(incoming: Record<string, unknown>) {
   if (Object.hasOwn(incoming,"languageChoice")) {
     const next=choice(incoming.languageChoice);
@@ -2848,13 +2860,7 @@ async function choose(i: number) {
     // Android's disk commit may still be pending after the click returns.
     // Keep immediate erase feedback, but never publish the new hit targets/count
     // before that write settles. This gate waits for storage, not animation.
-    $("board").setAttribute("aria-busy", "true");
-    document.querySelector<HTMLElement>(".game")!.dataset.persistence = "pending";
-    message(t("ui.saving-game"));
-    await save();
-    $("board").removeAttribute("aria-busy");
-    document.querySelector<HTMLElement>(".game")!.dataset.persistence =
-      saveFailed || storageConflict || futureSave ? "failed" : "saved";
+    await persistMove();
   }
   // Lessons and finishing routes get their full explanation. Ordinary Feel
   // moves swap the hit targets immediately, independently of the erase ghosts.
@@ -2976,7 +2982,7 @@ async function choose(i: number) {
     else message("Для возврата к Плану отмените ход");
   }
 }
-function add() {
+async function add() {
   saveRecovered = false;
   if (busy || paused) return;
   finishFeelRowSlide();
@@ -3003,7 +3009,8 @@ function add() {
     } else {
       session = commit(session, next, "add", viewport.scrollTop);
       markGameStarted();
-      save();
+      busy = true;
+      try { await persistMove(); } finally { busy = false; }
     }
     clearSelection();
     render();
@@ -3015,7 +3022,7 @@ function add() {
     );
   }
 }
-function undoAction() {
+async function undoAction() {
   saveRecovered = false;
   if (busy || paused || (lesson < 0 && !occupied(board()))) return;
   finishFeelRowSlide();
@@ -3038,6 +3045,8 @@ function undoAction() {
   const restored = removedPairs.get(previous.board);
   session = undo(session);
   clearSelection();
+  busy = true;
+  try { await persistMove(); } finally { busy = false; }
   render();
   const plan=currentPlan();
   if(plan?.pair)message("Уберите отмеченную пару");
@@ -3064,7 +3073,6 @@ function undoAction() {
     [{ transform: "rotate(-18deg)" }, { transform: "rotate(0)" }],
     160,
   );
-  save();
   platform.gameplay(occupied(board()) > 0);
 }
 async function hint() {

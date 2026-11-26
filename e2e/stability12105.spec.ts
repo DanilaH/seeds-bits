@@ -59,7 +59,8 @@ test('QT01 delayed write keeps the accepted count pending; durable move and Undo
   await expect(page.locator('#remaining')).toHaveText('26');
   expect((await state(page)).sessions.classic).toEqual(committed.sessions.classic);
   await page.locator('#undo').click();
-  await expect.poll(async()=>occupied((await state(page)).sessions.classic.current.board)).toBe(28);
+  await expect(page.locator('#remaining')).toHaveText('28');
+  expect(occupied((await state(page)).sessions.classic.current.board)).toBe(28);
   await page.reload(); await page.locator('#resume').click();
   await expect(page.locator('#remaining')).toHaveText('28');
 });
@@ -122,4 +123,30 @@ test('QT02 new Classic is atomic under a held commit and repeated clicks; previo
   await page.reload();await page.locator('#resume').click();
   expect((await state(page)).sessions.classic).toEqual(next.sessions.classic);
   expect((await state(page)).meta.completed).toBe(6);
+});
+
+test('QT02 failed new Classic leaves the completed attempt authoritative; retry cannot replay completion rewards',async({page})=>{
+  await boot(page,true);await page.locator('[data-index="0"]').click();await page.locator('[data-index="1"]').click();
+  await expect(page.locator('#win')).toBeVisible();await page.reload();await expect(page.locator('#resume')).toBeVisible();
+  const completed=await state(page);
+  await page.evaluate(key=>{
+    const original=Storage.prototype.setItem;(window as any).restoreWrite=()=>Storage.prototype.setItem=original;
+    Storage.prototype.setItem=function(k,v){if(k===key)throw new DOMException('quota','QuotaExceededError');original.call(this,k,v);};
+  },key);
+  await page.locator('#classic-mode').click();
+  if(await page.locator('#next-classic').isVisible())await page.locator('#next-classic').click();
+  await page.locator('[data-classic-level="1"]').click();
+  await expect(page.locator('#save-notice')).toBeVisible();
+  const failed=await trace(page,'new-classic-write-failed');
+  expect(failed.sessions.classic).toEqual(completed.sessions.classic);
+  expect(failed.meta.classicRun).toEqual(completed.meta.classicRun);
+  expect(failed.meta.attempts.classic).toEqual(completed.meta.attempts.classic);
+  expect(failed.meta.completed).toBe(6);expect(failed.meta.wallet).toBe(completed.meta.wallet);
+  await page.evaluate(()=>(window as any).restoreWrite());await page.locator('#retry-save').click();
+  await expect(page.locator('#save-notice')).toBeHidden();
+  expect((await state(page)).meta.attempts.classic).toEqual(completed.meta.attempts.classic);
+  await openClassicNew(page,1);const next=await trace(page,'new-classic-after-retry');
+  expect(CLASSIC_START_COUNTS[1]).toContain(occupied(next.sessions.classic.current.board));
+  expect(next.meta.completed).toBe(6);expect(next.meta.wallet).toBe(completed.meta.wallet);
+  expect(next.meta.attempts.classic.completed).toBe(false);
 });

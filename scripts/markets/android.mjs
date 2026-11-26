@@ -938,7 +938,7 @@ async function verifyAppBanner() {
   try {
     // Capture the emulator display on the host without a guest codec or desktop compositor.
     try {
-      const start=adb("emu","screenrecord","start","--time-limit","360",video);
+      const start=adb("emu","screenrecord","start","--time-limit","600",video);
       assert(!start.includes("KO"),start);
       report.recorder="emulator-console";
     } catch(error) {
@@ -1144,6 +1144,7 @@ async function verifyAppBanner() {
     assert.equal(shown.visible,false);
     trace("genuine interstitial hides native banner",{...shown,expected:false});
     shot("banner-hidden-by-interstitial");
+    const dismissFullscreen=async()=>{
     const sdkPlayerDeadline=performance.now()+100000;
     // The demo can serve a multi-part video. Give its own close control time to appear.
     while((await diagnostics()).fullscreen && performance.now()<sdkPlayerDeadline) {
@@ -1169,9 +1170,40 @@ async function verifyAppBanner() {
 
     }
     assert(!(await diagnostics()).fullscreen,"Demo creative has not provided an SDK dismissal");
+    };
+    await dismissFullscreen();
     await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");
     await stable("after genuine interstitial");
     await expected(true,"fullscreen dismissed");
+    await expected(false,"explicit QA rewarded bridge request");
+    const beforeReward=profiles().values[progress];
+    await ui.evaluate(`(async()=>{
+      window.__qtRewardResult=null; window.__qtRewardReceipt=null;
+      window.__qtRewardHandle=await window.Capacitor.Plugins.SeedsMonetization.addListener("reward",receipt=>window.__qtRewardReceipt=receipt);
+      window.Capacitor.Plugins.SeedsMonetization.show({kind:"rewarded",product:"hint_pack_3",
+        attempt:${JSON.stringify(beforeReward.meta.attempts[beforeReward.active].id)},intent_id:"qt45-native-acceptance",offer_id:"qt45-native-acceptance"})
+        .then(result=>window.__qtRewardResult=result);
+      return true;
+    })()`);
+    let rewardShown;
+    for(let i=0;i<50;i++){rewardShown=await diagnostics();if(rewardShown.fullscreen&&!rewardShown.focused)break;await wait(150);}
+    assert(rewardShown.fullscreen&&!rewardShown.visible,"SDK did not open/hide the banner for rewarded");
+    trace("genuine rewarded hides native banner",rewardShown);
+    await dismissFullscreen();
+    await ui.until("document.hasFocus() && window.__qtRewardResult!==null");
+    const rewardResult=await ui.evaluate("window.__qtRewardResult");
+    assert.equal(rewardResult.shown,true);
+    await ui.until("Boolean(window.__qtRewardReceipt?.token)");
+    const earnedReceipt=await ui.evaluate("window.__qtRewardReceipt");
+    // Delivery/receipt settlement is authoritative; the SDK callback is not a fabricated grant.
+    await ui.until(`window.Capacitor.Plugins.SeedsMonetization.pending().then(p=>!p.reward)`);
+    const afterReward=profiles().values[progress];
+    assert.equal(afterReward.meta.wallet,beforeReward.meta.wallet+3);
+    assert.equal(afterReward.meta.rewardReceipts.filter(id=>id===earnedReceipt.token).length,1);
+    trace("earned rewarded saved exactly once",{token:earnedReceipt.token,walletBefore:beforeReward.meta.wallet,walletAfter:afterReward.meta.wallet});
+    await ui.evaluate("window.__qtRewardHandle.remove();true");
+    await stable("after genuine rewarded");
+    await expected(true,"rewarded dismissed");
     await ui.tap("#menu"); await stable("interstitial round trip to Home");
     report.status="PASS";
     return report;
@@ -1206,6 +1238,43 @@ async function verifyAppBanner() {
     try { stop(); adb("uninstall",app); } catch (cleanupError) { console.warn(String(cleanupError)); }
     if(report.status==="ERROR")process.exitCode=1;
   }
+}
+async function verifyDurableClassic() {
+  const records=[], savedProfile=profiles().values;
+  const initial=Array.from({length:19},(_,i)=>String(i+1)).join("").replaceAll("0","").split("").map(Number);
+  const next=moved(initial,[0,9]);
+  try {
+    for(let trial=0;trial<20;trial++) {
+      const snapshot={board:initial,moves:0,additions:0,scroll:0}, attempt="qt45-native-"+trial;
+      const data={version:3,active:"classic",done:[],seen:[],hints:{},sessions:{classic:{rules:1,current:snapshot,history:[]}},
+        meta:{version:2,since:"2026-11-26T00:00:00Z",completed:0,unassisted:0,wallet:0,
+          attempts:{classic:{id:attempt,completed:false}},classicRun:{version:1,seed:73,difficulty:1,recent:[initial.join("")],current:{attempt,board:initial}}}};
+      await fixture({[progress]:data,[settings]:{tutorialDone:true,languageChoice:"en",sound:false,vibration:false,theme:"light"}});
+      launch();let ui=await connect();
+      try {
+        await ui.tap("#resume");await ui.tap(digit(0));
+        // Dispatch the final input and observe the counter in the WebView, then
+        // force-stop immediately. No post-move sleep or disk polling precedes it.
+        await ui.evaluate(`document.querySelector('${digit(9)}').click();true`);
+        await ui.until("document.querySelector('#remaining').textContent==='26'");
+        stop();ui.close();
+        const disk=profiles().values[progress];
+        assert.deepEqual(disk.sessions.classic.current.board,next);
+        assert.equal(disk.sessions.classic.current.moves,1);
+        assert.equal((disk.sessions.classic.history??disk.sessions.classic.packedHistory).length,1);
+        launch();ui=await connect();await ui.tap("#resume");
+        assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"26");
+        await ui.evaluate("document.querySelector('#undo').click();true");
+        await ui.until("document.querySelector('#remaining').textContent==='28'");
+        stop();ui.close();
+        const undone=profiles().values[progress];assert.deepEqual(undone.sessions.classic.current.board,initial);
+        assert.equal(undone.sessions.classic.current.moves,0);
+        assert.equal(undone.jars.meter,2); // Undo does not repay or remove earned depth.
+        records.push({trial,forceStopAfterVisible26:true,restored26:true,undoDurable28:true,attempt});
+      }finally{ui.close();stop();}
+    }
+    return {source:process.env.GITHUB_SHA,device:"Android API35 offline",physicalPhone:false,records,status:"PASS"};
+  }finally{await fixture(savedProfile);}
 }
 async function verifyAppearance() {
   launch();
@@ -1328,6 +1397,7 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
+  fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(await verifyDurableClassic(),null,2));
   fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
   fs.writeFileSync(out+"/reach-values.json",JSON.stringify(await verifyReachValues(),null,2));
   if (process.env.SEEDS_ANDROID_CORE_FEEL === "1") {
