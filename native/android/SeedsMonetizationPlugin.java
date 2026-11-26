@@ -53,7 +53,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private int bannerRequests, bannerLoads, bannerImpressions, bannerFrames, bannerHiddenFrames;
   private int bannerDraws, bannerMovedFrames, expectedLeft, expectedTop, expectedWidth, expectedHeight;
   private boolean expectedRectSet;
-  private JSObject bannerPreDraw;
+  private JSObject bannerPreDraw, bannerAtRequest;
   private final List<PluginCall> bannerDiagnosticCalls = new ArrayList<>();
   private final List<JSObject> bannerGeometryTrace = new ArrayList<>();
   private String bannerGeometryKey = "";
@@ -532,6 +532,7 @@ public class SeedsMonetizationPlugin extends Plugin {
       call.resolve(bannerSnapshot("hidden"));
       return;
     }
+    bannerAtRequest=bannerSnapshot("request");
     bannerDiagnosticCalls.add(call);
     getActivity().getWindow().getDecorView().invalidate();
   }); }
@@ -599,7 +600,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     }
     if (!bannerDiagnosticCalls.isEmpty()) {
       List<PluginCall> calls=new ArrayList<>(bannerDiagnosticCalls); bannerDiagnosticCalls.clear();
-      JSObject diagnostic=sample.put("preDraw",bannerPreDraw);
+      JSObject diagnostic=sample.put("preDraw",bannerPreDraw).put("atRequest",bannerAtRequest);
       handler.post(() -> { for (PluginCall call : calls) call.resolve(diagnostic); });
     }
   }

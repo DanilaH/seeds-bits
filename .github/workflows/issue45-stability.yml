@@ -26,6 +26,12 @@ jobs:
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/seeds12104/node_modules"
           cd "$RUNNER_TEMP/seeds12104"
           npx playwright test e2e/game.spec.ts --grep 'complete tutorial' --repeat-each=20 --workers=2
+      - name: Capture deterministic baseline trace while the real storage lock is held
+        continue-on-error: true
+        run: |
+          cp e2e/stability12105.spec.ts "$RUNNER_TEMP/seeds12104/e2e/"
+          cd "$RUNNER_TEMP/seeds12104"
+          npx playwright test e2e/stability12105.spec.ts --grep 'QT01 delayed' --workers=1 --output=test-results/held-baseline
       - name: Preserve baseline outcome
         if: always()
         run: |
