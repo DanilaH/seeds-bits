@@ -870,6 +870,7 @@
   #app #win .quiet-result-page { padding-block: 10px 13px; margin-block: 1px 6px; }
   #app #win .quiet-result-page h1 { font-size: 23px; }
   #app #win .quiet-result-page .win-symbol { width: 57px; height: 57px; margin-bottom: 5px; }
+  #app #win .quiet-result-page .win-symbol.paper-result { width: 64px; height: 64px; }
   #app #win #win-stats .result-stat strong { font-size: 20px; }
   #app #win #result-book-card { padding: 1px 5px; margin: 0 auto; }
   #app #win #result-book-card .book-picture { font-size: 17px; }
