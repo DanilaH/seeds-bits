@@ -830,10 +830,16 @@
 @media (orientation: portrait) and (max-height: 649px) {
   #app .game[data-mode="classic"]:not(:has(.opening-guide)) .status-wrap:not(:has(#save-notice:not([hidden]), #read-notice:not([hidden]), #recover-task:not([hidden]))) {
     box-sizing: border-box;
-    height: 68px;
-    min-height: 68px;
-    max-height: 68px;
+    height: 48px;
+    min-height: 48px;
+    max-height: 48px;
     overflow-y: auto;
+
+    &:has(#no-pairs-title:not([hidden])) {
+      padding-block: 0;
+      & > #no-pairs-title { line-height: 16px; }
+      & > #status { line-height: 15px; }
+    }
   }
 }
 @media (max-width: 350px), (orientation: landscape) and (max-height: 420px) {

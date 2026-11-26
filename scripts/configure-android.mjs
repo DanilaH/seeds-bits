@@ -18,7 +18,7 @@ if (
   ![major, minor, patch].every(Number.isSafeInteger) ||
   minor > 9 ||
   patch > 99 ||
-  build > 999
+  (storeRelease && build > 999)
 )
   throw Error("Version/build outside Android version-code range");
 const versionCode = storeRelease
