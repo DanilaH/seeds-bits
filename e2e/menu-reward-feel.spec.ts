@@ -144,6 +144,17 @@ test('MF fast local navigation and cancellation retain current selection and inp
   await expect(page.locator('#book-mode')).toHaveClass(/is-pressed/);
   await page.dispatchEvent('#book-mode','pointercancel');await page.mouse.move(0,0);await page.mouse.up();
   await expect(page.locator('#dialog')).toHaveAttribute('data-screen','home');await expect(page.locator('button.is-pressed')).toHaveCount(0);
+  await page.setViewportSize({width:320,height:568});await page.locator('#calendar-open').click();
+  const targets=await page.evaluate(async()=>{
+    document.querySelector<HTMLButtonElement>('#prev-month')!.click();
+    const start=performance.now(),samples:{w:number,h:number}[]=[];
+    await new Promise<void>(resolve=>{const frame=()=>{
+      for(const day of document.querySelectorAll('.calendar .task')){const r=day.getBoundingClientRect();samples.push({w:r.width,h:r.height});}
+      if(performance.now()-start>=180)resolve();else requestAnimationFrame(frame);
+    };frame();});return samples;
+  });
+  expect(targets.length).toBeGreaterThan(28);
+  expect(targets.every(r=>r.w>=44&&r.h>=44)).toBe(true);
 });
 test('MF multiple jar thresholds coalesce while every accepted move remains durable',async({page})=>{
   await seed(page,'classic',22);

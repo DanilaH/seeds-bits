@@ -4405,7 +4405,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   if (sameScreen && contentKey!==previousKey) {
     clearInterfaceMotion();
     const local=panel.querySelector(kind==="calendar"?".calendar":kind==="book-picker"?".volume-shelf":kind==="trophies"?(collectionTab==="jars"?".jar-collection":".monthly-collection"):".quiet-book-page");
-    presentMenuChange(local??panel,"page",contentKey>previousKey?1:-1);
+    presentMenuChange(local??panel,"page");
   }
   if (sameScreen) {
     dialogScroller().scrollTop = oldScroll;

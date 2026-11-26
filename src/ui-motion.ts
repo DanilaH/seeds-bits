@@ -1,12 +1,12 @@
 import {OwnedDomMotion} from "./vendor/mini-games-kit/owned-dom-motion";
 const owner = new OwnedDomMotion();
 export function clearInterfaceMotion() { owner.cancelAll(); }
-/** The semantic page is already installed. Only its visual child moves. */
-export function presentMenuChange(node: Element | null, kind: "open"|"back"|"page"|"modal"|"route" = "page", direction=1) {
+/** The semantic page is already installed. Local page fades retain every hit rectangle. */
+export function presentMenuChange(node: Element | null, kind: "open"|"back"|"page"|"modal"|"route" = "page") {
   if (document.hidden || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const opening=kind==="open",back=kind==="back";
   const animation=owner.animate(node,[
-    {opacity:opening?.9:.86,transform:opening?"perspective(900px) rotateY(4deg) scale(.99)":kind==="modal"?"translateY(6px) scale(.985)":kind==="route"||back?`translateY(${back?-3:4}px)`:`translateX(${direction*2}px) scale(.975)`},
+    {opacity:opening?.9:.86,transform:opening?"perspective(900px) rotateY(4deg) scale(.99)":kind==="modal"?"translateY(6px) scale(.985)":kind==="route"||back?`translateY(${back?-3:4}px)`:"none"},
     {opacity:1,transform:"none"},
   ],{duration:opening?200:back?120:kind==="modal"?170:140,easing:"cubic-bezier(.2,.8,.3,1)"});
   if (animation) animation.id=`menu-${kind}`;
