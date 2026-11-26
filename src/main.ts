@@ -357,8 +357,9 @@ function renderClassicNewSheet() {
       (current.hidden ? "" : ". "+current.textContent));
   }
 }
-function openClassicNewSheet() {
-  if (classicNewSheet.open || !dialog.open || dialog.dataset.screen !== "home" ||
+function openClassicNewSheet(fromResult = false) {
+  const resultEntry = fromResult && progress.active === "classic" && !occupied(board());
+  if (classicNewSheet.open || (!resultEntry && (!dialog.open || dialog.dataset.screen !== "home")) ||
       busy || saveFailed || futureSave || storageConflict || adActive || rewardRequest ||
       engagementActive || lesson >= 0) return;
   choosingClassicDifficulty = !classicParked();
@@ -485,6 +486,12 @@ resultNext.setAttribute("role", "group");
 resultNext.setAttribute("aria-label", t("ui.next-game"));
 $("play-again").before(resultNext);
 resultNext.append($("play-again"));
+const resultHome = document.createElement("button");
+resultHome.id = "result-home";
+resultHome.className = "text-button";
+resultHome.hidden = true;
+resultHome.onclick = () => void goHomeFromBoard();
+resultNext.append(resultHome);
 const difficultyCaption = document.createElement("p");
 difficultyCaption.id = "classic-difficulty";
 difficultyCaption.hidden = true;
@@ -678,6 +685,21 @@ const noPairsTitle = document.createElement("strong");
 noPairsTitle.id = "no-pairs-title";
 noPairsTitle.hidden = true;
 $("status").before(noPairsTitle);
+const noMovesCard = document.createElement("section");
+noMovesCard.id = "no-moves-card";
+noMovesCard.hidden = true;
+noMovesCard.setAttribute("role", "status");
+noMovesCard.innerHTML = '<strong></strong><p></p><div><button id="no-moves-primary" class="primary"></button><button id="no-moves-undo" class="secondary"></button></div>';
+document.querySelector(".game")!.append(noMovesCard);
+function positionNoMoves() {
+  if (noMovesCard.hidden) return;
+  const frame = viewport.getBoundingClientRect();
+  noMovesCard.style.left = `${frame.left + 8}px`;
+  noMovesCard.style.width = `${frame.width - 16}px`;
+  noMovesCard.style.maxHeight = `${frame.height - 16}px`;
+  noMovesCard.style.top = `${Math.max(frame.top + 8, frame.bottom - noMovesCard.offsetHeight - 10)}px`;
+}
+new ResizeObserver(positionNoMoves).observe($("viewport"));
 const gameTop = document.createElement("div");
 gameTop.className = "game-top";
 const lessonToolbar = document.querySelector<HTMLElement>(".lesson-top")!;
@@ -1363,7 +1385,7 @@ function maybeCelebrateResult() {
   feedback(kind === "classic" || kind === "daily" ? "win" : kind);
   clearResultCelebration();
   clearResultCelebration = celebrateResult(
-    document.querySelector<HTMLElement>(".win-symbol")!,
+    resultPaper,
     kind,
     reduced(),
   );
@@ -2251,7 +2273,7 @@ function renderWin() {
       ? t("result.nextTask", { puzzle })
       : taskLabel(next);
   } else {
-    nextButton.textContent = i >= 0 ? t("books.back") : dailyResult ? t("result.calendar") : t("nav.menu");
+    nextButton.textContent = i >= 0 ? t("books.back") : dailyResult ? t("result.calendar") : t("action.next");
   }
   $("completion-status").textContent =
     i >= 0 &&
@@ -2290,6 +2312,8 @@ function renderWin() {
         .join("");
   $("try-notebook").hidden = !helpFlags.result || id !== "classic" || !notebookTarget(progress);
   const award = $("award");
+  if (dailyResult) resultPaper.append(award);
+  else if (award.parentElement === resultPaper) $("completion-status").before(award);
   award.hidden = true;
   if (i >= 0) {
     const page = Math.floor(i / 6);
@@ -2327,6 +2351,9 @@ function renderClassicChoices() {
         ? t("ui.difficulty-highest")
         : t("ui.difficulty", { "0": localName(classicDifficultyNames[level]) });
   $<HTMLButtonElement>("play-again").disabled = blocked;
+  resultHome.hidden = !isClassic && !progress.active.startsWith("daily");
+  resultHome.textContent = t("nav.menu");
+  resultHome.disabled = blocked;
 }
 function compactCount(n: number) {
   return n > 999 ? "999+" : String(n);
@@ -2525,6 +2552,22 @@ function render() {
   // The hidden result footer has no width. Settle the next field's actions
   // before it paints instead of carrying a layout measured on the result.
   if (leavingResult) layoutActions();
+  const noMoves = lesson < 0 && count > 0 && !available.length;
+  noMovesCard.hidden = !noMoves || dialog.open || saveFailed || Boolean(readWarning);
+  noMovesCard.querySelector("strong")!.textContent = t("calm.noPairs");
+  noMovesCard.querySelector("p")!.textContent = progress.active === "classic" ? $("status").textContent : t("play.noMovesHelp");
+  $("no-moves-primary").textContent = progress.active === "classic" && canAdd
+    ? t("calm.classic.add", {count}) : t("ui.restart-puzzle");
+  $<HTMLButtonElement>("no-moves-primary").disabled = busy || paused;
+  $("no-moves-undo").textContent = t("action.undo");
+  $("no-moves-undo").hidden = !session.history.length;
+  $<HTMLButtonElement>("no-moves-undo").disabled = busy || paused;
+  $("no-moves-primary").onclick = () => {
+    if (progress.active === "classic" && canAdd) void add();
+    else requestRestart();
+  };
+  $("no-moves-undo").onclick = undoAction;
+  positionNoMoves();
   drawPath(highlight);
   clipPairTrace();
   if (focusedIndex !== undefined) {
@@ -3040,6 +3083,18 @@ async function hint() {
             : t("ui.we-could-not-check-whether-there-is-a-solution"),
         );
       } else message(t("ui.there-is-no-solution-from-here-restart-the-puzzle"));
+      noMovesCard.hidden = false;
+      noMovesCard.querySelector("strong")!.textContent = $("status").textContent;
+      noMovesCard.querySelector("p")!.textContent = t("play.noMovesHelp");
+      $("no-moves-primary").textContent = recovery >= 0 ? $("recover-task").textContent : t("ui.restart-puzzle");
+      $("no-moves-primary").onclick = () => {
+        if (recovery >= 0) $("recover-task").click();
+        else requestRestart();
+      };
+      $("no-moves-undo").hidden = recovery < 0;
+      $("no-moves-undo").textContent = t("ui.restart-puzzle");
+      $("no-moves-undo").onclick = () => requestRestart();
+      positionNoMoves();
       return;
     }
     if (advice.kind !== "move") {
@@ -3209,6 +3264,7 @@ function playBoardEntrance() {
 function closeMenu() {
   if (protectedContent) return;
   if (lesson < 0) enteredGame = true;
+  entryAdProtected = false;
   navigationTrail.length = 0;
   dialog.close();
   render();
@@ -3216,6 +3272,7 @@ function closeMenu() {
   playBoardEntrance();
   showSaveState();
   document.body.classList.remove("navigation-open");
+  positionNoMoves();
   platform.gameplay(!paused && occupied(board()) > 0);
   fieldActivity();
 }
@@ -3237,6 +3294,7 @@ function navigateBack(native = false): boolean {
   return true;
 }
 function openMenu(preserve: unknown = false) {
+  noMovesCard.hidden = true;
   if (busy || adActive || rewardRequest || engagementActive) return;
   if (!dialog.open) {
     if (lesson < 0 && enteredGame) session.current.scroll = viewport.scrollTop;
@@ -3428,6 +3486,7 @@ $("hint").onclick = hint;
 $("add").onclick = add;
 $("menu").onclick = () => void goHomeFromBoard();
 $("resume").onclick = () => {
+  if (homeCurrent.hasAttribute("data-new-game")) { openClassicNewSheet(); return; }
   if (lesson >= 0 || protectedContent) { closeMenu(); return; }
   if (progress.active.startsWith("book") && !unfinished(session)) {
     const target = notebookTarget(progress);
@@ -3519,11 +3578,12 @@ $("confirm-new").onclick = () => {
   else reset();
 };
 $("restart-task").onclick = () => requestRestart();
+let entryAdProtected = true;
 async function transitionAd(route: string) {
   const transitionId = crypto.randomUUID();
   const adSession = crypto.randomUUID();
   const detail = {route, transition_id:transitionId, ad_session_id:adSession, mode:gameMode()};
-  const reason = !monetized ? "disabled"
+  const reason = entryAdProtected ? "app_entry" : !monetized ? "disabled"
     : !appForeground || document.hidden ? "background"
     : skipNextInterstitial || performance.now() - lastExternalAt <= 30000 ? "external_suppression"
     : "request";
@@ -3566,7 +3626,7 @@ async function goHomeFromBoard() {
 }
 $("play-again").onclick = () => {
   const id = progress.active;
-  if (id === "classic") { void goHomeFromBoard(); return; }
+  if (id === "classic") { openClassicNewSheet(true); return; }
   const next = $("play-again").dataset.destination;
   if (next) void switchGame(next, "next");
   else if (id.startsWith("book")) openHomeNotebook();
@@ -3825,6 +3885,7 @@ async function boot() {
       if (!active && !adActive && !rewardRequest && !engagementActive)
         backgroundAt = Date.now();
       if (active) {
+        if (backgroundAt !== undefined) entryAdProtected = true;
         if (
           backgroundAt !== undefined &&
           Date.now() - backgroundAt >= 30 * 60 * 1000
@@ -4281,7 +4342,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ?.focus({ preventScroll: true });
   } else if (!restoring) dialogScroller().scrollTop = 0;
 }
-$("classic-mode").onclick = openClassicNewSheet;
+$("classic-mode").onclick = () => openClassicNewSheet();
 $("book-mode").onclick = openHomeNotebook;
 bookQuick.onclick = () => {
   const target = notebookTarget(progress);
@@ -4398,12 +4459,13 @@ function difficultyLabel() {
 function renderHomeCurrent() {
   const id = progress.active;
   const count = occupied(board());
-  const classic = id === "classic";
+  const isClassic = id === "classic";
   const book = id.startsWith("book");
   const next = book && !count ? notebookTarget(progress) : undefined;
   const show = lesson >= 0 || Boolean(next) ||
-    count > 0 && (classic ? classicParked() : Boolean(progress.sessions[id]));
-  homeCurrent.hidden = !show;
+    count > 0 && (isClassic ? classicParked() : Boolean(progress.sessions[id]));
+  homeCurrent.hidden = false;
+  homeCurrent.toggleAttribute("data-new-game", !show);
   homePreview.hidden = lesson >= 0 || count === 0;
   if (!homePreview.hidden && show) {
     const cells = board().slice(0, 27);
@@ -4415,8 +4477,20 @@ function renderHomeCurrent() {
   }
   homeGoal.hidden = true;
   $("new").hidden = lesson >= 0 || !unfinished(session);
-  $("new").textContent = classic ? t("ui.restart") : t("ui.restart-puzzle");
-  if (!show) return;
+  $("new").textContent = isClassic ? t("ui.restart") : t("ui.restart-puzzle");
+  if (!show) {
+    homePreview.hidden = false;
+    homePreview.replaceChildren(...classic().slice(0,18).map(digit => {
+      const cell = document.createElement("span");
+      cell.textContent = String(digit);
+      return cell;
+    }));
+    $("home-game-title").textContent = t("calm.classic.new");
+    $("resume-context").textContent = t("calm.classic.startNote");
+    $("resume").hidden = false;
+    $("resume").textContent = t("action.start");
+    return;
+  }
   $("resume").hidden = false;
   if (lesson >= 0) {
     $("home-game-title").textContent = t("ui.tutorial");
@@ -4424,11 +4498,11 @@ function renderHomeCurrent() {
     $("resume").textContent = t("ui.continue-tutorial");
     return;
   }
-  const date = !classic && !book ? taskDate(id.slice(9),id.slice(9,13)!==today().slice(0,4)) : "";
-  $("home-game-title").textContent = classic ? t("home.classic")
+  const date = !isClassic && !book ? taskDate(id.slice(9),id.slice(9,13)!==today().slice(0,4)) : "";
+  $("home-game-title").textContent = isClassic ? t("home.classic")
     : book ? volumeLabel(volumeOf(next ?? id)) : id.slice(9) === today()
       ? t("notification.channel") : t("home.daily.date", {date});
-  $("resume-context").textContent = classic ? `${difficultyLabel()} · ${count} ${digitWord(count)}`
+  $("resume-context").textContent = isClassic ? `${difficultyLabel()} · ${count} ${digitWord(count)}`
     : book ? next ? t("nav.bookTaskTarget",{book:volumeLabel(volumeOf(next)),task:puzzleNumberInVolume(next)})
       : t("ui.puzzle-3",{"0":puzzleNumberInVolume(id),"1":count,"2":digitWord(count)})
     : `${date} · ${count} ${digitWord(count)}`;
@@ -4440,7 +4514,7 @@ function renderHomeCurrent() {
   }
   $("resume").textContent = next
     ? t("ui.puzzle",{"0":notebookStarted(progress,next)?t("daily.resume"):t("action.start"),"1":puzzleNumberInVolume(next)})
-    : classic ? t("ui.resume-classic") : book ? t("ui.resume-puzzle",{"0":puzzleNumberInVolume(id)})
+    : isClassic ? t("ui.resume-classic") : book ? t("ui.resume-puzzle",{"0":puzzleNumberInVolume(id)})
     : id.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for",{"0":date});
 }
 function updateHome() {
@@ -4469,7 +4543,7 @@ function updateHome() {
   const date = today();
   const id = dailyIdFor(date,progress);
   const doneToday = dailyDone(progress.done, date);
-  const startedToday = Boolean(progress.sessions[id]?.history.length);
+  const startedToday = Boolean(progress.sessions[id]);
   const dailyCaption = t(doneToday ? "daily.replay" : startedToday ? "daily.resume" : "daily.tagline");
   $("daily-mode").toggleAttribute("data-daily-pending", !doneToday);
   $("daily-mode").toggleAttribute("data-daily-started", startedToday);

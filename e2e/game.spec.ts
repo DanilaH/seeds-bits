@@ -43,8 +43,8 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   await page.locator("#settings-back").click();
   await page.reload();
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
-  if (await page.locator("#resume").isVisible()) await page.locator("#resume").click();
-  else await openClassicNew(page,1);
+  if (await page.locator(".home-current[data-new-game]").isVisible()) await openClassicNew(page,1);
+  else await page.locator("#resume").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.locator("#hint").click();
   await expect(page.locator(".hinted")).toHaveCount(2);
@@ -113,7 +113,7 @@ test("win state and quick repeated clicks", async ({ page }) => {
   await expect(page.locator("footer")).toBeHidden();
   await expect(page.locator("#win-stats")).toBeVisible();
   await expect(page.locator("#win summary")).toHaveCount(0);
-  await page.locator("#play-again").click();
+  await page.locator("#result-home").click();
   await expect(page.locator("#win")).toBeHidden();
   await expect(page.locator("#classic-mode")).toBeVisible();
 });

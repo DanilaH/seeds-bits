@@ -68,7 +68,7 @@ test("jar fills with flights, never blocks next move, survives undo/reload and r
   );
   await expect(page.locator("footer")).toBeHidden();
   await page.reload();
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   const p = await page.evaluate(
     (k) => JSON.parse(localStorage.getItem(k)!),
     key,

@@ -22,7 +22,7 @@ test("home separates saved Continue and New Classic with four real levels",async
   await page.setViewportSize({width:390,height:844});
   await menu(page);
   const before=await state(page);
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   await openClassicNew(page);
   await expect(page.locator("#classic-new-sheet")).toBeVisible();
   await page.screenshot({path:"test-results/classic-new-sheet/390x844-light.jpg",type:"jpeg",quality:88,animations:"disabled"});

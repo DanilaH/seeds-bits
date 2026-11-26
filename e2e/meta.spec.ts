@@ -146,7 +146,7 @@ test("failed result save blocks next party; retry persists one result", async ({
       ),
     )
     .toBe(1);
-  await page.locator("#play-again").evaluate((button) => {
+  await page.locator("#result-home").evaluate((button) => {
     (button as HTMLButtonElement).click();
     (button as HTMLButtonElement).click();
   });

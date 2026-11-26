@@ -2511,5 +2511,12 @@
     "es": "Partida guardada",
     "tr": "Kayıtlı oyun",
     "pt-BR": "Partida salva"
+  },
+  "play.noMovesHelp": {
+    "ru": "Верните ход или попробуйте сначала.",
+    "en": "Undo a move or try again from the start.",
+    "es": "Deshaz una jugada o vuelve a empezar.",
+    "tr": "Bir hamleyi geri al veya baştan dene.",
+    "pt-BR": "Desfaça uma jogada ou tente de novo."
   }
 }

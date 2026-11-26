@@ -41,12 +41,12 @@ test("QA short route preserves the result when an ad is unavailable and never sh
   expect(await page.evaluate(()=>(window as any).requests.length)).toBe(1);
 });
 
-test("baseline Classic only offers Home and retains the native cooldown reason",async({page})=>{
+test("baseline Classic offers Next and Home and retains the native cooldown reason",async({page})=>{
   await result(page,"baseline","cooldown");
-  await expect(page.locator("#result-actions button:visible")).toHaveCount(1);
+  await expect(page.locator("#result-actions button:visible")).toHaveCount(2);
   await expect(page.locator("#try-notebook")).toBeHidden();
-  await expect(page.locator("#play-again")).toHaveText("В меню");
-  await page.locator("#play-again").click();
+  await expect(page.locator("#result-home")).toHaveText("В меню");
+  await page.locator("#result-home").click();
   await expect(page.locator("#menu-content")).toBeVisible();
   expect(await page.evaluate(()=>(window as any).requests)).toMatchObject([{route:"classic-result-home",saved:true}]);
   expect(await page.evaluate(()=>(window as any).events.some((e:any)=>e.name==="result_transition"&&e.data.reason==="cooldown"))).toBe(true);

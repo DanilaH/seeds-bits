@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
 test("wide Home displays all modes and uses an explicit return",async({page})=>{
   await page.setViewportSize({width:1280,height:800});
   await page.goto("/");
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   for(const id of ["classic-mode","book-mode","daily-mode"]) await expect(page.locator("#"+id)).toBeInViewport();
   await page.keyboard.press("Escape");
   await expect(page.locator("#dialog")).toBeVisible();

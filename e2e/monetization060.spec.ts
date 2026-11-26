@@ -233,7 +233,7 @@ test("unavailable interstitial leaves Classic result for Home on the explicit ac
   await page.locator("#board button").last().click();
   await expect(page.locator("#win")).toBeVisible();
   expect(await page.evaluate(() => (window as any).adsCalls.length)).toBe(0);
-  await page.locator("#play-again").click();
+  await page.locator("#result-home").click();
   await expect(page.locator("#classic-mode")).toBeVisible();
   expect(
     await page.evaluate(() => (window as any).adsCalls.map((o: any) => o.kind)),

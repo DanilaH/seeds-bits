@@ -61,7 +61,7 @@ for (const exhausted of [false,true]) {
     const before=await state(page), history=unpackSession(before.game).history;
     await page.locator("#hint").click();
     await expect(page.locator("#status")).toContainText("Из этой позиции решения нет");
-    const rollback = page.locator("#recover-task");
+    const rollback = page.locator("#no-moves-primary");
     await expect(rollback).toHaveText("Отменить 1 ход");
     await rollback.click();
     await expect(page.locator("#status")).toContainText("Поле восстановлено.");
@@ -90,8 +90,8 @@ test("real task 5 offers the exact two-move rollback depth",async({page})=>{
   await expect.poll(async()=>unpackSession((await state(page)).game).current.moves).toBe(4);
   const before=unpackSession((await state(page)).game);
   await page.locator("#hint").click();
-  await expect(page.locator("#recover-task")).toHaveText("Отменить 2 хода");
-  await page.locator("#recover-task").click();
+  await expect(page.locator("#no-moves-primary")).toHaveText("Отменить 2 хода");
+  await page.locator("#no-moves-primary").click();
   await expect.poll(async()=>unpackSession((await state(page)).game)).toEqual({
     rules:1,current:before.history[2],history:before.history.slice(0,2),
   });
@@ -114,9 +114,9 @@ test("archived daily reports an unknown solution without calling it impossible",
   await remove(page,1,11,occupied(board));
   await page.locator("#hint").click();
   await expect(page.locator("#status")).toContainText("Пока не удалось проверить, есть ли решение.");
-  await expect(page.locator("#recover-task")).toHaveText("Отменить 1 ход");
+  await expect(page.locator("#no-moves-primary")).toHaveText("Отменить 1 ход");
   await expect(page.locator("#add")).toBeHidden();
-  await page.locator("#recover-task").click();
+  await page.locator("#no-moves-primary").click();
   await expect(page.locator("#hint-offer")).toBeHidden();
   await expect(page.locator("#board .hinted")).toHaveCount(0);
 });

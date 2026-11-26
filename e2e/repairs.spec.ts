@@ -178,8 +178,8 @@ test("dead puzzle offers a recovery to a solvable position", async ({
   );
   await start(page);
   await page.locator("#hint").click();
-  await expect(page.locator("#recover-task")).toHaveText("Отменить 1 ход");
-  await page.locator("#recover-task").click();
+  await expect(page.locator("#no-moves-primary")).toHaveText("Отменить 1 ход");
+  await page.locator("#no-moves-primary").click();
   await expect(page.locator("#remaining")).toHaveText("10");
   await expect(page.locator(".hinted")).toHaveCount(0);
   await page.locator("#hint").click();

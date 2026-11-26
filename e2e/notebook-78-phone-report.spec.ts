@@ -52,8 +52,8 @@ test("report: both highlighted sixes and bottom 6+4 respond to real touch",async
   await expect(page.locator("#undo")).toBeEnabled();
   // A real hint should show that this branch is dead and offer a saved Undo.
   await page.locator("#hint").click();
-  await expect(page.locator("#recover-task")).toBeVisible({timeout:10000});
-  await page.locator("#recover-task").click();
+  await expect(page.locator("#no-moves-primary")).toBeVisible({timeout:10000});
+  await page.locator("#no-moves-primary").click();
   await expect(page.locator("#remaining")).toHaveText("12");
   // The highlighted bottom 6 + 4 also accepts a real touch.
   await remove(page,37,38,10);

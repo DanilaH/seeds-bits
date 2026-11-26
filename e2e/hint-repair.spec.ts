@@ -78,7 +78,7 @@ test("worker UNKNOWN and proven dead never spend a hint or restore the field", a
   await page.locator("#resume").click();
   await page.locator("#hint").click();
   await expect(page.locator("#status")).toContainText("Из этой позиции решения нет");
-  await expect(page.locator("#restart-task")).toBeVisible();
+  await expect(page.locator("#no-moves-primary")).toBeVisible();
   await expect(hinted(page)).toHaveCount(0);
   expect((await stored(page)).hints).toEqual(before.hints);
 });

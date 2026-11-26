@@ -1003,6 +1003,19 @@
       },
       "nextAction": "Сверить demo SDK, затем наблюдать навигацию и баннер на физическом телефоне.",
       "kitImpact": "REUSE"
+    },
+    {
+      "id": "owner-playtest-quiet-table-20261126",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "ownerDecision": "Плейтест владельца 26 ноября 2026, 12 замечаний и дополнение по финалу дейлика.",
+      "currentImplementation": "src/main.ts: entryAdProtected, resultHome, noMovesCard; src/result-presentation.ts; src/quiet-table.css; src/audio/sources.json",
+      "acceptanceEvidence": {
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Плейтест подписанного preview 12101 на телефоне.",
+      "kitImpact": "REUSE"
     }
   ]
 }

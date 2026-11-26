@@ -72,7 +72,13 @@ export function celebrateResult(
         node.animate(frames, { duration, easing: "cubic-bezier(.2,.8,.3,1)" }),
       );
   };
-  if (kind === "classic") {
+  if (kind === "classic" || kind === "daily") {
+    animate(host, [
+      {transform:"rotate(-5deg) scale(.84)"},
+      {transform:"rotate(-7deg) scale(1.04)",offset:.45},
+      {transform:"rotate(-3deg) scale(.99)",offset:.7},
+      {transform:"rotate(-5deg) scale(1)"},
+    ], 640);
     animate(
       host.querySelector(".result-clearing-cells"),
       [
@@ -99,6 +105,13 @@ export function celebrateResult(
       500,
     );
   } else if (kind === "book") {
+    animate(host, [
+      {transform:"rotate(-5deg) scale(.85)"},
+      {transform:"rotate(-9deg) scale(1.06)",offset:.35},
+      {transform:"rotate(0deg) scale(1.01)",offset:.6},
+      {transform:"rotate(-7deg) scale(1.02)",offset:.8},
+      {transform:"rotate(-5deg) scale(1)"},
+    ], 780);
     for (const [i, leaf] of [
       ...host.querySelectorAll(".result-leaf"),
     ].entries())
@@ -147,25 +160,26 @@ export function celebrateResult(
   const burst = document.createElement("span");
   burst.className = "result-seed-burst";
   burst.setAttribute("aria-hidden", "true");
-  if (kind === "book") {
-    for (let i = 0; i < 10; i++) {
+  if (kind === "book" || kind === "classic" || kind === "daily") {
+    host.append(burst);
+    for (let i = 0; i < 24; i++) {
       const grain = document.createElement("i");
       burst.append(grain);
-      const a = (i * Math.PI * 2) / 10;
+      const a = (i * Math.PI * 2) / 24;
+      grain.style.background = ["var(--table-cover)", "#ac5b3e", "#be983d"][i % 3];
       animate(
         grain,
         [
           { transform: "translate(0,0) scale(.3)", opacity: 0 },
           { opacity: 1, offset: 0.2 },
           {
-            transform: `translate(${Math.cos(a) * 72}px,${Math.sin(a) * 60}px) rotate(${i * 43}deg)`,
+            transform: `translate(${Math.cos(a) * (92 + i % 3 * 14)}px,${Math.sin(a) * 90 + 28}px) rotate(${i * 43}deg)`,
             opacity: 0,
           },
         ],
-        580,
+        850 + i % 4 * 65,
       );
     }
-    host.append(burst);
   }
   const clear = () => {
     for (const a of animations) a.cancel();

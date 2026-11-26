@@ -79,3 +79,12 @@ The shared module deliberately fixes shorthand/longhand overlap with var() throu
 ## 25 ноября 2026 · Меню, тетради и реклама
 
 Решение по [№31](https://github.com/DanilaH/seeds-bits/issues/31) заменяет прежние действия «Легче», «Сложнее» и повторный старт из результата Классики. Одна CTA «В меню», четыре сложности доступны при запуске новой Классики. Баннер сохраняет view и резерв на игровых и обычных навигационных экранах. Реальные модальные окна, фон и fullscreen скрывают view. Действует существующий общий интервал показа. [Контракт и область проверок](research/menu-package-2026-11-25/README.md).
+
+## Owner playtest follow-up · 26 November 2026
+
+- The first field entry after each application launch is protected from interstitials. Further transitions use the existing shared advertising gate.
+- Classic results offer Next, which opens the difficulty chooser before the new-game interstitial, and a separate Home button. Daily results also have an explicit Home button.
+- Results fit the supported portrait viewport at the app's fixed 100% text scale. Daily medal progress belongs on the illustrated result sheet.
+- A completed notebook, Classic and daily use visible bounded celebrations with the existing sound/vibration settings and lifecycle cancellation.
+- No-pair states expose a prominent contextual Add or Restart action and Undo when available. Solver recovery actions use the same visible card.
+- With no resumable session, Home keeps its illustrated object and offers New Classic with a difficulty choice. Today's untouched daily receives a periodic calendar nudge until first entry.

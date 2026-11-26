@@ -772,6 +772,142 @@
 #win #result-jar-card .jar-glass { width: 52px; height: 70px; }
 #win #result-book-card { justify-content: center; text-align: start; }
 #result-actions { background: transparent; border-top-color: var(--table-rule); }
+
+#app .game.is-result > #viewport { overflow: clip; mask-image: none; }
+#app .game.is-result #win {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+  overflow: clip;
+  margin: 0 auto;
+  padding: 4px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+#app #win .quiet-result-page {
+  position: relative;
+  flex: 0 0 auto;
+  min-height: 0;
+  margin: 4px auto 10px;
+  padding: 16px 28px 18px 34px;
+}
+#app #win .quiet-result-page .win-symbol.paper-result {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  background: transparent;
+  border-radius: 0;
+}
+#app #win .result-paper-art { width: 100%; height: 100%; }
+#app #win .result-stamp {
+  inset: auto 0 -2px;
+  width: max-content;
+  max-width: 100%;
+  margin: auto;
+  font-size: 11px;
+  padding: 2px 5px;
+}
+#app #win .result-details { margin: 0; width: 100%; }
+#app #win #win-stats { margin: 3px auto; }
+#app #win :is(#award, #completion-status, #result-gains) { margin: 2px auto; }
+#app #win #result-gains { min-height: 0 !important; }
+#app #win > #result-gains { flex-shrink: 0; }
+#app #win #award { padding: 6px 9px; }
+#app #win #award .trophy-heading { display: flex; gap: 8px; justify-content: space-between; font-size: 12px; margin: 0 0 4px; }
+#app #win #award .trophy-display { display: flex; align-items: center; gap: 10px; }
+#app #win #award .trophy-display { margin-top: 0; }
+#app #win #award .trophy-mark {
+  display: grid;
+  flex: 1;
+  width: 100%;
+  grid-template-columns: 52px minmax(0,1fr);
+  align-items: center;
+  gap: 1px 8px;
+  text-align: start;
+  padding: 0;
+}
+#app #win #award .medal-figure { grid-row: 1 / span 4; margin: 0; width: 52px; height: 62px; }
+#app #win #award .medal-art { width: 52px; height: 62px; }
+#app #win #award :is(.metal-name,.metal-count,.metal-goal,.medal-note) { margin: 0; font-size: 12px; }
+#app #win #award .medal-note:empty { display: none; }
+#app #win #award .next-medal { max-width: 80px; gap: 1px; font-size: 11px; }
+#app #win #award .next-medal-art { width: 25px; height: 31px; }
+#app #win #result-date-art { font-size: 23px; }
+#app #win.daily-result .quiet-result-page { padding-inline: 29px 22px; }
+#app #win.daily-result #award {
+  width: 100%;
+  border: 0;
+  background: var(--table-wash);
+  margin-top: 8px;
+  border-radius: 7px;
+}
+#app #win.daily-result #result-subtitle { display: none; }
+@media (orientation: portrait) and (max-height: 650px) {
+  #app #win.daily-result #result-date-art { display: none; }
+  #app #win.daily-result .quiet-result-page { width: 100%; padding: 9px 14px 12px 29px; margin-block: 3px 7px; }
+  #app #win.daily-result .quiet-result-page h1 { font-size: 21px; }
+  #app #win.daily-result #award { padding: 4px 6px; margin-top: 6px; }
+  #app #win.daily-result #award :is(.medal-art,.medal-figure) { width: 40px; height: 48px; }
+  #app #win.daily-result #award .trophy-mark { grid-template-columns: 40px minmax(0,1fr); }
+  #app #win.daily-result #win-stats { display: flex; justify-content: center; gap: 16px; }
+  #app #win.daily-result #win-stats .result-stat { display: flex; align-items: baseline; gap: 4px; padding: 0; border: 0; }
+  #app #win.daily-result #win-stats strong { font-size: 16px; }
+}
+#app #win #result-jar-card { display: flex; justify-content: center; align-items: center; gap: 9px; }
+#app #win #result-jar-card .jar-glass { width: 32px; height: 44px; }
+#app #result-next { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+#app #result-next #result-home { min-height: 44px; padding: 6px; text-align: center; }
+#app .game.is-result #result-actions {
+  width: 100%;
+  align-items: center;
+  padding: 6px 4px;
+  gap: 4px;
+}
+@media (orientation: portrait) and (max-height: 650px) {
+  #app #win .quiet-result-page { padding-block: 10px 13px; margin-block: 1px 6px; }
+  #app #win .quiet-result-page h1 { font-size: 23px; }
+  #app #win .quiet-result-page .win-symbol { width: 57px; height: 57px; margin-bottom: 5px; }
+  #app #win #win-stats .result-stat strong { font-size: 20px; }
+  #app #win #result-book-card { padding: 1px 5px; margin: 0 auto; }
+  #app #win #result-book-card .book-picture { font-size: 17px; }
+  #app #result-actions #classic-difficulty { font-size: 12px; }
+}
+#app #no-moves-card {
+  position: fixed;
+  z-index: 8;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border: 2px solid var(--table-cover);
+  border-radius: 12px;
+  padding: 14px;
+  color: var(--table-ink);
+  background: var(--sheet);
+  box-shadow: 0 5px 0 var(--table-shadow), 0 0 0 6px var(--table-wash);
+  text-align: center;
+}
+#no-moves-card > strong { display: block; font-size: 22px; line-height: 1.2; }
+#no-moves-card > p { margin: 8px 0 12px; font-size: 15px; line-height: 1.35; }
+#no-moves-card > div { display: flex; gap: 8px; }
+#no-moves-card button { flex: 1; min-height: 44px; padding: 8px; margin: 0; font-size: 15px; }
+.game.is-result #no-moves-card { display: none; }
+.game:has(#no-moves-card:not([hidden])) .status-wrap { visibility: hidden; }
+@keyframes daily-nudge {
+  0%, 65%, 100% { transform: rotate(0); }
+  72% { transform: rotate(-7deg) translateY(-3px); }
+  79% { transform: rotate(6deg) translateY(-3px); }
+  86% { transform: rotate(-3deg); }
+  93% { transform: rotate(2deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #daily-mode[data-daily-pending]:not([data-daily-started]) #home-today-art {
+    animation: daily-nudge 4.8s ease-in-out infinite;
+    transform-origin: 50% 85%;
+  }
+  .navigation-open #no-moves-card { display: none; }
+}
 @media (orientation: landscape) {
   #dialog[data-screen="home"] #menu-content { max-width: 800px; }
   #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) {

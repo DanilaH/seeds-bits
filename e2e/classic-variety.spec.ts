@@ -180,7 +180,7 @@ test("failed replacement leaves the game, generator and chosen band intact", asy
 for (const level of [0, 1, 2, 3] as ClassicDifficulty[])
   test(`completed Classic uses Home and a new difficulty selection ${level}`, async ({page})=>{
     await boot(page,level,true);
-    await expect(page.locator("#resume")).toBeHidden();
+    await expect(page.locator("#resume")).toHaveText("Начать");
     await expect(page.locator("#classic-mode")).toBeVisible();
     const requested = level===3?2:level+1;
     await openClassicNew(page,requested);
@@ -210,8 +210,8 @@ test("generated hard game clears through the UI and same-band play stays hard", 
     if (n < proof.length - 1) await expect(page.locator("#undo")).toBeEnabled();
   }
   await expect(page.locator("#win")).toBeVisible();
-  await expect(page.locator("#result-actions button:visible")).toHaveCount(1);
-  await page.locator("#play-again").click();
+  await expect(page.locator("#result-actions button:visible")).toHaveCount(2);
+  await page.locator("#result-home").click();
   await expect(page.locator("#dialog")).toBeVisible();
   await openClassicNew(page,2);
   await expect(page.locator("#win")).toBeHidden();
@@ -238,9 +238,9 @@ for (const viewport of [{width:320,height:568},{width:844,height:390}])
       await move(page,[0,1]);
       await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
       await page.addStyleTag({content:"body{font-size:22px}"});
-      await expect(page.locator("#result-actions button:visible")).toHaveCount(1);
+      await expect(page.locator("#result-actions button:visible")).toHaveCount(2);
       await expect(page.locator("#play-again")).toBeInViewport();
-      await expect(page.locator("#play-again")).toHaveText("В меню");
+      await expect(page.locator("#result-home")).toHaveText("В меню");
     });
 test("Expert keeps its scroll, move and Undo after restarting above a 50px banner", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 568 });

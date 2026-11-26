@@ -276,7 +276,7 @@ for (const [completed, tier] of [
       animations: "disabled",
     });
     await page.reload();
-    await expect(page.locator("#resume")).toBeHidden();
+    await expect(page.locator("#resume")).toHaveText("Начать");
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seeds-bits.progress.v2")!).done)).toContain("daily-v1-2026-10-31");
     await page.locator("#progress-open").click();
     await page.locator("#progress-trophies").click();

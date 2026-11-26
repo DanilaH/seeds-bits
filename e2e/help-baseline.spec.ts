@@ -170,5 +170,5 @@ test("Paused result hides assistant labels and offers only the ordinary Home tra
     };
   });
   await expect(page.locator("#try-notebook")).toBeHidden();
-  await expect(page.locator("#play-again")).toHaveText("В меню");
+  await expect(page.locator("#result-home")).toHaveText("В меню");
 });

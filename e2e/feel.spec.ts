@@ -218,7 +218,7 @@ for (const mode of ["book-v1-1", "daily-v1-2026-11-09"])
     await page.reload();
     await resetEvents(page);
     if (mode.startsWith("book")) await expect(page.locator("#resume")).toHaveText("Начать · задача 2");
-    else await expect(page.locator("#resume")).toBeHidden();
+    else await expect(page.locator("#resume")).toHaveText("Начать");
     await page.waitForTimeout(1700);
     expect((await pulses(page)).filter((x: any) => Array.isArray(x))).toEqual(
       [],

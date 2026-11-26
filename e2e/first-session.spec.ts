@@ -113,7 +113,7 @@ test("archive date is retained across menu, victory, replay and restart",async({
   for(const step of daily("2026-11-19").solution)await move(page,step.a,step.b);
   await expect(page.locator("#win h1")).toHaveText("Задача за 19 ноября решена");
   const done=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).done,key);expect(done).toContain("daily-v1-2026-11-19");expect(done).not.toContain("daily-v1-2026-11-20");
-  await page.reload();await expect(page.locator("#resume")).toBeHidden();
+  await page.reload();await expect(page.locator("#resume")).toHaveText("Начать");
   await page.locator("#calendar-open").click();
   await expect(page.locator('[data-game="daily-v1-2026-11-19"]')).toHaveClass(/done/);
   await expect(page.locator('[data-game="daily-v1-2026-11-20"]')).not.toHaveClass(/done/);
