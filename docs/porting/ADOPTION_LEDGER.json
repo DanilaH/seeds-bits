@@ -578,11 +578,12 @@
       "ownerDecision": "Пять замечаний владельца с кадрами и прямое предложение подсвечивать достижимые цифры при выборе, 26 ноября 2026. Не утверждение о Easybrain/NADO.",
       "currentImplementation": "src/main.ts:renderNotebookPicker; src/quiet-table.css shared radii/insets/shadow; src/core.ts:reachableNumbers; src/board-view.ts reachable set and remap",
       "acceptanceEvidence": {
-        "report": "../research/ui-audit-2026-11-26/README.md",
+        "report": "../research/ui-audit-2026-11-26/DELIVERY-12103.md",
         "code": "IMPLEMENTED",
-        "browser": "See delivery report for completed checks",
+        "browser": "161 unit; 24 UI; 12 broad layout; 31 prior results; 8 focused follow-ups; CI preview 38/19/19 PASS",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "apk": "12103 signed; same cert as 12102; 675 unsigned entries retained; 21 local game files match"
       },
       "nextAction": "Проверить подписанный preview 12103 на физическом телефоне: читаемость, тень и ненавязчивость подсветки.",
       "kitImpact": "REUSE",
