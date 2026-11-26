@@ -1107,6 +1107,27 @@
         "audience": "UNKNOWN: no retention/revenue or player-observation claim.",
         "sdkDemoVariant": "UNKNOWN: 48d5561/45867651090/artifact15141069958, looping Yandex demo interstitial with no visible Next/Close; no SDK dismissal within unchanged160s. Not attributed to app or SDK without comparison. Retry same SHA/new response; if repeated compare media/logcat/activity evidence with official SDK sample on API35 and phone. Same-SHA rerun PASS: artifact15141859844/job140085978867, no code/SDK ID/deadline/callback changes; failed artifact remains. This narrows the observation to response/conditions, not proven vendor attribution."
       }
+    },
+    {
+      "id": "seeds-quiet-bookmark-12106",
+      "sourceFeatureIds": [],
+      "scope": "Собственный UI: финиши тетрадковой задачи/страницы/тома и карточка новой Классики в Home",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/quiet-table.css",
+        "src/i18n/ui-copy.json",
+        "e2e/bookmark-followup.spec.ts"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "ownerReport": "Плейтест12105: кривой финиш/съехавшая закладка; английская подпись новой игры поверх закладки.",
+        "report": "../research/bookmark-followup-2026-11-26/README.md",
+        "code": "Убрана ротация тетрадковых финишей; ribbon внутри листа; короткая подпись с отдельным резервом под ribbon.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Exact-source CI/PNG review и подписанный12106; телефонный повтор финиша и Home без текущей партии.",
+      "kitImpact": "REUSE: established UI tokens and decoration safe area; no runtime change."
     }
   ]
 }

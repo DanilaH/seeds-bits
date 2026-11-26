@@ -270,6 +270,12 @@
   padding-inline-end: 14px;
   overflow-wrap: anywhere;
 }
+/* The fresh-game note shares the cover's upper row with the SVG bookmark. */
+#dialog[data-screen="home"] .home-current[data-new-game] #resume-context {
+  max-width: calc(100% - 52px);
+  padding-inline-end: 0;
+  text-wrap: balance;
+}
 .quiet-mini-board {
   order: 3;
   display: grid;
@@ -999,6 +1005,14 @@
   background: url("./art/quiet-table/ribbon.svg") center / 100% 100% no-repeat;
   pointer-events: none;
 }
+#app #win:is([data-result-kind="task"], [data-result-kind="page"], [data-result-kind="book"]) .quiet-result-page {
+  transform: none;
+}
+#app #win:is([data-result-kind="task"], [data-result-kind="page"], [data-result-kind="book"]) .quiet-result-page .result-ribbon {
+  /* result-cover.svg: the paper begins at y=1/289, inside the cover edge. */
+  top: .35%;
+  right: 9%;
+}
 #app #win .quiet-result-page .win-symbol.paper-result {
   position: relative;
   width: 88px;
@@ -1090,16 +1104,7 @@
   #app #win .quiet-result-page { padding-block: 10px 13px; margin-block: 1px 6px; }
   #app #win .quiet-result-page h1 { font-size: 23px; }
   #app #win .quiet-result-page .win-symbol { width: 57px; height: 57px; margin-bottom: 5px; }
-  #app #win .quiet-result-page .result-ribbon {
-  position: absolute;
-  top: -3px;
-  right: 0;
-  width: 18px;
-  height: 38px;
-  background: url("./art/quiet-table/ribbon.svg") center / 100% 100% no-repeat;
-  pointer-events: none;
-}
-#app #win .quiet-result-page .win-symbol.paper-result { width: 64px; height: 64px; }
+  #app #win .quiet-result-page .win-symbol.paper-result { width: 64px; height: 64px; }
   #app #win #win-stats .result-stat strong { font-size: 20px; }
   #app #win #result-book-card { padding: 1px 5px; margin: 0 auto; }
   #app #win #result-book-card .book-picture { font-size: 17px; }

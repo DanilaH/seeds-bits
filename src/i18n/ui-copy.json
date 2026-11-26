@@ -2338,11 +2338,11 @@
     "pt-BR": "Novo jogo"
   },
   "calm.classic.startNote": {
-    "ru": "Выберите сложность — партия начнётся сразу.",
-    "en": "Choose a difficulty to start a new game.",
-    "es": "Elige una dificultad para empezar.",
-    "tr": "Başlamak için zorluk seçin.",
-    "pt-BR": "Escolha uma dificuldade para começar."
+    "ru": "Выберите сложность.",
+    "en": "Choose a difficulty.",
+    "es": "Elige la dificultad.",
+    "tr": "Zorluk seçin.",
+    "pt-BR": "Escolha a dificuldade."
   },
   "calm.classic.confirmNote": {
     "ru": "Начатая классика заменится только после подтверждения.",
