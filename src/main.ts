@@ -1138,6 +1138,7 @@ function persistMove() {
   const revision = ++moveSaveRevision;
   $("board").setAttribute("aria-busy", "true");
   document.querySelector<HTMLElement>(".game")!.dataset.persistence = "pending";
+  if (!moveSavePending) postSaveMessage = $("status").textContent ?? "";
   moveSavePending = true;
   $("status").textContent = t("ui.saving-game");
   return Promise.resolve(save()).then(() => {
@@ -3053,7 +3054,6 @@ function undoAction() {
   const restored = removedPairs.get(previous.board);
   session = undo(session);
   clearSelection();
-  void persistMove();
   render();
   const plan=currentPlan();
   if(plan?.pair)message("Уберите отмеченную пару");
@@ -3080,6 +3080,9 @@ function undoAction() {
     [{ transform: "rotate(-18deg)" }, { transform: "rotate(0)" }],
     160,
   );
+  // Snapshot after restoring the saved viewport, as before. Persisting earlier
+  // would replace the restored scroll with the collapsed/added board's offset.
+  void persistMove();
   platform.gameplay(occupied(board()) > 0);
 }
 async function hint() {

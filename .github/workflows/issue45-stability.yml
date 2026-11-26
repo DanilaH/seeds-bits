@@ -1,7 +1,7 @@
 name: Issue 45 stability evidence
 on:
   push:
-    branches: [feat/quiet-table-20261126]
+    branches: [feat/quiet-table-20261126, verify/quiet-stability-12105]
 permissions:
   contents: read
 concurrency:

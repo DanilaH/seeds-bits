@@ -34,18 +34,20 @@ async function boot(page:Page, finish=false) {
   // Drain the real lock queue, without an elapsed-time assumption.
   await page.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));
 }
-async function hold(context:BrowserContext) {
+async function hold(context:BrowserContext,waitForAcquisition=true) {
   const blocker=await context.newPage();
   await blocker.route('**/storage-lock-owner', route=>route.fulfill({contentType:'text/html',body:'<!doctype html>'}));
   await blocker.goto('/storage-lock-owner');
-  await blocker.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));
-  await blocker.evaluate(()=>new Promise<void>(acquired=>{
+  await blocker.evaluate(()=>{
     const w=window as any;
-    navigator.locks.request('seeds-save',async()=>{
+    w.writeAcquired=new Promise<void>(acquired=>navigator.locks.request('seeds-save',async()=>{
       acquired(); await new Promise<void>(resolve=>w.releaseWrite=resolve);
-    });
-  }));
-  return {release:async()=>{await blocker.evaluate(()=>(window as any).releaseWrite());await blocker.close();}};
+    }));
+  });
+  const acquired=()=>blocker.evaluate(()=>(window as any).writeAcquired);
+  if(waitForAcquisition)await acquired();
+  let released=false;
+  return {acquired,release:async()=>{if(released)return;await acquired();await blocker.evaluate(()=>(window as any).releaseWrite());released=true;await blocker.close();}};
 }
 async function trace(page:Page,label:string) {
   const value={label,remaining:await page.locator('#remaining').textContent(),
@@ -167,4 +169,25 @@ test('QT02 failed new Classic leaves the completed attempt authoritative; retry 
   expect(CLASSIC_START_COUNTS[1]).toContain(occupied(next.sessions.classic.current.board));
   expect(next.meta.completed).toBe(6);expect(next.meta.wallet).toBe(completed.meta.wallet);
   expect(next.meta.attempts.classic.completed).toBe(false);
+});
+
+test('QT01 acknowledging an older write cannot clear a newer fast move pending behind another lock',async({page,context})=>{
+  await boot(page);const first=await hold(context);let second:Awaited<ReturnType<typeof hold>>|undefined;
+  try {
+    await page.evaluate(()=>{document.querySelector<HTMLButtonElement>('[data-index="0"]')!.click();document.querySelector<HTMLButtonElement>('[data-index="9"]')!.click();});
+    second=await hold(context,false);
+    await page.evaluate(()=>{document.querySelector<HTMLButtonElement>('[data-index="10"]')!.click();document.querySelector<HTMLButtonElement>('[data-index="11"]')!.click();});
+    await expect(page.locator('#remaining')).toHaveText('24');
+    await first.release();await second.acquired();
+    await expect.poll(async()=>(await state(page)).sessions.classic.current.moves).toBe(1);
+    await expect(page.locator('.game')).toHaveAttribute('data-persistence','pending');
+    await expect(page.locator('#board')).toHaveAttribute('aria-busy','true');
+    await trace(page,'older-write-durable-newer-move-pending');
+  }finally{await first.release();if(second)await second.release();}
+  await expect(page.locator('.game')).toHaveAttribute('data-persistence','saved');
+  const saved=await trace(page,'latest-fast-move-durable');
+  expect(saved.sessions.classic.current.moves).toBe(2);
+  expect(saved.sessions.classic.current.board).toEqual(removePair(removePair(classic(),0,9),10,11));
+  expect(saved.sessions.classic.history??saved.sessions.classic.packedHistory).toHaveLength(2);
+  await page.reload();await page.locator('#resume').click();await expect(page.locator('#remaining')).toHaveText('24');
 });
