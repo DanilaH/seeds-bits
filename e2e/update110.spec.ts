@@ -581,6 +581,7 @@ test("slow review preparation keeps input usable and cannot interrupt a new part
   await expect(page.locator("#classic-mode")).toBeVisible();
   await openClassicNew(page,1);
   await expect(page.locator("#win")).toBeHidden();
+  await expect.poll(async()=>Boolean((await stored(page)).meta.classicRun?.current)).toBe(true);
   const next = await stored(page);
   const deal = next.meta.classicRun.current;
   const board = deal.board;

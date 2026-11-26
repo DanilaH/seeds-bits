@@ -227,6 +227,20 @@ public class AuditHarness {
   p.banner(wideViewport);
   check("N52_resize_waits_for_matching_viewport",preserved && BannerAdView.all.size()==2 && beforeResize.destroyed && BannerAdView.all.get(1).requests==1,"one replacement after the native and CSS widths agree");
 
+  p=fresh(true);android.content.res.Resources.density=2;
+  p.bridge.web.width=p.activity.root.width=640;p.bridge.web.height=p.activity.root.height=1136;
+  PluginCall fixedSlot=box();fixedSlot.args.put("viewportWidth",320).put("viewportHeight",568).put("width",288).put("y",514).put("height",50).put("pixelRatio",2);
+  p.banner(fixedSlot);BannerAdView retainedInset=BannerAdView.all.get(0);
+  p.bannerExpectation(new PluginCall(new JSObject().put("visible",true)));
+  int fixedTop=((android.widget.FrameLayout.LayoutParams)retainedInset.getParent().layoutParams).topMargin;
+  p.bridge.web.height=1232;fixedSlot.args.put("revision",++revision);p.banner(fixedSlot);p.bridge.web.observer.preDraw.onPreDraw();
+  boolean insetRetained=retainedInset.getParent().visibility==android.view.View.VISIBLE && ((android.widget.FrameLayout.LayoutParams)retainedInset.getParent().layoutParams).topMargin==fixedTop;
+  p.bridge.web.height=1136;fixedSlot.args.put("revision",++revision);p.banner(fixedSlot);p.bridge.web.observer.preDraw.onPreDraw();
+  PluginCall insetSample=new PluginCall();p.bannerDiagnostics(insetSample);
+  check("N53_insets_bounce_retains_slot",insetRetained && BannerAdView.all.size()==1 && retainedInset.requests==1 && Integer.valueOf(0).equals(insetSample.result.get("hiddenFrames")),"transient WebView height cannot move or hide a validated same-window banner");
+  p.activity.focused=false;p.bridge.web.observer.focus.onWindowFocusChanged(false);
+  check("N54_insets_hold_never_overrides_background",retainedInset.getParent().visibility==android.view.View.GONE,"a retained slot still hides immediately when the Activity loses focus");
+
   p=fresh(true);PluginCall lab=new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","lab-only"));p.persistLabState(lab);game=p.activity.getSharedPreferences("CapacitorStorage",0);boolean isolated=lab.result!=null && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1"));boolean invalidLab=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.progress.v2").put("value","bad")));}catch(RuntimeException failure){invalidLab=true;}check("N42_lab_storage_namespace",isolated&&invalidLab&&!game.data.containsKey("seeds-bits.progress.v2"),"lab method cannot write production progress");
   game.fail=true;boolean labFailure=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","not-saved")));}catch(RuntimeException failure){labFailure=true;}check("N43_lab_storage_failure",labFailure && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1")) && "lab-only".equals(game.data.get("seeds-bits.lab.trials.v1")),"failed lab commit retains previous authority");
 

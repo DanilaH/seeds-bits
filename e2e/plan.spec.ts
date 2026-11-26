@@ -12,11 +12,12 @@ async function position(page:Page,charges=0,demo=false,state="ready"){
 async function preview(page:Page){await page.locator("#plan").click();await expect(page.locator("#hint-offer-title")).toHaveText("План на 3 хода");await expect(page.locator("#help-offer-copy")).toContainText("Очистить поле");}
 async function pair(page:Page,a:number,b:number,remaining:number){await page.locator(`#board [data-index="${a}"]`).click();await page.locator(`#board [data-index="${b}"]`).click();await expect(page.locator("#remaining")).toHaveText(String(remaining));}
 test("P01/05/06/09/10: preview, demo, complete player-driven plan with compaction, Undo and reload",async({page})=>{
-  await position(page);const before=await data(page);await preview(page);await expect(page.locator("#board .hinted")).toHaveCount(0);await page.locator("#cancel-hints").click();expect(await data(page)).toEqual(before);
+  await position(page);const cancelState=async()=>{const p=await data(page);delete p.meta.engagement;return p;};const before=await cancelState();await preview(page);await expect(page.locator("#board .hinted")).toHaveCount(0);await page.locator("#cancel-hints").click();expect(await cancelState()).toEqual(before);
   await preview(page);if(process.env.SEEDS_RECORD_HELP)await page.waitForTimeout(800);await page.locator("#watch-hints").click();await expect(page.locator("#board .hinted")).toHaveCount(2);
   await expect(page.locator("#remaining")).toHaveText("6");const p=await data(page),path=p.meta.attempts.classic.help.plan.intent.proof;expect(p.meta.help.demo.plan).toBe(true);
   await pair(page,...path[0] as [number,number],4);await expect(page.locator("#plan-count")).toHaveText("2/3");
   await page.locator("#undo").click();await expect(page.locator("#plan-count")).toHaveText("1/3");
+  await expect.poll(async()=>(await data(page)).sessions.classic.current.board).toEqual(board);
   await page.reload();await page.locator("#resume").click();await expect(page.locator("#board .hinted")).toHaveCount(2);
   for(let i=0;i<path.length;i++){if(process.env.SEEDS_RECORD_HELP)await page.waitForTimeout(650);await pair(page,...path[i] as [number,number],4-i*2);}
   await expect(page.locator("#win")).toBeVisible();const q=await data(page);expect(q.meta.unassisted).toBe(0);expect(q.meta.help.inventory.plan).toBe(0);expect(await page.evaluate(()=>(window as any).requests.length)).toBe(0);

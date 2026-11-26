@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import com.getcapacitor.BridgeActivity;
 public class MainActivity extends BridgeActivity {
   private boolean gameDark;
+  private Boolean paintedDark;
   @Override public void onCreate(Bundle savedInstanceState) {
     try {
       String saved = getSharedPreferences("CapacitorStorage", MODE_PRIVATE).getString("seeds-bits.settings.v1", "{}");
@@ -57,17 +58,20 @@ public class MainActivity extends BridgeActivity {
     if (Build.VERSION.SDK_INT < 26 && !gameDark) bottom = Color.parseColor("#34553f");
     // Paint behind transparent system bars on API35+, without changing content
     // insets, the WebView rectangle, SDK banner slot, or system navigation mode.
-    getWindow().setBackgroundDrawable(new GradientDrawable(
-      GradientDrawable.Orientation.TOP_BOTTOM, new int[]{top, bottom}));
-    getWindow().setStatusBarColor(top);
-    getWindow().setNavigationBarColor(bottom);
-    if (Build.VERSION.SDK_INT >= 29) {
-      getWindow().setStatusBarContrastEnforced(false);
-      getWindow().setNavigationBarContrastEnforced(false);
+    if (paintedDark == null || paintedDark != gameDark) {
+      getWindow().setBackgroundDrawable(new GradientDrawable(
+        GradientDrawable.Orientation.TOP_BOTTOM, new int[]{top, bottom}));
+      getWindow().setStatusBarColor(top);
+      getWindow().setNavigationBarColor(bottom);
+      if (Build.VERSION.SDK_INT >= 29) {
+        getWindow().setStatusBarContrastEnforced(false);
+        getWindow().setNavigationBarContrastEnforced(false);
+      }
+      paintedDark = gameDark;
     }
     var controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-    controller.setAppearanceLightStatusBars(!gameDark);
-    controller.setAppearanceLightNavigationBars(!gameDark);
+    if (controller.isAppearanceLightStatusBars() != !gameDark) controller.setAppearanceLightStatusBars(!gameDark);
+    if (controller.isAppearanceLightNavigationBars() != !gameDark) controller.setAppearanceLightNavigationBars(!gameDark);
   }
 
   private void applyGameTextZoom() {

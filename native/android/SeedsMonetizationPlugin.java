@@ -48,6 +48,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private long bannerRevision;
   private String bannerEpoch = "";
   private int measuredWebWidth, measuredWebHeight;
+  private int placedRootWidth, placedRootHeight, placedWebWidth;
   private boolean bannerExpected;
   private int bannerRequests, bannerLoads, bannerImpressions, bannerFrames, bannerHiddenFrames;
   private String bannerHiddenReason = "not_requested";
@@ -56,7 +57,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private final ViewTreeObserver.OnWindowFocusChangeListener bannerFocus = this::windowFocusChanged;
   private final View.OnLayoutChangeListener bannerLayout = (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
     if (right-left != oldRight-oldLeft || bottom-top != oldBottom-oldTop) {
-      hideBanner("native_state");
+      deferBannerGeometry("native_state");
       requestBannerRefresh();
     }
   };
@@ -463,6 +464,17 @@ public class SeedsMonetizationPlugin extends Plugin {
     bannerHiddenReason = reason;
     if (bannerHost != null) bannerHost.setVisibility(View.GONE);
   }
+  private void deferBannerGeometry(String reason) {
+    FrameLayout root = getActivity().findViewById(android.R.id.content);
+    // SystemBars can briefly remove/reapply WebView insets during uiMode changes.
+    // Keep the last validated SDK placement while the physical window/width stay
+    // unchanged. Real resize, modal intent and lifecycle still hide immediately.
+    if (canPlaceBanner() && bannerPlacement != null && bannerPlacement.visible &&
+        bannerHost != null && bannerHost.getVisibility() == View.VISIBLE && root != null &&
+        root.getWidth() == placedRootWidth && root.getHeight() == placedRootHeight &&
+        getBridge().getWebView().getWidth() == placedWebWidth) return;
+    hideBanner(reason);
+  }
   private void clearBanner() {
     if (banner != null) { banner.setBannerAdEventListener(null); banner.destroy(); banner = null; }
     if (bannerHost != null) { if (bannerHost.getParent() instanceof ViewGroup) ((ViewGroup)bannerHost.getParent()).removeView(bannerHost); bannerHost = null; }
@@ -519,7 +531,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     View web = getBridge().getWebView();
     FrameLayout root = getActivity().findViewById(android.R.id.content);
     if (web.getWidth() <= 0 || web.getHeight() <= 0 || root == null ||
-        web.getWidth() != measuredWebWidth || web.getHeight() != measuredWebHeight) { hideBanner("native_bounds_changed"); return; }
+        web.getWidth() != measuredWebWidth || web.getHeight() != measuredWebHeight) { deferBannerGeometry("native_bounds_changed"); return; }
     // Native bounds can resize before CSS reports its new viewport. Keep the SDK view
     // until both measurements refer to the same width, with one CSS pixel of rounding.
     if (Double.isFinite(placement.pixelRatio) && placement.pixelRatio > 0 &&
@@ -528,6 +540,10 @@ public class SeedsMonetizationPlugin extends Plugin {
       return;
     }
     double scale = web.getWidth() / placement.viewportWidth;
+    if (Math.abs(web.getHeight() - placement.viewportHeight * scale) > Math.max(1, scale)) {
+      deferBannerGeometry("height_mismatch");
+      return;
+    }
     int[] webLocation = new int[2], rootLocation = new int[2];
     web.getLocationOnScreen(webLocation); root.getLocationOnScreen(rootLocation);
     int offsetX = webLocation[0] - rootLocation[0], offsetY = webLocation[1] - rootLocation[1];
@@ -579,6 +595,7 @@ public class SeedsMonetizationPlugin extends Plugin {
       bannerTop = parentTop;
     }
     if (bannerHost.getVisibility() != View.VISIBLE) bannerHost.setVisibility(View.VISIBLE);
+    placedRootWidth = root.getWidth(); placedRootHeight = root.getHeight(); placedWebWidth = web.getWidth();
     bannerHiddenReason = "";
   }
   private void publishBannerHeight(int pixels, double scale, boolean grow) {

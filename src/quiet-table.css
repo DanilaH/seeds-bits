@@ -925,6 +925,10 @@
 /* Retained diagnostic previews obey the same panel bounds while experiments
    remain paused in the delivered baseline. */
 #app #hint-offer .hint-copy:has(#help-preview:not([hidden])) { flex-shrink: 0; padding: 8px; }
+#app #hint-offer:has(#help-preview:not([hidden])) { gap: 6px; padding: 12px; }
+#app #hint-offer:has(#help-preview:not([hidden])) .offer-terms { padding-block: 6px; }
+#app #help-preview { margin-block: 4px; gap: 8px; }
+#app #help-preview .help-grid span { aspect-ratio: auto; min-height: 20px; }
 @media (orientation: landscape) and (max-height: 420px) {
   #app #hint-offer:has(#help-preview:not([hidden])) { padding-block: 6px; gap: 4px; }
   #app #hint-offer .hint-copy:has(#help-preview:not([hidden])) { padding: 4px 8px; }

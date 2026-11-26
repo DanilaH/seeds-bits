@@ -155,6 +155,7 @@ test("failed result save blocks next party; retry persists one result", async ({
   expect(won.filter(Boolean)).toEqual([]);
   await openClassicNew(page,1);
   await expect(page.locator("#win")).toBeHidden();
+  await expect.poll(()=>page.evaluate(k=>Boolean(JSON.parse(localStorage.getItem(k)!).meta.classicRun?.current),key)).toBe(true);
   const next = await page.evaluate(
     (k) => JSON.parse(localStorage.getItem(k)!),
     key,
