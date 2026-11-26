@@ -84,7 +84,8 @@ test("failed save stays visible while settings are open", async ({ page }) => {
       throw new DOMException("Full", "QuotaExceededError");
     };
   });
-  await page.locator("#sound").check();
+  const sound = page.locator("#sound");
+  await sound.setChecked(!(await sound.isChecked()));
   await expect(page.locator("#save-notice")).toBeVisible();
   await expect(page.locator("#retry-save")).toBeVisible();
   await page.locator("#settings-back").click();
@@ -251,7 +252,10 @@ test("fast selection retains the moving cell instead of replacing it", async ({
     (window as any).moving = [];
     const recorded = new WeakSet<Animation>();
     const observe = (a: Animation) => {
-      if (!recorded.has(a) && a.effect?.getTiming().duration === 170) {
+      const effect = a.effect;
+      if (!recorded.has(a) && effect instanceof KeyframeEffect &&
+          effect.target?.matches("#board button.cell") &&
+          effect.getKeyframes().some(frame => frame.translate && frame.translate !== "0 0")) {
         recorded.add(a);
         a.pause();
         (window as any).moving.push(a);
@@ -265,6 +269,7 @@ test("fast selection retains the moving cell instead of replacing it", async ({
     Animation.prototype.play = function () { play.call(this); observe(this); };
   });
   await pair(page, 0, 1);
+  await expect.poll(() => page.evaluate(() => (window as any).moving.length)).toBeGreaterThan(0);
   await page.evaluate(() =>
     (document.querySelector('[data-index="0"]') as HTMLElement).click(),
   );

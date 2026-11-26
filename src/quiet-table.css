@@ -789,3 +789,13 @@
 @media (max-width: 330px) {
   #dialog[data-screen="calendar"] #collection > .calendar-layout { border-inline-width: 1px; }
 }
+@media (max-width: 350px), (orientation: landscape) and (max-height: 420px) {
+  #dialog #settings-panel .language-row {
+    grid-template-columns: 20px minmax(0, 1fr);
+    row-gap: 2px;
+  }
+  #settings-panel #language-current {
+    grid-column: 2;
+    text-align: start;
+  }
+}
