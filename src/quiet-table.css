@@ -420,7 +420,7 @@
 .game:not(.is-result) #board .empty { background: var(--sheet); }
 .game .game-top header { border-color: var(--table-rule); }
 .game .game-top .game-meta { color: var(--table-muted); }
-.game .game-top .game-meta #mode { color: var(--table-ink); font-weight: 650; line-height: 1.35; }
+.game .game-top .game-meta #mode { color: var(--table-ink); font-weight: 650; }
 .game .game-actions footer {
   gap: 0;
   padding: 0;
@@ -491,6 +491,7 @@
     pointer-events: none;
   }
   .game .game-meta .mode-description { display: block; flex-basis: 100%; }
+  .game .game-top .game-meta #mode { line-height: 1.35; }
   .game .game-meta #game-difficulty { margin: 1px 0; }
   .game .game-meta .field-date-art { display: none; }
   .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header #book-top {
