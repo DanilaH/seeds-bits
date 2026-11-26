@@ -457,7 +457,7 @@ test("review follows a saved eligible result, skips the next ad and is not a sub
   ).toBe(false);
   await page.locator("#result-home").click();
   await expect(page.locator("#classic-mode")).toBeVisible();
-  expect(await page.evaluate(() => (window as any).adShows)).toMatchObject([{kind:"interstitial"}]);
+  expect(await page.evaluate(() => (window as any).adShows)).toEqual([]);
   await page.evaluate((k) => {
     const p = JSON.parse(localStorage.getItem(k)!);
     p.sessions.classic.current.board = [5, 5];
