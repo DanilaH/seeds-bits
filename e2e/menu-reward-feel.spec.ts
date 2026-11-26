@@ -145,3 +145,20 @@ test('MF fast local navigation and cancellation retain current selection and inp
   await page.dispatchEvent('#book-mode','pointercancel');await page.mouse.move(0,0);await page.mouse.up();
   await expect(page.locator('#dialog')).toHaveAttribute('data-screen','home');await expect(page.locator('button.is-pressed')).toHaveCount(0);
 });
+test('MF multiple jar thresholds coalesce while every accepted move remains durable',async({page})=>{
+  await seed(page,'classic',22);
+  await page.evaluate(key=>{const p=JSON.parse(localStorage.getItem(key)!);p.sessions.classic.current={board:Array(84).fill(5),moves:0,additions:0,scroll:0};p.jars.highWater=0;localStorage.setItem(key,JSON.stringify(p));},key);
+  await page.reload();await resumeStoredGame(page);
+  await page.evaluate(()=>{
+    (window as any).closings46=0;
+    new MutationObserver(records=>{for(const r of records)if((r.target as HTMLElement).dataset.rewardPhase==='closing')(window as any).closings46++;}).observe(document.querySelector('#jar-glass')!,{attributes:true,attributeFilter:['data-reward-phase']});
+    for(let i=0;i<40;i++){const digits=[...document.querySelectorAll<HTMLButtonElement>('#board button')].filter(b=>b.textContent?.trim()==='5'&&!b.disabled);digits[0].click();digits[1].click();}
+  });
+  await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).jars.meter,key)).toBe(102);
+  await expect(page.locator('#jar-name')).toContainText('1–2');
+  await expect(page.locator('#jar-name')).toHaveText('Баночка 3');
+  await expect(page.locator('#jar-meter')).toHaveAttribute('data-filled','18');
+  expect(await page.evaluate(()=>(window as any).closings46)).toBe(1);
+  const p=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!),key);
+  expect(p.sessions.classic.current.moves).toBe(40);expect(p.sessions.classic.current.board.filter(Boolean)).toHaveLength(4);
+});

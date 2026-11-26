@@ -1375,7 +1375,7 @@ async function presentFullJar(before: ReturnType<typeof jarState>, target: HTMLE
     target.dataset.rewardPhase = "next";
     const a = motion(target,[{opacity:.75,transform:"scale(.94)"},{opacity:1,transform:"none"}],160);
     await a?.finished.catch(()=>{});
-    delete target.dataset.rewardPhase;
+    if (presentationActive(revision)) delete target.dataset.rewardPhase;
   };
   const current = run(); jarMilestone = current;
   try { await current; } finally { if (jarMilestone === current) jarMilestone = undefined; }
