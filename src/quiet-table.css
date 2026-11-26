@@ -817,7 +817,7 @@
 #app #win > #result-gains { flex-shrink: 0; }
 #app #win #award { padding: 6px 9px; }
 #app #win #award .trophy-heading { display: flex; gap: 8px; justify-content: space-between; font-size: 12px; margin: 0 0 4px; }
-#app #win #award .trophy-display { display: flex; align-items: center; gap: 10px; }
+#app #win #award .trophy-display { display: grid; grid-template-columns: minmax(0,1fr); align-items: center; gap: 4px; }
 #app #win #award .trophy-display { margin-top: 0; }
 #app #win #award .trophy-mark {
   display: grid;
@@ -833,8 +833,9 @@
 #app #win #award .medal-art { width: 52px; height: 62px; }
 #app #win #award :is(.metal-name,.metal-count,.metal-goal,.medal-note) { margin: 0; font-size: 12px; }
 #app #win #award .medal-note:empty { display: none; }
-#app #win #award .next-medal { max-width: 80px; gap: 1px; font-size: 11px; }
-#app #win #award .next-medal-art { width: 25px; height: 31px; }
+#app #win #award .next-medal { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 2px 5px; padding: 2px 0; border: 0; background: transparent; font-size: 11px; }
+#app #win #award .next-medal strong { font-size: 12px; }
+#app #win #award .next-medal-art { display: none; }
 #app #win #result-date-art { font-size: 23px; }
 #app #win.daily-result .quiet-result-page { padding-inline: 29px 22px; }
 #app #win.daily-result #award {

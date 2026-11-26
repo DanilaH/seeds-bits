@@ -1,13 +1,13 @@
 import {expect,test,type Page} from "@playwright/test";
 
-async function seed(page:Page,kind:string,lang="ru") {
-  await page.addInitScript(({kind,lang})=>{
+async function seed(page:Page,kind:string,lang="ru",completedDays=0) {
+  await page.addInitScript(({kind,lang,completedDays})=>{
     if(localStorage.getItem("seeds-bits.progress.v2")) return;
     const id=kind==="book"?"book-v1-24":kind==="daily"?"daily-v1-2026-11-13":kind==="dead"?"book-v1-25":"classic";
     const board=kind==="dead"?[1,2,3,4]:[5,5];
     localStorage.setItem("seeds-bits.settings.v1",JSON.stringify({tutorialDone:true,languageChoice:lang,sound:false}));
-    localStorage.setItem("seeds-bits.progress.v2",JSON.stringify({version:3,active:id,sessions:{[id]:{rules:1,current:{board,moves:1,additions:0,scroll:0},history:[]}},seen:[],done:kind==="book"?Array.from({length:23},(_,i)=>"book-v1-"+(i+1)):[],hints:{}}));
-  },{kind,lang});
+    localStorage.setItem("seeds-bits.progress.v2",JSON.stringify({version:3,active:id,sessions:{[id]:{rules:1,current:{board,moves:1,additions:0,scroll:0},history:[]}},seen:[],done:kind==="book"?Array.from({length:23},(_,i)=>"book-v1-"+(i+1)):kind==="daily"?Array.from({length:30},(_,i)=>i+1).filter(day=>day!==13).slice(0,completedDays).map(day=>"daily-v1-2026-11-"+String(day).padStart(2,"0")):[],hints:{}}));
+  },{kind,lang,completedDays});
   await page.goto("/");
   await page.evaluate(()=>document.documentElement.classList.add("has-mobile-ads"));
   await page.locator("#resume").click();
@@ -64,3 +64,20 @@ test("the daily nudge stops after entering today's game and survives reload",asy
   await page.reload();
   await expect(page.locator("#daily-mode")).toHaveAttribute("data-daily-started","");
 });
+
+for(const completedDays of [6,13,29]) for(const lang of ["ru","en","pt-BR"]) {
+  test(`earned daily medal and next goal fit at 320, previous=${completedDays}, ${lang}`,async({page})=>{
+    await page.setViewportSize({width:320,height:568});
+    await seed(page,"daily",lang,completedDays);
+    await page.locator('[data-index="0"]').click();
+    await page.locator('[data-index="1"]').click();
+    await expect(page.locator("#win")).toBeVisible();
+    await page.locator("#win").evaluate(el=>Promise.allSettled(el.getAnimations({subtree:true}).map(a=>a.finished)));
+    const frame=(await page.locator("#viewport").boundingBox())!;
+    for(const selector of ["#win h1","#result-gains","#award"]) {
+      const box=(await page.locator(selector).boundingBox())!;
+      expect(box.y).toBeGreaterThanOrEqual(frame.y-1);
+      expect(box.y+box.height).toBeLessThanOrEqual(frame.y+frame.height+1);
+    }
+  });
+}
