@@ -1080,6 +1080,14 @@ async function verifyAppBanner() {
         await diagnostics();
       }
     }
+    // The first field entry after returning to the app is protected. Verify
+    // that entry before exercising an internal Home-to-game transition.
+    await stable("before protected app entry");
+    await ui.tap("#resume");
+    await ui.until("!document.querySelector('#dialog').open");
+    await stable("protected app entry keeps the banner");
+    await ui.tap("#menu");
+    await ui.until("document.querySelector('#dialog').open");
     await stable("before genuine interstitial");
     await expected(false,"fullscreen request");
     await ui.tap("#resume");
