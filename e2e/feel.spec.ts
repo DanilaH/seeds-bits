@@ -205,7 +205,7 @@ for (const mode of ["book-v1-1", "daily-v1-2026-11-09"])
             (x: any) =>
               Array.isArray(x) &&
               x.join(",") ===
-                (mode.startsWith("book") ? "18,35,24" : "34,45,42,55,62"),
+                "18,35,24", // MF-07: ordinary task/day cue; medal and jar accents are separate.
           ).length,
       )
       .toBe(1);
