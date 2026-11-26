@@ -1038,6 +1038,62 @@
       "nextAction": "Плейтест подписанного preview 12102 на физическом телефоне; оценить новые звуки и вибрацию.",
       "kitImpact": "REUSE",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40"
+    },
+    {
+      "id": "quiet-table-independent-ui-20261126",
+      "sourceFeatureIds": [],
+      "localIssueIds": [
+        "QT-UI-01",
+        "QT-UI-02",
+        "QT-UI-03",
+        "QT-UI-04",
+        "QT-UI-05",
+        "QT-UI-06",
+        "QT-UI-07"
+      ],
+      "scope": "Own Quiet Table UI polish requested by owner; independent audit, not original parity.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "634583a9a08d8e1a1941c4611a1e0f2d0b77d159",
+      "code": [
+        "src/main.ts",
+        "src/ui-polish.css",
+        "src/quiet-table.css",
+        "native/android/MainActivity.java"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/43",
+        "report": "../research/quiet-table-independent-2026-11-26/README.md",
+        "browser": "141 screenshot CI success; remaining visual defects documented. Existing UI implemented; proposed fixes NOT implemented.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Implement #43 without redesign, repeat exact state captures and native/theme/phone acceptance.",
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "quiet-table-reachability-colors-20261126",
+      "sourceFeatureIds": [],
+      "localIssueIds": [
+        "QT-REACH-01"
+      ],
+      "scope": "Owner-requested valid/incompatible colors on geometric candidates; existing uniform green reachability implemented, color distinction MISSING.",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "consumerCommit": "634583a9a08d8e1a1941c4611a1e0f2d0b77d159",
+      "code": [
+        "src/core.ts",
+        "src/board-view.ts",
+        "src/main.ts",
+        "src/quiet-table.css"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/44",
+        "report": "../research/quiet-table-independent-2026-11-26/README.md",
+        "code": "reachableNumbers and checkPair exist, board-view adds .reachable to every candidate",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Implement #44, classify reachable set with checkPair; test values, geometry and lifecycle; no solver, currency or paused flag change.",
+      "kitImpact": "REUSE"
     }
   ]
 }
