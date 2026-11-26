@@ -583,9 +583,11 @@
         "browser": "161 unit; 24 UI; 12 broad layout; 31 prior results; 8 focused follow-ups; CI preview 38/19/19 PASS",
         "phone": "UNKNOWN",
         "audience": "UNKNOWN",
-        "apk": "12103 signed; same cert as 12102; 675 unsigned entries retained; 21 local game files match"
+        "apk": "12103 signed; same cert as 12102; 675 unsigned entries retained; 21 local game files match",
+        "androidDemo": "FAILED: waiting for task 2 after ADB #play-again tap; root cause UNKNOWN; API35 frame/report linked in delivery",
+        "androidOffline": "RUNNING at delivery"
       },
-      "nextAction": "Проверить подписанный preview 12103 на физическом телефоне: читаемость, тень и ненавязчивость подсветки.",
+      "nextAction": "Разобрать Android demo next-task tap с актуальными WebView bounds и pointer/click trace; проверить 12103 на физическом телефоне: подписи, тень и достижимость.",
       "kitImpact": "REUSE",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40"
     }
