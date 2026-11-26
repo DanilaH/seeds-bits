@@ -770,6 +770,15 @@ return (${code})(SeedsClassicQA);})()`;
     return v.hasAttribute("data-scroll-above")===${above} && v.hasAttribute("data-scroll-below")===${below}
       && (getComputedStyle(v).maskImage!=="none")===${above||below};})()`;
   const timing=[];
+  const durableMove=async label=>{
+    const before=await ui.evaluate("({count:document.querySelector('#remaining').textContent,persistence:document.querySelector('.game').dataset.persistence})");
+    await ui.until("document.querySelector('.game').dataset.persistence==='saved'");
+    const disk=profiles().values[progress].sessions.classic;
+    fs.appendFileSync(out+"/classic-pilot-durable.jsonl",JSON.stringify({label,before,
+      diskCount:disk.current.board.filter(Boolean).length,moves:disk.current.moves,
+      history:(disk.history??disk.packedHistory).length})+"\n");
+    return disk;
+  };
   let geometry, savedScroll, expertCount;
   const generated = [];
   try {
@@ -779,6 +788,7 @@ return (${code})(SeedsClassicQA);})()`;
     await ui.until(left(25));
     await ui.tap("#undo");
     await ui.until(left(27));
+    await durableMove("legacy Undo27");
     await expectSavedBoard("classic",oldHighBoard);
     await ui.tap("#menu");
     const { counts, holes } = await ui.evaluate(withGenerator(
@@ -848,11 +858,12 @@ return (${code})(SeedsClassicQA);})()`;
     await ui.until(left(expertCount-2));
     await ui.tap("#undo");
     await ui.until(left(expertCount));
-    assert.deepEqual(profiles().values[progress].sessions.classic.current.board,savedExpert);
+    assert.deepEqual((await durableMove("Expert bottom Undo")).current.board,savedExpert);
     shot("classic-expert-bottom-320-dark");
     await ui.tap(digit(bottomPair.a));
     await ui.tap(digit(bottomPair.b));
     await ui.until(left(expertCount-2));
+    await durableMove("Expert bottom pair before restart");
     savedScroll=(await depth()).scroll;
     for(const level of [0,1,2,3]){
       timing.push(await ui.evaluate(withGenerator(`({generateClassic,newClassicRun})=>{
@@ -880,11 +891,14 @@ return (${code})(SeedsClassicQA);})()`;
   const resumed=await connect();
   try{
     await resumed.tap("#resume");
+    await resumed.until("!document.querySelector('#dialog').open");
     await resumed.until(left(expertCount-2));
     const restoredScroll=await resumed.evaluate("document.querySelector('#viewport').scrollTop");
     if(geometry.realBannerReserve)assert(Math.abs(restoredScroll-savedScroll)<=1,"Lost Expert scroll after restart");
     await resumed.tap("#undo");
     await resumed.until(left(expertCount));
+    await resumed.until("document.querySelector('.game').dataset.persistence==='saved'");
+    assert.deepEqual(profiles().values[progress].sessions.classic.current.board,savedExpert);
     return {timing,generated,geometry,scrollEdges:true,scrollRestore:{before:savedScroll,after:restoredScroll,realReserve:geometry.realBannerReserve},
       physicalPhone:false,viewport320:true,legacy27Undo:true,legacyWallet:7,
       bottomTouch:true,undo:true,restartAndContinue:true,
