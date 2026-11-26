@@ -856,6 +856,8 @@
   #app #win.daily-result #win-stats { display: flex; justify-content: center; gap: 16px; }
   #app #win.daily-result #win-stats .result-stat { display: flex; align-items: baseline; gap: 4px; padding: 0; border: 0; }
   #app #win.daily-result #win-stats strong { font-size: 16px; }
+  #app #win.daily-result #result-jar-card { margin-block: 2px; padding-block: 1px; }
+  #app #win.daily-result #result-jar-card .jar-glass { width: 28px; height: 36px; }
 }
 #app #win #result-jar-card { display: flex; justify-content: center; align-items: center; gap: 9px; }
 #app #win #result-jar-card .jar-glass { width: 32px; height: 44px; }
