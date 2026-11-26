@@ -1279,3 +1279,12 @@
 }
 
 #app .jar-glass[data-reward-phase="closing"] { overflow: visible; }
+/* Receipt copy uses a reserved column: the receiving jar never follows text width. */
+#app #win #result-jar-card > .jar-picture { flex: 0 0 auto; }
+#app #win #result-jar-amount {
+  flex: 0 1 26ch;
+  min-block-size: 2.4em;
+  display: flex;
+  align-items: center;
+  text-align: start;
+}
