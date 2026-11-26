@@ -228,7 +228,7 @@ for (const [completed, tier] of [
       /earned/,
     );
     const burst = page.locator("#award .trophy-confetti");
-    await expect(burst.locator("i")).toHaveCount(32);
+    await expect(burst.locator("i")).toHaveCount(12);
     expect(await burst.locator('[data-white="true"]').count()).toBeGreaterThan(
       0,
     );

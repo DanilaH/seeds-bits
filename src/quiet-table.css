@@ -1267,11 +1267,15 @@
   }
 }
 
-#dialog[data-screen="home"] .mode-nav {
-  grid-template-columns: repeat(auto-fit,minmax(min(100%,9ch),1fr));
+@media (orientation: portrait) {
+  #dialog[data-screen="home"] .mode-nav {
+    grid-template-columns: repeat(auto-fit,minmax(min(100%,9ch),1fr));
+  }
 }
 #dialog button .volume-illustration { transition: translate 80ms ease-out, scale 120ms ease-out; }
 #dialog button.is-pressed .volume-illustration { translate: 0 2px; scale: .97; }
 @media (prefers-reduced-motion: reduce) {
   #dialog button .volume-illustration { transition:none; translate:none; scale:none; }
 }
+
+#app .jar-glass[data-reward-phase="closing"] { overflow: visible; }

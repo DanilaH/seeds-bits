@@ -2539,5 +2539,12 @@
     "es": "Guardando jugada…",
     "tr": "Hamle kaydediliyor…",
     "pt-BR": "Salvando jogada…"
+  },
+  "feel.jar.collected": {
+    "ru": "Баночка {number} собрана",
+    "en": "Jar {number} collected",
+    "es": "Frasco {number} completado",
+    "tr": "{number}. kavanoz tamamlandı",
+    "pt-BR": "Pote {number} completo"
   }
 }

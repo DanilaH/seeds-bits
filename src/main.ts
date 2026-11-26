@@ -1420,7 +1420,7 @@ function maybeCelebrateResult() {
   presentationRevision++;
   for (const cancel of [...presentationWaits]) cancel();
   flights.clear();jarSpill.clear();completedJar=undefined;jarMilestone=undefined;
-  const revision=presentationRevision, current=session, amount=earnedSeeds;
+  const revision=presentationRevision, current=session, amount=earnedSeeds+resultPairSeeds;
   visualSeeds=Math.max(0,jars(progress).meter-amount);renderJar();
   const kind=resultMilestone?.session===session ? resultMilestone.kind : resultKind(progress.active,progress.done,notebook,false);
   const award=earnedAward;
@@ -2184,6 +2184,7 @@ $("watch-hints").onclick = async () => {
 };
 let earnedAward = "",
   earnedSeeds = 0,
+  resultPairSeeds = 0,
   earnedHints = 0;
 function complete(rects: DOMRect[], pairSeeds = 0) {
   const alreadyCompleted =
@@ -2204,7 +2205,8 @@ function complete(rects: DOMRect[], pairSeeds = 0) {
       count: gains.hints,
       attempt: hintAttempt(progress).id,
     });
-  earnedSeeds = gains.seeds + pairSeeds;
+  earnedSeeds = gains.seeds;
+  resultPairSeeds = pairSeeds;
   earnedHints = gains.hints;
   if (!alreadyCompleted)
     durableEvent("game_complete", {
@@ -3483,7 +3485,7 @@ async function beginClassic(
     busy = switching = false;
     dialog.inert = false;
     earnedAward = "";
-    earnedSeeds = earnedHints = 0;
+    earnedSeeds = earnedHints = resultPairSeeds = 0;
     saveRecovered = false;
     clearSelection();
     closeMenu();
@@ -4105,7 +4107,7 @@ async function switchGame(id: string, route?: string) {
   busy = false;
   if (saveFailed || futureSave || storageConflict) return;
   earnedAward = "";
-  earnedSeeds = earnedHints = 0;
+  earnedSeeds = earnedHints = resultPairSeeds = 0;
   saveRecovered = false;
   progress = candidate;
   session = nextSession;
@@ -4699,7 +4701,7 @@ function updateResultJar() {
   if (resultJarCard.hidden) return;
   const total = jars(progress).meter;
   const displayed = visualSeeds ?? total;
-  const j = jarState(resultAwaitingSave === session ? Math.min(displayed, total - earnedSeeds) : displayed);
+  const j = jarState(resultAwaitingSave === session ? Math.min(displayed, total - earnedSeeds - resultPairSeeds) : displayed);
   if (completedJar) Object.assign(j,{index:completedJar.index,filled:completedJar.capacity,capacity:completedJar.capacity,percent:100,
     name:localName(jarNames[completedJar.index%6]),color:jarColors[completedJar.index%6]});
   resultJarCard.dataset.filled=String(j.filled);
@@ -4708,8 +4710,10 @@ function updateResultJar() {
   resultJarCard.style.setProperty("--jar-color", j.color);
   resultJarCard.style.setProperty("--fill", `${j.percent}%`);
   syncJarGrains(resultJarCard, j.filled);
+  const lastJar=jarState(displayed).index;
+  const ordinal=lastJar>j.index+1 ? `${j.index+1}–${lastJar}` : j.index+1;
   $("result-jar-amount").textContent = completedJar
-    ? `${t("ui.jar-3",{"0":jarState(displayed).index>j.index+1?`${j.index+1}–${jarState(displayed).index}`:j.index+1})} · ${t("ui.collected")} · ${j.filled}/${j.capacity}`
+    ? `${t("feel.jar.collected",{number:ordinal})} · ${j.filled}/${j.capacity}`
     : `${j.name} · ${t("ui.of-seeds", {"0":j.filled,"1":j.capacity})}`;
 }
 $("jar-meter").onclick = () => {

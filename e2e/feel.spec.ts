@@ -429,11 +429,12 @@ test("slow save holds the full jar through its spill instead of shaking the next
     };
   });
   await removePair(page);
-  await expect(page.locator("#jar-meter")).toHaveAttribute("data-full", "true");
+  // A held commit cannot display an earned receipt or start the closing accent.
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-full", "false");
   await page.waitForTimeout(600);
   await expect(page.locator("#jar-spill")).toHaveCount(0);
   await page.evaluate(() => (window as any).releaseJarSave());
-  await expect(page.locator("#jar-spill i")).toHaveCount(24);
+  await expect(page.locator("#jar-spill i")).toHaveCount(12);
   await expect(page.locator("#jar-percent")).toHaveText("100%");
   await expect(page.locator("#jar-name")).toHaveText("Баночка 1");
   await expect(page.locator("#jar-name")).toHaveText("Баночка 2");
@@ -452,7 +453,7 @@ for (const viewport of [
     await resetEvents(page);
     const caption = await page.locator(".jar-caption").boundingBox();
     await removePair(page);
-    await expect(page.locator("#jar-spill i")).toHaveCount(24);
+    await expect(page.locator("#jar-spill i")).toHaveCount(12);
     await expect
       .poll(
         async () =>
@@ -471,7 +472,7 @@ for (const viewport of [
         ).getKeyframes();
         const first = new DOMMatrixReadOnly(frames[0].transform as string);
         const last = new DOMMatrixReadOnly(frames.at(-1)!.transform as string);
-        return { x: first.m41, y: first.m42, endY: last.m42 };
+        return { x: first.m41, y: first.m42, endX: last.m41, endY: last.m42 };
       });
       return {
         paths,
@@ -488,7 +489,7 @@ for (const viewport of [
         (p) =>
           Math.abs(p.x - (geometry.glass.x + geometry.glass.width / 2)) < 20 &&
           Math.abs(p.y - geometry.glass.top) < 15 &&
-          p.endY > geometry.height,
+          Math.abs(p.endX-p.x) <= 54 && Math.abs(p.endY-p.y) <= 54,
       ),
     ).toBe(true);
     expect(await page.locator(".jar-caption").boundingBox()).toEqual(caption);
@@ -510,7 +511,7 @@ test("full jar cancellation removes its layer and cannot restart in the menu", a
   await seed(page, { meter: 22 });
   await page.locator("#resume").click();
   await removePair(page);
-  await expect(page.locator("#jar-spill i")).toHaveCount(24);
+  await expect(page.locator("#jar-spill i")).toHaveCount(12);
   await page.locator("#menu").click();
   await resetEvents(page);
   await expect(page.locator("#jar-spill")).toHaveCount(0);
@@ -568,7 +569,7 @@ test("rotation cancels the spill instead of leaving trajectories over a new layo
   await seed(page, { meter: 22 });
   await page.locator("#resume").click();
   await removePair(page);
-  await expect(page.locator("#jar-spill i")).toHaveCount(24);
+  await expect(page.locator("#jar-spill i")).toHaveCount(12);
   await page.setViewportSize({ width: 844, height: 390 });
   await expect(page.locator("#jar-spill")).toHaveCount(0);
   await page.waitForTimeout(600);

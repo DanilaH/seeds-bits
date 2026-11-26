@@ -30,12 +30,12 @@ async function trace(page:Page){
     const start=performance.now(),samples:any[]=[];
     await new Promise<void>(resolve=>{const frame=()=>{
       const paper=document.querySelector('.quiet-result-page')!,card=document.querySelector<HTMLElement>('#result-jar-card')!,glass=document.querySelector<HTMLElement>('#result-jar-glass')!;
-      const r=glass.getBoundingClientRect();
+      const r=glass.getBoundingClientRect(), anchor=glass.parentElement!.getBoundingClientRect();
       samples.push({at:performance.now()-start,kind:document.querySelector('#win')?.getAttribute('data-result-kind'),fill:card.dataset.filled,capacity:card.dataset.capacity,index:card.dataset.index,
         phase:glass.dataset.rewardPhase,spillTarget:document.querySelector<HTMLElement>('#jar-spill')?.dataset.target,
         particles:document.querySelectorAll('.result-seed-burst i,#jar-spill i,.trophy-confetti i,.flying-seed').length,
         angle:Math.atan2(new DOMMatrix(getComputedStyle(paper).transform).b,new DOMMatrix(getComputedStyle(paper).transform).a)*180/Math.PI,
-        opacity:Number(getComputedStyle(document.querySelector('#win')!).opacity),box:{x:r.x,y:r.y,width:r.width,height:r.height}});
+        opacity:Number(getComputedStyle(document.querySelector('#win')!).opacity),box:{x:r.x,y:r.y,width:r.width,height:r.height},anchor:{x:anchor.x,y:anchor.y,width:anchor.width,height:anchor.height}});
       if(performance.now()-start>2900)resolve();else requestAnimationFrame(frame);
     };frame();});return samples;
   });
@@ -46,6 +46,7 @@ for(const kind of ['task','page','book','classic','daily','daily-bronze','daily-
   expect(Math.max(...samples.map(x=>x.particles))).toBeLessThanOrEqual(14);
   expect(samples.every(x=>x.opacity===1)).toBe(true);
   if(['task','page','book'].includes(kind))expect(Math.max(...samples.map(x=>Math.abs(x.angle)))).toBeLessThan(.1);
+  for(const axis of ['x','y'])expect(Math.max(...samples.map(x=>x.anchor[axis]))-Math.min(...samples.map(x=>x.anchor[axis]))).toBeLessThanOrEqual(1);
   expect(samples.some(x=>x.fill==='24'&&x.capacity==='24')).toBe(true);
   expect(samples.some(x=>x.phase==='closing'&&x.spillTarget==='result-jar-glass')).toBe(true);
   const total=kind==='classic'?24:26;

@@ -34,7 +34,7 @@ export class JarSpill {
       grain.style.setProperty("--grain-size",`${4+i%3}px`);
       grain.style.background = color;
       layer.append(grain);
-      const x=box.x+box.width/2,y=box.y+box.height*.25,a=i*Math.PI*2/12;
+      const x=box.x+box.width/2,y=box.y+Math.min(8,box.height*.15),a=i*Math.PI*2/12;
       animate(grain,[
         {transform:`translate(${x}px,${y}px) scale(.4)`,opacity:0},
         {opacity:.9,offset:.2},
