@@ -54,6 +54,15 @@ for(const [width,height] of [[320,568],[390,844]])for(const language of ['ru','e
  await expect(page.locator('.jar-overview .hero-value')).toHaveCount(0);await expect(page.locator('#jar-play')).toBeInViewport();
  const shelf=page.locator('.jar-shelf');const first=(await shelf.locator('.jar-keepsake').first().boundingBox())!;expect(first.y).toBeLessThan(height-62);
  await expect(page.locator('#dialog .dialog-head')).toHaveCSS('box-shadow','none');
+ await page.locator('#collection-back').click();await page.locator('#collection-back').click();
+ await page.locator('#settings-open').click();
+ const stock=(await page.locator('.settings-reserve').boundingBox())!,restart=(await page.locator('#new').boundingBox())!;
+ expect(restart.y-stock.y-stock.height).toBeGreaterThanOrEqual(0);expect(restart.y-stock.y-stock.height).toBeLessThanOrEqual(16);
+ for(const id of ['dark','sound','vibration'])expect((await page.locator('#'+id).locator('..').boundingBox())!.height).toBeGreaterThanOrEqual(48);
+ await page.locator('#settings-back').click();await page.locator('#book-mode').click();await page.locator('#all-books').click();
+ const range=page.locator('[data-book-range="4"]');await range.click();
+ const tops=await page.locator('.book-ranges button').evaluateAll(es=>es.map(e=>Math.round(e.getBoundingClientRect().top)));expect(new Set(tops).size,JSON.stringify(await page.locator(".book-ranges").evaluate(el=>{const s=getComputedStyle(el);return {width:el.clientWidth,font:s.font,columns:s.gridTemplateColumns,gap:s.gap};}))).toBe(1);
+ const line=await range.evaluate(el=>{const r=document.createRange();r.selectNodeContents(el);return r.getClientRects().length;});expect(line).toBe(1);
  await page.locator('#collection-back').click();await page.locator('#collection-back').click();await page.locator('#classic-mode').click();await page.locator('#next-classic').click();await page.locator('[data-classic-level="2"]').click();
  const confirm=(await page.locator('#confirm-content').boundingBox())!;expect(confirm.height).toBeLessThan(330);const padding=await page.locator('#confirm-content').evaluate(el=>getComputedStyle(el).paddingLeft);expect(padding).toBe('16px');
  await page.locator('#cancel-new').click();
@@ -77,4 +86,19 @@ for(const [width,height] of [[320,568],[390,844]])for(const language of ['ru','e
   const overflow=await page.locator('#viewport').evaluate(e=>e.scrollHeight-e.clientHeight);expect(overflow).toBeLessThanOrEqual(1);
   await context.close();
  }
+});
+
+test('daily archive button opens the calendar when no unsolved date exists',async({page})=>{
+ await page.clock.setFixedTime(new Date('2025-01-01T12:00:00Z'));await page.setViewportSize({width:320,height:568});
+ await seed(page,{id:'daily-v1-2025-01-01',board:[5,5],language:'ru'});await page.locator('#resume').click();await page.locator('[data-index="0"]').click();await page.locator('[data-index="1"]').click();
+ await expect(page.locator('#win')).toBeVisible();await expect(page.locator('#play-again')).toHaveAttribute('data-destination','');await expect(page.locator('#play-again')).toHaveClass(/archive-next/);
+ await page.locator('#play-again').click();await expect(page.locator('#dialog')).toHaveAttribute('data-screen','calendar');
+});
+
+test('enlarged catalogue keeps numeric ranges intact and scrollable',async({page})=>{
+ await page.setViewportSize({width:320,height:568});await seed(page);await page.locator('#book-mode').click();await page.locator('#all-books').click();
+ await page.locator('.book-ranges').evaluate(el=>{(el as HTMLElement).style.fontSize='24px';});
+ await page.locator('[data-book-range="4"]').click();
+ const failures=await page.locator('.book-ranges button').evaluateAll(es=>es.filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>e.textContent));expect(failures).toEqual([]);
+ await page.locator('[data-volume="99"]').scrollIntoViewIfNeeded();await expect(page.locator('[data-volume="99"]')).toBeInViewport();
 });

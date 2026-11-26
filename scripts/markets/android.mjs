@@ -1018,6 +1018,9 @@ async function verifyAppBanner() {
     let retained=initial;
     const stable=async(label)=>{
       const current=await diagnostics();
+      const dom=await ui.evaluate(`({focus:document.hasFocus(),hidden:document.hidden,active:document.activeElement?.id,
+        dialogs:[...document.querySelectorAll('dialog[open]')].map(e=>e.id),inert:document.querySelector('#app').inert})`);
+      trace(label+" observed",{...current,dom});
       assert.equal(current.view,retained.view,label);
       assert.equal(current.request,retained.request,label);
       assert.equal(current.visible,true,label);

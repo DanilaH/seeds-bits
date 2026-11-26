@@ -901,6 +901,10 @@
 #dialog #settings-panel .settings-basics { min-height: 0; gap: 10px; padding: 14px; }
 #dialog #settings-panel .settings label { min-height: 48px; }
 #dialog #settings-panel #privacy-open { margin-top: 0; }
+#dialog #settings-panel :is(.settings-reserve,#new) { margin-block: 0; }
+#dialog #settings-panel #new { min-height: 48px; padding: 10px; }
+#dialog .book-ranges { display: flex; flex-wrap: wrap; font-size: 12px; }
+#dialog .book-ranges button { flex: 1 1 0; min-width: max-content; white-space: nowrap; padding-inline: 1px; font-size: inherit; font-weight: 650; }
 
 #dialog :is(.settings-basics, #reminder-settings) { padding: 10px 14px; margin-inline: 2px 5px; }
 #dialog .settings-rows, #dialog .settings-reserve,

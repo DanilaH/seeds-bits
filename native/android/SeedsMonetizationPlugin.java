@@ -54,7 +54,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private final ViewTreeObserver.OnWindowFocusChangeListener bannerFocus = this::windowFocusChanged;
   private final View.OnLayoutChangeListener bannerLayout = (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
     if (right-left != oldRight-oldLeft || bottom-top != oldBottom-oldTop) {
-      hideBanner();
+      hideBanner("native_state");
       requestBannerRefresh();
     }
   };
@@ -83,6 +83,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     }
   }
   private BannerPlacement bannerPlacement;
+  private String bannerHiddenReason = "not_requested";
   private static double number(PluginCall call, String key) {
     Object value = call.getData().opt(key);
     return value instanceof Number ? ((Number)value).doubleValue() : Double.NaN;
@@ -447,14 +448,15 @@ public class SeedsMonetizationPlugin extends Plugin {
     preloadAds(); publishReadiness();
   }
   private void windowFocusChanged(boolean focused) {
-    if (!focused) hideBanner();
+    if (!focused) hideBanner("window_focus");
     // Only the SDK can dismiss a shown fullscreen. Focus alone can return under its overlay.
     else if (showing == null && bannerPlacement != null) applyBanner(bannerPlacement);
   }
   private boolean canPlaceBanner() {
     return initialized && !destroyed && enabled() && !fullscreenActive && resumed && getActivity().hasWindowFocus();
   }
-  private void hideBanner() {
+  private void hideBanner(String reason) {
+    bannerHiddenReason = reason;
     if (bannerHost != null) bannerHost.setVisibility(View.GONE);
   }
   private void clearBanner() {
@@ -492,6 +494,7 @@ public class SeedsMonetizationPlugin extends Plugin {
       .put("view",banner==null?0:System.identityHashCode(banner))
       .put("loaded",bannerLoads).put("impressions",bannerImpressions)
       .put("visible",bannerHost!=null&&bannerHost.getVisibility()==View.VISIBLE)
+      .put("hiddenReason",bannerHiddenReason)
       .put("expected",bannerExpected).put("requestedVisible",bannerPlacement!=null&&bannerPlacement.visible)
       .put("fullscreen",fullscreenActive).put("resumed",resumed)
       .put("focused",getActivity().hasWindowFocus())
@@ -503,16 +506,18 @@ public class SeedsMonetizationPlugin extends Plugin {
       .put("webWidth",web.getWidth()).put("webHeight",web.getHeight()));
   }); }
   private void applyBanner(BannerPlacement placement) {
-    if (!canPlaceBanner() || !placement.visible || !placement.valid()) { hideBanner(); return; }
+    if (!canPlaceBanner()) { hideBanner("native_lifecycle"); return; }
+    if (!placement.visible) { hideBanner("web_requested_hidden"); return; }
+    if (!placement.valid()) { hideBanner("invalid_placement"); return; }
     View web = getBridge().getWebView();
     FrameLayout root = getActivity().findViewById(android.R.id.content);
     if (web.getWidth() <= 0 || web.getHeight() <= 0 || root == null ||
-        web.getWidth() != measuredWebWidth || web.getHeight() != measuredWebHeight) { hideBanner(); return; }
+        web.getWidth() != measuredWebWidth || web.getHeight() != measuredWebHeight) { hideBanner("native_bounds_changed"); return; }
     // Native bounds can resize before CSS reports its new viewport. Keep the SDK view
     // until both measurements refer to the same width, with one CSS pixel of rounding.
     if (Double.isFinite(placement.pixelRatio) && placement.pixelRatio > 0 &&
         Math.abs(web.getWidth() - placement.viewportWidth * placement.pixelRatio) > Math.max(1, placement.pixelRatio)) {
-      hideBanner();
+      hideBanner("scale_mismatch");
       return;
     }
     double scale = web.getWidth() / placement.viewportWidth;
@@ -528,7 +533,7 @@ public class SeedsMonetizationPlugin extends Plugin {
         || top < Math.max(offsetY, root.getPaddingTop())
         || right > Math.min(offsetX + web.getWidth(), root.getWidth() - root.getPaddingRight())
         || bottom > Math.min(offsetY + web.getHeight(), root.getHeight() - root.getPaddingBottom())) {
-      hideBanner();
+      hideBanner("outside_bounds");
       return;
     }
     int dp = Math.max(1, (int) Math.floor(width / getContext().getResources().getDisplayMetrics().density));
@@ -555,7 +560,7 @@ public class SeedsMonetizationPlugin extends Plugin {
       bannerRequests++; event("ad_request", "banner"); banner.loadAd(new AdRequest.Builder(unit("banner")).build());
     }
     if (bannerHost == null) return; // A synchronous load failure may have removed this view.
-    if (bannerPixelHeight > height) { publishBannerHeight(bannerPixelHeight + (height == bannerPixelHeight - 1 ? 1 : 0), scale, true); hideBanner(); return; }
+    if (bannerPixelHeight > height) { publishBannerHeight(bannerPixelHeight + (height == bannerPixelHeight - 1 ? 1 : 0), scale, true); hideBanner("creative_height"); return; }
     int parentLeft = left - root.getPaddingLeft();
     int parentTop = bottom - bannerPixelHeight - root.getPaddingTop();
     if (bannerLeft != parentLeft || bannerTop != parentTop) {
@@ -567,6 +572,7 @@ public class SeedsMonetizationPlugin extends Plugin {
       bannerTop = parentTop;
     }
     if (bannerHost.getVisibility() != View.VISIBLE) bannerHost.setVisibility(View.VISIBLE);
+    bannerHiddenReason = "";
   }
   private void publishBannerHeight(int pixels, double scale, boolean grow) {
     int cssHeight = (int) Math.ceil(pixels / scale);

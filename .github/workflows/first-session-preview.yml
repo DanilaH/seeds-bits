@@ -128,8 +128,7 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
       - run: sdkmanager "build-tools;36.0.0"
-      - name: Check the video tools
-        if: matrix.mode == 'demo'
+      - name: Check screenshot and video tools
         run: |
           command -v ffmpeg > /dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
       - run: npm ci --no-audit --no-fund

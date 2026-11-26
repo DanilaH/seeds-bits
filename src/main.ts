@@ -604,7 +604,7 @@ $("menu-content").querySelector(".home-title")!.append(homeJar);
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
 homeGoal.innerHTML = '<span id="home-goal-caption"></span><progress max="24" aria-hidden="true"></progress>';
-$("new").className = "text-button restart-action";
+$("new").className = "secondary restart-action";
 homeCurrent.querySelector(".home-current-copy")!.append($("resume-context"), homePreview, homeGoal);
 // The hit target stays on the table; only the illustrated child floats.
 const homeNotebook = document.createElement("div");
@@ -1873,7 +1873,7 @@ function markGameStarted() {
 function bannerEligible() {
   const guardedScreen = dialog.open && ["settings","confirm","privacy"].includes(dialog.dataset.screen ?? "");
   return appForeground && !platformPaused && !rewardRequest && !engagementActive &&
-    !document.hidden && document.hasFocus() && lesson < 0 && !guardedScreen && !languageSheet.open && !classicNewSheet.open && !hintOffer.open &&
+    !document.hidden && (platform.native || document.hasFocus()) && lesson < 0 && !guardedScreen && !languageSheet.open && !classicNewSheet.open && !hintOffer.open &&
     !document.querySelector("dialog[open]:not(#dialog)");
 }
 function updateBanner() {
