@@ -15,3 +15,5 @@
 -keepnames class io.appmetrica.analytics.AppMetrica
 
 -keep class **.SeedsFeedbackPlugin { *; }
+
+-keep class **.SeedsAppearancePlugin { *; }

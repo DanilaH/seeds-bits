@@ -12,6 +12,10 @@
   --table-shadow: #78694a38;
   --table-ground-shadow: #4a4b35;
   --table-reachable: #e8edcf;
+  --table-reachable-invalid: #edd3c7;
+  --table-invalid-edge: #a75b50;
+  --table-archive: #e0bd80;
+  --table-archive-ink: #304837;
   --control-radius: 14px;
   --panel-radius: 16px;
   --inset-radius: 10px;
@@ -45,6 +49,10 @@
   --table-shadow: #101c15aa;
   --table-ground-shadow: #080f0a;
   --table-reachable: #465c42;
+  --table-reachable-invalid: #63413b;
+  --table-invalid-edge: #d68f81;
+  --table-archive: #dca77c;
+  --table-archive-ink: #213826;
   --table-action: #b8cba3;
   --table-action-ink: #213826;
   --table-wash: #425742;
@@ -303,15 +311,15 @@
 #dialog[data-screen="home"] .mode-nav {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
+  align-items: stretch;
   gap: 3px;
   width: 100%;
 }
 #dialog[data-screen="home"] :is(.home-book-card, .home-calendar) {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: stretch;
+  justify-content: stretch;
   gap: 0;
   border: 0;
   padding: 0;
@@ -409,7 +417,9 @@
 .calendar-picture::before,
 .calendar-picture::after { content: none; }
 #dialog[data-screen="home"] :is(#book-quick, .home-calendar #calendar-open) {
-  width: auto;
+  width: calc(100% - 6px);
+  justify-self: center;
+  align-self: stretch;
   max-width: 100%;
   min-width: 44px;
   min-height: 48px;
@@ -426,9 +436,9 @@
   gap: 1px;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: 0;
-  color: var(--table-muted);
+  background: var(--sheet);
+  border: 1px solid var(--table-rule);
+  color: var(--table-ink);
 }
 #dialog[data-screen="home"] .home-calendar { margin-top: 0; }
 #daily-mode[data-daily-pending] .calendar-picture {
@@ -440,7 +450,8 @@
 #calendar-open svg { width: 12px; flex: 0 0 12px; }
 #dialog[data-screen="home"] .home-links {
   display: grid;
-  grid-template-columns: repeat(4,minmax(0,1fr));
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,9.7ch),1fr));
+  font-size: .73rem;
   justify-items: stretch;
   width: 100%;
   border-top: 1px solid var(--table-rule);
@@ -510,9 +521,15 @@
   background: var(--table-wash);
   box-shadow: inset 0 0 0 .5px var(--table-rule);
 }
-.game:not(.is-result) #board button.cell.reachable:not(.selected):not(.hinted):not(.pair-blocker) {
+.game:not(.is-result) #board button.cell.reachable-valid:not(.selected):not(.hinted):not(.pair-blocker) {
   background: var(--table-reachable);
   box-shadow: inset 0 0 0 1px var(--table-cover);
+}
+.game:not(.is-result) #board button.cell.reachable-invalid:not(.selected):not(.hinted):not(.pair-blocker) {
+  background: var(--table-reachable-invalid);
+  box-shadow: inset 0 0 0 .5px var(--table-rule);
+  outline: 1px dashed var(--table-invalid-edge);
+  outline-offset: -2px;
 }
 .game:not(.is-result) #board .empty {
   background: var(--sheet);
@@ -636,7 +653,7 @@
   color: var(--table-ink);
 }
 #dialog .screen-heading h2 { font-weight: 650; }
-#dialog:not([data-screen="home"]) > .dialog-head { background: transparent; }
+#dialog:not([data-screen="home"]) > .dialog-head { background: transparent; box-shadow: none; margin-bottom: 8px; }
 #dialog .screen-heading :is(#collection-back,#settings-back,#privacy-back) {
   border: 0;
   box-shadow: none;
@@ -681,7 +698,7 @@
   font-weight: 650;
   padding-inline-end: 5px;
 }
-#dialog[data-screen="book"] #collection { flex: 0 1 auto; }
+#dialog[data-screen="book"] #collection { flex: 0 1 auto; margin: 0 auto; }
 #dialog[data-screen="book"] #notebook-dock { padding-inline: 13px; background: transparent; }
 @media (orientation: portrait) and (max-height: 590px) {
   #dialog[data-screen="book"] .quiet-book-page {
@@ -738,7 +755,7 @@
   border-radius: var(--inset-radius);
   padding: 5px 3px;
   min-width: 0;
-  min-height: 80px;
+  min-height: 72px;
   height: auto;
   aspect-ratio: auto;
   line-height: 1.2;
@@ -747,8 +764,8 @@
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  width: min(100%, 54px);
-  height: 52px;
+  width: min(100%, 50px);
+  height: 46px;
   padding: 0 5px 6px 1px;
   background: var(--table-book-art) center / 100% 100% no-repeat;
 }
@@ -833,26 +850,58 @@
 }
 #dialog #collection .calendar-note { margin-block: 9px; }
 
-#dialog #collection .jar-overview .progress-hero {
+/* One current vessel, one count, one scale; the shelf keeps earned identities. */
+#dialog #collection .progress-hero {
   display: grid;
-  flex: initial;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 6px;
-  text-align: center;
-  background: none;
+  grid-template-columns: clamp(80px, 23vw, 94px) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 8px 4px;
+  margin: 0;
   border: 0;
-  padding: 6px;
   box-shadow: none;
+  background: transparent;
+  color: var(--table-ink);
 }
-#dialog #collection .jar-overview .progress-hero > div { display: contents; }
-#dialog .jar-overview .hero-kicker { grid-row: 1; }
-#dialog .jar-overview :is(.hero-value,.hero-count) { justify-content: center; text-align: center; }
-#dialog .jar-overview .hero-jar-name { grid-row: 2; }
-#dialog #collection .jar-overview .progress-hero > .jar-picture { grid-row: 3; justify-self: center; }
-#dialog #collection .jar-overview .progress-hero .jar-glass { width: clamp(85px, 31vw, 140px); height: clamp(112px, 42vw, 194px); }
-#dialog .jar-overview .progress-hero progress { width: min(70%, 220px); justify-self: center; }
-#dialog #collection .jar-history { padding: 10px; }
-#dialog .jar-shelf { border-bottom: 5px solid var(--table-cover); padding-bottom: 6px; }
+#dialog #collection .progress-hero > div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  width: auto;
+  min-width: 0;
+  text-align: start;
+}
+#dialog #collection .progress-hero > .jar-picture { grid-row: auto; justify-self: center; }
+#dialog #collection .progress-hero .jar-glass { width: clamp(80px, 23vw, 94px); height: clamp(110px, 31vw, 128px); }
+#dialog #collection .progress-hero .hero-jar-name { font-size: 22px !important; margin: 0; }
+#dialog #collection .progress-hero :is(.hero-count,.fine) { margin: 0; line-height: 1.3; }
+#dialog #collection .progress-hero .hero-count { font-size: 14px; justify-content: flex-start; }
+#dialog #collection .progress-hero .hero-kicker { grid-row: auto; font-size: 12px; }
+#dialog #collection .progress-hero progress { width: 100%; height: 6px; margin: 2px 0; }
+#dialog .jar-overview .jar-collected-count { margin: 8px 0; font-size: 13px; }
+#dialog #collection #jar-play { width: 100%; min-height: 48px; margin: 4px 0 10px; color: var(--table-action-ink); background: var(--table-action); }
+#dialog #collection .jar-history { padding: 0; border: 0; background: transparent; box-shadow: none; }
+#dialog .jar-shelf-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+#dialog .jar-shelf-heading h3 { margin: 0; font-size: 17px; }
+#dialog .jar-shelf-heading .month-nav { gap: 4px; margin: 0; width: auto; }
+#dialog .jar-shelf-heading .month-nav button { min-width: 44px; min-height: 44px; padding: 6px; font-size: 12px; }
+#dialog .jar-shelf-heading .month-nav span { font-size: 12px; }
+#dialog .jar-shelf { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px 6px; margin: 5px 0 10px; padding: 10px 4px; border-bottom: 5px solid var(--table-cover); }
+#dialog .jar-keepsake { min-width: 0; gap: 4px; }
+#dialog .jar-keepsake .jar-glass { width: 30px; height: 42px; }
+#dialog .jar-keepsake small { font-size: 11px; line-height: 1.2; overflow-wrap: anywhere; }
+#dialog .jar-empty { margin: 8px 0; color: var(--table-muted); }
+@media (min-width: 380px) { #dialog .jar-shelf { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+
+#dialog[data-screen="confirm"] #confirm-content { flex: 0 1 auto; margin: 8px auto auto; padding: 16px; max-height: calc(100% - 64px); }
+#dialog #confirm-content p { margin: 0 0 14px; line-height: 1.5; }
+#dialog #confirm-content button { width: 100%; min-height: 48px; padding: 10px; margin-block: 4px; }
+#dialog #settings-panel { margin: 0 auto; }
+#dialog #settings-panel .settings-basics { min-height: 0; gap: 10px; padding: 14px; }
+#dialog #settings-panel .settings label { min-height: 48px; }
+#dialog #settings-panel #privacy-open { margin-top: 0; }
+
 #dialog :is(.settings-basics, #reminder-settings) { padding: 10px 14px; margin-inline: 2px 5px; }
 #dialog .settings-rows, #dialog .settings-reserve,
 #app .language-option[aria-pressed="true"],
@@ -922,6 +971,15 @@
   margin: 4px auto 10px;
   padding: 16px 28px 18px 34px;
 }
+#app #win .quiet-result-page .result-ribbon {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  width: 18px;
+  height: 38px;
+  background: url("./art/quiet-table/ribbon.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
 #app #win .quiet-result-page .win-symbol.paper-result {
   position: relative;
   width: 88px;
@@ -965,7 +1023,7 @@
 #app #win #award .next-medal strong { font-size: 12px; }
 #app #win #award .next-medal-art { display: none; }
 #app #win #result-date-art { font-size: 23px; }
-#app #win.daily-result .quiet-result-page { padding-inline: 29px 22px; }
+#app #win.daily-result .quiet-result-page { padding-inline: 29px 32px; }
 #app #win.daily-result #award {
   width: 100%;
   border: 0;
@@ -976,7 +1034,7 @@
 #app #win.daily-result #result-subtitle { display: none; }
 @media (orientation: portrait) and (max-height: 650px) {
   #app #win.daily-result #result-date-art { display: none; }
-  #app #win.daily-result .quiet-result-page { width: 100%; padding: 9px 14px 12px 29px; margin-block: 3px 7px; }
+  #app #win.daily-result .quiet-result-page { width: 100%; padding: 9px 32px 12px 29px; margin-block: 3px 7px; }
   #app #win.daily-result .quiet-result-page h1 { font-size: 21px; }
   #app #win.daily-result #award { padding: 4px 6px; margin-top: 6px; }
   #app #win.daily-result #award :is(.medal-art,.medal-figure) { width: 40px; height: 48px; }
@@ -992,14 +1050,17 @@
 #app #result-next { display: flex; flex-direction: column; gap: 4px; width: 100%; }
 #app #result-next #result-home { min-height: 44px; padding: 6px; text-align: center; }
 #app #result-next #result-home.primary { min-height: 48px; padding: 10px 8px; }
-#app #result-next #play-again.text-button {
+#app #result-next #play-again.archive-next {
   min-height: 44px;
   padding: 6px;
   border: 0;
-  background: transparent;
-  color: var(--table-ink);
+  background: var(--table-archive);
+  color: var(--table-archive-ink);
+  border-radius: var(--control-radius);
   font-size: 14px;
 }
+#app #result-next #play-again.archive-next:active { filter: brightness(.94); }
+#app #result-next #play-again.archive-next:focus-visible { outline: 2px solid var(--table-cover); outline-offset: 2px; }
 #app .game.is-result #result-actions {
   width: 100%;
   align-items: center;
@@ -1010,7 +1071,16 @@
   #app #win .quiet-result-page { padding-block: 10px 13px; margin-block: 1px 6px; }
   #app #win .quiet-result-page h1 { font-size: 23px; }
   #app #win .quiet-result-page .win-symbol { width: 57px; height: 57px; margin-bottom: 5px; }
-  #app #win .quiet-result-page .win-symbol.paper-result { width: 64px; height: 64px; }
+  #app #win .quiet-result-page .result-ribbon {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  width: 18px;
+  height: 38px;
+  background: url("./art/quiet-table/ribbon.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+#app #win .quiet-result-page .win-symbol.paper-result { width: 64px; height: 64px; }
   #app #win #win-stats .result-stat strong { font-size: 20px; }
   #app #win #result-book-card { padding: 1px 5px; margin: 0 auto; }
   #app #win #result-book-card .book-picture { font-size: 17px; }
@@ -1121,3 +1191,13 @@
     text-align: start;
   }
 }
+
+@media (orientation: portrait) and (min-height: 760px) {
+  #dialog[data-screen="home"] .home-layout { gap: 30px; }
+  #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) { width: min(100%, 96px); height: 80px; font-size: 39px; }
+  #dialog[data-screen="home"] .mode-link > .tile-picture i { height: 57px; flex-basis: 38px; font-size: 1.7rem; }
+  #home-jar .jar-glass { width: 40px; height: 56px; }
+}
+#dialog[data-screen="home"] .home-links > button { overflow-wrap: normal; word-break: normal; }
+
+#dialog[data-screen="home"] :is(.home-book-card #book-quick, .home-calendar #calendar-open) { background: var(--sheet); border: 1px solid var(--table-rule); }

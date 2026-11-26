@@ -465,6 +465,7 @@ test("enlarged text remains contained in screens and game controls", async ({
     await check("calendar");
     for (let i = 0; i < 3; i++) await page.locator("#collection-back").click();
     await page.locator("#resume").click();
+    await expect(page.locator("#dialog")).toBeHidden();
     await check("game");
     await context.close();
   }

@@ -44,13 +44,28 @@ jobs:
         if: always()
         with: {name: markets-browser-controls, path: test-results/markets/}
 
+  visual-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - run: node scripts/run-quiet-audit.mjs
+      - run: npx playwright test e2e/quiet-polish.spec.ts e2e/ui-audit12103.spec.ts e2e/playtest-followup.spec.ts e2e/gold-layout.spec.ts e2e/menu-package.spec.ts e2e/pair-feedback.spec.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: quiet-polish-visual-audit, path: test-results/}
+
   preview:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1003' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1004' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
       SEEDS_MAVEN_CENTRAL_MIRROR: google
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test

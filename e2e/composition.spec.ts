@@ -44,7 +44,7 @@ test("progress has a meaningful jar figure and reachable continuation, switches 
   await page.goto("/");
   await page.locator("#progress-open").click();
   await expect(page.locator(".progress-hero .jar-glass")).toBeVisible();
-  await expect(page.locator(".hero-value")).toContainText("0");
+  await expect(page.locator(".hero-count")).toContainText("0");
   await page.locator("#progress-book").click();
   await expect(page.locator("#continue-book")).toBeVisible();
   await page.locator("#collection-back").click();

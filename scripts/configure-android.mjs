@@ -91,6 +91,7 @@ for (const name of [
   "SeedsMonetizationPlugin",
   "SeedsEngagementPlugin",
   "SeedsFeedbackPlugin",
+  "SeedsAppearancePlugin",
   "SeedsDailyReminder",
   "SeedsAdRevenue",
 ]) {

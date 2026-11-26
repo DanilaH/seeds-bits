@@ -2518,5 +2518,19 @@
     "es": "Deshaz una jugada o vuelve a empezar.",
     "tr": "Bir hamleyi geri al veya baştan dene.",
     "pt-BR": "Desfaça uma jogada ou tente de novo."
+  },
+  "board.reach.valid": {
+    "ru": "Достижима: допустимая пара",
+    "en": "Reachable: valid pair",
+    "es": "Alcanzable: pareja válida",
+    "tr": "Ulaşılabilir: geçerli çift",
+    "pt-BR": "Alcançável: par válido"
+  },
+  "board.reach.invalid": {
+    "ru": "Достижима: числа не образуют пару",
+    "en": "Reachable: numbers do not form a pair",
+    "es": "Alcanzable: los números no forman pareja",
+    "tr": "Ulaşılabilir: sayılar çift oluşturmuyor",
+    "pt-BR": "Alcançável: os números não formam um par"
   }
 }

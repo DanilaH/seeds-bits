@@ -100,7 +100,27 @@ async function connect() {
     await wait(200);
   }
   assert(bounds,"No WebView bounds");
+  // Insets and the banner may settle after connect(). Project each gesture
+  // through the current native WebView, not a cached startup rectangle.
+  async function refreshBounds() {
+    try {
+      const f=await evaluate("window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics()");
+      if(f?.webWidth>0 && f?.webHeight>0) bounds=[f.webX,f.webY,f.webX+f.webWidth,f.webY+f.webHeight];
+    } catch { /* Existing accessibility bounds remain a fallback. */ }
+  }
+  await evaluate(`(()=>{
+    if(window.__seedsNativeInputTrace)return;
+    window.__seedsNativeInputTrace=[];
+    for(const type of ['pointerdown','pointerup','click']) document.addEventListener(type,event=>{
+      const selector=window.__seedsNativeInputSelector;
+      window.__seedsNativeInputTrace.push({type,x:event.clientX,y:event.clientY,time:performance.now(),target:event.target.id||event.target.tagName,
+        hit:!!selector&&event.composedPath().some(node=>node instanceof Element&&node.matches(selector))});
+      if(window.__seedsNativeInputTrace.length>200)window.__seedsNativeInputTrace.shift();
+    },true);
+  })()`);
   async function tap(selector,scroll=true) {
+    await refreshBounds();
+    await evaluate(`window.__seedsNativeInputSelector=${JSON.stringify(selector)};window.__seedsNativeInputTrace=[]`);
     const hitTest=`(()=>{
       const e=document.querySelector(${JSON.stringify(selector)});
       if(!e || e.matches(':disabled') || e.closest('[inert]')) return {ok:false};
@@ -116,11 +136,15 @@ async function connect() {
       await wait(100);
     }
     assert(p.ok,selector+" "+JSON.stringify(p));
+    await refreshBounds();
     adb("shell","input","tap",String(Math.round(bounds[0]+p.x*(bounds[2]-bounds[0])/p.w)),
       String(Math.round(bounds[1]+p.y*(bounds[3]-bounds[1])/p.h)));
     await wait(200);
+    const trace=await evaluate("window.__seedsNativeInputTrace");
+    fs.appendFileSync(out+"/native-input.jsonl",JSON.stringify({selector,bounds,point:p,events:trace})+"\n");
   }
   async function swipeBoardUp() {
+    await refreshBounds();
     const p=await evaluate(`(()=>{
       const r=document.querySelector("#viewport").getBoundingClientRect();
       return {x:r.x+r.width*.5,from:r.y+r.height*.8,to:r.y+r.height*.25,w:innerWidth,h:innerHeight};
@@ -1103,6 +1127,31 @@ async function verifyAppBanner() {
     assert.equal(shown.visible,false);
     trace("genuine interstitial hides native banner",{...shown,expected:false});
     shot("banner-hidden-by-interstitial");
+    const findStoryNext=(raw,width,height)=>{
+      const x0=Math.floor(width*.88),x1=Math.floor(width*.98),y1=Math.floor(height*.65);
+      const grey=(x,y)=>{const p=(y*width+x)*4,r=raw[p],g=raw[p+1],b=raw[p+2];return r>=110&&r<=210&&Math.max(r,g,b)-Math.min(r,g,b)<9;};
+      const seen=new Set();
+      for(let y=8;y<y1;y++)for(let x=x0;x<x1;x++){
+        const key=y*width+x;if(seen.has(key)||!grey(x,y))continue;
+        const queue=[[x,y]];seen.add(key);let left=x,right=x,top=y,bottom=y,area=0;
+        while(queue.length){const [cx,cy]=queue.pop();area++;left=Math.min(left,cx);right=Math.max(right,cx);top=Math.min(top,cy);bottom=Math.max(bottom,cy);
+          for(const [nx,ny]of [[cx-1,cy],[cx+1,cy],[cx,cy-1],[cx,cy+1]]){const k=ny*width+nx;if(nx<x0||nx>=x1||ny<0||ny>=y1||seen.has(k)||!grey(nx,ny))continue;seen.add(k);queue.push([nx,ny]);}
+        }
+        const h=bottom-top+1,w=right-left+1;if(h<8||h>width*.06||w<5||w>h*1.3||area<20)continue;
+        const rowInk=row=>{let n=0;for(let cx=left;cx<=right;cx++)if(grey(cx,row))n++;return n;};
+        const q1=top+Math.round(h*.25),mid=top+Math.round(h*.5),q3=top+Math.round(h*.75);
+        const middle=rowInk(mid),upper=rowInk(q1),lower=rowInk(q3);
+        if(!grey(left,q1)||!grey(left,q3)||middle<w*.7||upper>middle*.85||lower>middle*.85)continue;
+        // A separate vertical stop bar is required, so creative text/art is not a control.
+        for(let bx=right+2;bx<=right+Math.max(5,h*.7);bx++){
+          let ink=0;for(let by=top;by<=bottom;by++)if(grey(bx,by))ink++;
+          if(ink<h*.75)continue;
+          const px=Math.max(0,left-4),py=Math.min(height-1,top-4),i=(py*width+px)*4;
+          if(Math.min(raw[i],raw[i+1],raw[i+2])>240)return {x:Math.round((left+bx)/2),y:Math.round((top+bottom)/2),area,w,h};
+        }
+      }
+      return null;
+    };
     const sdkPlayerDeadline=performance.now()+100000;
     // The demo can serve a multi-part video. Give its own close control time to appear.
     while((await diagnostics()).fullscreen && performance.now()<sdkPlayerDeadline) {
@@ -1120,7 +1169,9 @@ async function verifyAppBanner() {
       } catch(error) { console.warn("Reading the ad close control:",String(error)); }
       if(!(await diagnostics()).fullscreen)break;
       // Yandex's demo story also displays an unlabelled light Next/Close icon in this rail.
-      const {raw,width}=await capturePixels();
+      const {raw,width,height}=await capturePixels();
+      const storyNext=findStoryNext(raw,width,height);
+      if(storyNext){trace("visible SDK story Next control tapped",storyNext);adb("shell","input","tap",String(storyNext.x),String(storyNext.y));continue;}
       const x=Math.round(width*.922), y=Math.round(width*.100), half=Math.round(width*.023);
       let lightPixels=0;
       for(let row=y-half;row<=y+half;row++)for(let col=x-half;col<=x+half;col++){
@@ -1170,6 +1221,47 @@ async function verifyAppBanner() {
     if(report.status==="ERROR")process.exitCode=1;
   }
 }
+async function verifyAppearance() {
+  launch();
+  const records=[];
+  const original=profiles().values[settings]?.theme || "light";
+  let ui=await connect();
+  const inspect=async(name,dark)=>{
+    const state=await ui.evaluate("window.Capacitor.Plugins.SeedsAppearance.diagnostics()");
+    assert.equal(state.dark,dark,name+" saved theme");
+    assert.equal(state.darkStatusIcons,!dark,name+" status icons");
+    assert.equal(state.darkNavigationIcons,!dark,name+" navigation icons");
+    await wait(250);
+    shot(name);
+    const png=fs.readFileSync(out+"/"+name+".png"),w=png.readUInt32BE(16),h=png.readUInt32BE(20);
+    const raw=execFileSync("ffmpeg",["-v","error","-threads","1","-i",out+"/"+name+".png","-frames:v","1","-f","rawvideo","-pix_fmt","rgba","-threads","1","pipe:1"],{maxBuffer:20e6});
+    const color=(x,y)=>[...raw.subarray((y*w+x)*4,(y*w+x)*4+3)];
+    const top=color(8,8),bottom=color(8,h-8);
+    const near=(actual,expected)=>actual.every((v,i)=>Math.abs(v-expected[i])<18);
+    assert(near(top,dark?[48,62,49]:[229,221,190]),name+" status pixels "+top);
+    assert(near(bottom,dark?[35,49,39]:[197,190,159]),name+" navigation pixels "+bottom);
+    records.push({name,dark,state,top,bottom});
+  };
+  try {
+    for(const dark of [false,true]) {
+      await ui.tap("#settings-open");
+      if(await ui.evaluate("document.querySelector('#dark').checked")!==dark)await ui.tap("#dark");
+      await ui.until("document.documentElement.dataset.theme==='"+(dark?"dark":"light")+"'");
+      await inspect("appearance-"+(dark?"dark":"light")+"-settings",dark);
+      await ui.tap("#settings-back");
+      await ui.tap("#pause-language");await inspect("appearance-"+(dark?"dark":"light")+"-modal",dark);
+      adb("shell","input","keyevent","4");await ui.until("!document.querySelector('#language-sheet').open");
+      await ui.tap("#resume");await inspect("appearance-"+(dark?"dark":"light")+"-field",dark);
+      adb("shell","input","keyevent","3");await wait(150);launch();await inspect("appearance-"+(dark?"dark":"light")+"-resume",dark);
+      await ui.tap("#menu");
+    }
+    ui.close();stop();launch();ui=await connect();await inspect("appearance-dark-cold",true);
+    await ui.tap("#settings-open");if((original==="dark")!==await ui.evaluate("document.querySelector('#dark').checked"))await ui.tap("#dark");
+    await ui.tap("#settings-back");
+    return {records,physicalPhone:false};
+  } finally {ui.close();}
+}
+
 async function verifyCoreFeel() {
   const initial = [2,8,4,4,1,9];
   const after = [0,0,4,4,1,9];
@@ -1216,6 +1308,7 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
+  fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
   if (process.env.SEEDS_ANDROID_CORE_FEEL === "1") {
     const pilot=await verifyCoreFeel();
     fs.writeFileSync(out+"/core-feel.json",JSON.stringify({source:process.env.GITHUB_SHA,...pilot},null,2));

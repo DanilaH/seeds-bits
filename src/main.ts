@@ -1,3 +1,4 @@
+import { syncGameAppearance } from "./appearance";
 import "./content-pilot.css";
 import { t, plural, choice, localName, word, activeLanguage, launchLanguages, languageNames, resolveLocale, useLanguage, staticCopy, type LanguageChoice } from "./i18n";
 import { WebAcquisition, activityDate, type InstallContext } from "./distribution";
@@ -532,6 +533,10 @@ resultDateArt.hidden = true;
 resultTitle.before(resultDateArt);
 const resultPaper = document.createElement("section");
 resultPaper.className = "quiet-result-page";
+const resultRibbon = document.createElement("span");
+resultRibbon.className = "result-ribbon";
+resultRibbon.setAttribute("aria-hidden", "true");
+resultPaper.append(resultRibbon);
 const winSymbol = document.querySelector<HTMLElement>("#win .win-symbol")!;
 winSymbol.before(resultPaper);
 resultPaper.append(winSymbol, resultDateArt, resultTitle, resultSubtitle);
@@ -1181,14 +1186,16 @@ window.addEventListener("storage", (event) => {
   }
 });
 function applyTheme() {
+  syncGameAppearance(settings.theme === "dark");
   if (document.documentElement.dataset.theme === settings.theme) return;
+  clearMotions();
   document.documentElement.dataset.theme = settings.theme;
   $<HTMLInputElement>("dark").checked = settings.theme === "dark";
   document
     .querySelector('meta[name="theme-color"]')
     ?.setAttribute(
       "content",
-      settings.theme === "dark" ? "#202724" : "#fafbf9",
+      settings.theme === "dark" ? "#303e31" : "#e5ddbe",
     );
 }
 function setTheme(dark: boolean) {
@@ -1582,7 +1589,7 @@ const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ownedDomMotion = new OwnedDomMotion();
 const cellColorMotions = new Map<Element, {animation: Animation; selection: string}>();
 const cellSelection = (el: Element) =>
-  `${el.classList.contains("selected")}/${el.classList.contains("hinted")}/${el.classList.contains("reachable")}`;
+  `${el.classList.contains("selected")}/${el.classList.contains("hinted")}/${el.classList.contains("reachable-valid")}/${el.classList.contains("reachable-invalid")}`;
 function clearMotions() {
   ownedDomMotion.cancelAll();
   feelRowSlides = [];
@@ -1704,7 +1711,8 @@ function reconcileCellMotions() {
     const visible = getComputedStyle(el).backgroundColor;
     const target = el.classList.contains("selected") ? "var(--selected)"
       : el.classList.contains("hinted") ? "var(--highlight)"
-      : el.classList.contains("reachable") ? "var(--table-reachable)" : "transparent";
+      : el.classList.contains("reachable-invalid") ? "var(--table-reachable-invalid)"
+      : el.classList.contains("reachable-valid") ? "var(--table-reachable)" : "transparent";
     motion(el, [{background:visible}, {background:target}], 100);
   }
 }
@@ -2384,7 +2392,7 @@ function renderClassicChoices() {
   $<HTMLButtonElement>("play-again").disabled = blocked;
   resultHome.hidden = !isClassic && !isDaily;
   resultHome.className = isDaily ? "primary" : "text-button";
-  $("play-again").className = isDaily ? "text-button" : "primary";
+  $("play-again").className = isDaily ? "secondary archive-next" : "primary";
   const primary = isDaily ? resultHome : $("play-again");
   if (resultNext.firstElementChild !== primary) resultNext.prepend(primary);
   resultHome.textContent = t("nav.menu");
@@ -4191,7 +4199,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       },
     ).join(
       "",
-    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>${t("ui.earlier")}</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : t("ui.nothing-yet")}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>${t("ui.newer")}</button></div><details class="explanation"><summary>${t("ui.how-jars-fill-up")}</summary><p>${t("ui.earn-two-seeds-for-each-new-move-in-classic")}</p></details><p>${t("ui.boards-cleared", { "0": jars(progress).wins })}</p><p class="fine">${jars(progress).wins >= 100 ? t("ui.master-100-boards") : jars(progress).wins >= 25 ? t("ui.expert-25-boards") : jars(progress).wins >= 5 ? t("ui.solid-start-5-boards") : t("ui.clear-5-boards-to-earn-your-first-badge")}</p><button id="jar-play" class="secondary">${t("action.playClassic")}</button></section>`;
+    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>${t("ui.earlier")}</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : t("ui.nothing-yet")}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>${t("ui.newer")}</button></div><details class="explanation"><summary>${t("ui.how-jars-fill-up")}</summary><p class="jar-percent-detail">${j.percent}% · ${t("ui.of-seeds", {"0":j.filled,"1":j.capacity})}</p><p>${t("ui.earn-two-seeds-for-each-new-move-in-classic")}</p></details><p>${t("ui.boards-cleared", { "0": jars(progress).wins })}</p><p class="fine">${jars(progress).wins >= 100 ? t("ui.master-100-boards") : jars(progress).wins >= 25 ? t("ui.expert-25-boards") : jars(progress).wins >= 5 ? t("ui.solid-start-5-boards") : t("ui.clear-5-boards-to-earn-your-first-badge")}</p><button id="jar-play" class="secondary">${t("action.playClassic")}</button></section>`;
     html += `<section class="monthly-collection" ${collectionTab !== "months" ? "hidden" : ""}><p class="fine">${t("ui.bronze-7-puzzles-silver-14-gold-the-whole-month")}</p><label class="year-picker">${t("ui.trophy-year")}<select id="trophy-year">${years()
       .map((y) => `<option ${y === trophyYear ? "selected" : ""}>${y}</option>`)
       .join("")}</select></label>`;
@@ -4236,11 +4244,32 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     const history = document.createElement("div");
     history.className = "jar-history";
     const summary = jars.querySelector(".jar-collected-count");
+    const play = jars.querySelector("#jar-play")!;
+    play.className = "primary";
+    overview.append(play);
+    const shelf = jars.querySelector(".jar-shelf")!;
+    const shelfNav = jars.querySelector(".month-nav")!;
+    const shelfHeading = document.createElement("div");
+    shelfHeading.className = "jar-shelf-heading";
+    shelfHeading.innerHTML = `<h3>${t("ui.jars")}</h3>`;
+    shelfHeading.append(shelfNav);
+    shelf.before(shelfHeading);
+    if (!shelf.childElementCount) {
+      shelf.remove();
+      shelfHeading.remove();
+      const empty = document.createElement("p");
+      empty.className = "jar-empty";
+      empty.textContent = t("ui.nothing-yet");
+      jars.prepend(empty);
+    }
     for (const node of [...jars.children])
-      (node.matches("h3,.progress-hero") || node === summary
+      (node.matches("h3,.progress-hero,#jar-play") || node === summary
         ? overview
         : history
       ).append(node);
+    overview.append(play);
+    const rules = history.querySelector("details")!;
+    for (const p of [...history.querySelectorAll(":scope > p:not(.jar-empty)")]) rules.append(p);
     jars.append(overview, history);
   }
   const screenHeading = document.createElement("div");
@@ -4316,11 +4345,13 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       collectionTab = "months";
       openCollection("trophies");
     };
-    $("older-jars").onclick = () => {
+    const olderJars = document.getElementById("older-jars");
+    if (olderJars) olderJars.onclick = () => {
       jarShelfPage++;
       openCollection("trophies");
     };
-    $("newer-jars").onclick = () => {
+    const newerJars = document.getElementById("newer-jars");
+    if (newerJars) newerJars.onclick = () => {
       jarShelfPage--;
       openCollection("trophies");
     };
@@ -4472,7 +4503,7 @@ function jarPicture(j: ReturnType<typeof jarState>) {
   return `<span class="jar-picture" style="--fill:${j.percent}%;--jar-color:${j.color}" aria-hidden="true">${jarGlass(undefined, j.filled)}</span>`;
 }
 function jarHero(j: ReturnType<typeof jarState>) {
-  return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-value">${j.percent}<span>%</span></p><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p></div></section>`;
+  return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p></div></section>`;
 }
 function difficultyLabel() {
   const level = classicDifficulty();

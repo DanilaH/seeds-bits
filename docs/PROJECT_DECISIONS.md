@@ -94,3 +94,9 @@ The shared module deliberately fixes shorthand/longhand overlap with var() throu
 The owner requests consistent control/panel geometry and padding, readable notebook labels, a visible synchronized ground shadow and removal of the notebook filter. Main/Themes and numbered ranges remain. Text must fit the safe area of the illustration, not merely its outer button. See [UI audit](research/ui-audit-2026-11-26/README.md).
 
 The owner separately authorizes subtle geometric reachability when selecting a number: the first occupied number on each clear ray plus reading-order neighbours, regardless of value. This free visual state spends no stock, makes no winning-pair promise and leaves all six paused assistance experiments disabled. It is suppressed in the scripted tutorial. No progression/reward/save contract changes are authorized by this addition.
+
+## Quiet Table polish #43 / reach classification #44 · 26 November 2026
+
+The owner preserves Variant A and requests local geometry/density fixes across the existing screens; no dashboard or new art direction. System bars follow the saved in-game theme without changing the banner slot or hiding navigation. Jar counts, IDs, rewards and details remain available; visible duplicates may move into existing details. Daily archive becomes a colored secondary button; Home remains primary.
+
+Reachability remains the exact existing geometric set. Existing checkPair supplies valid/invalid classification: soft green with solid edge versus soft red with dashed edge and localized accessible descriptions. Unreachable cells remain neutral. Hint/budget/save/rules and all six paused experiments remain unchanged. See [package and acceptance](research/quiet-polish-2026-11-26/README.md).

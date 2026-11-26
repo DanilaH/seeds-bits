@@ -590,6 +590,36 @@
       "nextAction": "Разобрать Android demo next-task tap с актуальными WebView bounds и pointer/click trace; проверить 12103 на физическом телефоне: подписи, тень и достижимость.",
       "kitImpact": "REUSE",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40"
+    },
+    {
+      "id": "owner-quiet-polish-ui-43",
+      "sourceFeatureId": "owner.seeds.quiet-table.polish.2026-11-26",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/43",
+      "currentImplementation": "src/quiet-table.css; src/main.ts jarHero/openCollection; native/android/MainActivity.java and SeedsAppearancePlugin.java",
+      "acceptanceEvidence": {
+        "report": "../research/quiet-polish-2026-11-26/README.md",
+        "browser": "local target checks; final project CI pending",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Повторить project visual/native CI, сверить APK и сравнимые кадры.",
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "owner-quiet-reach-values-44",
+      "sourceFeatureId": "owner.seeds.reachable-valid-invalid.2026-11-26",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/44",
+      "currentImplementation": "src/board-view.ts checkPair classification; src/main.ts cellSelection/reconcileCellMotions; src/quiet-table.css semantic colors/borders; src/i18n/ui-copy.json",
+      "acceptanceEvidence": {
+        "report": "../research/quiet-polish-2026-11-26/README.md",
+        "browser": "81 value combinations and mixed fixtures in e2e/quiet-polish.spec.ts",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Подтвердить классификацию и сбросы на подписанном Android preview.",
+      "kitImpact": "REUSE"
     }
   ],
   "localAdaptations": [

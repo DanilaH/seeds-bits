@@ -51,6 +51,8 @@ jobs:
           name: seeds-bits-yandex-draft
           path: dist-yandex/
   android:
+    env:
+      SEEDS_MAVEN_CENTRAL_MIRROR: google
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -84,7 +86,7 @@ jobs:
           ADS_MODE: ${{ inputs.ads_mode || 'test' }}
           REQUIRE_MOBILE_CONFIG: ${{ github.event_name != 'pull_request' }}
       - run: npm run sync:android
-      - run: chmod +x android/gradlew && cd android && ./gradlew assembleDebug
+      - run: chmod +x android/gradlew && cd android && ./gradlew -I ../scripts/gradle-maven-mirror.init.gradle assembleDebug
       - uses: actions/upload-artifact@v4
         with:
           name: seeds-bits-android-preview-intermediate
