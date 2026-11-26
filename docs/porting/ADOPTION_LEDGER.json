@@ -1001,7 +1001,497 @@
         "phone": "UNKNOWN",
         "audience": "UNKNOWN"
       },
-      "nextAction": "Сверить demo SDK, затем наблюдать навигацию и баннер на физическом телефоне.",
+      "nextAction": "Учесть новое решение владельца 26 ноября: защита входа от interstitial и Дальше → сложность после Классики; приёмка старого маршрута В меню не закрывает новый запрос. Проверить SDK/телефон.",
+      "kitImpact": "REUSE",
+      "ownerCorrectionRef": "../research/playtest-2026-11-26/README.md"
+    },
+    {
+      "id": "seeds-own-entry-ad-protection",
+      "sourceFeatureId": "seeds-own-entry-ad-protection",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 1,
+      "scope": "Первый игровой вход, восстановление и Resume после захода без interstitial",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts",
+        "src/monetization.ts"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/monetization.ts"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии A в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-result-no-scroll",
+      "sourceFeatureId": "seeds-own-result-no-scroll",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 2,
+      "scope": "Все пять видов результата без прокрутки и обрезки",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts",
+        "src/quiet-table.css",
+        "src/ui-adaptation.css"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/quiet-table.css",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/ui-adaptation.css"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии B в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-sfx-replacement",
+      "sourceFeatureId": "seeds-own-sfx-replacement",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 3,
+      "scope": "Заменить отвергнутый звук короткими разборчивыми cues",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/sound.ts",
+        "src/audio/",
+        "scripts/mix-foley.py"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/sound.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/scripts/mix-foley.py"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии F/AUDIO.md в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-completion-mark-layout",
+      "sourceFeatureId": "seeds-own-completion-mark-layout",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 4,
+      "scope": "Расположение done/галочки/24 из 24 на итоговой тетрадке",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/quiet-table.css",
+        "src/ui-adaptation.css",
+        "src/result-presentation.ts"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/quiet-table.css",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/ui-adaptation.css",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/result-presentation.ts"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии B в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-book-celebration",
+      "sourceFeatureId": "seeds-own-book-celebration",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 5,
+      "scope": "Выразительный праздник полного тома с визуалом, SFX и native haptic",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/result-presentation.ts",
+        "src/main.ts",
+        "src/haptics.ts"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/result-presentation.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/haptics.ts"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии C в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-hint-recovery-visible",
+      "sourceFeatureId": "seeds-own-hint-recovery-visible",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 6,
+      "scope": "Заметный recovery/restart после неудачной подсказки",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии D в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-no-moves-visible",
+      "sourceFeatureId": "seeds-own-no-moves-visible",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 7,
+      "scope": "Ясное отсутствие пар с действиями своего режима",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts",
+        "src/core.ts"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/core.ts"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии D в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-classic-menu-position",
+      "sourceFeatureId": "seeds-own-classic-menu-position",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 8,
+      "scope": "Центрированная навигация финала Классики без старых трёх колонок",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/ui-polish.css",
+        "src/main.ts"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/ui-polish.css",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии B/E в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-classic-celebration",
+      "sourceFeatureId": "seeds-own-classic-celebration",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 9,
+      "scope": "Акцент очистки Классики со звуком, частицами и вибрацией",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/result-presentation.ts",
+        "src/main.ts"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/result-presentation.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии C в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-classic-next",
+      "sourceFeatureId": "seeds-own-classic-next",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 10,
+      "scope": "Дальше → сложность → один рекламный gate → новая Классика",
+      "status": "ROADMAPPED",
+      "parity": "MISSING",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии E в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-daily-unopened-attention",
+      "sourceFeatureId": "seeds-own-daily-unopened-attention",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 11,
+      "scope": "Тихий акцент сегодняшнего дейлика до первого фактического входа",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts",
+        "src/quiet-table.css",
+        "src/calm-screens.css"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/quiet-table.css",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/calm-screens.css"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии G в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-home-no-active-notebook",
+      "sourceFeatureId": "seeds-own-home-no-active-notebook",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 12,
+      "scope": "Стартовая тетрадка меню без активной сохранённой партии",
+      "status": "ROADMAPPED",
+      "parity": "MISSING",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts",
+        "src/quiet-table.css"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/quiet-table.css"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии H в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-calendar-green-underlay",
+      "sourceFeatureId": "seeds-own-calendar-green-underlay",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 13,
+      "scope": "Убрать зелёный фон старой анимации под SVG календаря",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/calm-screens.css",
+        "src/quiet-table.css"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/calm-screens.css",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/quiet-table.css"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии G в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-home-notebook-touch-float",
+      "sourceFeatureId": "seeds-own-home-notebook-touch-float",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 14,
+      "scope": "Нажимаемая тетрадка меню с левитацией и связанной тенью",
+      "status": "ROADMAPPED",
+      "parity": "MISSING",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts",
+        "src/quiet-table.css"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/quiet-table.css"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии H в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "seeds-own-daily-result-medal",
+      "sourceFeatureId": "seeds-own-daily-result-medal",
+      "sourceFeatureIds": [],
+      "origin": "OWNER_REQUEST_OUR_GAME",
+      "ownerRequestNumber": 15,
+      "scope": "Финал дейлика: праздник, медаль на тетрадке, В меню, без прокрутки",
+      "status": "ROADMAPPED",
+      "parity": "PARTIAL",
+      "consumerCommit": "09afadfab24befeac683610aab063d13c82034aa",
+      "code": [
+        "src/main.ts",
+        "src/trophies.ts",
+        "src/puzzles.ts",
+        "src/quiet-table.css"
+      ],
+      "ownerDecisionRef": "../research/playtest-2026-11-26/OWNER_PLAYTEST.md",
+      "evidence": {
+        "code": [
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/main.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/trophies.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/puzzles.ts",
+          "https://github.com/DanilaH/seeds-bits/blob/09afadfab24befeac683610aab063d13c82034aa/src/quiet-table.css"
+        ],
+        "ownerPlaytest": "USER_REPORTED, APK version/package/hash unspecified",
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "OWNER_REPORTED_GAP; FIX_VERIFICATION_UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Реализовать и проверить критерии B/C/I в docs/research/playtest-2026-11-26/README.md; сверить существующий WIP PR40 и не принимать наличие кода за телефонную приёмку.",
+      "dependencies": [
+        "Сохранить Тихий стол и паузу шести экспериментов",
+        "Сверить актуальный head PR40 перед кодом"
+      ],
       "kitImpact": "REUSE"
     }
   ]

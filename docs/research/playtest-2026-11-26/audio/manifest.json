@@ -1,0 +1,183 @@
+{
+  "status": "CANDIDATES_NOT_OWNER_ACCEPTED",
+  "inspection": "FILES_DECODED_AND_MEASURED; perceptual audition and physical-speaker acceptance UNKNOWN",
+  "publisher": "Kenney",
+  "pack": "Interface Sounds 1.0",
+  "license": "CC0-1.0",
+  "publisherPage": "https://kenney.nl/assets/interface-sounds",
+  "mirrorCommit": "4596a49eaf5a533948d49a47467f606bcdea70ff",
+  "files": [
+    {
+      "file": "click_001.wav",
+      "sha256": "ea67c9d78750e5a356bf53ef8c2063b52cc3ccdae6ae8afeec87f97f79ae692d",
+      "seconds": 0.114649,
+      "bytes": 10190,
+      "source": "https://github.com/Calinou/kenney-interface-sounds/blob/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/click_001.wav"
+    },
+    {
+      "file": "select_001.wav",
+      "sha256": "3d9e86003f8ebd1a3f6f3d8af65b6b682562a46d532ccd204dcba21305b950ff",
+      "seconds": 0.062404,
+      "bytes": 11086,
+      "source": "https://github.com/Calinou/kenney-interface-sounds/blob/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/select_001.wav"
+    },
+    {
+      "file": "tick_001.wav",
+      "sha256": "fee217e21731da4be1f0347fd2632296259b8bfdca343c936fe60dc64bce280e",
+      "seconds": 0.044989,
+      "bytes": 4046,
+      "source": "https://github.com/Calinou/kenney-interface-sounds/blob/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/tick_001.wav"
+    },
+    {
+      "file": "drop_001.wav",
+      "sha256": "0aa0b07692c5d37177f078c39d246d12f2685b553ed06887671797737e5cd432",
+      "seconds": 0.132063,
+      "bytes": 23374,
+      "source": "https://github.com/Calinou/kenney-interface-sounds/blob/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/drop_001.wav"
+    },
+    {
+      "file": "glass_001.wav",
+      "sha256": "39182b395a30b34e18cbcf842922552b23da5b010a52b7777557e02a405f083e",
+      "seconds": 0.291701,
+      "bytes": 25806,
+      "source": "https://github.com/Calinou/kenney-interface-sounds/blob/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/glass_001.wav"
+    },
+    {
+      "file": "confirmation_001.wav",
+      "sha256": "f9d0ef5a5c740c2ac250ac3876db9e4340669044a5bf78ae09192918db3e2ebc",
+      "seconds": 0.294603,
+      "bytes": 26062,
+      "source": "https://github.com/Calinou/kenney-interface-sounds/blob/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/confirmation_001.wav"
+    },
+    {
+      "file": "confirmation_002.wav",
+      "sha256": "b23339f3fdcd9f54520ca73caa3a9ae93ecfb3675acdaf1468990feb5d55d5fa",
+      "seconds": 0.561633,
+      "bytes": 49614,
+      "source": "https://github.com/Calinou/kenney-interface-sounds/blob/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/confirmation_002.wav"
+    },
+    {
+      "file": "error_001.wav",
+      "sha256": "d77546b0baa89f37eca6b86f59b54a654ce5afe3d5a73492d0963168cc4ab5bf",
+      "seconds": 0.172698,
+      "bytes": 30542,
+      "source": "https://github.com/Calinou/kenney-interface-sounds/blob/4596a49eaf5a533948d49a47467f606bcdea70ff/addons/kenney_interface_sounds/error_001.wav"
+    }
+  ],
+  "auditions": {
+    "A": {
+      "file": "audition-a.wav",
+      "seconds": 6.5,
+      "timeline": [
+        {
+          "at": 0.4,
+          "file": "click_001.wav",
+          "peakGain": 0.06
+        },
+        {
+          "at": 0.65,
+          "file": "drop_001.wav",
+          "peakGain": 0.14
+        },
+        {
+          "at": 1.3,
+          "file": "click_001.wav",
+          "peakGain": 0.06
+        },
+        {
+          "at": 1.55,
+          "file": "drop_001.wav",
+          "peakGain": 0.14
+        },
+        {
+          "at": 2.15,
+          "file": "error_001.wav",
+          "peakGain": 0.09
+        },
+        {
+          "at": 3.1,
+          "file": "click_001.wav",
+          "peakGain": 0.06
+        },
+        {
+          "at": 3.35,
+          "file": "drop_001.wav",
+          "peakGain": 0.14
+        },
+        {
+          "at": 4.0,
+          "file": "click_001.wav",
+          "peakGain": 0.06
+        },
+        {
+          "at": 4.25,
+          "file": "drop_001.wav",
+          "peakGain": 0.14
+        },
+        {
+          "at": 5.2,
+          "file": "confirmation_002.wav",
+          "peakGain": 0.2
+        }
+      ],
+      "sha256": "f6dd1beec54fd01a342ae60007bfc7247d4a6695b7e48dba02b6f8a4b5e5ebd0"
+    },
+    "B": {
+      "file": "audition-b.wav",
+      "seconds": 6.5,
+      "timeline": [
+        {
+          "at": 0.4,
+          "file": "tick_001.wav",
+          "peakGain": 0.06
+        },
+        {
+          "at": 0.65,
+          "file": "glass_001.wav",
+          "peakGain": 0.14
+        },
+        {
+          "at": 1.3,
+          "file": "tick_001.wav",
+          "peakGain": 0.06
+        },
+        {
+          "at": 1.55,
+          "file": "glass_001.wav",
+          "peakGain": 0.14
+        },
+        {
+          "at": 2.15,
+          "file": "error_001.wav",
+          "peakGain": 0.09
+        },
+        {
+          "at": 3.1,
+          "file": "tick_001.wav",
+          "peakGain": 0.06
+        },
+        {
+          "at": 3.35,
+          "file": "glass_001.wav",
+          "peakGain": 0.14
+        },
+        {
+          "at": 4.0,
+          "file": "tick_001.wav",
+          "peakGain": 0.06
+        },
+        {
+          "at": 4.25,
+          "file": "glass_001.wav",
+          "peakGain": 0.14
+        },
+        {
+          "at": 5.2,
+          "file": "confirmation_001.wav",
+          "peakGain": 0.2
+        }
+      ],
+      "sha256": "61beba9191901290eddf41dd1ef90ac4a2ecff3cf713e5abe93c9b84e014831e"
+    }
+  }
+}
