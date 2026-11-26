@@ -80,6 +80,7 @@ import "./ui-polish.css";
 import "./ui-adaptation.css";
 import "./calm-screens.css";
 import "./compact-navigation.css";
+import "./quiet-table.css";
 import {
   resultKind,
   resultArtwork,
@@ -524,6 +525,11 @@ const resultDateArt = document.createElement("div");
 resultDateArt.id = "result-date-art";
 resultDateArt.hidden = true;
 resultTitle.before(resultDateArt);
+const resultPaper = document.createElement("section");
+resultPaper.className = "quiet-result-page";
+const winSymbol = document.querySelector<HTMLElement>("#win .win-symbol")!;
+winSymbol.before(resultPaper);
+resultPaper.append(winSymbol, resultDateArt, resultTitle, resultSubtitle);
 const choiceFits = new WeakMap<HTMLElement, { base: string; fitted: string }>();
 const choiceObserver = new ResizeObserver(() => scheduleActionLayout());
 function prepareResultLabels() {
@@ -574,11 +580,22 @@ homeCurrent.className = "home-current";
 homeCurrent.setAttribute("aria-labelledby", "home-game-title");
 homeCurrent.innerHTML =
   '<div class="home-current-copy"><h2 id="home-game-title"></h2></div><div id="home-current-art" aria-hidden="true"></div>';
+const homePreview = document.createElement("div");
+homePreview.className = "quiet-mini-board";
+homePreview.setAttribute("aria-hidden", "true");
+const homeJar = document.createElement("button");
+homeJar.id = "home-jar";
+homeJar.className = "plain";
+homeJar.onclick = () => {
+  collectionTab = "jars";
+  openCollection("trophies");
+};
+$("menu-content").querySelector(".home-title")!.append(homeJar);
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
 homeGoal.innerHTML = '<span id="home-goal-caption"></span><progress max="24" aria-hidden="true"></progress>';
 $("new").className = "text-button restart-action";
-homeCurrent.querySelector(".home-current-copy")!.append($("resume-context"), homeGoal);
+homeCurrent.querySelector(".home-current-copy")!.append($("resume-context"), homePreview, homeGoal);
 homeCurrent.append($("resume"));
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
@@ -710,10 +727,6 @@ function updateBoardEdges() {
 const boardEdgeObserver = new ResizeObserver(updateBoardEdges);
 boardEdgeObserver.observe(viewport);
 boardEdgeObserver.observe($("board-wrap"));
-const calendarActions = document.createElement("div");
-calendarActions.id = "calendar-actions";
-calendarActions.hidden = true;
-dialog.append(calendarActions);
 const notebookDock = document.createElement("div");
 notebookDock.id = "notebook-dock";
 notebookDock.hidden = true;
@@ -2190,13 +2203,13 @@ function renderWin() {
     resultSubtitle.textContent = themeOf(volumeOf(id)) ? t("content.progress",{theme:volumeLabel(volumeOf(id)),solved}) : t("result.progress", { "book": volumeOf(id) + 1, "solved": solved });
   }
   resultSubtitle.hidden = !resultSubtitle.textContent;
-  resultJarCard.hidden = !openingWin;
+  resultJarCard.hidden = false;
   resultBookCard.hidden = !openingWin;
   const resultGains = $("result-gains");
+  updateResultJar();
   if (openingWin) {
     if (resultGains.parentElement !== resultJarCard) $("result-jar-amount").before(resultGains);
     resultBookCard.innerHTML = `${bookPicture(volumeOf(id) + 1)}<span><strong>${volumeLabel(volumeOf(id))}</strong><small>${t("ui.of-24-puzzles", { "0": volumeTasks(volumeOf(id)).filter(task => progress.done.includes(task.id)).length })}</small></span>`;
-    updateResultJar();
   } else if (resultGains.parentElement === resultJarCard) {
     $("completion-status").after(resultGains);
   }
@@ -3222,8 +3235,6 @@ function openMenu(preserve: unknown = false) {
   if (preserve !== true) navigationTrail.length = 0;
   settlePresentation();
   releaseDialogHeading();
-  calendarActions.replaceChildren();
-  calendarActions.hidden = true;
   notebookDock.replaceChildren();
   notebookDock.hidden = true;
   updateHome();
@@ -4100,8 +4111,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   if (kind === "calendar") {
     const todayTask = $("today-task");
     todayTask.toggleAttribute("data-daily-pending", !progress.done.includes(todayTask.dataset.continue!));
-    calendarActions.append(todayTask);
-    calendarActions.hidden = false;
+    panel.querySelector(".calendar-hero")!.after(todayTask);
     const layout = document.createElement("div");
     layout.className = "calendar-layout";
     const activity = document.createElement("section");
@@ -4110,7 +4120,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     month.className = "calendar-month";
     for (const node of [...panel.children]) {
       if (node.matches(".screen-back,h2")) continue;
-      (node.matches(".calendar-hero,#calendar-extras") ? activity : month).append(node);
+      (node.matches(".calendar-hero,#today-task") ? activity : month).append(node);
     }
     layout.append(activity, month);
     panel.append(layout);
@@ -4134,9 +4144,15 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   screenHeading.append($("collection-back"), panel.querySelector("h2")!);
   panel.prepend(screenHeading);
   const bookAction = panel.querySelector(".notebook-action");
-  if (bookAction) {
-    notebookDock.append(bookAction);
-    notebookDock.hidden = false;
+  if (kind === "book" || kind === "book-picker") {
+    const paper = document.createElement("div");
+    paper.className = "quiet-book-page";
+    for (const child of [...panel.children]) if (child !== screenHeading) paper.append(child);
+    panel.append(paper);
+    if (bookAction) {
+      notebookDock.append(bookAction);
+      notebookDock.hidden = false;
+    }
   }
   pinDialogHeading(panel);
   if (kind === "progress") {
@@ -4378,6 +4394,16 @@ function renderHomeCurrent() {
   const show = lesson >= 0 || Boolean(next) ||
     count > 0 && (classic ? classicParked() : Boolean(progress.sessions[id]));
   homeCurrent.hidden = !show;
+  homeCurrent.dataset.cover = classic ? "classic" : book ? "book" : "daily";
+  homePreview.hidden = lesson >= 0 || count === 0;
+  if (!homePreview.hidden && show) {
+    const cells = board().slice(0, 27);
+    homePreview.replaceChildren(...cells.map(digit => {
+      const cell = document.createElement("span");
+      cell.textContent = digit ? String(digit) : "";
+      return cell;
+    }));
+  }
   homeGoal.hidden = true;
   $("new").hidden = lesson >= 0 || !unfinished(session);
   $("new").textContent = classic ? t("ui.restart") : t("ui.restart-puzzle");
@@ -4412,6 +4438,9 @@ function renderHomeCurrent() {
     : id.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for",{"0":date});
 }
 function updateHome() {
+  const jar = jarState(jars(progress).meter);
+  homeJar.setAttribute("aria-label", t("ui.jar-collection"));
+  homeJar.innerHTML = jarPicture(jar);
   const finished = new Set(progress.done);
   const target = notebookTarget(progress);
   const volume = target ? volumeOf(target) : nextBookVolume();

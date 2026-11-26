@@ -1,7 +1,7 @@
 name: First session preview
 on:
   push:
-    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125, feat/menu-rails-20261125, feat/core-feel-pilot-20261125]
+    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125, feat/menu-rails-20261125, feat/core-feel-pilot-20261125, feat/quiet-table-20261126]
     paths: [src/**, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, tests/**, e2e/**, scripts/configure-android.mjs, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
 permissions:
   contents: read
@@ -34,7 +34,7 @@ jobs:
         with: {name: first-session-browser, path: test-results/}
       - run: npx playwright test --config playwright.markets.config.ts
       - name: Verify default sound and board feedback
-        if: github.ref_name == 'feat/core-feel-pilot-20261125'
+        if: github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126'
         run: npx playwright test --config playwright.core-feel.config.ts
       - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
       - uses: actions/upload-artifact@v4
@@ -50,7 +50,7 @@ jobs:
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '998' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
       SEEDS_ARTIFACT_CHANNEL: rustore
@@ -94,7 +94,7 @@ jobs:
     timeout-minutes: 25
     env:
       SEEDS_ANDROID_TEST_MODE: ${{ matrix.mode }}
-      SEEDS_ANDROID_CORE_FEEL: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '1' || '0' }}
+      SEEDS_ANDROID_CORE_FEEL: ${{ (github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126') && '1' || '0' }}
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
       SEEDS_BUILD_FLAVOR: preview
