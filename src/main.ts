@@ -931,7 +931,13 @@ function availablePairs(values: readonly number[]) {
   }
   return pairCache;
 }
+let moveSaveRevision = 0, moveSavePending = false, postSaveMessage = "";
 function message(text: string) {
+  if (moveSavePending && !saveFailed) {
+    postSaveMessage = text;
+    $("status").textContent = t("ui.saving-game");
+    return;
+  }
   const copy = document.querySelector<HTMLElement>(".opening-copy");
   if (inOpening() && copy && highlight) {
     $("status").textContent = "";
@@ -1126,17 +1132,22 @@ function save(state = progress, game = session) {
     });
   return saveQueue;
 }
-async function persistMove() {
-  // Count/hit-target publication acknowledges storage, independently of motion.
+function persistMove() {
+  // Gameplay stays synchronous, including remapping and bursts of legal moves.
+  // Only the latest move's completed write can acknowledge the visible party.
+  const revision = ++moveSaveRevision;
   $("board").setAttribute("aria-busy", "true");
   document.querySelector<HTMLElement>(".game")!.dataset.persistence = "pending";
-  message(t("ui.saving-game"));
-  try { await save(); }
-  finally {
+  moveSavePending = true;
+  $("status").textContent = t("ui.saving-game");
+  return Promise.resolve(save()).then(() => {
+    if (revision !== moveSaveRevision) return;
     $("board").removeAttribute("aria-busy");
+    moveSavePending = false;
     document.querySelector<HTMLElement>(".game")!.dataset.persistence =
       saveFailed || storageConflict || futureSave ? "failed" : "saved";
-  }
+    if (!saveFailed) message(postSaveMessage);
+  });
 }
 function applySettings(incoming: Record<string, unknown>) {
   if (Object.hasOwn(incoming,"languageChoice")) {
@@ -2856,11 +2867,9 @@ async function choose(i: number) {
       if (gain) animateSeeds(flightRects, gain, ending);
     }
     if (!occupied(next)) complete(flightRects);
-    // A visible accepted count is a durable acknowledgement. Web Locks and
-    // Android's disk commit may still be pending after the click returns.
-    // Keep immediate erase feedback, but never publish the new hit targets/count
-    // before that write settles. This gate waits for storage, not animation.
-    await persistMove();
+    // Publish fast input immediately with an explicit pending-save state.
+    // The queue acknowledges durability independently of decorative animation.
+    void persistMove();
   }
   // Lessons and finishing routes get their full explanation. Ordinary Feel
   // moves swap the hit targets immediately, independently of the erase ghosts.
@@ -2982,7 +2991,7 @@ async function choose(i: number) {
     else message("Для возврата к Плану отмените ход");
   }
 }
-async function add() {
+function add() {
   saveRecovered = false;
   if (busy || paused) return;
   finishFeelRowSlide();
@@ -3009,8 +3018,7 @@ async function add() {
     } else {
       session = commit(session, next, "add", viewport.scrollTop);
       markGameStarted();
-      busy = true;
-      try { await persistMove(); } finally { busy = false; }
+      void persistMove();
     }
     clearSelection();
     render();
@@ -3022,7 +3030,7 @@ async function add() {
     );
   }
 }
-async function undoAction() {
+function undoAction() {
   saveRecovered = false;
   if (busy || paused || (lesson < 0 && !occupied(board()))) return;
   finishFeelRowSlide();
@@ -3045,8 +3053,7 @@ async function undoAction() {
   const restored = removedPairs.get(previous.board);
   session = undo(session);
   clearSelection();
-  busy = true;
-  try { await persistMove(); } finally { busy = false; }
+  void persistMove();
   render();
   const plan=currentPlan();
   if(plan?.pair)message("Уберите отмеченную пару");
@@ -3722,8 +3729,14 @@ for (const key of ["sound", "vibration"] as const)
     save();
   };
 $("retry-save").onclick = async () => {
+  const revision = moveSaveRevision;
   await save();
   if (saveFailed || storageConflict || futureSave) return;
+  if (revision === moveSaveRevision) {
+    moveSavePending = false;
+    $("board").removeAttribute("aria-busy");
+    document.querySelector<HTMLElement>(".game")!.dataset.persistence = "saved";
+  }
   // A failed reward save leaves its native receipt pending until a durable retry.
   try {
     const pending = await adsBridge?.pending();

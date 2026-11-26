@@ -1,0 +1,37 @@
+# Quiet Table: техническая стабильность, №45
+
+Рабочая база — PR40, `feat/quiet-table-20261126`, `253daea010cd6d48296db719050f9c4855ae4b6a` / preview12104. Main и release/rustore-1.1.2 сверены отдельно; разработка от них не велась. Цель — preview12105, тот же package и ключ подписи. Визуальная приёмка №43 и reach-классификация №44 сохранены.
+
+## QT-ACCEPT-01: подтверждённая гонка публикации и записи
+
+`choose()` менял session и публиковал поле/счётчик, не дожидаясь очереди `saveQueue`. Browser `saveState` получает Web Lock и только затем записывает localStorage; Android выполняет отдельный bridge/disk commit. Возврат click и новый счётчик не были подтверждением записи. Pagehide/visibility пытались ещё раз поставить save в очередь, но unload не обязан завершать асинхронные операции; busy дополнительно мог пропустить этот вызов.
+
+Доказательство на **неизменённой 12104**, CI игры: [45853953243](https://github.com/DanilaH/seeds-bits/actions/runs/45853953243), шаг `Capture deterministic baseline trace`. Второй пустой same-origin документ удерживает настоящий `navigator.locks` lock `seeds-save`, не подменяя storage/fixture/runtime. Трасса `pair-write-held`: видимые26, сериализованные28, moves0, packedHistory пуст. Сам исходный tutorial/reload сценарий прошёл20/20 в [45853709746](https://github.com/DanilaH/seeds-bits/actions/runs/45853709746): это не опровержение гонки, а отсутствие гарантированной задержки очереди. На контролируемой записи исходная версия нарушает инвариант детерминированно. `installLegacyClassic` устанавливает поле только при отсутствии обеих существующих сохранённых партий и не перезаписывает durable ход после reload.
+
+Исправление в `src/main.ts:persistMove/choose/add/undoAction`: счётчик и hit targets остаются мгновенными, включая12 ходов в одном JS-такте и выбор во время сжатия строк. Пока запись не закончилась — явные `aria-busy`, data-persistence=pending и локализованный статус сохранения в прежнем status-слоте, без нового ряда/сдвига раскладки. Только последняя поставленная запись текущего move revision снимает pending; завершение старой записи не подтверждает новый ход. Reload-тест ждёт этот настоящий durable barrier; требование восстановить точное поле26 не ослаблено. Первый эксперимент с await внутри choose был отвергнут после трёх Core Feel регрессий; его не выдаём пользователю. Ошибка записи оставляет честное предупреждение и штатный Retry; восстановление сохраняет точное поле, историю и уже начисленные depth/reward IDs. Новых схем/миграций нет. Reload **до** commit возвращает прежнее подтверждённое поле; отображаемая оперативная партия в это время явно pending. После data-persistence=saved точный count обязан пережить reload/process death. При явном отказе count может отражать оперативную партию, но одновременно виден обязательный save-error; она не считается durable.
+
+Проверки: `e2e/stability12105.spec.ts` — удержание lock, reload до/после записи, quota error/retry, точное поле, move1 и один элемент существующей packed Undo history, reload/Undo без повторной награды. `scripts/markets/android.mjs:verifyDurableClassic` —20 offline Android process-death циклов сразу после durable acknowledgement26 и после Undo28, без sleep/ожидания файла между acknowledgement и force-stop. Это технический эмулятор, не физический телефон.
+
+## QT-ACCEPT-02: чтение старого состояния в тесте
+
+`beginClassic` уже сохранял полный candidate/nextSession до публикации и рекламного перехода. Старый `openClassicNew()` завершался после click; скрытый `#win` относился ещё к предыдущему экрану. При удержанном commit допустимо прочитать завершённый старый attempt с пустым полем, пока новая партия ещё не подтверждена.
+
+Helper теперь ждёт изменённый durable attempt, completed=false, непустое поле и законченный переход; подтверждение замены незавершённой партии остаётся отдельным действием. Сами инварианты не менялись: exact board совпадает с classicRun, допустимые24/28/32, пустая история и moves0, completed остаётся6, wallet/meter не увеличиваются. Независимый сценарий также удерживает commit при повторном клике и проверяет failed-start → retry → успешный старт. Ошибка новой партии оставляет старый completed attempt авторитетным, Retry не повторяет завершение.
+
+## QT-ACCEPT-03: координаты отрисованного кадра
+
+Исходная независимая приёмка: [INDEPENDENT-12104](https://github.com/DanilaH/seeds-bits/blob/ccbe3cc6605b996e71bd8eb2f482c120d42f2be3/docs/research/quiet-polish-2026-11-26/INDEPENDENT-12104.md). Ранее raw screenTop отличался на48px, но все57 600 пикселей creative band на двух endpoint PNG совпадали. Это не доказательство видимого перемещения.
+
+Новая demo-диагностика разделяет `request`, `preDraw` и `draw`: origin/size окна, root и WebView, root/window padding, желаемые margins, фактический host top/left и layoutPending. Видимые координаты RPC возвращаются из OnDraw после всех preDraw listeners, а не между setLayoutParams и новым layout. Сырой request сохраняется рядом. Скрытое lifecycle/fullscreen состояние отвечает немедленно. Нативный bounded trace хранит изменившиеся кадры; счётчик `movedFrames` проверяет **каждый draw** внутри явно ожидаемого непрерывного интервала. Endpoint-сравнение остаётся и дополнено этим счётчиком, physical continuity не ослаблена.
+
+N56 моделирует старый host layout + новый root origin (raw1048 → actual1000); RPC не завершается до draw. N57 намеренно сдвигает host на1px и требует обнаружения. Это Java doubles, не доказательство Android paint. Реальный demo-прогон отдельно проверяет painted creative, один SDK view/request, ordinary маршруты, language modal, background/foreground, uiMode, reload, реальный resize, interstitial, настоящий rewarded callback/durable receipt/ack и возврат баннера. QA rewarded вызывается явно через реальный bridge, без подмены SDK callback или начисления тестовым JS. Непрерывная native запись и сырой geometry trace сохраняются в artifact.
+
+Рекламная политика/размеры/reserve/insets и код физического позиционирования не менялись. Использован контракт app-owned banner из кита, основанный на «Стрелках»: [ADS_AND_LIFECYCLE](https://github.com/DanilaH/mini-games-kit/blob/f199e642c40a28239fe973d13489d4144d871df2/docs/android/ADS_AND_LIFECYCLE.md#stable-banner-across-scene-changes). Guidance/runtime pins игры прежние.
+
+## Состояние приёмки
+
+Локально TypeScript/web build и171 unit PASS. Chromium в данной среде не запускается из-за `socket() Operation not permitted`, javac отсутствует; browser/native gates выполняются в CI **seeds-bits**. Итоговые run IDs, APK/hash и фактические счётчики записываются в DELIVERY после полного прогона. Ни один текущий тест не исключён. Отдельные проверки natural baseline/контролируемого old failure намеренно сохраняют исходный исход, они не являются weakened release gate.
+
+Физический телефон, звук/вибрация в руках игрока, live ad inventory/revenue и аудитория UNKNOWN. Шесть experiments остаются выключены; права/stock/контентные ревизии прежние.
+
+**KIT IMPACT — REUSE / CANDIDATE:** общие durable-state и banner contracts использованы без обновления runtime. Привязка Java geometry diagnostics к draw вместо асинхронного RPC — кандидат на короткое upstream QA-уточнение после Android-подтверждения, не новый общий SDK.

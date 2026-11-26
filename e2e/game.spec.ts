@@ -30,6 +30,8 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   await clickCell(0);
   await clickCell(9);
   await expect(page.locator("#remaining")).toHaveText("26");
+  // A fast rendered move can still be pending in the real storage queue.
+  await expect(page.locator(".game")).toHaveAttribute("data-persistence", "saved");
   await page.reload();
   await expect(page.locator("#app")).not.toHaveAttribute("inert", "");
   if (await page.locator("#resume").isVisible())

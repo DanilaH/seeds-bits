@@ -6,6 +6,21 @@ const key='seeds-bits.progress.v2';
 const state=(page:Page)=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!),key);
 async function boot(page:Page, finish=false) {
   await page.addInitScript(({key,finish})=>{
+    const log=(type:string,value?:string)=>{
+      const events=JSON.parse(sessionStorage.getItem('qt45-trace')??'[]');
+      let state:any;try{const p=JSON.parse(value??localStorage.getItem(key)??'{}');state={count:p.sessions?.classic?.current?.board.filter(Boolean).length,moves:p.sessions?.classic?.current?.moves,history:(p.sessions?.classic?.history??p.sessions?.classic?.packedHistory)?.length,attempt:p.meta?.attempts?.classic?.id};}catch{}
+      events.push({type,at:Date.now(),visibility:document.visibilityState,...state});
+      sessionStorage.setItem('qt45-trace',JSON.stringify(events.slice(-160)));
+    };
+    const write=Storage.prototype.setItem;
+    Storage.prototype.setItem=function(k,v){
+      if(k!==key)return write.call(this,k,v);
+      log('write-begin',v);try{write.call(this,k,v);log('write-success',v);}catch(error){log('write-failed',v);throw error;}
+    };
+    log('document-init');
+    addEventListener('pagehide',()=>log('pagehide'));
+    addEventListener('pageshow',()=>log('pageshow'));
+    document.addEventListener('visibilitychange',()=>log('visibilitychange'));
     if(sessionStorage.getItem('stability-seeded'))return;
     sessionStorage.setItem('stability-seeded','1');
     localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true,sound:false,vibration:false}));
@@ -34,7 +49,8 @@ async function hold(context:BrowserContext) {
 }
 async function trace(page:Page,label:string) {
   const value={label,remaining:await page.locator('#remaining').textContent(),
-    persistence:await page.locator('.game').getAttribute('data-persistence'),save:await state(page)};
+    persistence:await page.locator('.game').getAttribute('data-persistence'),
+    lifecycle:await page.evaluate(()=>JSON.parse(sessionStorage.getItem('qt45-trace')??'[]')),save:await state(page)};
   console.log('STABILITY_TRACE',JSON.stringify(value));
   await test.info().attach(label,{body:JSON.stringify(value,null,2),contentType:'application/json'});
   return value.save;
@@ -48,9 +64,10 @@ test('QT01 delayed write keeps the accepted count pending; durable move and Undo
     expect(pending.sessions.classic).toEqual(before.sessions.classic);
     await expect(page.locator('#board')).toHaveAttribute('aria-busy','true');
     await expect(page.locator('#status')).toContainText('Сохраняем ход');
-    await expect(page.locator('#remaining')).toHaveText('28');
+    await expect(page.locator('#remaining')).toHaveText('26');
   } finally {await blocker.release();}
   await expect(page.locator('#remaining')).toHaveText('26');
+  await expect(page.locator('.game')).toHaveAttribute('data-persistence','saved');
   const committed=await trace(page,'pair-durable');
   expect(committed.sessions.classic.current.board).toEqual(removePair(classic(),0,9));
   expect(committed.sessions.classic.current.moves).toBe(1);
@@ -60,6 +77,7 @@ test('QT01 delayed write keeps the accepted count pending; durable move and Undo
   expect((await state(page)).sessions.classic).toEqual(committed.sessions.classic);
   await page.locator('#undo').click();
   await expect(page.locator('#remaining')).toHaveText('28');
+  await expect(page.locator('.game')).toHaveAttribute('data-persistence','saved');
   expect(occupied((await state(page)).sessions.classic.current.board)).toBe(28);
   await page.reload(); await page.locator('#resume').click();
   await expect(page.locator('#remaining')).toHaveText('28');

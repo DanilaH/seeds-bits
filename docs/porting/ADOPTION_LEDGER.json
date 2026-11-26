@@ -1068,6 +1068,29 @@
       "nextAction": "Плейтест подписанного preview 12102 на физическом телефоне; оценить новые звуки и вибрацию.",
       "kitImpact": "REUSE",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40"
+    },
+    {
+      "id": "seeds-quiet-stability-12105",
+      "sourceFeatureIds": [],
+      "scope": "Собственная техническая приёмка №45: durable move/Undo/Add, atomic Classic start, native drawn banner geometry",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/main.ts",
+        "e2e/restore-game.ts",
+        "e2e/stability12105.spec.ts",
+        "native/android/SeedsMonetizationPlugin.java",
+        "scripts/markets/android.mjs"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/45",
+        "report": "../research/stability-2026-11-26/README.md",
+        "local": "171 unit and TypeScript/web build PASS; baseline held-write trace shows UI26/disk28",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Завершить exact-source общий CI,20 повторов каждой storage fault, Android process-death и native demo; выдать подписанный APK12105 с прежним сертификатом.",
+      "kitImpact": "REUSE; CANDIDATE draw-aligned native diagnostics"
     }
   ]
 }

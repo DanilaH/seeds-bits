@@ -1070,6 +1070,14 @@ async function verifyAppBanner() {
     await expected(true,"language modal closed");
     await ui.tap("#resume"); await stable("explicit Home to game");
     await ui.tap("#menu"); await stable("Home before background");
+    await expected(false,"settings modal opens for theme change");
+    await ui.tap("#settings-open");
+    assert.equal((await diagnostics()).visible,false);
+    await ui.tap("#dark");
+    await ui.until("document.documentElement.dataset.theme==='dark'");
+    await ui.tap("#settings-back");
+    await stable("saved dark theme returns to Home");
+    await expected(true,"theme change finished");
     await expected(false,"Home backgrounds");
     adb("shell","am","start","-a","android.settings.SETTINGS");
     await wait(450);
@@ -1256,7 +1264,7 @@ async function verifyDurableClassic() {
         // Dispatch the final input and observe the counter in the WebView, then
         // force-stop immediately. No post-move sleep or disk polling precedes it.
         await ui.evaluate(`document.querySelector('${digit(9)}').click();true`);
-        await ui.until("document.querySelector('#remaining').textContent==='26'");
+        await ui.until("document.querySelector('#remaining').textContent==='26' && document.querySelector('.game').dataset.persistence==='saved'");
         stop();ui.close();
         const disk=profiles().values[progress];
         assert.deepEqual(disk.sessions.classic.current.board,next);
@@ -1265,7 +1273,7 @@ async function verifyDurableClassic() {
         launch();ui=await connect();await ui.tap("#resume");
         assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"26");
         await ui.evaluate("document.querySelector('#undo').click();true");
-        await ui.until("document.querySelector('#remaining').textContent==='28'");
+        await ui.until("document.querySelector('#remaining').textContent==='28' && document.querySelector('.game').dataset.persistence==='saved'");
         stop();ui.close();
         const undone=profiles().values[progress];assert.deepEqual(undone.sessions.classic.current.board,initial);
         assert.equal(undone.sessions.classic.current.moves,0);
