@@ -102,6 +102,14 @@ for (const name of [
 }
 const rootGradle = "android/build.gradle";
 let rootScript = readFileSync(rootGradle, "utf8");
+// CI egress can be rate-limited by repo.maven.apache.org (HTTP 429).
+// Same Maven Central coordinates, via the mirror documented by Google Cloud:
+// https://docs.cloud.google.com/docs/buildpacks/java#google_cloud_hosted_maven_central_mirror
+if (process.env.SEEDS_MAVEN_CENTRAL_MIRROR === "google")
+  rootScript = rootScript.replaceAll(
+    "mavenCentral()",
+    'maven { url "https://maven-central.storage-download.googleapis.com/maven2/" }',
+  );
 if (!rootScript.includes("maven-rustore-exposed"))
   rootScript = rootScript.replace(
     /repositories \{/g,

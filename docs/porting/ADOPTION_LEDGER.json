@@ -1007,15 +1007,17 @@
     {
       "id": "owner-playtest-quiet-table-20261126",
       "status": "IMPLEMENTED_UNVERIFIED",
-      "ownerDecision": "Плейтест владельца 26 ноября 2026, 12 замечаний и дополнение по финалу дейлика.",
-      "currentImplementation": "src/main.ts: entryAdProtected, resultHome, noMovesCard; src/result-presentation.ts; src/quiet-table.css; src/audio/sources.json",
+      "ownerDecision": "14 замечаний владельца 26 ноября 2026 и дополнение по финалу дейлика.",
+      "currentImplementation": "src/main.ts: entryAdProtected, resultHome, noMovesCard; src/result-presentation.ts; src/quiet-table.css; src/audio/sources.json; src/main.ts: homeNotebook; отдельная тень/левитация и отключение старой фоновой анимации календаря в src/quiet-table.css",
       "acceptanceEvidence": {
         "report": "../research/playtest-2026-11-26/README.md",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "browser": "158 unit; 62 целевых Playwright; отдельный regression зелёного фона календаря"
       },
-      "nextAction": "Плейтест подписанного preview 12101 на телефоне.",
-      "kitImpact": "REUSE"
+      "nextAction": "Плейтест подписанного preview 12102 на физическом телефоне; оценить новые звуки и вибрацию.",
+      "kitImpact": "REUSE",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40"
     }
   ]
 }

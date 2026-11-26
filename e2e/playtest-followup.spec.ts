@@ -58,6 +58,8 @@ test("the daily nudge stops after entering today's game and survives reload",asy
   await page.locator("#menu").click();
   await expect(page.locator("#daily-mode")).toHaveAttribute("data-daily-pending","");
   await expect(page.locator("#daily-mode")).not.toHaveAttribute("data-daily-started");
+  await expect(page.locator("#home-today-art .calendar-picture")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(page.locator("#home-today-art .calendar-picture")).toHaveCSS("animation-name", "none");
   await page.locator("#daily-mode").click();
   await page.locator("#menu").click();
   await expect(page.locator("#daily-mode")).toHaveAttribute("data-daily-started","");

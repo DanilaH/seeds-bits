@@ -399,6 +399,8 @@
 #daily-mode[data-daily-pending] .calendar-picture {
   background: var(--table-date-art) center / contain no-repeat;
   color: var(--table-ink);
+  /* The old glow animated background-color above the SVG's transparent paper. */
+  animation: none;
 }
 #calendar-open svg { width: 12px; flex: 0 0 12px; }
 #dialog[data-screen="home"] .home-links {
