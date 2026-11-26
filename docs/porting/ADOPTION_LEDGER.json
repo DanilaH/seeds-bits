@@ -1090,7 +1090,8 @@
         "audience": "UNKNOWN",
         "generalCI": "https://github.com/DanilaH/seeds-bits/actions/runs/45867651382",
         "storageCI": "https://github.com/DanilaH/seeds-bits/actions/runs/45866037928",
-        "nativeDemo": "https://github.com/DanilaH/seeds-bits/actions/runs/45864381070/artifacts/15139982808"
+        "nativeDemo": "https://github.com/DanilaH/seeds-bits/actions/runs/45864381070/artifacts/15139982808",
+        "sameSourceDemoRetry": "https://github.com/DanilaH/seeds-bits/actions/runs/45867651090/artifacts/15141859844"
       },
       "nextAction": "Телефонный плейтест подписанного12105 после exact-HEAD CI/native gates: update без стирания данных, durable26/Undo28/Add, New Classic completion/dedup, banner/fullscreen. Уточнение draw-aligned diagnostics остаётся кандидатом для kit, без обновления runtime pins. Отдельно UNKNOWN по looping SDK demo: SDK sample/API35/phone comparison per acceptance README; do not synthesize dismissal.",
       "kitImpact": "REUSE; CANDIDATE draw-aligned native diagnostics",
@@ -1104,7 +1105,7 @@
         "emulator": "Android API35/WebView124: aefeb1b native demo PASS (45864381070/artifact15139982808), raw layout1124→draw1076 at nativeMs90455, hiddenFrames0/movedFrames0;20 offline force-stop/Undo cycles PASS (artifact15140028846). Expert disk-read precommit race diagnosed and driver corrected; full final matrix is a mandatory delivery gate.",
         "phone": "UNKNOWN: install12105 over12104, durable move/Undo/Add, new Classic and native banner/fullscreen in DELIVERY-12105.md.",
         "audience": "UNKNOWN: no retention/revenue or player-observation claim.",
-        "sdkDemoVariant": "UNKNOWN: 48d5561/45867651090/artifact15141069958, looping Yandex demo interstitial with no visible Next/Close; no SDK dismissal within unchanged160s. Not attributed to app or SDK without comparison. Retry same SHA/new response; if repeated compare media/logcat/activity evidence with official SDK sample on API35 and phone."
+        "sdkDemoVariant": "UNKNOWN: 48d5561/45867651090/artifact15141069958, looping Yandex demo interstitial with no visible Next/Close; no SDK dismissal within unchanged160s. Not attributed to app or SDK without comparison. Retry same SHA/new response; if repeated compare media/logcat/activity evidence with official SDK sample on API35 and phone. Same-SHA rerun PASS: artifact15141859844/job140085978867, no code/SDK ID/deadline/callback changes; failed artifact remains. This narrows the observation to response/conditions, not proven vendor attribution."
       }
     }
   ]

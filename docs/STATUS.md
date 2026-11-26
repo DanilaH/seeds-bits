@@ -4,7 +4,7 @@
 
 Общий CI62ee0c2 — PASS:172 unit +2 model +15 regression browser +552 e2e; отдельная серия140 fault/atomic/resume +80 исходных повторов — PASS. На неизменённой12104 исходный26→28 воспроизведён2/20. Preview12105 подписывается прежним сертификатом; **выдача требует полного CI и обоих native jobs на точном итоговом HEAD**, source/hash берутся из финального signed artifact, итоговые ссылки — в PR40. Стиль №43 и reach №44 приняты и сохранены; Wire10, права, раскладки и шесть выключенных экспериментов не менялись. Физический телефон/аудитория UNKNOWN. KIT IMPACT — REUSE / CANDIDATE draw-aligned QA.
 
-SDK demo48d5561 отдельно зафиксировал повторяющееся видео без видимого Close; причина UNKNOWN до сравнения с официальным SDK sample/телефоном. Пассивные logcat/media/activity diagnostics добавлены в QA-драйвер, policy/callbacks не менялись. Собственная ошибка scope последнего Expert assertion исправлена; полный native gate повторяется перед выдачей. Неуспешные прогоны не считаются приёмкой.
+SDK demo48d5561 отдельно зафиксировал повторяющееся видео без видимого Close; причина UNKNOWN до сравнения с официальным SDK sample/телефоном. Повтор demo того же48d5561 — PASS ([artifact15141859844](https://github.com/DanilaH/seeds-bits/actions/runs/45867651090/artifacts/15141859844)); первый FAIL не удалён. Пассивные logcat/media/activity diagnostics добавлены в QA-драйвер, policy/callbacks не менялись. Собственная ошибка scope последнего Expert assertion исправлена; полный native gate повторяется перед выдачей. Неуспешные прогоны не считаются приёмкой.
 
 # Quiet Table · полировка №43–44 · 26 ноября 2026
 
