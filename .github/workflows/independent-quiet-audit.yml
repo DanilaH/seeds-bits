@@ -1,0 +1,23 @@
+name: Independent Quiet Table screen audit
+on:
+  push:
+    branches: [qa/quiet-table-independent-20261126]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - run: |
+          npx vite --host 127.0.0.1 --port 5173 >/tmp/audit-vite.log 2>&1 &
+          for i in $(seq 1 40); do curl -fsS http://127.0.0.1:5173/ >/dev/null && break; sleep 1; done
+          node scripts/independent-quiet-audit.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: independent-quiet-screens, path: test-results/independent-quiet/}
