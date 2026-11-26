@@ -5,7 +5,7 @@
 
 Small, offline-first Number Match game. TypeScript + Vite + HTML/CSS/SVG. No React, game engine, remote fonts, backend or accounts.
 
-For project work, start with [AGENTS.md](AGENTS.md) and [current project decisions](docs/PROJECT_DECISIONS.md). The current working baseline is `feat/monetization-assists-20261113`: ordinary Undo / Hint / Add, with all six product experiments paused. The prepared store 1.1.2 baseline remains historical release evidence. [Task-routed kit guidance](docs/kit-guidance/TASK_ROUTER.md) and [commercial research](docs/COMMERCIAL_RESEARCH.md) have separately recorded exact revisions; documentation adoption does not upgrade the vendored runtime.
+For project work, start with [AGENTS.md](AGENTS.md) and [current project decisions](docs/PROJECT_DECISIONS.md). The current working branch is `feat/quiet-table-20261126` (PR #40): ordinary Undo / Hint / Add, with all six product experiments paused. Start from that branch and the latest [STATUS](docs/STATUS.md), not the older main or the historical baseline. Technical stability #45 is documented in [acceptance](docs/research/stability-2026-11-26/README.md). The prepared store 1.1.2 baseline remains historical release evidence. [Task-routed kit guidance](docs/kit-guidance/TASK_ROUTER.md) and [commercial research](docs/COMMERCIAL_RESEARCH.md) have separately recorded exact revisions; documentation adoption does not upgrade the vendored runtime.
 
 ## Run
 
@@ -48,7 +48,9 @@ On macOS with supported Xcode: `npm run setup:ios` once, then `npm run sync:ios`
 - `tests/`: rule fixtures, independent differential validator, seeded play/undo/save simulations.
 - `e2e/`: tutorial, restoration, actions, win and viewport tests.
 
-## Product decisions / limits
+## Historical product notes / limits
+
+Current navigation, four Classic difficulties, assigned content revisions and save contracts are governed by the dated latest entries in [project decisions](docs/PROJECT_DECISIONS.md) and [STATUS](docs/STATUS.md). The older version notes below are historical.
 
 See `docs/SPEC.md` and `docs/STATUS.md`. Rule version 0.1. The first classic game uses the traditional 1–19 start (zero omitted). Subsequent games are generated at runtime in three player-selected difficulty bands; normal preserves the original 28-digit multiset. The result offers “Легче / Ещё партия / Сложнее” in one row, with the boundary actions disabled. Restart repeats the current field; new game generates another at the selected band. See [classic difficulty](docs/classic-difficulty-2026-11-12/README.md). Adding is free but only allowed when there are no pairs. No loss on repeated state/no pairs. Classic hints identify legal pairs. Notebook and daily hints use verified solution paths and bounded search, with explicit recovery when a path cannot be verified. Version 0.5.0 includes 100 notebooks / 2400 verified tasks, the daily archive and monthly trophies from January 2025, and shared seed jars across all three modes. The first 24 puzzles keep their original IDs and layouts. Large late notebooks scroll vertically without shrinking digits. Expanded content loads separately. Save wire format 5 migrates formats 2–4 and protects the new data from older builds. Android uses Yandex banner/interstitial/rewarded ads and AppMetrica; no purchases, coins or leaderboards. Version 1.1.0 adds a shared hint wallet, daily streak bonuses, local reminders enabled by default (subject to Android notification permission; explicit opt-out is retained) and a rare native RuStore review request without incentives. The 9 November feel pass adds native event-specific haptics enabled by default for new settings, saved-result celebrations, shared reward flights in every mode, bounded visible-cell animation and touch contact feedback. See `docs/FEEL_2026-11-09.md`.
 

@@ -48,7 +48,9 @@ export const findSdkStoryNext=(raw,width,height)=>{
           let ink=0;for(let by=top;by<=bottom;by++)if(grey(bx,by))ink++;
           if(ink<h*.75)continue;
           const px=Math.max(0,left-4),py=Math.min(height-1,top-4),i=(py*width+px)*4;
-          if(Math.abs(raw[i]-raw[(top*width+left)*4])>35)return {x:Math.round((left+bx)/2),y:Math.round((top+bottom)/2),area,w,h};
+          // Antialiased tips need not occupy the bounding box's top-left
+          // corner. Compare with the known component seed, not that empty pixel.
+          if(Math.abs(raw[i]-raw[(y*width+x)*4])>35)return {x:Math.round((left+bx)/2),y:Math.round((top+bottom)/2),area,w,h};
         }
       }
       return null;

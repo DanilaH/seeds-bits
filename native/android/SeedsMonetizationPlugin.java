@@ -606,14 +606,17 @@ public class SeedsMonetizationPlugin extends Plugin {
       sample.opt("rootY")+":"+sample.opt("rootHeight")+":"+sample.opt("windowPaddingTop")+":"+bannerRevision;
     if (!key.equals(bannerGeometryKey)) {
       bannerGeometryKey=key;
-      if (bannerGeometryTrace.size()>=2048) bannerGeometryTrace.remove(0);
-      bannerGeometryTrace.add(sample);
+      recordBannerGeometry(sample);
     }
     if (!bannerDiagnosticCalls.isEmpty()) {
       List<PluginCall> calls=new ArrayList<>(bannerDiagnosticCalls); bannerDiagnosticCalls.clear();
       JSObject diagnostic=sample.put("preDraw",bannerPreDraw).put("atRequest",bannerAtRequest);
       handler.post(() -> { for (PluginCall call : calls) call.resolve(diagnostic); });
     }
+  }
+  private void recordBannerGeometry(JSObject sample) {
+    if (bannerGeometryTrace.size()>=2048) bannerGeometryTrace.remove(0);
+    bannerGeometryTrace.add(sample);
   }
   private void applyBanner(BannerPlacement placement) {
     if (!canPlaceBanner()) { hideBanner("native_lifecycle"); return; }
@@ -693,6 +696,10 @@ public class SeedsMonetizationPlugin extends Plugin {
       bannerHost.setLayoutParams(layout);
       bannerLeft = parentLeft;
       bannerTop = parentTop;
+      // Retain the requested margins beside the OLD laid-out host rectangle.
+      // This sample is intent, never a physical-continuity frame. The next
+      // OnDraw sample establishes what actually reached the renderer.
+      if (demoAds()) recordBannerGeometry(bannerSnapshot("layout-request"));
     }
   }
   private void publishBannerHeight(int pixels, double scale, boolean grow) {

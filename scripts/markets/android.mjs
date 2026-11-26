@@ -1151,16 +1151,18 @@ async function verifyAppBanner() {
     await ui.tap("#menu");
     await ui.until("document.querySelector('#dialog').open");
     await stable("before genuine interstitial");
+    const interstitialBaselineCalls=(await diagnostics()).fullscreenShowCalls;
     await expected(false,"fullscreen request");
     await ui.tap("#resume");
     let shown;
-    for (let attempt=0;attempt<24;attempt++) {
+    for (let attempt=0;attempt<120;attempt++) {
       shown=await diagnostics();
-      if(shown.fullscreen && !shown.focused)break;
+      if(shown.fullscreen && !shown.focused && shown.lastFullscreenStatus==="shown")break;
+      if(shown.fullscreenShowCalls>interstitialBaselineCalls && shown.lastFullscreenKind==="interstitial" && ["error","skipped","unavailable"].includes(shown.lastFullscreenStatus))break;
       await wait(150);
     }
     trace("interstitial show outcome",shown);
-    assert(shown.fullscreen && !shown.focused,"SDK did not open the demo interstitial: "+JSON.stringify(shown));
+    assert(shown.fullscreen && !shown.focused && shown.lastFullscreenStatus==="shown","SDK did not open the demo interstitial: "+JSON.stringify(shown));
     assert.equal(shown.visible,false);
     trace("genuine interstitial hides native banner",{...shown,expected:false});
     shot("banner-hidden-by-interstitial");
@@ -1220,8 +1222,8 @@ async function verifyAppBanner() {
       return true;
     })()`);
     let rewardShown;
-    for(let i=0;i<50;i++){rewardShown=await diagnostics();if(rewardShown.fullscreen&&!rewardShown.focused)break;await wait(150);}
-    assert(rewardShown.fullscreen&&!rewardShown.visible,"SDK did not open/hide the banner for rewarded");
+    for(let i=0;i<120;i++){rewardShown=await diagnostics();if(rewardShown.fullscreen&&!rewardShown.focused&&rewardShown.lastFullscreenStatus==="shown")break;if(rewardShown.fullscreenShowCalls>rewardedReady.fullscreenShowCalls&&rewardShown.lastFullscreenKind==="rewarded"&&["error","skipped","unavailable"].includes(rewardShown.lastFullscreenStatus))break;await wait(150);}
+    assert(rewardShown.fullscreen&&!rewardShown.visible&&rewardShown.lastFullscreenStatus==="shown","SDK did not open/hide the banner for rewarded: "+JSON.stringify(rewardShown));
     trace("genuine rewarded hides native banner",rewardShown);
     await dismissFullscreen();
     await ui.until("document.hasFocus() && window.__qtRewardResult!==null");
