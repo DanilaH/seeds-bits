@@ -1,4 +1,4 @@
-import { openClassicNew } from "./restore-game";
+import { openClassicNew, resumeStoredGame } from "./restore-game";
 import { test, expect, type Page } from "@playwright/test";
 const key = "seeds-bits.progress.v2";
 async function seed(
@@ -481,7 +481,7 @@ test("large board has one Tab stop and arrow navigation retains a quick exit", a
   page,
 }) => {
   await seed(page, { large: true });
-  await page.locator("#resume").click();
+  await resumeStoredGame(page);
   await expect(page.locator('#board button[tabindex="0"]')).toHaveCount(1);
   await page.locator('#board button[tabindex="0"]').focus();
   await page.keyboard.press("ArrowDown");

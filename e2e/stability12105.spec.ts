@@ -1,5 +1,5 @@
 import {test,expect,type Page,type BrowserContext} from '@playwright/test';
-import {installLegacyClassic,openClassicNew} from './restore-game';
+import {installLegacyClassic,openClassicNew,resumeStoredGame} from './restore-game';
 import {classic,removePair,occupied} from '../src/core';
 import {CLASSIC_START_COUNTS} from '../src/classic-generator';
 const key='seeds-bits.progress.v2';
@@ -30,7 +30,7 @@ async function boot(page:Page, finish=false) {
   },{key,finish});
   await installLegacyClassic(page);
   await page.goto('/');
-  await page.locator('#resume').click();
+  await resumeStoredGame(page);
   // Drain the real lock queue, without an elapsed-time assumption.
   await page.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));
 }
@@ -190,4 +190,31 @@ test('QT01 acknowledging an older write cannot clear a newer fast move pending b
   expect(saved.sessions.classic.current.board).toEqual(removePair(removePair(classic(),0,9),10,11));
   expect(saved.sessions.classic.history??saved.sessions.classic.packedHistory).toHaveLength(2);
   await page.reload();await page.locator('#resume').click();await expect(page.locator('#remaining')).toHaveText('24');
+});
+
+test('QT02 resume readiness waits for commit and modal closure before testing focus or scroll',async({page,context})=>{
+  await page.addInitScript(()=>{
+    localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true,sound:false,vibration:false}));
+    localStorage.setItem('seeds-bits.session.v1',JSON.stringify({rules:1,current:{board:Array(900).fill(5),moves:0,additions:0,scroll:0},history:[]}));
+  });
+  await page.goto('/');
+  await page.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));
+  const blocker=await hold(context);let ready=false;
+  const resumed=resumeStoredGame(page).then(()=>{ready=true;});
+  try {
+    await expect(page.locator('#dialog')).toHaveAttribute('inert','');
+    expect(ready).toBe(false);
+    const ignored=await page.evaluate(()=>{
+      document.querySelector<HTMLButtonElement>('[data-index="0"]')!.focus();
+      return !document.querySelector('#board')!.contains(document.activeElement);
+    });
+    expect(ignored).toBe(true);
+    await trace(page,'resume-write-held-dialog-inert');
+  }finally{await blocker.release();await resumed;}
+  expect(ready).toBe(true);
+  await page.locator('#board button[tabindex="0"]').focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('[data-index="9"]')).toBeFocused();
+  await page.locator('#viewport').evaluate(el=>{el.scrollTop=el.scrollHeight;});
+  await expect(page.locator('[data-index="899"]')).toBeInViewport();
 });

@@ -3,6 +3,12 @@ import { classic } from "../src/core";
 
 const key = "seeds-bits.progress.v2";
 
+/** Home resume persists the party before closing the modal and restoring scroll. */
+export async function resumeStoredGame(page: Page) {
+  await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+}
+
 /** Fixtures for tests exercising the legacy, already assigned Classic board. */
 export async function installLegacyClassic(page: Page) {
   await page.addInitScript(({key,board}) => {
