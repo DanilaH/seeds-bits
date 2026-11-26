@@ -67,7 +67,7 @@ export function celebrateTrophy(
   const mark = host.querySelector<HTMLElement>(
     `[data-tier="${tier}"] .medal-art`,
   );
-  if (!mark || reduced) return () => {};
+  if (!mark || reduced) return Object.assign(() => {}, {finished: Promise.resolve()});
   const animations: Animation[] = [
     mark.animate(
       [
@@ -119,9 +119,9 @@ export function celebrateTrophy(
     "#fff2cb",
   ];
   const spread = Math.min(116, Math.max(55, parent.width / 2 - 10));
-  for (let i = 0; i < 32; i++) {
+  for (let i = 0; i < 12; i++) {
     const piece = document.createElement("i");
-    const angle = (i / 32) * Math.PI * 2;
+    const angle = (i / 12) * Math.PI * 2;
     const dx = Math.cos(angle) * spread * (0.72 + (i % 4) * 0.08),
       dy = Math.sin(angle) * (62 + (i % 3) * 11) - 22;
     piece.dataset.shape = ["rect", "diamond", "strip"][i % 3];
@@ -152,7 +152,7 @@ export function celebrateTrophy(
             transform: `translate(${dx}px,${dy + 88}px) rotate(${tilt + spin}deg) rotateY(${i % 2 ? 160 : -160}deg)`,
           },
         ],
-        { duration: 1000 + (i % 4) * 70, easing: "ease-out", fill: "both" },
+        { duration: 620 + (i % 3) * 35, easing: "ease-out", fill: "both" },
       ),
     );
   }
@@ -161,8 +161,6 @@ export function celebrateTrophy(
     animations.forEach((a) => a.cancel());
     layer.remove();
   };
-  void Promise.all(animations.map((a) => a.finished.catch(() => {}))).then(() =>
-    layer.remove(),
-  );
-  return clear;
+  const finished = Promise.allSettled(animations.map(a => a.finished)).then(() => { layer.remove(); });
+  return Object.assign(clear, {finished});
 }

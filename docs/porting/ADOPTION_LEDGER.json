@@ -1128,6 +1128,30 @@
       },
       "nextAction": "Exact-source CI/PNG review и подписанный12106; телефонный повтор финиша и Home без текущей партии.",
       "kitImpact": "REUSE: established UI tokens and decoration safe area; no runtime change."
+    },
+    {
+      "id": "seeds-menu-reward-feel-46",
+      "sourceFeatureIds": [],
+      "scope": "Собственный Menu & Reward Feel по №46 поверх12106",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/main.ts",
+        "src/ui-motion.ts",
+        "src/result-presentation.ts",
+        "src/jar-spill.ts",
+        "src/trophies.ts",
+        "src/quiet-table.css",
+        "e2e/menu-reward-feel.spec.ts"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "report": "../research/menu-reward-feel-2026-11-27/README.md",
+        "code": "Декоративная последовательность после durable commit; milestone novelty Session-only; actual jar target; bound particles; local owned transitions",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Exact-source CI/native gates, before/after actual-audio videos, signed12107 и телефонный плейтест.",
+      "kitImpact": "REUSE: UI Motion Recipes / OwnedDomMotion / StableProgress / TierProgress; runtime pins unchanged."
     }
   ]
 }

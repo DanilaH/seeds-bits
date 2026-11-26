@@ -1,5 +1,6 @@
 import { t } from "./i18n";
 import { icon } from "./icons";
+import { OwnedDomMotion } from "./vendor/mini-games-kit/owned-dom-motion";
 
 export type ResultKind = "classic" | "daily" | "task" | "page" | "book";
 
@@ -9,9 +10,11 @@ export function resultKind(
   id: string,
   done: readonly string[],
   tasks: readonly { id: string }[],
+  newlyCompleted = true,
 ): ResultKind {
   if (id === "classic") return "classic";
   if (id.startsWith("daily")) return "daily";
+  if (!newlyCompleted) return "task";
   const index = tasks.findIndex((t) => t.id === id);
   if (index < 0) return "task";
   const finished = new Set(done);
@@ -60,25 +63,25 @@ export function celebrateResult(
   kind: ResultKind,
   reduced: boolean,
 ) {
-  if (reduced) return () => {};
+  if (reduced) return Object.assign(() => {}, {finished: Promise.resolve()});
+  const owner = new OwnedDomMotion();
+  const pose = getComputedStyle(host).transform;
+  const base = pose === "none" ? "rotate(0deg)" : pose;
   const animations: Animation[] = [];
   const animate = (
     node: Element | null,
     frames: Keyframe[],
     duration: number,
   ) => {
-    if (node)
-      animations.push(
-        node.animate(frames, { duration, easing: "cubic-bezier(.2,.8,.3,1)" }),
-      );
+    const animation = owner.animate(node, frames, {duration, easing: "cubic-bezier(.2,.8,.3,1)"});
+    if (animation) animations.push(animation);
   };
   if (kind === "classic" || kind === "daily") {
     animate(host, [
-      {transform:"rotate(-5deg) scale(.84)"},
-      {transform:"rotate(-7deg) scale(1.04)",offset:.45},
-      {transform:"rotate(-3deg) scale(.99)",offset:.7},
-      {transform:"rotate(-5deg) scale(1)"},
-    ], 640);
+      {transform: `${base} scale(.96)`},
+      {transform: `${base} scale(1.025)`,offset:.5},
+      {transform: `${base} scale(1)`},
+    ], kind === "classic" ? 500 : 420);
     animate(
       host.querySelector(".result-clearing-cells"),
       [
@@ -106,12 +109,10 @@ export function celebrateResult(
     );
   } else if (kind === "book") {
     animate(host, [
-      {transform:"rotate(-5deg) scale(.85)"},
-      {transform:"rotate(-9deg) scale(1.06)",offset:.35},
-      {transform:"rotate(0deg) scale(1.01)",offset:.6},
-      {transform:"rotate(-7deg) scale(1.02)",offset:.8},
-      {transform:"rotate(-5deg) scale(1)"},
-    ], 780);
+      {transform: `${base} scale(.96)`},
+      {transform: `${base} scale(1.035)`,offset:.4},
+      {transform: `${base} scale(1)`},
+    ], 680);
     for (const [i, leaf] of [
       ...host.querySelectorAll(".result-leaf"),
     ].entries())
@@ -142,12 +143,13 @@ export function celebrateResult(
     );
   } else
     animate(
-      host,
+      host.querySelector(".win-symbol"),
       [
-        { opacity: 0, transform: "scale(.85)" },
-        { opacity: 1, transform: "scale(1)" },
+        { transform: "scale(.82)" },
+        { transform: "scale(1.05)", offset: .55 },
+        { transform: "scale(1)" },
       ],
-      240,
+      300,
     );
   animate(
     host.querySelector(".result-stamp"),
@@ -160,12 +162,13 @@ export function celebrateResult(
   const burst = document.createElement("span");
   burst.className = "result-seed-burst";
   burst.setAttribute("aria-hidden", "true");
-  if (kind === "book" || kind === "classic" || kind === "daily") {
+  if (kind === "book" || kind === "classic") {
     host.append(burst);
-    for (let i = 0; i < 24; i++) {
+    const count = kind === "book" ? 12 : 8;
+    for (let i = 0; i < count; i++) {
       const grain = document.createElement("i");
       burst.append(grain);
-      const a = (i * Math.PI * 2) / 24;
+      const a = (i * Math.PI * 2) / count;
       grain.style.background = ["var(--table-cover)", "#ac5b3e", "#be983d"][i % 3];
       animate(
         grain,
@@ -177,16 +180,14 @@ export function celebrateResult(
             opacity: 0,
           },
         ],
-        850 + i % 4 * 65,
+        620 + i % 3 * 35,
       );
     }
   }
   const clear = () => {
-    for (const a of animations) a.cancel();
+    owner.cancelAll();
     burst.remove();
   };
-  void Promise.allSettled(animations.map((a) => a.finished)).then(() =>
-    burst.remove(),
-  );
-  return clear;
+  const finished = Promise.allSettled(animations.map((a) => a.finished)).then(() => { burst.remove(); });
+  return Object.assign(clear, {finished});
 }

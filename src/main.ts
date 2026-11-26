@@ -66,7 +66,7 @@ import { playSound, suspendSound, blockSound, warmSound, type SoundCue } from ".
 import { SeedFlight } from "./seed-flight";
 import { JarSpill } from "./jar-spill";
 import { icon } from "./icons";
-import { installInterfaceMotion } from "./ui-motion";
+import { installInterfaceMotion, presentMenuChange, clearInterfaceMotion } from "./ui-motion";
 import type { HapticCue } from "./haptics";
 import {
   createValueTransferPlan,
@@ -234,12 +234,14 @@ let lastExternalAt = -Infinity,
   activeSinceSave = 0;
 let visualSeeds: number | undefined;
 let completedJar:
-  { index: number; capacity: number; until: number } | undefined;
+  { index: number; capacity: number } | undefined;
 let clearContact = () => {};
 let clearTrophyCelebration = () => {};
 let clearResultCelebration = () => {};
 let resultArtKey = "";
-let fullJarTimer: ReturnType<typeof setTimeout> | undefined;
+let jarMilestone: Promise<void> | undefined;
+const presentationWaits = new Set<() => void>();
+let resultMilestone: {session: Session; kind: ReturnType<typeof resultKind>} | undefined;
 let boardRevealCancel: (() => void) | undefined;
 let pendingResult:
   { session: Session; rects: DOMRect[]; saved: boolean } | undefined;
@@ -1325,162 +1327,123 @@ function revealAddedCells(start: number, end: number) {
 function settlePresentation() {
   presentationRevision++;
   clearMotions();
+  clearInterfaceMotion();
   jarSpill.clear();
   clearContact();
   clearTrophyCelebration();
   clearResultCelebration();
   clearBoardReveal();
   clearPairFeedback();
-  clearTimeout(fullJarTimer);
+  for (const cancel of [...presentationWaits]) cancel();
   completedJar = undefined;
   pendingResult = undefined;
   flights.clear();
+  jarMilestone=undefined;
+  document.querySelectorAll("[data-reward-phase]").forEach(node=>node.removeAttribute("data-reward-phase"));
   visualSeeds = jars(progress).meter;
   renderJar();
 }
-function animateSeeds(rects: DOMRect[], amount: number, result = false) {
-  if (!amount || !rects.length) return;
-  const plan = createValueTransferPlan(amount, {
-    minDurationMs: 420,
-    maxDurationMs: 720,
-    maxVisualTokens: 2,
-    maxAudioEvents: 2,
+/** This wait owns presentation only; cancellation resolves it without continuation. */
+function presentationPause(ms: number) {
+  return new Promise<boolean>(resolve => {
+    const cancel = () => finish(false);
+    const finish = (active: boolean) => { clearTimeout(timer); presentationWaits.delete(cancel); resolve(active); };
+    const timer = setTimeout(() => finish(true), ms);
+    presentationWaits.add(cancel);
   });
-  const tokens = Array.from(
-    { length: plan.visualTokenCount },
-    (_, i) => rects[i % rects.length],
-  );
-  const target = result && !resultJarCard.hidden ? $("result-jar-glass") : $("jar-glass");
-  flights.fly(tokens, target, (index, silent) => {
-    const quantity =
-      valueAfterVisualArrival(plan, index) -
-      (index ? valueAfterVisualArrival(plan, index - 1) : 0);
-    const before = jarState(visualSeeds ?? 0);
-    visualSeeds = Math.min(jars(progress).meter, (visualSeeds ?? 0) + quantity);
-    const after = jarState(visualSeeds);
-    const full = after.index > before.index;
-    if (full && !silent) {
-      clearTimeout(fullJarTimer);
-      completedJar = {
-        index: before.index,
-        capacity: before.capacity,
-        until: performance.now() + 1100,
-      };
-      const nextJar = () => {
-        completedJar = undefined;
-        renderJar();
-        if (!dialog.open && !paused)
-          motion(
-            $("jar-glass"),
-            [
-              { opacity: 0.5, transform: "scale(.92)" },
-              { opacity: 1, transform: "scale(1)" },
-            ],
-            160,
-          );
-      };
-      fullJarTimer = setTimeout(nextJar, 1110);
-      const completion = completedJar;
-      const revision = presentationRevision;
-      // A failed/delayed write must not emit a new milestone, nor may an old
-      // arrival restart it after navigation. This effect owns no saved reward.
-      void Promise.resolve()
-        .then(() => saveQueue)
-        .then(() => {
-          if (
-            revision !== presentationRevision ||
-            completedJar !== completion ||
-            performance.now() >= completion.until ||
-            saveFailed ||
-            storageConflict ||
-            futureSave ||
-            dialog.open ||
-            hintOffer.open ||
-            paused ||
-            document.hidden
-          )
-            return;
-          // Keep the old, full jar through the whole shake if persistence was slow.
-          completion.until = performance.now() + 1100;
-          clearTimeout(fullJarTimer);
-          fullJarTimer = setTimeout(nextJar, 1110);
-          jarSpill.play($("jar-glass"));
-          feedback("full");
-        });
-    }
+}
+function presentationActive(revision: number) {
+  return revision === presentationRevision && !paused && !document.hidden &&
+    !dialog.open && !hintOffer.open && !languageSheet.open && !classicNewSheet.open;
+}
+async function presentFullJar(before: ReturnType<typeof jarState>, target: HTMLElement, revision: number) {
+  // The captured write, never an animation, authorizes the earned accent.
+  await saveQueue;
+  if (!presentationActive(revision) || saveFailed || storageConflict || futureSave || reduced()) return;
+  if (jarMilestone) return jarMilestone;
+  const run = async () => {
+    completedJar = {index: before.index, capacity: before.capacity};
     renderJar();
-    if (silent || dialog.open || paused) return;
-    if (full || completedJar) return;
-    feedback("land", !result);
-    motion(
-      target,
-      [
-        { transform: "rotate(-3deg) scale(1.05)" },
-        { transform: "rotate(2deg)" },
-        { transform: "none" },
-      ],
-      180,
-    );
+    target.dataset.rewardPhase = "full";
+    if (!await presentationPause(180) || !presentationActive(revision)) return;
+    target.dataset.rewardPhase = "closing";
+    feedback("full");
+    await jarSpill.play(target);
+    if (!presentationActive(revision)) return;
+    completedJar = undefined;
+    renderJar();
+    target.dataset.rewardPhase = "next";
+    const a = motion(target,[{opacity:.75,transform:"scale(.94)"},{opacity:1,transform:"none"}],160);
+    await a?.finished.catch(()=>{});
+    delete target.dataset.rewardPhase;
+  };
+  const current = run(); jarMilestone = current;
+  try { await current; } finally { if (jarMilestone === current) jarMilestone = undefined; }
+}
+function animateSeeds(rects: DOMRect[], amount: number, result = false): Promise<void> {
+  if (!amount || !rects.length) return Promise.resolve();
+  const revision = presentationRevision;
+  if (reduced() || !presentationActive(revision)) {
+    visualSeeds = jars(progress).meter; renderJar(); return Promise.resolve();
+  }
+  const plan = createValueTransferPlan(amount, {
+    minDurationMs:420,maxDurationMs:720,maxVisualTokens:2,maxAudioEvents:2,
+  });
+  const tokens = Array.from({length:plan.visualTokenCount},(_,i)=>rects[i%rects.length]);
+  const target = result && !resultJarCard.hidden ? $("result-jar-glass") : $("jar-glass");
+  const start = jarState(visualSeeds ?? 0);
+  let remaining=tokens.length;
+  let fullPromise: Promise<void> | undefined;
+  return new Promise(resolve => {
+    flights.fly(tokens,target,(index,silent)=>{
+      const quantity=valueAfterVisualArrival(plan,index)-(index?valueAfterVisualArrival(plan,index-1):0);
+      visualSeeds=Math.min(jars(progress).meter,(visualSeeds??0)+quantity);
+      // Both visible indicators share the full old jar until its lid closes.
+      renderJar();
+      if (!silent && presentationActive(revision) && jarState(visualSeeds).index===start.index && !completedJar) {
+        feedback("land",!result);
+        motion(target,[{transform:"rotate(-3deg) scale(1.05)"},{transform:"rotate(2deg)"},{transform:"none"}],180);
+      }
+      if (!silent && presentationActive(revision) && jarState(visualSeeds).index>start.index && !fullPromise)
+        fullPromise=presentFullJar(start,target,revision);
+      if (--remaining) return;
+      if (fullPromise) void fullPromise.then(resolve); else resolve();
+    });
   });
 }
 function maybeCelebrateResult() {
-  const pending = pendingResult;
-  if (
-    !pending ||
-    pending.session !== session ||
-    !pending.saved ||
-    busy ||
-    paused ||
-    dialog.open ||
-    occupied(board()) ||
-    saveFailed ||
-    storageConflict ||
-    futureSave
-  )
-    return;
-  pendingResult = undefined;
-  const kind = resultKind(progress.active, progress.done, notebook);
-  feedback(kind === "classic" || kind === "daily" ? "win" : kind);
+  const pending=pendingResult;
+  if (!pending || pending.session!==session || !pending.saved || busy || paused ||
+      dialog.open || occupied(board()) || saveFailed || storageConflict || futureSave) return;
+  pendingResult=undefined;
+  const revision=presentationRevision, current=session, amount=earnedSeeds;
+  const kind=resultMilestone?.session===session ? resultMilestone.kind : resultKind(progress.active,progress.done,notebook,false);
+  const award=earnedAward;
+  feedback(kind==="classic"||kind==="daily"?"win":kind);
   clearResultCelebration();
-  clearResultCelebration = celebrateResult(
-    resultPaper,
-    kind,
-    reduced(),
-  );
-  if (earnedSeeds) animateSeeds(pending.rects, earnedSeeds, true);
-  if (earnedSeeds || earnedHints)
-    motion(
-      $("result-gains"),
-      [
-        { opacity: 0.1, transform: "translateY(5px)" },
-        { opacity: 1, transform: "translateY(0)" },
-      ],
-      200,
-    );
-  if (progress.active.startsWith("daily") && earnedSeeds) {
-    const month = progress.active.slice(9, 16);
-    const monthTrophy = trophy(month, progress.done);
-    for (const fill of $("award").querySelectorAll<SVGElement>(
-      ".medal-liquid, .medal-ink-level",
-    )) {
-      const target = Number(fill.dataset.target);
-      const after = Math.min(monthTrophy.count, target);
-      motion(
-        fill,
-        [
-          {
-            transform: `scaleY(${after ? Math.min(Math.max(0, monthTrophy.count - 1), target) / after : 1})`,
-          },
-          { transform: "scaleY(1)" },
-        ],
-        420,
-      );
+  const scene=celebrateResult(resultPaper,kind,reduced());
+  clearResultCelebration=scene;
+  // One hierarchy: readable win → newly earned medal → jar transaction.
+  // Every next action stays live; leaving settles directly to the durable totals.
+  void (async()=>{
+    await scene.finished;
+    if (!presentationActive(revision) || session!==current) return;
+    if (progress.active.startsWith("daily") && amount) {
+      const month=progress.active.slice(9,16), mark=trophy(month,progress.done);
+      for (const fill of $("award").querySelectorAll<SVGElement>(".medal-liquid,.medal-ink-level")) {
+        const target=Number(fill.dataset.target), after=Math.min(mark.count,target);
+        motion(fill,[{transform:`scaleY(${after?Math.min(Math.max(0,mark.count-1),target)/after:1})`},{transform:"scaleY(1)"}],300);
+      }
+      if (award) {
+        feedback("full");
+        const medal=celebrateTrophy($("award"),mark.tier,reduced());
+        clearTrophyCelebration=medal;
+        await medal.finished;
+        if (!presentationActive(revision) || session!==current) return;
+      }
     }
-    if (earnedAward) {
-      clearTrophyCelebration();
-      clearTrophyCelebration = celebrateTrophy($("award"), monthTrophy.tier, reduced());
-    }
-  }
+    if (amount) await animateSeeds(pending.rects,amount,true);
+  })();
 }
 function cellCenter(index: number, origin: DOMRect, boardBox: DOMRect) {
   const box = cell(index)?.getBoundingClientRect();
@@ -2214,7 +2177,7 @@ $("watch-hints").onclick = async () => {
 let earnedAward = "",
   earnedSeeds = 0,
   earnedHints = 0;
-function complete(rects: DOMRect[]) {
+function complete(rects: DOMRect[], pairSeeds = 0) {
   const alreadyCompleted =
     metadata(progress).attempts[progress.active]?.completed;
   const id = progress.active,
@@ -2222,7 +2185,9 @@ function complete(rects: DOMRect[]) {
   const before = id.startsWith("daily")
     ? trophy(month, progress.done).tier
     : 0;
+  const newlyCompleted = !progress.done.includes(id);
   const gains = recordCompletion(progress, id);
+  resultMilestone = {session,kind:resultKind(id,progress.done,notebook,newlyCompleted)};
   resultAwaitingSave = session;
   pendingResult = { session, rects, saved: false };
   if (gains.hints)
@@ -2231,7 +2196,7 @@ function complete(rects: DOMRect[]) {
       count: gains.hints,
       attempt: hintAttempt(progress).id,
     });
-  earnedSeeds = gains.seeds;
+  earnedSeeds = gains.seeds + pairSeeds;
   earnedHints = gains.hints;
   if (!alreadyCompleted)
     durableEvent("game_complete", {
@@ -2259,7 +2224,7 @@ function complete(rects: DOMRect[]) {
 function renderWin() {
   const id = progress.active;
   renderClassicChoices();
-  const kind = resultKind(id, progress.done, notebook);
+  const kind = resultMilestone?.session === session ? resultMilestone.kind : resultKind(id, progress.done, notebook, false);
   const dailyResult = kind === "daily";
   resultDateArt.hidden = !dailyResult;
   if (dailyResult) resultDateArt.innerHTML = calendarPicture(id.slice(9));
@@ -2863,11 +2828,9 @@ async function choose(i: number) {
       progress.seen.push("reading");
     removedPairs.set(session.current.board, [a, i]);
     hintIndex = 0;
-    if (progress.active === "classic") {
-      const gain = collectPair(progress, session.current.moves);
-      if (gain) animateSeeds(flightRects, gain, ending);
-    }
-    if (!occupied(next)) complete(flightRects);
+    const gain = progress.active === "classic" ? collectPair(progress, session.current.moves) : 0;
+    if (gain && !ending) void animateSeeds(flightRects, gain);
+    if (!occupied(next)) complete(flightRects, gain);
     // Publish fast input immediately with an explicit pending-save state.
     // The queue acknowledges durability independently of decorative animation.
     void persistMove();
@@ -4160,6 +4123,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   if (busy) return;
   const sameScreen = dialog.open && dialog.dataset.screen === kind;
   const oldScroll = dialogScroller().scrollTop;
+  const previousKey = dialog.dataset.contentKey ?? "";
   const focused = document.activeElement as HTMLElement | null;
   const focusId = focused?.id;
   const focusVolume = focused?.dataset.volume;
@@ -4185,7 +4149,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     const nextDone = volumeTasks(nextVolume).filter((p) =>
       progress.done.includes(p.id),
     ).length;
-    html += `<h2>${t("home.progress")}</h2>${jarHero(j)}<button id="progress-book" class="progress-book" data-volume="${nextVolume}">${bookPicture(nextVolume + 1)}<span><strong>${volumeLabel(nextVolume)}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${volumeLabel(nextVolume)}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p><button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button>`;
+    html += `<h2>${t("home.progress")}</h2>${jarHero(j).replace('<section','<button type="button" id="progress-jar"').replace('</section>','</button>')}<button id="progress-book" class="progress-book" data-volume="${nextVolume}">${bookPicture(nextVolume + 1)}<span><strong>${volumeLabel(nextVolume)}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${volumeLabel(nextVolume)}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p><button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button>`;
   } else if (kind === "book") {
     html += renderNotebook();
   } else if (kind === "book-picker") {
@@ -4323,7 +4287,8 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   }
   pinDialogHeading(panel);
   if (kind === "progress") {
-    $("progress-trophies").onclick = () => openCollection("trophies");
+    $("progress-trophies").onclick = $("progress-jar").onclick = () => {collectionTab="jars";openCollection("trophies");};
+    $("progress-jar").setAttribute("aria-label",t("ui.jar-collection"));
     $("progress-book").onclick = () => {
       // An addressable progress card must open its own book, not the first
       // candidate from the last browsed catalog section.
@@ -4423,6 +4388,13 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     $("today-task").onclick = () => {
       void switchGame($("today-task").dataset.continue!, "calendar-today");
     };
+  }
+  const contentKey=kind==="book-picker"?`${bookThemes}:${bookRange}`:kind==="trophies"?`${collectionTab}:${jarShelfPage}:${trophyYear}`:kind==="calendar"?calendarMonth:String(selectedVolume);
+  dialog.dataset.contentKey=contentKey;
+  if (sameScreen && contentKey!==previousKey) {
+    clearInterfaceMotion();
+    const local=panel.querySelector(kind==="calendar"?".calendar":kind==="book-picker"?".volume-shelf":kind==="trophies"?(collectionTab==="jars"?".jar-collection":".monthly-collection"):".quiet-book-page");
+    presentMenuChange(local??panel,"page",contentKey>previousKey?1:-1);
   }
   if (sameScreen) {
     dialogScroller().scrollTop = oldScroll;
@@ -4689,7 +4661,7 @@ function renderJar() {
   if (meter.hidden) return;
   visualSeeds ??= jars(progress).meter;
   const j = jarState(visualSeeds);
-  const celebrating = completedJar && performance.now() < completedJar.until;
+  const celebrating = Boolean(completedJar);
   if (celebrating) {
     j.index = completedJar!.index;
     j.percent = 100;
@@ -4700,7 +4672,9 @@ function renderJar() {
   meter.style.setProperty("--jar-color", j.color);
   meter.style.setProperty("--fill", `${j.percent}%`);
   syncJarGrains(meter, j.filled);
-  $("jar-name").textContent = t("ui.jar-3", { "0": j.index + 1 });
+  const through = celebrating ? jarState(visualSeeds).index : j.index + 1;
+  const ordinal = through > j.index + 1 ? `${j.index+1}–${through}` : j.index+1;
+  $("jar-name").textContent = t("ui.jar-3", { "0": ordinal });
   $("jar-percent").textContent = `${j.percent}%`;
   meter.dataset.full = String(Boolean(celebrating));
   $("jar-collected").title = celebrating ? t("ui.jar-collected") : "";
@@ -4717,10 +4691,17 @@ function updateResultJar() {
   const total = jars(progress).meter;
   const displayed = visualSeeds ?? total;
   const j = jarState(resultAwaitingSave === session ? Math.min(displayed, total - earnedSeeds) : displayed);
+  if (completedJar) Object.assign(j,{index:completedJar.index,filled:completedJar.capacity,capacity:completedJar.capacity,percent:100,
+    name:localName(jarNames[completedJar.index%6]),color:jarColors[completedJar.index%6]});
+  resultJarCard.dataset.filled=String(j.filled);
+  resultJarCard.dataset.capacity=String(j.capacity);
+  resultJarCard.dataset.index=String(j.index);
   resultJarCard.style.setProperty("--jar-color", j.color);
   resultJarCard.style.setProperty("--fill", `${j.percent}%`);
   syncJarGrains(resultJarCard, j.filled);
-  $("result-jar-amount").textContent = `${j.name} · ${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}`;
+  $("result-jar-amount").textContent = completedJar
+    ? `${t("ui.jar-3",{"0":jarState(displayed).index>j.index+1?`${j.index+1}–${jarState(displayed).index}`:j.index+1})} · ${t("ui.collected")} · ${j.filled}/${j.capacity}`
+    : `${j.name} · ${t("ui.of-seeds", {"0":j.filled,"1":j.capacity})}`;
 }
 $("jar-meter").onclick = () => {
   collectionTab = "jars";

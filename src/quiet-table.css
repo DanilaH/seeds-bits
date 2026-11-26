@@ -1225,3 +1225,53 @@
 #dialog[data-screen="home"] .home-links > button { overflow-wrap: normal; word-break: normal; }
 
 #dialog[data-screen="home"] :is(.home-book-card #book-quick, .home-calendar #calendar-open) { background: var(--sheet); border: 1px solid var(--table-rule); }
+
+/* Menu & Reward Feel: the content moves, never the hit target or banner layer. */
+#app #win { animation: none; }
+#dialog[data-screen="home"] :is(#book-quick,.home-calendar #calendar-open) {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  padding-inline: 2px;
+}
+#dialog[data-screen="home"] #book-quick { white-space: nowrap; }
+#app #language-sheet[open] {
+  display: flex;
+  flex-direction: column;
+  width: min(420px,calc(100% - 24px));
+  height: auto;
+  max-height: calc(100dvh - max(24px,var(--safe-area-inset-top,0px)) - max(24px,var(--safe-area-inset-bottom,0px)));
+  margin: auto;
+  padding: 14px;
+  border: solid var(--table-cover);
+  border-width: 1px 6px 7px;
+  border-radius: var(--panel-radius);
+  overflow: hidden;
+  animation: none;
+}
+#language-sheet .language-heading { flex: 0 0 auto; }
+#language-sheet #language-options { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+#app :is(#classic-new-sheet,#hint-offer)[open] { animation: none; }
+#app #progress-jar { text-align: start; font: inherit; width:100%; }
+#dialog button :is(.book-picture,.tile-picture,.calendar-picture,.jar-picture) {
+  transition: translate 80ms ease-out, scale 120ms ease-out;
+}
+#dialog button.is-pressed :is(.book-picture,.tile-picture,.calendar-picture,.jar-picture) {
+  translate: 0 2px;
+  scale: .97;
+}
+#app #result-jar-amount { min-width: 0; max-width: 26ch; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  #dialog button :is(.book-picture,.tile-picture,.calendar-picture,.jar-picture) {
+    transition: none; translate: none; scale: none;
+  }
+}
+
+#dialog[data-screen="home"] .mode-nav {
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,9ch),1fr));
+}
+#dialog button .volume-illustration { transition: translate 80ms ease-out, scale 120ms ease-out; }
+#dialog button.is-pressed .volume-illustration { translate: 0 2px; scale: .97; }
+@media (prefers-reduced-motion: reduce) {
+  #dialog button .volume-illustration { transition:none; translate:none; scale:none; }
+}
