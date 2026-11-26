@@ -779,7 +779,7 @@ return (${code})(SeedsClassicQA);})()`;
       history:(disk.history??disk.packedHistory).length})+"\n");
     return disk;
   };
-  let geometry, savedScroll, expertCount;
+  let geometry, savedScroll, expertCount, savedExpert;
   const generated = [];
   try {
     assertViewportResult(await depth());
@@ -824,7 +824,7 @@ return (${code})(SeedsClassicQA);})()`;
       if (level===3) expertCount=count;
     }
     const natural=await depth();
-    const savedExpert=profiles().values[progress].sessions.classic.current.board;
+    savedExpert=profiles().values[progress].sessions.classic.current.board;
     assert.equal(savedExpert.filter(Boolean).length,expertCount);
     const reservesBanner=await ui.evaluate("document.documentElement.classList.contains('has-mobile-ads')");
     if (!reservesBanner) {
@@ -1261,6 +1261,15 @@ async function verifyAppBanner() {
     if (report.status !== "UNAVAILABLE") report.status="ERROR";
     report.error=String(error);
     try { shot("banner-failure"); } catch (captureError) { console.warn(String(captureError)); }
+    // Keep SDK/player evidence before finally() stops the process. A looping
+    // remote demo without a close control is an observed failure, not proof of
+    // an app placement defect or permission to manufacture onAdDismissed.
+    for(const [name,args]of [
+      ["logcat",["logcat","-d","-t","2500"]],
+      ["media",["shell","dumpsys","media.metrics"]],
+      ["activities",["shell","dumpsys","activity","top"]],
+    ])try{fs.writeFileSync(out+"/banner-failure-"+name+".txt",adb(...args));}
+      catch(diagnosticError){console.warn("SDK failure diagnostics:",String(diagnosticError));}
     throw error;
   } finally {
     if(recording) {
