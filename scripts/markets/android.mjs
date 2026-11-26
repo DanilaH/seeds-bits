@@ -3,7 +3,7 @@ import {execFileSync, spawn} from "node:child_process";
 import fs from "node:fs";
 import {resolve} from "node:path";
 import assert from "node:assert/strict";
-import {findSdkCloseCross} from "./sdk-controls.mjs";
+import {findSdkCloseCross,findSdkStoryNext} from "./sdk-controls.mjs";
 
 const app="com.seedsbits.game.preview", out="test-results/markets-android";
 fs.mkdirSync(out,{recursive:true});
@@ -1142,36 +1142,17 @@ async function verifyAppBanner() {
     assert.equal(shown.visible,false);
     trace("genuine interstitial hides native banner",{...shown,expected:false});
     shot("banner-hidden-by-interstitial");
-    const findStoryNext=(raw,width,height)=>{
-      const x0=Math.floor(width*.88),x1=Math.floor(width*.98),y1=Math.floor(height*.65);
-      const grey=(x,y)=>{const p=(y*width+x)*4,r=raw[p],g=raw[p+1],b=raw[p+2];return r>=110&&r<=210&&Math.max(r,g,b)-Math.min(r,g,b)<9;};
-      const seen=new Set();
-      for(let y=8;y<y1;y++)for(let x=x0;x<x1;x++){
-        const key=y*width+x;if(seen.has(key)||!grey(x,y))continue;
-        const queue=[[x,y]];seen.add(key);let left=x,right=x,top=y,bottom=y,area=0;
-        while(queue.length){const [cx,cy]=queue.pop();area++;left=Math.min(left,cx);right=Math.max(right,cx);top=Math.min(top,cy);bottom=Math.max(bottom,cy);
-          for(const [nx,ny]of [[cx-1,cy],[cx+1,cy],[cx,cy-1],[cx,cy+1]]){const k=ny*width+nx;if(nx<x0||nx>=x1||ny<0||ny>=y1||seen.has(k)||!grey(nx,ny))continue;seen.add(k);queue.push([nx,ny]);}
-        }
-        const h=bottom-top+1,w=right-left+1;if(h<8||h>width*.06||w<5||w>h*1.3||area<20)continue;
-        const rowInk=row=>{let n=0;for(let cx=left;cx<=right;cx++)if(grey(cx,row))n++;return n;};
-        const q1=top+Math.round(h*.25),mid=top+Math.round(h*.5),q3=top+Math.round(h*.75);
-        const middle=rowInk(mid),upper=rowInk(q1),lower=rowInk(q3);
-        if(!grey(left,q1)||!grey(left,q3)||middle<w*.7||upper>middle*.85||lower>middle*.85)continue;
-        // A separate vertical stop bar is required, so creative text/art is not a control.
-        for(let bx=right+2;bx<=right+Math.max(5,h*.7);bx++){
-          let ink=0;for(let by=top;by<=bottom;by++)if(grey(bx,by))ink++;
-          if(ink<h*.75)continue;
-          const px=Math.max(0,left-4),py=Math.min(height-1,top-4),i=(py*width+px)*4;
-          if(Math.min(raw[i],raw[i+1],raw[i+2])>240)return {x:Math.round((left+bx)/2),y:Math.round((top+bottom)/2),area,w,h};
-        }
-      }
-      return null;
-    };
     const sdkPlayerDeadline=performance.now()+100000;
     // The demo can serve a multi-part video. Give its own close control time to appear.
     while((await diagnostics()).fullscreen && performance.now()<sdkPlayerDeadline) {
       await wait(6000);
       if(!(await diagnostics()).fullscreen)break;
+      // Yandex's demo story also displays an unlabelled Next/Close icon in this rail.
+      const {raw,width,height}=await capturePixels();
+      const storyNext=findSdkStoryNext(raw,width,height);
+      if(storyNext){trace("visible SDK story Next control tapped",storyNext);adb("shell","input","tap",String(storyNext.x),String(storyNext.y));continue;}
+      const closeCross=findSdkCloseCross(raw,width,height);
+      if(closeCross){trace("visible SDK close control tapped",closeCross);adb("shell","input","tap",String(closeCross.x),String(closeCross.y));continue;}
       try {
         adb("shell","uiautomator","dump","/sdcard/demo-fullscreen.xml");
         const hierarchy=adb("shell","cat","/sdcard/demo-fullscreen.xml");
@@ -1183,12 +1164,7 @@ async function verifyAppBanner() {
         }
       } catch(error) { console.warn("Reading the ad close control:",String(error)); }
       if(!(await diagnostics()).fullscreen)break;
-      // Yandex's demo story also displays an unlabelled light Next/Close icon in this rail.
-      const {raw,width,height}=await capturePixels();
-      const storyNext=findStoryNext(raw,width,height);
-      if(storyNext){trace("visible SDK story Next control tapped",storyNext);adb("shell","input","tap",String(storyNext.x),String(storyNext.y));continue;}
-      const closeCross=findSdkCloseCross(raw,width,height);
-      if(closeCross){trace("visible SDK close control tapped",closeCross);adb("shell","input","tap",String(closeCross.x),String(closeCross.y));}
+
     }
     assert(!(await diagnostics()).fullscreen,"Demo creative has not provided an SDK dismissal");
     await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");

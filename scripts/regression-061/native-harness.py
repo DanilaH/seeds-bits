@@ -242,9 +242,10 @@ public class AuditHarness {
   check("N53_insets_bounce_retains_slot",insetRetained && BannerAdView.all.size()==1 && retainedInset.requests==1 && Integer.valueOf(0).equals(insetSample.result.get("hiddenFrames")),"transient WebView height cannot move or hide a validated same-window banner");
   p.activity.focused=false;p.bridge.web.observer.focus.onWindowFocusChanged(false);
   check("N54_insets_hold_never_overrides_background",retainedInset.getParent().visibility==android.view.View.GONE,"a retained slot still hides immediately when the Activity loses focus");
-  p.activity.focused=true;p.banner(fixedSlot);
+  p.activity.focused=true;fixedSlot.args.put("revision",++revision);p.banner(fixedSlot);
+  boolean visibleBeforeHeightResize=retainedInset.getParent().visibility==android.view.View.VISIBLE;
   p.activity.window.decor.height=1392;p.activity.root.height=p.bridge.web.height=1296;fixedSlot.args.put("revision",++revision);p.banner(fixedSlot);
-  check("N55_real_window_height_resize_hides",retainedInset.getParent().visibility==android.view.View.GONE,"retention never carries a creative through a real physical window resize");
+  check("N55_real_window_height_resize_hides",visibleBeforeHeightResize && retainedInset.getParent().visibility==android.view.View.GONE,"retention never carries a creative through a real physical window resize");
 
   p=fresh(true);PluginCall lab=new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","lab-only"));p.persistLabState(lab);game=p.activity.getSharedPreferences("CapacitorStorage",0);boolean isolated=lab.result!=null && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1"));boolean invalidLab=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.progress.v2").put("value","bad")));}catch(RuntimeException failure){invalidLab=true;}check("N42_lab_storage_namespace",isolated&&invalidLab&&!game.data.containsKey("seeds-bits.progress.v2"),"lab method cannot write production progress");
   game.fail=true;boolean labFailure=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","not-saved")));}catch(RuntimeException failure){labFailure=true;}check("N43_lab_storage_failure",labFailure && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1")) && "lab-only".equals(game.data.get("seeds-bits.lab.trials.v1")),"failed lab commit retains previous authority");
