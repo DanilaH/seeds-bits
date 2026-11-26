@@ -3,6 +3,7 @@ import {execFileSync, spawn} from "node:child_process";
 import fs from "node:fs";
 import {resolve} from "node:path";
 import assert from "node:assert/strict";
+import {findSdkCloseCross} from "./sdk-controls.mjs";
 
 const app="com.seedsbits.game.preview", out="test-results/markets-android";
 fs.mkdirSync(out,{recursive:true});
@@ -64,7 +65,11 @@ async function connect() {
   assert(target,"No game debug WebView at the configured localhost origin");
   const ws=new WebSocket(target.webSocketDebuggerUrl), pending=new Map();let id=0;
   await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
-  ws.onmessage=({data})=>{const resp=JSON.parse(data);pending.get(resp.id)?.(resp);};
+  ws.onmessage=({data})=>{const resp=JSON.parse(data);pending.get(resp.id)?.(resp);
+    if(resp.method==="Runtime.exceptionThrown" || resp.method==="Runtime.consoleAPICalled" && ["error","warning"].includes(resp.params?.type))
+      fs.appendFileSync(out+"/webview-errors.jsonl",JSON.stringify(resp)+"\n");
+  };
+  ws.send(JSON.stringify({id:++id,method:"Runtime.enable"}));
   const evaluate=async expression=>{
     const seq=++id;
     const promise=new Promise((resolve,reject)=>{
@@ -78,6 +83,13 @@ async function connect() {
   };
   const until=async expression=>{
     for(let i=0;i<80;i++){if(await evaluate(expression))return;await wait(150);}
+    try {
+      const state=await evaluate(`({url:location.href,ready:document.readyState,hidden:document.hidden,focus:document.hasFocus(),
+        root:document.documentElement.className,body:document.body?.outerHTML.slice(0,18000),
+        resources:performance.getEntriesByType('resource').map(e=>({name:e.name,duration:e.duration,bytes:e.transferSize}))})`);
+      fs.writeFileSync(out+"/webview-wait-failure.json",JSON.stringify({expression,state},null,2));
+      fs.writeFileSync(out+"/webview-logcat.txt",adb("logcat","-d","-t","500"));
+    } catch(diagnosticError) {console.warn("WebView failure details:",String(diagnosticError));}
     throw Error(expression);
   };
   await until("document.querySelector('#dialog')&&!document.querySelector('#app').inert&&!document.querySelector('.locale-pending')");
@@ -1175,16 +1187,8 @@ async function verifyAppBanner() {
       const {raw,width,height}=await capturePixels();
       const storyNext=findStoryNext(raw,width,height);
       if(storyNext){trace("visible SDK story Next control tapped",storyNext);adb("shell","input","tap",String(storyNext.x),String(storyNext.y));continue;}
-      const x=Math.round(width*.922), y=Math.round(width*.100), half=Math.round(width*.023);
-      let lightPixels=0;
-      for(let row=y-half;row<=y+half;row++)for(let col=x-half;col<=x+half;col++){
-        const i=(row*width+col)*4;
-        if(Math.min(raw[i],raw[i+1],raw[i+2])>=132)lightPixels++;
-      }
-      if(lightPixels>=40){
-        trace("visible SDK player control tapped",{x,y,lightPixels});
-        adb("shell","input","tap",String(x),String(y));
-      } else adb("shell","input","keyevent","4");
+      const closeCross=findSdkCloseCross(raw,width,height);
+      if(closeCross){trace("visible SDK close control tapped",closeCross);adb("shell","input","tap",String(closeCross.x),String(closeCross.y));}
     }
     assert(!(await diagnostics()).fullscreen,"Demo creative has not provided an SDK dismissal");
     await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");

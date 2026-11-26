@@ -39,7 +39,7 @@ public class MainActivity extends BridgeActivity {
   @Override public void onConfigurationChanged(Configuration configuration) {
     super.onConfigurationChanged(configuration);
     applyGameTextZoom();
-    applyGameAppearance();
+    applyGameAppearance(false);
   }
 
   public boolean isGameDark() { return gameDark; }
@@ -49,8 +49,10 @@ public class MainActivity extends BridgeActivity {
     applyGameAppearance();
   }
 
+  private void applyGameAppearance() { applyGameAppearance(true); }
+
   @SuppressWarnings("deprecation")
-  private void applyGameAppearance() {
+  private void applyGameAppearance(boolean repaint) {
     int top = Color.parseColor(gameDark ? "#303e31" : "#e5ddbe");
     int bottom = Color.parseColor(gameDark ? "#233127" : "#c5be9f");
     // API24–25 cannot draw dark navigation icons. Keep a dark palette color
@@ -58,7 +60,9 @@ public class MainActivity extends BridgeActivity {
     if (Build.VERSION.SDK_INT < 26 && !gameDark) bottom = Color.parseColor("#34553f");
     // Paint behind transparent system bars on API35+, without changing content
     // insets, the WebView rectangle, SDK banner slot, or system navigation mode.
-    if (paintedDark == null || paintedDark != gameDark) {
+    // Splash/Activity restoration may replace the Window background independently
+    // of the saved palette. uiMode alone can reuse the painted palette.
+    if (repaint || paintedDark == null || paintedDark != gameDark) {
       getWindow().setBackgroundDrawable(new GradientDrawable(
         GradientDrawable.Orientation.TOP_BOTTOM, new int[]{top, bottom}));
       getWindow().setStatusBarColor(top);
