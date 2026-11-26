@@ -5030,10 +5030,11 @@ if (import.meta.env.DEV || import.meta.env.VITE_SEEDS_QA_PROFILE) {
   if(qaProfile==="all"){qaTools.innerHTML='<h3>Проверка новых фич</h3>';$("menu-content").append(qaTools);}
   installHelpLab(qaProfile,qaProfile==="all"?qaTools:$("menu-content"),assistFeedback);
   const scenes=qaProfile==="all"?["magnet","plan","a3"]:[qaProfile].filter(profile=>["magnet","plan","a3"].includes(profile));
+  if(scenes.length && !qaTools.isConnected)$("menu-content").append(qaTools);
   for (const scene of scenes) {
     const scenario = document.createElement("button"); scenario.id = qaProfile==="all"?`qa-${scene}-scene`:"qa-help-scene"; scenario.className = "secondary";
     scenario.textContent = scene === "magnet" ? "QA: пример Магнита" : scene === "plan" ? "QA: пример плана" : "QA: подсказки за видео";
-    if(qaProfile==="all")qaTools.append(scenario);else $("home-goal").after(scenario);
+    qaTools.append(scenario);
     scenario.onclick = async () => {
       if (busy || rewardRequest || adActive) return;
       const candidate = cloneProgress(progress);

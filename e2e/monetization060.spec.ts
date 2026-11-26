@@ -388,14 +388,17 @@ test("analytics starts once on gameplay, not on opening home or returning to a s
           .length,
     ),
   ).toBe(1);
+  const startId=await page.evaluate(()=>(window as any).adsEvents.find((e:any)=>e.name==="game_start").data.event_id);
+  expect(typeof startId).toBe("string");
   await page.reload();
   await page.locator("#resume").click();
   await page.locator("#board button").nth(0).click();
   expect(
     await page.evaluate(
-      () =>
+      (startId) =>
         (window as any).adsEvents.filter((e: any) => e.name === "game_start")
-          .length,
+          .filter((e:any)=>e.data.event_id!==startId).length,
+      startId,
     ),
   ).toBe(0);
 });

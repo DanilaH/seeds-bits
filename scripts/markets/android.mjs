@@ -1265,6 +1265,38 @@ async function verifyAppearance() {
   } finally {ui.close();}
 }
 
+async function verifyReachValues() {
+  const original=profiles().values,records=[];
+  try {
+    for(const theme of ["light","dark"])for(const kind of ["mixed","invalid"]) {
+      const board=Array(45).fill(0);
+      for(const [i,n] of [[0,4],[2,kind==="mixed"?4:1],[4,6],[8,6],[9,2],[10,kind==="mixed"?6:3],[20,8],[44,4]])board[i]=n;
+      await fixture({
+        [settings]:{...original[settings],theme,tutorialDone:true,languageChoice:"en"},
+        [progress]:{version:3,active:"classic",done:[],seen:[],hints:{},
+          sessions:{classic:{rules:1,current:{board,moves:1,additions:0,scroll:0},history:[]}}},
+      });
+      launch();const ui=await connect();
+      try {
+        await ui.tap("#resume");await ui.until("!document.querySelector('#dialog').open");
+        await ui.tap(digit(0));await ui.until("document.querySelectorAll('.reachable').length===3");
+        const result=await ui.evaluate(`({green:[...document.querySelectorAll('.reachable-valid')].map(e=>+e.dataset.index),
+          red:[...document.querySelectorAll('.reachable-invalid')].map(e=>+e.dataset.index),
+          blocked:[4,20].every(i=>!document.querySelector('[data-index="'+i+'"]').classList.contains('reachable')),
+          redEdges:[...document.querySelectorAll('.reachable-invalid')].map(e=>getComputedStyle(e).outlineStyle)})`);
+        assert.deepEqual(result.green,kind==="mixed"?[2,10]:[]);
+        assert.deepEqual(result.red,kind==="mixed"?[9]:[2,9,10]);
+        assert(result.blocked);assert(result.redEdges.every(edge=>edge==="dashed"));
+        shot("reach-"+theme+"-"+kind);
+        await ui.tap(digit(0));await ui.until("document.querySelectorAll('.reachable').length===0");
+        assert.deepEqual(profiles().values[progress].sessions.classic.current.board,board);
+        records.push({theme,kind,...result});
+      } finally {ui.close();}
+    }
+    return {records,physicalPhone:false};
+  } finally {await fixture({[settings]:original[settings],[progress]:original[progress]});}
+}
+
 async function verifyCoreFeel() {
   const initial = [2,8,4,4,1,9];
   const after = [0,0,4,4,1,9];
@@ -1312,6 +1344,7 @@ try{
   lockDeviceRotation(0);
   const upgrade=await update();
   fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
+  fs.writeFileSync(out+"/reach-values.json",JSON.stringify(await verifyReachValues(),null,2));
   if (process.env.SEEDS_ANDROID_CORE_FEEL === "1") {
     const pilot=await verifyCoreFeel();
     fs.writeFileSync(out+"/core-feel.json",JSON.stringify({source:process.env.GITHUB_SHA,...pilot},null,2));

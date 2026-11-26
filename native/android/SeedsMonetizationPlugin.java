@@ -50,6 +50,8 @@ public class SeedsMonetizationPlugin extends Plugin {
   private int measuredWebWidth, measuredWebHeight;
   private boolean bannerExpected;
   private int bannerRequests, bannerLoads, bannerImpressions, bannerFrames, bannerHiddenFrames;
+  private String bannerHiddenReason = "not_requested";
+  private final java.util.Map<String,Integer> bannerHiddenReasons = new java.util.HashMap<>();
   private String showingRoute = "", showingTransition = "";
   private final ViewTreeObserver.OnWindowFocusChangeListener bannerFocus = this::windowFocusChanged;
   private final View.OnLayoutChangeListener bannerLayout = (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
@@ -61,7 +63,10 @@ public class SeedsMonetizationPlugin extends Plugin {
   private final ViewTreeObserver.OnPreDrawListener bannerProbe = () -> {
     if (bannerExpected) {
       bannerFrames++;
-      if (bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) bannerHiddenFrames++;
+      if (bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) {
+        bannerHiddenFrames++;
+        bannerHiddenReasons.put(bannerHiddenReason,bannerHiddenReasons.getOrDefault(bannerHiddenReason,0)+1);
+      }
     }
     return true;
   };
@@ -83,7 +88,6 @@ public class SeedsMonetizationPlugin extends Plugin {
     }
   }
   private BannerPlacement bannerPlacement;
-  private String bannerHiddenReason = "not_requested";
   private static double number(PluginCall call, String key) {
     Object value = call.getData().opt(key);
     return value instanceof Number ? ((Number)value).doubleValue() : Double.NaN;
@@ -489,12 +493,15 @@ public class SeedsMonetizationPlugin extends Plugin {
     int[] webLocation = new int[2], bannerLocation = new int[2];
     web.getLocationOnScreen(webLocation);
     if (bannerHost != null) bannerHost.getLocationOnScreen(bannerLocation);
+    JSObject hiddenReasons = new JSObject();
+    for (var entry : bannerHiddenReasons.entrySet()) hiddenReasons.put(entry.getKey(),entry.getValue());
     call.resolve(new JSObject()
       .put("measuredRevision",bannerRevision).put("request",bannerRequests)
       .put("view",banner==null?0:System.identityHashCode(banner))
       .put("loaded",bannerLoads).put("impressions",bannerImpressions)
       .put("visible",bannerHost!=null&&bannerHost.getVisibility()==View.VISIBLE)
       .put("hiddenReason",bannerHiddenReason)
+      .put("hiddenReasons",hiddenReasons)
       .put("expected",bannerExpected).put("requestedVisible",bannerPlacement!=null&&bannerPlacement.visible)
       .put("fullscreen",fullscreenActive).put("resumed",resumed)
       .put("focused",getActivity().hasWindowFocus())

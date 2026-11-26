@@ -920,6 +920,17 @@
 #app #hint-offer .hint-copy p { margin: 0; }
 #app #hint-offer .hint-copy details p { margin-top: 8px; }
 #app #help-pack { flex-wrap: wrap; gap: 8px; }
+#app .game-actions .action-count { flex-shrink: 0; min-width: max-content; }
+#app .game.docked-actions .game-actions footer > .action { flex-wrap: wrap; }
+/* Retained diagnostic previews obey the same panel bounds while experiments
+   remain paused in the delivered baseline. */
+#app #hint-offer .hint-copy:has(#help-preview:not([hidden])) { flex-shrink: 0; padding: 8px; }
+@media (orientation: landscape) and (max-height: 420px) {
+  #app #hint-offer:has(#help-preview:not([hidden])) { padding-block: 6px; gap: 4px; }
+  #app #hint-offer .hint-copy:has(#help-preview:not([hidden])) { padding: 4px 8px; }
+  #app #hint-offer:has(#help-preview:not([hidden])) .offer-terms { padding-block: 4px; }
+  #app #help-preview { margin-block: 4px; }
+}
 
 .game.is-result #viewport { background: transparent; }
 #win .quiet-result-page {
