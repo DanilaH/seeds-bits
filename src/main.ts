@@ -610,6 +610,9 @@ homeBookCard.append($("book-mode"), bookQuick);
 const homeCalendar = document.createElement("div");
 homeCalendar.className = "home-calendar";
 homeCalendar.append($("daily-mode"), $("calendar-open"));
+const bookTaskCaption = document.createElement("span");
+bookTaskCaption.id = "home-book-task";
+$("book-count").after(bookTaskCaption);
 const homeModeGrid = document.querySelector(".mode-nav")!;
 homeModeGrid.append(homeCalendar);
 homeModes.append(homeModeGrid);
@@ -4058,7 +4061,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ).getDay() +
           6) %
         7;
-    html += `<h2>${t("notification.channel")}</h2><section class="calendar-hero">${calendarPicture(date)}<div><small>${t("calm.calendar.today")}</small><strong>${taskDate(date)}</strong><span>${t(todayAction === "play" ? "daily.tagline" : todayAction === "replay" ? "daily.replay" : "daily.resume")}</span></div></section><div class="month-nav calendar-nav"><button id="prev-month" aria-label="${t("ui.previous-month")}" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>${icon("back")}</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="${t("ui.choose-month")}">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="${t("ui.next-month")}" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>${icon("arrow")}</button></div><div class="calendar">${[t("ui.mon"), t("ui.tue"), t("ui.wed"), t("ui.thu"), t("ui.fri"), t("ui.sat"), t("ui.sun")].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
+    html += `<h2>${t("notification.channel")}</h2><section class="calendar-hero">${calendarPicture(date)}<div><small>${monthName(date.slice(0,7))}</small><strong>${new Date(date).toLocaleDateString(activeLanguage,{weekday:"long",timeZone:"UTC"})}</strong><span>${t(todayAction === "play" ? "daily.tagline" : todayAction === "replay" ? "daily.replay" : "daily.resume")}</span></div></section><div class="month-nav calendar-nav"><button id="prev-month" aria-label="${t("ui.previous-month")}" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>${icon("back")}</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="${t("ui.choose-month")}">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="${t("ui.next-month")}" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>${icon("arrow")}</button></div><div class="calendar">${[t("ui.mon"), t("ui.tue"), t("ui.wed"), t("ui.thu"), t("ui.fri"), t("ui.sat"), t("ui.sun")].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
       calendarMonth,
     )
       .map(
@@ -4394,7 +4397,6 @@ function renderHomeCurrent() {
   const show = lesson >= 0 || Boolean(next) ||
     count > 0 && (classic ? classicParked() : Boolean(progress.sessions[id]));
   homeCurrent.hidden = !show;
-  homeCurrent.dataset.cover = classic ? "classic" : book ? "book" : "daily";
   homePreview.hidden = lesson >= 0 || count === 0;
   if (!homePreview.hidden && show) {
     const cells = board().slice(0, 27);
@@ -4451,6 +4453,9 @@ function updateHome() {
     ? t("nav.bookTaskTarget",{book:volumeLabel(volume),task:puzzleNumberInVolume(target)})
     : t("nav.mainComplete");
   $("book-count").textContent = target ? `${context} · ${solved}/24` : context;
+  bookTaskCaption.textContent = target
+    ? t("ui.puzzle-2", {"0": puzzleNumberInVolume(target), "1": ""}).trim()
+    : context;
   bookMode.setAttribute("aria-label", `${t("home.books")}. ${context}`);
   bookQuick.hidden = progress.active.startsWith("book") || !target;
   if (target) {
@@ -4460,6 +4465,8 @@ function updateHome() {
   const date = today();
   const id = dailyIdFor(date,progress);
   $("daily-mode").toggleAttribute("data-daily-pending", !dailyDone(progress.done,date));
+  $("daily-mode").toggleAttribute("data-daily-started", Boolean(progress.sessions[id]?.history.length));
+  $("daily-mode").setAttribute("aria-label", `${t("notification.channel")}. ${taskDate(date)}. ${dailyDone(progress.done,date) ? t("daily.replay") : progress.sessions[id]?.history.length ? t("daily.resume") : t("daily.tagline")}`);
   $("home-today-art").innerHTML = calendarPicture(date, true);
   const run = dailyRun(progress);
   $("daily-series").hidden = run.count === 0;

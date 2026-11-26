@@ -94,7 +94,7 @@
 #dialog[data-screen="home"] { padding-inline: max(18px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px)); }
 #dialog[data-screen="home"] #menu-content {
   max-width: 580px;
-  gap: clamp(8px, 2.5dvh, 18px);
+  gap: clamp(8px, 1.8dvh, 14px);
 }
 #dialog[data-screen="home"] .home-title {
   justify-content: space-between;
@@ -150,7 +150,7 @@
   align-items: flex-start;
   gap: 5px;
   width: 100%;
-  min-height: clamp(186px, 36dvh, 246px);
+  min-height: clamp(186px, 35dvh, 244px);
   padding: 27px 35px 23px 45px;
   background: var(--table-hero-art) center / 100% 100% no-repeat;
   transform: rotate(-5deg);
@@ -256,7 +256,11 @@
   font-size: .72rem;
   color: var(--table-muted);
 }
-#dialog[data-screen="home"] #classic-mode small { display: none; }
+#dialog[data-screen="home"] #classic-mode small,
+#dialog[data-screen="home"] #book-count,
+#dialog[data-screen="home"] #daily-mode[data-daily-pending]:not([data-daily-started]) #daily-state {
+  display: none;
+}
 #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) {
   align-self: center;
   display: flex;
@@ -363,7 +367,7 @@
   text-align: center;
   overflow-wrap: anywhere;
 }
-#dialog[data-screen="home"] .home-links button svg { display: none; }
+#dialog[data-screen="home"] .home-links > button svg { display: none; }
 
 /* Glass is an extracted outline around the existing live fill, grains and lid. */
 #app .jar-glass {
@@ -499,11 +503,17 @@
 
 /* Paper sections share the binding and palette across the other routes. */
 #dialog .screen-heading {
-  background: var(--table);
-  border-bottom-color: var(--table-rule);
+  background: transparent;
+  border-bottom-color: transparent;
   color: var(--table-ink);
 }
 #dialog .screen-heading h2 { font-weight: 650; }
+#dialog:not([data-screen="home"]) > .dialog-head { background: transparent; }
+#dialog .screen-heading :is(#collection-back,#settings-back,#privacy-back) {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
 #dialog .quiet-book-page,
 #dialog .calendar-layout,
 #dialog .settings-basics,
@@ -558,6 +568,8 @@
 #dialog #collection .compact-task-grid .task {
   color: var(--table-ink);
   background: transparent;
+  aspect-ratio: auto;
+  min-height: 48px;
   border-color: var(--table-rule);
   border-width: 0 1px 1px 0;
   border-radius: 0;
@@ -600,7 +612,7 @@
 #dialog .calendar-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 6px;
+  gap: 2px;
   position: relative;
   padding-top: 22px;
   margin: 17px 16px 9px;
@@ -626,6 +638,8 @@
 #dialog .calendar-layout #today-task { width: 100%; min-height: 47px; }
 #dialog #collection .calendar .task {
   min-width: 0;
+  min-height: 42px;
+  aspect-ratio: auto;
   border-radius: 0;
   border: 0;
   border-bottom: 1px solid var(--table-rule);
@@ -719,3 +733,23 @@
   #dialog[data-screen="home"] .home-current-copy .quiet-mini-board { display: none; }
   #dialog[data-screen="home"] .home-current #resume { min-height: 44px; }
 }
+
+@media (orientation: portrait) and (min-height: 650px) {
+  #app .game:not(.is-result):not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) > #viewport {
+    margin-block-start: 16px;
+  }
+  #app .game:not(.is-result):not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) #board-wrap {
+    width: calc(100% - 18px);
+    margin: 20px auto 0;
+  }
+}
+#dialog #collection .compact-volume-shelf .volume-cover {
+  gap: 0;
+  justify-content: center;
+  line-height: 1.05;
+}
+#dialog #collection .compact-volume-shelf .volume-cover small {
+  margin: 2px 0 0;
+}
+#dialog #collection .calendar-month .calendar-nav { margin-block: 4px 1px; }
+#dialog #collection .calendar-nav > button { background: transparent; border: 0; }
