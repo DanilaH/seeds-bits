@@ -1275,6 +1275,9 @@ async function verifyAppBanner() {
 }
 async function verifyDurableClassic() {
   const records=[], savedProfile=profiles().values;
+  const report={source:process.env.GITHUB_SHA,device:"Android API35 offline",physicalPhone:false,records,status:"RUNNING"};
+  const checkpoint=()=>fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(report,null,2));
+  checkpoint();
   const initial=Array.from({length:19},(_,i)=>String(i+1)).join("").replaceAll("0","").split("").map(Number);
   const next=moved(initial,[0,9]);
   try {
@@ -1306,10 +1309,12 @@ async function verifyDurableClassic() {
         assert.equal(undone.sessions.classic.current.moves,0);
         assert.equal(undone.jars.meter,2); // Undo does not repay or remove earned depth.
         records.push({trial,forceStopAfterVisible26:true,durableAcknowledgement:true,noPostAcknowledgementSleep:true,restored26:true,undoDurable28:true,attempt});
+        checkpoint();
       }finally{ui.close();stop();}
     }
-    return {source:process.env.GITHUB_SHA,device:"Android API35 offline",physicalPhone:false,records,status:"PASS"};
-  }finally{await fixture(savedProfile);}
+    report.status="PASS";return report;
+  }catch(error){report.status="ERROR";report.error=String(error);throw error;}
+  finally{checkpoint();await fixture(savedProfile);}
 }
 async function verifyAppearance() {
   launch();
