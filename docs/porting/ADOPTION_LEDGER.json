@@ -601,9 +601,23 @@
         "report": "../research/quiet-polish-2026-11-26/README.md",
         "browser": "local target checks; final project CI pending",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "independentReview": {
+          "review": "https://github.com/DanilaH/seeds-bits/issues/45",
+          "source": "253daea010cd6d48296db719050f9c4855ae4b6a",
+          "apk": {
+            "versionCode": 12104,
+            "package": "com.seedsbits.game.preview",
+            "sha256": "b62faac009e95c4cec1d2ed72ff527f7cb7950b35f3f47e074eba89b97737873",
+            "verification": "independent hash matches artifact 15130677105"
+          },
+          "visual": "145 actual browser frames and metrics artifact 15130268118 independently inspected; zero route/text errors; native 11 appearance states and reach fixtures inspected in artifact 15130783343; offline CI PASS",
+          "gates": "Full browser 543/545 and 544/545. Reload game.spec.ts fails both; repairs041 A04 fails once. Demo screenTop assertion fails; two painted creative crops pixel-identical, transient behavior UNKNOWN. See #45.",
+          "phone": "UNKNOWN",
+          "audience": "UNKNOWN"
+        }
       },
-      "nextAction": "Повторить project visual/native CI, сверить APK и сравнимые кадры.",
+      "nextAction": "Визуальные/цветовые изменения проверены; закрыть durable reload/new Classic и native demo geometry (#45), физический плейтест отдельно.",
       "kitImpact": "REUSE"
     },
     {
@@ -616,9 +630,23 @@
         "report": "../research/quiet-polish-2026-11-26/README.md",
         "browser": "81 value combinations and mixed fixtures in e2e/quiet-polish.spec.ts",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "independentReview": {
+          "review": "https://github.com/DanilaH/seeds-bits/issues/45",
+          "source": "253daea010cd6d48296db719050f9c4855ae4b6a",
+          "apk": {
+            "versionCode": 12104,
+            "package": "com.seedsbits.game.preview",
+            "sha256": "b62faac009e95c4cec1d2ed72ff527f7cb7950b35f3f47e074eba89b97737873",
+            "verification": "independent hash matches artifact 15130677105"
+          },
+          "visual": "145 actual browser frames and metrics artifact 15130268118 independently inspected; zero route/text errors; native 11 appearance states and reach fixtures inspected in artifact 15130783343; offline CI PASS",
+          "gates": "Full browser 543/545 and 544/545. Reload game.spec.ts fails both; repairs041 A04 fails once. Demo screenTop assertion fails; two painted creative crops pixel-identical, transient behavior UNKNOWN. See #45.",
+          "phone": "UNKNOWN",
+          "audience": "UNKNOWN"
+        }
       },
-      "nextAction": "Подтвердить классификацию и сбросы на подписанном Android preview.",
+      "nextAction": "Визуальные/цветовые изменения проверены; закрыть durable reload/new Classic и native demo geometry (#45), физический плейтест отдельно.",
       "kitImpact": "REUSE"
     }
   ],
