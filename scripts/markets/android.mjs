@@ -54,12 +54,14 @@ async function connect() {
   for(let i=0;i<70;i++){
     try{
       adb("forward","tcp:9223","localabstract:webview_devtools_remote_"+adb("shell","pidof",app));
-      target=(await (await fetch("http://127.0.0.1:9223/json/list")).json()).find(t=>t.type==="page");
+      const targets=await (await fetch("http://127.0.0.1:9223/json/list")).json();
+      // The ads SDK also creates debuggable WebViews in this process.
+      target=targets.find(t=>t.type==="page" && /^https?:\/\/localhost(?:[/:?#]|$)/.test(t.url));
       if(target)break;
     }catch{}
     await wait(250);
   }
-  assert(target,"No debug WebView");
+  assert(target,"No game debug WebView at the configured localhost origin");
   const ws=new WebSocket(target.webSocketDebuggerUrl), pending=new Map();let id=0;
   await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
   ws.onmessage=({data})=>{const resp=JSON.parse(data);pending.get(resp.id)?.(resp);};
