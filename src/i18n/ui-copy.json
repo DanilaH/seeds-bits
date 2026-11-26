@@ -2532,5 +2532,12 @@
     "es": "Alcanzable: los números no forman pareja",
     "tr": "Ulaşılabilir: sayılar çift oluşturmuyor",
     "pt-BR": "Alcançável: os números não formam um par"
+  },
+  "ui.saving-game": {
+    "ru": "Сохраняем ход…",
+    "en": "Saving move…",
+    "es": "Guardando jugada…",
+    "tr": "Hamle kaydediliyor…",
+    "pt-BR": "Salvando jogada…"
   }
 }

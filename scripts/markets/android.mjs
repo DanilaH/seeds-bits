@@ -1037,6 +1037,8 @@ async function verifyAppBanner() {
       assert.equal(current.request,retained.request,label);
       assert.equal(current.visible,true,label);
       assert.equal(current.hiddenFrames,retained.hiddenFrames,label);
+      assert.equal(current.phase,"draw",label+" geometry must belong to a rendered frame");
+      assert.equal(current.movedFrames,retained.movedFrames,label+" unexpected physical movement in rendered frames");
       for (const dimension of ["screenLeft","screenTop","width","height"])
         assert.equal(current[dimension],retained[dimension],label+" "+dimension);
       const paintColorBuckets=await paint(current);
@@ -1198,6 +1200,7 @@ async function verifyAppBanner() {
         if(report.status==="PASS") { report.status="ERROR"; report.error=String(error); }
       }
     }
+    if(ui)try{report.geometryTrace=await ui.evaluate("window.Capacitor.Plugins.SeedsMonetization.bannerGeometryTrace()");}catch(error){report.traceError=String(error);}
     fs.writeFileSync(out+"/banner-continuity.json",JSON.stringify(report,null,2));
     ui?.close();
     try { stop(); adb("uninstall",app); } catch (cleanupError) { console.warn(String(cleanupError)); }

@@ -65,7 +65,7 @@ jobs:
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1004' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1005' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
       SEEDS_MAVEN_CENTRAL_MIRROR: google
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test

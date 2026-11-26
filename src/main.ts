@@ -2844,7 +2844,17 @@ async function choose(i: number) {
       if (gain) animateSeeds(flightRects, gain, ending);
     }
     if (!occupied(next)) complete(flightRects);
-    save();
+    // A visible accepted count is a durable acknowledgement. Web Locks and
+    // Android's disk commit may still be pending after the click returns.
+    // Keep immediate erase feedback, but never publish the new hit targets/count
+    // before that write settles. This gate waits for storage, not animation.
+    $("board").setAttribute("aria-busy", "true");
+    document.querySelector<HTMLElement>(".game")!.dataset.persistence = "pending";
+    message(t("ui.saving-game"));
+    await save();
+    $("board").removeAttribute("aria-busy");
+    document.querySelector<HTMLElement>(".game")!.dataset.persistence =
+      saveFailed || storageConflict || futureSave ? "failed" : "saved";
   }
   // Lessons and finishing routes get their full explanation. Ordinary Feel
   // moves swap the hit targets immediately, independently of the erase ghosts.

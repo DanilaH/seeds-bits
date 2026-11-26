@@ -24,7 +24,21 @@ export async function openClassicNew(page: Page, level?: number) {
   if (!(await sheet.isVisible())) await page.locator("#classic-mode").click();
   const newGame = page.locator("#next-classic");
   if (await newGame.isVisible()) await newGame.click();
-  if (level !== undefined) await sheet.locator(`[data-classic-level="${level}"]`).click();
+  if (level !== undefined) {
+    const previous = await page.evaluate(key =>
+      JSON.parse(localStorage.getItem(key) ?? "{}").meta?.attempts?.classic?.id, key);
+    await sheet.locator(`[data-classic-level="${level}"]`).click();
+    // An unfinished party asks for confirmation. Otherwise the click only
+    // starts an async transaction; a hidden old #win is not its commit barrier.
+    if (await page.locator("#confirm-content").isVisible()) return;
+    await expect.poll(() => page.evaluate(({key,previous}) => {
+      const p = JSON.parse(localStorage.getItem(key) ?? "{}");
+      return p.meta?.attempts?.classic?.id !== previous &&
+        p.meta?.attempts?.classic?.completed === false &&
+        p.sessions?.classic?.current?.board?.some(Boolean);
+    }, {key,previous})).toBe(true);
+    await expect(page.locator("#dialog")).toBeHidden();
+  }
 }
 export async function continueClassic(page: Page) {
   await page.locator("#classic-mode").click();

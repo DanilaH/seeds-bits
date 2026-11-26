@@ -51,6 +51,13 @@ public class SeedsMonetizationPlugin extends Plugin {
   private int placedWindowWidth, placedWindowHeight, placedWindowX, placedWindowY, placedWebWidth, placedScreenLeft, placedScreenTop;
   private boolean bannerExpected;
   private int bannerRequests, bannerLoads, bannerImpressions, bannerFrames, bannerHiddenFrames;
+  private int bannerDraws, bannerMovedFrames, expectedLeft, expectedTop, expectedWidth, expectedHeight;
+  private boolean expectedRectSet;
+  private JSObject bannerPreDraw;
+  private final List<PluginCall> bannerDiagnosticCalls = new ArrayList<>();
+  private final List<JSObject> bannerGeometryTrace = new ArrayList<>();
+  private String bannerGeometryKey = "";
+  private final ViewTreeObserver.OnDrawListener bannerDrawProbe = this::sampleBannerDraw;
   private String bannerHiddenReason = "not_requested";
   private final java.util.Map<String,Integer> bannerHiddenReasons = new java.util.HashMap<>();
   private String showingRoute = "", showingTransition = "";
@@ -62,6 +69,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     }
   };
   private final ViewTreeObserver.OnPreDrawListener bannerProbe = () -> {
+    bannerPreDraw = bannerSnapshot("preDraw");
     if (bannerExpected) {
       bannerFrames++;
       if (bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) {
@@ -122,7 +130,10 @@ public class SeedsMonetizationPlugin extends Plugin {
       web.addOnLayoutChangeListener(bannerLayout);
       ViewTreeObserver observer = web.getViewTreeObserver();
       observer.addOnWindowFocusChangeListener(bannerFocus);
-      if (demoAds()) observer.addOnPreDrawListener(bannerProbe);
+      if (demoAds()) {
+        observer.addOnPreDrawListener(bannerProbe);
+        observer.addOnDrawListener(bannerDrawProbe);
+      }
       YandexAds.initialize(getContext(), () -> getActivity().runOnUiThread(() -> {
         if (destroyed) return;
         initialized = true;
@@ -506,18 +517,41 @@ public class SeedsMonetizationPlugin extends Plugin {
     call.resolve();
   }); }
   @PluginMethod public void bannerExpectation(PluginCall call) { getActivity().runOnUiThread(() -> {
-    if (demoAds()) bannerExpected = call.getBoolean("visible",false);
+    if (demoAds()) {
+      bannerExpected = call.getBoolean("visible",false);
+      expectedRectSet = false;
+    }
     call.resolve();
   }); }
   @PluginMethod public void bannerDiagnostics(PluginCall call) { getActivity().runOnUiThread(() -> {
     if (!demoAds()) { call.resolve(new JSObject()); return; }
+    // getLocationOnScreen between setLayoutParams and traversal combines the
+    // new root origin with the host's OLD laid-out top. It is not a painted frame.
+    // Visible geometry is acknowledged by OnDraw, after all preDraw listeners.
+    if (!canPlaceBanner() || bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) {
+      call.resolve(bannerSnapshot("hidden"));
+      return;
+    }
+    bannerDiagnosticCalls.add(call);
+    getActivity().getWindow().getDecorView().invalidate();
+  }); }
+  @PluginMethod public void bannerGeometryTrace(PluginCall call) { getActivity().runOnUiThread(() -> {
+    JSONArray trace = new JSONArray();
+    if (demoAds()) for (JSObject frame : bannerGeometryTrace) trace.put(frame);
+    call.resolve(new JSObject().put("trace",trace));
+  }); }
+  private JSObject bannerSnapshot(String phase) {
     View web = getBridge().getWebView();
-    int[] webLocation = new int[2], bannerLocation = new int[2];
+    View decor = getActivity().getWindow().getDecorView();
+    FrameLayout root = getActivity().findViewById(android.R.id.content);
+    int[] webLocation = new int[2], bannerLocation = new int[2], rootLocation = new int[2], windowLocation = new int[2];
     web.getLocationOnScreen(webLocation);
+    decor.getLocationOnScreen(windowLocation);
+    if (root != null) root.getLocationOnScreen(rootLocation);
     if (bannerHost != null) bannerHost.getLocationOnScreen(bannerLocation);
     JSObject hiddenReasons = new JSObject();
     for (var entry : bannerHiddenReasons.entrySet()) hiddenReasons.put(entry.getKey(),entry.getValue());
-    call.resolve(new JSObject()
+    return new JSObject().put("phase",phase).put("ms",SystemClock.elapsedRealtime())
       .put("measuredRevision",bannerRevision).put("request",bannerRequests)
       .put("view",banner==null?0:System.identityHashCode(banner))
       .put("loaded",bannerLoads).put("impressions",bannerImpressions)
@@ -528,12 +562,47 @@ public class SeedsMonetizationPlugin extends Plugin {
       .put("fullscreen",fullscreenActive).put("resumed",resumed)
       .put("focused",getActivity().hasWindowFocus())
       .put("frames",bannerFrames).put("hiddenFrames",bannerHiddenFrames)
+      .put("draws",bannerDraws).put("movedFrames",bannerMovedFrames)
       .put("width",bannerWidth).put("height",bannerPixelHeight)
       .put("left",bannerLeft).put("top",bannerTop)
       .put("screenLeft",bannerLocation[0]).put("screenTop",bannerLocation[1])
+      .put("hostLeft",bannerHost==null?0:bannerHost.getLeft()).put("hostTop",bannerHost==null?0:bannerHost.getTop())
+      .put("hostLayoutPending",bannerHost!=null&&bannerHost.isLayoutRequested())
+      .put("rootX",rootLocation[0]).put("rootY",rootLocation[1])
+      .put("rootWidth",root==null?0:root.getWidth()).put("rootHeight",root==null?0:root.getHeight())
+      .put("rootPaddingTop",root==null?0:root.getPaddingTop()).put("rootPaddingBottom",root==null?0:root.getPaddingBottom())
+      .put("rootLayoutPending",root!=null&&root.isLayoutRequested())
+      .put("windowX",windowLocation[0]).put("windowY",windowLocation[1])
+      .put("windowWidth",decor.getWidth()).put("windowHeight",decor.getHeight())
+      .put("windowPaddingTop",decor.getPaddingTop()).put("windowPaddingBottom",decor.getPaddingBottom())
       .put("webX",webLocation[0]).put("webY",webLocation[1])
-      .put("webWidth",web.getWidth()).put("webHeight",web.getHeight()));
-  }); }
+      .put("webWidth",web.getWidth()).put("webHeight",web.getHeight());
+  }
+  private void sampleBannerDraw() {
+    bannerDraws++;
+    JSObject sample = bannerSnapshot("draw");
+    boolean visible = Boolean.TRUE.equals(sample.opt("visible"));
+    int left=((Number)sample.opt("screenLeft")).intValue(), top=((Number)sample.opt("screenTop")).intValue();
+    if (bannerExpected && visible) {
+      if (expectedRectSet && (left!=expectedLeft || top!=expectedTop || bannerWidth!=expectedWidth || bannerPixelHeight!=expectedHeight)) bannerMovedFrames++;
+      else if (!expectedRectSet) {
+        expectedLeft=left; expectedTop=top; expectedWidth=bannerWidth; expectedHeight=bannerPixelHeight; expectedRectSet=true;
+      }
+    }
+    sample.put("movedFrames",bannerMovedFrames);
+    String key = visible+":"+left+":"+top+":"+bannerWidth+":"+bannerPixelHeight+":"+
+      sample.opt("rootY")+":"+sample.opt("rootHeight")+":"+sample.opt("windowPaddingTop")+":"+bannerRevision;
+    if (!key.equals(bannerGeometryKey)) {
+      bannerGeometryKey=key;
+      if (bannerGeometryTrace.size()>=2048) bannerGeometryTrace.remove(0);
+      bannerGeometryTrace.add(sample);
+    }
+    if (!bannerDiagnosticCalls.isEmpty()) {
+      List<PluginCall> calls=new ArrayList<>(bannerDiagnosticCalls); bannerDiagnosticCalls.clear();
+      JSObject diagnostic=sample.put("preDraw",bannerPreDraw);
+      handler.post(() -> { for (PluginCall call : calls) call.resolve(diagnostic); });
+    }
+  }
   private void applyBanner(BannerPlacement placement) {
     if (!canPlaceBanner()) { hideBanner("native_lifecycle"); return; }
     if (!placement.visible) { hideBanner("web_requested_hidden"); return; }
@@ -632,8 +701,11 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (observer.isAlive()) {
       observer.removeOnWindowFocusChangeListener(bannerFocus);
       observer.removeOnPreDrawListener(bannerProbe);
+      observer.removeOnDrawListener(bannerDrawProbe);
     }
     getBridge().getWebView().removeOnLayoutChangeListener(bannerLayout);
+    for (PluginCall call : bannerDiagnosticCalls) call.resolve(bannerSnapshot("destroyed"));
+    bannerDiagnosticCalls.clear();
     if (interstitial != null) interstitial.setAdEventListener(null);
     if (rewarded != null && (showingReward == null || showingReward.failed)) rewarded.setAdEventListener(null);
     if (showing != null) { showing.resolve(new JSObject().put("status", "interrupted")); showing = null; }
