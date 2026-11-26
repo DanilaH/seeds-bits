@@ -35,6 +35,8 @@ for(const width of [320,390])for(const kind of ["classic","book","daily"])for(co
     await expect(page.locator("#play-again")).toBeInViewport();
     if(kind!=="book") await expect(page.locator("#result-home")).toBeInViewport();
     if(kind==="daily") {
+      await expect(page.locator("#result-next > :first-child")).toHaveAttribute("id", "result-home");
+      await expect(page.locator("#result-home")).toHaveClass("primary");
       await expect(page.locator(".quiet-result-page #award .metal-goal")).toBeVisible();
       const medal=await page.locator("#award").boundingBox(),paper=await page.locator(".quiet-result-page").boundingBox();
       expect(medal!.y+medal!.height).toBeLessThanOrEqual(paper!.y+paper!.height+10);

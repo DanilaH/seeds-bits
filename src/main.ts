@@ -2371,6 +2371,7 @@ function classicDifficulty(): ClassicDifficulty {
 }
 function renderClassicChoices() {
   const isClassic = progress.active === "classic";
+  const isDaily = progress.active.startsWith("daily");
   const level = classicDifficulty();
   const blocked = busy || saveFailed || storageConflict || futureSave || resultAwaitingSave === session;
   resultNext.classList.toggle("is-classic", isClassic);
@@ -2382,7 +2383,11 @@ function renderClassicChoices() {
         ? t("ui.difficulty-highest")
         : t("ui.difficulty", { "0": localName(classicDifficultyNames[level]) });
   $<HTMLButtonElement>("play-again").disabled = blocked;
-  resultHome.hidden = !isClassic && !progress.active.startsWith("daily");
+  resultHome.hidden = !isClassic && !isDaily;
+  resultHome.className = isDaily ? "primary" : "text-button";
+  $("play-again").className = isDaily ? "text-button" : "primary";
+  const primary = isDaily ? resultHome : $("play-again");
+  if (resultNext.firstElementChild !== primary) resultNext.prepend(primary);
   resultHome.textContent = t("nav.menu");
   resultHome.disabled = blocked;
 }
