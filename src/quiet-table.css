@@ -420,7 +420,7 @@
 .game:not(.is-result) #board .empty { background: var(--sheet); }
 .game .game-top header { border-color: var(--table-rule); }
 .game .game-top .game-meta { color: var(--table-muted); }
-.game .game-top .game-meta #mode { color: var(--table-ink); font-weight: 650; }
+.game .game-top .game-meta #mode { color: var(--table-ink); font-weight: 650; line-height: 1.35; }
 .game .game-actions footer {
   gap: 0;
   padding: 0;
@@ -453,42 +453,49 @@
     position: relative;
     padding-block-end: 5px;
   }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) .game-top header {
-    position: relative;
+  #app .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) .game-top header {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px 44px;
+    align-items: center;
     min-height: 68px;
     gap: 0;
   }
+  .game:has(#lesson:not([hidden])) .game-top > header .brand { display: none; }
+  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header #menu { grid-column: 1; }
   .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header .brand { display: none; }
   .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header .jar-caption { display: none; }
   .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header .jar-meter {
     min-width: 44px;
     padding-inline: 0;
     justify-content: center;
-    margin-inline: auto 38px;
+    grid-column: 3;
+    justify-self: center;
+    margin: 0;
   }
   .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header .jar-glass {
     width: 30px;
     height: 43px;
   }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) .game-top .game-meta {
+  #app .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) .game-top .game-meta {
     position: relative;
     margin: -62px 88px 0 43px;
     min-height: 62px;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-content: center;
+    align-content: safe center;
+    align-items: flex-start;
     gap: 0 6px;
     line-height: 1.13;
-    padding-block: 3px;
+    padding-block: 6px 5px;
     pointer-events: none;
   }
   .game .game-meta .mode-description { display: block; flex-basis: 100%; }
   .game .game-meta #game-difficulty { margin: 1px 0; }
   .game .game-meta .field-date-art { display: none; }
-  .game .game-top header #book-top {
-    position: absolute;
-    inset-inline-end: 0;
+  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header #book-top {
+    grid-column: 4;
+    justify-self: end;
   }
 }
 @media (orientation: portrait) and (max-height: 580px) {

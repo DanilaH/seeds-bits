@@ -8,7 +8,7 @@ permissions:
   actions: read
 concurrency:
   group: first-session-preview-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' }}
+  cancel-in-progress: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126' }}
 jobs:
   browser:
     runs-on: ubuntu-24.04
