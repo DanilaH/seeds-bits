@@ -59,3 +59,5 @@ await run('navigation','nav',{},async(p,rec)=>{
 });
 fs.writeFileSync(out+'/metrics.json',JSON.stringify(result,null,2));console.log(JSON.stringify({cases:result.cases.length,errors:result.errors}));await browser.close();
 
+
+if(result.errors.length)process.exitCode=1;

@@ -115,15 +115,14 @@ export function celebrateResult(
     ], 680);
     for (const [i, leaf] of [
       ...host.querySelectorAll(".result-leaf"),
-    ].entries())
-      animate(
-        leaf,
-        [
-          { transform: `translateY(${-i * 5}px) rotate(${8 + i * 4}deg)` },
-          { transform: "translateY(0) rotate(0)" },
-        ],
-        500,
-      );
+    ].entries()) {
+      const rest=getComputedStyle(leaf).transform;
+      const baseLeaf=rest==="none"?"translate(0,0)":rest;
+      animate(leaf,[
+        {transform:`${baseLeaf} translateY(${-i*5}px) rotate(${8+i*4}deg)`},
+        {transform:baseLeaf},
+      ],500);
+    }
     animate(
       host.querySelector(".result-cover"),
       [

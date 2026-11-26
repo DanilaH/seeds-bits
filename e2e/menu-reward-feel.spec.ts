@@ -80,9 +80,11 @@ for(const language of ['ru','en','es','tr','pt-BR'])for(const theme of ['light',
   for(const [width,height] of [[320,568],[390,844],[844,390]])for(const font of [16,24,32]){
     await page.setViewportSize({width,height});await page.evaluate(font=>document.documentElement.style.fontSize=font+'px',font);
     const lines=await page.locator('#book-quick').evaluate(e=>{const r=document.createRange();r.selectNodeContents(e);return [...r.getClientRects()].filter(r=>r.width>0).map(r=>({x:r.x,right:r.right,y:r.y}));});
+    await page.screenshot({path:test.info().outputPath(`home-${width}-${font}.png`),animations:"disabled"});
     expect(lines.length).toBe(1);expect(lines[0].x).toBeGreaterThanOrEqual(0);expect(lines[0].right).toBeLessThanOrEqual(width);
   }
   await page.setViewportSize({width:320,height:568});await page.evaluate(()=>document.documentElement.style.fontSize='16px');
+  await raw(page,'#book-quick');await expect(page.locator('#dialog')).toBeHidden();await raw(page,'#menu');
   await raw(page,'#progress-open');await raw(page,'#progress-jar');await expect(page.locator('#dialog')).toHaveAttribute('data-screen','trophies');
   await raw(page,'#trophies-mode');await raw(page,'#jars-tab');await raw(page,'#collection-back');await raw(page,'#collection-back');
   await raw(page,'#pause-language');
