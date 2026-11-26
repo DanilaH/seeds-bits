@@ -54,7 +54,7 @@ test('QT01 delayed write keeps the accepted count pending; durable move and Undo
   const committed=await trace(page,'pair-durable');
   expect(committed.sessions.classic.current.board).toEqual(removePair(classic(),0,9));
   expect(committed.sessions.classic.current.moves).toBe(1);
-  expect(committed.sessions.classic.history).toHaveLength(1);
+  expect(committed.sessions.classic.history ?? committed.sessions.classic.packedHistory).toHaveLength(1);
   await page.reload(); await page.locator('#resume').click();
   await expect(page.locator('#remaining')).toHaveText('26');
   expect((await state(page)).sessions.classic).toEqual(committed.sessions.classic);
@@ -90,7 +90,7 @@ test('QT01 failed pair write is explicit; retry saves exact board/history and do
   await page.evaluate(()=>(window as any).restoreWrite());await page.locator('#retry-save').click();
   await expect(page.locator('#save-notice')).toBeHidden();
   const saved=await trace(page,'pair-retried');
-  expect(saved.sessions.classic.current.moves).toBe(1);expect(saved.sessions.classic.history).toHaveLength(1);
+  expect(saved.sessions.classic.current.moves).toBe(1);expect(saved.sessions.classic.history ?? saved.sessions.classic.packedHistory).toHaveLength(1);
   expect(saved.sessions.classic.current.board).toEqual(removePair(classic(),0,9));
   await page.reload();await page.locator('#resume').click();await expect(page.locator('#remaining')).toHaveText('26');
   const reloaded=await state(page);expect(reloaded.jars).toEqual(saved.jars);expect(reloaded.meta.completed).toBe(saved.meta.completed);
@@ -115,7 +115,7 @@ test('QT02 new Classic is atomic under a held commit and repeated clicks; previo
   await expect(page.locator('#dialog')).toBeHidden();
   const next=await trace(page,'new-classic-durable'), board=next.sessions.classic.current.board;
   expect(CLASSIC_START_COUNTS[1]).toContain(occupied(board));
-  expect(next.sessions.classic.history).toEqual([]);expect(next.sessions.classic.current.moves).toBe(0);
+  expect(next.sessions.classic.history ?? next.sessions.classic.packedHistory).toEqual([]);expect(next.sessions.classic.current.moves).toBe(0);
   expect(next.meta.classicRun.current.board).toEqual(board);
   expect(next.meta.attempts.classic.completed).toBe(false);
   expect(next.meta.attempts.classic.id).not.toBe(completed.meta.attempts.classic.id);
