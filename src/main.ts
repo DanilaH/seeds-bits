@@ -2774,7 +2774,9 @@ async function choose(i: number) {
     const viewRect = viewport.getBoundingClientRect();
     const boardRect = $("board").getBoundingClientRect();
     const rowHeight = cell(0)?.getBoundingClientRect().height || boardRect.width / WIDTH;
-    const firstRow = Math.max(0, Math.floor((viewRect.top - boardRect.top) / rowHeight));
+    const topRow = (viewRect.top - boardRect.top) / rowHeight;
+    const firstRow = Math.max(0, Math.floor(topRow));
+    const firstAnchorRow = Math.max(0, Math.ceil(topRow));
     const lastRow = Math.ceil((viewRect.bottom - boardRect.top) / rowHeight);
     for (const [nextIndex, oldIndex] of positions) {
       const oldRow = Math.floor(oldIndex / WIDTH),
@@ -2786,7 +2788,7 @@ async function choose(i: number) {
         continue;
       const node = cell(oldIndex);
       if (!node) continue;
-      if (!anchor && viewport.scrollTop > 1 && oldRow >= firstRow && oldRow < lastRow && blank[oldIndex])
+      if (!anchor && viewport.scrollTop > 1 && oldRow >= firstAnchorRow && oldRow < lastRow && blank[oldIndex])
         anchor = node;
       if (animateCollapse || node === anchor) oldTops.set(node, node.getBoundingClientRect().top);
     }
