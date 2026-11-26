@@ -1,0 +1,104 @@
+name: Quiet preview native follow-up
+on:
+  push:
+    branches: [qa/quiet-native-12104]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: quiet-native-follow-up
+  cancel-in-progress: true
+jobs:
+  native-acceptance:
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [demo]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SEEDS_ANDROID_TEST_MODE: ${{ matrix.mode }}
+      SEEDS_ANDROID_CORE_FEEL: ${{ (github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126') && '1' || '0' }}
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+      SEEDS_BUILD_FLAVOR: preview
+      ADS_MODE: test
+      SEEDS_ARTIFACT_CHANNEL: rustore
+      APPMETRICA_API_KEY: ""
+      APPMETRICA_QA_API_KEY: ""
+      REQUIRE_MOBILE_CONFIG: "false"
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: sdkmanager "build-tools;36.0.0"
+      - name: Check screenshot and video tools
+        run: |
+          command -v ffmpeg > /dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+      - run: npm ci --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        with:
+          name: first-session-preview-unsigned
+          path: candidate/
+          run-id: 45836015742
+          github-token: ${{ github.token }}
+      - name: Verify pinned runtime source
+        run: |
+          node -e 'const s=require("./candidate/source.json"); if(s.source!=="8f92957dd2491fd5b73e8afb9a71ea290f32775b" || s.versionCode!==12104 || s.helpProfile!=="baseline") throw Error("Unexpected APK");'
+          mkdir -p test-results/markets-android
+          cp candidate/source.json test-results/markets-android/runtime-apk.json
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: 15005703885
+          merge-multiple: true
+          run-id: 45579802309
+          github-token: ${{ github.token }}
+          path: baseline
+      - run: |
+          echo '4de5a8398d5deb9748cec6c5e89b9b78a44258a2f29f0b26f18dc1096ff7daf9  baseline/seeds-first-session-12088-unsigned.apk' | sha256sum -c -
+          keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
+          version_code=$(node -p 'require("./candidate/source.json").versionCode')
+          build_tools_dir=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12088-unsigned.apk
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" "candidate/seeds-first-session-${version_code}-unsigned.apk"
+          "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" "candidate/seeds-first-session-${version_code}-debug.apk"
+      - run: |
+          node scripts/classic-pilot.mjs --bundle "$RUNNER_TEMP/seeds-classic-pilot.bundle.js"
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/seeds-first-session-avd"
+          mkdir -p "$ANDROID_AVD_HOME" test-results/first-session-android
+          sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
+          echo no | avdmanager create avd --force --name firstsession --package 'system-images;android-35;google_apis;x86_64'
+          sudo chmod 666 /dev/kvm
+          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
+          emulator_pid=$!
+          for attempt in $(seq 1 120); do
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/first-session-android/emulator.log; exit 1; fi
+            if [ "$(timeout 4 adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ]; then break; fi
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          for attempt in $(seq 1 12); do
+            if [ "$(timeout 4 adb shell id -u 2>/dev/null | tr -d '\r')" = 0 ]; then break; fi
+            timeout 4 adb root || true
+            sleep 2
+          done
+          test "$(adb shell id -u | tr -d '\r')" = 0
+          adb shell input keyevent 82
+          if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then
+            SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk"
+            exit
+          fi
+          adb shell svc wifi disable
+          adb shell svc data disable
+          adb shell iptables -I OUTPUT '!' -o lo -j REJECT
+          adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
+          adb shell input keyevent 82
+          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'markets-android-${{ matrix.mode }}', path: "test-results/markets-android/\ntest-results/first-session-android/emulator.log"}
+
