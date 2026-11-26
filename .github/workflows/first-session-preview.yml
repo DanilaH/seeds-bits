@@ -76,6 +76,7 @@ jobs:
       - run: npx playwright install chromium
       - run: npx playwright test e2e/menu-reward-feel.spec.ts --workers=2
       - name: Record original dynamic audit and actual application audio before and after
+        if: ${{ !cancelled() }}
         run: |
           command -v ffmpeg >/dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
           git worktree add "$RUNNER_TEMP/menu-before" 125606e4a90e06b844fe6eb8f83249032cb7057f

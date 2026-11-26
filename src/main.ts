@@ -1416,11 +1416,17 @@ function maybeCelebrateResult() {
   if (!pending || pending.session!==session || !pending.saved || busy || paused ||
       dialog.open || occupied(board()) || saveFailed || storageConflict || futureSave) return;
   pendingResult=undefined;
+  // Hand off any still-flying field feedback to this one result scene.
+  presentationRevision++;
+  for (const cancel of [...presentationWaits]) cancel();
+  flights.clear();jarSpill.clear();completedJar=undefined;jarMilestone=undefined;
   const revision=presentationRevision, current=session, amount=earnedSeeds;
+  visualSeeds=Math.max(0,jars(progress).meter-amount);renderJar();
   const kind=resultMilestone?.session===session ? resultMilestone.kind : resultKind(progress.active,progress.done,notebook,false);
   const award=earnedAward;
-  feedback(kind==="classic"||kind==="daily"?"win":kind);
+  feedback(kind==="classic"?"win":kind==="daily"?"task":kind);
   clearResultCelebration();
+  if (reduced()) { visualSeeds=jars(progress).meter;renderJar();return; }
   const scene=celebrateResult(resultPaper,kind,reduced());
   clearResultCelebration=scene;
   // One hierarchy: readable win → newly earned medal → jar transaction.
@@ -1572,7 +1578,9 @@ function showPairWave(path: Connection, blocked = false) {
   if (!blocked) pairFeedbackTimer = setTimeout(clearPairFeedback, 240);
   return true;
 }
-const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reducedPreference = matchMedia("(prefers-reduced-motion: reduce)");
+const reduced = () => reducedPreference.matches;
+reducedPreference.addEventListener("change",()=>settlePresentation());
 const ownedDomMotion = new OwnedDomMotion();
 const cellColorMotions = new Map<Element, {animation: Animation; selection: string}>();
 const cellSelection = (el: Element) =>
@@ -3744,6 +3752,7 @@ document.addEventListener("visibilitychange", () => {
   else fieldActivity();
 });
 window.addEventListener("pagehide", () => {
+  settlePresentation();
   if (!busy) save();
 });
 async function boot() {

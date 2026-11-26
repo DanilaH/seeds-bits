@@ -3,13 +3,14 @@ import {resumeStoredGame} from './restore-game';
 const key='seeds-bits.progress.v2';
 const ids=(n:number)=>Array.from({length:n},(_,i)=>`book-v1-${i+1}`);
 async function seed(page:Page,kind='task',meter=22,language='ru',theme='light') {
-  const daily=kind.startsWith('daily'),classic=kind==='classic';
+  const daily=kind.startsWith('daily'),classic=kind==='classic'||kind==='menu';
   const n=kind==='page'?5:kind==='book'?23:kind==='page-replay'?6:kind==='book-replay'?24:0;
   const active=classic?'classic':daily?'daily-v1-2026-11-26':`book-v1-${kind.startsWith('page')?6:kind.startsWith('book')?24:9}`;
   const dayCount=kind==='daily-gold'?29:kind==='daily-silver'?13:kind==='daily-bronze'?6:3;
   const done=daily?Array.from({length:dayCount},(_,i)=>`daily-v1-2026-11-${String(i+1===26?30:i+1).padStart(2,'0')}`):ids(n);
-  const state={version:3,active,done,seen:[],hints:{},sessions:{[active]:{rules:1,current:{board:[5,5],moves:1,additions:0,scroll:0},history:[]}},
+  const state:any={version:3,active,done,seen:[],hints:{},sessions:{[active]:{rules:1,current:{board:[5,5],moves:1,additions:0,scroll:0},history:[]}},
     jars:{version:2,meter,seeds:meter,wins:3,attempt:'feel46',highWater:1},meta:{version:2,since:'2026-11-01',completed:10,unassisted:10,wallet:1,attempts:{[active]:{id:'feel46',completed:false}}}};
+  if(kind==='menu'){state.sessions['book-v1-1']=structuredClone(state.sessions.classic);state.meta.attempts['book-v1-1']={id:'menu-notebook',completed:false};}
   await page.addInitScript(({key,state,language,theme})=>{
     if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(state));
     if(!localStorage.getItem('seeds-bits.settings.v1'))localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true,languageChoice:language,theme,sound:false,vibration:false}));
@@ -75,7 +76,7 @@ for(const mode of ['reduced','next','background','resize'])test(`MF interruption
   await expect(page.locator('.result-seed-burst i,.trophy-confetti i,#jar-spill,.flying-seed')).toHaveCount(0);
 });
 for(const language of ['ru','en','es','tr','pt-BR'])for(const theme of ['light','dark'])test(`MF menu layout ${language} ${theme}`,async({page})=>{
-  await seed(page,'task',5600,language,theme);
+  await seed(page,'menu',5600,language,theme);
   for(const [width,height] of [[320,568],[390,844],[844,390]])for(const font of [16,24,32]){
     await page.setViewportSize({width,height});await page.evaluate(font=>document.documentElement.style.fontSize=font+'px',font);
     const lines=await page.locator('#book-quick').evaluate(e=>{const r=document.createRange();r.selectNodeContents(e);return [...r.getClientRects()].filter(r=>r.width>0).map(r=>({x:r.x,right:r.right,y:r.y}));});
