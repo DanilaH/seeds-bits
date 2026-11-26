@@ -1255,6 +1255,8 @@ async function verifyAppearance() {
       if(await ui.evaluate("document.querySelector('#dark').checked")!==dark)await ui.tap("#dark");
       await ui.until("document.documentElement.dataset.theme==='"+(dark?"dark":"light")+"'");
       await inspect("appearance-"+(dark?"dark":"light")+"-settings",dark);
+      adb("shell","cmd","uimode","night",dark?"no":"yes");
+      await inspect("appearance-"+(dark?"dark":"light")+"-system-config",dark);
       await ui.tap("#settings-back");
       await ui.tap("#pause-language");await inspect("appearance-"+(dark?"dark":"light")+"-modal",dark);
       adb("shell","input","keyevent","4");await ui.until("!document.querySelector('#language-sheet').open");

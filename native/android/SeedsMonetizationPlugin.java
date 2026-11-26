@@ -48,7 +48,7 @@ public class SeedsMonetizationPlugin extends Plugin {
   private long bannerRevision;
   private String bannerEpoch = "";
   private int measuredWebWidth, measuredWebHeight;
-  private int placedRootWidth, placedRootHeight, placedWebWidth;
+  private int placedWindowWidth, placedWindowHeight, placedWindowX, placedWindowY, placedWebWidth, placedScreenLeft, placedScreenTop;
   private boolean bannerExpected;
   private int bannerRequests, bannerLoads, bannerImpressions, bannerFrames, bannerHiddenFrames;
   private String bannerHiddenReason = "not_requested";
@@ -466,13 +466,23 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   private void deferBannerGeometry(String reason) {
     FrameLayout root = getActivity().findViewById(android.R.id.content);
+    View decor = getActivity().getWindow().getDecorView();
+    int[] windowLocation = new int[2], rootLocation = new int[2];
+    decor.getLocationOnScreen(windowLocation);
     // SystemBars can briefly remove/reapply WebView insets during uiMode changes.
     // Keep the last validated SDK placement while the physical window/width stay
     // unchanged. Real resize, modal intent and lifecycle still hide immediately.
     if (canPlaceBanner() && bannerPlacement != null && bannerPlacement.visible &&
         bannerHost != null && bannerHost.getVisibility() == View.VISIBLE && root != null &&
-        root.getWidth() == placedRootWidth && root.getHeight() == placedRootHeight &&
-        getBridge().getWebView().getWidth() == placedWebWidth) return;
+        decor.getWidth() == placedWindowWidth && decor.getHeight() == placedWindowHeight &&
+        windowLocation[0] == placedWindowX && windowLocation[1] == placedWindowY &&
+        getBridge().getWebView().getWidth() == placedWebWidth) {
+      root.getLocationOnScreen(rootLocation);
+      // The content root itself moves when DecorView insets are cleared/reapplied.
+      // Compensate its origin so the already validated creative stays on screen.
+      positionBanner(placedScreenLeft-rootLocation[0]-root.getPaddingLeft(), placedScreenTop-rootLocation[1]-root.getPaddingTop());
+      return;
+    }
     hideBanner(reason);
   }
   private void clearBanner() {
@@ -586,17 +596,23 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (bannerPixelHeight > height) { publishBannerHeight(bannerPixelHeight + (height == bannerPixelHeight - 1 ? 1 : 0), scale, true); hideBanner("creative_height"); return; }
     int parentLeft = left - root.getPaddingLeft();
     int parentTop = bottom - bannerPixelHeight - root.getPaddingTop();
-    if (bannerLeft != parentLeft || bannerTop != parentTop) {
-      FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, bannerPixelHeight);
+    positionBanner(parentLeft,parentTop);
+    if (bannerHost.getVisibility() != View.VISIBLE) bannerHost.setVisibility(View.VISIBLE);
+    View decor = getActivity().getWindow().getDecorView();
+    int[] windowLocation = new int[2]; decor.getLocationOnScreen(windowLocation);
+    placedWindowWidth=decor.getWidth(); placedWindowHeight=decor.getHeight(); placedWindowX=windowLocation[0]; placedWindowY=windowLocation[1];
+    placedWebWidth=web.getWidth(); placedScreenLeft=rootLocation[0]+left; placedScreenTop=rootLocation[1]+bottom-bannerPixelHeight;
+    bannerHiddenReason = "";
+  }
+  private void positionBanner(int parentLeft,int parentTop) {
+    if (bannerHost != null && (bannerLeft != parentLeft || bannerTop != parentTop)) {
+      FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(bannerWidth, bannerPixelHeight);
       layout.leftMargin = parentLeft;
       layout.topMargin = parentTop;
       bannerHost.setLayoutParams(layout);
       bannerLeft = parentLeft;
       bannerTop = parentTop;
     }
-    if (bannerHost.getVisibility() != View.VISIBLE) bannerHost.setVisibility(View.VISIBLE);
-    placedRootWidth = root.getWidth(); placedRootHeight = root.getHeight(); placedWebWidth = web.getWidth();
-    bannerHiddenReason = "";
   }
   private void publishBannerHeight(int pixels, double scale, boolean grow) {
     int cssHeight = (int) Math.ceil(pixels / scale);

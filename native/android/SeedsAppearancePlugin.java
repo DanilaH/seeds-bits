@@ -20,6 +20,7 @@ public class SeedsAppearancePlugin extends Plugin {
       var activity=(MainActivity)getActivity();
       var controller=WindowCompat.getInsetsController(activity.getWindow(), activity.getWindow().getDecorView());
       call.resolve(new JSObject().put("dark",activity.isGameDark())
+        .put("gameBackgroundApplied",activity.isGameBackgroundApplied())
         .put("darkStatusIcons",controller.isAppearanceLightStatusBars())
         .put("darkNavigationIcons",controller.isAppearanceLightNavigationBars()));
     });

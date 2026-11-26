@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.os.Build;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import androidx.core.view.WindowCompat;
 import org.json.JSONObject;
 import com.getcapacitor.BridgeActivity;
 public class MainActivity extends BridgeActivity {
   private boolean gameDark;
   private Boolean paintedDark;
+  private GradientDrawable gameBackground;
+  private boolean appearanceGuardInstalled;
+  private final ViewTreeObserver.OnPreDrawListener appearanceGuard = () -> { repairGameAppearance(); return true; };
   @Override public void onCreate(Bundle savedInstanceState) {
     try {
       String saved = getSharedPreferences("CapacitorStorage", MODE_PRIVATE).getString("seeds-bits.settings.v1", "{}");
@@ -39,43 +44,59 @@ public class MainActivity extends BridgeActivity {
   @Override public void onConfigurationChanged(Configuration configuration) {
     super.onConfigurationChanged(configuration);
     applyGameTextZoom();
-    applyGameAppearance(false);
+    applyGameAppearance();
   }
 
   public boolean isGameDark() { return gameDark; }
+  public boolean isGameBackgroundApplied() { return getWindow().getDecorView().getBackground() == gameBackground; }
 
   public void setGameAppearance(boolean dark) {
     gameDark = dark;
     applyGameAppearance();
   }
 
-  private void applyGameAppearance() { applyGameAppearance(true); }
-
   @SuppressWarnings("deprecation")
-  private void applyGameAppearance(boolean repaint) {
-    int top = Color.parseColor(gameDark ? "#303e31" : "#e5ddbe");
-    int bottom = Color.parseColor(gameDark ? "#233127" : "#c5be9f");
-    // API24–25 cannot draw dark navigation icons. Keep a dark palette color
-    // behind their mandatory light icons, rather than losing contrast.
-    if (Build.VERSION.SDK_INT < 26 && !gameDark) bottom = Color.parseColor("#34553f");
-    // Paint behind transparent system bars on API35+, without changing content
-    // insets, the WebView rectangle, SDK banner slot, or system navigation mode.
-    // Splash/Activity restoration may replace the Window background independently
-    // of the saved palette. uiMode alone can reuse the painted palette.
-    if (repaint || paintedDark == null || paintedDark != gameDark) {
-      getWindow().setBackgroundDrawable(new GradientDrawable(
-        GradientDrawable.Orientation.TOP_BOTTOM, new int[]{top, bottom}));
-      getWindow().setStatusBarColor(top);
-      getWindow().setNavigationBarColor(bottom);
-      if (Build.VERSION.SDK_INT >= 29) {
-        getWindow().setStatusBarContrastEnforced(false);
-        getWindow().setNavigationBarContrastEnforced(false);
-      }
+  private void applyGameAppearance() {
+    View decor = getWindow().getDecorView();
+    if (!appearanceGuardInstalled) {
+      decor.getViewTreeObserver().addOnPreDrawListener(appearanceGuard);
+      appearanceGuardInstalled = true;
+    }
+    if (Build.VERSION.SDK_INT < 35) {
+      getWindow().setStatusBarColor(Color.parseColor(gameDark ? "#303e31" : "#e5ddbe"));
+      getWindow().setNavigationBarColor(Color.parseColor(gameDark ? "#233127" : Build.VERSION.SDK_INT < 26 ? "#34553f" : "#c5be9f"));
+    }
+    if (Build.VERSION.SDK_INT >= 29) {
+      getWindow().setStatusBarContrastEnforced(false);
+      getWindow().setNavigationBarContrastEnforced(false);
+    }
+    repairGameAppearance();
+  }
+
+  private void repairGameAppearance() {
+    View decor = getWindow().getDecorView();
+    if (gameBackground == null || paintedDark != gameDark) {
+      int top = Color.parseColor(gameDark ? "#303e31" : "#e5ddbe");
+      int bottom = Color.parseColor(gameDark ? "#233127" : Build.VERSION.SDK_INT < 26 ? "#34553f" : "#c5be9f");
+      gameBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{top, bottom});
       paintedDark = gameDark;
     }
-    var controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+    // Capacitor SystemBars.setStyle replaces the DecorView background on startup,
+    // reload and uiMode. Own the palette at draw time while preserving its insets.
+    if (decor.getBackground() != gameBackground) {
+      int left=decor.getPaddingLeft(), top=decor.getPaddingTop(), right=decor.getPaddingRight(), bottom=decor.getPaddingBottom();
+      decor.setBackground(gameBackground);
+      decor.setPadding(left, top, right, bottom);
+    }
+    var controller = WindowCompat.getInsetsController(getWindow(), decor);
     if (controller.isAppearanceLightStatusBars() != !gameDark) controller.setAppearanceLightStatusBars(!gameDark);
     if (controller.isAppearanceLightNavigationBars() != !gameDark) controller.setAppearanceLightNavigationBars(!gameDark);
+  }
+
+  @Override public void onDestroy() {
+    var observer = getWindow().getDecorView().getViewTreeObserver();
+    if (appearanceGuardInstalled && observer.isAlive()) observer.removeOnPreDrawListener(appearanceGuard);
+    super.onDestroy();
   }
 
   private void applyGameTextZoom() {
