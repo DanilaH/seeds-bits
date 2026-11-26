@@ -87,16 +87,12 @@ test("last played Notebook 91/20 survives reload, browsing and a direct resume",
   await expect(page.locator("#collection .task")).toHaveCount(24);
   await expect(page.locator("#collection .task.started")).toHaveAttribute("data-game",retainedId);
   await page.locator("#all-books").click();
-  await page.locator("#toggle-book-filter").click();
-  await page.locator("#book-filter").selectOption("active");
   await expect(page.locator('[data-book-range="4"]')).toHaveAttribute("aria-pressed","true");
   await page.locator('[data-volume="90"]').click();
   await page.locator("#collection-back").click();
   expect(await route(page)).toBe("book-picker");
-  await expect(page.locator("#book-filter")).toHaveValue("active");
+  await expect(page.locator("#book-filter, #toggle-book-filter")).toHaveCount(0);
   await page.locator("#book-section-themes").click();
-  await expect(page.locator("#book-filter-reset")).toBeVisible();
-  await page.locator("#book-filter-reset").click();
   await expect(page.locator(".theme-shelf [data-volume]")).toHaveCount(4);
   await page.reload();
   await page.locator("#book-quick").click();

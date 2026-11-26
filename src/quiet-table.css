@@ -10,6 +10,11 @@
   --table-rule: #c8c2a6;
   --table-cover: #526e51;
   --table-shadow: #78694a38;
+  --table-ground-shadow: #4a4b35;
+  --table-reachable: #e8edcf;
+  --control-radius: 14px;
+  --panel-radius: 16px;
+  --inset-radius: 10px;
   --table-action: #34553f;
   --table-action-ink: #fff5d7;
   --table-wash: #e1e9cb;
@@ -38,6 +43,8 @@
   --table-rule: #707e65;
   --table-cover: #79906d;
   --table-shadow: #101c15aa;
+  --table-ground-shadow: #080f0a;
+  --table-reachable: #465c42;
   --table-action: #b8cba3;
   --table-action-ink: #213826;
   --table-wash: #425742;
@@ -86,12 +93,40 @@
   color: var(--table-action-ink);
   background: var(--table-action);
   border-color: transparent;
-  border-radius: 14px;
+  border-radius: var(--control-radius);
 }
 #app :is(.secondary, #book-quick) {
   color: var(--table-ink);
   background: var(--sheet);
   border-color: var(--table-rule);
+}
+
+/* Same-role controls share geometry; paper cells and illustrated objects keep theirs. */
+#app :is(.primary, .secondary, .classic-difficulty-option, .language-option),
+#dialog :is(.book-sections, .book-ranges, .collection-tabs) button,
+#app :is(select, input[type="time"]) {
+  box-sizing: border-box;
+  border-radius: var(--control-radius);
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+#dialog :is(.book-sections, .book-ranges, .collection-tabs) button {
+  padding: 8px 4px;
+  line-height: 1.25;
+  border: 1px solid var(--table-rule);
+  background: var(--sheet);
+  color: var(--table-ink);
+  box-shadow: none;
+}
+#app :is(select, input[type="time"]) {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--table-rule);
+  background: var(--sheet);
+  color: var(--table-ink);
+  font: inherit;
 }
 
 #dialog[data-screen="home"] { padding-inline: max(18px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px)); }
@@ -174,12 +209,12 @@
 #dialog[data-screen="home"] .home-notebook-hit::before {
   content: "";
   position: absolute;
-  inset: auto 5% -5px;
-  height: 25px;
+  inset: auto 6% -13px;
+  height: 23px;
   border-radius: 50%;
-  background: var(--table-shadow);
-  filter: blur(5px);
-  opacity: .55;
+  background: radial-gradient(ellipse, var(--table-ground-shadow) 0%, transparent 72%);
+  filter: blur(3px);
+  opacity: .48;
   pointer-events: none;
 }
 #dialog[data-screen="home"] .home-notebook-hit .home-current-copy {
@@ -195,8 +230,8 @@
   50% { transform: translateY(-4px) rotate(-4.7deg); }
 }
 @keyframes home-notebook-shadow {
-  0%,100% { transform: scaleX(.96); opacity: .55; }
-  50% { transform: scaleX(1.05); opacity: .34; }
+  0%,100% { transform: scale(.96, 1); opacity: .48; }
+  50% { transform: scale(1.08, .85); opacity: .32; }
 }
 @media (prefers-reduced-motion: no-preference) {
   #dialog[data-screen="home"] .home-notebook-hit .home-current-copy {
@@ -470,10 +505,14 @@
   background: var(--sheet);
   border-radius: 0;
 }
-.game:not(.is-result) button.cell:not(.selected):not(.hinted):not(.pair-blocker) {
+.game:not(.is-result) button.cell:not(.selected):not(.hinted):not(.pair-blocker):not(.reachable) {
   color: var(--table-ink);
   background: var(--table-wash);
   box-shadow: inset 0 0 0 .5px var(--table-rule);
+}
+.game:not(.is-result) #board button.cell.reachable:not(.selected):not(.hinted):not(.pair-blocker) {
+  background: var(--table-reachable);
+  box-shadow: inset 0 0 0 1px var(--table-cover);
 }
 .game:not(.is-result) #board .empty {
   background: var(--sheet);
@@ -483,21 +522,20 @@
 .game .game-top .game-meta { color: var(--table-muted); }
 .game .game-top .game-meta #mode { color: var(--table-ink); font-weight: 650; }
 .game .game-actions footer {
-  gap: 0;
-  padding: 0;
+  gap: 4px;
+  padding: 4px;
   border: 1px solid var(--table-rule);
-  border-radius: 11px;
+  border-radius: var(--panel-radius);
   background: var(--sheet-background);
   box-shadow: 1px 2px var(--table-shadow);
 }
 .game .game-actions footer > .action:not([hidden]) {
   color: var(--table-ink);
   border: 0;
-  border-radius: 0;
+  border-radius: var(--control-radius);
   background: transparent;
   box-shadow: none;
 }
-.game .game-actions footer > .action:not([hidden]) + .action:not([hidden]) { border-inline-start: 1px solid var(--table-rule); }
 .game .game-actions footer > .action.ready { background: var(--table-action); color: var(--table-action-ink); }
 .game #status { color: var(--table-muted); }
 @media (orientation: portrait) {
@@ -616,7 +654,7 @@
   background: var(--sheet-background);
   border: solid var(--table-cover);
   border-width: 1px 6px 7px;
-  border-radius: 8px 8px 11px 11px;
+  border-radius: var(--panel-radius);
   box-shadow: 4px 5px var(--table-shadow);
 }
 #dialog .quiet-book-page,
@@ -689,18 +727,46 @@
   clip-path: polygon(0 0,100% 0,100% 100%,50% 75%,0 100%);
 }
 #dialog #collection .compact-volume-shelf .volume-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
   color: var(--table-ink);
-  background: var(--table-book-art) center / 100% 100% no-repeat;
-  border: 0;
-  border-radius: 5px;
-  padding: 5px 9% 8px 0;
-  min-height: 51px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--inset-radius);
+  padding: 5px 3px;
+  min-width: 0;
+  min-height: 80px;
+  height: auto;
+  aspect-ratio: auto;
+  line-height: 1.2;
 }
+#dialog #collection .compact-volume-shelf .volume-illustration {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: min(100%, 54px);
+  height: 52px;
+  padding: 0 5px 6px 1px;
+  background: var(--table-book-art) center / 100% 100% no-repeat;
+}
+#dialog #collection .volume-illustration strong { font-size: 19px; line-height: 1; }
+#dialog #collection .volume-illustration .volume-number-long { font-size: 15px; }
+#dialog #collection .compact-volume-shelf .volume-title {
+  width: 100%;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+#dialog #collection .compact-volume-shelf .volume-cover small { margin: 0; line-height: 1.2; }
 #dialog #collection .compact-volume-shelf .volume-cover.done { background-color: var(--table-wash); }
-#dialog #collection .compact-volume-shelf .volume-cover[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: -3px; }
-#dialog #collection .theme-shelf .volume-cover {
-  background-size: 100% 100%;
-  padding: 6px 12%;
+#dialog #collection .compact-volume-shelf .volume-cover[aria-pressed="true"] {
+  border-color: var(--accent);
+  outline: 0;
+  background-color: var(--table-wash);
 }
 #dialog .notebook-action { margin: 10px 0 2px; }
 #dialog .notebook-action > button { width: 100%; min-height: 48px; }
@@ -794,7 +860,13 @@
 #app :is(.hint-copy,.offer-terms,#lesson-text,.opening-copy) {
   color: var(--table-ink);
   background: var(--table-wash);
+  border-radius: var(--inset-radius);
 }
+#app :is(.hint-copy, .offer-terms, .opening-copy) { padding: 12px; }
+#app .offer-terms:empty { display: none; }
+#app #hint-offer .hint-copy p { margin: 0; }
+#app #hint-offer .hint-copy details p { margin-top: 8px; }
+#app #help-pack { flex-wrap: wrap; gap: 8px; }
 
 .game.is-result #viewport { background: transparent; }
 #win .quiet-result-page {
@@ -950,7 +1022,7 @@
   box-sizing: border-box;
   overflow-y: auto;
   border: 2px solid var(--table-cover);
-  border-radius: 12px;
+  border-radius: var(--panel-radius);
   padding: 14px;
   color: var(--table-ink);
   background: var(--sheet);
@@ -1005,14 +1077,6 @@
     margin: 20px auto 0;
     padding-block-start: 0;
   }
-}
-#dialog #collection .compact-volume-shelf .volume-cover {
-  gap: 0;
-  justify-content: center;
-  line-height: 1.05;
-}
-#dialog #collection .compact-volume-shelf .volume-cover small {
-  margin: 2px 0 0;
 }
 #dialog #collection .calendar-month .calendar-nav { margin-block: 4px 1px; }
 #dialog #collection .calendar-nav > button { background: transparent; border: 0; }

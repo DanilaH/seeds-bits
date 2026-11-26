@@ -1,7 +1,7 @@
 import { requestRestartFromSettings } from "./restore-game";
 import { installLegacyClassic } from "./restore-game";
 import { openClassicNew } from "./restore-game";
-import { openBookPicker, exposeBookFilter } from "./book-controls";
+import { openBookPicker } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 const out = "test-results/gold-layout";
@@ -375,9 +375,8 @@ test("all screens contain their text with ads, themes, narrow landscape and tabl
       await page.locator("#book-mode").click();
       await check("books");
       await openBookPicker(page);
-      await (await exposeBookFilter(page)).selectOption("done");
-      await check("book-empty");
-      await page.locator("#book-filter-reset").click();
+      await page.locator("#book-section-themes").click();
+      await check("book-themes");
       await page.locator("#collection-back").click();
       await page.locator("#continue-book").click();
       await check("game");

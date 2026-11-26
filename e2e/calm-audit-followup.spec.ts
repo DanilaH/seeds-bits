@@ -1,4 +1,4 @@
-import { chooseBookVolume, exposeBookFilter } from "./book-controls";
+import { chooseBookVolume } from "./book-controls";
 import {test, expect, type Page} from "@playwright/test";
 import notebook from "../src/notebook.json" with {type:"json"};
 import {pairs, removePair} from "../src/core";
@@ -30,13 +30,14 @@ async function seeded(page:Page, options:{active?:string; done?:string[]; seeds?
 }
 const boardTop=async (page:Page) => (await page.locator("#viewport").boundingBox())!.y;
 
-test("progress card targets its own saved notebook after New and Completed catalog filters",async({page})=>{
+test("progress card targets its own saved notebook after browsing catalogue sections and ranges",async({page})=>{
   await page.emulateMedia({reducedMotion:"reduce"});
   await seeded(page);
-  for(const filter of ["new","done"]) {
+  for(const filter of ["themes","range"]) {
     await page.locator("#book-mode").click();
-    await (await exposeBookFilter(page)).selectOption(filter);
-    await expect(page.locator("#book-filter")).toHaveValue(filter);
+    await page.locator("#all-books").click();
+    if(filter === "themes") await page.locator("#book-section-themes").click();
+    else await page.locator('[data-book-range="4"]').click();
     await page.locator("#collection-back").click();
     await page.locator("#collection-back").click();
     await page.locator("#progress-open").click();
@@ -255,7 +256,7 @@ test.describe("month on the home calendar", () => {
   });
 });
 
-test("today is emphasized until its puzzle is completed", async ({page}) => {
+test("today stays marked but an already started puzzle does not nudge", async ({page}) => {
   await page.clock.setFixedTime(new Date("2026-11-23T12:00:00+05:00"));
   const id = "daily-v1-2026-11-23";
   await seeded(page,{active:id,done:["daily-v1-2026-11-22"]});
@@ -264,7 +265,9 @@ test("today is emphasized until its puzzle is completed", async ({page}) => {
   const calendar = icon.locator(".calendar-picture");
   await expect(daily).toHaveAttribute("data-daily-pending","");
   expect(await icon.evaluate(el=>getComputedStyle(el,"::after").content)).toBe("none");
-  await expect(calendar).toHaveCSS("animation-name", "today-calendar-glow");
+  await expect(daily).toHaveAttribute("data-daily-started", "");
+  await expect(icon).toHaveCSS("animation-name", "none");
+  await expect(calendar).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await page.emulateMedia({reducedMotion:"reduce"});
   await expect(calendar).toHaveCSS("animation-name", "none");
   await page.locator("#calendar-open").click();

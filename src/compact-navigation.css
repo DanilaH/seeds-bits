@@ -220,7 +220,6 @@
 #dialog :is(.book-sections,.book-ranges) button { flex: 1; min-width: 0; padding-inline: 2px; }
 #dialog :is(.book-sections,.book-ranges) [aria-pressed="true"] { background: var(--calm-surface); font-weight: 650; }
 #dialog .book-ranges button { font-size: 12px; }
-#dialog #book-filter { max-width: 100%; min-height: 48px; margin-bottom: 6px; }
 #dialog [data-book-range]:disabled { opacity: .45; }
 #dialog #collection :is(.compact-task-grid,.compact-volume-shelf) {
   display: grid;

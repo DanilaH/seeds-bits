@@ -1,5 +1,5 @@
 import { installLegacyClassic } from "./restore-game";
-import { openBookPicker, exposeBookFilter } from "./book-controls";
+import { openBookPicker } from "./book-controls";
 import { test, expect } from "@playwright/test";
 import { writeFileSync, mkdirSync } from "node:fs";
 const out = "test-results/fixes052",
@@ -61,6 +61,7 @@ async function boot(page: any) {
   await installLegacyClassic(page);
   await page.goto("/");
   await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
 }
 async function pair(page: any) {
   await page.locator("#board button").nth(0).click();
@@ -113,7 +114,7 @@ test("F02 book chunk failure is visible in open modal and retry clears loading",
   await expect(page.locator("#dialog")).toBeHidden();
   await expect(page.locator("#mode")).toContainText("Тетрадь 2");
 });
-test("F03 completed volume filter does not silently reset when changing section", async ({
+test("F03 completed volumes remain marked without hiding the rest of the catalogue", async ({
   page,
 }) => {
   await seed(
@@ -126,14 +127,11 @@ test("F03 completed volume filter does not silently reset when changing section"
   await page.goto("/");
   await page.locator("#book-mode").click();
   await openBookPicker(page);
-  await (await exposeBookFilter(page)).selectOption("done");
-  await expect(page.locator('[data-book-range="4"]')).toBeDisabled();
-  await expect(page.locator('[data-volume="0"]')).toBeVisible();
-  save("filter", {
-    value: await page.locator("#book-filter").inputValue(),
-    covers: await page.locator("[data-volume]").count(),
-  });
-  expect(await page.locator("#book-filter").inputValue()).toBe("done");
+  await expect(page.locator("#book-filter, #toggle-book-filter")).toHaveCount(0);
+  await expect(page.locator('[data-book-range="4"]')).toBeEnabled();
+  await expect(page.locator('[data-volume="0"]')).toHaveClass(/done/);
+  await expect(page.locator("[data-volume]")).toHaveCount(20);
+  save("catalogue", {covers: await page.locator("[data-volume]").count()});
 });
 test("F04 calendar 2028 leap-day and 2125 trophies", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2028-06-20T12:00:00"));

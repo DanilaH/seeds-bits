@@ -76,6 +76,26 @@ export function pairBlockers(board: Board, a: number, b: number, reason: Rejecti
   }
   return blockers;
 }
+/** Geometric visibility only: first number in each ray and reading neighbour.
+ * Values do not affect visibility; this is neither a hint nor a winning move. */
+export function reachableNumbers(board: Board, from: number, width = WIDTH): number[] {
+  if (!Number.isInteger(from) || !board[from] || !Number.isInteger(width) || width < 1) return [];
+  const found = new Set<number>();
+  const row = Math.floor(from / width), col = from % width;
+  for (const dy of [-1, 0, 1]) for (const dx of [-1, 0, 1]) {
+    if (!dy && !dx) continue;
+    let r = row + dy, c = col + dx;
+    while (r >= 0 && c >= 0 && c < width && r * width + c < board.length) {
+      const i = r * width + c;
+      if (board[i]) { found.add(i); break; }
+      r += dy; c += dx;
+    }
+  }
+  for (const direction of [-1, 1])
+    for (let i = from + direction; i >= 0 && i < board.length; i += direction)
+      if (board[i]) { found.add(i); break; }
+  return [...found].sort((a,b) => a-b);
+}
 /** First visible occupied cell along each ray, plus reading-order neighbours. */
 export function pairs(board: Board, width = WIDTH): Connection[] {
   const result: Connection[] = [],

@@ -214,10 +214,8 @@ let saveQueue = Promise.resolve(),
   lessonPhase = 0;
 let jarShelfPage = 0;
 let selectedVolume = 0,
-  bookFilter = "all",
   bookRange = 0,
   bookThemes = false,
-  bookFilterOpen = false,
   trophyYear = today().slice(0, 4);
 let rewardSeenDuringBoot = false;
 let bootComplete = false,
@@ -1584,7 +1582,7 @@ const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ownedDomMotion = new OwnedDomMotion();
 const cellColorMotions = new Map<Element, {animation: Animation; selection: string}>();
 const cellSelection = (el: Element) =>
-  `${el.classList.contains("selected")}/${el.classList.contains("hinted")}`;
+  `${el.classList.contains("selected")}/${el.classList.contains("hinted")}/${el.classList.contains("reachable")}`;
 function clearMotions() {
   ownedDomMotion.cancelAll();
   feelRowSlides = [];
@@ -1705,7 +1703,8 @@ function reconcileCellMotions() {
     if (owner.selection === cellSelection(el)) continue;
     const visible = getComputedStyle(el).backgroundColor;
     const target = el.classList.contains("selected") ? "var(--selected)"
-      : el.classList.contains("hinted") ? "var(--highlight)" : "transparent";
+      : el.classList.contains("hinted") ? "var(--highlight)"
+      : el.classList.contains("reachable") ? "var(--table-reachable)" : "transparent";
     motion(el, [{background:visible}, {background:target}], 100);
   }
 }
@@ -2487,7 +2486,7 @@ function render() {
     planHighlighted=Boolean(plan?.pair);
   }
   updatePlanRail(plan);
-  boardView.render(values, selected, highlight);
+  boardView.render(values, selected, highlight, lesson < 0);
   reconcileCellMotions();
   $("win").hidden = count > 0 || lesson >= 0;
   document.querySelector<HTMLElement>("footer")!.hidden = !count && lesson < 0;
@@ -3218,7 +3217,7 @@ function displayHint(pair: Connection,quiet=false) {
 type CollectionScreen = "book" | "book-picker" | "calendar" | "trophies" | "progress";
 const navigationTrail: {
   screen: string; scroll: number; focus: string;
-  volume: number; range: number; themes: boolean; filter: string; filterOpen: boolean;
+  volume: number; range: number; themes: boolean;
 }[] = [];
 let collectionTab: "jars" | "months" = "jars";
 let featuredTrophyMonth = "";
@@ -3229,7 +3228,7 @@ function rememberNavigation(target: string) {
   navigationTrail.push({
     screen,
     scroll: dialogScroller().scrollTop,
-    volume: selectedVolume, range: bookRange, themes: bookThemes, filter: bookFilter, filterOpen: bookFilterOpen,
+    volume: selectedVolume, range: bookRange, themes: bookThemes,
     focus:
       element?.id ||
       (element?.dataset.month
@@ -3249,8 +3248,6 @@ function returnToPrevious() {
     selectedVolume = previous.volume;
     bookRange = previous.range;
     bookThemes = previous.themes;
-    bookFilter = previous.filter;
-    bookFilterOpen = previous.filterOpen;
   }
   if (!previous || previous.screen === "home") openMenu(true);
   else if (previous.screen === "settings") openSettings(true);
@@ -4266,9 +4263,8 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     $("progress-trophies").onclick = () => openCollection("trophies");
     $("progress-book").onclick = () => {
       // An addressable progress card must open its own book, not the first
-      // candidate remaining under a previously selected catalog filter.
+      // candidate from the last browsed catalog section.
       selectedVolume = Number($<HTMLButtonElement>("progress-book").dataset.volume);
-      bookFilter = "all";
       openCollection("book");
     };
   }
@@ -4302,11 +4298,6 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     for (const range of panel.querySelectorAll<HTMLButtonElement>("[data-book-range]")) {
       range.onclick = () => { bookRange = Number(range.dataset.bookRange); updatePicker(); };
     }
-    $("toggle-book-filter").onclick = () => { bookFilterOpen = !bookFilterOpen; updatePicker(); };
-    const filter = document.querySelector<HTMLSelectElement>("#book-filter");
-    if (filter) filter.onchange = () => { bookFilter = filter.value; updatePicker(); };
-    const reset = document.getElementById("book-filter-reset");
-    if (reset) reset.onclick = () => { bookFilter = "all"; updatePicker(); };
     for (const button of panel.querySelectorAll<HTMLButtonElement>("[data-volume]")) {
       button.onclick = () => {
         rememberNavigation("book");
@@ -4427,24 +4418,19 @@ function renderNotebookPicker() {
   const volumes = Array.from({length:VOLUMES},(_,volume)=>volume)
     .filter(volume=>Boolean(themeOf(volume))===bookThemes)
     .map(volume=>({volume, ...notebookBrowseStatus(progress,volume,done)}));
-  const matching = volumes.filter(({solved,started})=>bookFilter==="all" ||
-    (bookFilter==="new" ? !started : bookFilter==="done" ? solved===24 : started && solved<24));
-  const ranges = [...new Set(matching.map(({volume})=>Math.floor(volume/20)))];
+  const ranges = [...new Set(volumes.map(({volume})=>Math.floor(volume/20)))];
   if (!bookThemes && ranges.length && !ranges.includes(bookRange)) bookRange = ranges[0];
   const rangeButtons = bookThemes ? "" : `<div class="book-ranges">${Array.from({length:5},(_,i)=>
     `<button class="text-button" id="book-range-${i}" data-book-range="${i}" aria-pressed="${bookRange===i}" ${ranges.includes(i)?"":"disabled"}>${i*20+1}–${(i+1)*20}</button>`).join("")}</div>`;
-  const options = [["all",t("ui.all")],["active",t("ui.in-progress")],["done",t("ui.completed")],["new",t("ui.not-started")]];
-  const filterLabel=options.find(([id])=>id===bookFilter)?.[1] ?? t("ui.all");
-  const filter = `<div class="notebook-toolbar"><span>${filterLabel}</span><button id="toggle-book-filter" class="text-button" aria-expanded="${bookFilterOpen}">${t("nav.filter")}</button></div>
-    ${bookFilterOpen ? `<select id="book-filter" aria-label="${t("nav.filter")}">${options.map(([id,label])=>`<option value="${id}" ${id===bookFilter?"selected":""}>${label}</option>`).join("")}</select>`:""}`;
-  const buttons = matching.filter(({volume})=>bookThemes || Math.floor(volume/20)===bookRange)
+  const buttons = volumes.filter(({volume})=>bookThemes || Math.floor(volume/20)===bookRange)
     .map(({volume,solved,started})=>`<button class="volume-cover ${solved===24?"done":started?"started":""}" data-volume="${volume}" aria-pressed="${volume===selectedVolume}"
-      aria-label="${bookThemes ? volumeLabel(volume)+", "+solved+"/24" : t("ui.puzzle-book-of-24",{"0":volume+1,"1":solved})}"><strong>${bookThemes?volumeLabel(volume):volume+1}</strong><small>${solved}/24${solved===24?" ✓":started?" ▸":""}</small></button>`).join("");
+      aria-label="${bookThemes ? volumeLabel(volume)+", "+solved+"/24" : t("ui.puzzle-book-of-24",{"0":volume+1,"1":solved})}">${bookThemes
+        ? `<span class="volume-illustration" aria-hidden="true"></span><strong class="volume-title">${volumeLabel(volume)}</strong><small>${solved}/24${solved===24?" ✓":started?" ▸":""}</small>`
+        : `<span class="volume-illustration" aria-hidden="true"><strong${volume===99?' class="volume-number-long"':""}>${volume+1}</strong></span><small>${solved}/24${solved===24?" ✓":started?" ▸":""}</small>`}</button>`).join("");
   return `<h2>${t("nav.booksAll")}</h2><div class="book-sections" role="group" aria-label="${t("nav.booksAll")}">
     <button id="book-section-main" data-book-section="main" aria-pressed="${!bookThemes}">${t("nav.bookMain")}</button>
     <button id="book-section-themes" data-book-section="themes" aria-pressed="${bookThemes}">${t("nav.bookThemes")}</button></div>
-    ${rangeButtons}${filter}${buttons?`<div class="volume-shelf compact-volume-shelf ${bookThemes?"theme-shelf":""}">${buttons}</div>`:
-      `<p>${t("ui.no-puzzle-books-in-this-section-have-that-status")}</p><button class="secondary" id="book-filter-reset">${t("ui.show-all-in-this-section")}</button>`}`;
+    ${rangeButtons}<div class="volume-shelf compact-volume-shelf ${bookThemes?"theme-shelf":""}">${buttons}</div>`;
 }
 function volumeLabel(volume: number) {
   const theme = themeOf(volume);

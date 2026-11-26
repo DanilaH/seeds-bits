@@ -88,3 +88,9 @@ The shared module deliberately fixes shorthand/longhand overlap with var() throu
 - A completed notebook, Classic and daily use visible bounded celebrations with the existing sound/vibration settings and lifecycle cancellation.
 - No-pair states expose a prominent contextual Add or Restart action and Undo when available. Solver recovery actions use the same visible card.
 - With no resumable session, Home keeps its illustrated object and offers New Classic with a difficulty choice. Today's untouched daily receives a periodic calendar nudge until first entry.
+
+## Owner UI correction · 26 November 2026
+
+The owner requests consistent control/panel geometry and padding, readable notebook labels, a visible synchronized ground shadow and removal of the notebook filter. Main/Themes and numbered ranges remain. Text must fit the safe area of the illustration, not merely its outer button. See [UI audit](research/ui-audit-2026-11-26/README.md).
+
+The owner separately authorizes subtle geometric reachability when selecting a number: the first occupied number on each clear ray plus reading-order neighbours, regardless of value. This free visual state spends no stock, makes no winning-pair promise and leaves all six paused assistance experiments disabled. It is suppressed in the scripted tutorial. No progression/reward/save contract changes are authorized by this addition.

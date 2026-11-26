@@ -570,6 +570,23 @@
         "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
       ],
       "consumerTest": "../research/first-session-2026-11-20/replay.mjs"
+    },
+    {
+      "id": "owner-ui-audit-20261126",
+      "sourceFeatureId": "owner.seeds.ui-consistency-and-reachability.2026-11-26",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "ownerDecision": "Пять замечаний владельца с кадрами и прямое предложение подсвечивать достижимые цифры при выборе, 26 ноября 2026. Не утверждение о Easybrain/NADO.",
+      "currentImplementation": "src/main.ts:renderNotebookPicker; src/quiet-table.css shared radii/insets/shadow; src/core.ts:reachableNumbers; src/board-view.ts reachable set and remap",
+      "acceptanceEvidence": {
+        "report": "../research/ui-audit-2026-11-26/README.md",
+        "code": "IMPLEMENTED",
+        "browser": "See delivery report for completed checks",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Проверить подписанный preview 12103 на физическом телефоне: читаемость, тень и ненавязчивость подсветки.",
+      "kitImpact": "REUSE",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40"
     }
   ],
   "localAdaptations": [

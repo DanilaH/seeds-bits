@@ -1,5 +1,5 @@
 import { installLegacyClassic } from "./restore-game";
-import { openBookPicker, exposeBookFilter } from "./book-controls";
+import { openBookPicker } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 async function boot(page: Page) {
   await page.addInitScript(() =>
@@ -32,7 +32,7 @@ test("direct game shortcuts return to the game; collection calendar returns to i
   await page.keyboard.press("Escape");
   await expect(page.locator("#dialog")).toBeHidden();
 });
-test("notebooks have meaningful selection, progress and a recoverable empty filter", async ({
+test("notebooks have meaningful selection, progress and an unfiltered catalogue", async ({
   page,
 }) => {
   await boot(page);
@@ -49,9 +49,10 @@ test("notebooks have meaningful selection, progress and a recoverable empty filt
   expect(await page.locator("[data-volume][style*=cover-hue]").count()).toBe(0);
   await expect(page.locator("[data-volume] small")).toHaveCount(20);
   await openBookPicker(page);
-  await (await exposeBookFilter(page)).selectOption("done");
-  await expect(page.locator("#book-filter-reset")).toBeVisible();
-  await page.locator("#book-filter-reset").click();
+  await expect(page.locator("#book-filter, #toggle-book-filter")).toHaveCount(0);
+  await page.locator("#book-section-themes").click();
+  await expect(page.locator("[data-volume]")).toHaveCount(4);
+  await page.locator("#book-section-main").click();
   await expect(page.locator("[data-volume]")).toHaveCount(20);
 });
 test("compact calendar picker retains focus and dates, with usable day targets at 320px", async ({
