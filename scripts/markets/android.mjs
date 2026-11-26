@@ -1153,7 +1153,8 @@ async function verifyAppBanner() {
     trace("genuine interstitial hides native banner",{...shown,expected:false});
     shot("banner-hidden-by-interstitial");
     const dismissFullscreen=async()=>{
-    const sdkPlayerDeadline=performance.now()+100000;
+    const sdkPlayerStarted=performance.now(), sdkPlayerDeadline=sdkPlayerStarted+160000;
+    let backDelivered=false;
     // The demo can serve a multi-part video. Give its own close control time to appear.
     while((await diagnostics()).fullscreen && performance.now()<sdkPlayerDeadline) {
       await wait(6000);
@@ -1164,6 +1165,15 @@ async function verifyAppBanner() {
       if(storyNext){trace("visible SDK story Next control tapped",storyNext);adb("shell","input","tap",String(storyNext.x),String(storyNext.y));continue;}
       const closeCross=findSdkCloseCross(raw,width,height);
       if(closeCross){trace("visible SDK close control tapped",closeCross);adb("shell","input","tap",String(closeCross.x),String(closeCross.y));continue;}
+      // Android Back is a real SDK-window input, not a synthetic dismissal or
+      // app-side finish(). Some demo video players expose no close glyph while
+      // accessibility remains permanently busy. Require the actual SDK callback.
+      if(!backDelivered && performance.now()-sdkPlayerStarted>30000) {
+        trace("Android Back delivered to the focused SDK window");
+        adb("shell","input","keyevent","KEYCODE_BACK");
+        backDelivered=true;
+        continue;
+      }
       try {
         adb("shell","uiautomator","dump","/sdcard/demo-fullscreen.xml");
         const hierarchy=adb("shell","cat","/sdcard/demo-fullscreen.xml");
@@ -1271,6 +1281,7 @@ async function verifyDurableClassic() {
         assert.equal(disk.sessions.classic.current.moves,1);
         assert.equal((disk.sessions.classic.history??disk.sessions.classic.packedHistory).length,1);
         launch();ui=await connect();await ui.tap("#resume");
+        await ui.until("!document.querySelector('#dialog').open && !document.querySelector('#undo').disabled");
         assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"26");
         await ui.evaluate("document.querySelector('#undo').click();true");
         await ui.until("document.querySelector('#remaining').textContent==='28' && document.querySelector('.game').dataset.persistence==='saved'");
@@ -1278,7 +1289,7 @@ async function verifyDurableClassic() {
         const undone=profiles().values[progress];assert.deepEqual(undone.sessions.classic.current.board,initial);
         assert.equal(undone.sessions.classic.current.moves,0);
         assert.equal(undone.jars.meter,2); // Undo does not repay or remove earned depth.
-        records.push({trial,forceStopAfterVisible26:true,restored26:true,undoDurable28:true,attempt});
+        records.push({trial,forceStopAfterVisible26:true,durableAcknowledgement:true,noPostAcknowledgementSleep:true,restored26:true,undoDurable28:true,attempt});
       }finally{ui.close();stop();}
     }
     return {source:process.env.GITHUB_SHA,device:"Android API35 offline",physicalPhone:false,records,status:"PASS"};
