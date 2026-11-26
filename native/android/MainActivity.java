@@ -52,6 +52,9 @@ public class MainActivity extends BridgeActivity {
   private void applyGameAppearance() {
     int top = Color.parseColor(gameDark ? "#303e31" : "#e5ddbe");
     int bottom = Color.parseColor(gameDark ? "#233127" : "#c5be9f");
+    // API24–25 cannot draw dark navigation icons. Keep a dark palette color
+    // behind their mandatory light icons, rather than losing contrast.
+    if (Build.VERSION.SDK_INT < 26 && !gameDark) bottom = Color.parseColor("#34553f");
     // Paint behind transparent system bars on API35+, without changing content
     // insets, the WebView rectangle, SDK banner slot, or system navigation mode.
     getWindow().setBackgroundDrawable(new GradientDrawable(
