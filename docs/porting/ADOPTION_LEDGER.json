@@ -1128,6 +1128,45 @@
       },
       "nextAction": "Exact-source CI/PNG review и подписанный12106; телефонный повтор финиша и Home без текущей партии.",
       "kitImpact": "REUSE: established UI tokens and decoration safe area; no runtime change."
+    },
+    {
+      "id": "seeds-menu-reward-feel-12106",
+      "sourceFeatureIds": [],
+      "scope": "Собственная UX-доработка: меню, победы, банки и медали; не заимствование оригинала",
+      "status": "DEFERRED",
+      "localIssueIds": [
+        "MF-01",
+        "MF-02",
+        "MF-03",
+        "MF-04",
+        "MF-05",
+        "MF-06",
+        "MF-07",
+        "MF-08"
+      ],
+      "code": [
+        "src/main.ts",
+        "src/ui-motion.ts",
+        "src/result-presentation.ts",
+        "src/jar-spill.ts",
+        "src/seed-flight.ts",
+        "src/progress.ts",
+        "src/quiet-table.css",
+        "src/trophies.ts",
+        "src/sound.ts",
+        "src/haptics.ts"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/46",
+        "report": "../research/menu-reward-feel-2026-11-27/README.md",
+        "baseline": "125606e4a90e06b844fe6eb8f83249032cb7057f",
+        "browser": "https://github.com/DanilaH/seeds-bits/actions/runs/45885868198/artifacts/15149286635",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Implement #46 after accepted12106; P0 truthful reward animation and local layout, then coordinated menu/reward feel. Exact CI and phone acceptance before release.",
+      "kitImpact": "REUSE",
+      "reason": "Research package ready, implementation not yet started; resume on developer taking issue #46."
     }
   ]
 }
