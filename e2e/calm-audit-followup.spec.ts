@@ -56,11 +56,13 @@ test("progress card targets its own saved notebook after New and Completed catal
   }
 });
 
-test("pause menu has a compact card gap at 390x844 with footer near bottom",async({page})=>{
+test("pause menu shows the live notebook cover and a footer near the bottom",async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await seeded(page);
   await page.screenshot({path:"test-results/calm-followup/menu-390x844.jpg",type:"jpeg",quality:90,animations:"disabled"});
-  await expect(page.locator("#home-current-art .book-cover-number")).toHaveText("№1");
+  await expect(page.locator("#home-game-title")).toHaveText("Тетрадь 1");
+  await expect(page.locator(".quiet-mini-board")).toBeVisible();
+  await expect(page.locator(".home-current-copy")).toHaveCSS("background-image", /svg/);
   await expect(page.locator("#home-goal progress")).toHaveJSProperty("value",1);
   const measure=await page.evaluate(()=>{
     const a=document.querySelector(".home-current")!.getBoundingClientRect();
@@ -70,9 +72,10 @@ test("pause menu has a compact card gap at 390x844 with footer near bottom",asyn
     const qaBox=qa && qa.getClientRects().length ? qa.getBoundingClientRect() : null;
     return {height:a.height, gap:b.top-a.bottom, qaBottom:qaBox?.bottom??links.bottom, screen:innerHeight};
   });
-  expect(measure.height).toBeLessThanOrEqual(150);
+  expect(measure.height).toBeGreaterThanOrEqual(220);
+  expect(measure.height).toBeLessThanOrEqual(345);
   expect(measure.gap).toBeGreaterThanOrEqual(0);
-  expect(measure.gap).toBeLessThanOrEqual(20);
+  expect(measure.gap).toBeLessThanOrEqual(32);
   expect(measure.screen-measure.qaBottom).toBeGreaterThanOrEqual(0);
   expect(measure.screen-measure.qaBottom).toBeLessThanOrEqual(45);
 });
@@ -139,7 +142,7 @@ test("field header follows the grid and the compact language rows keep their mar
   await seeded(page);
   await page.locator("#resume").click();
   const menu = await page.locator("#menu").boundingBox();
-  const board = await page.locator("#board").boundingBox();
+  const board = await page.locator("#viewport").boundingBox();
   expect(Math.abs(menu!.x - board!.x)).toBeLessThanOrEqual(1);
   expect(menu!.width).toBeGreaterThanOrEqual(44);
   for (const id of ["menu","book-top"]) {
@@ -181,26 +184,23 @@ test("Home mode art aligns with the compact labels and stays on-screen", async (
   await expect(page.locator("#book-mode .book-cover-number")).toHaveText("№1");
   await expect(page.locator("#book-count")).toHaveText("Тетрадь 1 · задача 2 · 1/24");
   const dimensions = await page.evaluate(() => {
-    return [["#classic-mode", "#classic-mode .tile-picture"], [".home-book-card", "#book-mode .book-picture"], [".home-calendar", "#home-today-art .calendar-picture"]]
-      .map(([card, art]) => {
-        const frame = document.querySelector(card)!.getBoundingClientRect();
-        const artwork = document.querySelector(art)!;
+    return ["#classic-mode .tile-picture", "#book-mode .book-picture", "#home-today-art"]
+      .map(selector => {
+        const artwork = document.querySelector(selector)!;
         const icon = artwork.getBoundingClientRect();
-        const label = artwork.closest("button")!.lastElementChild!;
-        return { cardLeft: frame.left, height: frame.height, iconLeft: icon.left, iconRight: icon.right,
-          iconWidth: icon.width, labelLeft: label.getBoundingClientRect().left };
+        const label = artwork.closest("button")!.lastElementChild!.getBoundingClientRect();
+        return {top: icon.top, bottom: icon.bottom, width: icon.width,
+          left: icon.left, right: icon.right, labelTop: label.top, labelCenter: (label.left + label.right) / 2};
       });
   });
-  for (const { cardLeft, iconLeft, iconRight, iconWidth, labelLeft } of dimensions) {
-    expect(iconLeft).toBeGreaterThan(0);
-    expect(iconLeft).toBeGreaterThanOrEqual(cardLeft - 1);
-    expect(iconWidth).toBeGreaterThanOrEqual(24);
-    expect(iconRight).toBeLessThan(labelLeft);
+  for (const icon of dimensions) {
+    expect(icon.left).toBeGreaterThan(0);
+    expect(icon.right).toBeLessThanOrEqual(320);
+    expect(icon.width).toBeGreaterThanOrEqual(24);
+    expect(icon.bottom).toBeLessThanOrEqual(icon.labelTop);
+    expect(Math.abs((icon.left + icon.right) / 2 - icon.labelCenter)).toBeLessThanOrEqual(1);
   }
-  const insets = dimensions.map(({ cardLeft, labelLeft }) => labelLeft - cardLeft);
-  const heights = dimensions.map(({ height }) => height);
-  expect(Math.max(...insets)-Math.min(...insets)).toBeLessThanOrEqual(1);
-  expect(Math.max(...heights)-Math.min(...heights)).toBeLessThanOrEqual(1);
+  expect(Math.max(...dimensions.map(icon => icon.top)) - Math.min(...dimensions.map(icon => icon.top))).toBeLessThanOrEqual(1);
   await expect(page.locator("#calendar-open")).toBeVisible();
 });
 
@@ -221,15 +221,13 @@ test("the Home notebook cover shows progress for the volume it opens", async ({ 
 test("the three-digit recommended notebook number fits on the cover at 320px", async ({ page }) => {
   await page.setViewportSize({ width:320,height:568 });
   await seeded(page,{active:"book-v3-links-1",done:[]});
-  for (const selector of ["#book-mode .book-cover-number","#home-current-art .book-cover-number"]) {
-    const number=page.locator(selector);
-    await expect(number).toHaveText("№101");
-    expect(await number.evaluate(label=>{
-      const cover=label.parentElement!;
-      const style=getComputedStyle(cover);
-      return (label as HTMLElement).offsetWidth + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) <= cover.clientWidth;
-    })).toBe(true);
-  }
+  const number = page.locator("#book-mode .book-cover-number");
+  await expect(number).toHaveText("№101");
+  expect(await number.evaluate(label => {
+    const cover = label.parentElement!;
+    const style = getComputedStyle(cover);
+    return (label as HTMLElement).offsetWidth + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) <= cover.clientWidth;
+  })).toBe(true);
 });
 
 test.describe("month on the home calendar", () => {

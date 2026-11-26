@@ -579,7 +579,7 @@ const homeCurrent = document.createElement("section");
 homeCurrent.className = "home-current";
 homeCurrent.setAttribute("aria-labelledby", "home-game-title");
 homeCurrent.innerHTML =
-  '<div class="home-current-copy"><h2 id="home-game-title"></h2></div><div id="home-current-art" aria-hidden="true"></div>';
+  '<div class="home-current-copy"><h2 id="home-game-title"></h2></div>';
 const homePreview = document.createElement("div");
 homePreview.className = "quiet-mini-board";
 homePreview.setAttribute("aria-hidden", "true");
@@ -4412,15 +4412,12 @@ function renderHomeCurrent() {
   if (!show) return;
   $("resume").hidden = false;
   if (lesson >= 0) {
-    $("home-current-art").innerHTML = `<span class="home-lesson-art">${icon("help")}</span>`;
     $("home-game-title").textContent = t("ui.tutorial");
     $("resume-context").textContent = t("ui.step-of", {"0": lesson+1,"1":shortLesson?2:lessons.length});
     $("resume").textContent = t("ui.continue-tutorial");
     return;
   }
   const date = !classic && !book ? taskDate(id.slice(9),id.slice(9,13)!==today().slice(0,4)) : "";
-  $("home-current-art").innerHTML = classic ? classicPicture
-    : book ? bookPicture(volumeOf(next ?? id) + 1) : calendarPicture(id.slice(9), true);
   $("home-game-title").textContent = classic ? t("home.classic")
     : book ? volumeLabel(volumeOf(next ?? id)) : id.slice(9) === today()
       ? t("notification.channel") : t("home.daily.date", {date});
@@ -4464,19 +4461,18 @@ function updateHome() {
   }
   const date = today();
   const id = dailyIdFor(date,progress);
-  $("daily-mode").toggleAttribute("data-daily-pending", !dailyDone(progress.done,date));
-  $("daily-mode").toggleAttribute("data-daily-started", Boolean(progress.sessions[id]?.history.length));
-  $("daily-mode").setAttribute("aria-label", `${t("notification.channel")}. ${taskDate(date)}. ${dailyDone(progress.done,date) ? t("daily.replay") : progress.sessions[id]?.history.length ? t("daily.resume") : t("daily.tagline")}`);
+  const doneToday = dailyDone(progress.done, date);
+  const startedToday = Boolean(progress.sessions[id]?.history.length);
+  const dailyCaption = t(doneToday ? "daily.replay" : startedToday ? "daily.resume" : "daily.tagline");
+  $("daily-mode").toggleAttribute("data-daily-pending", !doneToday);
+  $("daily-mode").toggleAttribute("data-daily-started", startedToday);
+  $("daily-mode").setAttribute("aria-label", `${t("notification.channel")}. ${taskDate(date)}. ${dailyCaption}`);
   $("home-today-art").innerHTML = calendarPicture(date, true);
   const run = dailyRun(progress);
   $("daily-series").hidden = run.count === 0;
   $("daily-series").textContent =
     t("ui.in-a-row", { "0": run.count, "1": dayWord(run.count), "2": run.solvedToday ? "" : t("ui.until-reward", { "0": run.until, "1": dayWord(run.until) }) });
-  $("daily-state").textContent = dailyDone(progress.done,date)
-    ? t("daily.replay")
-    : progress.sessions[id]?.history.length
-      ? t("daily.resume")
-      : t("daily.tagline");
+  $("daily-state").textContent = dailyCaption;
 }
 let displayedDate = today();
 function refreshDate() {

@@ -22,25 +22,6 @@
   --table-jar-art: url("./art/quiet-table/jar.svg");
   --table-background: linear-gradient(145deg, var(--table-light), var(--table-shade));
   --sheet-background: linear-gradient(145deg, var(--sheet), var(--sheet-shade));
-  --calm-paper: var(--table);
-  --calm-ink: var(--table-ink);
-  --calm-muted: var(--table-muted);
-  --calm-line: var(--table-rule);
-  --calm-soft: var(--table-wash);
-  --calm-surface: var(--sheet);
-  --calm-card: var(--sheet-background);
-  --calm-card-ink: var(--table-ink);
-  --calm-card-muted: var(--table-muted);
-  --calm-action: var(--table-action);
-  --calm-action-ink: var(--table-action-ink);
-  --calm-book: var(--table-cover);
-  --calm-illustration: var(--sheet);
-  --calm-mist: transparent;
-  --ink: var(--table-ink);
-  --muted: var(--table-muted);
-  --line: var(--table-rule);
-  --paper: var(--table);
-  --button: var(--table-wash);
   --accent: #567153;
   --selected: #d1dfad;
   --highlight: #dce6b7;
@@ -72,10 +53,32 @@
   --highlight: #637d55;
   background: var(--table-shade);
 }
-.game,
+:root,
+:root[data-theme="dark"] {
+  --calm-paper: var(--table);
+  --calm-ink: var(--table-ink);
+  --calm-muted: var(--table-muted);
+  --calm-line: var(--table-rule);
+  --calm-soft: var(--table-wash);
+  --calm-surface: var(--sheet);
+  --calm-card: var(--sheet-background);
+  --calm-card-ink: var(--table-ink);
+  --calm-card-muted: var(--table-muted);
+  --calm-action: var(--table-action);
+  --calm-action-ink: var(--table-action-ink);
+  --calm-book: var(--table-cover);
+  --calm-illustration: var(--sheet);
+  --calm-mist: transparent;
+  --ink: var(--table-ink);
+  --muted: var(--table-muted);
+  --line: var(--table-rule);
+  --paper: var(--table);
+  --button: var(--table-wash);
+}
+#app .game,
 #dialog:not([data-screen="home"]),
 #dialog[data-screen="home"] {
-  background: var(--table-background);
+  background: var(--table-background) var(--table);
 }
 #ad-space { background: var(--table-banner); }
 :root.has-mobile-ads { background: var(--table-banner); }
@@ -170,7 +173,6 @@
   padding-inline-end: 14px;
   overflow-wrap: anywhere;
 }
-#dialog[data-screen="home"] #home-current-art { display: none; }
 .quiet-mini-board {
   order: 3;
   display: grid;
@@ -367,7 +369,8 @@
   text-align: center;
   overflow-wrap: anywhere;
 }
-#dialog[data-screen="home"] .home-links > button svg { display: none; }
+#dialog[data-screen="home"] .home-links > button svg,
+#dialog[data-screen="home"] .home-links > #progress-open svg { display: none; }
 
 /* Glass is an extracted outline around the existing live fill, grains and lid. */
 #app .jar-glass {
@@ -638,7 +641,7 @@
 #dialog .calendar-layout #today-task { width: 100%; min-height: 47px; }
 #dialog #collection .calendar .task {
   min-width: 0;
-  min-height: 42px;
+  min-height: 44px;
   aspect-ratio: auto;
   border-radius: 0;
   border: 0;
@@ -720,7 +723,6 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
   }
-  #dialog .calendar-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); }
 }
 
 @media (orientation: landscape) and (max-height: 420px) {
@@ -753,3 +755,30 @@
 }
 #dialog #collection .calendar-month .calendar-nav { margin-block: 4px 1px; }
 #dialog #collection .calendar-nav > button { background: transparent; border: 0; }
+
+@media (orientation: portrait) and (min-height: 650px) {
+  .game:not(:has(#lesson:not([hidden]),.opening-guide)) .game-actions .status-wrap:not(:has(#save-notice:not([hidden]),#read-notice:not([hidden]),#recover-task:not([hidden]))) {
+    --table-status-height: 60px;
+    height: var(--table-status-height);
+    min-height: var(--table-status-height);
+    max-height: var(--table-status-height);
+  }
+}
+
+@media (orientation: landscape) and (min-width: 740px) {
+  #dialog .calendar-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); }
+}
+@media (max-width: 360px) {
+  #dialog[data-screen="calendar"] #collection > .calendar-layout {
+    border-inline-width: 2px;
+    padding-inline: 0;
+  }
+  #dialog .calendar-month .calendar { gap: 0; }
+  #dialog .calendar-layout :is(.calendar-hero,#today-task) {
+    width: calc(100% - 16px);
+    margin-inline: auto;
+  }
+}
+@media (max-width: 330px) {
+  #dialog[data-screen="calendar"] #collection > .calendar-layout { border-inline-width: 1px; }
+}

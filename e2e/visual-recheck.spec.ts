@@ -76,7 +76,9 @@ for (const [width, height, scale] of [
       ).toBe(true);
       if (route === "calendar-open") {
         const today = (await page.locator("#today-task").boundingBox())!;
-        expect(Math.abs(today.x - a.x)).toBeLessThan(1);
+        const paper = (await page.locator(".calendar-layout").boundingBox())!;
+        expect(today.x).toBeGreaterThanOrEqual(paper.x);
+        expect(today.x + today.width).toBeLessThanOrEqual(paper.x + paper.width + 1);
         expect(
           await page.locator(".calendar").evaluate((e) => {
             const rail = e.closest(".dialog-scroll")!.getBoundingClientRect();
@@ -246,7 +248,7 @@ test("short landscape menu grows with its enlarged labels", async ({
       await button.evaluate((e) => {
         const b = e.getBoundingClientRect();
         const range = document.createRange();
-        range.selectNodeContents(e.firstElementChild!);
+        range.selectNodeContents(e.lastElementChild!);
         return [...range.getClientRects()].every(
           (t) => t.top >= b.top - 1 && t.bottom <= b.bottom + 1,
         );
