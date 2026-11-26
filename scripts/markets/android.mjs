@@ -3,6 +3,7 @@ import {execFileSync, spawn} from "node:child_process";
 import fs from "node:fs";
 import {resolve} from "node:path";
 import assert from "node:assert/strict";
+import {portraitBannerPaintMatches} from "./banner-proof.mjs";
 import {findSdkCloseCross,findSdkStoryNext} from "./sdk-controls.mjs";
 
 const app="com.seedsbits.game.preview", out="test-results/markets-android";
@@ -986,10 +987,10 @@ async function verifyAppBanner() {
       new Promise((_,reject)=>setTimeout(()=>reject(Error("Banner diagnostics did not respond")),5000))
     ])`);
     const capturePixels = async () => {
-      let raw, width, height;
+      let png, raw, width, height;
       for (let attempt=0;attempt<3;attempt++) {
         try {
-          const png=execFileSync("adb",["exec-out","screencap","-p"],{maxBuffer:20e6,timeout:12000});
+          png=execFileSync("adb",["exec-out","screencap","-p"],{maxBuffer:20e6,timeout:12000});
           assert(png.length>24&&png.toString("ascii",1,4)==="PNG","Android returned an incomplete PNG");
           width=png.readUInt32BE(16); height=png.readUInt32BE(20);
           raw=execFileSync("ffmpeg",["-v","error","-threads","1","-f","image2pipe","-vcodec","png","-i","pipe:0",
@@ -1001,10 +1002,10 @@ async function verifyAppBanner() {
           await wait(650);
         }
       }
-      return {raw,width,height};
+      return {png,raw,width,height};
     };
-    const paint = async frame => {
-      const {raw,width,height}=await capturePixels();
+    const paint = async (frame,pixels) => {
+      const {raw,width,height}=pixels??await capturePixels();
       const left=frame.screenLeft, top=frame.screenTop;
       assert(left>=0&&top>=0&&left+frame.width<=width&&top+frame.height<=height,
         "The native banner frame is outside the screenshot");
@@ -1015,20 +1016,29 @@ async function verifyAppBanner() {
       }
       return colors.size;
     };
-    let painted, initial;
+    let painted, initial, initialPixels;
+    report.initialPaintAttempts=[];
     for(let i=0;i<36;i++) {
-      initial=await diagnostics();
-      if(initial.loaded>0&&initial.visible&&(painted=await paint(initial))>20)break;
-      await wait(650);
+      const before=await diagnostics();
+      if(before.loaded>0&&before.visible) {
+        const pixels=await capturePixels(),after=await diagnostics();
+        const coherent=portraitBannerPaintMatches(before,after);
+        report.initialPaintAttempts.push({before,after,coherent});
+        if(coherent) {
+          initial=after;painted=await paint(initial,pixels);
+          if(painted>20){initialPixels=pixels.png;break;}
+        }
+      }
+      await wait(650); // Existing SDK availability polling; never an elapsed-time layout assertion.
     }
     report.initial=initial;
     report.paintColorBuckets=painted??0;
-    if(!(initial.loaded>0&&initial.visible&&painted>20)){
+    if(!(initial?.loaded>0&&initial.visible&&painted>20)){
       report.status="UNAVAILABLE";
       throw Error("Android did not paint a demo banner");
     }
     trace("first verified paint",{...initial,paintColorBuckets:painted});
-    shot("banner-painted-start");
+    fs.writeFileSync(out+"/banner-painted-start.png",initialPixels);
     const expected=async(visible,reason)=>{
       const mark=()=>ui.evaluate(`window.Capacitor.Plugins.SeedsMonetization.bannerExpectation({visible:${visible}})`);
       try { await mark(); }
@@ -1060,6 +1070,7 @@ async function verifyAppBanner() {
       assert(paintColorBuckets>20,label+" creative band lost color");
     };
     await expected(true,"ordinary scene transitions begin");
+    await stable("paired baseline before input");
     for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2],[7,14,0]]) {
       await ui.tap(digit(a)); await ui.tap(digit(b));
       await ui.until(`document.querySelector('#remaining').textContent==='${n}'`);

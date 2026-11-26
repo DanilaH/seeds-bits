@@ -31,7 +31,7 @@ async function trace(page:Page){
     await new Promise<void>(resolve=>{const frame=()=>{
       const paper=document.querySelector('.quiet-result-page')!,card=document.querySelector<HTMLElement>('#result-jar-card')!,glass=document.querySelector<HTMLElement>('#result-jar-glass')!;
       const r=glass.getBoundingClientRect(), anchor=glass.parentElement!.getBoundingClientRect();
-      samples.push({at:performance.now()-start,kind:document.querySelector('#win')?.getAttribute('data-result-kind'),fill:card.dataset.filled,capacity:card.dataset.capacity,index:card.dataset.index,
+      samples.push({at:performance.now()-start,kind:document.querySelector('#win')?.getAttribute('data-result-kind'),fill:card.dataset.filled,capacity:card.dataset.capacity,index:card.dataset.jarIndex,
         phase:glass.dataset.rewardPhase,spillTarget:document.querySelector<HTMLElement>('#jar-spill')?.dataset.target,
         particles:document.querySelectorAll('.result-seed-burst i,#jar-spill i,.trophy-confetti i,.flying-seed').length,
         angle:Math.atan2(new DOMMatrix(getComputedStyle(paper).transform).b,new DOMMatrix(getComputedStyle(paper).transform).a)*180/Math.PI,

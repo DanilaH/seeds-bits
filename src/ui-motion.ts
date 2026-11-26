@@ -2,11 +2,11 @@ import {OwnedDomMotion} from "./vendor/mini-games-kit/owned-dom-motion";
 const owner = new OwnedDomMotion();
 export function clearInterfaceMotion() { owner.cancelAll(); }
 /** The semantic page is already installed. Only its visual child moves. */
-export function presentMenuChange(node: Element | null, kind: "open"|"back"|"page"|"modal" = "page", direction=1) {
+export function presentMenuChange(node: Element | null, kind: "open"|"back"|"page"|"modal"|"route" = "page", direction=1) {
   if (document.hidden || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const opening=kind==="open",back=kind==="back";
   const animation=owner.animate(node,[
-    {opacity:opening?.9:.86,transform:opening?"perspective(900px) rotateY(-4deg) scale(.99)":kind==="modal"?"translateY(6px) scale(.985)":`translateX(${direction*(back?-4:6)}px)`},
+    {opacity:opening?.9:.86,transform:opening?"perspective(900px) rotateY(4deg) scale(.99)":kind==="modal"?"translateY(6px) scale(.985)":kind==="route"||back?`translateY(${back?-3:4}px)`:`translateX(${direction*2}px) scale(.975)`},
     {opacity:1,transform:"none"},
   ],{duration:opening?200:back?120:kind==="modal"?170:140,easing:"cubic-bezier(.2,.8,.3,1)"});
   if (animation) animation.id=`menu-${kind}`;
@@ -110,7 +110,7 @@ export function installInterfaceMotion(
         );
         clearInterfaceMotion();
         const paper=panel?.querySelector(".quiet-book-page");
-        presentMenuChange(paper??panel??null,next==="home"?"back":paper?"open":"page");
+        presentMenuChange(paper??panel??null,next==="home"?"back":paper?"open":"route");
       } else if (!open && wasOpen) {
         clearInterfaceMotion();
       }

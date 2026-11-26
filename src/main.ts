@@ -4706,7 +4706,7 @@ function updateResultJar() {
     name:localName(jarNames[completedJar.index%6]),color:jarColors[completedJar.index%6]});
   resultJarCard.dataset.filled=String(j.filled);
   resultJarCard.dataset.capacity=String(j.capacity);
-  resultJarCard.dataset.index=String(j.index);
+  resultJarCard.dataset.jarIndex=String(j.index);
   resultJarCard.style.setProperty("--jar-color", j.color);
   resultJarCard.style.setProperty("--fill", `${j.percent}%`);
   syncJarGrains(resultJarCard, j.filled);

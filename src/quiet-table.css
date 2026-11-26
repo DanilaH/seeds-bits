@@ -1299,3 +1299,5 @@
   #app #win[data-result-kind="classic"] .quiet-result-page .win-symbol { width:48px; height:48px; }
   #app #win[data-result-kind="classic"] #result-jar-card { padding-block:2px; margin-block:2px; }
 }
+
+#dialog .quiet-book-page { transform-origin: left center; }
