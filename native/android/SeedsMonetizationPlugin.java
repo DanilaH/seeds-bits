@@ -61,6 +61,8 @@ public class SeedsMonetizationPlugin extends Plugin {
   private String bannerHiddenReason = "not_requested";
   private final java.util.Map<String,Integer> bannerHiddenReasons = new java.util.HashMap<>();
   private String showingRoute = "", showingTransition = "";
+  private String lastFullscreenKind = "", lastFullscreenStatus = "idle", lastFullscreenReason = "";
+  private int fullscreenShowCalls;
   private final ViewTreeObserver.OnWindowFocusChangeListener bannerFocus = this::windowFocusChanged;
   private final View.OnLayoutChangeListener bannerLayout = (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
     if (right-left != oldRight-oldLeft || bottom-top != oldBottom-oldTop) {
@@ -378,13 +380,16 @@ public class SeedsMonetizationPlugin extends Plugin {
   @PluginMethod public void show(PluginCall call) { getActivity().runOnUiThread(() -> showOnMain(call)); }
   private void showOnMain(PluginCall call) {
     String kind = call.getString("kind", "");
+    fullscreenShowCalls++; lastFullscreenKind=kind; lastFullscreenStatus="requested"; lastFullscreenReason="";
     if (!kind.equals("rewarded") && !kind.equals("interstitial")) { call.reject("Invalid format"); return; }
-    if (destroyed || !resumed || !getActivity().hasWindowFocus() || showing != null || !initialized || !enabled()) { call.resolve(new JSObject().put("status", "unavailable").put("reason", rewardedState().optString("reason","unavailable"))); return; }
+    if (destroyed || !resumed || !getActivity().hasWindowFocus() || showing != null || !initialized || !enabled()) { lastFullscreenStatus="unavailable"; lastFullscreenReason="native_state"; call.resolve(new JSObject().put("status", "unavailable").put("reason", rewardedState().optString("reason","unavailable"))); return; }
     long since = System.currentTimeMillis() - prefs.getLong("last_fullscreen", System.currentTimeMillis());
     if (kind.equals("interstitial") && (since < INTERVAL || interstitial == null)) {
+      lastFullscreenStatus="skipped"; lastFullscreenReason=since<INTERVAL?"cooldown":"not_loaded";
       call.resolve(new JSObject().put("status", "skipped").put("reason", since < INTERVAL ? "cooldown" : "not_loaded")); preloadAds(); return;
     }
     if (kind.equals("rewarded") && (rewarded == null || pendingReceipt() || call.getString("attempt", "").isEmpty())) {
+      lastFullscreenStatus="unavailable"; lastFullscreenReason=rewardedState().optString("reason","invalid_request");
       JSObject result = new JSObject().put("status", "unavailable").put("reason", rewardedState().optString("reason","invalid_request")); if (receipt() != null) result.put("reward", receipt());
       call.resolve(result); preloadAds(); return;
     }
@@ -435,12 +440,13 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   private void didShow() {
     if (showing == null) return;
-    shown = true; handler.removeCallbacks(showDeadline);
+    shown = true; lastFullscreenStatus="shown"; handler.removeCallbacks(showDeadline);
     prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
     event("ad_shown", showingKind);
   }
   private void finish(String status) {
     if (showing == null) return;
+    lastFullscreenStatus=status;
     handler.removeCallbacks(showDeadline);
     recoverReceipt();
     JSObject result = new JSObject().put("shown", shown).put("status", status).put("ad_session_id", showingSession);
@@ -552,7 +558,7 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (bannerHost != null) bannerHost.getLocationOnScreen(bannerLocation);
     JSObject hiddenReasons = new JSObject();
     for (var entry : bannerHiddenReasons.entrySet()) hiddenReasons.put(entry.getKey(),entry.getValue());
-    return new JSObject().put("phase",phase).put("ms",SystemClock.elapsedRealtime())
+    return new JSObject().put("phase",phase).put("nativeMs",SystemClock.elapsedRealtime())
       .put("measuredRevision",bannerRevision).put("request",bannerRequests)
       .put("view",banner==null?0:System.identityHashCode(banner))
       .put("loaded",bannerLoads).put("impressions",bannerImpressions)
@@ -561,6 +567,11 @@ public class SeedsMonetizationPlugin extends Plugin {
       .put("hiddenReasons",hiddenReasons)
       .put("expected",bannerExpected).put("requestedVisible",bannerPlacement!=null&&bannerPlacement.visible)
       .put("fullscreen",fullscreenActive).put("resumed",resumed)
+      .put("fullscreenShowCalls",fullscreenShowCalls).put("lastFullscreenKind",lastFullscreenKind)
+      .put("lastFullscreenStatus",lastFullscreenStatus).put("lastFullscreenReason",lastFullscreenReason)
+      .put("interstitialReady",interstitial!=null).put("interstitialLoading",loadingInterstitial)
+      .put("rewardedReady",rewarded!=null).put("rewardedLoading",loadingRewarded)
+      .put("cooldownRemainingMs",Math.max(0,INTERVAL-(System.currentTimeMillis()-prefs.getLong("last_fullscreen",System.currentTimeMillis()))))
       .put("focused",getActivity().hasWindowFocus())
       .put("frames",bannerFrames).put("hiddenFrames",bannerHiddenFrames)
       .put("draws",bannerDraws).put("movedFrames",bannerMovedFrames)

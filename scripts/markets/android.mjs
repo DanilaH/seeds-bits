@@ -934,11 +934,11 @@ async function verifyAppBanner() {
   let video = resolve(out,"banner-continuity.webm");
   const guestVideo = "/sdcard/seeds-banner-continuity.mp4";
   const captureStart=performance.now();
-  const trace=(label, detail={})=>report.observed.push({label,ms:Math.round(performance.now()-captureStart),...detail});
+  const trace=(label, detail={})=>report.observed.push({...detail,label,ms:Math.round(performance.now()-captureStart)});
   try {
     // Capture the emulator display on the host without a guest codec or desktop compositor.
     try {
-      const start=adb("emu","screenrecord","start","--time-limit","600",video);
+      const start=adb("emu","screenrecord","start","--time-limit","1200",video);
       assert(!start.includes("KO"),start);
       report.recorder="emulator-console";
     } catch(error) {
@@ -1131,6 +1131,17 @@ async function verifyAppBanner() {
         await diagnostics();
       }
     }
+    // A painted banner does not imply that the independent interstitial loader
+    // has delivered a creative. Wait on real SDK state before testing a show.
+    let fullscreenReady;
+    for(let i=0;i<180;i++) {
+      fullscreenReady=await diagnostics();
+      if(fullscreenReady.interstitialReady&&fullscreenReady.cooldownRemainingMs===0)break;
+      if(i%30===0)await ui.evaluate("window.Capacitor.Plugins.SeedsMonetization.preload()");
+      await wait(1000);
+    }
+    trace("interstitial SDK precondition",fullscreenReady);
+    assert(fullscreenReady.interstitialReady&&fullscreenReady.cooldownRemainingMs===0,"Interstitial did not satisfy actual SDK load/cooldown preconditions");
     // The first field entry after returning to the app is protected. Verify
     // that entry before exercising an internal Home-to-game transition.
     await stable("before protected app entry");
@@ -1148,7 +1159,8 @@ async function verifyAppBanner() {
       if(shown.fullscreen && !shown.focused)break;
       await wait(150);
     }
-    assert(shown.fullscreen && !shown.focused,"SDK did not open the demo interstitial");
+    trace("interstitial show outcome",shown);
+    assert(shown.fullscreen && !shown.focused,"SDK did not open the demo interstitial: "+JSON.stringify(shown));
     assert.equal(shown.visible,false);
     trace("genuine interstitial hides native banner",{...shown,expected:false});
     shot("banner-hidden-by-interstitial");
@@ -1193,6 +1205,10 @@ async function verifyAppBanner() {
     await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");
     await stable("after genuine interstitial");
     await expected(true,"fullscreen dismissed");
+    let rewardedReady;
+    for(let i=0;i<120;i++){rewardedReady=await diagnostics();if(rewardedReady.rewardedReady)break;if(i%30===0)await ui.evaluate("window.Capacitor.Plugins.SeedsMonetization.preload()");await wait(500);}
+    trace("rewarded SDK precondition",rewardedReady);
+    assert(rewardedReady.rewardedReady,"Rewarded SDK did not deliver a loaded creative");
     await expected(false,"explicit QA rewarded bridge request");
     const beforeReward=profiles().values[progress];
     await ui.evaluate(`(async()=>{

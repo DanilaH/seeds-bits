@@ -269,6 +269,15 @@ public class AuditHarness {
   check("N57_each_draw_checks_physical_continuity",((Number)shiftedFrame.result.get("movedFrames")).intValue()>0,
     "a real single-frame displacement is recorded even if endpoint screenshots match");
 
+  p=fresh(true);p.banner(box());BannerAdView.all.get(0).listener.onAdLoaded();
+  PluginCall bannerOnly=new PluginCall();p.bannerDiagnostics(bannerOnly);
+  boolean bannerIsNotInterstitial=Boolean.FALSE.equals(bannerOnly.result.get("interstitialReady"));
+  InterstitialAdLoader.last.listener.onAdLoaded(new InterstitialAd());
+  PluginCall fullscreenLoaded=new PluginCall();p.bannerDiagnostics(fullscreenLoaded);
+  check("N58_independent_fullscreen_readiness",bannerIsNotInterstitial && Boolean.TRUE.equals(fullscreenLoaded.result.get("interstitialReady")) &&
+    Boolean.FALSE.equals(fullscreenLoaded.result.get("rewardedReady")) && fullscreenLoaded.result.containsKey("nativeMs") && !fullscreenLoaded.result.containsKey("ms"),
+    "banner load never stands in for a fullscreen load; native timestamps cannot overwrite the recorder clock");
+
   p=fresh(true);PluginCall lab=new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","lab-only"));p.persistLabState(lab);game=p.activity.getSharedPreferences("CapacitorStorage",0);boolean isolated=lab.result!=null && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1"));boolean invalidLab=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.progress.v2").put("value","bad")));}catch(RuntimeException failure){invalidLab=true;}check("N42_lab_storage_namespace",isolated&&invalidLab&&!game.data.containsKey("seeds-bits.progress.v2"),"lab method cannot write production progress");
   game.fail=true;boolean labFailure=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","not-saved")));}catch(RuntimeException failure){labFailure=true;}check("N43_lab_storage_failure",labFailure && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1")) && "lab-only".equals(game.data.get("seeds-bits.lab.trials.v1")),"failed lab commit retains previous authority");
 
