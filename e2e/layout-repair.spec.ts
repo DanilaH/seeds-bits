@@ -110,10 +110,12 @@ for (const [width, height, scale] of [[390,844,1],[320,568,1],[390,844,1.5],[568
     expect(Math.abs(after!.height - before!.height)).toBeLessThanOrEqual(1);
     expect(Math.abs(after!.y - before!.y)).toBeLessThanOrEqual(1);
     const intercepted = () => page.evaluate(() => {
-      const v = document.getElementById("viewport")!.getBoundingClientRect();
+      const viewport = document.getElementById("viewport")!;
+      const contentTop = viewport.getBoundingClientRect().top + viewport.clientTop;
+      const contentBottom = contentTop + viewport.clientHeight;
       return [...document.querySelectorAll<HTMLElement>("#board button")].filter(el => {
         const r = el.getBoundingClientRect(), x = r.x + r.width/2, y = r.y + r.height/2;
-        return y >= v.top && y < v.bottom && !el.contains(document.elementFromPoint(x,y));
+        return y >= contentTop && y < contentBottom && !el.contains(document.elementFromPoint(x,y));
       }).map(el => el.dataset.index);
     });
     expect(await intercepted()).toEqual([]);
