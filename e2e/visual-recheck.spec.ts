@@ -300,3 +300,15 @@ test("large-text hint offer keeps both whole buttons reachable by scrolling", as
   await page.locator("#cancel-hints").click();
   await expect(page.locator("#hint-offer")).not.toBeVisible();
 });
+
+test("calendar keeps its rail when crossing from 380 to 381 pixels", async ({page}) => {
+  await page.setViewportSize({width:380,height:713});
+  await install(page);
+  await page.locator("#calendar-open").click();
+  const calendar = page.locator(".calendar");
+  const before = (await calendar.boundingBox())!;
+  await page.setViewportSize({width:381,height:713});
+  const after = (await calendar.boundingBox())!;
+  expect(Math.abs(after.x - before.x)).toBeLessThanOrEqual(1);
+  expect(after.width).toBeGreaterThanOrEqual(before.width);
+});

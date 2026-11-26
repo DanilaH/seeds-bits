@@ -195,11 +195,13 @@
 #dialog[data-screen="home"] #home-goal {
   order: 4;
   justify-content: flex-start;
+  width: 100%;
   height: auto;
   max-width: 100%;
   color: var(--table-muted);
   margin: 0;
 }
+#dialog[data-screen="home"] #home-goal-caption { flex: 0 1 auto; }
 #dialog[data-screen="home"] #home-goal progress::-webkit-progress-bar { background: var(--table-rule); }
 #dialog[data-screen="home"] #home-goal progress::-webkit-progress-value { background: var(--table-cover); }
 #dialog[data-screen="home"] #resume {
@@ -417,7 +419,10 @@
   background: var(--table-wash);
   box-shadow: inset 0 0 0 .5px var(--table-rule);
 }
-.game:not(.is-result) #board .empty { background: var(--sheet); }
+.game:not(.is-result) #board .empty {
+  background: var(--sheet);
+  box-shadow: inset 0 0 0 .5px var(--table-rule);
+}
 .game .game-top header { border-color: var(--table-rule); }
 .game .game-top .game-meta { color: var(--table-muted); }
 .game .game-top .game-meta #mode { color: var(--table-ink); font-weight: 650; }
@@ -449,9 +454,13 @@
   #app .game {
     padding-inline: max(12px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px));
   }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) .game-top {
-    position: relative;
-    padding-block-end: 5px;
+  .game:not(.is-result):not(:has(#lesson:not([hidden]), .opening-guide)) .game-top {
+    display: flow-root;
+    flex: none;
+    min-block-size: 97px;
+  }
+  #app .game:not(.is-result):not(:has(#lesson:not([hidden]), .opening-guide)) #board-wrap {
+    padding-block: 12px;
   }
   #app .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) .game-top header {
     display: grid;
@@ -499,17 +508,31 @@
     justify-self: end;
   }
 }
-@media (orientation: portrait) and (max-height: 580px) {
+@media (orientation: portrait) and (max-height: 650px) {
   #dialog[data-screen="home"] #menu-content { gap: 5px; }
-  #dialog[data-screen="home"] .home-title { min-height: 47px; }
+  #dialog[data-screen="home"] .home-title { min-height: 44px; }
+  #home-jar { min-height: 44px; }
+  #home-jar .jar-glass { width: 28px; height: 37px; }
   #dialog[data-screen="home"] .home-layout { padding-block: 2px; }
-  #dialog[data-screen="home"] .home-current-copy { min-height: 172px; padding-block: 19px 13px; }
-  #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) {
-    height: 48px;
-    font-size: 26px;
+  #dialog[data-screen="home"] .home-current-copy {
+    min-height: 143px;
+    padding-block: 13px 20px;
   }
-  #dialog[data-screen="home"] .mode-link > .tile-picture i { height: 40px; }
-  #dialog[data-screen="home"] .home-current, #dialog[data-screen="home"] .home-layout { gap: 11px; }
+  #dialog[data-screen="home"] #home-game-title { font-size: clamp(21px, 6.4vw, 24px); }
+  #dialog[data-screen="home"] .quiet-mini-board { width: min(100%, 171px); }
+  #dialog[data-screen="home"] .quiet-mini-board span:nth-child(n+19) { display: none; }
+  #dialog[data-screen="home"] #resume {
+    min-height: 48px;
+    padding-block: 6px;
+    font-size: 1.03rem;
+  }
+  #dialog[data-screen="home"] :is(.mode-nav .mode-link, #book-mode, #daily-mode) { gap: 5px; }
+  #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) {
+    height: 42px;
+    font-size: 24px;
+  }
+  #dialog[data-screen="home"] .mode-link > .tile-picture i { height: 36px; }
+  #dialog[data-screen="home"] :is(.home-current, .home-layout) { gap: 9px; }
 }
 
 /* Paper sections share the binding and palette across the other routes. */
@@ -564,7 +587,17 @@
   font-weight: 650;
   padding-inline-end: 5px;
 }
+#dialog[data-screen="book"] #collection { flex: 0 1 auto; }
 #dialog[data-screen="book"] #notebook-dock { padding-inline: 13px; background: transparent; }
+@media (orientation: portrait) and (max-height: 590px) {
+  #dialog[data-screen="book"] .quiet-book-page {
+    margin-block: 5px 4px;
+    padding-block: 12px 6px;
+  }
+  #dialog[data-screen="book"] .quiet-book-page::before { height: 25px; }
+  #dialog[data-screen="book"] #collection .compact-task-grid .task,
+  #dialog[data-screen="book"] .notebook-toolbar button { min-height: 44px; }
+}
 #dialog[data-screen="book"] #notebook-dock .notebook-action { margin: 0; }
 #dialog .notebook-toolbar button { color: var(--table-ink); text-decoration: underline; text-underline-offset: 2px; }
 #dialog[data-screen="book"] #collection .compact-task-grid,
@@ -620,13 +653,27 @@
   color: var(--table-action-ink);
   background: var(--table-action);
 }
-#dialog .calendar-layout {
+#dialog[data-screen="calendar"] {
+  --calendar-gutter: clamp(3px, calc(35vw - 109px), 18px);
+  padding-inline: max(var(--calendar-gutter), var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px));
+}
+#dialog[data-screen="calendar"] .dialog-head {
+  --calendar-heading-inset: max(0px, calc(18px - var(--calendar-gutter)));
+  width: min(100% - var(--calendar-heading-inset) - var(--calendar-heading-inset), 440px);
+}
+#dialog[data-screen="calendar"] #collection { width: min(100%, 440px); }
+#dialog[data-screen="calendar"] #collection > .calendar-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 2px;
   position: relative;
-  padding-top: 22px;
-  margin: 17px 16px 9px;
+  width: 100%;
+  margin: 17px 0 9px;
+  padding: 22px clamp(0px, calc(10vw - 32px), 10px) 12px;
+  border-inline-width: clamp(1px, calc(10vw - 31px), 6px);
+}
+#dialog .calendar-layout .calendar-month .calendar {
+  gap: clamp(0px, calc(10vw - 37px), 4px);
 }
 #dialog .calendar-layout::before {
   content: "";
@@ -751,6 +798,7 @@
   #app .game:not(.is-result):not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) #board-wrap {
     width: calc(100% - 18px);
     margin: 20px auto 0;
+    padding-block-start: 0;
   }
 }
 #dialog #collection .compact-volume-shelf .volume-cover {
@@ -774,21 +822,19 @@
 }
 
 @media (orientation: landscape) and (min-width: 740px) {
-  #dialog .calendar-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); }
-}
-@media (max-width: 360px) {
+  #dialog[data-screen="calendar"] #collection { width: min(100%, 960px); }
   #dialog[data-screen="calendar"] #collection > .calendar-layout {
-    border-inline-width: 2px;
-    padding-inline: 0;
-  }
-  #dialog .calendar-month .calendar { gap: 0; }
-  #dialog .calendar-layout :is(.calendar-hero,#today-task) {
-    width: calc(100% - 16px);
-    margin-inline: auto;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
   }
 }
-@media (max-width: 330px) {
-  #dialog[data-screen="calendar"] #collection > .calendar-layout { border-inline-width: 1px; }
+@media (orientation: portrait) and (max-height: 649px) {
+  #app .game[data-mode="classic"]:not(:has(.opening-guide)) .status-wrap:not(:has(#save-notice:not([hidden]), #read-notice:not([hidden]), #recover-task:not([hidden]))) {
+    box-sizing: border-box;
+    height: 68px;
+    min-height: 68px;
+    max-height: 68px;
+    overflow-y: auto;
+  }
 }
 @media (max-width: 350px), (orientation: landscape) and (max-height: 420px) {
   #dialog #settings-panel .language-row {

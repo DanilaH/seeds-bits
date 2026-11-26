@@ -304,3 +304,36 @@ test("notebook completion markers and tap targets work from zero to all tasks so
     await page.locator("#collection-back").click();
   }
 });
+
+for (const [width, height, language] of [[320,568,"ru"], [360,640,"pt-BR"]] as const) {
+  test(`archive resume leaves the Home links tappable at ${width}×${height}`, async ({page}) => {
+    await page.setViewportSize({width,height});
+    await page.clock.setFixedTime(new Date("2026-11-26T12:00:00+05:00"));
+    const day = "daily-v1-2026-11-24";
+    await install(page,{[day]:classicGame()},day,[],true,"light",language);
+    const links = page.locator(".home-links button");
+    const visible = await links.evaluateAll(buttons => {
+      const shell = document.querySelector("#dialog")!.getBoundingClientRect();
+      const ad = document.querySelector("#ad-space")!.getBoundingClientRect();
+      return buttons.every(button => {
+        const rect = button.getBoundingClientRect();
+        return rect.bottom <= Math.min(shell.bottom,ad.top) &&
+          button.contains(document.elementFromPoint(rect.x + rect.width/2,rect.y + rect.height/2));
+      });
+    });
+    expect(visible).toBe(true);
+    const settings = (await page.locator("#settings-open").boundingBox())!;
+    await page.mouse.click(settings.x + settings.width/2, settings.y + settings.height/2);
+    await expect(page.locator("#dialog")).toHaveAttribute("data-screen","settings");
+  });
+}
+
+test("the last notebook row fits above its continuation button at 320×568", async ({page}) => {
+  await page.setViewportSize({width:320,height:568});
+  await install(page,{[retainedId]:started},retainedId,[],true);
+  await page.locator("#book-mode").click();
+  const grid = (await page.locator(".compact-task-grid").boundingBox())!;
+  const scroll = (await page.locator("#collection").boundingBox())!;
+  const dock = (await page.locator("#notebook-dock").boundingBox())!;
+  expect(grid.y + grid.height).toBeLessThanOrEqual(Math.min(scroll.y + scroll.height,dock.y));
+});

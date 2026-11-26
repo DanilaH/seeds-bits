@@ -1,4 +1,5 @@
 package com.seedsbits.game.preview;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import com.getcapacitor.BridgeActivity;
 public class MainActivity extends BridgeActivity {
@@ -12,6 +13,22 @@ public class MainActivity extends BridgeActivity {
 
   @Override protected void load() {
     super.load();
-    getBridge().getWebView().getSettings().setTextZoom(100);
+    applyGameTextZoom();
+  }
+
+  @Override public void onResume() {
+    super.onResume();
+    applyGameTextZoom();
+  }
+
+  @Override public void onConfigurationChanged(Configuration configuration) {
+    super.onConfigurationChanged(configuration);
+    applyGameTextZoom();
+  }
+
+  private void applyGameTextZoom() {
+    if (getBridge() != null) {
+      getBridge().getWebView().getSettings().setTextZoom(100);
+    }
   }
 }

@@ -766,92 +766,93 @@ function pinDialogHeading(panel: HTMLElement) {
 let actionsFrame = 0;
 function scheduleActionLayout() {
   cancelAnimationFrame(actionsFrame);
-  actionsFrame = requestAnimationFrame(() => {
-    fitResultLabels();
-    const footer = document.querySelector<HTMLElement>("footer")!;
-    const actions = [...footer.querySelectorAll<HTMLElement>(".action")].filter(
-      (b) => getComputedStyle(b).display !== "none" && !b.hidden,
-    );
-    footer.style.setProperty("--help-actions",String(actions.length));
-    const hasAssist=actions.some(button=>button.id==="magnet"||button.id==="plan");
-    let widest = 44;
-    const required = actions.reduce(
-      (width, button) => {
-        const label =
-          button.querySelector<HTMLElement>(".action-label") ??
-          button.querySelector<HTMLElement>("span")!;
-        const range=document.createRange();range.selectNodeContents(label);
-        let needed=Math.max(44,range.getBoundingClientRect().width+6);
-        if(hasAssist){
-          // New four-action toolbars need unwrapped labels. Preserve the established
-          // three-action sidebar measurement so ordinary landscape keeps its height.
-          const probe=document.createElement("span");probe.textContent=label.textContent;
-          Object.assign(probe.style,{position:"fixed",visibility:"hidden",whiteSpace:"nowrap",width:"max-content",maxWidth:"none",font:getComputedStyle(label).font,letterSpacing:getComputedStyle(label).letterSpacing});
-          button.append(probe);range.selectNodeContents(probe);
-          needed=Math.max(44,range.getBoundingClientRect().width+12);probe.remove();
-        }
-        widest = Math.max(widest, needed);
-        return width + needed;
-      },
-      Math.max(0, actions.length - 1) * 2,
-    );
-    const landscape = matchMedia(
-      "(orientation: landscape) and (min-width: 540px)",
-    ).matches;
-    const game = document.querySelector<HTMLElement>(".game")!;
-    // Compare with the stable sidebar width, not a footer that widens after docking.
-    const sideWidth = gameTop.clientWidth;
-    const dock =
-      landscape &&
-      lesson < 0 &&
-      innerHeight <= 420 &&
-      !game.classList.contains("is-result") &&
-      actions.length > 0 &&
-      (inOpening() ||
-        (game.classList.contains("compact-game") && innerWidth<=600 && innerHeight<=340) ||
-        required > sideWidth ||
-        (actions.length === 2 && widest > (sideWidth - 2) / 2));
-    game.classList.toggle("docked-actions", dock);
-    const status = document.querySelector<HTMLElement>(".status-wrap")!;
-    const statusParent = dock ? (inOpening() ? gameTop : hintDock) : gameActions;
-    if (status.parentElement !== statusParent) {
-      if (statusParent === gameTop) gameTop.append(status);
-      else statusParent.prepend(status);
-    }
-    hintDock.hidden = !landscape || lesson >= 0;
-    const jump = $("hint-jump");
-    const jumpParent = landscape && lesson < 0 ? hintDock : status;
-    if (jump.parentElement !== jumpParent) jumpParent.prepend(jump);
-    const availableWidth = dock ? game.clientWidth - 32 : footer.clientWidth;
-    footer.style.setProperty("--assist-columns",actions.length>4&&widest+12<=(availableWidth-12)/3?"3":widest+12>(availableWidth-8)/2?"1":"2");
-    game.classList.toggle(
-      "stacked-actions",
-      actions.length > 0 &&
-        (required > availableWidth ||
-          ((!landscape || hasAssist) &&
-            widest >
-              (availableWidth - Math.max(0, actions.length - 1) * 2) /
-                actions.length)),
-    );
-    const win = $("win");
-    const viewport = $("viewport");
-    if (document.querySelector("#save-notice:not([hidden])")) {
-      const row = document.querySelector("#board .cell")?.getBoundingClientRect();
-      if (row?.height) {
-        const minimum = `${Math.ceil(Math.max(44, row.height + 2))}px`;
-        if (viewport.style.getPropertyValue("--minimum-field-row") !== minimum)
-          viewport.style.setProperty("--minimum-field-row", minimum);
+  actionsFrame = requestAnimationFrame(layoutActions);
+}
+function layoutActions() {
+  fitResultLabels();
+  const footer = document.querySelector<HTMLElement>("footer")!;
+  const actions = [...footer.querySelectorAll<HTMLElement>(".action")].filter(
+    (b) => getComputedStyle(b).display !== "none" && !b.hidden,
+  );
+  footer.style.setProperty("--help-actions",String(actions.length));
+  const hasAssist=actions.some(button=>button.id==="magnet"||button.id==="plan");
+  let widest = 44;
+  const required = actions.reduce(
+    (width, button) => {
+      const label =
+        button.querySelector<HTMLElement>(".action-label") ??
+        button.querySelector<HTMLElement>("span")!;
+      const range=document.createRange();range.selectNodeContents(label);
+      let needed=Math.max(44,range.getBoundingClientRect().width+6);
+      if(hasAssist){
+        // New four-action toolbars need unwrapped labels. Preserve the established
+        // three-action sidebar measurement so ordinary landscape keeps its height.
+        const probe=document.createElement("span");probe.textContent=label.textContent;
+        Object.assign(probe.style,{position:"fixed",visibility:"hidden",whiteSpace:"nowrap",width:"max-content",maxWidth:"none",font:getComputedStyle(label).font,letterSpacing:getComputedStyle(label).letterSpacing});
+        button.append(probe);range.selectNodeContents(probe);
+        needed=Math.max(44,range.getBoundingClientRect().width+12);probe.remove();
       }
+      widest = Math.max(widest, needed);
+      return width + needed;
+    },
+    Math.max(0, actions.length - 1) * 2,
+  );
+  const landscape = matchMedia(
+    "(orientation: landscape) and (min-width: 540px)",
+  ).matches;
+  const game = document.querySelector<HTMLElement>(".game")!;
+  // Compare with the stable sidebar width, not a footer that widens after docking.
+  const sideWidth = gameTop.clientWidth;
+  const dock =
+    landscape &&
+    lesson < 0 &&
+    innerHeight <= 420 &&
+    !game.classList.contains("is-result") &&
+    actions.length > 0 &&
+    (inOpening() ||
+      (game.classList.contains("compact-game") && innerWidth<=600 && innerHeight<=340) ||
+      required > sideWidth ||
+      (actions.length === 2 && widest > (sideWidth - 2) / 2));
+  game.classList.toggle("docked-actions", dock);
+  const status = document.querySelector<HTMLElement>(".status-wrap")!;
+  const statusParent = dock ? (inOpening() ? gameTop : hintDock) : gameActions;
+  if (status.parentElement !== statusParent) {
+    if (statusParent === gameTop) gameTop.append(status);
+    else statusParent.prepend(status);
+  }
+  hintDock.hidden = !landscape || lesson >= 0;
+  const jump = $("hint-jump");
+  const jumpParent = landscape && lesson < 0 ? hintDock : status;
+  if (jump.parentElement !== jumpParent) jumpParent.prepend(jump);
+  const availableWidth = dock ? game.clientWidth - 32 : footer.clientWidth;
+  footer.style.setProperty("--assist-columns",actions.length>4&&widest+12<=(availableWidth-12)/3?"3":widest+12>(availableWidth-8)/2?"1":"2");
+  game.classList.toggle(
+    "stacked-actions",
+    availableWidth > 0 && actions.length > 0 &&
+      (required > availableWidth ||
+        ((!landscape || hasAssist) &&
+          widest >
+            (availableWidth - Math.max(0, actions.length - 1) * 2) /
+              actions.length)),
+  );
+  const win = $("win");
+  const viewport = $("viewport");
+  if (document.querySelector("#save-notice:not([hidden])")) {
+    const row = document.querySelector("#board .cell")?.getBoundingClientRect();
+    if (row?.height) {
+      const minimum = `${Math.ceil(Math.max(44, row.height + 2))}px`;
+      if (viewport.style.getPropertyValue("--minimum-field-row") !== minimum)
+        viewport.style.setProperty("--minimum-field-row", minimum);
     }
-    const classicResult = !win.hidden && win.dataset.resultKind === "classic";
-    win.classList.toggle(
-      "compact-result",
-      classicResult && viewport.clientHeight < 440,
-    );
-    win.classList.remove("minimal-result");
-    if (classicResult && win.scrollHeight > viewport.clientHeight + 1)
-      win.classList.add("minimal-result");
-  });
+  }
+  const classicResult = !win.hidden && win.dataset.resultKind === "classic";
+  win.classList.toggle(
+    "compact-result",
+    classicResult && viewport.clientHeight < 440,
+  );
+  win.classList.remove("minimal-result");
+  if (classicResult && win.scrollHeight > viewport.clientHeight + 1)
+    win.classList.add("minimal-result");
 }
 const actionObserver = new ResizeObserver(scheduleActionLayout);
 actionObserver.observe(document.querySelector("footer")!);
@@ -2354,6 +2355,7 @@ function render() {
   gameDifficulty.textContent = difficultyLabel();
   gameDifficulty.dataset.level = String(classicDifficulty());
   const ended = count === 0 && lesson < 0;
+  const leavingResult = !ended && game.classList.contains("is-result");
   game.classList.toggle("is-result", ended);
   resultDock.hidden = !ended;
   const taskIndex = notebook.findIndex((p) => p.id === progress.active);
@@ -2520,6 +2522,9 @@ function render() {
                   : t("calm.classic.copy", { copied, count, digits: digitWord(count) })
               : t(session.history.length ? "game.noMoves" : "calm.noPairs"),
     );
+  // The hidden result footer has no width. Settle the next field's actions
+  // before it paints instead of carrying a layout measured on the result.
+  if (leavingResult) layoutActions();
   drawPath(highlight);
   clipPairTrace();
   if (focusedIndex !== undefined) {

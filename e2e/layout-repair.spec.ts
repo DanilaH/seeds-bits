@@ -190,3 +190,37 @@ test("LAYOUT-04: privacy links and jar captions wrap at 200%", async ({page}) =>
     expect(overflow, `${width}x${height}`).toEqual([]);
   }
 });
+
+test("short-board threshold and double-line Add status preserve the field rail", async ({browser}) => {
+  const page = await browser.newPage({viewport:{width:320,height:568},locale:"ru-RU"});
+  try {
+    await page.emulateMedia({reducedMotion:"reduce"});
+    await seed(page,[5,5,0,0,0,0,0,0,0,...Array.from({length:54},(_,i)=>i%2 ? 2 : 8)]);
+    const grid = page.locator("#board");
+    const before = (await grid.boundingBox())!.y;
+    await digit(page,0);
+    await digit(page,1);
+    await expect(page.locator("#remaining")).toHaveText("54");
+    expect((await grid.boundingBox())!.y).toBe(before);
+    await rawClick(page,"#undo");
+    expect((await grid.boundingBox())!.y).toBe(before);
+  } finally {
+    await page.context().close();
+  }
+
+  const noPairs = await browser.newPage({viewport:{width:320,height:568},locale:"ru-RU"});
+  try {
+    await noPairs.emulateMedia({reducedMotion:"reduce"});
+    await seed(noPairs,[1,2,3,4]);
+    const viewport = noPairs.locator("#viewport");
+    const before = await viewport.boundingBox();
+    await rawClick(noPairs,"#add");
+    await expect(noPairs.locator("#remaining")).toHaveText("8");
+    expect(await viewport.boundingBox()).toEqual(before);
+    await rawClick(noPairs,"#undo");
+    await expect(noPairs.locator("#remaining")).toHaveText("4");
+    expect(await viewport.boundingBox()).toEqual(before);
+  } finally {
+    await noPairs.context().close();
+  }
+});

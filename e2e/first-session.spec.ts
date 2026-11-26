@@ -412,3 +412,38 @@ for (const [width,height] of [[320,568],[390,844]]) {
     await expect(page.locator("#win")).toBeVisible();
   });
 }
+
+for (const [width, height] of [[320,568], [390,844]]) {
+  test(`task 2 paints its final toolbar and field at ${width}×${height}`, async ({page}) => {
+    await page.setViewportSize({width,height});
+    await start(page);
+    for (const [a,b] of [[8,17],[4,5],[9,11],[7,14]]) await move(page,a,b);
+    await expect(page.locator("#win")).toBeVisible();
+    await page.evaluate(() => {
+      const button = document.querySelector<HTMLButtonElement>("#play-again")!;
+      button.addEventListener("click", () => {
+        const game = document.querySelector<HTMLElement>(".game")!;
+        const toolbar = game.querySelector("footer")!;
+        const viewport = game.querySelector("#viewport")!;
+        const frames: number[][] = [];
+        const end = performance.now() + 350;
+        function observe() {
+          if (!game.classList.contains("is-result") && !toolbar.hidden) {
+            const footer = toolbar.getBoundingClientRect();
+            const field = viewport.getBoundingClientRect();
+            frames.push([footer.top, footer.height, field.top, field.height]);
+          }
+          if (performance.now() < end) requestAnimationFrame(observe);
+          else game.dataset.taskTwoFrames = JSON.stringify(frames);
+        }
+        requestAnimationFrame(observe);
+      }, {once:true});
+    });
+    await page.locator("#play-again").click();
+    await expect(page.locator("#mode")).toContainText("задача 2");
+    await expect(page.locator(".game")).toHaveAttribute("data-task-two-frames", /^\[/);
+    const frames = JSON.parse((await page.locator(".game").getAttribute("data-task-two-frames"))!) as number[][];
+    expect(frames.length).toBeGreaterThan(1);
+    for (const frame of frames) expect(frame).toEqual(frames[0]);
+  });
+}
