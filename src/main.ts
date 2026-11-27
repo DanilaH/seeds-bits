@@ -1,3 +1,4 @@
+import {optionalResult, optionalSingleFlight} from "./optional-service";
 import { syncGameAppearance } from "./appearance";
 import "./content-pilot.css";
 import { t, plural, choice, localName, word, activeLanguage, launchLanguages, languageNames, resolveLocale, useLanguage, staticCopy, type LanguageChoice } from "./i18n";
@@ -127,6 +128,7 @@ import {
   serializeProgress,
   FutureProgress,
   ProtectedContentProgress,
+  ProtectedEarnedProgress,
   metadata,
   startAttempt,
   recordCompletion,
@@ -1931,6 +1933,13 @@ async function persistHelp(candidate: Progress, game = session): Promise<boolean
     return true;
   } finally { busy = wasBusy; }
 }
+function recoverNativeReward() {
+  return optionalSingleFlight("pending-reward", async () => {
+    const pending = await adsBridge?.pending();
+    if (pending?.reward) await receiveReward(pending.reward);
+    return pending;
+  });
+}
 function receiveReward(r: RewardReceipt): Promise<void> {
   if (!bootComplete) rewardSeenDuringBoot = true;
   rewardQueue = rewardQueue.catch(() => {}).then(async () => {
@@ -1949,7 +1958,7 @@ function receiveReward(r: RewardReceipt): Promise<void> {
       });
     }
     if (!await persistHelp(candidate)) return;
-    await adsBridge?.acknowledge({token: r.token}).catch(() => {});
+    await optionalSingleFlight("reward-ack:"+r.token, async () => { await adsBridge?.acknowledge({token:r.token}); });
     void refreshRewarded();
     if (!busy) render();
   });
@@ -2107,7 +2116,7 @@ function offerHints(intent: HelpIntent) {
   helpEvent("offer", intent, {ready_state: rewardedReadiness.state});
   void refreshRewarded(true);
   if (rewardedReadiness.reason === "pending_receipt") void (async () => {
-    const pending = await adsBridge?.pending().catch(() => undefined);
+    const pending = await recoverNativeReward();
     if (pending?.reward) {await receiveReward(pending.reward); if (!saveFailed && offeredIntent?.id === intent.id) {hintOffer.close(); offeredIntent = undefined; message(t("ui.previously-earned-reward-restored"));}}
   })();
   updateBanner();
@@ -3119,7 +3128,7 @@ async function hint() {
           viewport.focus({preventScroll:true});
           feedback("undo");
           message(t("ui.board-restored-continue-on-your-own-or-tap-hint"));
-          void save();
+          void persistMove();
         };
         message(
           advice.kind === "dead"
@@ -3715,8 +3724,7 @@ $("retry-save").onclick = async () => {
   }
   // A failed reward save leaves its native receipt pending until a durable retry.
   try {
-    const pending = await adsBridge?.pending();
-    if (pending?.reward) await receiveReward(pending.reward);
+    await recoverNativeReward();
   } catch {
     // Keep the receipt for the next retry or launch; the game remains usable.
   }
@@ -3798,7 +3806,11 @@ async function boot() {
   } catch (error) {
     futureSave = error instanceof FutureProgress;
     protectedContent = error instanceof ProtectedContentProgress;
-    warning = protectedContent ? t("save.contentIdentity") : futureSave
+    if ((error as Error)?.name === "SecurityError") {
+      hadStoredState = true;
+      saveFailed = true;
+    }
+    warning = (error as Error)?.name === "SecurityError" ? t("save.storageUnavailable") : error instanceof ProtectedEarnedProgress ? t("save.earnedProtected") : protectedContent ? t("save.contentIdentity") : futureSave
       ? t("ui.this-save-is-from-a-newer-version-update-the")
       : t("ui.could-not-read-the-save-a-new-game-was");
     readWarning = warning;
@@ -3874,7 +3886,7 @@ async function boot() {
     warning = t("service.offline");
   }
   if(platform.native) {
-    const acquisition=await adsBridge?.installContext?.().catch(()=>undefined);
+    const acquisition=await optionalResult(adsBridge?.installContext?.() ?? Promise.resolve(undefined));
     if(acquisition) {
       nativeAcquisition=acquisition;
       if(acquisition.locales?.length) deviceLanguages=acquisition.locales;
@@ -3901,9 +3913,9 @@ async function boot() {
     label.textContent = t("ui.qa-test-ads", { "0": firstSessionEnabled?t("ui.first-launch"):qaProfile==="baseline"?t("ui.standard-game"):qaProfile==="all"?t("ui.all-features"):qaProfile }); $("menu-content").append(label);
   }
   await save();
-  await adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}).catch(() => {});
+  await optionalResult(adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}) ?? Promise.resolve());
   experience(progress).sessions++;
-  await initializeMonetization(() => syncPauseState(), receiveReward);
+  await optionalResult(initializeMonetization(() => syncPauseState(), receiveReward));
   viewport.scrollTop = session.current.scroll;
   if (
     !futureSave &&
@@ -3915,17 +3927,19 @@ async function boot() {
     // A failed SharedPreferences commit can remain in process memory. A read on
     // WebView recreation is not a disk acknowledgement: confirm it with a write.
     await save();
-  if (engagementBridge)
-    try {
-      await engagementBridge.addListener("dailyOpen", () => {
-        pendingDailyOpen = true;
-        void openDailyNotification();
-      });
-      const config = await engagementBridge.configuration();
-      engagementAvailable = config.available;
-      notificationGranted = config.granted;
-      pendingDailyOpen = Boolean(config.entry);
-    } catch {}
+  if (engagementBridge) {
+    // Optional permission/configuration services cannot hold core startup.
+    void engagementBridge.addListener("dailyOpen", () => {
+      pendingDailyOpen=true;void openDailyNotification();
+    }).catch(()=>{});
+    const readConfiguration = optionalSingleFlight("notification-configuration", () => engagementBridge!.configuration().then(config=>{
+      engagementAvailable=config.available;notificationGranted=config.granted;
+      pendingDailyOpen ||= Boolean(config.entry);
+      updateReminderSettings();void openDailyNotification();
+      return config;
+    }));
+    await readConfiguration;
+  }
   syncPauseState();
   trackOpen("resume");
   void platform
@@ -3942,9 +3956,9 @@ async function boot() {
           experience(progress).sessions++;
         backgroundAt = undefined;
         if (engagementBridge)
-          void engagementBridge
-            .configuration()
+          void optionalSingleFlight("notification-configuration", () => engagementBridge!.configuration())
             .then((c) => {
+              if (!c) return;
               notificationGranted = c.granted;
               updateReminderSettings();
               if (c.entry) {

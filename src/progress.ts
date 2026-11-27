@@ -34,6 +34,7 @@ export const fresh = (): Progress => ({
 const validId = validContentId;
 export class FutureProgress extends Error {}
 export class ProtectedContentProgress extends FutureProgress {}
+export class ProtectedEarnedProgress extends FutureProgress {}
 export function readProgress(
   raw: string,
   onRecovery: () => void = () => {},
@@ -61,7 +62,7 @@ export function readProgress(
     try {
       if (p.meta?.help !== undefined) readHelp(p.meta.help);
       for (const a of Object.values(p.meta?.attempts ?? {}) as any[]) if (a.help !== undefined) readHelpAttempt(a.help);
-    } catch { throw new FutureProgress("Protected assistance data could not be read"); }
+    } catch { throw new ProtectedEarnedProgress("Protected assistance data could not be read"); }
   }
   const clean = fresh();
   try {
@@ -131,20 +132,16 @@ export function readProgress(
   if (p.meta !== undefined) {
     const m = p.meta;
     try {
-      if (
-        (m?.version !== 1 && m?.version !== 2) ||
-        typeof m.since !== "string" ||
-        !Number.isFinite(Date.parse(m.since)) ||
-        !Number.isSafeInteger(m.completed) ||
-        m.completed < 0 ||
-        !Number.isSafeInteger(m.unassisted) ||
-        m.unassisted < 0 ||
-        m.unassisted > m.completed ||
-        !m.attempts ||
-        typeof m.attempts !== "object" ||
-        Array.isArray(m.attempts)
-      )
-        throw Error("Invalid statistics");
+      if ((m?.version !== 1 && m?.version !== 2) || !m.attempts || typeof m.attempts !== "object" || Array.isArray(m.attempts))
+        throw new ProtectedEarnedProgress("Unreadable earned metadata");
+      // Statistics have no authority over funds, entitlements or reward dedup.
+      if (typeof m.since !== "string" || !Number.isFinite(Date.parse(m.since))) {
+        m.since = new Date(0).toISOString(); onRecovery();
+      }
+      if (!Number.isSafeInteger(m.completed) || m.completed < 0) { m.completed = 0; onRecovery(); }
+      if (!Number.isSafeInteger(m.unassisted) || m.unassisted < 0 || m.unassisted > m.completed) {
+        m.unassisted = 0; onRecovery();
+      }
       const attempts: Record<string, Attempt> = {};
       for (const [id, value] of Object.entries(m.attempts)) {
         const a = value as Attempt;
@@ -154,8 +151,7 @@ export function readProgress(
           typeof a.id !== "string" ||
           typeof a.completed !== "boolean"
         ) {
-          onRecovery();
-          continue;
+          throw new ProtectedEarnedProgress("Unreadable attempt identity");
         }
         const safe: Attempt = { id: a.id, completed: a.completed };
         if (typeof a.analyticsStarted === "boolean")
@@ -163,6 +159,7 @@ export function readProgress(
         if (a.hintBonus !== undefined) {
           if (Number.isSafeInteger(a.hintBonus) && a.hintBonus >= 0)
             safe.hintBonus = a.hintBonus;
+          else if (m.version === 1) throw new ProtectedEarnedProgress("Unreadable legacy hint credit");
           else onRecovery();
         }
         if (a.hintKeys !== undefined) {
@@ -174,7 +171,7 @@ export function readProgress(
               onRecovery();
               return `recovered:${index}`;
             });
-          } else onRecovery();
+          } else throw new ProtectedEarnedProgress("Unreadable used hints");
         }
         if (
           a.hintChoices &&
@@ -207,7 +204,7 @@ export function readProgress(
         m.version = 2;
       }
       if (!Number.isSafeInteger(m.wallet) || m.wallet < 0)
-        throw Error("Invalid hint wallet");
+        throw new ProtectedEarnedProgress("Invalid hint wallet");
       for (const a of Object.values(attempts)) delete a.hintBonus;
       if (
         m.daily !== undefined &&
@@ -220,8 +217,7 @@ export function readProgress(
           [0, 1, 3].includes(m.daily.reward)
         )
       ) {
-        delete m.daily;
-        onRecovery();
+        throw new ProtectedEarnedProgress("Unreadable daily reward boundary");
       }
       if (m.engagement !== undefined) {
         const e = m.engagement;
@@ -244,21 +240,9 @@ export function readProgress(
       if (!["fresh-v2", "legacy"].includes(m.analyticsCohort))
         delete m.analyticsCohort;
       if (m.analytics !== undefined) m.analytics = readAnalytics(m.analytics);
-      if (m.rewardReceipts !== undefined) {
-        if (Array.isArray(m.rewardReceipts)) {
-          m.rewardReceipts = m.rewardReceipts.filter((token: unknown) => {
-            const valid =
-              typeof token === "string" &&
-              token.length > 0 &&
-              token.length <= 100;
-            if (!valid) onRecovery();
-            return valid;
-          });
-        } else {
-          delete m.rewardReceipts;
-          onRecovery();
-        }
-      }
+      if (m.rewardReceipts !== undefined && (!Array.isArray(m.rewardReceipts) ||
+          !m.rewardReceipts.every((token: unknown) => typeof token === "string" && token.length > 0 && token.length <= 100)))
+        throw new ProtectedEarnedProgress("Unreadable reward receipts");
       if (m.classicDeals !== undefined) {
         const deals = readClassicDeals(m.classicDeals);
         if (deals) m.classicDeals = deals;
@@ -277,9 +261,9 @@ export function readProgress(
       }
       if (m.help !== undefined) m.help = readHelp(m.help);
       clean.meta = m;
-    } catch {
-      // Statistics are optional; keep valid boards, completion marks and trophies.
-      onRecovery();
+    } catch (error) {
+      if (error instanceof FutureProgress) throw error;
+      throw new ProtectedEarnedProgress("Unreadable earned metadata");
     }
   }
   metadata(clean);
@@ -294,7 +278,7 @@ export function readProgress(
       typeof j.attempt === "string"
     )
       clean.jars = j.version === 1 ? migrateJars(j) : j;
-    else onRecovery();
+    else throw new ProtectedEarnedProgress("Unreadable jar high-water mark");
   }
   const jar = jars(clean),
     attempt = metadata(clean).attempts.classic?.id ?? "legacy";

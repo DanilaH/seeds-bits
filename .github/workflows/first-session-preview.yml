@@ -2,7 +2,7 @@ name: First session preview
 on:
   push:
     branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125, feat/menu-rails-20261125, feat/core-feel-pilot-20261125, feat/quiet-table-20261126]
-    paths: [docs/STATUS.md, docs/porting/ADOPTION_LEDGER.json, docs/research/stability-2026-11-26/**, src/**, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, tests/**, e2e/**, scripts/configure-android.mjs, scripts/gradle-maven-mirror.init.gradle, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
+    paths: [docs/STATUS.md, docs/porting/ADOPTION_LEDGER.json, docs/research/stability-2026-11-26/**, src/**, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, scripts/functional-*.mjs, tests/**, e2e/**, scripts/configure-android.mjs, scripts/gradle-maven-mirror.init.gradle, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
 permissions:
   contents: read
   actions: read
@@ -110,7 +110,7 @@ jobs:
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1008' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1009' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
       SEEDS_MAVEN_CENTRAL_MIRROR: google
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
@@ -194,6 +194,9 @@ jobs:
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12088-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" "candidate/seeds-first-session-${version_code}-unsigned.apk"
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" "candidate/seeds-first-session-${version_code}-debug.apk"
+      - name: Generate real large profiles for the Android persistence audit
+        if: matrix.mode == 'offline'
+        run: npx vitest run tests/functional-size.test.ts
       - run: node scripts/classic-series.mjs --before eae2bcbeaaa1a5c76872dddc7a7f79844988b60e
         if: matrix.mode == 'offline'
       - uses: actions/upload-artifact@v4

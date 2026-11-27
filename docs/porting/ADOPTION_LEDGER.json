@@ -1176,6 +1176,33 @@
       },
       "nextAction": "Exact-source project CI/native, signed12108; телефонная проверка обеих тем и меню.",
       "kitImpact": "REUSE: UX & Art System / accepted component roles / Reference Protocol; runtime pins unchanged."
+    },
+    {
+      "id": "seeds-functional-audit-47",
+      "sourceFeatureIds": [],
+      "scope": "Собственный функциональный аудит FA01–08 поверх12108/e592866",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/platform.ts",
+        "src/progress.ts",
+        "src/main.ts",
+        "src/optional-service.ts",
+        "src/monetization.ts",
+        "e2e/functional-audit-fixes.spec.ts",
+        "tests/functional-size.test.ts",
+        "scripts/markets/functional-audit.mjs"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "audit": "https://github.com/DanilaH/seeds-bits/issues/47",
+        "report": "../research/functional-fixes-2026-11-27/README.md",
+        "code": "Durable recovery; independent stats salvage/protected earned authority; cross-document web CAS; explicit persistent-storage failure; optional service single-flight/deadlines.",
+        "phone": "UNKNOWN",
+        "commercial": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Exact-source full CI + independent model/faults + Android real profiles/force-stop/demo + production configuration; signed12109. External phone/live/release-key gates documented separately.",
+      "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE local web transaction barrier; runtime pins unchanged."
     }
   ]
 }

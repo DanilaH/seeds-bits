@@ -3,6 +3,7 @@ import {execFileSync, spawn} from "node:child_process";
 import fs from "node:fs";
 import {resolve} from "node:path";
 import assert from "node:assert/strict";
+import {verifyFunctionalAudit} from "./functional-audit.mjs";
 import {portraitBannerPaintMatches} from "./banner-proof.mjs";
 import {findSdkCloseCross,findSdkStoryNext} from "./sdk-controls.mjs";
 
@@ -11,7 +12,7 @@ fs.mkdirSync(out,{recursive:true});
 const [candidate,baseline,optimized,classicBundle]=process.argv.slice(2);
 const prefs=`/data/user/0/${app}/shared_prefs/CapacitorStorage.xml`;
 const progress="seeds-bits.progress.v2", settings="seeds-bits.settings.v1";
-const adb=(...args)=>execFileSync("adb",args,{encoding:"utf8",timeout:26000,maxBuffer:8e6}).trim();
+const adb=(...args)=>execFileSync("adb",args,{encoding:"utf8",timeout:26000,maxBuffer:32e6}).trim();
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const launch=()=>adb("shell","am","start","-W","-n",app+"/.MainActivity");
 const stop=()=>adb("shell","am","force-stop",app);
@@ -1473,6 +1474,7 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
+  await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
   fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(await verifyDurableClassic(),null,2));
   fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
   fs.writeFileSync(out+"/reach-values.json",JSON.stringify(await verifyReachValues(),null,2));

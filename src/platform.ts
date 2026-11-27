@@ -110,19 +110,42 @@ export function gameplay(active: boolean) {
   const api = sdk?.features.GameplayAPI;
   active ? api?.start() : api?.stop();
 }
-const temporary = new Map<string,string>();
-let webStorageBlocked = false;
-try { if(!Capacitor.isNativePlatform()) localStorage.getItem("seeds-bits.settings.v1"); }
-catch (error) {
-  if ((error as Error).name!=="SecurityError") throw error;
-  webStorageBlocked = true;
+// Never substitute volatile memory for a durable save. Access may recover later.
+function browserRead(key: string) { return localStorage.getItem(key); }
+function browserWrite(key: string, value: string) { localStorage.setItem(key, value); }
+
+// Every current web writer participates, including browsers without Web Locks.
+// IndexedDB serializes readwrite transactions across documents. The canonical
+// profile stays in localStorage; compare, settings merge and write are synchronous
+// inside the transaction callback (no await gap between compare and write).
+let writerDatabase: Promise<IDBDatabase> | undefined;
+function database() {
+  return writerDatabase ??= new Promise<IDBDatabase>((resolve, reject) => {
+    const request = indexedDB.open("seeds-bits.writer", 1);
+    request.onupgradeneeded = () => request.result.createObjectStore("writer");
+    request.onerror = () => { writerDatabase = undefined; reject(request.error); };
+    request.onblocked = () => { writerDatabase = undefined; reject(new Error("Storage writer blocked")); };
+    request.onsuccess = () => {
+      const db = request.result;
+      db.onversionchange = () => { db.close(); writerDatabase = undefined; };
+      resolve(db);
+    };
+  });
 }
-function browserRead(key:string) {
-  return webStorageBlocked ? temporary.get(key) ?? null : localStorage.getItem(key);
-}
-function browserWrite(key:string,value:string) {
-  if(webStorageBlocked) temporary.set(key,value);
-  else localStorage.setItem(key,value);
+async function webWrite<T>(action: () => T): Promise<T> {
+  const run = async () => {
+    const db = await database();
+    return new Promise<T>((resolve, reject) => {
+      const transaction = db.transaction("writer", "readwrite");
+      let value: T, failure: unknown;
+      transaction.objectStore("writer").get("lock").onsuccess = () => {
+        try { value = action(); } catch (error) { failure = error; }
+      };
+      transaction.oncomplete = () => failure ? reject(failure) : resolve(value!);
+      transaction.onabort = transaction.onerror = () => reject(transaction.error ?? new Error("Storage transaction aborted"));
+    });
+  };
+  return navigator.locks ? navigator.locks.request("seeds-save", run) : run();
 }
 export async function read(key: string): Promise<string | null> {
   return Capacitor.isNativePlatform()
@@ -131,8 +154,10 @@ export async function read(key: string): Promise<string | null> {
 }
 /** Per-field browser keys prevent unrelated preferences from overwriting each other across tabs. */
 export async function readSettings(key: string): Promise<string | null> {
-  const raw = await read(key);
-  if (native) return raw;
+  return native ? await read(key) : browserSettings(key);
+}
+function browserSettings(key: string): string | null {
+  const raw = browserRead(key);
   let result: Record<string, unknown> = {};
   try {
     const parsed = JSON.parse(raw ?? "{}");
@@ -192,52 +217,36 @@ export async function saveState(
   settings: string,
   patch: Record<string, unknown> = {},
 ) {
-  const persist = async () => {
-    const conflict = !native && browserRead(key) !== expected;
-    const defaults = JSON.parse(settings);
+  const defaults = JSON.parse(settings);
+  const merge = (raw: string | null) => {
     let latest: Record<string, unknown> = {};
-    try {
-      latest = JSON.parse((await readSettings(settingsKey)) ?? "{}") ?? {};
-    } catch {
-      /* Keep valid defaults. */
-    }
+    try { latest = JSON.parse(raw ?? "{}") ?? {}; } catch { /* Invalid preferences only. */ }
     const merged = { ...defaults };
     for (const field of Object.keys(defaults)) {
-      if (typeof latest[field] === typeof defaults[field])
-        merged[field] = latest[field];
-      if (Object.hasOwn(patch, field)) merged[field] = patch[field];
-    }
-    if (Capacitor.getPlatform() === "android") {
-      await nativePlugin.persistState({
-        key,
-        value,
-        settingsKey,
-        settings: JSON.stringify(merged),
-      });
-    } else if (native) {
-      await write(settingsKey, JSON.stringify(merged));
-      await write(key, value);
-    } else {
-      // The Web Lock spans the merge and write; each preference has its own canonical key.
-      for (const field of Object.keys(patch)) {
-        if (
-          Object.hasOwn(defaults, field) &&
-          typeof patch[field] === typeof defaults[field]
-        )
-          browserWrite(
-            `${settingsKey}.${field}`,
-            JSON.stringify(patch[field]),
-          );
-      }
-      browserWrite(settingsKey, JSON.stringify(merged));
-      if (conflict) throw new SaveConflict();
-      browserWrite(key, value);
+      if (typeof latest[field] === typeof defaults[field]) merged[field] = latest[field];
+      if (Object.hasOwn(patch, field) && typeof patch[field] === typeof defaults[field]) merged[field] = patch[field];
     }
     return merged;
   };
-  if (!native && navigator.locks)
-    return await navigator.locks.request("seeds-save", persist);
-  else return await persist();
+  if (!native) return webWrite(() => {
+    const conflict = browserRead(key) !== expected;
+    const merged = merge(browserSettings(settingsKey));
+    for (const field of Object.keys(patch))
+      if (Object.hasOwn(defaults, field) && typeof patch[field] === typeof defaults[field])
+        browserWrite(`${settingsKey}.${field}`, JSON.stringify(patch[field]));
+    browserWrite(settingsKey, JSON.stringify(merged));
+    if (conflict) throw new SaveConflict();
+    browserWrite(key, value);
+    return merged;
+  });
+  const merged = merge(await readSettings(settingsKey));
+  if (Capacitor.getPlatform() === "android") {
+    await nativePlugin.persistState({key, value, settingsKey, settings: JSON.stringify(merged)});
+  } else {
+    await write(settingsKey, JSON.stringify(merged));
+    await write(key, value);
+  }
+  return merged;
 }
 
 /** Safe bounded diagnostics: never expose native messages or saved content. */
@@ -257,18 +266,13 @@ export async function writeSettingsPatch(
   defaults: string,
   patch: Record<string, unknown>,
 ) {
-  const update = async () => {
-    const merged = {
-      ...JSON.parse(defaults),
-      ...JSON.parse((await readSettings(key)) ?? "{}"),
-      ...patch,
-    };
-    if (!native) for (const [field, value] of Object.entries(patch))
-      browserWrite(`${key}.${field}`, JSON.stringify(value));
-    await write(key, JSON.stringify(merged));
+  if (!native) return webWrite(() => {
+    const merged = {...JSON.parse(defaults), ...JSON.parse(browserSettings(key) ?? "{}"), ...patch};
+    for (const [field, value] of Object.entries(patch)) browserWrite(`${key}.${field}`, JSON.stringify(value));
+    browserWrite(key, JSON.stringify(merged));
     return merged;
-  };
-  return !native && navigator.locks
-    ? await navigator.locks.request("seeds-save", update)
-    : await update();
+  });
+  const merged = {...JSON.parse(defaults), ...JSON.parse((await readSettings(key)) ?? "{}"), ...patch};
+  await write(key, JSON.stringify(merged));
+  return merged;
 }

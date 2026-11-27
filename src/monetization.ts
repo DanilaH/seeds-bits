@@ -1,3 +1,4 @@
+import {optionalResult} from "./optional-service";
 import { Capacitor, registerPlugin } from "@capacitor/core";
 import { eventContext } from "./analytics";
 import type { InstallContext } from "./distribution";
@@ -104,21 +105,20 @@ export async function initializeMonetization(
   onPause = pause;
   if (!bridge) return;
   try {
-    if (bridge.readiness) await bridge.addListener("rewardedState", setReadiness);
-    await bridge.addListener("reward", (r) => {
-      void reward(r);
-    });
-    await bridge.addListener("bannerSize", ({ height }) => setBannerHeight(height));
-    if (bridge === nativePlugin) await bridge.addListener("bannerRefresh", () => {
+    if (bridge.readiness) void bridge.addListener("rewardedState", setReadiness).catch(()=>{});
+    void bridge.addListener("reward", (r) => { void reward(r).catch(()=>{}); }).catch(()=>{});
+    void bridge.addListener("bannerSize", ({ height }) => setBannerHeight(height)).catch(()=>{});
+    if (bridge === nativePlugin) void bridge.addListener("bannerRefresh", () => {
       bannerGeometry = "";
       window.dispatchEvent(new Event("seeds:banner-refresh"));
-    });
+    }).catch(()=>{});
     const config = await bridge.initialize();
     bannerEpoch = config.bannerEpoch;
     if (config.bannerHeight !== undefined) setBannerHeight(config.bannerHeight);
     monetized = config.enabled;
-    setReadiness(config.readiness ?? (bridge.readiness ? await bridge.readiness() : {state: import.meta.env.DEV && config.enabled ? "ready" : "disabled", reason: "legacy_qa_bridge"}));
+    setReadiness(config.readiness ?? (bridge.readiness ? (await optionalResult(bridge.readiness())) ?? {state:"unavailable",reason:"bridge_pending"} : {state: import.meta.env.DEV && config.enabled ? "ready" : "disabled", reason: "legacy_qa_bridge"}));
     document.documentElement.classList.toggle("has-mobile-ads", monetized);
+    window.dispatchEvent(new Event("seeds:banner-refresh"));
     if (config.reward) await reward(config.reward);
     void bridge.preload().catch(() => {});
   } catch {

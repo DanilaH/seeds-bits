@@ -2546,5 +2546,19 @@
     "es": "Frasco {number} completado",
     "tr": "{number}. kavanoz tamamlandı",
     "pt-BR": "Pote {number} completo"
+  },
+  "save.storageUnavailable": {
+    "ru": "Постоянное хранилище недоступно. Прогресс не сохраняется. Восстановите доступ и повторите сохранение.",
+    "en": "Persistent storage is unavailable. Progress is not saved. Restore access and retry saving.",
+    "es": "El almacenamiento no está disponible. El progreso no se guarda. Restablece el acceso y reintenta guardar.",
+    "tr": "Kalıcı depolamaya erişilemiyor. İlerleme kaydedilmiyor. Erişimi düzeltip yeniden kaydet.",
+    "pt-BR": "O armazenamento não está disponível. O progresso não está salvo. Restaure o acesso e tente salvar novamente."
+  },
+  "save.earnedProtected": {
+    "ru": "Не удалось прочитать накопления или права. Запись отключена: исходный прогресс защищён.",
+    "en": "Earned resources or entitlements could not be read. Saving is off to protect the original progress.",
+    "es": "No se pudieron leer los recursos o derechos. El guardado está desactivado para proteger el progreso original.",
+    "tr": "Kazanımlar veya haklar okunamadı. Orijinal ilerlemeyi korumak için kaydetme kapalı.",
+    "pt-BR": "Não foi possível ler os recursos ou direitos. O salvamento está desativado para proteger o progresso original."
   }
 }

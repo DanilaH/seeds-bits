@@ -36,10 +36,10 @@ test("malformed optional fields preserve statistics, valid attempts, receipts an
     m = metadata(p);
   m.completed = 120;
   m.unassisted = 100;
-  m.attempts.classic.hintBonus = "broken" as never;
+  m.attempts.classic.hintBonus = 0;
   m.attempts.classic.hintKeys = ["1111:0:1", null as never, "valid"];
   m.attempts["book-v1-1"] = { id: "intact", completed: true, hintBonus: 6 };
-  m.rewardReceipts = ["kept", 42 as never];
+  m.rewardReceipts = ["kept"];
   let recovered = 0;
   (p.meta as unknown as { version: number }).version = 1;
   const q = readProgress(serializeProgress(p), () => recovered++),
