@@ -1190,7 +1190,9 @@
         "src/monetization.ts",
         "e2e/functional-audit-fixes.spec.ts",
         "tests/functional-size.test.ts",
-        "scripts/markets/functional-audit.mjs"
+        "scripts/markets/functional-audit.mjs",
+        "scripts/patch-capacitor-bridge.mjs",
+        "scripts/capacitor-bridge-harness.py"
       ],
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
       "evidence": {
@@ -1212,6 +1214,13 @@
           "source": "13defc3f0e9fcae7a54dab3338d6e7cd87463aa7",
           "nativeFunctional": "https://github.com/DanilaH/seeds-bits/actions/runs/45971272294/artifacts/15185882337",
           "scope": "All new native functional checks PASS, demo PASS; following old Classic input failed before first pair (Resume ADB trace empty). Final QA strengthens awake/foreground/native-input preconditions; full offline acceptance still pending."
+        },
+        "bridgeRace": {
+          "dependency": "@capacitor/android8.5.3",
+          "upstream": "https://github.com/ionic-team/capacitor/issues/8616",
+          "rawFailure": "https://github.com/DanilaH/seeds-bits/actions/runs/45974489816/artifacts/15186443487",
+          "level": "Actual source compiled against deterministic transport doubles; native10-reload and final exact-source acceptance pending",
+          "change": "Bind current reply proxy before dispatch; guarded exact version/source patch, modern origin scope unchanged"
         }
       },
       "nextAction": "Final exact-source full40min offline gate + repeated demo/general/functional CI; signed12109. Physical low/mid frame jank/TalkBack/live/release-key gates remain external.",

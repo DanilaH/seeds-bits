@@ -68,6 +68,7 @@ jobs:
       - run: npm ci
       - run: python3 scripts/regression-061/native-harness.py
       - run: python3 scripts/feedback-native-harness.py
+      - run: python3 scripts/capacitor-bridge-harness.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -75,6 +76,7 @@ jobs:
           path: |
             test-results/regression-061/
             test-results/feedback-native.json
+            test-results/capacitor-bridge.json
       - run: npm run setup:android
       - run: node scripts/configure-android.mjs
         env:

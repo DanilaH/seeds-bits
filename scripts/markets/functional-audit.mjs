@@ -130,6 +130,20 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
   launch();ui=await connect();assert.equal(profiles().values[progress].done.length,beforeReboot.done.length);assert.equal(profiles().values[progress].meta.wallet,beforeReboot.meta.wallet);
   await ui.until('!document.hidden && document.hasFocus()');
   report.reboot={actualEmulatorReboot:true,kernelUptimeReset:true,retained:true,offline:true,foregroundAndFocus:true};ui.close();ui=undefined;
+  // Exercise the first real native Preferences reply of each new document.
+  // The dependency race oracle forces its interleaving separately; this gate
+  // proves actual Android reload liveness and complete saved-state continuity.
+  launch();ui=await connect();const reloadBaseline=profiles().values[progress];report.bridgeReloads=[];
+  for(let trial=0;trial<10;trial++){
+   const origin=await ui.evaluate('performance.timeOrigin');
+   await ui.evaluate('setTimeout(()=>location.reload(),0);true');
+   await ui.until(`performance.timeOrigin!==${origin} && !!document.querySelector('#dialog[open]') && !document.querySelector('#app').inert && !document.hidden && document.hasFocus()`);
+   const after=await ui.evaluate(`window.Capacitor.Plugins.Preferences.get({key:${JSON.stringify(progress)}}).then(p=>JSON.parse(p.value))`);
+   assert.deepEqual(after.sessions,reloadBaseline.sessions);assert.deepEqual(after.done,reloadBaseline.done);assert.deepEqual(after.bookRevisions,reloadBaseline.bookRevisions);assert.deepEqual(after.dailyAssignments,reloadBaseline.dailyAssignments);
+   assert.equal(after.meta.wallet,reloadBaseline.meta.wallet);assert.deepEqual(after.meta.rewardReceipts,reloadBaseline.meta.rewardReceipts);assert.deepEqual(after.jars,reloadBaseline.jars);
+   report.bridgeReloads.push({trial,newDocument:true,bootReady:true,nativeReply:true,historiesAndRightsRetained:true});
+  }
+  ui.close();ui=undefined;checkpoint();
   report.status='PASS';checkpoint();return report;
  } catch(error){report.status='ERROR';report.error=String(error);checkpoint();throw error;}
  finally {ui?.close();stop();await fixture(initial);}
