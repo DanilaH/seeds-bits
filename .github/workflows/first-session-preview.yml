@@ -7,7 +7,9 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  group: first-session-preview-${{ github.ref }}
+  # Keep the in-flight pre-VA10-contract native diagnostic available once;
+  # subsequent visual48 revisions still cancel superseded runs in this group.
+  group: first-session-preview-visual48-${{ github.ref }}
   cancel-in-progress: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126' }}
 jobs:
   browser:
@@ -61,7 +63,7 @@ jobs:
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/style-before/node_modules"
           cp scripts/independent-quiet-audit.mjs scripts/quiet-style-probe.mjs "$RUNNER_TEMP/style-before/scripts/"
           (cd "$RUNNER_TEMP/style-before" && GITHUB_SHA=7fd75255817ce2776383603b36b2fba20d749912 SEEDS_VISUAL_BASELINE=7fd75255817ce2776383603b36b2fba20d749912 SEEDS_VISUAL_OUT="$GITHUB_WORKSPACE/test-results/style-residue-before" node scripts/run-quiet-audit.mjs)
-      - run: npx playwright test e2e/quiet-polish.spec.ts e2e/ui-audit12103.spec.ts e2e/playtest-followup.spec.ts e2e/gold-layout.spec.ts e2e/menu-package.spec.ts e2e/pair-feedback.spec.ts --workers=2
+      - run: npx playwright test e2e/quiet-polish.spec.ts e2e/ui-audit12103.spec.ts e2e/playtest-followup.spec.ts e2e/gold-layout.spec.ts e2e/feel.spec.ts e2e/menu-package.spec.ts e2e/pair-feedback.spec.ts --workers=2
       - name: Verify notebook finishes and fresh-game bookmark clearance
         run: VITE_SEEDS_FIRST_SESSION=1 npx playwright test e2e/bookmark-followup.spec.ts --workers=2
       - uses: actions/upload-artifact@v4

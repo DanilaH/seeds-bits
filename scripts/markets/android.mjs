@@ -1137,6 +1137,13 @@ async function verifyAppBanner() {
     await ui.tap("#settings-back");
     await stable("saved dark theme returns to Home");
     await expected(true,"theme change finished");
+    await ui.tap("#resume");
+    await stable("Settings Back Home Game keeps the same banner");
+    assert.equal((await diagnostics()).view,beforeSettings.view);
+    assert.equal((await diagnostics()).request,beforeSettings.request);
+    await ui.tap("#menu");await stable("Game returns to Home before Settings");
+    await ui.tap("#settings-open");await stable("reverse entry into ordinary Settings");
+    await ui.tap("#settings-back");await stable("Settings returns before background");
     await expected(false,"Home backgrounds");
     adb("shell","am","start","-a","android.settings.SETTINGS");
     await wait(450);
