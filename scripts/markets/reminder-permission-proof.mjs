@@ -4,10 +4,6 @@ import assert from 'node:assert/strict';
 // QA only: respond to the actual first-result Android dialog, never a JS double.
 export async function declineAutomaticReminder({ui,adb,profiles,progress,settings,out,shot}) {
   await ui.until("document.querySelector('#app').inert");
-  const before=profiles().values[progress];
-  assert(before.meta.flags.includes('reminder_permission_requested'),'Request marker must be durable before the system prompt');
-  assert(before.meta.completed>0,'Permission follows a genuinely stored completed puzzle');
-  assert.equal(await ui.evaluate("document.querySelectorAll('#jar-spill,.flying-seed,.result-seed-burst,.trophy-confetti').length"),0,'Reward effects finish before the native prompt');
   let xml='',button;
   for(let attempt=0;attempt<20;attempt++){
     adb('shell','uiautomator','dump','/sdcard/seeds-reminder-permission.xml');
@@ -17,6 +13,12 @@ export async function declineAutomaticReminder({ui,adb,profiles,progress,setting
     await new Promise(resolve=>setTimeout(resolve,150));
   }
   assert(button,'Actual Android notification permission dialog must appear');
+  // Inert also covers preparation while the marker's write is still pending.
+  // Observe the real system dialog before checking its durable prerequisites.
+  const before=profiles().values[progress];
+  assert(before.meta.flags.includes('reminder_permission_requested'),'Request marker must be durable when the system prompt is visible');
+  assert(before.meta.completed>0,'Permission follows a genuinely stored completed puzzle');
+  assert.equal(await ui.evaluate("document.querySelectorAll('#jar-spill,.flying-seed,.result-seed-burst,.trophy-confetti').length"),0,'Reward effects finish before the native prompt');
   fs.writeFileSync(out+'/automatic-reminder-permission.xml',xml);
   shot('automatic-reminder-permission');
   const bounds=/bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/.exec(button);assert(bounds);

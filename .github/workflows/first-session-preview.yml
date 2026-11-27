@@ -7,9 +7,9 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  # Retain the preceding native diagnostic while the real permission-dialog
-  # scenario is added; later revisions still cancel superseded runs here.
-  group: first-session-preview-visual48-permission-${{ github.ref }}
+  # Keep the in-flight input/layout diagnostic while the native dialog oracle
+  # distinguishes request preparation from actual Android visibility.
+  group: first-session-preview-visual48-native-proof-${{ github.ref }}
   cancel-in-progress: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126' }}
 jobs:
   browser:
