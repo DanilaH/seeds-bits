@@ -10,7 +10,7 @@ const out=path.resolve('test-results/menu-reward-audio',side),temp=await fs.mkdt
 await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({args:['--no-sandbox','--autoplay-policy=no-user-gesture-required']});
 const sleep=ms=>new Promise(r=>setTimeout(r,Math.max(0,ms)));
-const ffmpeg=(...a)=>{const p=spawnSync('ffmpeg',['-v','error','-y',...a],{stdio:'inherit'});if(p.status)throw Error('ffmpeg failed');};
+const ffmpeg=(...a)=>{const p=spawnSync('ffmpeg',['-v','error','-y','-filter_threads','2','-filter_complex_threads','2',...a],{stdio:'inherit'});if(p.status)throw Error('ffmpeg failed');};
 const key='seeds-bits.progress.v2';const report={side,source:process.env.SEEDS_FEEL_SOURCE||(side==='before'?baseline:process.env.GITHUB_SHA),physicalPhone:false,audio:'actual application WebAudio mix; no replacement track',clips:[]};
 try {
  for(const [name,kind,width,height,theme] of [['jar','task',390,844,'light'],['field','field',390,844,'light'],['book','book',390,844,'light'],['medal','daily',390,844,'light'],['menus','nav',390,844,'light'],['compact-field','field',320,520,'dark'],['compact-medal','daily',320,520,'dark'],['compact-book','book',320,520,'dark']]){
@@ -58,7 +58,7 @@ try {
   await cdp.send('Page.stopScreencast');await Promise.all(frames.map(f=>f.saved));if(frames.length<15)throw Error('too few real frames');
   const list=path.join(dir,'sequence.ffconcat');await fs.writeFile(list,'ffconcat version 1.0\n'+frames.map((f,i)=>`file '${f.file}'\nduration ${Math.max(.001,(frames[i+1]?.time??end)-f.time).toFixed(6)}`).join('\n')+`\nfile '${frames.at(-1).file}'\n`);
   const target=path.join(out,`${name}.mp4`),offset=(start/1000-frames[0].time).toFixed(5);
-  ffmpeg('-f','concat','-safe','0','-i',list,'-itsoffset',offset,'-i',audio,'-map','0:v','-map','1:a','-vf',`fps=60,scale=390:844:force_original_aspect_ratio=decrease,pad=390:844:(ow-iw)/2:(oh-ih)/2,drawtext=text='${process.env.SEEDS_FEEL_LABEL||(side==='before'?'12106':side==='baseline'?'12109':'12110')} - ${name} ${width}x${height}':fontcolor=white:fontsize=18:box=1:boxcolor=black@0.65:x=8:y=h-30`,'-c:v','libx264','-preset','fast','-crf','20','-pix_fmt','yuv420p','-af','aresample=async=1:first_pts=0,apad','-c:a','aac','-b:a','128k','-movflags','+faststart','-t',String(length),target);
+  ffmpeg('-f','concat','-safe','0','-i',list,'-itsoffset',offset,'-i',audio,'-map','0:v','-map','1:a','-vf',`fps=60,scale=390:844:force_original_aspect_ratio=decrease,pad=390:844:(ow-iw)/2:(oh-ih)/2,drawtext=text='${process.env.SEEDS_FEEL_LABEL||(side==='before'?'12106':side==='baseline'?'12109':'12110')} - ${name} ${width}x${height}':fontcolor=white:fontsize=18:box=1:boxcolor=black@0.65:x=8:y=h-30`,'-c:v','libx264','-threads','2','-preset','fast','-crf','20','-pix_fmt','yuv420p','-af','aresample=async=1:first_pts=0,apad','-c:a','aac','-b:a','128k','-movflags','+faststart','-t',String(length),target);
   report.clips.push({name,width,height,theme,frames:frames.length,audioOffsetSeconds:Number(offset),actions,seconds:length});
   await context.close();
  }

@@ -129,7 +129,7 @@ for(const theme of ['light','dark'])for(const [width,height] of [[320,520],[390,
   expect(await ratio('.jar-keepsake .jar-interior')).toBeCloseTo(1,2);
   await page.screenshot({path:test.info().outputPath('collected-full-and-next-remainder.png')});
 });
-for(const outcome of ['release','failure-retry','background','resize','reduced','resize-new-move'])test(`VA11 held save never paints new→old jar ${outcome}`,async({page,context})=>{
+for(const outcome of ['release','failure-retry','background','resize','reduced','resize-new-move','menu','collection','progress'])test(`VA11 held save never paints new→old jar ${outcome}`,async({page,context})=>{
   if(outcome==='reduced')await page.emulateMedia({reducedMotion:'reduce'});
   await seed(page,outcome==='resize-new-move'?'classic-six':'classic');await resumeStoredGame(page);await page.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));
   const blocker=await context.newPage();await blocker.goto('/');
@@ -148,6 +148,24 @@ for(const outcome of ['release','failure-retry','background','resize','reduced',
   if(outcome==='background')await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
   if(outcome.startsWith('resize'))await page.setViewportSize({width:400,height:800});
   if(outcome==='resize-new-move'){await page.locator('[data-index="2"]').click();await page.locator('[data-index="3"]').click();}
+  const ratio=async(selector:string)=>page.locator(selector).evaluate(e=>e.querySelector('.jar-fill')!.getBoundingClientRect().height/e.getBoundingClientRect().height);
+  if(['menu','collection','progress'].includes(outcome)){
+    await page.locator('#menu').click();expect(await ratio('#home-jar .jar-interior')).toBeCloseTo(22/24,2);
+    if(outcome==='collection'){
+      await page.locator('#home-jar').click();await expect(page.locator('.jar-collection .hero-count')).toContainText('22');
+      expect(await ratio('.jar-collection .progress-hero .jar-interior')).toBeCloseTo(22/24,2);
+      await expect(page.locator('.jar-keepsake')).toHaveCount(0);
+      await page.locator('#collection-back').evaluate(e=>(window as any).heldJarBack=e);
+      const back=(await page.locator('#collection-back').boundingBox())!;
+      await page.mouse.move(back.x+back.width/2,back.y+back.height/2);await page.mouse.down();
+    }
+    if(outcome==='progress'){
+      await page.locator('#progress-open').click();expect(await ratio('#progress-jar .jar-interior')).toBeCloseTo(22/24,2);
+      await page.locator('#collection-back').evaluate(e=>(window as any).heldJarBack=e);
+      const back=(await page.locator('#collection-back').boundingBox())!;
+      await page.mouse.move(back.x+back.width/2,back.y+back.height/2);await page.mouse.down();
+    }
+  }
   await blocker.evaluate(()=>(window as any).release());
   if(outcome==='failure-retry'){
     await expect(page.locator('.game')).toHaveAttribute('data-persistence','failed');await expect(page.locator('#jar-meter')).toHaveAttribute('data-capacity','24');
@@ -157,7 +175,20 @@ for(const outcome of ['release','failure-retry','background','resize','reduced',
   if(outcome==='background')await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});
   await expect(page.locator('#jar-meter')).toHaveAttribute('data-capacity','60',{timeout:7000});
   if(outcome==='resize-new-move')await expect(page.locator('#jar-meter')).toHaveAttribute('data-filled','2');
-  if(['background','resize','reduced'].includes(outcome)){
+  if(outcome==='menu')await expect.poll(()=>ratio('#home-jar .jar-interior')).toBeCloseTo(0,2);
+  if(outcome==='collection'){
+    await expect(page.locator('.jar-keepsake')).toHaveCount(1);
+    expect(await ratio('.jar-collection .progress-hero .jar-interior')).toBeCloseTo(0,2);
+    expect(await page.locator('#collection-back').evaluate(e=>e===(window as any).heldJarBack)).toBe(true);
+    await page.mouse.up();await expect(page.locator('#dialog')).toHaveAttribute('data-screen','home');
+  }
+  if(outcome==='progress'){
+    await expect.poll(()=>ratio('#progress-jar .jar-interior')).toBeCloseTo(0,2);
+    expect(await page.locator('#collection-back').evaluate(e=>e===(window as any).heldJarBack)).toBe(true);
+    await page.mouse.up();await expect(page.locator('#dialog')).toHaveAttribute('data-screen','home');
+  }
+  if(['menu','collection','progress'].includes(outcome))await page.locator('#resume').click();
+  if(['background','resize','reduced','menu','collection','progress'].includes(outcome)){
     await expect(page.locator('#jar-meter')).toHaveAttribute('data-filled','0');
     await expect(page.locator('#jar-spill,.flying-seed')).toHaveCount(0);
     await expect(page.locator('#jar-meter')).toHaveAttribute('data-full','false');

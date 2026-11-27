@@ -8,12 +8,12 @@ const records=['before','baseline','after'].map(side=>JSON.parse(fs.readFileSync
 assert.equal(records[0].source,'125606e4a90e06b844fe6eb8f83249032cb7057f');
 assert.equal(records[1].source,'0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c');
 assert.equal(records[2].source,process.env.GITHUB_SHA);
-const run=args=>{const r=spawnSync('ffmpeg',['-v','error','-y',...args],{stdio:'inherit'});assert.equal(r.status,0,'Actual-frame comparison encoding');};
+const run=args=>{const r=spawnSync('ffmpeg',['-v','error','-y','-filter_threads','2','-filter_complex_threads','2',...args],{stdio:'inherit'});assert.equal(r.status,0,`Actual-frame comparison encoding; signal=${r.signal}; error=${r.error?.message??''}`);};
 const clips=[];
 for(const {name} of records[2].clips){
-  const inputs=['before','baseline','after'].flatMap(side=>['-i',path.join(base,side,name+'.mp4')]);
+  const inputs=['before','baseline','after'].flatMap(side=>['-threads','2','-i',path.join(base,side,name+'.mp4')]);
   const file=path.resolve(out,name+'.mp4');
-  run([...inputs,'-filter_complex','[0:v][1:v][2:v]hstack=inputs=3[v]','-map','[v]','-map','2:a:0','-c:v','libx264','-preset','fast','-crf','21','-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart',file]);
+  run([...inputs,'-filter_complex','[0:v][1:v][2:v]hstack=inputs=3[v]','-map','[v]','-map','2:a:0','-c:v','libx264','-threads','2','-preset','fast','-crf','21','-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart',file]);
   clips.push({name,file,seconds:6});
 }
 const concat=path.resolve(out,'montage.ffconcat');fs.writeFileSync(concat,'ffconcat version 1.0\n'+clips.map(c=>`file '${c.file}'`).join('\n')+'\n');

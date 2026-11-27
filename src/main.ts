@@ -237,6 +237,8 @@ let lastExternalAt = -Infinity,
   activeSinceSave = 0;
 let visualSeeds: number | undefined;
 let confirmedSeeds: number | undefined;
+let confirmedJars: ReturnType<typeof jars> | undefined;
+const storedJarView = () => confirmedJars ?? jars(progress);
 let jarPending = false;
 let rewardScene: Promise<void> | undefined;
 let completedJar:
@@ -1066,7 +1068,8 @@ function save(state = progress, game = session) {
   if (bootComplete && enteredGame && lesson < 0 && !busy && !dialog.open) game.current.scroll = viewport.scrollTop;
   state.sessions[state.active] = game;
   const committedEvents = [...(metadata(state).analytics ?? [])];
-  const savedSeeds = jars(state).meter;
+  const savedJars = { ...jars(state) };
+  const savedSeeds = savedJars.meter;
   const bundle = serializeProgress(state),
     prefs = JSON.stringify(settings),
     patch = { ...settingsDirty };
@@ -1102,6 +1105,9 @@ function save(state = progress, game = session) {
         if (resultAwaitingSave === game) resultAwaitingSave = undefined;
         if (pendingResult?.session === game) pendingResult.saved = true;
         lastStored = bundle;
+        const jarViewChanged = !confirmedJars || confirmedJars.meter !== savedJars.meter ||
+          confirmedJars.seeds !== savedJars.seeds || confirmedJars.wins !== savedJars.wins;
+        confirmedJars = savedJars;
         confirmedSeeds = savedSeeds;
         // A cancelled/static scene follows a later acknowledgement without replay.
         if (!flights.running && !completedJar && !jarMilestone && !rewardScene && !pendingResult) {
@@ -1120,6 +1126,7 @@ function save(state = progress, game = session) {
         storageUnsupported = false;
         saveFailed = false;
         showSaveState();
+        if (jarViewChanged) refreshStaticJarViews();
         if (jarPending && completedJar && !pendingResult && !jarMilestone)
           void presentFullJar(jarStateForHold(completedJar), resultJarCard.hidden ? $("jar-glass") : $("result-jar-glass"), presentationRevision);
         if (lesson < 0 && !occupied(board())) {
@@ -1799,6 +1806,7 @@ let appForeground = true;
 let backgroundAt: number | undefined;
 let platformPaused = false;
 function syncPauseState() {
+  const wasPaused = paused;
   paused =
     !appForeground ||
     platformPaused ||
@@ -1818,6 +1826,7 @@ function syncPauseState() {
     suspendSound();
   }
   if (!busy) render();
+  if (wasPaused && !paused) refreshStaticJarViews();
   platform.gameplay(!paused && !dialog.open && occupied(board()) > 0);
   updateBanner();
   if (!paused) queueMicrotask(() => void applyEarnedHelp());
@@ -3878,7 +3887,8 @@ async function boot() {
     hadBackup = backup !== null || (await platform.read(PROGRESS + ".damaged")) !== null;
     recoveryAvailable = restorable(backup);
   } catch { hadBackup = true; }
-  confirmedSeeds = jars(progress).meter;
+  confirmedJars = { ...jars(progress) };
+  confirmedSeeds = confirmedJars.meter;
   visualSeeds = confirmedSeeds;
   if (settings.sound) void warmSound();
   if (recoveryAvailable && !readWarning)
@@ -4207,7 +4217,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       progress.done.includes(p.id),
     ).length;
     const completedDaily = new Set(progress.done.map(dailyDay).filter(Boolean)).size;
-    const j = jarState(jars(progress).meter);
+    const j = jarState(storedJarView().meter);
     const nextVolume = nextBookVolume();
     const nextDone = volumeTasks(nextVolume).filter((p) =>
       progress.done.includes(p.id),
@@ -4243,24 +4253,11 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       )}</div><p class="fine calendar-note">${t("ui.you-can-play-past-days-any-time")}</p><details id="calendar-extras" ${calendarExtrasOpen ? "open" : ""}><summary>${t("calm.calendar.more")}</summary>${streakPanel()}<section class="calendar-trophies" aria-label="${t("ui.monthly-trophies")}">${trophyMark(calendarMonth, monthTrophy.count, days(calendarMonth).length)}</section><p>${t("ui.of-puzzles-solved", { "0": monthTrophy.count, "1": days(calendarMonth).length })}</p><details class="explanation"><summary>${t("ui.how-streaks-work")}</summary><p>${t("ui.solve-todays-puzzle-today-archive-puzzles-count-towards-monthly")}</p></details><details class="explanation"><summary>${t("ui.monthly-trophies")}</summary><p>${t("ui.bronze-7-puzzles-silver-14-gold-the-whole-month-2")}</p></details></details><button class="primary calendar-today" id="today-task" data-continue="${todayId}">${t("calm.calendar." + todayAction, { date: taskDate(date) })}</button>`;
   } else {
     html += `<h2>${t("ui.collection")}</h2><div class="collection-tabs" role="group" aria-label="${t("ui.collection-section")}"><button id="jars-tab" aria-pressed="${collectionTab === "jars"}">${t("ui.jars")}</button><button id="trophies-mode" aria-pressed="${collectionTab === "months"}">${t("ui.monthly-trophies")}</button></div>`;
-    const j = jarState(jars(progress).meter);
-    jarShelfPage = Math.min(
-      jarShelfPage,
-      Math.max(0, Math.ceil(j.index / 12) - 1),
-    );
-    const shelfEnd = j.index - jarShelfPage * 12,
-      shelfStart = Math.max(0, shelfEnd - 12);
-    const seedCount = jars(progress).seeds;
+    const j = jarState(storedJarView().meter);
+    const { start: shelfStart, end: shelfEnd } = jarShelfBounds(j.index);
+    const seedCount = storedJarView().seeds;
     const seedNoun = word(seedCount, t("ui.seed"), t("ui.seed-plural"), t("ui.seeds"));
-    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}>${jarHero(j)}<p class="jar-collected-count">${t("ui.collected-seeds", { "0": j.index, "1": seedCount, "2": seedNoun })}</p><div class="jar-shelf">${Array.from(
-      { length: shelfEnd - shelfStart },
-      (_, n) => {
-        const i = shelfStart + n;
-        return `<div class="jar-keepsake" style="--jar-color:${jarColors[i % 6]};--fill:100%">${jarGlass(undefined, 24)}<small>${localName(jarNames[i % 6])} · ${i + 1}</small></div>`;
-      },
-    ).join(
-      "",
-    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>${t("ui.earlier")}</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : t("ui.nothing-yet")}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>${t("ui.newer")}</button></div><details class="explanation"><summary>${t("ui.how-jars-fill-up")}</summary><p class="jar-percent-detail">${j.percent}% · ${t("ui.of-seeds", {"0":j.filled,"1":j.capacity})}</p><p>${t("ui.earn-two-seeds-for-each-new-move-in-classic")}</p></details><p>${t("ui.boards-cleared", { "0": jars(progress).wins })}</p><p class="fine">${jars(progress).wins >= 100 ? t("ui.master-100-boards") : jars(progress).wins >= 25 ? t("ui.expert-25-boards") : jars(progress).wins >= 5 ? t("ui.solid-start-5-boards") : t("ui.clear-5-boards-to-earn-your-first-badge")}</p><button id="jar-play" class="secondary">${t("action.playClassic")}</button></section>`;
+    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}>${jarHero(j)}<p class="jar-collected-count">${t("ui.collected-seeds", { "0": j.index, "1": seedCount, "2": seedNoun })}</p><div class="jar-shelf">${jarKeepsakes(shelfStart, shelfEnd)}</div>${jarShelfNavigation(j.index, shelfStart, shelfEnd)}<details class="explanation"><summary>${t("ui.how-jars-fill-up")}</summary><p class="jar-percent-detail">${j.percent}% · ${t("ui.of-seeds", {"0":j.filled,"1":j.capacity})}</p><p>${t("ui.earn-two-seeds-for-each-new-move-in-classic")}</p></details><p class="jar-wins">${t("ui.boards-cleared", { "0": storedJarView().wins })}</p><p class="fine jar-rank">${jarRank(storedJarView().wins)}</p><button id="jar-play" class="secondary">${t("action.playClassic")}</button></section>`;
     html += `<section class="monthly-collection" ${collectionTab !== "months" ? "hidden" : ""}><p class="fine">${t("ui.bronze-7-puzzles-silver-14-gold-the-whole-month")}</p><label class="year-picker">${t("ui.trophy-year")}<select id="trophy-year">${years()
       .map((y) => `<option ${y === trophyYear ? "selected" : ""}>${y}</option>`)
       .join("")}</select></label>`;
@@ -4407,16 +4404,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       collectionTab = "months";
       openCollection("trophies");
     };
-    const olderJars = document.getElementById("older-jars");
-    if (olderJars) olderJars.onclick = () => {
-      jarShelfPage++;
-      openCollection("trophies");
-    };
-    const newerJars = document.getElementById("newer-jars");
-    if (newerJars) newerJars.onclick = () => {
-      jarShelfPage--;
-      openCollection("trophies");
-    };
+    bindJarShelfNavigation();
     $("trophy-year").onchange = () => {
       trophyYear = $<HTMLSelectElement>("trophy-year").value;
       openCollection("trophies");
@@ -4574,6 +4562,28 @@ function jarPicture(j: ReturnType<typeof jarState>) {
 function jarHero(j: ReturnType<typeof jarState>) {
   return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p><span class="progress-jar-cue">${t("ui.jar-collection")}${icon("arrow")}</span></div></section>`;
 }
+function jarShelfBounds(index: number) {
+  jarShelfPage = Math.min(jarShelfPage, Math.max(0, Math.ceil(index / 12) - 1));
+  const end = index - jarShelfPage * 12;
+  return { start: Math.max(0, end - 12), end };
+}
+function jarKeepsakes(start: number, end: number) {
+  return Array.from({length:end-start}, (_,n) => {
+    const i=start+n;
+    return `<div class="jar-keepsake" style="--jar-color:${jarColors[i%6]};--fill:100%">${jarGlass(undefined,24)}<small>${localName(jarNames[i%6])} · ${i+1}</small></div>`;
+  }).join("");
+}
+function jarShelfNavigation(index: number, start: number, end: number) {
+  return `<div class="month-nav" ${index ? "" : "hidden"}><button id="older-jars" ${start===0 ? "disabled" : ""}>${t("ui.earlier")}</button><span>${index ? `${start+1}–${end}` : t("ui.nothing-yet")}</span><button id="newer-jars" ${jarShelfPage===0 ? "disabled" : ""}>${t("ui.newer")}</button></div>`;
+}
+function bindJarShelfNavigation() {
+  const older=document.getElementById("older-jars"),newer=document.getElementById("newer-jars");
+  if(older)older.onclick=()=>{jarShelfPage++;openCollection("trophies");};
+  if(newer)newer.onclick=()=>{jarShelfPage--;openCollection("trophies");};
+}
+function jarRank(wins: number) {
+  return t(wins>=100 ? "ui.master-100-boards" : wins>=25 ? "ui.expert-25-boards" : wins>=5 ? "ui.solid-start-5-boards" : "ui.clear-5-boards-to-earn-your-first-badge");
+}
 function difficultyLabel() {
   const level = classicDifficulty();
   return `${localName(classicDifficultyNames[level])}${level === CLASSIC_MIN ? " "+t("ui.lowest") : level === CLASSIC_MAX ? " "+t("ui.highest") : ""}`;
@@ -4639,10 +4649,55 @@ function renderHomeCurrent() {
     : isClassic ? t("ui.resume-classic") : book ? t("ui.resume-puzzle",{"0":puzzleNumberInVolume(id)})
     : id.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for",{"0":date});
 }
-function updateHome() {
-  const jar = jarState(jars(progress).meter);
+function refreshStaticJarViews() {
+  if (!dialog.open || busy || paused || adActive || engagementActive || rewardRequest) return;
+  const screen = dialog.dataset.screen;
+  if (screen === "home") { updateHomeJar(); return; }
+  if (screen !== "progress" && screen !== "trophies") return;
+  const j=jarState(storedJarView().meter),template=document.createElement("template");
+  template.innerHTML=jarHero(j);
+  // Keep the buttons, focus, held contacts, details and scroll owners in place.
+  for(const hero of $("collection").querySelectorAll(".progress-hero")) {
+    const fresh=template.content.firstElementChild!.cloneNode(true) as HTMLElement;
+    hero.replaceChildren(...fresh.childNodes);
+  }
+  if(screen!=="trophies")return;
+  const collection=$("collection").querySelector<HTMLElement>(".jar-collection");
+  const history=collection?.querySelector<HTMLElement>(".jar-history");
+  if(!collection||!history)return;
+  const {start,end}=jarShelfBounds(j.index);
+  let shelf=history.querySelector<HTMLElement>(".jar-shelf");
+  if(j.index&&!shelf) {
+    const heading=document.createElement("div");heading.className="jar-shelf-heading";
+    heading.innerHTML=`<h3>${t("ui.jars")}</h3>${jarShelfNavigation(j.index,start,end)}`;
+    shelf=document.createElement("div");shelf.className="jar-shelf";
+    history.querySelector(".jar-empty")?.remove();history.prepend(heading,shelf);
+    bindJarShelfNavigation();
+  }
+  if(shelf)shelf.innerHTML=jarKeepsakes(start,end);
+  const nav=history.querySelector<HTMLElement>(".month-nav");
+  if(nav) {
+    nav.hidden=!j.index;
+    const older=nav.querySelector<HTMLButtonElement>("#older-jars"),newer=nav.querySelector<HTMLButtonElement>("#newer-jars");
+    if(older)older.disabled=start===0;
+    if(newer)newer.disabled=jarShelfPage===0;
+    const label=nav.querySelector("span");if(label)label.textContent=j.index ? `${start+1}–${end}` : t("ui.nothing-yet");
+  }
+  const seeds=storedJarView().seeds,wins=storedJarView().wins;
+  const copy:Record<string,string>={
+    '.jar-collected-count':t("ui.collected-seeds",{"0":j.index,"1":seeds,"2":word(seeds,t("ui.seed"),t("ui.seed-plural"),t("ui.seeds"))}),
+    '.jar-percent-detail':`${j.percent}% · ${t("ui.of-seeds",{"0":j.filled,"1":j.capacity})}`,
+    '.jar-wins':t("ui.boards-cleared",{"0":wins}),'.jar-rank':jarRank(wins),
+  };
+  for(const [selector,text] of Object.entries(copy)){const node=collection.querySelector(selector);if(node)node.textContent=text;}
+}
+function updateHomeJar() {
+  const jar = jarState(storedJarView().meter);
   homeJar.setAttribute("aria-label", t("ui.jar-collection"));
   homeJar.innerHTML = jarPicture(jar);
+}
+function updateHome() {
+  updateHomeJar();
   const finished = new Set(progress.done);
   const target = notebookTarget(progress);
   const volume = target ? volumeOf(target) : nextBookVolume();

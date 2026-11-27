@@ -84,6 +84,25 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: npx playwright install chromium
       - run: npx playwright test e2e/menu-reward-feel.spec.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: menu-reward-feel-tests
+          path: test-results/
+
+  menu-reward-recordings:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
       - name: Record original dynamic audit and actual application audio before and after
         if: ${{ !cancelled() }}
         run: |
