@@ -1152,6 +1152,30 @@
       },
       "nextAction": "Exact-source CI/native gates, before/after actual-audio videos, signed12107 и телефонный плейтест.",
       "kitImpact": "REUSE: UI Motion Recipes / OwnedDomMotion / StableProgress / TierProgress; runtime pins unchanged."
+    },
+    {
+      "id": "seeds-quiet-style-residue-20261127",
+      "sourceFeatureIds": [],
+      "scope": "Аудит остатков прежнего оформления по прямому поручению владельца поверх12107",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/quiet-table.css",
+        "src/ui-polish.css",
+        "src/calm-screens.css",
+        "src/compact-navigation.css",
+        "scripts/quiet-style-probe.mjs",
+        "scripts/independent-quiet-audit.mjs",
+        "e2e/menu-reward-feel.spec.ts"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "report": "../research/style-residue-2026-11-27/README.md",
+        "code": "Удалены контейнерные плашки; intrinsic language dialog; семантическая палитра медалей/теней/scrim; реальный privacy selector и banner reserve color;155 сопоставимых состояний и computed rule provenance.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Exact-source project CI/native, signed12108; телефонная проверка обеих тем и меню.",
+      "kitImpact": "REUSE: UX & Art System / accepted component roles / Reference Protocol; runtime pins unchanged."
     }
   ]
 }

@@ -216,7 +216,7 @@
   color: var(--muted);
 }
 #dialog :is(.notebook-toolbar,.book-sections,.book-ranges) button { min-height: 48px; }
-#dialog .book-sections { padding: 2px; border-radius: 11px; background: var(--calm-soft); }
+#dialog .book-sections { padding: 2px; }
 #dialog :is(.book-sections,.book-ranges) button { flex: 1; min-width: 0; padding-inline: 2px; }
 #dialog :is(.book-sections,.book-ranges) [aria-pressed="true"] { background: var(--calm-surface); font-weight: 650; }
 #dialog .book-ranges button { font-size: 12px; }

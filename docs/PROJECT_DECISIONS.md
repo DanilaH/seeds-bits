@@ -101,6 +101,10 @@ The owner preserves Variant A and requests local geometry/density fixes across t
 
 Reachability remains the exact existing geometric set. Existing checkPair supplies valid/invalid classification: soft green with solid edge versus soft red with dashed edge and localized accessible descriptions. Unreachable cells remain neutral. Hint/budget/save/rules and all six paused experiments remain unchanged. See [package and acceptance](research/quiet-polish-2026-11-26/README.md).
 
+## 27 November · visual residue audit after12107
+
+The owner requests an audit and immediate repair of remaining previous-skin surfaces, starting with the common background under the collection tabs. Remove confirmed redundant wrappers and unmapped decoration; preserve Quiet Table, meaningful selected/progress/error states, layout/input, saved rights and ad policy. Verify computed CSS and comparable real frames, including rare earned medals and recovery states. See [audit](research/style-residue-2026-11-27/README.md).
+
 ## 26 November · technical stability #45
 
 The owner requests continuation of PR40 on `feat/quiet-table-20261126`, with accepted Quiet Table art/reach classification, preserved Core Feel, content pins, rights, economy and all six paused experiments. The implementation distinguishes optimistic field input from durable acknowledgement: pending is explicit in the existing status rail, an old queued write cannot acknowledge a later move, and a failed write uses the existing recovery controls. Twelve same-turn moves remain accepted. Reload/process-death acceptance after a commit retains the exact board/history; reload while explicitly pending may restore the previous committed state. Rewards/one-time milestones retain their existing durable authority.

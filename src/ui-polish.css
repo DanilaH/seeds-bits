@@ -469,8 +469,6 @@ progress::-moz-progress-bar {
 .collection-tabs {
   display: flex;
   gap: 4px;
-  background: var(--button);
-  border-radius: 8px;
   padding: 3px;
   margin: 0 0 20px;
 }
@@ -2037,11 +2035,11 @@ header .jar-level {
   height: 32px;
   display: grid;
   place-items: center;
-  border: 3px solid #f6f8fc;
+  border: 3px solid var(--paper);
   border-radius: 9px;
-  color: #fff;
-  background: #29465f;
-  box-shadow: 0 3px 8px #152c4530;
+  color: var(--paper);
+  background: var(--accent);
+  box-shadow: 0 3px 8px var(--shadow);
   transform: rotate(-8deg);
   pointer-events: none;
 }
@@ -2062,9 +2060,9 @@ header .jar-level {
   gap: 6px;
   min-width: 0;
   padding: 10px 7px;
-  border: 1px solid #d0dbe7;
+  border: 1px solid var(--line);
   border-radius: 12px;
-  background: #f3f6fb;
+  background: var(--button);
   text-align: center;
 }
 .next-eyebrow {
@@ -2105,16 +2103,12 @@ header .jar-level {
 .next-medal-art .medal-emblem {
   stroke: currentColor;
 }
-:root[data-theme="dark"] .next-medal {
-  background: #273442;
-  border-color: #4b6074;
-}
 .trophy-confetti {
   overflow: clip;
 }
 .trophy-confetti i {
   border-radius: 1px;
-  box-shadow: 0 1px 2px #233d5b30;
+  box-shadow: 0 1px 2px var(--shadow);
 }
 .trophy-confetti [data-shape="rect"] {
   width: 9px;

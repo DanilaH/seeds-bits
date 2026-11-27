@@ -1,9 +1,10 @@
 import { chromium } from '@playwright/test';
 import fs from 'node:fs';
+import {inspectQuietStyle} from './quiet-style-probe.mjs';
 const out=process.env.SEEDS_VISUAL_OUT || 'test-results/quiet-polish';
 fs.mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.SEEDS_CHROMIUM || undefined,args:['--no-sandbox']});
-const result={baseline:'634583a9a08d8e1a1941c4611a1e0f2d0b77d159',audited:process.env.GITHUB_SHA || 'working-tree',source:process.env.GITHUB_SHA,frames:[],errors:[]};
+const result={baseline:process.env.SEEDS_VISUAL_BASELINE || '634583a9a08d8e1a1941c4611a1e0f2d0b77d159',audited:process.env.GITHUB_SHA || 'working-tree',source:process.env.GITHUB_SHA,frames:[],errors:[]};
 const base='http://127.0.0.1:5173';
 const doneBooks=Array.from({length:8},(_,i)=>'book-v1-'+(i+1));
 const doneDaily=Array.from({length:6},(_,i)=>'daily-v1-2026-11-'+String(i+1).padStart(2,'0'));
@@ -57,7 +58,7 @@ async function shot(page,name) {
    return {width:innerWidth,height:innerHeight,screen:activeDialog?.dataset.screen||'game',theme:document.documentElement.dataset.theme,boxes,buttons,small,overlaps,hiddenButtons,failures,topPixels,bodyBg:getComputedStyle(document.body).backgroundColor};
  });
  await page.screenshot({path:out+'/'+name+'.png',animations:'disabled'});
- result.frames.push({name,...m});
+ result.frames.push({name,...m,style:await page.evaluate(inspectQuietStyle)});
 }
 async function click(p,s){await p.locator(s).first().click({timeout:4500});}
 async function capture(prefix,w,h,dark,lang,kind,fn,meter){
@@ -99,6 +100,22 @@ await capture('320-empty-jars',320,568,false,'ru','normal',async(p,save)=>{await
 await capture('320-hint',320,568,true,'ru','normal',async(p,save)=>{await click(p,'#resume');await click(p,'#hint');await save('hint');});
 await capture('320-learn',320,568,false,'ru','normal',async(p,save)=>{await click(p,'#learn');await save('lesson');});
 await capture('320-fresh',320,568,false,'ru','fresh',async(p,save)=>{await save('home');});
+// Boundary medal states expose the receipt and next-tier surfaces hidden by
+// an ordinary in-progress month. Both themes use the same saved fixtures.
+for(const dark of [false,true])for(const count of [7,14,30])await capture('390-'+(dark?'dark':'light')+'-medal-'+count,390,844,dark,'ru','normal',async(p,save)=>{
+ await p.evaluate(count=>{const key='seeds-bits.progress.v2',data=JSON.parse(localStorage.getItem(key));data.done=Array.from({length:count},(_,i)=>'daily-v1-2026-11-'+String(i+1).padStart(2,'0'));localStorage.setItem(key,JSON.stringify(data));},count);
+ await p.reload();await p.locator('#dialog[open]').waitFor();await click(p,'#home-jar');await click(p,'#trophies-mode');await save('earned');
+});
+for(const dark of [false,true])await capture('320-'+(dark?'dark':'light')+'-save-failed',320,568,dark,'ru','normal',async(p,save)=>{
+ await click(p,'#resume');await p.locator('#dialog').waitFor({state:'hidden'});
+ await p.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));
+ await p.evaluate(()=>{const write=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k==='seeds-bits.progress.v2')throw new DOMException('Style audit write failure','QuotaExceededError');return write.call(this,k,v);};});
+ await click(p,'[data-index="0"]');await click(p,'[data-index="2"]');await p.locator('#save-notice').waitFor({state:'visible'});await save('notice');
+});
+for(const dark of [false,true])await capture('320-'+(dark?'dark':'light')+'-read-recovery',320,568,dark,'ru','normal',async(p,save)=>{
+ await p.addInitScript(()=>{if(!sessionStorage.getItem('style-corrupt-once')){sessionStorage.setItem('style-corrupt-once','1');localStorage.setItem('seeds-bits.progress.v2','{broken');}});
+ await p.reload();await p.locator('#read-notice').waitFor({state:'visible'});await save('notice');
+});
 for(const [w,h,dark]of [[320,568,false],[390,844,true]])for(const kind of ['reachmixed','reachred'])await capture(w+'-'+(dark?'dark':'light')+'-'+kind,w,h,dark,'ru',kind,async(p,save)=>{await click(p,'#resume');await click(p,'[data-index="0"]');await save('selected');});
 fs.writeFileSync(out+'/metrics.json',JSON.stringify(result,null,2));console.log('Captured',result.frames.length,'frames; route errors',result.errors);
 await browser.close();

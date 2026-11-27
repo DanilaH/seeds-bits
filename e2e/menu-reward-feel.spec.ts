@@ -103,6 +103,13 @@ for(const language of ['ru','en','es','tr','pt-BR'])for(const theme of ['light',
   await raw(page,'#trophies-mode');await raw(page,'#jars-tab');await raw(page,'#collection-back');await raw(page,'#collection-back');
   await raw(page,'#pause-language');
   const languageBox=(await page.locator('#language-sheet').boundingBox())!;expect(languageBox.height).toBeLessThan(568-24);
+  // A fixed dialog with top/bottom:0 and height:auto fills the viewport even
+  // though its options need much less space. Check the real content boundary.
+  const languageContent=await page.locator('#language-sheet').evaluate(el=>{
+    const s=getComputedStyle(el),r=el.getBoundingClientRect(),options=el.querySelector('#language-options')!.getBoundingClientRect();
+    return {blank:r.bottom-options.bottom,expected:parseFloat(s.paddingBottom)+parseFloat(s.borderBottomWidth)};
+  });
+  expect(languageContent.blank).toBeLessThanOrEqual(languageContent.expected+2);
   await raw(page,'#language-close');
 });
 for(const mode of ['held','failed'])test(`MF ${mode} commit cannot celebrate; successful retry earns once`,async({page})=>{

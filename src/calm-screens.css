@@ -831,10 +831,6 @@
 #collection .jar-overview .progress-hero > div { flex: initial; width: 100%; }
 #collection .jar-overview .progress-hero .jar-glass { width: 73px; height: 90px; }
 #collection .jar-collected-count { font-size: 13px; }
-#collection .collection-tabs {
-  background: var(--calm-soft);
-  border-color: var(--line);
-}
 #collection .collection-tabs [aria-pressed="true"] {
   color: var(--ink);
   background: var(--calm-surface);
