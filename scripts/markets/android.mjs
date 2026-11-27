@@ -22,6 +22,13 @@ function lockDeviceRotation(rotation) {
   adb("shell","wm","user-rotation","lock",String(rotation));
   assert.equal(adb("shell","settings","get","system","user_rotation"),String(rotation));
 }
+function launchOpeningInputCase() {
+  assert.equal(adb("shell","pm","clear",app),"Success");
+  // These cases measure native input/layout, with permission already granted.
+  // The genuine first-result prompt/denial is a separate demo-SDK case.
+  adb("shell","pm","grant",app,"android.permission.POST_NOTIFICATIONS");
+  launch();
+}
 const shot=name=>fs.writeFileSync(`${out}/${name}.png`,execFileSync("adb",["exec-out","screencap","-p"]));
 const decode=s=>s.replaceAll("&quot;",'"').replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&amp;","&");
 const encode=s=>s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
@@ -1548,15 +1555,13 @@ try{
     assert.deepEqual(gameText[scale],gameText[1],"Game text changed at system font scale "+scale);
   }
   fs.writeFileSync(out+"/fixed-text.json",JSON.stringify(gameText,null,2));
-  assert.equal(adb("shell","pm","clear",app),"Success");
-  launch();
+  launchOpeningInputCase();
   const opening=[await firstNotebookEdge([7,14])];
   const file=installRecord();
   assert.equal(file.install_store,"unknown");
   assert.equal(file.artifact_channel,"rustore");
   assert.equal(file.acquisition_state,"fresh");
-  assert.equal(adb("shell","pm","clear",app),"Success");
-  launch();
+  launchOpeningInputCase();
   opening.push(await firstNotebookEdge([14,7]));
   const archives=[];
   archives.push(await archiveAtLargeFont("es","Reto del archivo · 13 de noviembre","Deshacer"));
@@ -1570,6 +1575,7 @@ try{
   }
   fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode,
     physicalPhone:false,systemFont:2,forwardedFile:file,upgrade,updatePreservedSave:true,opening,archives,controls,
+    openingInputPermissionPrecondition:"granted; actual first-result prompt and denial verified separately in demo",
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
   // The player report requires a native touch regression, separate from solver proof.
   const report78=await verifyReport78Taps();
@@ -1593,8 +1599,7 @@ try{
   // An optional recording must never turn a passing game regression into a red CI.
   // Log camera/emulator failures separately so the real acceptance result survives.
   try {
-    assert.equal(adb("shell","pm","clear",app),"Success");
-    launch();
+    launchOpeningInputCase();
     await firstNotebookEdge([7,14],{recordVideo:true});
     fs.writeFileSync(out+"/video-result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode,physicalPhone:false,recorded:true},null,2));
   } catch(videoError) {
