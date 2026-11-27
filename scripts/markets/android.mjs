@@ -86,7 +86,15 @@ async function connect() {
     return res.result.result.value;
   };
   const until=async expression=>{
-    for(let i=0;i<80;i++){if(await evaluate(expression))return;await wait(150);}
+    for(let i=0;i<80;i++){
+      try {if(await evaluate(expression))return;}
+      catch(error){
+        // Navigation briefly has no default execution context. Retry only
+        // that CDP handoff; application exceptions and RPC timeouts still fail.
+        if(!/Cannot find (?:default execution )?context|Execution context was destroyed|Inspected target navigated/.test(String(error)))throw error;
+      }
+      await wait(150);
+    }
     try {
       const state=await evaluate(`({url:location.href,ready:document.readyState,hidden:document.hidden,focus:document.hasFocus(),
         root:document.documentElement.className,body:document.body?.outerHTML.slice(0,18000),
