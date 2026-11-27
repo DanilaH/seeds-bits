@@ -71,3 +71,7 @@ Additional FA06 dependency defect: on d32dbe2 the demo painted/navigated, then a
 Rules, generator/difficulty, economy, accepted art/Core Feel/Menu & Reward Feel, wire10, content revisions, inventory and all six paused experiments are unchanged. No generated competitor assets or new runtime module pins.
 
 KIT IMPACT: REUSE of durable receipt, shared-writer and optional-SDK lifecycle contracts reviewed at kit revision `7f289212cb0eb752d75127a3182478b005436533` (main rechecked at `8e05244f1849dc7bb48aac520cc28321c2e4d699`; intervening changes only concern Crossmath research); vendored module pins unchanged. CANDIDATE: independent cross-document/unsupported/denied/quota oracle; consumer-local until independently demonstrated elsewhere. No automatic extraction or kit edits.
+
+## Final automated acceptance —12109
+
+Executable source `96f5ae19588c151c0dd884e80a7f4e56c1d1f71d` passed all five CI runs, the complete offline Android regression and real demo SDK acceptance. Signed APK SHA256 `224d3e16fb84bace07e564f336b24cd572bdaa07810404ffa9cfeda9ef7b756c`; permanent preview certificate retained. [Build, exact CI/artifact links, counts and evidence limits](DELIVERY-12109.md). This records the tested executable source; a later documentation-only record does not create a new APK. Physical/commercial/release gates above remain open.

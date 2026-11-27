@@ -1219,11 +1219,38 @@
           "dependency": "@capacitor/android8.5.3",
           "upstream": "https://github.com/ionic-team/capacitor/issues/8616",
           "rawFailure": "https://github.com/DanilaH/seeds-bits/actions/runs/45974489816/artifacts/15186443487",
-          "level": "Actual source compiled against deterministic transport doubles; native10-reload and final exact-source acceptance pending",
+          "level": "Actual pinned source deterministic race harness PASS;10 real Android reload/native roundtrips and exact histories/rights PASS on 96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
           "change": "Bind current reply proxy before dispatch; guarded exact version/source patch, modern origin scope unchanged"
+        },
+        "automatedAcceptance": {
+          "source": "96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
+          "status": "PASS",
+          "scope": "FA01–04 and automatable FA05–08; physical/commercial gates remain open",
+          "report": "../research/functional-fixes-2026-11-27/DELIVERY-12109.md",
+          "ci": [
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976686110",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976677271",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976677220",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976677107",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976677053"
+          ],
+          "nativeOffline": "https://github.com/DanilaH/seeds-bits/actions/runs/45976677220/artifacts/15188539062",
+          "nativeDemo": "https://github.com/DanilaH/seeds-bits/actions/runs/45976677220/artifacts/15187398836",
+          "signedPreview": "https://github.com/DanilaH/seeds-bits/actions/runs/45976677220/artifacts/15187682120",
+          "versionCode": 12109,
+          "sha256": "224d3e16fb84bace07e564f336b24cd572bdaa07810404ffa9cfeda9ef7b756c",
+          "certificateSHA256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+          "nativeRecoveryTrials": 3,
+          "archiveProfiles": [
+            1,
+            3,
+            5
+          ],
+          "nativeReloads": 10,
+          "classicForceStops": 20
         }
       },
-      "nextAction": "Final exact-source full40min offline gate + repeated demo/general/functional CI; signed12109. Physical low/mid frame jank/TalkBack/live/release-key gates remain external.",
+      "nextAction": "Physical low/mid Android/full disk/RAM/frame jank/TalkBack/audio/vibration and live commercial checks; separate production policy/signing acceptance. Automatic CI and signed preview12109 are complete; issue48 remains separate.",
       "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE independent cross-document/denied/quota probes; runtime pins unchanged."
     }
   ]
