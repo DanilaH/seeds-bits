@@ -1,0 +1,22 @@
+name: Independent functional audit follow-up 12108
+on:
+  push:
+    branches: [qa/functional-audit-12108-20261127-followup]
+permissions:
+  contents: read
+jobs:
+  model-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx vitest run tests/functional-audit-followup.test.ts
+      - run: npx playwright install chromium
+      - run: npx playwright test e2e/functional-audit-followup.spec.ts --workers=1
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: functional-followup, path: test-results/functional-followup/}
