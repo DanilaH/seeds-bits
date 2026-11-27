@@ -114,38 +114,13 @@ export function gameplay(active: boolean) {
 function browserRead(key: string) { return localStorage.getItem(key); }
 function browserWrite(key: string, value: string) { localStorage.setItem(key, value); }
 
-// Every current web writer participates, including browsers without Web Locks.
-// IndexedDB serializes readwrite transactions across documents. The canonical
-// profile stays in localStorage; compare, settings merge and write are synchronous
-// inside the transaction callback (no await gap between compare and write).
-let writerDatabase: Promise<IDBDatabase> | undefined;
-function database() {
-  return writerDatabase ??= new Promise<IDBDatabase>((resolve, reject) => {
-    const request = indexedDB.open("seeds-bits.writer", 1);
-    request.onupgradeneeded = () => request.result.createObjectStore("writer");
-    request.onerror = () => { writerDatabase = undefined; reject(request.error); };
-    request.onblocked = () => { writerDatabase = undefined; reject(new Error("Storage writer blocked")); };
-    request.onsuccess = () => {
-      const db = request.result;
-      db.onversionchange = () => { db.close(); writerDatabase = undefined; };
-      resolve(db);
-    };
-  });
-}
+export class AtomicStorageUnavailable extends Error {}
+// localStorage has no cross-document compare-and-swap. A mutex around it via
+// another storage API is insufficient: renderer-local caches can be stale.
+// Unsupported browsers retain their saves but cannot acknowledge game writes.
 async function webWrite<T>(action: () => T): Promise<T> {
-  const run = async () => {
-    const db = await database();
-    return new Promise<T>((resolve, reject) => {
-      const transaction = db.transaction("writer", "readwrite");
-      let value: T, failure: unknown;
-      transaction.objectStore("writer").get("lock").onsuccess = () => {
-        try { value = action(); } catch (error) { failure = error; }
-      };
-      transaction.oncomplete = () => failure ? reject(failure) : resolve(value!);
-      transaction.onabort = transaction.onerror = () => reject(transaction.error ?? new Error("Storage transaction aborted"));
-    });
-  };
-  return navigator.locks ? navigator.locks.request("seeds-save", run) : run();
+  if (!navigator.locks) throw new AtomicStorageUnavailable("Web Locks unavailable");
+  return navigator.locks.request("seeds-save", action);
 }
 export async function read(key: string): Promise<string | null> {
   return Capacitor.isNativePlatform()
@@ -252,6 +227,7 @@ export async function saveState(
 /** Safe bounded diagnostics: never expose native messages or saved content. */
 export function saveErrorReason(error: unknown) {
   if (error instanceof SaveConflict) return "conflict";
+  if (error instanceof AtomicStorageUnavailable) return "unsupported";
   const e = error as { name?: string; code?: string };
   if (e?.name === "QuotaExceededError") return "quota";
   if (e?.name === "SecurityError") return "blocked";
@@ -266,12 +242,17 @@ export async function writeSettingsPatch(
   defaults: string,
   patch: Record<string, unknown>,
 ) {
-  if (!native) return webWrite(() => {
+  if (!native) {
+    const update = () => {
     const merged = {...JSON.parse(defaults), ...JSON.parse(browserSettings(key) ?? "{}"), ...patch};
     for (const [field, value] of Object.entries(patch)) browserWrite(`${key}.${field}`, JSON.stringify(value));
     browserWrite(key, JSON.stringify(merged));
     return merged;
-  });
+    };
+    // Each preference has its own canonical key; unrelated patches do not need
+    // a game-snapshot CAS and remain usable in a stale/unsupported game tab.
+    return navigator.locks ? webWrite(update) : update();
+  }
   const merged = {...JSON.parse(defaults), ...JSON.parse((await readSettings(key)) ?? "{}"), ...patch};
   await write(key, JSON.stringify(merged));
   return merged;

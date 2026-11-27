@@ -936,6 +936,7 @@ function availablePairs(values: readonly number[]) {
   return pairCache;
 }
 let moveSaveRevision = 0, moveSavePending = false, postSaveMessage = "";
+let storageUnsupported = false;
 function message(text: string) {
   if (moveSavePending && !saveFailed) {
     postSaveMessage = text;
@@ -1037,7 +1038,7 @@ function showSaveState() {
   dismissRead.hidden = futureSave;
   readText.textContent = readWarning;
   notice.hidden = !saveFailed;
-  $("save-warning").textContent = storageConflict
+  $("save-warning").textContent = storageUnsupported ? t("save.atomicUnavailable") : storageConflict
     ? t("ui.another-tab-has-a-newer-save-the-newer-save")
     : t("ui.could-not-save-the-game-keep-it-open-and");
   $("load-latest").hidden = !storageConflict;
@@ -1108,6 +1109,7 @@ function save(state = progress, game = session) {
               acknowledgeAnalytics(metadata(progress), id);
           });
         const recovered = saveFailed;
+        storageUnsupported = false;
         saveFailed = false;
         showSaveState();
         if (lesson < 0 && !occupied(board())) {
@@ -1121,6 +1123,7 @@ function save(state = progress, game = session) {
           message(t("ui.game-saved"));
         }
       } catch (error) {
+        storageUnsupported = error instanceof platform.AtomicStorageUnavailable;
         storageConflict = error instanceof platform.SaveConflict;
         if (!saveFailed)
           track("save_error", {
@@ -1151,7 +1154,10 @@ function persistMove() {
     moveSavePending = false;
     document.querySelector<HTMLElement>(".game")!.dataset.persistence =
       saveFailed || storageConflict || futureSave ? "failed" : "saved";
-    if (!saveFailed) message(postSaveMessage);
+    if (!saveFailed) {
+      message(postSaveMessage);
+      if (pendingDailyOpen) void openDailyNotification();
+    }
   });
 }
 function applySettings(incoming: Record<string, unknown>) {
@@ -3729,6 +3735,7 @@ $("retry-save").onclick = async () => {
     // Keep the receipt for the next retry or launch; the game remains usable.
   }
   await applyEarnedHelp();
+  if (pendingDailyOpen) void openDailyNotification();
 };
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && dialog.open) {
@@ -4923,13 +4930,19 @@ async function openDailyNotification() {
     rewardRequest ||
     engagementActive ||
     futureSave ||
-    storageConflict
+    storageConflict ||
+    saveFailed ||
+    moveSavePending ||
+    resultAwaitingSave === session
   )
     return;
   pendingDailyOpen = false;
   skipNextInterstitial = true;
   track("reminder_open");
-  await switchGame(dailyIdFor(today(),progress));
+  const id = dailyIdFor(today(),progress);
+  await switchGame(id);
+  if (progress.active !== id || saveFailed || storageConflict || futureSave)
+    pendingDailyOpen = true;
 }
 async function tryResultEngagement() {
   if (

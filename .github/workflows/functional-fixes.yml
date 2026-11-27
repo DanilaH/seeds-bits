@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: 24, cache: npm}
       - run: npm ci --no-audit --no-fund
-      - run: npx vitest run tests/functional-audit-12108.test.ts tests/functional-audit-followup.test.ts tests/functional-audit-fixes.test.ts tests/functional-size.test.ts
+      - run: npx vitest run tests/functional-audit-12108.test.ts tests/functional-audit-followup.test.ts tests/functional-audit-fixes.test.ts tests/functional-size.test.ts tests/optional-service.test.ts
       - run: npx playwright install chromium
       - run: npx playwright test e2e/functional-audit-fixes.spec.ts e2e/monetization060.spec.ts e2e/ux111.spec.ts e2e/update110.spec.ts e2e/hardening.spec.ts e2e/store-release.spec.ts --workers=2
       - uses: actions/upload-artifact@v4

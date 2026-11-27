@@ -43,15 +43,20 @@ for(const wire of [6,9,10])test(`FA02 wire${wire} actual boot, backup restore, r
  await Promise.all([page.waitForEvent('framenavigated',{predicate:f=>f===page.mainFrame()}),page.locator('#restore-backup').click()]);await page.locator('#dialog[open]').waitFor();await assertEarned();
  await page.reload();await page.locator('#dialog[open]').waitFor();evidence(`FA02-wire${wire}`,await assertEarned());
 });
-for(const locks of [true,false,'mixed'] as const)test(`FA03 real two documents serialize CAS, locks=${locks}`,async({page,context})=>{
+for(const locks of [true,false,'mixed'] as const)test(`FA03 two documents: atomic writer or explicit unsupported mode, locks=${locks}`,async({page,context})=>{
  const other=await context.newPage();await empty(page);await empty(other);
- for(const [i,p] of [page,other].entries())await p.evaluate(({disabled})=>{if(disabled)Object.defineProperty(navigator,'locks',{value:undefined,configurable:true});}, {disabled:locks===false||(locks==='mixed'&&i===1)});
- const k='audit.concurrent',s='audit.settings';await page.evaluate(({k})=>localStorage.setItem(k,'base'),{k});
- const write=(p:Page,value:string,patch:Record<string,unknown>)=>p.evaluate(async({k,s,value,patch})=>{const p=await import('/src/platform.ts');try{await p.saveState(k,value,'base',s,'{"sound":true,"theme":"light"}',patch);return 'saved';}catch(e){return e instanceof p.SaveConflict?'conflict':String(e);}}, {k,s,value,patch});
- const results=await Promise.all([write(page,'A',{sound:false}),write(other,'B',{theme:'dark'})]);expect(results.sort()).toEqual(['conflict','saved']);
- const result=await page.evaluate(async({k,s})=>{const p=await import('/src/platform.ts');return {final:localStorage.getItem(k),settings:JSON.parse((await p.readSettings(s))!)};},{k,s});expect(['A','B']).toContain(result.final);expect(result.settings).toMatchObject({sound:false,theme:'dark'});
- await other.reload();const stale=await write(other,'stale',{});expect(stale).toBe('conflict');
- evidence(`FA03-locks-${locks}`,{results,...result,stale});await other.close();
+ const disable=async(p:Page)=>p.evaluate(()=>Object.defineProperty(navigator,'locks',{value:undefined,configurable:true}));
+ if(locks===false)await disable(page);if(locks!==true)await disable(other);
+ const k='audit.concurrent',s='audit.settings';await page.evaluate(({k,s})=>{localStorage.setItem(k,'base');localStorage.setItem(s,'{"sound":true,"theme":"light"}');},{k,s});
+ const write=(p:Page,value:string,patch:Record<string,unknown>)=>p.evaluate(async({k,s,value,patch})=>{const p=await import('/src/platform.ts');try{await p.saveState(k,value,'base',s,'{"sound":true,"theme":"light"}',patch);return 'saved';}catch(e){return e instanceof p.SaveConflict?'conflict':e instanceof p.AtomicStorageUnavailable?'unsupported':String(e);}}, {k,s,value,patch});
+ const results=await Promise.all([write(page,'A',{sound:false}),write(other,'B',{theme:'dark'})]);
+ expect(results.sort()).toEqual(locks===true?['conflict','saved']:locks===false?['unsupported','unsupported']:['saved','unsupported']);
+ const final=await page.evaluate(k=>localStorage.getItem(k),k);if(locks===false)expect(final).toBe('base');else expect(['A','B']).toContain(final);
+ // Independent settings patches remain canonical even when game writing is unsupported.
+ await Promise.all([page.evaluate(async s=>(await import('/src/platform.ts')).writeSettingsPatch(s,'{}',{sound:false}),s),other.evaluate(async s=>(await import('/src/platform.ts')).writeSettingsPatch(s,'{}',{theme:'dark'}),s)]);
+ await expect.poll(()=>page.evaluate(async s=>JSON.parse((await (await import('/src/platform.ts')).readSettings(s))!),s)).toMatchObject({sound:false,theme:'dark'});
+ await other.reload();if(locks===false)await disable(other);const stale=await write(other,'stale',{});expect(stale).toBe(locks===false?'unsupported':'conflict');
+ evidence(`FA03-locks-${locks}`,{results,final,stale});await other.close();
 });
 test('FA04 denied at boot cannot acknowledge volatile storage; restore access and retry',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(String(e)));
@@ -104,4 +109,46 @@ for(const years of [1,3,5])test(`FA05 ${years}-year real archive browser persist
   return {times,accepted,quota,rejected,oldPreserved:localStorage.getItem(key)===raw,bytes:raw.length};
  },{raw,key});expect(result).toMatchObject({accepted:true,quota:true,rejected:true,oldPreserved:true});
  await page.reload();expect(await page.evaluate(key=>localStorage.getItem(key)?.length,key)).toBe(raw.length);evidence(`FA05-${years}`,result);
+});
+test('FA06 notification during held/failed move waits for durable retry and preserves the old game',async({page,context})=>{
+ await page.clock.setFixedTime(new Date('2026-11-27T12:00:00'));
+ await page.addInitScript(({key})=>{
+  const w=window as any;w.__SEEDS_ENGAGEMENT_TEST__={addListener:async(_:string,callback:any)=>{w.dailyOpen=callback;return {remove:async()=>{}};},configuration:async()=>({available:true,granted:false})};
+  localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true}));localStorage.setItem(key,JSON.stringify({version:3,active:'classic',done:[],seen:[],hints:{},sessions:{classic:{rules:1,current:{board:[1,1,2,8],moves:0,scroll:0,additions:0},history:[]}}}));
+ },{key});await page.goto('/');await page.locator('#resume').click();
+ const blocker=await context.newPage();await empty(blocker);await blocker.evaluate(()=>{(window as any).held=new Promise<void>(ready=>{void navigator.locks.request('seeds-save',async()=>{ready();await new Promise<void>(release=>(window as any).release=release);});});});await blocker.evaluate(()=>(window as any).held);
+ try {
+  await page.evaluate(()=>{const original=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if((window as any).fail&&k==='seeds-bits.progress.v2')throw new DOMException('fault','QuotaExceededError');return original.call(this,k,v);};(window as any).fail=true;});
+  await page.locator('#board [data-index="0"]').click();await page.locator('#board [data-index="1"]').click();await expect(page.locator('.game')).toHaveAttribute('data-persistence','pending');
+  await page.evaluate(()=>(window as any).dailyOpen());expect(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).active,key)).toBe('classic');await expect(page.locator('#mode')).toContainText('Классика');
+  await blocker.evaluate(()=>(window as any).release());await expect(page.locator('#save-notice')).toBeVisible();await expect(page.locator('#mode')).toContainText('Классика');
+  await page.evaluate(()=>(window as any).fail=false);await page.locator('#retry-save').click();await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).active,key)).toMatch(/^daily-v[135]-2026-11-27$/);
+  const saved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!),key);expect(saved.sessions.classic.current.moves).toBe(1);expect(saved.sessions.classic.packedHistory).toHaveLength(1);evidence('FA06-notification-during-save',{active:saved.active,old:saved.sessions.classic});
+ }finally{await blocker.close();}
+});
+test('FA08 keyboard-only play, named controls, modal focus and independent opt-outs',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.addInitScript(({key})=>{localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true,sound:true,vibration:true}));localStorage.setItem(key,JSON.stringify({version:3,active:'classic',done:[],seen:[],hints:{},sessions:{classic:{rules:1,current:{board:[1,1,2,8],moves:0,scroll:0,additions:0},history:[]}}}));},{key});
+ await page.goto('/');await page.locator('#resume').focus();await page.keyboard.press('Enter');await expect(page.locator('#dialog')).toBeHidden();
+ for(const index of [0,1]){const button=page.locator(`#board [data-index="${index}"]`);await expect(button).toHaveAccessibleName(/1/);await button.focus();await page.keyboard.press('Enter');}
+ await expect(page.locator('#remaining')).toHaveText('2');await expect(page.locator('.game')).toHaveAttribute('data-persistence','saved');await expect(page.locator('#status')).toHaveAttribute('role','status');
+ await page.locator('#undo').focus();await page.keyboard.press('Space');await expect(page.locator('#remaining')).toHaveText('4');
+ await page.locator('#menu').focus();await page.keyboard.press('Enter');await page.locator('#settings-open').focus();await page.keyboard.press('Enter');
+ await page.locator('#sound').focus();await page.keyboard.press('Space');await page.locator('#vibration').focus();await page.keyboard.press('Space');
+ await page.locator('#language-open').focus();await page.keyboard.press('Enter');await expect(page.locator('#language-sheet')).toBeVisible();
+ // Native dialog may send focus to browser chrome (activeElement=BODY), never a background app control.
+ for(let n=0;n<12;n++){await page.keyboard.press('Tab');const focus=await page.evaluate(()=>({inside:!!document.activeElement?.closest('#language-sheet'),tag:document.activeElement?.tagName}));expect(focus.inside||focus.tag==='BODY').toBe(true);}
+ await page.keyboard.press('Escape');await expect(page.locator('#language-sheet')).toBeHidden();await expect(page.locator('#language-open')).toBeFocused();
+ await page.keyboard.press('Escape');await page.locator('#resume').focus();await page.keyboard.press('Enter');
+ await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('seeds-bits.settings.v1')!))).toMatchObject({sound:false,vibration:false});
+ evidence('FA08',{keyboard:true,accessibleNames:true,noBackgroundControlFocus:true,focusReturn:true,sound:false,vibration:false,reducedMotion:true,physicalTalkBack:'UNKNOWN'});
+});
+test('FA03 unsupported writer is explicit, preserves original bytes and recovers capability',async({page})=>{
+ await empty(page);const result=await page.evaluate(async()=>{
+  const original=navigator.locks;Object.defineProperty(navigator,'locks',{value:undefined,configurable:true});
+  const p=await import('/src/platform.ts'),key='audit.writer-recovery';localStorage.setItem(key,'base');let rejected=false;
+  try{await p.saveState(key,'lost','base','audit.settings','{}');}catch(e){rejected=e instanceof p.AtomicStorageUnavailable;}
+  const protectedBase=localStorage.getItem(key)==='base';Object.defineProperty(navigator,'locks',{value:original,configurable:true});await p.saveState(key,'saved','base','audit.settings','{}');
+  return {rejected,protectedBase,actual:localStorage.getItem(key)};
+ });expect(result).toEqual({rejected:true,protectedBase:true,actual:'saved'});evidence('FA03-capability',result);
 });

@@ -2560,5 +2560,12 @@
     "es": "No se pudieron leer los recursos o derechos. El guardado está desactivado para proteger el progreso original.",
     "tr": "Kazanımlar veya haklar okunamadı. Orijinal ilerlemeyi korumak için kaydetme kapalı.",
     "pt-BR": "Não foi possível ler os recursos ou direitos. O salvamento está desativado para proteger o progresso original."
+  },
+  "save.atomicUnavailable": {
+    "ru": "Сохранение отключено: браузер не поддерживает безопасную запись между вкладками. Исходный прогресс защищён. Обновите браузер.",
+    "en": "Saving is off: this browser cannot safely coordinate game writes between tabs. Your original progress is protected. Update your browser.",
+    "es": "El guardado está desactivado: este navegador no puede coordinar escrituras entre pestañas. El progreso original está protegido. Actualiza el navegador.",
+    "tr": "Kaydetme kapalı: tarayıcı sekmeler arasında güvenli kayıt sağlayamıyor. Orijinal ilerlemen korunuyor. Tarayıcıyı güncelle.",
+    "pt-BR": "O salvamento está desativado: o navegador não coordena gravações entre abas com segurança. Seu progresso original está protegido. Atualize o navegador."
   }
 }

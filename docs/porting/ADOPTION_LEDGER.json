@@ -1196,13 +1196,13 @@
       "evidence": {
         "audit": "https://github.com/DanilaH/seeds-bits/issues/47",
         "report": "../research/functional-fixes-2026-11-27/README.md",
-        "code": "Durable recovery; independent stats salvage/protected earned authority; cross-document web CAS; explicit persistent-storage failure; optional service single-flight/deadlines.",
+        "code": "Durable recovery; independent stats salvage/protected earned authority; Web Locks CAS / explicit unsupported writable-mode guard; explicit persistent-storage failure; optional service single-flight/deadlines.",
         "phone": "UNKNOWN",
         "commercial": "UNKNOWN",
         "audience": "UNKNOWN"
       },
       "nextAction": "Exact-source full CI + independent model/faults + Android real profiles/force-stop/demo + production configuration; signed12109. External phone/live/release-key gates documented separately.",
-      "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE local web transaction barrier; runtime pins unchanged."
+      "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE independent cross-document/denied/quota probes; runtime pins unchanged."
     }
   ]
 }

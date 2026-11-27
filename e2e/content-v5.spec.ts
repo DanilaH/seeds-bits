@@ -47,6 +47,8 @@ test("v5 chunk and save failures preserve the existing game and its raw bytes",a
   let blocked=true;
   await page.route("**/*content-v5-books-1*",route=>blocked?route.abort():route.continue());
   await page.goto("/");
+  // Baseline the completed boot migration, before the requested chunk failure.
+  await page.locator("#dialog[open]").waitFor();
   const before=await raw(page);
   await chooseVolume(page,1);
   await selectTask(page,"book-v1-2");

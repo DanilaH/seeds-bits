@@ -13,7 +13,7 @@ for (const wire of [6,9,10]) test(`FA02 wire${wire}: repair stats without losing
  const r=readProgress(serializeProgress(q));grantReward(r,{token:'earned-before-corruption',attempt:m.attempts.classic.id});
  expect(metadata(r).wallet).toBe(9);expect(collectPair(r,8)).toBe(0);expect(recordCompletion(r,'classic')).toEqual({seeds:0,hints:0});
 });
-for(const field of ['wallet','help','rewardReceipts','attempts','hintKeys','jars'])test(`FA02 corrupt critical ${field} is protected, never replaced with zeros`,()=>{
+for(const field of ['wallet','help','rewardReceipts','attempts','hintKeys','jars','daily'])test(`FA02 corrupt critical ${field} is protected, never replaced with zeros`,()=>{
  const p=fresh(),m=metadata(p);m.wallet=9;helpProfile(p).inventory={magnet:2,plan:3};m.rewardReceipts=['kept'];collectPair(p,8);
  const raw=JSON.parse(serializeProgress(p));
  if(field==='jars')raw.jars.highWater=-1;
