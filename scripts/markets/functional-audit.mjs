@@ -117,7 +117,10 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    try{if(adb('shell','getprop','sys.boot_completed')==='1' && Number(adb('shell','cat','/proc/uptime').split(' ')[0])<beforeUptime){booted=true;break;}}catch{}
    await new Promise(resolve=>setTimeout(resolve,1000));
   }
-  assert(booted,'Emulator did not finish reboot');adb('root');adb('wait-for-device');adb('shell','input','keyevent','82');
+  assert(booted,'Emulator did not finish reboot');adb('root');adb('wait-for-device');
+  // MENU alone does not wake a display after the real reboot. These are
+  // emulator input preconditions, not application lifecycle callbacks.
+  adb('shell','input','keyevent','224');adb('shell','wm','dismiss-keyguard');adb('shell','input','keyevent','82');
   // Re-establish the offline gate after the emulator's firewall reset.
   adb('shell','svc','wifi','disable');adb('shell','svc','data','disable');
   adb('shell',"iptables -I OUTPUT '!' -o lo -j REJECT");adb('shell',"ip6tables -I OUTPUT '!' -o lo -j REJECT");
@@ -125,7 +128,8 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
   assert(alarms.includes('seeds.DAILY_REMINDER'),'Reminder was not rescheduled after reboot');
   report.rebootAlarm=alarms.split('\n').filter(line=>line.includes('seeds.DAILY_REMINDER')||line.includes('com.seedsbits.game.preview'));
   launch();ui=await connect();assert.equal(profiles().values[progress].done.length,beforeReboot.done.length);assert.equal(profiles().values[progress].meta.wallet,beforeReboot.meta.wallet);
-  report.reboot={actualEmulatorReboot:true,kernelUptimeReset:true,retained:true,offline:true};ui.close();ui=undefined;
+  await ui.until('!document.hidden && document.hasFocus()');
+  report.reboot={actualEmulatorReboot:true,kernelUptimeReset:true,retained:true,offline:true,foregroundAndFocus:true};ui.close();ui=undefined;
   report.status='PASS';checkpoint();return report;
  } catch(error){report.status='ERROR';report.error=String(error);checkpoint();throw error;}
  finally {ui?.close();stop();await fixture(initial);}

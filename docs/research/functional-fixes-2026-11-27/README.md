@@ -50,6 +50,10 @@ The476bac3 demo did not load/paint its first banner (request1/loaded0,35.354s re
 
 Native performance scope: bridge commit p50/p95 exclude snapshot creation; cold-to-field includes QA ADB/CDP/resume overhead and is one sample per profile; rAF/gfxinfo are emulator traces. Memory dumps cover the host process PSS, not a sum of isolated WebView renderer processes. Full handset RAM/frame-jank profiling remains an explicit external check.
 
+##13defc3 native follow-up
+
+General push/PR, functional/production, storage, visual/menu/browser/signing and actual demo passed on13defc3. Native `functional-audit.json` in [artifact15185882337](https://github.com/DanilaH/seeds-bits/actions/runs/45971272294/artifacts/15185882337) is PASS: all3 recovery trials,3 archives, actual12108 upgrade plus controlled atomic backup/reload,3 permission states,3 timezone/daily dates, background notification entry, real reboot and rescheduled reminder. The following prior Classic regression failed before its first pair: the Resume ADB tap produced an empty native input trace. A missing foreground/input precondition after reboot is a QA hypothesis; the failure alone does not establish an application input defect or proven display-power cause. The final QA driver explicitly wakes/dismisses the emulator keyguard after reboot, keeps the dedicated plugged-in CI device awake, requires actual document visibility/focus before input and asserts each native pointer-down reached its target. It retains pre-cleanup screenshot/power/window/hit diagnostics on hit-test failure. No persistence assertions, product callbacks or application runtime were changed. Final exact-source acceptance still requires the complete offline regression to pass.
+
 ## Remaining external gates — no false PASS
 
 | Gate | Status / concrete next check |

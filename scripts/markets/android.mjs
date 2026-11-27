@@ -97,6 +97,9 @@ async function connect() {
     throw Error(expression);
   };
   await until("document.querySelector('#dialog')&&!document.querySelector('#app').inert&&!document.querySelector('.locale-pending')");
+  // A loaded debug document can survive while Android has not delivered
+  // foreground/focus after reboot. ADB touches require the visible activity.
+  await until("!document.hidden && document.hasFocus()");
   // Demo builds expose the native WebView rectangle. Accessibility dumps can
   // stay busy while a creative is animated and return no hierarchy.
   let bounds;
@@ -151,6 +154,12 @@ async function connect() {
       if(p.ok)break;
       await wait(100);
     }
+    if(!p.ok){
+      shot("input-failure");
+      fs.writeFileSync(out+"/input-failure.json",JSON.stringify({selector,point:p,
+        state:await evaluate("({hidden:document.hidden,focus:document.hasFocus(),dialog:document.querySelector('#dialog')?.open,hit:document.elementFromPoint("+Number(p.x??0)+","+Number(p.y??0)+")?.outerHTML})"),
+        power:adb("shell","dumpsys","power"),window:adb("shell","dumpsys","window")},null,2));
+    }
     assert(p.ok,selector+" "+JSON.stringify(p));
     await refreshBounds();
     adb("shell","input","tap",String(Math.round(bounds[0]+p.x*(bounds[2]-bounds[0])/p.w)),
@@ -158,6 +167,7 @@ async function connect() {
     await wait(200);
     const trace=await evaluate("window.__seedsNativeInputTrace");
     fs.appendFileSync(out+"/native-input.jsonl",JSON.stringify({selector,bounds,point:p,events:trace})+"\n");
+    assert(trace.some(event=>event.type==="pointerdown"&&event.hit),"Native touch did not reach "+selector);
   }
   async function swipeBoardUp() {
     await refreshBounds();
@@ -1472,6 +1482,9 @@ if(process.env.SEEDS_BANNER_ONLINE==="1"){
   process.exit(process.exitCode??0);
 }
 try{
+  // Dedicated CI device: keep native input available throughout the long run,
+  // including the real reboot. Background/foreground remains explicitly tested.
+  adb("shell","svc","power","stayon","true");
   adb("shell","wm","density","320");
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
