@@ -5,9 +5,9 @@ const prefix=(index:number)=>Array.from({length:index},(_,i)=>i===0?24:i===1?60:
 async function seed(page:Page,kind='task',language='ru',theme='light',meter=22){
   const daily=kind.startsWith('daily');
   const n=kind==='book'?23:kind==='page'?5:0;
-  const active=daily?'daily-v1-2026-11-13':kind==='classic'||kind==='dead'?'classic':`book-v1-${kind==='book'?24:kind==='page'?6:9}`;
+  const active=daily?'daily-v1-2026-11-13':kind.startsWith('classic')||kind==='dead'?'classic':`book-v1-${kind==='book'?24:kind==='page'?6:9}`;
   const state={version:3,active,done:daily?Array.from({length:6},(_,i)=>`daily-v1-2026-11-0${i+1}`):Array.from({length:n},(_,i)=>`book-v1-${i+1}`),seen:[],hints:{},
-    sessions:{[active]:{rules:1,current:{board:kind==='dead'?[1,2,3,4]:kind==='classic'?[5,5,2,8]:[5,5],moves:1,additions:0,scroll:0},history:[]}},
+    sessions:{[active]:{rules:1,current:{board:kind==='dead'?[1,2,3,4]:kind==='classic-six'?[5,5,2,8,3,7]:kind==='classic'?[5,5,2,8]:[5,5],moves:1,additions:0,scroll:0},history:[]}},
     jars:{version:2,meter,seeds:meter,wins:3,attempt:'va48',highWater:1},
     meta:{version:2,since:'2026-11-01',wallet:1,completed:10,unassisted:10,attempts:{[active]:{id:'va48',completed:false}}}};
   await page.addInitScript(({key,state,language,theme})=>{
@@ -129,8 +129,9 @@ for(const theme of ['light','dark'])for(const [width,height] of [[320,520],[390,
   expect(await ratio('.jar-keepsake .jar-interior')).toBeCloseTo(1,2);
   await page.screenshot({path:test.info().outputPath('collected-full-and-next-remainder.png')});
 });
-for(const outcome of ['release','failure-retry','background'])test(`VA11 held save never paints new→old jar ${outcome}`,async({page,context})=>{
-  await seed(page,'classic');await resumeStoredGame(page);await page.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));
+for(const outcome of ['release','failure-retry','background','resize','reduced','resize-new-move'])test(`VA11 held save never paints new→old jar ${outcome}`,async({page,context})=>{
+  if(outcome==='reduced')await page.emulateMedia({reducedMotion:'reduce'});
+  await seed(page,outcome==='resize-new-move'?'classic-six':'classic');await resumeStoredGame(page);await page.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));
   const blocker=await context.newPage();await blocker.goto('/');
   await blocker.evaluate(()=>{(window as any).held=new Promise<void>(ready=>{void navigator.locks.request('seeds-save',async()=>{ready();await new Promise<void>(release=>(window as any).release=release);});});});
   await blocker.evaluate(()=>(window as any).held);await page.bringToFront();
@@ -145,13 +146,22 @@ for(const outcome of ['release','failure-retry','background'])test(`VA11 held sa
   expect(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).jars.meter,key)).toBe(22);
   await expect(page.locator('#jar-meter')).toHaveAttribute('data-capacity','24');await expect(page.locator('#jar-spill')).toHaveCount(0);
   if(outcome==='background')await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
+  if(outcome.startsWith('resize'))await page.setViewportSize({width:400,height:800});
+  if(outcome==='resize-new-move'){await page.locator('[data-index="2"]').click();await page.locator('[data-index="3"]').click();}
   await blocker.evaluate(()=>(window as any).release());
   if(outcome==='failure-retry'){
     await expect(page.locator('.game')).toHaveAttribute('data-persistence','failed');await expect(page.locator('#jar-meter')).toHaveAttribute('data-capacity','24');
     await page.evaluate(()=>(window as any).va48Restore());await page.locator('#retry-save').click();
   }
-  await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).jars.meter,key)).toBe(24);
-  if(outcome!=='background')await expect(page.locator('#jar-meter')).toHaveAttribute('data-capacity','60',{timeout:7000});
+  await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).jars.meter,key)).toBe(outcome==='resize-new-move'?26:24);
+  if(outcome==='background')await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));});
+  await expect(page.locator('#jar-meter')).toHaveAttribute('data-capacity','60',{timeout:7000});
+  if(outcome==='resize-new-move')await expect(page.locator('#jar-meter')).toHaveAttribute('data-filled','2');
+  if(['background','resize','reduced'].includes(outcome)){
+    await expect(page.locator('#jar-meter')).toHaveAttribute('data-filled','0');
+    await expect(page.locator('#jar-spill,.flying-seed')).toHaveCount(0);
+    await expect(page.locator('#jar-meter')).toHaveAttribute('data-full','false');
+  }
   await page.evaluate(()=>(window as any).va48Recording=false);
   const samples=await page.evaluate(()=>(window as any).va48Samples);
   expect(samples.some((s:any)=>s.persistence==='pending'&&(s.capacity==='60'||s.full==='true'||s.spill))).toBe(false);

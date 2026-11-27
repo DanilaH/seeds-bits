@@ -1103,6 +1103,11 @@ function save(state = progress, game = session) {
         if (pendingResult?.session === game) pendingResult.saved = true;
         lastStored = bundle;
         confirmedSeeds = savedSeeds;
+        // A cancelled/static scene follows a later acknowledgement without replay.
+        if (!flights.running && !completedJar && !jarMilestone && !rewardScene && !pendingResult) {
+          visualSeeds = Math.max(visualSeeds ?? 0, confirmedSeeds);
+          renderJar();
+        }
         // Dispatch only events contained in this successfully written snapshot.
         // A crash before the next cleanup write can replay IDs; native deduplicates.
         if (adsBridge || webAcquisition)
@@ -1396,7 +1401,9 @@ async function presentFullJar(before: ReturnType<typeof jarState>, target: HTMLE
     await jarSpill.play(target);
     if (!presentationActive(revision)) return;
     completedJar = undefined;
-    visualSeeds = Math.min(visualSeeds ?? 0, confirmedSeeds ?? 0);
+    visualSeeds = flights.running
+      ? Math.min(visualSeeds ?? 0, confirmedSeeds ?? 0)
+      : confirmedSeeds ?? 0;
     renderJar();
     target.dataset.rewardPhase = "next";
     const a = motion(target,[{opacity:.75,transform:"scale(.94)"},{opacity:1,transform:"none"}],160);
@@ -1410,7 +1417,8 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false): Promise
   if (!amount || !rects.length) return Promise.resolve();
   const revision = presentationRevision;
   if (reduced() || !presentationActive(revision)) {
-    visualSeeds = jars(progress).meter; renderJar(); return Promise.resolve();
+    visualSeeds = confirmedSeeds ?? jars(progress).meter;
+    renderJar(); return Promise.resolve();
   }
   const plan = createValueTransferPlan(amount, {
     minDurationMs:420,maxDurationMs:720,maxVisualTokens:2,maxAudioEvents:2,
@@ -1437,6 +1445,10 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false): Promise
       if (!silent && presentationActive(revision) && jarState(visualSeeds).index>start.index && !fullPromise)
         fullPromise=presentFullJar(start,target,revision);
       if (--remaining) return;
+      if (!fullPromise && !completedJar && !flights.running) {
+        visualSeeds = Math.max(visualSeeds ?? 0, confirmedSeeds ?? 0);
+        renderJar();
+      }
       if (fullPromise) void fullPromise.then(resolve); else resolve();
     });
   });

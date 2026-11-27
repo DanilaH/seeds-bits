@@ -1197,7 +1197,7 @@
     },
     "language.auto": {
       "source": "new:language-picker",
-      "ru": "Автоматически",
+      "ru": "Авто",
       "en": "Automatic",
       "es": "Automático",
       "tr": "Otomatik",
