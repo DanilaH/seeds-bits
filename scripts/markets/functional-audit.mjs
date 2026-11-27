@@ -67,8 +67,10 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    assert(before?.meta,'The prior build must have a committed profile before upgrade');assert.equal(before.meta.wallet,999);
    // Deliberately stage Android's interrupted-write state, then test the real
    // framework loader, not just our root-side disk oracle.
-   adb('shell',`if [ ! -f ${prefs}.bak ]; then cp ${prefs} ${prefs}.bak; fi`);
-   adb('shell',`printf '%s' '<map />' > ${prefs}`);
+   adb('shell',`if [ ! -f ${prefs}.bak ]; then mv ${prefs} ${prefs}.bak; fi`);
+   // Rename keeps the committed inode's app UID/SELinux context; create the
+   // unfinished replacement as the debuggable app, never as root.
+   adb('shell',`run-as com.seedsbits.game.preview sh -c 'umask 077; printf "%s" "<map />" > ${prefs}'`);
    assert.deepEqual(profiles().values[progress].sessions,before.sessions);
    launch();ui=await connect();await ui.tap('#resume');
    assert.deepEqual(profiles().values[progress].sessions,before.sessions);assert.equal(profiles().values[progress].meta.wallet,999);
