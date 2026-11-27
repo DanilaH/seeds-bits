@@ -2,7 +2,7 @@
 
 Scope: [issue48](https://github.com/DanilaH/seeds-bits/issues/48), including [VA12–13](https://github.com/DanilaH/seeds-bits/issues/48#issuecomment-7218627968). Base: accepted preview12109 executable96f5ae19588c151c0dd884e80a7f4e56c1d1f71d, documentation0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c, active PR40. Jar reference: internal preview12106 /125606e4a90e06b844fe6eb8f83249032cb7057f. These are observations and changes to Seeds; no claim about either Number Match reference is made.
 
-The final immutable executable source, signature, payload comparison, project CI runs and delivery artifacts belong in DELIVERY-12110.md after acceptance. Intermediate failed candidates are diagnostic evidence, not accepted releases.
+The immutable executable source, signature, payload comparison, project CI runs and delivery artifacts are recorded in [DELIVERY-12110.md](DELIVERY-12110.md). All six exact-source workflows and both native gates passed; phone/owner artistic/live acceptance remains separate. Intermediate failed candidates are diagnostic evidence, not accepted releases.
 
 | Requirement | Implementation / acceptance oracle |
 | --- | --- |

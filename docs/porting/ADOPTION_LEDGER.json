@@ -1257,7 +1257,7 @@
       "id": "seeds-visual-acceptance-48",
       "sourceFeatureIds": [],
       "scope": "VA01–13; owner notification/banner/jar corrections after12109",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_UNVERIFIED",
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
       "ownerDecisionRef": "https://github.com/DanilaH/seeds-bits/issues/48#issuecomment-7218627968",
       "code": [
@@ -1272,10 +1272,91 @@
         "commercial": "UNKNOWN",
         "audience": "UNKNOWN",
         "baseline": "12109/96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
-        "reference": "Internal12106/125606e4a90e06b844fe6eb8f83249032cb7057f"
+        "reference": "Internal12106/125606e4a90e06b844fe6eb8f83249032cb7057f",
+        "automated": "PASS on exact source 6daea5abd6609008e2338476d81e24171714c50a; all six workflows and both complete native jobs",
+        "delivery": "docs/research/visual-acceptance-2026-11-27/DELIVERY-12110.md",
+        "apk": {
+          "source": "6daea5abd6609008e2338476d81e24171714c50a",
+          "versionCode": 12110,
+          "firstSession": true,
+          "helpProfile": "baseline",
+          "analytics": false,
+          "package": "com.seedsbits.game.preview",
+          "versionName": "1.1.2",
+          "bytes": 6091755,
+          "sha256": "eb851f94d7362be26e53e7f972a63d6e914142a767ede172f0faaa658fcc633f",
+          "certificateSHA256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+          "v2": true,
+          "v3": true,
+          "zipalign16k": true,
+          "unsignedEntriesIdentical": 675,
+          "debugWebAssetsIdentical": 23
+        },
+        "ciRuns": {
+          "preview": 46023909431,
+          "visual48": 46023909446,
+          "functional47": 46023909359,
+          "stability45": 46023909493,
+          "checksPush": 46023909474,
+          "checksPR": 46023919944
+        },
+        "browser": {
+          "e2e": 725,
+          "focusedVA48": 204,
+          "functionalFocused": 74,
+          "candidateStorageRepeats": 220,
+          "independentVisualStatesPerSource": 442,
+          "pageErrors": 0
+        },
+        "androidDemo": {
+          "status": "PASS",
+          "artifact": 15211092584,
+          "seconds": 252.435,
+          "observations": 91,
+          "expectedFrames": 5546,
+          "unexpectedHidden": 0,
+          "unexpectedMoved": 0,
+          "actualPermissionDenial": true,
+          "sameSettingsBanner": true
+        },
+        "androidOffline": {
+          "status": "PASS",
+          "artifact": 15213490637,
+          "recoveryTrials": 3,
+          "archiveYears": [
+            1,
+            3,
+            5
+          ],
+          "actual12109Upgrade": true,
+          "receipts": 2048,
+          "wallet": 999,
+          "pinsAndLegacyOptOutRetained": true,
+          "nativeAbsenceCases": 16,
+          "bridgeReloads": 10,
+          "actualEmulatorReboot": true,
+          "durableForceStopTrials": 20,
+          "fullPreviousRegression": true
+        }
       },
-      "nextAction": "Project CI full regression, clipping/linear fill/durable transition/native absence reminders and Settings demo trace; signed12110 plus comparisons.",
-      "kitImpact": "REUSE existing owned motion, viewport and durable authority; no runtime pin changes."
+      "nextAction": "Owner phone review on low/mid Android: install over12109 without erasing data, all result/jar scenes and audio/vibration, TalkBack, memory/frame pacing; unattended lunch/evening delivery under actual battery policy, then entry between slots. Separate live commercial inventory/audience observations. No publication or return of paused experiments.",
+      "kitImpact": "REUSE existing owned motion, viewport and durable authority; no runtime pin changes.",
+      "implementationSource": "6daea5abd6609008e2338476d81e24171714c50a",
+      "requirementIds": [
+        "VA-01",
+        "VA-02",
+        "VA-03",
+        "VA-04",
+        "VA-05",
+        "VA-06",
+        "VA-07",
+        "VA-08",
+        "VA-09",
+        "VA-10",
+        "VA-11",
+        "VA-12",
+        "VA-13"
+      ]
     }
   ]
 }

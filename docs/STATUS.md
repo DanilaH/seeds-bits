@@ -1,6 +1,10 @@
-# Визуальная приёмка №48 · в работе
+# Визуальная приёмка №48 · автоматическая приёмка 12110 · 27 ноября 2026
 
-Поверх12109/0f7c6a6 выполняются VA01–13. Изменены полезная геометрия финалов/меню/языка, внутренняя шкала банки, рассыпание и durable hold. По решению владельца удалены notification settings/result CTA, обычные Settings возвращены в banner route; native reminders переведены на lunch/evening для отсутствовавших сегодня. Локальные193 unit/build PASS; браузерные/native gates и сравнительные видео ещё не приняты. Подписанный кандидат12110 будет выдан после полного seeds-bits CI.
+VA-01–VA-13 реализованы поверх принятой 12109. Исполняемый исходник `6daea5abd6609008e2338476d81e24171714c50a` прошёл все 6 workflows и оба полных Android jobs. Готовы геометрия финалов/меню/языка, пропорциональная внутренняя шкала банки, выразительное рассыпание и durable old→full→next. Из игры удалены управление уведомлениями/временем и result CTA. Два приблизительных native слота 12:30/19:00 предназначены не заходившим сегодня; Android permission/channel и legacy opt-out сохранены. Обычные Settings сохраняют настоящий banner view/request; реальные исключения прежние.
+
+PASS: 193 unit + 2 model + 15 regression browser + 725 e2e; 204 focused VA48; 16 + 74 FA47; 220 повторных проверок кандидата №45; visual 180 + 8; menu 32; first-session/markets/default-feedback 38 + 19 + 19; 93 Java SDK/feedback harness и Capacitor race oracle. Native offline: 3 recovery, 1/3/5-летние архивы, actual 12109 upgrade/2048 receipts/wallet999/pins/legacy opt-out, 16 absence cases, permissions/timezones/reboot/10 reloads, 20 force-stop и весь прежний набор. Demo: 252,435 с, 91 наблюдение, 5546 expected frames, unexpected hidden/moved=0; настоящий permission/Deny, обе Settings round-trip, fullscreen/rewarded/dedup/reload. Пересекающиеся выборки не суммируются.
+
+Выдан подписанный preview 1.1.2/12110, `com.seedsbits.game.preview`, 6 091 755 байт, SHA256 `eb851f94d7362be26e53e7f972a63d6e914142a767ede172f0faaa658fcc633f`; прежний preview certificate, v2/v3, 16K zipalign, 675 payload/23 web assets сверены. [Полная поставка, 13 требований, CI, видео и ограничения](research/visual-acceptance-2026-11-27/DELIVERY-12110.md). Последующий docs-only commit не создаёт новый runtime. Правила, контент, экономика, права, исправления 12109 и шесть paused experiments сохранены. Телефон/субъективный feel/live/audience UNKNOWN; публикации и merge нет. KIT IMPACT REUSE/CANDIDATE; pins и kit CI прежние.
 
 # Функциональный аудит №47 · автоматическая приёмка 12109 · 27 ноября 2026
 
