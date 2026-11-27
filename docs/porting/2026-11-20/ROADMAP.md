@@ -64,3 +64,7 @@ Owner requested integration after standalone pilot. 96 thematic tasks appended (
 ## 25.11.2026 · Меню и тетради
 
 По [№31](https://github.com/DanilaH/seeds-bits/issues/31) внедрён прямой вход в конкретную задачу и компактный выбор тома. Постоянный Android-баннер использует контракт «Стрелок». [Код и критерии приёмки](../../research/menu-package-2026-11-25/README.md). Физический телефон, наблюдение аудитории и коммерческие метрики остаются открытыми.
+
+## 27.11.2026 · Функциональная приёмка 12108
+
+[Независимый отчёт](../../research/functional-audit-2026-11-27/README.md) · [№47](https://github.com/DanilaH/seeds-bits/issues/47). Exact runtime e592866: core oracle, все pinned notebook witnesses, sampled daily/Classic, solver, rewards,751 roundtrips PASS. FA-01/02 подтверждённые shared persistence defects; исправить перед Android store candidate. FA-03/04 web-specific, до публикации веба. FA-05–08 — нагрузка длинных сохранений, device/native lifecycle, production configuration, телефон; UNKNOWN gates, не доказанные дефекты. Правила/экономика/пины/6 пауз неизменны. KIT IMPACT REUSE.

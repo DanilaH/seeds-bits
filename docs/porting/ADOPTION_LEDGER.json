@@ -1176,6 +1176,44 @@
       },
       "nextAction": "Exact-source project CI/native, signed12108; телефонная проверка обеих тем и меню.",
       "kitImpact": "REUSE: UX & Art System / accepted component roles / Reference Protocol; runtime pins unchanged."
+    },
+    {
+      "id": "seeds-functional-audit-12108",
+      "sourceFeatureIds": [],
+      "scope": "Собственный функциональный аудит exact12108: durable recovery, protected resources, web storage and release gates",
+      "status": "DEFERRED",
+      "reason": "QA findings confirmed; fix and production gates require developer implementation and owner release decision. Not an exclusion.",
+      "localIssueIds": [
+        "FA-01",
+        "FA-02",
+        "FA-03",
+        "FA-04",
+        "FA-05",
+        "FA-06",
+        "FA-07",
+        "FA-08"
+      ],
+      "code": [
+        "src/main.ts",
+        "src/progress.ts",
+        "src/platform.ts",
+        "native/android/SeedsMonetizationPlugin.java",
+        "native/android/SeedsEngagementPlugin.java",
+        "native/android/SeedsDailyReminder.java"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/47",
+        "report": "../research/functional-audit-2026-11-27/README.md",
+        "baseline": "e592866145b0c2f537f01d21fb62a0e9e471d5e4",
+        "browser": "https://github.com/DanilaH/seeds-bits/actions/runs/45957745452/artifacts/15179766472",
+        "model": "https://github.com/DanilaH/seeds-bits/actions/runs/45957745452/artifacts/15179023325",
+        "followup": "https://github.com/DanilaH/seeds-bits/actions/runs/45958071345/artifacts/15179039349",
+        "recovery": "https://github.com/DanilaH/seeds-bits/actions/runs/45958387154/artifacts/15179910980",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Take #47; FA-01/02 first, web FA-03/04 before web publication, then FA-05–08 release acceptance; verify exact candidate, no economy/rule/paused-feature changes.",
+      "kitImpact": "REUSE; candidate independent persistence probes after verified fix"
     }
   ]
 }
