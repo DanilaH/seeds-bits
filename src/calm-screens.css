@@ -1074,10 +1074,8 @@
   place-items: center;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--calm-line);
   border-radius: 50%;
   color: var(--calm-ink);
-  background: var(--calm-soft);
 }
 #classic-new-help {
   margin: 8px 0 16px;
