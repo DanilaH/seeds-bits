@@ -51,6 +51,22 @@ for(const [width,height] of [[320,520],[320,568],[360,640],[390,844],[568,320],[
       await context.close();
     }
   });
+for(const [width,height] of [[320,520],[568,320]])for(const theme of ['light','dark'])for(const kind of ['silver','gold','replay'])test(`VA01 rare daily ${kind} ${width} ${theme}`,async({browser})=>{
+  for(const language of ['ru','pt-BR']){
+    const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'});const page=await context.newPage();
+    await page.clock.install({time:new Date('2026-11-26T12:00:00Z')});await seed(page,'daily',language,theme);
+    await page.evaluate(({key,kind})=>{
+      const p=JSON.parse(localStorage.getItem(key)!),active='daily-v1-2026-11-26',game=p.sessions[p.active];
+      p.active=active;p.sessions={[active]:game};p.done=Array.from({length:kind==='silver'?13:kind==='gold'?29:30},(_,i)=>`daily-v1-2026-11-${String(i+1===26&&kind!=='replay'?30:i+1).padStart(2,'0')}`);
+      p.meta.attempts={[active]:{id:'rare-va48',completed:kind==='replay'}};p.jars.attempt='rare-va48';localStorage.setItem(key,JSON.stringify(p));
+    },{key,kind});await page.reload();await expect(page.locator('#dialog[open]')).toBeVisible();
+    await resumeStoredGame(page);await page.locator('[data-index="0"]').click();await page.locator('[data-index="1"]').click();
+    await expect(page.locator('#win')).toBeVisible();await expect(page.locator('.game')).toHaveAttribute('data-persistence','saved');
+    expect((await glyphs(page,'#win h1,#result-gains,#award .metal-name,#result-jar-amount')).filter(t=>!t.ok)).toEqual([]);
+    await rawHit(page,'#result-home');await rawHit(page,'#play-again');
+    await page.screenshot({path:test.info().outputPath(`${language}-${kind}.png`)});await context.close();
+  }
+});
 for(const language of ['ru','en','es','tr','pt-BR'])test(`VA02/03/05/07 menus and enlarged language ${language}`,async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});await page.setViewportSize({width:320,height:520});await seed(page,'classic',language);
   expect((await glyphs(page,'.home-links button')).filter(t=>!t.ok)).toEqual([]);
@@ -60,8 +76,9 @@ for(const language of ['ru','en','es','tr','pt-BR'])test(`VA02/03/05/07 menus an
     await page.evaluate(size=>document.documentElement.style.fontSize=size+'px',size);
     for(const option of await page.locator('#language-options button').all()){
       await option.scrollIntoViewIfNeeded();
-      const bounds=await option.evaluate(e=>{const r=e.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(e.querySelector('.language-option-copy')!);return [...range.getClientRects()].every(t=>t.left>=r.left-1&&t.right<=r.right+1&&t.top>=r.top-1&&t.bottom<=r.bottom+1);});
-      expect(bounds).toBe(true);
+      const bounds=await option.evaluate(e=>{const r=e.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(e.querySelector('.language-option-copy')!);return [...range.getClientRects()].filter(t=>t.left<r.left-1||t.right>r.right+1||t.top<r.top-1||t.bottom>r.bottom+1).map(t=>({text:e.textContent,button:r.toJSON(),glyph:t.toJSON()}));});
+      if(bounds.length)await page.screenshot({path:test.info().outputPath(`language-${size}-overflow.png`)});
+      expect(bounds,`${language}, root ${size}px`).toEqual([]);
     }
   }
   await page.keyboard.press('Escape');await page.locator('#book-mode').click();await page.locator('#all-books').click();
@@ -91,6 +108,26 @@ for(const theme of ['light','dark'])for(const index of [0,1,2,12])test(`VA09 lin
     expect(ratio).toBeGreaterThanOrEqual(previous);previous=ratio;
     if([0,50,80,99].includes(percentage))await page.screenshot({path:test.info().outputPath(`fill-${percentage}.png`)});
   }
+});
+for(const theme of ['light','dark'])for(const [width,height] of [[320,520],[390,844]])test(`VA09 every jar surface and collected 100% ${theme} ${width}`,async({page})=>{
+  await page.setViewportSize({width,height});await page.emulateMedia({reducedMotion:'reduce'});
+  await seed(page,'task','ru',theme,183);
+  const ratio=async(selector:string)=>page.locator(selector).first().evaluate(e=>e.querySelector('.jar-fill')!.getBoundingClientRect().height/e.getBoundingClientRect().height);
+  expect(await ratio('#home-jar .jar-interior')).toBeCloseTo(.99,2);
+  await page.locator('#progress-open').click();expect(await ratio('#progress-jar .jar-interior')).toBeCloseTo(.99,2);
+  await page.keyboard.press('Escape');await page.locator('#home-jar').click();
+  expect(await ratio('.jar-collection .progress-hero .jar-interior')).toBeCloseTo(.99,2);
+  for(const interior of await page.locator('.jar-keepsake .jar-interior').all())expect(await interior.evaluate(e=>e.querySelector('.jar-fill')!.getBoundingClientRect().height/e.getBoundingClientRect().height)).toBeCloseTo(1,2);
+  await page.keyboard.press('Escape');await resumeStoredGame(page);
+  expect(await ratio('#jar-glass .jar-interior')).toBeCloseTo(.99,2);
+  await page.locator('[data-index="0"]').click();await page.locator('[data-index="1"]').click();
+  await expect(page.locator('.game')).toHaveAttribute('data-persistence','saved');await expect(page.locator('#win')).toBeVisible();
+  await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).jars.meter,key)).toBe(187);
+  expect(await ratio('#result-jar-glass .jar-interior')).toBeCloseTo(3/140,2);
+  await page.locator('#menu').click();await page.locator('#home-jar').click();
+  expect(await ratio('.jar-collection .progress-hero .jar-interior')).toBeCloseTo(3/140,2);
+  expect(await ratio('.jar-keepsake .jar-interior')).toBeCloseTo(1,2);
+  await page.screenshot({path:test.info().outputPath('collected-full-and-next-remainder.png')});
 });
 for(const outcome of ['release','failure-retry','background'])test(`VA11 held save never paints new→old jar ${outcome}`,async({page,context})=>{
   await seed(page,'classic');await resumeStoredGame(page);await page.evaluate(()=>navigator.locks.request('seeds-save',()=>{}));

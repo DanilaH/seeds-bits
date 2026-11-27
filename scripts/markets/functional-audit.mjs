@@ -98,6 +98,9 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    ui.close();ui=undefined;stop();checkpoint();
   }
   // Android permission state is exercised through the real bridge, offline.
+  // The preceding upgrade deliberately retained a game opt-out. The separate
+  // scheduler/reboot scenario uses an explicitly enabled QA profile.
+  await fixture({[settings]:{...profiles().values[settings],reminders:true}});
   for(const granted of [false,true,false]){
    stop();adb('shell','pm',granted?'grant':'revoke','com.seedsbits.game.preview','android.permission.POST_NOTIFICATIONS');launch();ui=await connect();
    const config=await ui.evaluate('window.Capacitor.Plugins.SeedsEngagement.configuration()');assert.equal(config.granted,granted);report.permissions.push({requested:granted,actual:config.granted});ui.close();ui=undefined;

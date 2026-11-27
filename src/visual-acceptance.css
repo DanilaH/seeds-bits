@@ -43,9 +43,9 @@
   #app #win .quiet-result-page,
   #app #win.daily-result .quiet-result-page {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 1 / span 5;
     width: 100%;
-    padding: 9px 15px 12px;
+    padding: 9px 32px 12px 22px;
     margin: 0;
   }
   #app #win .quiet-result-page h1 { font-size: 20px; line-height: 1.15; }
@@ -58,7 +58,7 @@
   }
   #app #win #result-jar-card {
     grid-column: 2;
-    grid-row: 1;
+    grid-row: 2;
     width: 100%;
     margin: 0;
     padding: 2px 0;
@@ -86,10 +86,28 @@
   #app #win #win-stats .result-stat strong { font-size: 19px; }
   #app #win #result-gains { font-size: 13px; line-height: 1.2; }
   #app #win #result-book-card { margin: 0; padding: 0; }
+  #app #win > #result-gains { grid-column: 2; grid-row: 1; margin: 0; }
+  #app #win > #award { grid-column: 2; grid-row: 3; }
+  #app #win > #completion-status { grid-column: 2; grid-row: 4; margin: 0; }
+  #app #win > #result-book-card { grid-column: 2; grid-row: 5; }
+  #app #win > .result-details { grid-column: 1 / -1; grid-row: 6; }
 }
 @media (orientation: landscape) and (max-height: 430px) {
   #app #win .quiet-result-page { align-self: start; }
   #app #win #result-date-art { display: none; }
+  #app #win.daily-result .quiet-result-page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100cqh - 10px);
+    max-height: calc(100cqh - 10px);
+    padding-block: 5px;
+  }
+  #app #win.daily-result .quiet-result-page > h1 { flex: 0 0 auto; }
+  #app #win.daily-result .quiet-result-page > .win-symbol { display: none; }
+  #app #win.daily-result #award { min-height: 0; overflow-y: auto; margin-top: 3px; padding: 0; }
+  #app #win.daily-result #award .trophy-heading { margin: 0; }
+  #app #win #result-jar-card { gap: 2px; }
+  #app #win #result-jar-card .jar-glass { width: 26px; height: 34px; }
   #app #win #result-next { max-width: 100%; }
   #app #no-moves-card { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 2px; padding: 4px 7px; }
   #app #no-moves-card > strong { font-size: 16px; line-height: 1.15; }
@@ -117,6 +135,7 @@
 }
 
 #app #language-sheet { container-type: inline-size; container-name: languages; }
+#language-sheet #language-options { grid-auto-rows: max-content; align-content: start; }
 #language-options button { height: auto; align-items: center; }
 #language-options .language-option-copy { display: flex; flex-direction: column; align-self: start; gap: 2px; min-height: max-content; height: auto; white-space: normal; overflow-wrap: normal; word-break: normal; }
 #language-options .language-option-copy > :is(span, small) { line-height: 1.3; }
