@@ -1,0 +1,21 @@
+name: Independent 12109 acceptance and jar presentation
+on:
+  push:
+    branches: [qa/acceptance-12109-independent-20261127]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx vitest run tests/independent-acceptance-12109.test.ts
+      - run: npx playwright install chromium
+      - run: npx playwright test e2e/independent-acceptance-12109.spec.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: independent-12109, path: test-results/independent-12109/}
