@@ -64,3 +64,7 @@ Owner requested integration after standalone pilot. 96 thematic tasks appended (
 ## 25.11.2026 · Меню и тетради
 
 По [№31](https://github.com/DanilaH/seeds-bits/issues/31) внедрён прямой вход в конкретную задачу и компактный выбор тома. Постоянный Android-баннер использует контракт «Стрелок». [Код и критерии приёмки](../../research/menu-package-2026-11-25/README.md). Физический телефон, наблюдение аудитории и коммерческие метрики остаются открытыми.
+
+## 27.11.2026 · Приёмка 12109 и баночки
+
+[Независимый отчёт](../../research/functional-fixes-2026-11-27/INDEPENDENT-12109.md). Исходные FA01–04 исправлены в проверенном объёме; FA-03a web prefs, FA-02R recovery UX, физическая performance/release приёмка остаются. [№48](https://github.com/DanilaH/seeds-bits/issues/48) VA01–08 + VA09–11 по прямому замечанию владельца: пропорциональная высота, выраженное рассыпание, последовательность старый→полный→новый без premature swap. No rules/economy/paused flags changes. KIT IMPACT REUSE.

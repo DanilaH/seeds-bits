@@ -1148,9 +1148,20 @@
         "report": "../research/menu-reward-feel-2026-11-27/README.md",
         "code": "Декоративная последовательность после durable commit; milestone novelty Session-only; actual jar target; bound particles; local owned transitions",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "ownerJarFollowup": {
+          "issue": "https://github.com/DanilaH/seeds-bits/issues/48",
+          "ids": [
+            "VA-09",
+            "VA-10",
+            "VA-11"
+          ],
+          "artifact": "https://github.com/DanilaH/seeds-bits/actions/runs/45999822159/artifacts/15197248965",
+          "source": "96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
+          "scope": "Owner reports weakened spill and premature visual fill; trace confirms geometry plateau and held-save old/new jump. Sample final/medal/spill order remains sequential."
+        }
       },
-      "nextAction": "Exact-source CI/native gates, before/after actual-audio videos, signed12107 и телефонный плейтест.",
+      "nextAction": "Correct VA-09/10/11 under #48; preserve truthful reward authority and existing sequence, verify phone owner acceptance.",
       "kitImpact": "REUSE: UI Motion Recipes / OwnedDomMotion / StableProgress / TierProgress; runtime pins unchanged."
     },
     {
@@ -1248,10 +1259,61 @@
           ],
           "nativeReloads": 10,
           "classicForceStops": 20
+        },
+        "independentReview": {
+          "source": "96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
+          "report": "../research/functional-fixes-2026-11-27/INDEPENDENT-12109.md",
+          "qa": "https://github.com/DanilaH/seeds-bits/actions/runs/45999822159/artifacts/15197248965",
+          "originalDefects": "PASS in covered cases",
+          "residuals": [
+            "FA-03a",
+            "FA-02R",
+            "FA-05 physical performance"
+          ],
+          "phone": "UNKNOWN",
+          "commercial": "UNKNOWN"
         }
       },
-      "nextAction": "Physical low/mid Android/full disk/RAM/frame jank/TalkBack/audio/vibration and live commercial checks; separate production policy/signing acceptance. Automatic CI and signed preview12109 are complete; issue48 remains separate.",
+      "nextAction": "Original FA01–04 acceptance passed in covered scenarios. Resolve FA-03a actual web preference path, FA-02R safe known-corruption recovery UX; phone/production and large-profile stress gates remain. Issue48 visual/owner additions separate.",
       "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE independent cross-document/denied/quota probes; runtime pins unchanged."
+    },
+    {
+      "id": "seeds-visual-final-and-jars-12109",
+      "sourceFeatureIds": [],
+      "scope": "Собственная визуальная приёмка №48 и прямые замечания владельца по банкам, не перенос оригинала",
+      "status": "DEFERRED",
+      "reason": "На exact12109 №48 ещё не реализован; новый package after #47.",
+      "localIssueIds": [
+        "VA-01",
+        "VA-02",
+        "VA-03",
+        "VA-04",
+        "VA-05",
+        "VA-06",
+        "VA-07",
+        "VA-08",
+        "VA-09",
+        "VA-10",
+        "VA-11"
+      ],
+      "code": [
+        "src/quiet-table.css",
+        "src/style.css",
+        "src/main.ts",
+        "src/jar-spill.ts",
+        "src/result-presentation.ts"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/48",
+        "report": "../research/functional-fixes-2026-11-27/INDEPENDENT-12109.md",
+        "baseline": "96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
+        "browser": "https://github.com/DanilaH/seeds-bits/actions/runs/45999822159/artifacts/15197248965",
+        "owner": "Прямые замечания к видимому заполнению и рассыпающемуся эффекту.",
+        "phone": "Owner report only; independent physical acceptance UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Implement all #48 VA01–11; normalize internal jar fill, preserve old/full/next order after durable state, restore bounded expressive spill sequentially. Exact CI and phone owner acceptance, no redesign/economy change.",
+      "kitImpact": "REUSE; candidate normalized fill and visual milestone oracle"
     }
   ]
 }
