@@ -1206,7 +1206,8 @@
           "functional": "https://github.com/DanilaH/seeds-bits/actions/runs/45963331976",
           "nativeFunctional": "https://github.com/DanilaH/seeds-bits/actions/runs/45963331864/artifacts/15182853067",
           "scope": "193 unit/616 e2e; native functional3recoveries/3archives/update12108/reboot PASS. Full offline job timed out at prior25min budget; not final acceptance."
-        }
+        },
+        "qaOracle": "SharedPreferences disk oracle respects AOSP .bak authority and is tested with real controlled interrupted-write reload; guest DNS precondition precedes real demo paint check."
       },
       "nextAction": "Final exact-source full40min offline gate + repeated demo/general/functional CI; signed12109. Physical low/mid frame jank/TalkBack/live/release-key gates remain external.",
       "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE independent cross-document/denied/quota probes; runtime pins unchanged."

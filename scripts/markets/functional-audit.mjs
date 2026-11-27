@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 // QA driver only. No test fault or fixture is bundled into the application.
-export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108}) {
+export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prefs}) {
  const initial=profiles().values, report={source:process.env.GITHUB_SHA,physicalPhone:false,environment:'Android API35 offline emulator',recovery:[],profiles:[],permissions:[],timezones:[]};
  const checkpoint=()=>{fs.writeFileSync(out+'/functional-audit.json',JSON.stringify(report,null,2));console.log('FUNCTIONAL_AUDIT_CHECKPOINT',JSON.stringify({status:report.status??'RUNNING',recovery:report.recovery.length,profiles:report.profiles.map(p=>p.years),upgrade:!!report.upgrade12108,permissions:report.permissions.length,timezones:report.timezones.length,reboot:!!report.reboot}));};
  let ui;
@@ -39,7 +39,7 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    const times=await ui.evaluate('window.nativeWrites'),sorted=[...times].sort((a,b)=>a-b);
    assert(times.length>=20,'Every measured move/Undo needs a native commit sample');
    const gaps=await ui.evaluate('window.recordFrames=false;window.frameGaps'),ordered=[...gaps].sort((a,b)=>a-b);
-   const frames={samples:gaps.length,p50:ordered[Math.ceil(ordered.length*.5)-1],p95:ordered[Math.ceil(ordered.length*.95)-1],over50ms:gaps.filter(g=>g>50).length,maxGapMs:ordered.at(-1)};
+   const frames={scope:"Visible document rAF gaps during moves/Undo; emulator software GPU",samples:gaps.length,p50:ordered[Math.ceil(ordered.length*.5)-1],p95:ordered[Math.ceil(ordered.length*.95)-1],over50ms:gaps.filter(g=>g>50).length,maxGapMs:ordered.at(-1)};
    const gfxinfo=adb('shell','dumpsys','gfxinfo','com.seedsbits.game.preview');
    adb('shell','input','keyevent','3');
    await ui.until('document.hidden');
@@ -49,7 +49,7 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    assert.equal(saved.done.length,data.done.length);assert.equal(saved.meta.wallet,999);assert.equal(saved.meta.rewardReceipts.length,2048);assert.equal(saved.sessions.classic.current.moves,20);assert.equal(saved.jars.meter,beforeSeeds+2);
    launch();ui=await connect();await ui.tap('#resume');assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),String(data.sessions.classic.current.board.filter(Boolean).length));
    ui.close();ui=undefined;stop();
-   report.profiles.push({years,bytes:Buffer.byteLength(raw),done:saved.done.length,writeSamples:times,p50:sorted[Math.ceil(sorted.length*.5)-1],p95:sorted[Math.ceil(sorted.length*.95)-1],elapsedMs:performance.now()-boot,coldBootToFieldMs,frames,gfxinfo,memoryBefore,memoryAfter,trimMemory:'COMPLETE',processDeath:true,retainedWallet:999,retainedReceipts:2048,replayDidNotRepay:true});checkpoint();
+   report.profiles.push({years,bytes:Buffer.byteLength(raw),done:saved.done.length,writeSamples:times,p50:sorted[Math.ceil(sorted.length*.5)-1],p95:sorted[Math.ceil(sorted.length*.95)-1],elapsedMs:performance.now()-boot,coldBootToFieldMs,coldBootScope:"Single QA launch-to-field including ADB/CDP/resume",frames,gfxinfo,memoryScope:"Host process PSS only; isolated WebView renderer is not summed",memoryBefore,memoryAfter,trimMemory:'COMPLETE',processDeath:true,retainedWallet:999,retainedReceipts:2048,replayDidNotRepay:true});checkpoint();
   }
   if (prior12108) {
    // Both payloads are re-signed with this run's common temporary CI key.
@@ -57,13 +57,27 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    stop();adb('install','-r','-d',prior12108);
    const data=JSON.parse(fs.readFileSync('test-results/functional-profiles/archive-1.json','utf8'));
    await fixture({[progress]:data,[settings]:{tutorialDone:true,languageChoice:'en',sound:false,vibration:false,reminders:true}});
-   launch();ui=await connect();await ui.tap('#resume');await ui.evaluate("document.querySelector('#menu').click();true");
-   await ui.evaluate("document.querySelector('#resume').click();true");stop();ui.close();ui=undefined;
-   const before=profiles().values[progress];assert.equal(before.meta.wallet,999);
+   launch();ui=await connect();await ui.tap('#resume');
+   const cells=await ui.evaluate("[...document.querySelectorAll('#board [data-index]')].filter(e=>!e.disabled&&e.textContent.trim()).slice(0,2).map(e=>e.dataset.index)");
+   await ui.tap(`#board [data-index="${cells[0]}"]`);await ui.tap(`#board [data-index="${cells[1]}"]`);await ui.until("document.querySelector('.game').dataset.persistence==='saved'");
+   await ui.tap('#undo');await ui.until("document.querySelector('.game').dataset.persistence==='saved'");
+   stop();ui.close();ui=undefined;
+   const before=profiles().values[progress];
+   if(!before?.meta)fs.writeFileSync(out+'/upgrade12108-missing-profile.xml',profiles().xml);
+   assert(before?.meta,'The prior build must have a committed profile before upgrade');assert.equal(before.meta.wallet,999);
+   // Deliberately stage Android's interrupted-write state, then test the real
+   // framework loader, not just our root-side disk oracle.
+   adb('shell',`if [ ! -f ${prefs}.bak ]; then cp ${prefs} ${prefs}.bak; fi`);
+   adb('shell',`printf '%s' '<map />' > ${prefs}`);
+   assert.deepEqual(profiles().values[progress].sessions,before.sessions);
+   launch();ui=await connect();await ui.tap('#resume');
+   assert.deepEqual(profiles().values[progress].sessions,before.sessions);assert.equal(profiles().values[progress].meta.wallet,999);
+   report.atomicBackupRecovery={priorBuild:12108,primaryIncomplete:true,backupPreferred:true,actualAndroidReload:true,histories:true,wallet:999};
+   stop();ui.close();ui=undefined;
    assert.match(adb('shell','dumpsys','package','com.seedsbits.game.preview'),/versionCode=12108\b/);
    adb('install','-r',candidate);launch();ui=await connect();await ui.tap('#resume');
    const after=profiles().values[progress];assert.equal(after.done.length,before.done.length);assert.deepEqual(after.sessions,before.sessions);assert.equal(after.meta.wallet,999);assert.deepEqual(after.meta.rewardReceipts,before.meta.rewardReceipts);assert.deepEqual(after.bookRevisions,before.bookRevisions);assert.deepEqual(after.dailyAssignments,before.dailyAssignments);
-   report.upgrade12108={from:12108,source:'e592866145b0c2f537f01d21fb62a0e9e471d5e4',histories:true,assignments:true,wallet:999,receipts:after.meta.rewardReceipts.length,temporaryCommonCertificate:true};ui.close();ui=undefined;stop();checkpoint();
+   report.upgrade12108={from:12108,source:'e592866145b0c2f537f01d21fb62a0e9e471d5e4',histories:true,assignments:true,wallet:999,receipts:after.meta.rewardReceipts.length,temporaryCommonCertificate:true,atomicBackupRecovery:true};ui.close();ui=undefined;stop();checkpoint();
   }
   // Android permission state is exercised through the real bridge, offline.
   for(const granted of [false,true,false]){

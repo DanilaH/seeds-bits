@@ -24,7 +24,9 @@ const shot=name=>fs.writeFileSync(`${out}/${name}.png`,execFileSync("adb",["exec
 const decode=s=>s.replaceAll("&quot;",'"').replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&amp;","&");
 const encode=s=>s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
 function profiles() {
-  const xml=adb("shell","cat",prefs);
+  // Match SharedPreferencesImpl.loadFromDisk: an existing .bak wins even
+  // when the primary XML is present but belongs to an interrupted write.
+  const xml=adb("shell",`if [ -f ${prefs}.bak ]; then cat ${prefs}.bak 2>/dev/null || cat ${prefs}; else cat ${prefs} 2>/dev/null || cat ${prefs}.bak; fi`);
   return {xml,values:Object.fromEntries([...xml.matchAll(/<string name="([^"]+)">([\s\S]*?)<\/string>/g)].map(m=>[m[1],JSON.parse(decode(m[2]))]))};
 }
 async function expectSavedBoard(id, board) {
@@ -1474,7 +1476,7 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
-  await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108});
+  await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prefs});
   fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(await verifyDurableClassic(),null,2));
   fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
   fs.writeFileSync(out+"/reach-values.json",JSON.stringify(await verifyReachValues(),null,2));

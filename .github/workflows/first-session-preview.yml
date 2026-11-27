@@ -221,7 +221,9 @@ jobs:
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
           echo no | avdmanager create avd --force --name firstsession --package 'system-images;android-35;google_apis;x86_64'
           sudo chmod 666 /dev/kvm
-          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
+          emulator_network_args=()
+          if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then emulator_network_args=(-dns-server 8.8.8.8,8.8.4.4); fi
+          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 "${emulator_network_args[@]}" > test-results/first-session-android/emulator.log 2>&1 &
           emulator_pid=$!
           for attempt in $(seq 1 120); do
             if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/first-session-android/emulator.log; exit 1; fi
@@ -237,6 +239,7 @@ jobs:
           test "$(adb shell id -u | tr -d '\r')" = 0
           adb shell input keyevent 82
           if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then
+            node scripts/markets/check-emulator-network.mjs
             SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk"
             exit
           fi

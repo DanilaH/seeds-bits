@@ -40,6 +40,16 @@ On `ca8d8ba30e4664fdb3528be7f81017b705a407be`:193 unit,2 independent model unit,
 
 The combined offline job hit its old25-minute budget during the remaining prior regression, so the workflow is **not** accepted as fully green on that SHA. Its partial evidence is preserved. The final QA-only follow-up gives the expanded job40minutes, adds cold-to-field/visible rAF gap/gfxinfo measurement, a26-hour timezone/date crossing with actual daily navigation, and notification entry from background. Kernel uptime confirms a real reboot rather than a stale boot-complete property. No app runtime or product timeout was changed by this follow-up; no scenarios or assertions were removed. Final exact-source CI, signed artifact and hash are bound in PR40 and the delivered acceptance report after completion.
 
+## QA oracle correction after476bac3
+
+The476bac3 application APK is byte-identical toca8d8ba (`f1d5e06b2589f4ae609b2c725e8f2176d8c33dadd8b8433d7cda857060bc47ad`);193/616/general/functional/production gates passed again. Native recovery and all3 profile/frame measurements passed before the upgrade driver dereferenced a missing primary-XML profile immediately after stopping12108. The driver had ignored Android's atomic backup file; the interrupted-write explanation is an inference from that sequence, not a captured lost-player-profile claim.
+
+The corrected disk oracle follows [AOSP SharedPreferencesImpl.loadFromDisk](https://android.googlesource.com/platform/frameworks/base/+/main/core/java/android/app/SharedPreferencesImpl.java#157): a present `.bak` is restored before reading the primary; `writeToFile` renames the previous committed file before replacement. Reading only a partly written primary can falsely report loss or accept bytes Android would roll back. The upgrade baseline now uses actual Pair/Undo durable acknowledgement, then a controlled backup-present/empty-primary fixture and a real Android reload prove both the framework behavior and the oracle. Histories,999 hints and receipts remain strict assertions; no sleep substitutes for persistence. This is QA-only; game/native persistence code is unchanged.
+
+The476bac3 demo did not load/paint its first banner (request1/loaded0,35.354s recording). [Failed raw artifact15183454133](https://github.com/DanilaH/seeds-bits/actions/runs/45967671672/artifacts/15183454133) retains guest `UnknownHostException` connectivity diagnostics. This establishes DNS trouble in that guest, not the sole SDK root cause. Final demo uses the official emulator `-dns-server` option and a real guest-DNS precondition before app launch ([Android guidance](https://developer.android.com/studio/run/emulator-networking-dns)); SDK paint/continuity/fullscreen/reward checks and product deadlines are unchanged. A healthy rerun must still pass; failure is not turned into a green no-fill result.
+
+Native performance scope: bridge commit p50/p95 exclude snapshot creation; cold-to-field includes QA ADB/CDP/resume overhead and is one sample per profile; rAF/gfxinfo are emulator traces. Memory dumps cover the host process PSS, not a sum of isolated WebView renderer processes. Full handset RAM/frame-jank profiling remains an explicit external check.
+
 ## Remaining external gates — no false PASS
 
 | Gate | Status / concrete next check |
