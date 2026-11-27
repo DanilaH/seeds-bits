@@ -1199,9 +1199,16 @@
         "code": "Durable recovery; independent stats salvage/protected earned authority; Web Locks CAS / explicit unsupported writable-mode guard; explicit persistent-storage failure; optional service single-flight/deadlines.",
         "phone": "UNKNOWN",
         "commercial": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "automatedCandidate": {
+          "source": "ca8d8ba30e4664fdb3528be7f81017b705a407be",
+          "general": "https://github.com/DanilaH/seeds-bits/actions/runs/45963331958",
+          "functional": "https://github.com/DanilaH/seeds-bits/actions/runs/45963331976",
+          "nativeFunctional": "https://github.com/DanilaH/seeds-bits/actions/runs/45963331864/artifacts/15182853067",
+          "scope": "193 unit/616 e2e; native functional3recoveries/3archives/update12108/reboot PASS. Full offline job timed out at prior25min budget; not final acceptance."
+        }
       },
-      "nextAction": "Exact-source full CI + independent model/faults + Android real profiles/force-stop/demo + production configuration; signed12109. External phone/live/release-key gates documented separately.",
+      "nextAction": "Final exact-source full40min offline gate + repeated demo/general/functional CI; signed12109. Physical low/mid frame jank/TalkBack/live/release-key gates remain external.",
       "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE independent cross-document/denied/quota probes; runtime pins unchanged."
     }
   ]

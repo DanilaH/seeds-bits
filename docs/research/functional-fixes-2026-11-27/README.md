@@ -32,6 +32,14 @@ The old unit fixtures that expected zeroing corrupt jar authority or discarding 
 
 Capacitor8.5.3 `SystemBars.injectSafeAreaCSS` evaluates `document.documentElement.style` during the initial Android inset callback. Before the document root exists it catches/logs the null-root error; this explains the two startup messages in12108. It is upstream initialization ordering, not evidence of banner movement. Current driver preserves raw console/logcat errors and separately measures coherent painted geometry and continuity after document load. Do not suppress the log or fake an SDK close. Any later error or incorrect final inset/paint remains a failed gate. A successful final demo must be attached in PR40 before acceptance.
 
+## Measured candidate ca8d8ba and expanded final gate
+
+On `ca8d8ba30e4664fdb3528be7f81017b705a407be`:193 unit,2 independent model unit,15 browser regression and616 e2e passed. Functional workflow45963331976 passed independent models +74 focused browser checks + optimized production configuration. Demo45963331864 passed252.034s/73observations/6807 continuity frames,hidden0/moved0; real interstitial/rewarded closed and receipt saved once. The single startup null-root safe-area log was retained, final coherent geometry passed.
+
+[Native artifact15182853067](https://github.com/DanilaH/seeds-bits/actions/runs/45963331864/artifacts/15182853067) records functional PASS:3 actual native recovery/force-stop trials, all3 archives, grant/deny/revoke, correct timezone on restart, actual reboot/rescheduled alarm and update12108 with all histories/pins/999hints/2048receipt IDs retained. Native `persistState` bridge sample p50/p95 (ms; excludes JS snapshot creation) was888.1/1013.0,1063.7/1128.1,1188.0/1336.7 for1/3/5 years. These are emulator measurements, not a phone latency guarantee.20/20 prior Classic force-stop trials also passed.
+
+The combined offline job hit its old25-minute budget during the remaining prior regression, so the workflow is **not** accepted as fully green on that SHA. Its partial evidence is preserved. The final QA-only follow-up gives the expanded job40minutes, adds cold-to-field/visible rAF gap/gfxinfo measurement, a26-hour timezone/date crossing with actual daily navigation, and notification entry from background. Kernel uptime confirms a real reboot rather than a stale boot-complete property. No app runtime or product timeout was changed by this follow-up; no scenarios or assertions were removed. Final exact-source CI, signed artifact and hash are bound in PR40 and the delivered acceptance report after completion.
+
 ## Remaining external gates — no false PASS
 
 | Gate | Status / concrete next check |

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 // QA driver only. No test fault or fixture is bundled into the application.
 export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108}) {
  const initial=profiles().values, report={source:process.env.GITHUB_SHA,physicalPhone:false,environment:'Android API35 offline emulator',recovery:[],profiles:[],permissions:[],timezones:[]};
- const checkpoint=()=>fs.writeFileSync(out+'/functional-audit.json',JSON.stringify(report,null,2));
+ const checkpoint=()=>{fs.writeFileSync(out+'/functional-audit.json',JSON.stringify(report,null,2));console.log('FUNCTIONAL_AUDIT_CHECKPOINT',JSON.stringify({status:report.status??'RUNNING',recovery:report.recovery.length,profiles:report.profiles.map(p=>p.years),upgrade:!!report.upgrade12108,permissions:report.permissions.length,timezones:report.timezones.length,reboot:!!report.reboot}));};
  let ui;
  try {
   const puzzle=JSON.parse(fs.readFileSync('src/notebook.json','utf8'))[4],id=puzzle.id;
@@ -27,7 +27,9 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    const raw=fs.readFileSync(`test-results/functional-profiles/archive-${years}.json`,'utf8'),data=JSON.parse(raw),beforeSeeds=data.jars.meter;
    await fixture({[progress]:data,[settings]:{tutorialDone:true,languageChoice:'en',sound:false,vibration:false,reminders:true,reminderTime:'12:30'}});
    const boot=performance.now();launch();ui=await connect();await ui.tap('#resume');
-   await ui.evaluate(`(()=>{window.nativeWrites=[];const original=window.Capacitor.nativePromise;window.Capacitor.nativePromise=function(plugin,method,options){const start=performance.now(),p=original.call(this,plugin,method,options);return plugin==='SeedsMonetization'&&method==='persistState'?p.then(value=>{window.nativeWrites.push(performance.now()-start);return value;}):p;};return true;})()`);
+   const coldBootToFieldMs=performance.now()-boot;
+   adb('shell','dumpsys','gfxinfo','com.seedsbits.game.preview','reset');
+   await ui.evaluate(`(()=>{window.frameGaps=[];window.recordFrames=true;let last;function frame(now){if(!window.recordFrames)return;if(last!==undefined&&!document.hidden)window.frameGaps.push(now-last);last=now;requestAnimationFrame(frame);}requestAnimationFrame(frame);window.nativeWrites=[];const original=window.Capacitor.nativePromise;window.Capacitor.nativePromise=function(plugin,method,options){const start=performance.now(),p=original.call(this,plugin,method,options);return plugin==='SeedsMonetization'&&method==='persistState'?p.then(value=>{window.nativeWrites.push(performance.now()-start);return value;}):p;};return true;})()`);
    const memoryBefore=adb('shell','dumpsys','meminfo','-s','com.seedsbits.game.preview');
    for(let sample=0;sample<10;sample++){
     const cells=await ui.evaluate("[...document.querySelectorAll('#board [data-index]')].filter(e=>!e.disabled&&e.textContent.trim()).slice(0,2).map(e=>e.dataset.index)");assert.equal(cells.length,2);
@@ -35,6 +37,10 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
     await ui.tap('#undo');await ui.until("document.querySelector('.game').dataset.persistence==='saved'");
    }
    const times=await ui.evaluate('window.nativeWrites'),sorted=[...times].sort((a,b)=>a-b);
+   assert(times.length>=20,'Every measured move/Undo needs a native commit sample');
+   const gaps=await ui.evaluate('window.recordFrames=false;window.frameGaps'),ordered=[...gaps].sort((a,b)=>a-b);
+   const frames={samples:gaps.length,p50:ordered[Math.ceil(ordered.length*.5)-1],p95:ordered[Math.ceil(ordered.length*.95)-1],over50ms:gaps.filter(g=>g>50).length,maxGapMs:ordered.at(-1)};
+   const gfxinfo=adb('shell','dumpsys','gfxinfo','com.seedsbits.game.preview');
    adb('shell','input','keyevent','3');
    await ui.until('document.hidden');
    adb('shell','am','send-trim-memory','com.seedsbits.game.preview','COMPLETE');
@@ -43,7 +49,7 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    assert.equal(saved.done.length,data.done.length);assert.equal(saved.meta.wallet,999);assert.equal(saved.meta.rewardReceipts.length,2048);assert.equal(saved.sessions.classic.current.moves,20);assert.equal(saved.jars.meter,beforeSeeds+2);
    launch();ui=await connect();await ui.tap('#resume');assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),String(data.sessions.classic.current.board.filter(Boolean).length));
    ui.close();ui=undefined;stop();
-   report.profiles.push({years,bytes:Buffer.byteLength(raw),done:saved.done.length,writeSamples:times,p50:sorted[Math.ceil(sorted.length*.5)-1],p95:sorted[Math.ceil(sorted.length*.95)-1],elapsedMs:performance.now()-boot,memoryBefore,memoryAfter,trimMemory:'COMPLETE',processDeath:true,retainedWallet:999,retainedReceipts:2048,replayDidNotRepay:true});checkpoint();
+   report.profiles.push({years,bytes:Buffer.byteLength(raw),done:saved.done.length,writeSamples:times,p50:sorted[Math.ceil(sorted.length*.5)-1],p95:sorted[Math.ceil(sorted.length*.95)-1],elapsedMs:performance.now()-boot,coldBootToFieldMs,frames,gfxinfo,memoryBefore,memoryAfter,trimMemory:'COMPLETE',processDeath:true,retainedWallet:999,retainedReceipts:2048,replayDidNotRepay:true});checkpoint();
   }
   if (prior12108) {
    // Both payloads are re-signed with this run's common temporary CI key.
@@ -66,19 +72,33 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
   }
   const oldZone=adb('shell','getprop','persist.sys.timezone');
   try {
-   for(const zone of ['Pacific/Kiritimati','America/Los_Angeles']){
+   for(const zone of ['Pacific/Kiritimati','America/Los_Angeles','Etc/GMT+12']){
     stop();adb('shell','setprop','persist.sys.timezone',zone);adb('shell','am','broadcast','-a','android.intent.action.TIMEZONE_CHANGED','--es','time-zone',zone);launch();ui=await connect();
-    const value=await ui.evaluate(`({zone:Intl.DateTimeFormat().resolvedOptions().timeZone,date:new Date().toString(),ready:!document.querySelector('#app').inert})`);assert(value.ready);assert.equal(value.zone,zone);report.timezones.push({requested:zone,...value});ui.close();ui=undefined;
+    const value=await ui.evaluate(`({zone:Intl.DateTimeFormat().resolvedOptions().timeZone,date:new Date().toString(),ready:!document.querySelector('#app').inert})`);assert(value.ready);assert.equal(value.zone,zone);
+    const nativeDay=adb('shell','date','+%F');await ui.tap('#daily-mode');
+    await ui.until("!document.querySelector('#dialog').open");
+    const active=profiles().values[progress].active;assert.equal(active.slice(-10),nativeDay,'Daily route must use the native local calendar day');
+    report.timezones.push({requested:zone,...value,nativeDay,active});ui.close();ui=undefined;
    }
-  } finally {stop();adb('shell','setprop','persist.sys.timezone',oldZone);}
+  } finally {stop();adb('shell','setprop','persist.sys.timezone',oldZone);adb('shell','am','broadcast','-a','android.intent.action.TIMEZONE_CHANGED','--es','time-zone',oldZone);}
+  assert.notEqual(report.timezones[0].nativeDay,report.timezones[2].nativeDay,'The 26-hour offset must cross a calendar date');
+  // Deliver the real notification entry Intent while the app is backgrounded.
+  launch();ui=await connect();const beforeNotification=profiles().values[progress];
+  adb('shell','input','keyevent','3');await ui.until('document.hidden');
+  adb('shell','am','start','-W','-n','com.seedsbits.game.preview/.MainActivity','--ez','seeds_daily_notification','true');
+  const notificationDay=adb('shell','date','+%F');
+  await ui.until(`(async()=>{const p=JSON.parse((await window.Capacitor.Plugins.Preferences.get({key:${JSON.stringify(progress)}})).value);return p.active.endsWith(${JSON.stringify(notificationDay)})&&!document.querySelector('#dialog').open&&!document.querySelector('#app').inert;})()`);
+  const notificationSave=profiles().values[progress];assert(notificationSave.active.endsWith(notificationDay));
+  assert.deepEqual(notificationSave.sessions[beforeNotification.active].current.board,beforeNotification.sessions[beforeNotification.active].current.board);
+  report.notificationEntry={fromBackground:true,expectedDay:notificationDay,active:notificationSave.active,priorBoardPreserved:true};ui.close();ui=undefined;
   // Actual emulator reboot: Android must reschedule while keeping preferences.
   stop();adb('shell','pm','grant','com.seedsbits.game.preview','android.permission.POST_NOTIFICATIONS');
   launch();ui=await connect();const granted=await ui.evaluate('window.Capacitor.Plugins.SeedsEngagement.configuration()');assert(granted.granted);
   adb('shell','input','keyevent','3');ui.close();ui=undefined;
-  const beforeReboot=profiles().values[progress];adb('reboot');
+  const beforeReboot=profiles().values[progress],beforeUptime=Number(adb('shell','cat','/proc/uptime').split(' ')[0]);adb('reboot');
   let booted=false;
   for(let attempt=0;attempt<120;attempt++){
-   try{if(adb('shell','getprop','sys.boot_completed')==='1'){booted=true;break;}}catch{}
+   try{if(adb('shell','getprop','sys.boot_completed')==='1' && Number(adb('shell','cat','/proc/uptime').split(' ')[0])<beforeUptime){booted=true;break;}}catch{}
    await new Promise(resolve=>setTimeout(resolve,1000));
   }
   assert(booted,'Emulator did not finish reboot');adb('root');adb('wait-for-device');adb('shell','input','keyevent','82');
@@ -89,7 +109,7 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
   assert(alarms.includes('seeds.DAILY_REMINDER'),'Reminder was not rescheduled after reboot');
   report.rebootAlarm=alarms.split('\n').filter(line=>line.includes('seeds.DAILY_REMINDER')||line.includes('com.seedsbits.game.preview'));
   launch();ui=await connect();assert.equal(profiles().values[progress].done.length,beforeReboot.done.length);assert.equal(profiles().values[progress].meta.wallet,beforeReboot.meta.wallet);
-  report.reboot={actualEmulatorReboot:true,retained:true,offline:true};ui.close();ui=undefined;
+  report.reboot={actualEmulatorReboot:true,kernelUptimeReset:true,retained:true,offline:true};ui.close();ui=undefined;
   report.status='PASS';checkpoint();return report;
  } catch(error){report.status='ERROR';report.error=String(error);checkpoint();throw error;}
  finally {ui?.close();stop();await fixture(initial);}

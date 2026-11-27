@@ -152,7 +152,7 @@ jobs:
       matrix:
         mode: [offline, demo]
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 40
     env:
       SEEDS_ANDROID_TEST_MODE: ${{ matrix.mode }}
       SEEDS_ANDROID_CORE_FEEL: ${{ (github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126') && '1' || '0' }}
