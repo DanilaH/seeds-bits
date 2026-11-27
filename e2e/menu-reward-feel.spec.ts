@@ -36,14 +36,14 @@ async function trace(page:Page){
         particles:document.querySelectorAll('.result-seed-burst i,#jar-spill i,.trophy-confetti i,.flying-seed').length,
         angle:Math.atan2(new DOMMatrix(getComputedStyle(paper).transform).b,new DOMMatrix(getComputedStyle(paper).transform).a)*180/Math.PI,
         opacity:Number(getComputedStyle(document.querySelector('#win')!).opacity),box:{x:r.x,y:r.y,width:r.width,height:r.height},anchor:{x:anchor.x,y:anchor.y,width:anchor.width,height:anchor.height}});
-      if(performance.now()-start>2900)resolve();else requestAnimationFrame(frame);
+      if(performance.now()-start>4300)resolve();else requestAnimationFrame(frame);
     };frame();});return samples;
   });
 }
 for(const kind of ['task','page','book','classic','daily','daily-bronze','daily-silver','daily-gold'])test(`MF earned ${kind}: one scene, true final total, no pose jump`,async({page})=>{
   await page.setViewportSize({width:320,height:568});await seed(page,kind);await win(page);
   const samples=await trace(page);await test.info().attach('frames.json',{body:JSON.stringify(samples),contentType:'application/json'});
-  expect(Math.max(...samples.map(x=>x.particles))).toBeLessThanOrEqual(14);
+  expect(Math.max(...samples.map(x=>x.particles))).toBeLessThanOrEqual(26);
   expect(samples.every(x=>x.opacity===1)).toBe(true);
   if(['task','page','book'].includes(kind))expect(Math.max(...samples.map(x=>Math.abs(x.angle)))).toBeLessThan(.1);
   for(const axis of ['x','y'])expect(Math.max(...samples.map(x=>x.anchor[axis]))-Math.min(...samples.map(x=>x.anchor[axis]))).toBeLessThanOrEqual(1);

@@ -931,11 +931,11 @@
     "pt-BR": "No Android, AppMetrica e Yandex Ads enviam dados técnicos sobre dispositivo, instalação, sessões, falhas e anúncios. Podem usar endereços IP e identificadores de publicidade. O tabuleiro e o salvamento completo ficam fora dos eventos de análise."
   },
   "ui.daily-puzzle-reminders-are-on-by-default-and-use": {
-    "ru": "Напоминание о задаче дня включено по умолчанию и работает по местному времени на устройстве. Его можно выключить в настройках игры. Разрешение Android можно отключить в системных настройках.",
-    "en": "Daily puzzle reminders are on by default and use the device’s local time. You can turn them off in the game settings. Android permission can be revoked in system settings.",
-    "es": "Los recordatorios están activados por defecto y siguen la hora local del dispositivo. Puedes desactivarlos en el juego. El permiso de Android puede revocarse en los ajustes del sistema.",
-    "tr": "Günlük bulmaca hatırlatmaları varsayılan olarak açık ve cihazın yerel saatini kullanır. Oyunun ayarlarından kapatabilirsin. Android iznini sistem ayarlarından kaldırabilirsin.",
-    "pt-BR": "Lembretes diários vêm ativados e seguem o horário local do dispositivo. Você pode desligá-los no jogo. A permissão do Android pode ser revogada nas configurações do sistema."
+    "ru": "Если вы сегодня не заходили в игру, она может напомнить о себе в обед и вечером по местному времени. Уведомления зависят от разрешения и канала Android; отключить их можно в системных настройках. Прежнее отключение сохраняется.",
+    "en": "If you have not opened the game today, it may remind you at lunchtime and in the evening, using local time. Android permission and notification channel settings apply. You can disable notifications in system settings. Previous opt-outs are preserved.",
+    "es": "Si hoy no has abierto el juego, puede recordártelo al mediodía y por la tarde, según la hora local. Se respetan el permiso y el canal de notificaciones de Android. Puedes desactivarlas en los ajustes del sistema. Se conserva cualquier rechazo anterior.",
+    "tr": "Bugün oyunu açmadıysan yerel saatle öğlen ve akşam hatırlatabilir. Android izni ve bildirim kanalı ayarları geçerlidir. Bildirimleri sistem ayarlarından kapatabilirsin. Önceki ret kararları korunur.",
+    "pt-BR": "Se você não abriu o jogo hoje, ele pode lembrar você no almoço e à noite, no horário local. A permissão e o canal de notificações do Android são respeitados. Você pode desativá-las nas configurações do sistema. Recusas anteriores são preservadas."
   },
   "ui.rustore-provides-the-review-window-the-game-receives-neither": {
     "ru": "Окно оценки обслуживает RuStore. Игра не получает текст отзыва и звёзды и не выдаёт за них награду.",

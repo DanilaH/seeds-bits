@@ -23,7 +23,7 @@ public class SeedsEngagementPlugin extends Plugin {
   private RuStoreReviewManager manager;
   private volatile ReviewInfo prepared;
   private long preparedAt;
-  @Override public void load() {foreground=true;SeedsDailyReminder.sync(getContext());}
+  @Override public void load() {foreground=true;SeedsDailyReminder.visit(getContext());SeedsDailyReminder.sync(getContext());}
   private boolean consumeEntry(Intent intent) {
     boolean entry=intent!=null && intent.getBooleanExtra("seeds_daily_notification",false);
     if(entry)intent.removeExtra("seeds_daily_notification");
@@ -66,7 +66,7 @@ public class SeedsEngagementPlugin extends Plugin {
   @Override protected void handleOnNewIntent(Intent intent) {
     if(consumeEntry(intent))notifyListeners("dailyOpen",new JSObject(),true);
   }
-  @Override protected void handleOnResume() {foreground=true;SeedsDailyReminder.sync(getContext());}
+  @Override protected void handleOnResume() {foreground=true;SeedsDailyReminder.visit(getContext());SeedsDailyReminder.sync(getContext());}
   @Override protected void handleOnPause() {foreground=false;}
   @Override protected void handleOnDestroy() {
     foreground=false;

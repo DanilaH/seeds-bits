@@ -25,3 +25,9 @@ Use [NEW_PROJECT_SETUP.md](docs/kit-guidance/NEW_PROJECT_SETUP.md) only for setu
 Choose checks for the actual change. Browser CI, synthetic gestures, SDK doubles and demo ads do not establish physical phone feel, live revenue, player retention or publisher payout. Never claim an unread source was inspected. Do not publish to a store, change other games or alter dashboard settings as a side effect of documentation work.
 
 At the end of a material task report **KIT IMPACT**: NONE / REUSE / IMPROVE / CANDIDATE / EXTRACTED, with evidence and any targeted proposal, following [KIT_FEEDBACK_LOOP.md](docs/kit-guidance/KIT_FEEDBACK_LOOP.md). Do not turn a project-specific mechanic into a generic API without a demonstrated shared contract.
+
+## Active owner package48 (27 November)
+
+Preserve the complete12109 functional source96f5ae1. Issue48 VA01–13 authorizes local layout repairs, proportional jar fill and the restored expressive12106 spill. Earned jar replacement follows the current durable acknowledgement; cancellation settles only to confirmed totals. Ordinary Settings keeps its native banner; confirm/privacy/actual modals/fullscreen/background remain exceptions.
+
+In-game reminder switches/time/result CTA are removed by owner instruction. Inexact native lunch/evening slots12:30/19:00 target players with no entry/foreground today, not unfinished daily puzzles. Android permission/channel and legacy opt-out apply; one saved request after a successful result and completed reward sequence, no automatic repeat. Keep review/ads from overlapping this gate. Use seeds-bits CI, not kit CI; deliver signed preview plus normal-speed comparisons12106/12109/candidate. No publication.

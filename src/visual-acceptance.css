@@ -1,0 +1,138 @@
+/* VA01–13: preserve the Quiet Table artwork; use the actual useful height. */
+#app .jar-glass { overflow: visible; }
+#app .jar-interior {
+  position: absolute;
+  inset: 14% 13% 7%;
+  border-radius: 4px 6px 24% 24%;
+  overflow: hidden;
+  pointer-events: none;
+}
+#app .jar-glass .jar-fill {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--fill, 0%);
+  max-height: none;
+}
+#app .game.is-result > #viewport {
+  container-type: size;
+  container-name: result-space;
+}
+#app .game.is-result #win {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  justify-content: safe center;
+  scrollbar-width: thin;
+}
+#app #win > * { flex-shrink: 0; }
+#app #win .quiet-result-page { max-width: 100%; }
+#app .game.is-result #result-actions { flex-shrink: 0; }
+
+@container result-space (max-height: 350px) {
+  #app .game.is-result #win {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(80px, .43fr);
+    grid-auto-rows: max-content;
+    align-content: safe center;
+    align-items: center;
+    gap: 3px 8px;
+    padding: 5px 8px;
+  }
+  #app #win > * { grid-column: 1 / -1; min-width: 0; }
+  #app #win .quiet-result-page,
+  #app #win.daily-result .quiet-result-page {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    padding: 9px 15px 12px;
+    margin: 0;
+  }
+  #app #win .quiet-result-page h1 { font-size: 20px; line-height: 1.15; }
+  #app #win .quiet-result-page #result-subtitle { font-size: 13px; line-height: 1.2; }
+  #app #win .quiet-result-page .win-symbol,
+  #app #win .quiet-result-page .win-symbol.paper-result {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 5px;
+  }
+  #app #win #result-jar-card {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    margin: 0;
+    padding: 2px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  #app #win #result-jar-card .jar-glass { width: 44px; height: 59px; }
+  #app #win #result-jar-amount { font-size: 12px; line-height: 1.25; }
+  #app #win #result-date-art { font-size: 18px; }
+  #app #win #award { padding: 4px; margin-top: 4px; }
+  #app #win #award .trophy-heading { flex-wrap: wrap; gap: 0 5px; }
+  #app #win #award .trophy-mark { grid-template-columns: 38px minmax(0, 1fr); gap: 1px 4px; }
+  #app #win #award :is(.medal-art,.medal-figure) { width: 38px; height: 46px; }
+  #app #win #award .next-medal { font-size: 11px; }
+  #app #win #win-stats { margin-block: 2px; }
+  #app #win #win-stats .result-stat strong { font-size: 19px; }
+  #app #win #result-gains { font-size: 13px; line-height: 1.2; }
+  #app #win #result-book-card { margin: 0; padding: 0; }
+}
+@media (orientation: landscape) and (max-height: 430px) {
+  #app #win .quiet-result-page { align-self: start; }
+  #app #win #result-date-art { display: none; }
+  #app #win #result-next { max-width: 100%; }
+  #app #no-moves-card { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 2px; padding: 4px 7px; }
+  #app #no-moves-card > strong { font-size: 16px; line-height: 1.15; }
+  #app #no-moves-card > p { overflow-y: auto; min-height: 0; margin: 0; font-size: 13px; line-height: 1.2; }
+  #app #no-moves-card > div { min-height: 44px; }
+  #app #no-moves-card button { min-width: 0; white-space: normal; overflow-wrap: normal; }
+  #dialog[data-screen="home"] .home-book-card #book-quick { white-space: normal; }
+  #app footer .action { padding-inline: 3px; }
+  #app footer .action > span { overflow-wrap: normal; word-break: normal; }
+}
+
+#dialog[data-screen="home"] .home-links { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+#dialog[data-screen="home"] .home-links > button { overflow-wrap: normal; word-break: normal; }
+@media (orientation: portrait) and (max-width: 350px) {
+  #dialog[data-screen="home"] .home-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (orientation: portrait) and (max-height: 580px) {
+  #dialog[data-screen="home"] { padding-block: 6px; }
+  #dialog[data-screen="home"] #menu-content { gap: 3px; }
+  #dialog[data-screen="home"] .home-layout { gap: 6px; }
+  #dialog[data-screen="home"] .home-current { gap: 5px; padding-top: 0; }
+  #dialog[data-screen="home"] .home-current-copy { min-height: 100px; padding-block: 10px 13px; gap: 2px; }
+  #dialog[data-screen="home"] .quiet-mini-board { height: 28px; }
+  #dialog[data-screen="home"] .home-title { min-height: 44px; }
+}
+
+#app #language-sheet { container-type: inline-size; container-name: languages; }
+#language-options button { height: auto; align-items: center; }
+#language-options .language-option-copy { white-space: normal; overflow-wrap: normal; word-break: normal; }
+#language-options .language-option-copy > :is(span, small) { line-height: 1.3; }
+#language-options .language-check { align-self: center; }
+@container languages (max-width: 16em) {
+  #language-options button { grid-template-columns: 28px minmax(0, 1fr) 24px; gap: 4px; }
+  #language-options .language-option-copy { grid-column: 1 / -1; grid-row: 2; }
+  #language-options .language-check { grid-column: 3; grid-row: 1; }
+  #language-options .language-mark { grid-column: 1; grid-row: 1; }
+}
+#dialog .book-sections { flex-wrap: wrap; }
+#dialog .book-sections button { flex: 1 1 max-content; min-width: min-content; overflow-wrap: normal; word-break: normal; white-space: normal; }
+#app .language-option[aria-pressed="true"] { color: var(--table-ink); }
+#app #hint-jump { color: var(--table-ink); }
+#app #progress-jar .progress-jar-cue { display: flex; align-items: center; gap: 6px; color: var(--table-ink); font-size: .85rem; margin-top: 8px; }
+.progress-jar-cue svg { width: 16px; height: 16px; }
+#app .medal-figure .medal-receipt { right: -4px; bottom: -2px; width: 17px; height: 17px; }
+@media (min-width: 700px) {
+  #dialog[data-screen="progress"] #collection {
+    align-content: start;
+    align-items: start;
+    grid-auto-rows: max-content;
+    width: min(100%, 900px);
+    margin-inline: auto;
+  }
+  #dialog[data-screen="progress"] :is(.progress-hero,.progress-book,.progress-stats,#progress-trophies) { align-self: start; height: auto; }
+}

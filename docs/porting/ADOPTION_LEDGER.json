@@ -1252,6 +1252,30 @@
       },
       "nextAction": "Physical low/mid Android/full disk/RAM/frame jank/TalkBack/audio/vibration and live commercial checks; separate production policy/signing acceptance. Automatic CI and signed preview12109 are complete; issue48 remains separate.",
       "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE independent cross-document/denied/quota probes; runtime pins unchanged."
+    },
+    {
+      "id": "seeds-visual-acceptance-48",
+      "sourceFeatureIds": [],
+      "scope": "VA01–13; owner notification/banner/jar corrections after12109",
+      "status": "IN_PROGRESS",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "ownerDecisionRef": "https://github.com/DanilaH/seeds-bits/issues/48#issuecomment-7218627968",
+      "code": [
+        "src/main.ts",
+        "src/jar-spill.ts",
+        "src/visual-acceptance.css",
+        "native/android/SeedsDailyReminder.java",
+        "native/android/SeedsEngagementPlugin.java"
+      ],
+      "evidence": {
+        "phone": "UNKNOWN",
+        "commercial": "UNKNOWN",
+        "audience": "UNKNOWN",
+        "baseline": "12109/96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
+        "reference": "Internal12106/125606e4a90e06b844fe6eb8f83249032cb7057f"
+      },
+      "nextAction": "Project CI full regression, clipping/linear fill/durable transition/native absence reminders and Settings demo trace; signed12110 plus comparisons.",
+      "kitImpact": "REUSE existing owned motion, viewport and durable authority; no runtime pin changes."
     }
   ]
 }

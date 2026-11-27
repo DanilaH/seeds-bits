@@ -83,6 +83,7 @@ import "./ui-adaptation.css";
 import "./calm-screens.css";
 import "./compact-navigation.css";
 import "./quiet-table.css";
+import "./visual-acceptance.css";
 import {
   resultKind,
   resultArtwork,
@@ -235,6 +236,9 @@ let lastExternalAt = -Infinity,
   activeTick = performance.now(),
   activeSinceSave = 0;
 let visualSeeds: number | undefined;
+let confirmedSeeds: number | undefined;
+let jarPending = false;
+let rewardScene: Promise<void> | undefined;
 let completedJar:
   { index: number; capacity: number } | undefined;
 let clearContact = () => {};
@@ -291,7 +295,7 @@ const lessons = [
   },
 ];
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}">${jarGlass("jar-glass")}<span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}">${jarGlass("jar-glass")}<span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
 let refreshStaticCopy = () => {};
 const globe = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>';
 const languageFlags: Record<(typeof launchLanguages)[number], string> = {
@@ -446,7 +450,7 @@ function applyLanguage() {
     if(dialog.dataset.screen==="home")renderHomeCurrent();
     else if(dialog.open && (dialog.dataset.screen==="book" || dialog.dataset.screen==="book-picker"))
       openCollection(dialog.dataset.screen,true);
-    updateReminderSettings();
+    updateEngagementCopy();
     showSaveState();
   }
 }
@@ -480,8 +484,6 @@ async function changeLanguage(code:LanguageChoice) {
 languageRow.onclick=()=>openLanguage("settings");
 pauseLanguage.onclick=()=>openLanguage("pause");
 $("language-close").onclick=()=>languageSheet.close();
-// Keep the primary result action ahead of the optional reminder.
-$("play-again").after($("result-reminder"));
 const resultNext = document.createElement("div");
 resultNext.id = "result-next";
 resultNext.className = "result-next";
@@ -507,7 +509,6 @@ resultDock.append(
   difficultyCaption,
   resultNext,
   $("try-notebook"),
-  $("result-reminder"),
 );
 document.querySelector(".game")!.append(resultDock);
 const gameDifficulty = document.createElement("small");
@@ -679,9 +680,9 @@ for (const [id, name] of [["progress-open","progress"],["learn","help"],["settin
 const settingsBasics = document.createElement("section");
 settingsBasics.className = "settings-basics";
 for (const node of [...$("settings-panel").children])
-  if (!node.matches(".screen-heading,#reminder-settings"))
+  if (!node.matches(".screen-heading"))
     settingsBasics.append(node);
-$("settings-panel").insertBefore(settingsBasics, $("reminder-settings"));
+$("settings-panel").append(settingsBasics);
 const settingsRows = document.createElement("section");
 settingsRows.className = "settings-rows";
 settingsRows.append(languageRow, settingsBasics.querySelector(".settings")!);
@@ -691,7 +692,7 @@ hintReserve.className = "settings-reserve";
 $("hint-wallet").before(hintReserve);
 hintReserve.innerHTML = `<strong id="settings-reserve-title">${t("calm.settings.stock")}</strong>`;
 hintReserve.append($("hint-wallet"));
-for (const id of ["dark", "sound", "vibration", "reminders"])
+for (const id of ["dark", "sound", "vibration"])
   $(id).setAttribute("role", "switch");
 let enteredGame = false;
 const openingErrors: Record<string, string> = {
@@ -1065,6 +1066,7 @@ function save(state = progress, game = session) {
   if (bootComplete && enteredGame && lesson < 0 && !busy && !dialog.open) game.current.scroll = viewport.scrollTop;
   state.sessions[state.active] = game;
   const committedEvents = [...(metadata(state).analytics ?? [])];
+  const savedSeeds = jars(state).meter;
   const bundle = serializeProgress(state),
     prefs = JSON.stringify(settings),
     patch = { ...settingsDirty };
@@ -1100,6 +1102,7 @@ function save(state = progress, game = session) {
         if (resultAwaitingSave === game) resultAwaitingSave = undefined;
         if (pendingResult?.session === game) pendingResult.saved = true;
         lastStored = bundle;
+        confirmedSeeds = savedSeeds;
         // Dispatch only events contained in this successfully written snapshot.
         // A crash before the next cleanup write can replay IDs; native deduplicates.
         if (adsBridge || webAcquisition)
@@ -1112,6 +1115,8 @@ function save(state = progress, game = session) {
         storageUnsupported = false;
         saveFailed = false;
         showSaveState();
+        if (jarPending && completedJar && !pendingResult && !jarMilestone)
+          void presentFullJar(jarStateForHold(completedJar), resultJarCard.hidden ? $("jar-glass") : $("result-jar-glass"), presentationRevision);
         if (lesson < 0 && !occupied(board())) {
           renderWin();
           maybeCelebrateResult();
@@ -1192,7 +1197,7 @@ function applySettings(incoming: Record<string, unknown>) {
   $<HTMLInputElement>("sound").checked = settings.sound;
   $<HTMLInputElement>("vibration").checked = settings.vibration;
   platform.setHapticState(settings.vibration, paused);
-  updateReminderSettings();
+  updateEngagementCopy();
 }
 window.addEventListener("storage", (event) => {
   if (!event.newValue || !event.key?.startsWith(SETTINGS)) return;
@@ -1344,11 +1349,13 @@ function settlePresentation() {
   clearPairFeedback();
   for (const cancel of [...presentationWaits]) cancel();
   completedJar = undefined;
+  jarPending = false;
+  rewardScene = undefined;
   pendingResult = undefined;
   flights.clear();
   jarMilestone=undefined;
   document.querySelectorAll("[data-reward-phase]").forEach(node=>node.removeAttribute("data-reward-phase"));
-  visualSeeds = jars(progress).meter;
+  visualSeeds = confirmedSeeds ?? jars(progress).meter;
   renderJar();
 }
 /** This wait owns presentation only; cancellation resolves it without continuation. */
@@ -1364,11 +1371,21 @@ function presentationActive(revision: number) {
   return revision === presentationRevision && !paused && !document.hidden &&
     !dialog.open && !hintOffer.open && !languageSheet.open && !classicNewSheet.open;
 }
+function jarStateForHold(held: {index: number; capacity: number}) {
+  return {...jarState(0),...held,filled:held.capacity,percent:100,name:localName(jarNames[held.index%6]),color:jarColors[held.index%6]};
+}
 async function presentFullJar(before: ReturnType<typeof jarState>, target: HTMLElement, revision: number) {
+  if (jarMilestone) return jarMilestone;
+  // Keep the receiving vessel in place even if its flight beats disk commit.
+  completedJar ??= {index:before.index,capacity:before.capacity};
+  jarPending = true;
+  renderJar();
   // The captured write, never an animation, authorizes the earned accent.
   await saveQueue;
   if (!presentationActive(revision) || saveFailed || storageConflict || futureSave || reduced()) return;
   if (jarMilestone) return jarMilestone;
+  if (jarState(confirmedSeeds ?? 0).index <= before.index) return;
+  jarPending = false;
   const run = async () => {
     completedJar = {index: before.index, capacity: before.capacity};
     renderJar();
@@ -1379,6 +1396,7 @@ async function presentFullJar(before: ReturnType<typeof jarState>, target: HTMLE
     await jarSpill.play(target);
     if (!presentationActive(revision)) return;
     completedJar = undefined;
+    visualSeeds = Math.min(visualSeeds ?? 0, confirmedSeeds ?? 0);
     renderJar();
     target.dataset.rewardPhase = "next";
     const a = motion(target,[{opacity:.75,transform:"scale(.94)"},{opacity:1,transform:"none"}],160);
@@ -1404,9 +1422,13 @@ function animateSeeds(rects: DOMRect[], amount: number, result = false): Promise
   let fullPromise: Promise<void> | undefined;
   return new Promise(resolve => {
     flights.fly(tokens,target,(index,silent)=>{
+      if (!presentationActive(revision)) { if (!--remaining) resolve(); return; }
       const quantity=valueAfterVisualArrival(plan,index)-(index?valueAfterVisualArrival(plan,index-1):0);
       visualSeeds=Math.min(jars(progress).meter,(visualSeeds??0)+quantity);
-      // Both visible indicators share the full old jar until its lid closes.
+      // Establish the old-vessel hold before the first threshold render.
+      if (jarState(visualSeeds).index>start.index && !completedJar) {
+        completedJar={index:start.index,capacity:start.capacity};jarPending=true;
+      }
       renderJar();
       if (!silent && presentationActive(revision) && jarState(visualSeeds).index===start.index && !completedJar) {
         feedback("land",!result);
@@ -1427,7 +1449,7 @@ function maybeCelebrateResult() {
   // Hand off any still-flying field feedback to this one result scene.
   presentationRevision++;
   for (const cancel of [...presentationWaits]) cancel();
-  flights.clear();jarSpill.clear();completedJar=undefined;jarMilestone=undefined;
+  flights.clear();jarSpill.clear();completedJar=undefined;jarPending=false;jarMilestone=undefined;
   const revision=presentationRevision, current=session, amount=earnedSeeds+resultPairSeeds;
   visualSeeds=Math.max(0,jars(progress).meter-amount);renderJar();
   const kind=resultMilestone?.session===session ? resultMilestone.kind : resultKind(progress.active,progress.done,notebook,false);
@@ -1439,7 +1461,7 @@ function maybeCelebrateResult() {
   clearResultCelebration=scene;
   // One hierarchy: readable win → newly earned medal → jar transaction.
   // Every next action stays live; leaving settles directly to the durable totals.
-  void (async()=>{
+  const sequence = (async()=>{
     await scene.finished;
     if (!presentationActive(revision) || session!==current) return;
     if (progress.active.startsWith("daily") && amount) {
@@ -1458,6 +1480,8 @@ function maybeCelebrateResult() {
     }
     if (amount) await animateSeeds(pending.rects,amount,true);
   })();
+  rewardScene=sequence;
+  void sequence.finally(()=>{if(rewardScene===sequence){rewardScene=undefined;if(presentationActive(revision)&&session===current)void tryResultEngagement();}});
 }
 function cellCenter(index: number, origin: DOMRect, boardBox: DOMRect) {
   const box = cell(index)?.getBoundingClientRect();
@@ -1874,7 +1898,7 @@ function markGameStarted() {
   });
 }
 function bannerEligible() {
-  const guardedScreen = dialog.open && ["settings","confirm","privacy"].includes(dialog.dataset.screen ?? "");
+  const guardedScreen = dialog.open && ["confirm","privacy"].includes(dialog.dataset.screen ?? "");
   return appForeground && !platformPaused && !rewardRequest && !engagementActive &&
     !document.hidden && (platform.native || document.hasFocus()) && lesson < 0 && !guardedScreen && !languageSheet.open && !classicNewSheet.open && !hintOffer.open &&
     !document.querySelector("dialog[open]:not(#dialog)");
@@ -2338,31 +2362,6 @@ function renderWin() {
           : id.startsWith("daily")
             ? t("ui.all-available-days-complete")
             : "";
-  $("result-reminder").hidden =
-    !engagementAvailable ||
-    settings.reminders ||
-    !id.startsWith("daily") ||
-    Boolean(
-      metadata(progress).flags?.includes("reminder_permission_requested"),
-    );
-  $("result-gains").style.minHeight =
-    earnedSeeds || earnedHints
-      ? `${((earnedSeeds ? 1 : 0) + (earnedHints ? 1 : 0)) * 1.5}em`
-      : "";
-  $("result-gains").innerHTML = saveFailed || resultAwaitingSave === session
-    ? t("ui.reward-waiting-to-be-saved")
-    : [
-        earnedSeeds
-          ? t("ui.into-the-jar", { "0": earnedSeeds, "1": seedWord(earnedSeeds) })
-          : "",
-        earnedHints
-          ? t("ui.streak-reward", { "0": earnedHints, "1": hintWord(earnedHints) })
-          : "",
-      ]
-        .filter(Boolean)
-        .map((text) => `<span>${text}</span>`)
-        .join("");
-  $("try-notebook").hidden = !helpFlags.result || id !== "classic" || !notebookTarget(progress);
   const award = $("award");
   if (dailyResult) resultPaper.append(award);
   else if (award.parentElement === resultPaper) $("completion-status").before(award);
@@ -3610,7 +3609,7 @@ function openSettings(restoring = false) {
   $("menu-content").hidden = true;
   $("settings-panel").hidden = false;
   dialog.dataset.screen = "settings";
-  updateReminderSettings();
+  updateEngagementCopy();
   pinDialogHeading($("settings-panel"));
   if (!restoring) dialogScroller().scrollTop = 0;
   $("settings-back").focus({ preventScroll: true });
@@ -3849,6 +3848,8 @@ async function boot() {
     hadBackup = backup !== null || (await platform.read(PROGRESS + ".damaged")) !== null;
     recoveryAvailable = restorable(backup);
   } catch { hadBackup = true; }
+  confirmedSeeds = jars(progress).meter;
+  visualSeeds = confirmedSeeds;
   if (settings.sound) void warmSound();
   if (recoveryAvailable && !readWarning)
     readWarning =
@@ -3942,7 +3943,7 @@ async function boot() {
     const readConfiguration = optionalSingleFlight("notification-configuration", () => engagementBridge!.configuration().then(config=>{
       engagementAvailable=config.available;notificationGranted=config.granted;
       pendingDailyOpen ||= Boolean(config.entry);
-      updateReminderSettings();void openDailyNotification();
+      updateEngagementCopy();void openDailyNotification();
       return config;
     }));
     await readConfiguration;
@@ -3967,7 +3968,7 @@ async function boot() {
             .then((c) => {
               if (!c) return;
               notificationGranted = c.granted;
-              updateReminderSettings();
+              updateEngagementCopy();
               if (c.entry) {
                 pendingDailyOpen = true;
                 void openDailyNotification();
@@ -4529,7 +4530,7 @@ function jarGrains(count: number) {
   }).join("");
 }
 function jarGlass(id?: string, seedCount = 0) {
-  return `<span class="jar-glass"${id ? ` id="${id}"` : ""}><span class="jar-fill"><span class="jar-grains" aria-hidden="true" data-count="${seedCount}">${jarGrains(seedCount)}</span></span><span class="jar-lid"></span></span>`;
+  return `<span class="jar-glass"${id ? ` id="${id}"` : ""}><span class="jar-interior"><span class="jar-fill"><span class="jar-grains" aria-hidden="true" data-count="${seedCount}">${jarGrains(seedCount)}</span></span></span><span class="jar-lid"></span></span>`;
 }
 function syncJarGrains(host: HTMLElement, seedCount: number) {
   const grains = host.querySelector<HTMLElement>(".jar-grains");
@@ -4538,10 +4539,10 @@ function syncJarGrains(host: HTMLElement, seedCount: number) {
   grains.innerHTML = jarGrains(seedCount);
 }
 function jarPicture(j: ReturnType<typeof jarState>) {
-  return `<span class="jar-picture" style="--fill:${j.percent}%;--jar-color:${j.color}" aria-hidden="true">${jarGlass(undefined, j.filled)}</span>`;
+  return `<span class="jar-picture" style="--fill:${j.filled / j.capacity * 100}%;--jar-color:${j.color}" aria-hidden="true">${jarGlass(undefined, j.filled)}</span>`;
 }
 function jarHero(j: ReturnType<typeof jarState>) {
-  return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p></div></section>`;
+  return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p><span class="progress-jar-cue">${t("ui.jar-collection")}${icon("arrow")}</span></div></section>`;
 }
 function difficultyLabel() {
   const level = classicDifficulty();
@@ -4693,8 +4694,8 @@ function renderJar() {
   if (meter.hidden) return;
   visualSeeds ??= jars(progress).meter;
   const j = jarState(visualSeeds);
-  const celebrating = Boolean(completedJar);
-  if (celebrating) {
+  const celebrating = Boolean(completedJar) && !jarPending;
+  if (completedJar) {
     j.index = completedJar!.index;
     j.percent = 100;
     j.filled = j.capacity = completedJar!.capacity;
@@ -4702,7 +4703,7 @@ function renderJar() {
     j.color = jarColors[j.index % 6];
   }
   meter.style.setProperty("--jar-color", j.color);
-  meter.style.setProperty("--fill", `${j.percent}%`);
+  meter.style.setProperty("--fill", `${j.filled / j.capacity * 100}%`);
   syncJarGrains(meter, j.filled);
   const through = celebrating ? jarState(visualSeeds).index : j.index + 1;
   const ordinal = through > j.index + 1 ? `${j.index+1}–${through}` : j.index+1;
@@ -4729,11 +4730,11 @@ function updateResultJar() {
   resultJarCard.dataset.capacity=String(j.capacity);
   resultJarCard.dataset.jarIndex=String(j.index);
   resultJarCard.style.setProperty("--jar-color", j.color);
-  resultJarCard.style.setProperty("--fill", `${j.percent}%`);
+  resultJarCard.style.setProperty("--fill", `${j.filled / j.capacity * 100}%`);
   syncJarGrains(resultJarCard, j.filled);
   const lastJar=jarState(displayed).index;
   const ordinal=lastJar>j.index+1 ? `${j.index+1}–${lastJar}` : j.index+1;
-  $("result-jar-amount").textContent = completedJar
+  $("result-jar-amount").textContent = completedJar && !jarPending
     ? `${t("feel.jar.collected",{number:ordinal})} · ${j.filled}/${j.capacity}`
     : `${j.name} · ${t("ui.of-seeds", {"0":j.filled,"1":j.capacity})}`;
 }
@@ -4794,44 +4795,7 @@ function firstEvent(
   durableEvent(name, data);
   return true;
 }
-function updateReminderSettings() {
-  $("reminder-settings").hidden = !engagementAvailable;
-  $<HTMLInputElement>("reminders").checked = settings.reminders;
-  $<HTMLInputElement>("reminder-time").value = settings.reminderTime;
-  const requested = Boolean(
-    metadata(progress).flags?.includes("reminder_permission_requested"),
-  );
-  const failed = metadata(progress).flags?.includes(
-    "reminder_permission_error",
-  );
-  const denied = !notificationGranted && requested && !failed;
-  const pending =
-    !notificationGranted && ((settings.reminders && !requested) || failed);
-  $<HTMLInputElement>("reminders").disabled = notificationRequestPending;
-  $<HTMLButtonElement>("notification-permission-request").disabled =
-    notificationRequestPending;
-  $("reminder-permission").textContent = notificationRequestPending
-    ? notificationSaving
-      ? t("ui.saving-settings")
-      : t("ui.waiting-for-android")
-    : notificationGranted
-      ? settings.reminders
-        ? t("ui.reminder-on")
-        : t("ui.reminder-off")
-      : failed
-        ? t("ui.could-not-open-the-android-prompt-try-again-or")
-        : denied
-          ? t("ui.notifications-are-off-in-android-allow-them-in-system")
-          : pending
-            ? t("ui.android-permission-is-needed-well-ask-after-your-first")
-            : "";
-  $("notification-permission-request").hidden =
-    !pending || notificationRequestPending;
-  $("notification-permission-request").textContent = failed
-    ? t("ui.try-again")
-    : t("ui.allow-notifications");
-  $("notification-system-settings").hidden =
-    notificationRequestPending || notificationGranted || (!denied && !failed);
+function updateEngagementCopy() {
   const wallet = metadata(progress).wallet;
   $("settings-reserve-title").textContent = t("calm.settings.stock");
   $("hint-wallet").textContent =
@@ -4871,7 +4835,7 @@ async function enableReminder(enabled: boolean) {
       }
       if (firstRequest) track("reminder_permission_requested");
       notificationSaving = false;
-      updateReminderSettings();
+      updateEngagementCopy();
       const state = await requestNotificationPermission(engagementBridge);
       if (!state.available) throw new Error("notification_unavailable");
       notificationGranted = state.granted;
@@ -4891,35 +4855,15 @@ async function enableReminder(enabled: boolean) {
       notificationSaving = false;
       lastExternalAt = performance.now();
       syncPauseState();
-      updateReminderSettings();
+      updateEngagementCopy();
     }
   }
   settings.reminders = enabled && notificationGranted;
   settingsDirty.reminders = settings.reminders;
   await save();
   track("reminder_toggle", { enabled: settings.reminders });
-  updateReminderSettings();
+  updateEngagementCopy();
 }
-$("notification-system-settings").onclick = () => {
-  lastExternalAt = performance.now();
-  void engagementBridge?.openNotificationSettings?.().catch(() => {});
-};
-$("notification-permission-request").onclick = () => {
-  void enableReminder(true);
-};
-$("reminders").onchange = () => {
-  void enableReminder($<HTMLInputElement>("reminders").checked);
-};
-$("result-reminder").onclick = () => {
-  void enableReminder(true);
-};
-$("reminder-time").onchange = () => {
-  const time = $<HTMLInputElement>("reminder-time").value;
-  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return;
-  settings.reminderTime = time;
-  settingsDirty.reminderTime = time;
-  void save();
-};
 async function openDailyNotification() {
   if (
     !bootComplete ||
@@ -4945,12 +4889,13 @@ async function openDailyNotification() {
     pendingDailyOpen = true;
 }
 async function tryResultEngagement() {
+  if (rewardScene || jarMilestone || resultAwaitingSave === session || moveSavePending) return;
   if (
     engagementAvailable &&
     settings.reminders &&
     !notificationGranted &&
     !metadata(progress).flags?.includes("reminder_permission_requested") &&
-    dailyDay(progress.active) === today() &&
+    metadata(progress).completed > 0 &&
     bootComplete &&
     lesson < 0 &&
     !occupied(board()) &&
@@ -4987,7 +4932,7 @@ async function tryReview() {
     return;
   // Give the first daily result to notifications without a second native dialog.
   if (
-    progress.active.startsWith("daily") &&
+    settings.reminders &&
     !metadata(progress).flags?.includes("reminder_permission_requested") &&
     !notificationGranted
   )

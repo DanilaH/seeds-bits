@@ -1,3 +1,7 @@
+# Визуальная приёмка №48 · в работе
+
+Поверх12109/0f7c6a6 выполняются VA01–13. Изменены полезная геометрия финалов/меню/языка, внутренняя шкала банки, рассыпание и durable hold. По решению владельца удалены notification settings/result CTA, обычные Settings возвращены в banner route; native reminders переведены на lunch/evening для отсутствовавших сегодня. Локальные193 unit/build PASS; браузерные/native gates и сравнительные видео ещё не приняты. Подписанный кандидат12110 будет выдан после полного seeds-bits CI.
+
 # Функциональный аудит №47 · автоматическая приёмка 12109 · 27 ноября 2026
 
 Исполняемый исходник `96f5ae19588c151c0dd884e80a7f4e56c1d1f71d`, база 12108/e592866. Все 5 CI-прогонов прошли полностью: 193 unit, 616 e2e, 74 focused browser, production config/release compile, visual/menu/feedback/storage и native harness. Полный Android offline PASS: 3 recovery/force-stop, 3 больших архива, обновление 12108/atomic backup, permissions/timezone/notification/reboot, 10 WebView reload с точным сохранением историй и прав, 20 Classic force-stop и прежняя полная регрессия. Demo PASS: 257.625 с, 73 наблюдения, 7150 ожидаемых кадров баннера, hidden=0/moved=0, настоящие fullscreen/rewarded закрылись; награда сохранена один раз.
