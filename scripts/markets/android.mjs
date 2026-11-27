@@ -5,6 +5,7 @@ import {resolve} from "node:path";
 import assert from "node:assert/strict";
 import {verifyFunctionalAudit} from "./functional-audit.mjs";
 import {verifyAbsentReminders} from "./reminder-acceptance.mjs";
+import {declineAutomaticReminder} from "./reminder-permission-proof.mjs";
 import {portraitBannerPaintMatches} from "./banner-proof.mjs";
 import {findSdkCloseCross,findSdkStoryNext} from "./sdk-controls.mjs";
 
@@ -1094,9 +1095,19 @@ async function verifyAppBanner() {
     await expected(true,"ordinary scene transitions begin");
     await stable("paired baseline before input");
     for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2],[7,14,0]]) {
+      if(n===0)await expected(false,"first stored result may open the guarded Android permission dialog");
       await ui.tap(digit(a)); await ui.tap(digit(b));
       await ui.until(`document.querySelector('#remaining').textContent==='${n}'`);
     }
+    report.automaticReminderPermission=await declineAutomaticReminder({ui,adb,profiles,progress,settings,out,shot});
+    await ui.until("window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics().then(d=>d.visible && d.phase==='draw')");
+    const afterPermission=await diagnostics();
+    for(const key of ["view","request","screenLeft","screenTop","width","height"])
+      assert.equal(afterPermission[key],retained[key],"Permission dialog retains banner "+key);
+    assert(afterPermission.visible,"Banner returns after the genuine system dialog");
+    trace("actual Android notification prompt declined",{...afterPermission,permission:report.automaticReminderPermission});
+    retained=afterPermission; // Legitimate guarded-window frames are recorded separately.
+    await expected(true,"ordinary scenes resume after the permission dialog");
     await stable("game to result");
     await ui.tap("#play-again");
     await ui.until("document.querySelector('#mode').textContent.includes('2')");

@@ -7,9 +7,9 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  # Keep the in-flight pre-VA10-contract native diagnostic available once;
-  # subsequent visual48 revisions still cancel superseded runs in this group.
-  group: first-session-preview-visual48-${{ github.ref }}
+  # Retain the preceding native diagnostic while the real permission-dialog
+  # scenario is added; later revisions still cancel superseded runs here.
+  group: first-session-preview-visual48-permission-${{ github.ref }}
   cancel-in-progress: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126' }}
 jobs:
   browser:
