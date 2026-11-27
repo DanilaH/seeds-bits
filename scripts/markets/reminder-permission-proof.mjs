@@ -8,7 +8,7 @@ export async function declineAutomaticReminder({ui,adb,profiles,progress,setting
   for(let attempt=0;attempt<20;attempt++){
     adb('shell','uiautomator','dump','/sdcard/seeds-reminder-permission.xml');
     xml=adb('shell','cat','/sdcard/seeds-reminder-permission.xml');
-    button=[...xml.matchAll(/<node\b[^>]*>/g)].map(m=>m[0]).find(n=>n.includes('resource-id="com.android.permissioncontroller:id/permission_deny_button"'));
+    button=[...xml.matchAll(/<node\b[^>]*>/g)].map(m=>m[0]).find(n=>n.includes(':id/permission_deny_button"')&&/package="com\.(?:google\.)?android\.permissioncontroller"/.test(n));
     if(button)break;
     await new Promise(resolve=>setTimeout(resolve,150));
   }
