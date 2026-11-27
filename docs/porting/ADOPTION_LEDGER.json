@@ -1214,6 +1214,42 @@
       },
       "nextAction": "Take #47; FA-01/02 first, web FA-03/04 before web publication, then FA-05–08 release acceptance; verify exact candidate, no economy/rule/paused-feature changes.",
       "kitImpact": "REUSE; candidate independent persistence probes after verified fix"
+    },
+    {
+      "id": "seeds-visual-final-12108",
+      "sourceFeatureIds": [],
+      "scope": "Собственный финальный visual/UX аудит Quiet Table exact12108; не перенос оригинала",
+      "status": "DEFERRED",
+      "reason": "Подтверждённые дефекты и локальные предложения оформлены, разработчик выполняет #47; затем #48 на актуальном HEAD.",
+      "localIssueIds": [
+        "VA-01",
+        "VA-02",
+        "VA-03",
+        "VA-04",
+        "VA-05",
+        "VA-06",
+        "VA-07",
+        "VA-08"
+      ],
+      "code": [
+        "src/quiet-table.css",
+        "src/ui-polish.css",
+        "src/calm-screens.css",
+        "src/compact-navigation.css",
+        "src/main.ts",
+        "src/ui-motion.ts"
+      ],
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/48",
+        "report": "../research/visual-final-2026-11-27/README.md",
+        "baseline": "e592866145b0c2f537f01d21fb62a0e9e471d5e4",
+        "browser": "https://github.com/DanilaH/seeds-bits/actions/runs/45959732894/artifacts/15179992400",
+        "motion": "https://github.com/DanilaH/seeds-bits/actions/runs/45954682191/artifacts/15178790677",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Take #48 after/current with #47; VA-01/02 before phone acceptance, VA-03/04 web, VA-05/06 polish, optional VA-07, verify #46/#47 and exact CI; no redesign.",
+      "kitImpact": "REUSE; candidate clipping-ancestor QA after verified fix"
     }
   ]
 }

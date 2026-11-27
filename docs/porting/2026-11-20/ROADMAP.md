@@ -68,3 +68,7 @@ Owner requested integration after standalone pilot. 96 thematic tasks appended (
 ## 27.11.2026 · Функциональная приёмка 12108
 
 [Независимый отчёт](../../research/functional-audit-2026-11-27/README.md) · [№47](https://github.com/DanilaH/seeds-bits/issues/47). Exact runtime e592866: core oracle, все pinned notebook witnesses, sampled daily/Classic, solver, rewards,751 roundtrips PASS. FA-01/02 подтверждённые shared persistence defects; исправить перед Android store candidate. FA-03/04 web-specific, до публикации веба. FA-05–08 — нагрузка длинных сохранений, device/native lifecycle, production configuration, телефон; UNKNOWN gates, не доказанные дефекты. Правила/экономика/пины/6 пауз неизменны. KIT IMPACT REUSE.
+
+## 27.11.2026 · Финальная визуальная приёмка 12108
+
+[Отчёт](../../research/visual-final-2026-11-27/README.md) · [№48](https://github.com/DanilaH/seeds-bits/issues/48). Дополнительные442 состояния, 5 языков, 2 темы, short portrait, web landscape, tablet, root font200%, большие счётчики. VA-01/02 короткие финалы/Home, VA-03/04 web, VA-05/06 local polish, VA-07 ограниченное UX-предложение, VA-08 сохранить motion №46. После #47 на актуальной рабочей ветке; runtime не менялся. KIT IMPACT REUSE.
