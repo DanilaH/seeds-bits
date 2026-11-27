@@ -4,7 +4,7 @@ import fs from 'node:fs';
 const out=process.env.SEEDS_VISUAL_OUT || 'test-results/visual-final';
 fs.mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.SEEDS_CHROMIUM || undefined,args:['--no-sandbox']});
-const result={baseline:process.env.SEEDS_VISUAL_BASELINE || '634583a9a08d8e1a1941c4611a1e0f2d0b77d159',audited:process.env.GITHUB_SHA || 'working-tree',source:process.env.GITHUB_SHA,frames:[],errors:[]};
+const result={baseline:process.env.SEEDS_VISUAL_BASELINE || '0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c',audited:process.env.GITHUB_SHA || 'working-tree',source:process.env.GITHUB_SHA,frames:[],errors:[]};
 const base=process.env.SEEDS_VISUAL_URL || 'http://127.0.0.1:5173';
 const doneBooks=Array.from({length:8},(_,i)=>'book-v1-'+(i+1));
 const doneDaily=Array.from({length:6},(_,i)=>'daily-v1-2026-11-'+String(i+1).padStart(2,'0'));
@@ -122,5 +122,5 @@ for(const kind of ['reachmixed','reachred','normal'])await capture('320x520-'+ki
 await capture('320x520-hint-empty',320,520,false,'ru','normal',async(p,save)=>{
  await p.evaluate(()=>{let a=JSON.parse(localStorage.getItem('seeds-bits.progress.v2'));a.meta.attempts.classic.hintKeys=['used1','used2','used3'];localStorage.setItem('seeds-bits.progress.v2',JSON.stringify(a));});await p.reload();await p.locator('#dialog[open]').waitFor();await click(p,'#resume');await click(p,'#hint');await p.locator('#hint-offer').waitFor({state:'visible'});await save('rewarded-offer');
 });
-fs.writeFileSync(out+'/metrics.json',JSON.stringify({source:process.env.GITHUB_SHA,baseline:'e592866145b0c2f537f01d21fb62a0e9e471d5e4',frames:results,errors:result.errors},null,2));console.log('captured',results.length,'errors',JSON.stringify(result.errors));
+fs.writeFileSync(out+'/metrics.json',JSON.stringify({source:process.env.GITHUB_SHA,baseline:result.baseline,frames:results,errors:result.errors},null,2));console.log('captured',results.length,'errors',JSON.stringify(result.errors));
 await browser.close();

@@ -43,6 +43,8 @@ export class JarSpill {
     // area if there is no banner. Nothing touches SDK geometry or input.
     const banner = document.querySelector("#ad-space")?.getBoundingClientRect();
     const floor = banner && banner.height > 0 ? banner.top - 4 : innerHeight + 14;
+    layer.style.bottom="auto";
+    layer.style.height=`${Math.max(0,Math.min(innerHeight,floor))}px`;
     const originX=box.x+box.width/2, originY=Math.max(9,box.y+box.height*.06);
     for (let i=0;i<24;i++) {
       const grain = document.createElement("i");
@@ -61,8 +63,8 @@ export class JarSpill {
         return {transform:`translate3d(${x+side*spread*t**1.45}px,${originY-lift*elapsed+gravity*elapsed**2/2}px,0) rotate(${i*17+spin*t}deg)`,
           opacity:Math.min(.98,t*24,(1-t)*9),offset:t};
       });
-      const a=this.owner.animate(grain,frames,{duration:seconds*1000,delay:70+i%3*45+Math.floor(i/3)*5,easing:"linear",fill:"both"});
-      if(a)animations.push(a);
+      const a=this.owner.animate(grain,frames,{duration:seconds*1000,delay:70+i%3*45+Math.floor(i/3)*5,easing:"linear",fill:"backwards"});
+      if(a){animations.push(a);void a.finished.then(()=>grain.remove(),()=>grain.remove());}
     }
     return Promise.allSettled(animations.map(a=>a.finished)).then(()=>{
       layer.remove();

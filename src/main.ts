@@ -2362,6 +2362,24 @@ function renderWin() {
           : id.startsWith("daily")
             ? t("ui.all-available-days-complete")
             : "";
+  $("result-gains").style.minHeight =
+    earnedSeeds || earnedHints
+      ? `${((earnedSeeds ? 1 : 0) + (earnedHints ? 1 : 0)) * 1.5}em`
+      : "";
+  $("result-gains").innerHTML = saveFailed || resultAwaitingSave === session
+    ? t("ui.reward-waiting-to-be-saved")
+    : [
+        earnedSeeds
+          ? t("ui.into-the-jar", { "0": earnedSeeds, "1": seedWord(earnedSeeds) })
+          : "",
+        earnedHints
+          ? t("ui.streak-reward", { "0": earnedHints, "1": hintWord(earnedHints) })
+          : "",
+      ]
+        .filter(Boolean)
+        .map((text) => `<span>${text}</span>`)
+        .join("");
+  $("try-notebook").hidden = !helpFlags.result || id !== "classic" || !notebookTarget(progress);
   const award = $("award");
   if (dailyResult) resultPaper.append(award);
   else if (award.parentElement === resultPaper) $("completion-status").before(award);
@@ -4801,7 +4819,7 @@ function updateEngagementCopy() {
   $("hint-wallet").textContent =
     t("ui.shared-balance-your-three-free-hints-for-this-game", { "0": wallet, "1": hintWord(wallet) });
 }
-async function enableReminder(enabled: boolean) {
+async function requestAutomaticReminders() {
   if (
     !engagementBridge ||
     engagementActive ||
@@ -4810,12 +4828,7 @@ async function enableReminder(enabled: boolean) {
     rewardRequest
   )
     return;
-  if (!enabled) {
-    const flags = metadata(progress).flags;
-    const errorIndex = flags?.indexOf("reminder_permission_error") ?? -1;
-    if (errorIndex >= 0) flags!.splice(errorIndex, 1);
-  }
-  if (enabled && !notificationGranted) {
+  if (!notificationGranted) {
     engagementActive = true;
     notificationRequestPending = true;
     notificationSaving = true;
@@ -4841,12 +4854,15 @@ async function enableReminder(enabled: boolean) {
       notificationGranted = state.granted;
       const errorIndex = flags.indexOf("reminder_permission_error");
       if (errorIndex >= 0) flags.splice(errorIndex, 1);
+      const deniedIndex=flags.indexOf("reminder_permission_denied");
+      if (!state.granted && deniedIndex<0) flags.push("reminder_permission_denied");
+      if (state.granted && deniedIndex>=0) flags.splice(deniedIndex,1);
       track("reminder_permission", { granted: state.granted });
     } catch {
       if (!flags.includes("reminder_permission_error"))
         flags.push("reminder_permission_error");
       // Preserve the reminder preference on a bridge failure; this is not a
-      // user's denial. Keep the failed request retryable across process restarts.
+      // user's denial. Its saved request marker prevents automatic retries.
       await save();
       return;
     } finally {
@@ -4858,10 +4874,9 @@ async function enableReminder(enabled: boolean) {
       updateEngagementCopy();
     }
   }
-  settings.reminders = enabled && notificationGranted;
-  settingsDirty.reminders = settings.reminders;
+  // New Android refusals are system state, distinct from legacy game opt-outs.
+  // A later explicit grant in Android can resume the automatic policy.
   await save();
-  track("reminder_toggle", { enabled: settings.reminders });
   updateEngagementCopy();
 }
 async function openDailyNotification() {
@@ -4907,7 +4922,7 @@ async function tryResultEngagement() {
     !storageConflict &&
     !futureSave
   ) {
-    await enableReminder(true);
+    await requestAutomaticReminders();
     return;
   }
   await tryReview();

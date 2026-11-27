@@ -383,7 +383,7 @@ test("legacy opt-out cannot be re-enabled through removed notification controls"
   await expect(page.locator("#reminders")).toHaveCount(0);
 });
 
-test("the Android refusal disables reminders without asking again after reload", async ({
+test("Android refusal suppresses prompts without becoming a legacy game opt-out", async ({
   page,
 }) => {
   await seed(page, { daily: true, denied: true });
@@ -397,7 +397,7 @@ test("the Android refusal disables reminders without asking again after reload",
           JSON.parse(localStorage.getItem("seeds-bits.settings.v1")!).reminders,
       ),
     )
-    .toBe(false);
+    .toBe(true);
   await page.reload();
   await expect(page.locator("#resume")).toHaveText("Начать");
   await page.waitForTimeout(850);
@@ -533,7 +533,8 @@ test("denied notifications retain the refusal without restoring game controls", 
   await seed(page, {daily: true, denied: true});
   await page.locator('#resume').click();await remove(page);
   await expect.poll(()=>permissionRequests(page)).toBe(1);
-  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('seeds-bits.settings.v1')!).reminders)).toBe(false);
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('seeds-bits.settings.v1')!).reminders)).toBe(true);
+  expect((await stored(page)).meta.flags).toContain('reminder_permission_denied');
   await page.locator('#result-home').click();await page.locator('#settings-open').click();
   await expect(page.locator('#reminder-settings,#notification-system-settings,#result-reminder')).toHaveCount(0);
   await page.reload();await expect(page.locator('#dialog[open]')).toBeVisible();

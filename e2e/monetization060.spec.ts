@@ -209,7 +209,11 @@ test("banner reserves space in both orientations and only conceals at an actual 
     )
     .toBe(true);
   await page.locator("#settings-open").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(true);
+  await page.locator("#privacy-open").click();
   await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(false);
+  await page.locator("#privacy-back").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(true);
   await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await page.setViewportSize({ width: 844, height: 390 });
@@ -357,7 +361,11 @@ test("banner shelf fits short phones and landscape with safe insets, in both the
     )
     .toBe(true);
   await page.locator("#settings-open").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(true);
+  await page.locator("#privacy-open").click();
   await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(false);
+  await page.locator("#privacy-back").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(true);
   await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await expect

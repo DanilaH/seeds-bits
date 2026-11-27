@@ -70,7 +70,7 @@ jobs:
 
   menu-reward-feel:
     runs-on: ubuntu-24.04
-    timeout-minutes: 18
+    timeout-minutes: 25
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
@@ -88,16 +88,22 @@ jobs:
           command -v ffmpeg >/dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
           git worktree add "$RUNNER_TEMP/menu-before" 125606e4a90e06b844fe6eb8f83249032cb7057f
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/menu-before/node_modules"
+          git worktree add "$RUNNER_TEMP/menu-baseline" 0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/menu-baseline/node_modules"
           npx vite --host 127.0.0.1 --port 5191 > "$RUNNER_TEMP/menu-after.log" 2>&1 &
           candidate_pid=$!
           (cd "$RUNNER_TEMP/menu-before" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5192) > "$RUNNER_TEMP/menu-before.log" 2>&1 &
           baseline_pid=$!
-          trap 'kill "$candidate_pid" "$baseline_pid" || true' EXIT
-          for port in 5191 5192; do for attempt in $(seq 1 30); do curl -fsS "http://127.0.0.1:$port" >/dev/null && break || sleep 1; done; done
+          (cd "$RUNNER_TEMP/menu-baseline" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5193) > "$RUNNER_TEMP/menu-baseline.log" 2>&1 &
+          middle_pid=$!
+          trap 'kill "$candidate_pid" "$baseline_pid" "$middle_pid" || true' EXIT
+          for port in 5191 5192 5193; do for attempt in $(seq 1 30); do curl -fsS "http://127.0.0.1:$port" >/dev/null && break || sleep 1; done; done
           GITHUB_SHA=125606e4a90e06b844fe6eb8f83249032cb7057f SEEDS_MENU_URL=http://127.0.0.1:5192 SEEDS_MENU_OUT=test-results/menu-feel-before node scripts/independent-menu-feel.mjs
           SEEDS_MENU_URL=http://127.0.0.1:5191 SEEDS_MENU_OUT=test-results/menu-feel-after node scripts/independent-menu-feel.mjs
           SEEDS_FEEL_URL=http://127.0.0.1:5192 node scripts/record-menu-reward.mjs before
+          SEEDS_FEEL_SOURCE=0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c SEEDS_FEEL_URL=http://127.0.0.1:5193 node scripts/record-menu-reward.mjs baseline
           SEEDS_FEEL_URL=http://127.0.0.1:5191 node scripts/record-menu-reward.mjs after
+          node scripts/compare-visual48-video.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -4,6 +4,7 @@ import fs from "node:fs";
 import {resolve} from "node:path";
 import assert from "node:assert/strict";
 import {verifyFunctionalAudit} from "./functional-audit.mjs";
+import {verifyAbsentReminders} from "./reminder-acceptance.mjs";
 import {portraitBannerPaintMatches} from "./banner-proof.mjs";
 import {findSdkCloseCross,findSdkStoryNext} from "./sdk-controls.mjs";
 
@@ -1510,6 +1511,7 @@ try{
   lockDeviceRotation(0);
   const upgrade=await update();
   await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prefs});
+  await verifyAbsentReminders({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
   fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(await verifyDurableClassic(),null,2));
   fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
   fs.writeFileSync(out+"/reach-values.json",JSON.stringify(await verifyReachValues(),null,2));

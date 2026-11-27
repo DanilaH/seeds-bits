@@ -34,8 +34,8 @@ async function glyphs(page:Page,selector:string){
   }));
 }
 for(const [width,height] of [[320,520],[320,568],[360,640],[390,844],[568,320],[844,390],[800,1280]])
-  for(const theme of ['light','dark'])test(`VA01 result glyphs and raw actions ${width}x${height} ${theme}`,async({browser})=>{
-    for(const language of ['ru','en','es','tr','pt-BR'])for(const kind of ['task','page','book','daily','classic']){
+  for(const theme of ['light','dark'])for(const kind of ['task','page','book','daily','classic'])test(`VA01 ${kind} glyphs and raw actions ${width}x${height} ${theme}`,async({browser})=>{
+    for(const language of ['ru','en','es','tr','pt-BR']){
       const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'});const page=await context.newPage();
       await seed(page,kind==='classic'?'task':kind,language,theme);
       if(kind==='classic'){

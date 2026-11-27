@@ -144,8 +144,8 @@ for (const state of ["grant", "deny", "error", "hang"] as const)
   test(`automatic notification ${state} leaves usable navigation without game settings`,async({page})=>{
     await seed(page,state);await page.locator('#resume').click();
     for(let pair=0;pair<3;pair++){
-      const digits=page.locator('#board button').filter({hasText:'5'});
-      await digits.nth(0).click();await digits.nth(1).click();
+      await page.locator(`#board button[data-index="${pair*2}"]`).click();
+      await page.locator(`#board button[data-index="${pair*2+1}"]`).click();
       await expect(page.locator('#remaining')).toHaveText(String(4-pair*2));
     }
     await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).meta.flags?.includes('reminder_permission_requested'),key)).toBe(true);
