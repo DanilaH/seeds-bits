@@ -20,8 +20,22 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: npx playwright install chromium
       - run: npx playwright test e2e/visual48.spec.ts e2e/menu-reward-feel.spec.ts e2e/update110.spec.ts e2e/ux111.spec.ts e2e/gold-layout.spec.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual48-browser-evidence
+          path: test-results/
+  independent-comparison:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
       - name: Compare the unchanged 12109 and candidate with the same independent probe
-        if: ${{ !cancelled() }}
         run: |
           git worktree add "$RUNNER_TEMP/visual48-before" 0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/visual48-before/node_modules"
@@ -36,5 +50,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: visual48-browser-evidence
+          name: visual48-independent-comparison
           path: test-results/
