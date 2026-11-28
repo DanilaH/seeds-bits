@@ -115,7 +115,10 @@
   #app #no-moves-card > p { overflow-y: auto; min-height: 0; margin: 0; font-size: 13px; line-height: 1.2; }
   #app #no-moves-card > div { min-height: 44px; }
   #app #no-moves-card button { min-width: 0; white-space: normal; overflow-wrap: normal; }
-  #dialog[data-screen="home"] .home-book-card #book-quick { white-space: normal; }
+  #dialog[data-screen="home"] .home-book-card #book-quick { width: 100%; white-space: normal; }
+  #app .game:not(.stacked-actions) .game-actions footer {
+    grid-template-columns: repeat(var(--help-actions), minmax(min-content, 1fr));
+  }
   #app footer .action { padding-inline: 3px; }
   #app footer .action > span { overflow-wrap: normal; word-break: normal; }
 }
@@ -127,10 +130,10 @@
 }
 @media (orientation: portrait) and (max-height: 580px) {
   #dialog[data-screen="home"] { padding-block: 6px; }
-  #dialog[data-screen="home"] #menu-content { gap: 3px; }
-  #dialog[data-screen="home"] .home-layout { gap: 6px; }
+  #dialog[data-screen="home"] #menu-content { gap: 0; }
+  #dialog[data-screen="home"] .home-layout { gap: 3px; }
   #dialog[data-screen="home"] .home-current { gap: 5px; padding-top: 0; }
-  #dialog[data-screen="home"] .home-current-copy { min-height: 100px; padding-block: 10px 13px; gap: 2px; }
+  #dialog[data-screen="home"] .home-current-copy { min-height: 89px; padding-block: 6px; gap: 2px; }
   #dialog[data-screen="home"] .quiet-mini-board { height: 28px; }
   #dialog[data-screen="home"] .home-title { min-height: 44px; }
 }
@@ -150,7 +153,7 @@
 #dialog .book-sections { flex-wrap: wrap; }
 #dialog .book-sections button { flex: 1 1 max-content; min-width: min-content; overflow-wrap: normal; word-break: normal; white-space: normal; }
 #app #language-options button[aria-pressed="true"] { color: var(--table-ink); }
-#app #hint-jump { color: var(--table-ink); }
+#app #hint-jump { color: var(--table-action-ink); background: var(--table-action); }
 #app #progress-jar .progress-jar-cue { display: flex; align-items: center; gap: 6px; color: var(--table-ink); font-size: .85rem; margin-top: 8px; }
 .progress-jar-cue svg { width: 16px; height: 16px; }
 #app .medal-figure .medal-receipt { right: -4px; bottom: -2px; width: 17px; height: 17px; }

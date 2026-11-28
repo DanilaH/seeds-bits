@@ -19,7 +19,7 @@ jobs:
         with: {node-version: 24, cache: npm}
       - run: npm ci --no-audit --no-fund
       - run: npx playwright install chromium
-      - run: npx playwright test e2e/visual48.spec.ts e2e/feel.spec.ts e2e/menu-reward-feel.spec.ts e2e/update110.spec.ts e2e/ux111.spec.ts e2e/gold-layout.spec.ts --workers=2
+      - run: npx playwright test e2e/visual48-residual.spec.ts e2e/visual48.spec.ts e2e/feel.spec.ts e2e/menu-reward-feel.spec.ts e2e/update110.spec.ts e2e/ux111.spec.ts e2e/gold-layout.spec.ts --workers=2
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -35,9 +35,9 @@ jobs:
         with: {node-version: 24, cache: npm}
       - run: npm ci --no-audit --no-fund
       - run: npx playwright install chromium
-      - name: Compare the unchanged 12109 and candidate with the same independent probe
+      - name: Compare the unchanged 12110 and candidate with the same independent probe
         run: |
-          git worktree add "$RUNNER_TEMP/visual48-before" 0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c
+          git worktree add "$RUNNER_TEMP/visual48-before" 6daea5abd6609008e2338476d81e24171714c50a
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/visual48-before/node_modules"
           npx vite --host 127.0.0.1 --port 5195 > "$RUNNER_TEMP/visual48-after.log" 2>&1 &
           candidate_pid=$!
@@ -45,8 +45,10 @@ jobs:
           baseline_pid=$!
           trap 'kill "$candidate_pid" "$baseline_pid" || true' EXIT
           for port in 5195 5196; do for attempt in $(seq 1 30); do curl -fsS "http://127.0.0.1:$port" >/dev/null && break || sleep 1; done; done
-          GITHUB_SHA=0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c SEEDS_VISUAL_URL=http://127.0.0.1:5196 SEEDS_VISUAL_OUT=test-results/visual48-before node scripts/independent-final-visual.mjs
-          SEEDS_VISUAL_URL=http://127.0.0.1:5195 SEEDS_VISUAL_OUT=test-results/visual48-after node scripts/independent-final-visual.mjs
+          GITHUB_SHA=6daea5abd6609008e2338476d81e24171714c50a SEEDS_VISUAL_BASELINE=6daea5abd6609008e2338476d81e24171714c50a SEEDS_VISUAL_URL=http://127.0.0.1:5196 SEEDS_VISUAL_OUT=test-results/visual48-before node scripts/independent-final-visual.mjs
+          SEEDS_VISUAL_BASELINE=6daea5abd6609008e2338476d81e24171714c50a SEEDS_VISUAL_URL=http://127.0.0.1:5195 SEEDS_VISUAL_OUT=test-results/visual48-after node scripts/independent-final-visual.mjs
+      - name: Assert known residual thresholds, not just acquisition
+        run: node scripts/check-visual48-residual.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

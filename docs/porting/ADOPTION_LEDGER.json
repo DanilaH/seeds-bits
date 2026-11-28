@@ -1357,6 +1357,33 @@
         "VA-12",
         "VA-13"
       ]
+    },
+    {
+      "id": "seeds-visual-acceptance-48-residual",
+      "sourceFeatureIds": [],
+      "scope": "Собственные остаточные дефекты VA-06R/VA-02R/VA-04R по независимой приёмке12110; малый CSS-пакет поверх PR40",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "requirementIds": [
+        "VA-06R",
+        "VA-02R",
+        "VA-04R"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "code": [
+        "src/visual-acceptance.css",
+        "e2e/visual48-residual.spec.ts",
+        "scripts/check-visual48-residual.mjs"
+      ],
+      "evidence": {
+        "audit": "https://github.com/DanilaH/seeds-bits/issues/48#issuecomment-7237368017",
+        "baseline": "12110/6daea5abd6609008e2338476d81e24171714c50a",
+        "report": "../research/visual-residual-2026-11-28/README.md",
+        "automated": "PENDING exact-source project CI",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Project CI/full native regression/signed12111, then owner install over12110: exact compact Home in5languages/both themes, actual far hint, own landscape labels, jars/saves/reminders/permanent Settings banner. No publication.",
+      "kitImpact": "NONE runtime; CANDIDATE separate metric acquisition from known-defect thresholds"
     }
   ]
 }

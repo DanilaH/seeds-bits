@@ -11,7 +11,7 @@ import {findSdkCloseCross,findSdkStoryNext} from "./sdk-controls.mjs";
 
 const app="com.seedsbits.game.preview", out="test-results/markets-android";
 fs.mkdirSync(out,{recursive:true});
-const [candidate,baseline,optimized,classicBundle,prior12108,prior12109]=process.argv.slice(2);
+const [candidate,baseline,optimized,classicBundle,prior12108,prior12109,prior12110]=process.argv.slice(2);
 const prefs=`/data/user/0/${app}/shared_prefs/CapacitorStorage.xml`;
 const progress="seeds-bits.progress.v2", settings="seeds-bits.settings.v1";
 const adb=(...args)=>execFileSync("adb",args,{encoding:"utf8",timeout:26000,maxBuffer:32e6}).trim();
@@ -1535,7 +1535,7 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
-  await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prefs});
+  await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prior12110,prefs});
   await verifyAbsentReminders({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
   fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(await verifyDurableClassic(),null,2));
   fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));

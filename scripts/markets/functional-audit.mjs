@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 // QA driver only. No test fault or fixture is bundled into the application.
-export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prefs}) {
+export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prior12110,prefs}) {
  const initial=profiles().values, report={source:process.env.GITHUB_SHA,physicalPhone:false,environment:'Android API35 offline emulator',recovery:[],profiles:[],permissions:[],timezones:[]};
  const checkpoint=()=>{fs.writeFileSync(out+'/functional-audit.json',JSON.stringify(report,null,2));console.log('FUNCTIONAL_AUDIT_CHECKPOINT',JSON.stringify({status:report.status??'RUNNING',recovery:report.recovery.length,profiles:report.profiles.map(p=>p.years),upgrade:!!report.upgrade12108,permissions:report.permissions.length,timezones:report.timezones.length,reboot:!!report.reboot}));};
  let ui;
@@ -81,8 +81,10 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    const after=profiles().values[progress];assert.equal(after.done.length,before.done.length);assert.deepEqual(after.sessions,before.sessions);assert.equal(after.meta.wallet,999);assert.deepEqual(after.meta.rewardReceipts,before.meta.rewardReceipts);assert.deepEqual(after.bookRevisions,before.bookRevisions);assert.deepEqual(after.dailyAssignments,before.dailyAssignments);
    report.upgrade12108={from:12108,source:'e592866145b0c2f537f01d21fb62a0e9e471d5e4',histories:true,assignments:true,wallet:999,receipts:after.meta.rewardReceipts.length,temporaryCommonCertificate:true,atomicBackupRecovery:true};ui.close();ui=undefined;stop();checkpoint();
   }
-  if(prior12109){
-   stop();adb('install','-r','-d',prior12109);
+  for(const [from,prior] of [[12109,prior12109],[12110,prior12110]]){
+   if(!prior)continue;
+   stop();adb('install','-r','-d',prior);
+   assert.match(adb('shell','dumpsys','package','com.seedsbits.game.preview'),new RegExp('versionCode='+from+'\\b'));
    const data=JSON.parse(fs.readFileSync('test-results/functional-profiles/archive-1.json','utf8'));
    await fixture({[progress]:data,[settings]:{tutorialDone:true,languageChoice:'en',sound:false,vibration:false,reminders:false,reminderTime:'17:47'}});
    launch();ui=await connect();await ui.tap('#resume');await ui.until("document.querySelector('.game').dataset.persistence!=='pending'");
@@ -94,7 +96,7 @@ export async function verifyFunctionalAudit({adb,profiles,fixture,launch,stop,co
    assert.equal(after[settings].reminders,false);assert.equal(after[settings].reminderTime,'17:47');
    assert.deepEqual(after[progress].bookRevisions,before[progress].bookRevisions);assert.deepEqual(after[progress].dailyAssignments,before[progress].dailyAssignments);
    assert.equal(await ui.evaluate("document.querySelectorAll('#reminder-settings,#result-reminder').length"),0);
-   report.upgrade12109={from:12109,to:12110,histories:true,wallet:999,receipts:2048,pins:true,legacyOptOut:true,legacyCustomTimeRetained:true,temporaryCommonCertificate:true};
+   report[`upgrade${from}`]={from,to:Number(adb('shell','dumpsys','package','com.seedsbits.game.preview').match(/versionCode=(\d+)\b/)[1]),histories:true,wallet:999,receipts:2048,pins:true,legacyOptOut:true,legacyCustomTimeRetained:true,temporaryCommonCertificate:true};
    ui.close();ui=undefined;stop();checkpoint();
   }
   // Android permission state is exercised through the real bridge, offline.

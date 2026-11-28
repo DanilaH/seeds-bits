@@ -137,7 +137,7 @@ jobs:
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1010' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1011' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
       SEEDS_MAVEN_CENTRAL_MIRROR: google
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
@@ -229,6 +229,14 @@ jobs:
           run-id: 45976677220
           github-token: ${{ github.token }}
           path: baseline12109
+      - uses: actions/download-artifact@v4
+        if: matrix.mode == 'offline'
+        with:
+          artifact-ids: 15211986217
+          merge-multiple: true
+          run-id: 46023909431
+          github-token: ${{ github.token }}
+          path: baseline12110
       - run: |
           echo '4de5a8398d5deb9748cec6c5e89b9b78a44258a2f29f0b26f18dc1096ff7daf9  baseline/seeds-first-session-12088-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
@@ -242,6 +250,8 @@ jobs:
             "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12108-ci.apk" baseline12108/seeds-first-session-12108-debug.apk
             node -e 'const p=require("./baseline12109/source.json");if(p.source!=="96f5ae19588c151c0dd884e80a7f4e56c1d1f71d"||p.versionCode!==12109)throw Error("Wrong12109 baseline");'
             "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12109-ci.apk" baseline12109/seeds-first-session-12109-debug.apk
+            node -e 'const p=require("./baseline12110/source.json");if(p.source!=="6daea5abd6609008e2338476d81e24171714c50a"||p.versionCode!==12110)throw Error("Wrong12110 baseline");'
+            "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12110-ci.apk" baseline12110/seeds-first-session-12110-debug.apk
           fi
       - name: Generate real large profiles for the Android persistence audit
         if: matrix.mode == 'offline'
@@ -285,7 +295,7 @@ jobs:
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
           adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
           adb shell input keyevent 82
-          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js" "$RUNNER_TEMP/prior12108-ci.apk" "$RUNNER_TEMP/prior12109-ci.apk"
+          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js" "$RUNNER_TEMP/prior12108-ci.apk" "$RUNNER_TEMP/prior12109-ci.apk" "$RUNNER_TEMP/prior12110-ci.apk"
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: 'markets-android-${{ matrix.mode }}', path: "test-results/markets-android/\ntest-results/first-session-android/emulator.log"}

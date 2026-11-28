@@ -17,5 +17,5 @@ for(const {name} of records[2].clips){
   clips.push({name,file,seconds:6});
 }
 const concat=path.resolve(out,'montage.ffconcat');fs.writeFileSync(concat,'ffconcat version 1.0\n'+clips.map(c=>`file '${c.file}'`).join('\n')+'\n');
-run(['-f','concat','-safe','0','-i',concat,'-c','copy','-movflags','+faststart',path.join(out,'seeds-12106-12109-12110-comparison.mp4')]);
+run(['-f','concat','-safe','0','-i',concat,'-c','copy','-movflags','+faststart',path.join(out,'seeds-12106-12109-12111-comparison.mp4')]);
 fs.writeFileSync(path.join(out,'provenance.json'),JSON.stringify({source:process.env.GITHUB_SHA,references:records.map(r=>({side:r.side,source:r.source})),speed:1,audio:'Candidate application WebAudio mix in three-panel comparisons; each individual recording retains its own original application audio',physicalPhone:false,clips},null,2));
