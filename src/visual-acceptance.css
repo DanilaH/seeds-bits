@@ -129,11 +129,12 @@
   #dialog[data-screen="home"] .home-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (orientation: portrait) and (max-height: 580px) {
-  #dialog[data-screen="home"] { padding-block: 6px; }
+  #dialog[data-screen="home"] { padding-block: 2px; }
   #dialog[data-screen="home"] #menu-content { gap: 0; }
-  #dialog[data-screen="home"] .home-layout { gap: 3px; }
+  #dialog[data-screen="home"] .home-layout,
+  #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) { gap: 6px; padding-block: 0; }
   #dialog[data-screen="home"] .home-current { gap: 5px; padding-top: 0; }
-  #dialog[data-screen="home"] .home-current-copy { min-height: 89px; padding-block: 6px; gap: 2px; }
+  #dialog[data-screen="home"] .home-current-copy { min-height: 100px; padding-block: 10px 13px; gap: 2px; }
   #dialog[data-screen="home"] .quiet-mini-board { height: 28px; }
   #dialog[data-screen="home"] .home-title { min-height: 44px; }
 }

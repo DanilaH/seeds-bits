@@ -66,6 +66,7 @@ async function contrast(page:Page){
 
 for(const language of languages)for(const theme of ['light','dark'])test(`VA02R exact independent Home 320x520 ${language} ${theme}`,async({page})=>{
   await page.setViewportSize({width:320,height:520});await start(page,language,theme);
+  const paper=await geometry(page,'#home-notebook');await evidence('home-paper',paper);expect(paper.overflow,'mini-board glyphs stay inside notebook').toEqual([]);
   for(const selector of ['#progress-open','#learn','#settings-open','#pause-language'])await check(page,selector,selector.slice(1));
   expect(await page.locator('#dialog').evaluate(e=>e.scrollTop)).toBe(0);
   await page.screenshot({path:test.info().outputPath('home-initial.png')});
