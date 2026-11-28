@@ -7,7 +7,11 @@ describe('Home daily durable presentation',()=>{
   it('does not treat a preloaded session as an accepted start or mutate progress',()=>{
     const p=fresh();metadata(p);p.sessions[id]=newSession();const before=JSON.stringify(p);
     expect(homeDailyStatus(homeDailySnapshot(p),day,id)).toBe('unplayed');expect(JSON.stringify(p)).toBe(before);
-    startAttempt(p,id);expect(homeDailyStatus(homeDailySnapshot(p),day,id)).toBe('started');
+    // Migration can attach an empty Attempt to a cached session as well.
+    startAttempt(p,id);expect(homeDailyStatus(homeDailySnapshot(p),day,id)).toBe('unplayed');
+    p.active=id;expect(homeDailyStatus(homeDailySnapshot(p),day,id)).toBe('started');
+    p.active='classic';p.sessions[id].current.moves=1;
+    expect(homeDailyStatus(homeDailySnapshot(p),day,id)).toBe('started');
   });
   it('captures completion and series independently of later in-memory writes; replay stays done',()=>{
     const p=fresh();p.active=id;p.sessions[id]=newSession();metadata(p).daily={lastDay:'2026-11-27',count:2,best:2,reward:0};

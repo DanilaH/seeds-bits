@@ -10,7 +10,7 @@ export function homeDailySnapshot(p: Progress) {
     done: [...p.done],
     daily: p.meta?.daily ? {...p.meta.daily} : undefined,
     started: new Set(Object.entries(p.sessions).filter(([id, session]) =>
-      dailyDay(id) && (p.active === id || p.meta?.attempts[id] ||
+      dailyDay(id) && (p.active === id || p.meta?.attempts[id]?.analyticsStarted ||
         session.current.moves > 0 || session.current.additions > 0 || session.history.length > 0),
     ).map(([id]) => id)),
   };
