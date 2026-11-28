@@ -1384,6 +1384,29 @@
       },
       "nextAction": "Project CI/full native regression/signed12111, then owner install over12110: exact compact Home in5languages/both themes, actual far hint, own landscape labels, jars/saves/reminders/permanent Settings banner. No publication.",
       "kitImpact": "NONE runtime; CANDIDATE separate metric acquisition from known-defect thresholds"
+    },
+    {
+      "id": "seeds-final-ui-49-20261128",
+      "sourceFeatureIds": [],
+      "scope": "Owner UI/UX/Feel UF01–06 and residual48; no new reference mechanic",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/final-ui.css",
+        "src/home-daily.ts",
+        "src/main.ts",
+        "e2e/final-ui49.spec.ts",
+        "scripts/record-final-ui49.mjs"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/49#issuecomment-7237667847",
+        "report": "../research/final-ui-2026-11-28/README.md",
+        "browser": "Targeted geometry/status/save-fault/date/motion checks and existing full regression; final CI pending",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Exact-source project CI and signed12112; human phone/feel/aesthetic final gate",
+      "kitImpact": "REUSE; no shared runtime/source inventory change"
     }
   ]
 }

@@ -1,0 +1,113 @@
+/* Owner package49: local Quiet Table refinements, same routes and hit targets. */
+#dialog[data-screen="home"] .home-current {
+  /* Reserve the cover's complete rotated/floating upper edge, including press. */
+  padding-block-start: 22px;
+}
+#dialog[data-screen="home"] .home-links {
+  margin-block-start: 10px;
+}
+#dialog[data-screen="home"] .home-links > button {
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--table-ink);
+}
+#dialog[data-screen="home"] .mode-link small { color: var(--table-ink); }
+#app header :is(#menu,#book-top) svg { stroke-width: 1.8; }
+#dialog[data-screen="home"] .home-links > button svg,
+#dialog[data-screen="home"] .home-links > #progress-open svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  stroke-width: 1.8;
+}
+#dialog[data-screen="home"] :is(.home-book-card #book-quick, .home-calendar #calendar-open) {
+  background: var(--table-wash);
+  color: var(--table-ink);
+  border: 1px solid transparent;
+  box-shadow: none;
+  font-weight: 500;
+}
+#dialog[data-screen="home"] .mode-nav { align-items: start; }
+#dialog[data-screen="home"] :is(.home-book-card, .home-calendar) { align-self: stretch; }
+#dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) {
+  height: 54px;
+  width: min(100%, 84px);
+  font-size: 28px;
+}
+#dialog[data-screen="home"] .mode-link > .tile-picture i { height: 43px; flex-basis: 29px; }
+#dialog[data-screen="home"] .mode-link > span:last-child { font-size: 14px; }
+#dialog[data-screen="home"] #daily-mode #home-today-art {
+  position: relative;
+  /* Status belongs to this stable slot. Never move the whole calendar. */
+  animation: none;
+  transform: none;
+}
+#dialog[data-screen="home"] #home-today-art::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ac5b3e;
+  box-shadow: 0 0 0 2px var(--sheet);
+  pointer-events: none;
+}
+:root[data-theme="dark"] #dialog[data-screen="home"] #home-today-art::after { background: #dc967c; }
+#dialog[data-screen="home"] #daily-mode[data-daily-status="done"] #home-today-art::after {
+  content: "✓";
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  top: -2px;
+  right: 0;
+  color: var(--table-ink);
+  background: var(--sheet);
+  font-size: 17px;
+  line-height: 1;
+  font-weight: 750;
+  color: #38754c;
+}
+:root[data-theme="dark"] #dialog[data-screen="home"] #daily-mode[data-daily-status="done"] #home-today-art::after { color: #9ac99d; }
+@keyframes home-daily-dot {
+  0%,20%,40%,100% { opacity: .65; transform: scale(1); }
+  10%,30% { opacity: 1; transform: scale(1.12); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #dialog[data-screen="home"] #daily-mode[data-daily-status="unplayed"] #home-today-art::after {
+    animation: home-daily-dot 10s ease-in-out infinite;
+  }
+  #app:has(#home-notebook[data-paused]) #dialog[data-screen="home"] #daily-mode #home-today-art::after,
+  #app:has(dialog[open]:not(#dialog)) #dialog[data-screen="home"] #daily-mode #home-today-art::after {
+    animation-play-state: paused;
+  }
+}
+@media (orientation: portrait) and (max-height: 650px) {
+  #dialog[data-screen="home"] .home-current { padding-block-start: 17px; }
+  #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) { height: 42px; }
+  #dialog[data-screen="home"] .mode-link > .tile-picture i { height: 34px; }
+}
+@media (orientation: portrait) and (max-height: 580px) {
+  #dialog[data-screen="home"] .home-current { padding-block-start: 17px; }
+  #dialog[data-screen="home"] .home-current { gap: 3px; }
+  #dialog[data-screen="home"] .home-layout,
+  #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) { gap: 2px; }
+  #dialog[data-screen="home"] .home-links { margin-block-start: 0; }
+  #dialog[data-screen="home"] .home-links > button { min-height: 44px; }
+  #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) { height: 38px; font-size: 22px; }
+  #dialog[data-screen="home"] .mode-link > .tile-picture i { height: 32px; }
+}
+@media (orientation: landscape) and (max-height: 420px) {
+  #dialog[data-screen="home"] { padding-block: 2px; }
+  #dialog[data-screen="home"] .home-current { padding-block-start: 0; }
+  #dialog[data-screen="home"] .home-layout,
+  #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) { padding-block: 0; }
+  #dialog[data-screen="home"] .home-links { margin-block-start: 0; }
+  #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) { height: 42px; font-size: 24px; }
+  #dialog[data-screen="home"] :is(.mode-nav .mode-link, #book-mode, #daily-mode) { gap: 5px; }
+  #dialog[data-screen="home"] .mode-link > .tile-picture i { height: 34px; }
+}

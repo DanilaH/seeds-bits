@@ -13,6 +13,7 @@ import {removePair as proofRemovePair} from "./core";
 import {helpFlags, helpPaused, qaProfile, assignHelp} from "./help-config";
 import {receiptProduct, sameBoard, freezeIntent, type HelpIntent, type HelpProduct} from "./help-contract";
 import { dailyRun, streakReward } from "./daily-run";
+import { homeDailySnapshot, homeDailyStatus } from "./home-daily";
 import { hintExplanation } from "./hint-explanation";
 import { readClassicDeals, restartClassic } from "./classic-deals";
 import {
@@ -84,6 +85,7 @@ import "./calm-screens.css";
 import "./compact-navigation.css";
 import "./quiet-table.css";
 import "./visual-acceptance.css";
+import "./final-ui.css";
 import {
   resultKind,
   resultArtwork,
@@ -238,6 +240,7 @@ let lastExternalAt = -Infinity,
 let visualSeeds: number | undefined;
 let confirmedSeeds: number | undefined;
 let confirmedJars: ReturnType<typeof jars> | undefined;
+let confirmedDaily: ReturnType<typeof homeDailySnapshot> | undefined;
 const storedJarView = () => confirmedJars ?? jars(progress);
 let jarPending = false;
 let rewardScene: Promise<void> | undefined;
@@ -1070,6 +1073,7 @@ function save(state = progress, game = session) {
   const committedEvents = [...(metadata(state).analytics ?? [])];
   const savedJars = { ...jars(state) };
   const savedSeeds = savedJars.meter;
+  const savedDaily = homeDailySnapshot(state);
   const bundle = serializeProgress(state),
     prefs = JSON.stringify(settings),
     patch = { ...settingsDirty };
@@ -1109,6 +1113,8 @@ function save(state = progress, game = session) {
           confirmedJars.seeds !== savedJars.seeds || confirmedJars.wins !== savedJars.wins;
         confirmedJars = savedJars;
         confirmedSeeds = savedSeeds;
+        confirmedDaily = savedDaily;
+        updateHomeDaily();
         // A cancelled/static scene follows a later acknowledgement without replay.
         if (!flights.running && !completedJar && !jarMilestone && !rewardScene && !pendingResult) {
           visualSeeds = Math.max(visualSeeds ?? 0, confirmedSeeds);
@@ -3888,6 +3894,7 @@ async function boot() {
     recoveryAvailable = restorable(backup);
   } catch { hadBackup = true; }
   confirmedJars = { ...jars(progress) };
+  confirmedDaily = homeDailySnapshot(progress);
   confirmedSeeds = confirmedJars.meter;
   visualSeeds = confirmedSeeds;
   if (settings.sound) void warmSound();
@@ -4717,16 +4724,30 @@ function updateHome() {
     bookQuick.textContent = notebookStarted(progress,target) ? t("daily.resume") : t("action.start");
     bookQuick.setAttribute("aria-label",`${bookQuick.textContent}. ${context}`);
   }
+  updateHomeDaily();
+}
+function updateHomeDaily() {
   const date = today();
   const id = dailyIdFor(date,progress);
-  const doneToday = dailyDone(progress.done, date);
-  const startedToday = Boolean(progress.sessions[id]);
+  const status = homeDailyStatus(confirmedDaily ?? homeDailySnapshot(progress), date, id);
+  const doneToday = status === "done";
+  const startedToday = status === "started";
   const dailyCaption = t(doneToday ? "daily.replay" : startedToday ? "daily.resume" : "daily.tagline");
   $("daily-mode").toggleAttribute("data-daily-pending", !doneToday);
   $("daily-mode").toggleAttribute("data-daily-started", startedToday);
+  $("daily-mode").dataset.dailyStatus = status;
   $("daily-mode").setAttribute("aria-label", `${t("notification.channel")}. ${taskDate(date)}. ${dailyCaption}`);
-  $("home-today-art").innerHTML = calendarPicture(date, true);
-  const run = dailyRun(progress);
+  // Keep both the illustration and its pseudo-element animation alive across
+  // ordinary renders/saves. Only an actual date/language change replaces copy.
+  const art = $("home-today-art");
+  const artKey = `${date}:${activeLanguage}`;
+  if (art.dataset.date !== artKey) {
+    art.innerHTML = calendarPicture(date, true);
+    art.dataset.date = artKey;
+  }
+  const run = dailyRun(confirmedDaily
+    ? {...progress, meta: {...metadata(progress), daily: confirmedDaily.daily}}
+    : progress);
   $("daily-series").hidden = run.count === 0;
   $("daily-series").textContent =
     t("ui.in-a-row", { "0": run.count, "1": dayWord(run.count), "2": run.solvedToday ? "" : t("ui.until-reward", { "0": run.until, "1": dayWord(run.until) }) });
