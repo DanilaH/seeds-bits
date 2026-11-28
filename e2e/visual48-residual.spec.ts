@@ -1,6 +1,6 @@
 import {test,expect,type Page} from '@playwright/test';
 import {writeFileSync} from 'node:fs';
-async function evidence(label:string,value:unknown){const path=test.info().outputPath(label+'.json');writeFileSync(path,JSON.stringify(value,null,2));await test.info().attach(label,{path,contentType:'application/json'});}
+async function evidence(label:string,value:unknown){const path=test.info().outputPath(label.replace(/[^a-zA-Z0-9._-]+/g,'-')+'.json');writeFileSync(path,JSON.stringify(value,null,2));await test.info().attach(label,{path,contentType:'application/json'});}
 
 const languages=['ru','en','es','tr','pt-BR'];
 const progress='seeds-bits.progress.v2';
