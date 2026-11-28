@@ -1401,11 +1401,36 @@
       "evidence": {
         "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/49#issuecomment-7237667847",
         "report": "../research/final-ui-2026-11-28/README.md",
-        "browser": "Targeted geometry/status/save-fault/date/motion checks and existing full regression; final CI pending",
+        "browser": "4ce4cd4/12112: all6 project workflows and17jobs SUCCESS;195unit/844e2e/323focused, full native offline/demo; final PR40 acceptance",
         "phone": "UNKNOWN",
         "audience": "UNKNOWN"
       },
-      "nextAction": "Exact-source project CI and signed12112; human phone/feel/aesthetic final gate",
+      "nextAction": "Physical phone/feel/aesthetic owner gate; automatic source4ce4cd4 accepted",
+      "kitImpact": "REUSE; no shared runtime/source inventory change"
+    },
+    {
+      "id": "seeds-final-tutorial-50-20261128",
+      "sourceFeatureIds": [],
+      "scope": "Owner FT01–03: real first notebook entry in production candidate, common game surface, voluntary six-step course; no new reference mechanic",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/first-session.ts",
+        "src/main.ts",
+        "src/tutorial-ui.css",
+        "scripts/configure-android.mjs",
+        "e2e/final-tutorial50.spec.ts",
+        "scripts/markets/final-tutorial50.mjs"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/50",
+        "report": "../research/tutorial-final-2026-11-28/README.md",
+        "browser": "Source-matched production-tutorial and first-session jobs plus full regression; see final PR40 acceptance for actual outcomes",
+        "native": "Source-matched offline/demo jobs, actual12112 upgrade/ACK process death, six ADB lessons and task2; see final PR40 acceptance for actual outcomes",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Final source-matched project CI and signed12113; then autonomous novice physical phone playtest and owner feel gate",
       "kitImpact": "REUSE; no shared runtime/source inventory change"
     }
   ]

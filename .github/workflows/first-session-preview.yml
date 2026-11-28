@@ -90,6 +90,21 @@ jobs:
           name: menu-reward-feel-tests
           path: test-results/
 
+  production-tutorial:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - name: Exercise actual optimized product entry and shared tutorial UI
+        run: npx playwright test --config playwright.tutorial50.config.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: tutorial50-production-evidence, path: test-results/tutorial50/}
+
   menu-reward-recordings:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
@@ -113,6 +128,8 @@ jobs:
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/menu-baseline/node_modules"
           git worktree add "$RUNNER_TEMP/ui49-before" f7f30fe9fe1bcd7e8b3b1b6f0121c82b219a307f
           ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/ui49-before/node_modules"
+          git worktree add "$RUNNER_TEMP/tutorial50-before" 4ce4cd4bf56a6b9723af1f9f0bfcf76371aeb77e
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/tutorial50-before/node_modules"
           npx vite --host 127.0.0.1 --port 5191 > "$RUNNER_TEMP/menu-after.log" 2>&1 &
           candidate_pid=$!
           (cd "$RUNNER_TEMP/menu-before" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5192) > "$RUNNER_TEMP/menu-before.log" 2>&1 &
@@ -121,8 +138,10 @@ jobs:
           middle_pid=$!
           (cd "$RUNNER_TEMP/ui49-before" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5194) > "$RUNNER_TEMP/ui49-before.log" 2>&1 &
           ui49_pid=$!
-          trap 'kill "$candidate_pid" "$baseline_pid" "$middle_pid" "$ui49_pid" || true' EXIT
-          for port in 5191 5192 5193 5194; do for attempt in $(seq 1 30); do curl -fsS "http://127.0.0.1:$port" >/dev/null && break || sleep 1; done; done
+          (cd "$RUNNER_TEMP/tutorial50-before" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5196) > "$RUNNER_TEMP/tutorial50-before.log" 2>&1 &
+          tutorial50_pid=$!
+          trap 'kill "$candidate_pid" "$baseline_pid" "$middle_pid" "$ui49_pid" "$tutorial50_pid" || true' EXIT
+          for port in 5191 5192 5193 5194 5196; do for attempt in $(seq 1 30); do curl -fsS "http://127.0.0.1:$port" >/dev/null && break || sleep 1; done; done
           GITHUB_SHA=125606e4a90e06b844fe6eb8f83249032cb7057f SEEDS_MENU_URL=http://127.0.0.1:5192 SEEDS_MENU_OUT=test-results/menu-feel-before node scripts/independent-menu-feel.mjs
           SEEDS_MENU_URL=http://127.0.0.1:5191 SEEDS_MENU_OUT=test-results/menu-feel-after node scripts/independent-menu-feel.mjs
           SEEDS_FEEL_URL=http://127.0.0.1:5192 node scripts/record-menu-reward.mjs before
@@ -131,6 +150,7 @@ jobs:
           node scripts/compare-visual48-video.mjs
           SEEDS_UI49_SOURCE=f7f30fe9fe1bcd7e8b3b1b6f0121c82b219a307f SEEDS_UI49_URL=http://127.0.0.1:5194 node scripts/record-final-ui49.mjs before
           SEEDS_UI49_URL=http://127.0.0.1:5191 node scripts/record-final-ui49.mjs after
+          node scripts/record-tutorial50.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -143,7 +163,7 @@ jobs:
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1012' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1013' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
       SEEDS_MAVEN_CENTRAL_MIRROR: google
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
@@ -251,6 +271,14 @@ jobs:
           run-id: 46134792302
           github-token: ${{ github.token }}
           path: baseline12111
+      - uses: actions/download-artifact@v4
+        if: matrix.mode == 'offline'
+        with:
+          artifact-ids: 15262099965
+          merge-multiple: true
+          run-id: 46144750753
+          github-token: ${{ github.token }}
+          path: baseline12112
       - run: |
           echo '4de5a8398d5deb9748cec6c5e89b9b78a44258a2f29f0b26f18dc1096ff7daf9  baseline/seeds-first-session-12088-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
@@ -268,6 +296,8 @@ jobs:
             "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12110-ci.apk" baseline12110/seeds-first-session-12110-debug.apk
             node -e 'const p=require("./baseline12111/source.json");if(p.source!=="f7f30fe9fe1bcd7e8b3b1b6f0121c82b219a307f"||p.versionCode!==12111)throw Error("Wrong12111 baseline");'
             "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12111-ci.apk" baseline12111/seeds-first-session-12111-debug.apk
+            node -e 'const p=require("./baseline12112/source.json");if(p.source!=="4ce4cd4bf56a6b9723af1f9f0bfcf76371aeb77e"||p.versionCode!==12112)throw Error("Wrong12112 baseline");'
+            "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12112-ci.apk" baseline12112/seeds-first-session-12112-debug.apk
           fi
       - name: Generate real large profiles for the Android persistence audit
         if: matrix.mode == 'offline'
@@ -311,7 +341,7 @@ jobs:
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
           adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
           adb shell input keyevent 82
-          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js" "$RUNNER_TEMP/prior12108-ci.apk" "$RUNNER_TEMP/prior12109-ci.apk" "$RUNNER_TEMP/prior12110-ci.apk" "$RUNNER_TEMP/prior12111-ci.apk"
+          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js" "$RUNNER_TEMP/prior12108-ci.apk" "$RUNNER_TEMP/prior12109-ci.apk" "$RUNNER_TEMP/prior12110-ci.apk" "$RUNNER_TEMP/prior12111-ci.apk" "$RUNNER_TEMP/prior12112-ci.apk"
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: 'markets-android-${{ matrix.mode }}', path: "test-results/markets-android/\ntest-results/first-session-android/emulator.log"}

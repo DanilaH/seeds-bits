@@ -84,8 +84,8 @@ for(const reverse of [false,true])test(`gap cue before the move, explicit hint, 
   await expect(page.locator("#win")).toBeVisible();
 });
 for(const height of [520,568])test(`first commands fully visible at 320x${height} and 200%`,async({page})=>{
-  await page.setViewportSize({width:320,height});await start(page);await scale(page,2);await fullyVisible(page,".opening-copy","#page-progress");
-  await page.screenshot({path:`test-results/first-session/first-${height}-200.png`});await digit(page,9);await expect(cue(page)).toHaveText("Найдите ещё одну 3.");await fullyVisible(page,".opening-copy","#page-progress");
+  await page.setViewportSize({width:320,height});await start(page);await scale(page,2);await fullyVisible(page,".opening-copy","#opening-instructions");
+  await page.screenshot({path:`test-results/first-session/first-${height}-200.png`});await digit(page,9);await expect(cue(page)).toHaveText("Найдите ещё одну 3.");await fullyVisible(page,".opening-copy","#opening-instructions");
   await page.locator("#menu").click();await page.locator("#learn").click();await stable(page);
   await expect(page.locator("#lesson-text")).toHaveText("Нажмите на две четвёрки.");await fullyVisible(page,"#lesson-text","#lesson");
   const before=await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top);await digit(page,0);await digit(page,1);await expect(page.locator("#lesson-next")).toBeVisible();await click(page,"#lesson-next","#lesson-actions");
@@ -151,10 +151,10 @@ test("today's completed field names the archived task that the next action opens
   await expect.poll(()=>page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).active,key)).toBe(target);
 });
 
-for(const height of [520,568])test(`returning short course command fully visible at 320x${height} and 200%`,async({page})=>{
+for(const height of [520,568])test(`returning player can voluntarily start full course, command fully visible at 320x${height} and 200%`,async({page})=>{
   await page.setViewportSize({width:320,height});await page.emulateMedia({reducedMotion:"reduce"});
   await page.addInitScript(key=>localStorage.setItem(key,JSON.stringify({tutorialDone:false})),settings);
-  await page.goto("/");await expect(page.locator("#lesson-text")).toHaveText("Нажмите на две четвёрки.");await scale(page,2);
+  await page.goto("/");await expect(page.locator("#dialog")).toBeVisible();await expect(page.locator("#lesson")).toBeHidden();await page.locator("#learn").click();await expect(page.locator("#lesson-step")).toHaveText("1 / 6");await expect(page.locator("#lesson-text")).toHaveText("Нажмите на две четвёрки.");await scale(page,2);
   await fullyVisible(page,"#lesson-text","#lesson");const top=await page.locator("#viewport").evaluate(e=>e.getBoundingClientRect().top);
   await digit(page,0);await digit(page,1);await click(page,"#lesson-next","#lesson-actions");
   await expect(page.locator("#lesson-text")).toHaveText("Соедините 3 и 7.");await fullyVisible(page,"#lesson-text","#lesson");
@@ -233,26 +233,26 @@ test("landscape 568×320 at 200% fits the first command and required pair explan
   await scale(page, 2);
   const geometry = () => page.locator("#viewport").boundingBox();
   const before = await geometry();
-  await fullyVisible(page, ".opening-copy", "#page-progress");
-  await fullyVisible(page, ".opening-copy", ".game-top");
+  await fullyVisible(page, ".opening-copy", "#opening-instructions");
+  await fullyVisible(page, ".opening-copy", ".status-wrap");
   await page.screenshot({path:"test-results/first-session/landscape-opening-200.png"});
   // Without scrolling, tap a digit on each row and check the menu at the end.
   await click(page, '#board [data-index="4"]');
   await expect(cue(page)).toContainText("9 + 1 = 10");
-  await fullyVisible(page, ".opening-copy", "#page-progress");
-  await fullyVisible(page, ".opening-copy", ".game-top");
+  await fullyVisible(page, ".opening-copy", "#opening-instructions");
+  await fullyVisible(page, ".opening-copy", ".status-wrap");
   await page.screenshot({path:"test-results/first-session/landscape-nine-200.png"});
   expect(await geometry()).toEqual(before);
   await click(page, '#board [data-index="4"]');
   await move(page, 8, 17);
   await move(page, 4, 5);
   await expect(cue(page)).toHaveText("Пустые клетки можно пропускать.");
-  await fullyVisible(page, ".opening-copy", "#page-progress");
-  await fullyVisible(page, ".opening-copy", ".game-top");
+  await fullyVisible(page, ".opening-copy", "#opening-instructions");
+  await fullyVisible(page, ".opening-copy", ".status-wrap");
   await move(page, 9, 11);
   await expect(cue(page)).toHaveText("От правого края — в начало строки ниже.");
-  await fullyVisible(page, ".opening-copy", "#page-progress");
-  await fullyVisible(page, ".opening-copy", ".game-top");
+  await fullyVisible(page, ".opening-copy", "#opening-instructions");
+  await fullyVisible(page, ".opening-copy", ".status-wrap");
   expect(await geometry()).toEqual(before);
   await click(page, "#menu");
   await expect(page.locator("#dialog")).toBeVisible();

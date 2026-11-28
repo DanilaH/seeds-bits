@@ -1,0 +1,64 @@
+#app .game.compact-game #hint-dock, #app .game.compact-game .status-wrap { min-width: 0; max-width: 100%; }
+/* Teaching uses the same field, status rail and tool slots as ordinary play. */
+#app .game.compact-game:not(.is-result) .status-wrap:not(:has(#save-notice:not([hidden]), #read-notice:not([hidden]), #recover-task:not([hidden]))) {
+  box-sizing: border-box;
+  flex: none;
+  height: 4.5em;
+  min-height: 60px;
+  max-height: none;
+  overflow: auto;
+  justify-content: safe center;
+}
+#opening-instructions { flex: none; min-width: 0; width: 100%; max-width: 100%; overflow-wrap: anywhere; font-size: 14px; line-height: 1.35; }
+#opening-instructions .opening-copy { display: block; width: 100%; white-space: normal; }
+#app .game:has(#lesson:not([hidden])) #viewport { min-height: min(42dvh, calc((min(100vw, 640px) - 52px) / 3 + 32px)); }
+#app .game:has(#lesson:not([hidden])) #status { display: none; }
+#app .game .game-top .lesson-top { display: contents; }
+#app .game .game-top .lesson-top[hidden] { display: none; }
+#app .game .game-top #skip { grid-column: 4; min-height: 44px; padding: 4px; font-size: 12px; }
+#lesson-step { white-space: nowrap; }
+#app .game .status-wrap > #lesson { flex: none; width: 100%; margin: 0; padding: 0; overflow: visible; }
+#app #lesson-title { margin: 0; font-size: inherit; font-weight: 650; line-height: 1.35; overflow-wrap: anywhere; }
+#app #lesson #lesson-text { margin: 0; font-size: 16px; line-height: 1.25; }
+#app #lesson-detail, #app #lesson-feedback { margin: 3px 0 0; font-size: 13px; line-height: 1.3; }
+#app .game:has(#lesson:not([hidden])) .game-actions footer {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+#app .game:has(#lesson:not([hidden])) footer #hint { display: none; }
+#app .game footer #lesson-actions {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+  align-content: stretch;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  visibility: visible;
+}
+#app .game footer #lesson-actions[hidden] { display: none; }
+#app .game footer #lesson-next {
+  min-height: 44px;
+  height: 100%;
+  border: 0;
+  margin: 0;
+  padding: 4px;
+  font-size: 14px;
+  color: var(--table-action-ink);
+  background: var(--table-action);
+  box-shadow: none;
+}
+
+#app .game footer #lesson-next[hidden] { display: flex !important; visibility: hidden; pointer-events: none; }
+
+@media (orientation: landscape) and (min-width: 540px) { #app .game .game-top #skip { grid-column: 3; } }
+
+/* The retired two-step QA route keeps both optional continuation slots reserved. */
+#app .game:has(#lesson-actions[data-short="true"]) footer > :is(#undo, #add) { display: none; }
+#app .game footer #lesson-actions[data-short="true"] { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+#app #lesson-actions[data-short="true"] #lesson-quick[hidden] { display: block !important; visibility: hidden; pointer-events: none; }
+
+@media (orientation: portrait), (max-width: 539px) {
+  #app .game:has(#lesson:not([hidden])) > .game-top { height: 97px; min-height: 97px; max-height: 97px; }
+  #app .game:has(#lesson:not([hidden])) .game-top .game-meta { height: 62px; min-height: 62px; max-height: 62px; overflow: auto; }
+}

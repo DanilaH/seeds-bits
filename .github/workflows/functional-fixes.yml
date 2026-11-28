@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 25
     env:
       SEEDS_BUILD_FLAVOR: release
-      VITE_SEEDS_FIRST_SESSION: "0"
+      VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: ""
       SEEDS_MAVEN_CENTRAL_MIRROR: google
     steps:
@@ -75,7 +75,7 @@ jobs:
           for token in [b'__SEEDS_ADS_TEST__',b'__SEEDS_ENGAGEMENT_TEST__',b'__SEEDS_FEEDBACK_TEST__']:
             assert token not in assets,token
           Path('test-results').mkdir(exist_ok=True)
-          Path('test-results/production-configuration.json').write_text(json.dumps({'source':os.environ['GITHUB_SHA'],'unsignedOnly':True,'published':False,'firstSession':False,'productionConfiguration':True,'liveDelivery':'UNKNOWN','releaseSigning':'NOT_RUN'},indent=2))
+          Path('test-results/production-configuration.json').write_text(json.dumps({'source':os.environ['GITHUB_SHA'],'unsignedOnly':True,'published':False,'firstSession':True,'productionConfiguration':True,'liveDelivery':'UNKNOWN','releaseSigning':'NOT_RUN'},indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()

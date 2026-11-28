@@ -59,8 +59,8 @@ if (storeRelease && (test || process.env.REQUIRE_MOBILE_CONFIG !== "true"))
   throw Error("Store builds require checked live configuration");
 if (storeRelease && new Set([values.YANDEX_BANNER_AD_UNIT_ID, values.YANDEX_INTERSTITIAL_AD_UNIT_ID, values.YANDEX_REWARDED_AD_UNIT_ID]).size !== 3)
   throw Error("Store builds require distinct placement IDs");
-if (storeRelease && process.env.VITE_SEEDS_FIRST_SESSION === "1")
-  throw Error("First-session pilot is preview-only pending owner production decision");
+if (storeRelease && process.env.VITE_SEEDS_FIRST_SESSION === "0")
+  throw Error("Store builds require the owner-approved first notebook entry");
 let gradle = readFileSync(path, "utf8")
   .replace(/versionCode \d+/, `versionCode ${versionCode}`)
   .replace(/versionName "[^"]+"/, `versionName "${version}"`);

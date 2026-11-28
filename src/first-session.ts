@@ -1,7 +1,8 @@
 import { t, activeLanguage } from "./i18n";
 import {pairs, WIDTH, type Board, type Connection} from "./core";
 
-export const firstSessionEnabled = import.meta.env.VITE_SEEDS_FIRST_SESSION === "1";
+// The real first notebook task is the product entry. Explicit 0 is legacy QA only.
+export const firstSessionEnabled = import.meta.env.VITE_SEEDS_FIRST_SESSION !== "0";
 export const firstGuideId = "first-notebook-guide-v1";
 export const openingGoal = () => t("open.tap");
 export const gapCue = () => t("open.gap");

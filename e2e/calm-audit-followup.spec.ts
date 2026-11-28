@@ -131,7 +131,7 @@ test("full course uses one action plus one rule; answering does not shift board"
   expect(Math.abs(endSlot!.height - originalSlot!.height)).toBeLessThanOrEqual(1);
 });
 
-test("entering a lesson in landscape excludes the game hint dock on the first layout", async ({page}) => {
+test("entering a lesson reuses the status rail without a stale game hint on the first layout", async ({page}) => {
   await page.setViewportSize({ width: 568, height: 320 });
   await seeded(page);
   await page.locator("#resume").click();
@@ -140,9 +140,9 @@ test("entering a lesson in landscape excludes the game hint dock on the first la
   await page.locator("#menu").click();
   const firstLayout = await page.locator("#learn").evaluate((button: HTMLElement) => {
     button.click();
-    return document.querySelector("#hint-dock")!.getBoundingClientRect().height;
+    return {jumpHidden:(document.querySelector("#hint-jump") as HTMLElement).hidden,teachingInRail:!!document.querySelector(".status-wrap #lesson:not([hidden])")};
   });
-  expect(firstLayout).toBe(0);
+  expect(firstLayout).toEqual({jumpHidden:true,teachingInRail:true});
   await expect(page.locator("#lesson")).toBeVisible();
 });
 

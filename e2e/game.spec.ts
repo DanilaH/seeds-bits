@@ -26,6 +26,7 @@ test("complete tutorial, remove a pair, undo, restore and change theme", async (
   await page.locator("#add").click();
   await page.locator("#undo").click();
   await page.getByRole("button", { name: "Начать игру", exact: true }).click();
+  await expect(page.locator("#dialog")).toBeHidden();
   await expect(page.locator("#remaining")).toHaveText("28");
   await clickCell(0);
   await clickCell(9);

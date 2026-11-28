@@ -86,6 +86,7 @@ import "./compact-navigation.css";
 import "./quiet-table.css";
 import "./visual-acceptance.css";
 import "./final-ui.css";
+import "./tutorial-ui.css";
 import {
   resultKind,
   resultArtwork,
@@ -745,16 +746,24 @@ new ResizeObserver(positionNoMoves).observe($("viewport"));
 const gameTop = document.createElement("div");
 gameTop.className = "game-top";
 const lessonToolbar = document.querySelector<HTMLElement>(".lesson-top")!;
+const lessonStep = $("lesson-step");
+let lessonReturnToMenu = false;
+let lessonReturnEnteredGame = false;
 lessonToolbar.hidden = true;
 gameTop.append(
   document.querySelector("header")!,
   document.querySelector(".game-meta")!,
   $("page-progress"),
-  lessonToolbar,
 );
+gameTop.querySelector("header")!.append(lessonToolbar);
 const gameScreen = document.querySelector(".game")!;
 gameScreen.insertBefore(gameTop, $("viewport"));
 $("viewport").after($("lesson"));
+const openingInstructions = document.createElement("div");
+openingInstructions.id = "opening-instructions";
+openingInstructions.className = "context-guide";
+openingInstructions.hidden = true;
+document.querySelector(".status-wrap")!.prepend(openingInstructions, $("lesson"));
 const gameActions = document.createElement("div");
 gameActions.className = "game-actions";
 gameActions.append(
@@ -836,7 +845,7 @@ function layoutActions() {
   fitResultLabels();
   const footer = document.querySelector<HTMLElement>("footer")!;
   const actions = [...footer.querySelectorAll<HTMLElement>(".action")].filter(
-    (b) => getComputedStyle(b).display !== "none" && !b.hidden,
+    (b) => getComputedStyle(b).display !== "none" && (!b.hidden || (lesson >= 0 && b.id === "lesson-next")),
   );
   footer.style.setProperty("--help-actions",String(actions.length));
   const hasAssist=actions.some(button=>button.id==="magnet"||button.id==="plan");
@@ -845,7 +854,7 @@ function layoutActions() {
     (width, button) => {
       const label =
         button.querySelector<HTMLElement>(".action-label") ??
-        button.querySelector<HTMLElement>("span")!;
+        button.querySelector<HTMLElement>("span") ?? button;
       const range=document.createRange();range.selectNodeContents(label);
       let needed=Math.max(44,range.getBoundingClientRect().width+6);
       if(hasAssist){
@@ -869,24 +878,23 @@ function layoutActions() {
   const sideWidth = gameTop.clientWidth;
   const dock =
     landscape &&
-    lesson < 0 &&
     innerHeight <= 420 &&
     !game.classList.contains("is-result") &&
     actions.length > 0 &&
-    (inOpening() ||
+    ((lesson >= 0 && shortLesson) ||
       (game.classList.contains("compact-game") && innerWidth<=600 && innerHeight<=340) ||
       required > sideWidth ||
       (actions.length === 2 && widest > (sideWidth - 2) / 2));
   game.classList.toggle("docked-actions", dock);
   const status = document.querySelector<HTMLElement>(".status-wrap")!;
-  const statusParent = dock ? (inOpening() ? gameTop : hintDock) : gameActions;
+  const statusParent = dock ? hintDock : gameActions;
   if (status.parentElement !== statusParent) {
     if (statusParent === gameTop) gameTop.append(status);
     else statusParent.prepend(status);
   }
-  hintDock.hidden = !landscape || lesson >= 0;
+  hintDock.hidden = !landscape;
   const jump = $("hint-jump");
-  const jumpParent = landscape && lesson < 0 ? hintDock : status;
+  const jumpParent = landscape ? hintDock : status;
   if (jump.parentElement !== jumpParent) jumpParent.prepend(jump);
   const availableWidth = dock ? game.clientWidth - 32 : footer.clientWidth;
   footer.style.setProperty("--assist-columns",actions.length>4&&widest+12<=(availableWidth-12)/3?"3":widest+12>(availableWidth-8)/2?"1":"2");
@@ -955,7 +963,7 @@ function message(text: string) {
     copy.textContent = hintExplanation(board(), highlight);
     return;
   }
-  $("status").textContent = text;
+  $("status").textContent = lesson >= 0 ? "" : text;
   if (lesson >= 0) $("lesson-feedback").textContent = text;
 }
 const notice = document.createElement("aside");
@@ -1858,7 +1866,8 @@ const lessonActions = document.createElement("div");
 lessonActions.id = "lesson-actions";
 lessonActions.hidden = true;
 lessonActions.append($("lesson-next"), lessonQuick);
-document.querySelector(".game")!.insertBefore(lessonActions, gameActions);
+document.querySelector("footer")!.insertBefore(lessonActions, $("hint"));
+$("lesson-next").className = "action ready";
 const lessonDetail = document.createElement("p");
 lessonDetail.id = "lesson-detail";
 $("lesson-title").after(lessonDetail);
@@ -1867,6 +1876,7 @@ const lessonFeedback = document.createElement("p");
 lessonFeedback.id = "lesson-feedback";
 lessonFeedback.setAttribute("role", "status");
 $("lesson").append(lessonFeedback);
+document.querySelector(".mode-description")!.append($("lesson-title"));
 lessonQuick.onclick = () => {
   const task = notebook.find((p) => !progress.done.includes(p.id));
   if (!task || busy) return;
@@ -2475,9 +2485,9 @@ function render() {
     available = availablePairs(values);
   const game = viewport.closest<HTMLElement>(".game")!;
   game.dataset.mode = lesson < 0 ? gameMode() : "lesson";
-  game.classList.toggle("compact-game", lesson < 0 && progress.active !== "classic");
+  game.classList.toggle("compact-game", lesson >= 0 || progress.active !== "classic");
   $("add").hidden = lesson < 0 && progress.active !== "classic";
-  game.classList.toggle("short-board", values.length <= 54 && count > 0 && lesson < 0);
+  game.classList.toggle("short-board", lesson >= 0 || (values.length <= 54 && count > 0));
   renderJar();
   gameDifficulty.hidden = lesson >= 0 || progress.active !== "classic";
   gameDifficulty.textContent = difficultyLabel();
@@ -2488,26 +2498,34 @@ function render() {
   resultDock.hidden = !ended;
   const taskIndex = notebook.findIndex((p) => p.id === progress.active);
   const marks = $("page-progress");
-  marks.hidden = lesson >= 0 || taskIndex < 0;
-  marks.classList.toggle("opening-guide", inOpening());
+  marks.hidden = lesson < 0 && taskIndex < 0;
+  $("book-top").hidden = lesson >= 0;
+  $("mode").hidden = lesson >= 0;
+  $("lesson-title").hidden = lesson < 0;
+  $("hint").hidden = lesson >= 0;
+  openingInstructions.hidden = !inOpening();
+  if (!inOpening()) openingInstructions.replaceChildren();
   if (inOpening()) {
-    delete marks.dataset.renderedProgress;
-    if (!marks.querySelector(".opening-copy")) {
-      marks.replaceChildren();
+    if (!openingInstructions.querySelector(".opening-copy")) {
       const copy = document.createElement("span");
       copy.className = "opening-copy";
       copy.setAttribute("role", "status");
-      marks.append(copy);
+      openingInstructions.append(copy);
     }
-    marks.removeAttribute("aria-label");
-    const copy = marks.querySelector<HTMLElement>(".opening-copy")!;
+    const copy = openingInstructions.querySelector<HTMLElement>(".opening-copy")!;
     let cue = t("ui.find-the-next-pair");
     if (highlight) cue = hintExplanation(values, highlight);
     else if (selected >= 0) cue = openingSelection(values, selected);
     else if (requiredRule(available)) cue = requiredRule(available)!;
     else if (!session.current.moves) cue = openingGoal();
     if (copy.textContent !== cue) copy.textContent = cue;
+  }
+  if (lesson >= 0) {
+    if (lessonStep.parentElement !== marks) marks.replaceChildren(lessonStep);
+    delete marks.dataset.renderedProgress;
+    marks.setAttribute("aria-label", t("home.how"));
   } else if (taskIndex >= 0) {
+    if (lessonStep.parentElement === marks) lessonToolbar.prepend(lessonStep);
     const pageIndex = Math.floor(taskIndex / 6);
     const progressMarkup = `<span>${t("ui.page", { "0": (pageIndex % 4) + 1 })}</span><div>${notebook
       .slice(pageIndex * 6, pageIndex * 6 + 6)
@@ -2552,7 +2570,7 @@ function render() {
     planHighlighted=Boolean(plan?.pair);
   }
   updatePlanRail(plan);
-  boardView.render(values, selected, highlight, lesson < 0);
+  boardView.render(values, selected, highlight, true);
   reconcileCellMotions();
   $("win").hidden = count > 0 || lesson >= 0;
   document.querySelector<HTMLElement>("footer")!.hidden = !count && lesson < 0;
@@ -2695,6 +2713,8 @@ function clearSelection() {
 function startLesson(short = false) {
   shortLesson = short;
   if (busy) return;
+  lessonReturnEnteredGame = enteredGame;
+  lessonReturnToMenu = !short && !enteredGame;
   if (!metadata(progress).flags?.includes("tutorial_end"))
     firstEvent("tutorial_start", { short });
   session.current.scroll = viewport.scrollTop;
@@ -2711,6 +2731,9 @@ const lessonRules = [
   "lesson.diagonal.rule", "lesson.edge.rule", "lesson.undo.rule",
 ] as const;
 function renderLessonCopy() {
+  $("skip").innerHTML = icon("close");
+  $("skip").setAttribute("aria-label", t("action.skip"));
+  $("skip").title = t("action.skip");
   $("lesson-title").textContent = lessons[lesson].title;
   // Keep one command and one rule in the space below the field.
   $("lesson-detail").textContent = t(shortLesson && lesson === 1 ? "lesson.ten-short.rule" : lessonRules[lesson]);
@@ -2734,6 +2757,7 @@ function loadLesson() {
   // The invisible continuation slot must already have its final text geometry.
   $("lesson-next").textContent = lessonNextText();
   $("lesson").scrollTop = 0;
+  document.querySelector(".status-wrap")!.scrollTop = 0;
   lessonActions.scrollTop = 0;
   viewport.scrollTop = 0;
   render();
@@ -2747,7 +2771,7 @@ function finishLesson(outcome: "complete" | "skip" = "skip") {
     firstEvent("tutorial_end", { outcome, step: lesson + 1 });
   lesson = -1;
   lessonQuick.hidden = true;
-  enteredGame = true;
+  enteredGame = shortLesson || lessonReturnEnteredGame;
   settings.tutorialDone = true;
   settingsDirty.tutorialDone = true;
   $("lesson").hidden = true;
@@ -2756,6 +2780,7 @@ function finishLesson(outcome: "complete" | "skip" = "skip") {
   viewport.scrollTop = session.current.scroll;
   save();
   platform.gameplay(true);
+  if (lessonReturnToMenu) openMenu();
 }
 async function choose(i: number) {
   cancelHint();
@@ -2793,7 +2818,7 @@ async function choose(i: number) {
     selected = i;
     highlight = null;
     render();
-    const blockers = lesson < 0 ? pairBlockers(values, a, i, result.reason) : [];
+    const blockers = pairBlockers(values, a, i, result.reason);
     showPairBlockers(blockers);
     const blockedEdge = result.reason === "direction" && blockers.length > 0;
     const firstBlocker = a < i ? blockers[0] : blockers.at(-1);
@@ -2855,7 +2880,7 @@ async function choose(i: number) {
     .map((n) => n!.getBoundingClientRect());
   const next = removePair(values, a, i);
   const ending = lesson < 0 && !occupied(next);
-  const fast = lesson < 0 && !ending;
+  const fast = !ending;
   busy = true;
   highlight = result.path;
   if (!fast) render();
@@ -2903,7 +2928,7 @@ async function choose(i: number) {
     // Publish fast input immediately with an explicit pending-save state.
     // The queue acknowledges durability independently of decorative animation.
     void persistMove();
-  }
+  } else lessonBoard = next;
   // Lessons and finishing routes get their full explanation. Ordinary Feel
   // moves swap the hit targets immediately, independently of the erase ghosts.
   if (!fast)
@@ -3782,7 +3807,7 @@ $("retry-save").onclick = async () => {
   if (pendingDailyOpen) void openDailyNotification();
 };
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && dialog.open) {
+  if (e.key === "Escape" && (dialog.open || lesson >= 0)) {
     e.preventDefault();
     navigateBack();
   }
@@ -4044,7 +4069,7 @@ async function boot() {
       settingsDirty.tutorialDone = false;
       openMenu();
     }
-  } else if (!settings.tutorialDone && !protectedContent) startLesson(true);
+  } else if (!firstSessionEnabled && !settings.tutorialDone && !protectedContent) startLesson(true);
   else openMenu();
   bootComplete = true;
   await openDailyNotification();

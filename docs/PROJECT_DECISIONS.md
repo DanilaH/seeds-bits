@@ -1,5 +1,9 @@
 # Семечки — project decisions
 
+## 28 November — owner package50, final tutorial
+
+[№50](https://github.com/DanilaH/seeds-bits/issues/50) approves the real book-v1-1 contextual entry for the production candidate, superseding the20November preview-only flag decision. The default product route is ON; explicit0 remains legacy QA only and release configuration rejects it. Stored/uncertain profiles keep their former protected entry. The six-step Learn course is voluntary, uses the common board/HUD/tools/status/Core Feel and restores the real game/menu without rewards. Preserve12112/№45–49 and all six paused experiments; no publication or release signing. [Scenarios/verification limits](research/tutorial-final-2026-11-28/README.md).
+
 Recorded 13 November 2026. This is the working project baseline, not proof of publication or approval of every research idea. Inspect actual HEAD and later owner instructions before implementation.
 
 ## Source, platform and release baseline

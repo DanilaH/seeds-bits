@@ -563,7 +563,7 @@
 .game .game-actions footer > .action.ready { background: var(--table-action); color: var(--table-action-ink); }
 .game #status { color: var(--table-muted); }
 @media (orientation: portrait) {
-  #app .game:not(.is-result):not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) > #viewport {
+  #app .game:not(.is-result):is(#app .game):not(:has(.opening-guide)) > #viewport {
     flex: 1 1 auto;
     max-height: none;
     display: block;
@@ -572,15 +572,15 @@
   #app .game {
     padding-inline: max(12px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px));
   }
-  .game:not(.is-result):not(:has(#lesson:not([hidden]), .opening-guide)) .game-top {
+  .game:not(.is-result):is(#app .game) .game-top {
     display: flow-root;
     flex: none;
     min-block-size: 97px;
   }
-  #app .game:not(.is-result):not(:has(#lesson:not([hidden]), .opening-guide)) #board-wrap {
+  #app .game:not(.is-result):is(#app .game) #board-wrap {
     padding-block: 12px;
   }
-  #app .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) .game-top header {
+  #app .game:is(#app .game):not(:has(.opening-guide)) .game-top header {
     display: grid;
     grid-template-columns: 44px minmax(0, 1fr) 44px 44px;
     align-items: center;
@@ -588,10 +588,10 @@
     gap: 0;
   }
   .game:has(#lesson:not([hidden])) .game-top > header .brand { display: none; }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header #menu { grid-column: 1; }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header .brand { display: none; }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header .jar-caption { display: none; }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header .jar-meter {
+  .game:is(#app .game):not(:has(.opening-guide)) header #menu { grid-column: 1; }
+  .game:is(#app .game):not(:has(.opening-guide)) header .brand { display: none; }
+  .game:is(#app .game):not(:has(.opening-guide)) header .jar-caption { display: none; }
+  .game:is(#app .game):not(:has(.opening-guide)) header .jar-meter {
     min-width: 44px;
     padding-inline: 0;
     justify-content: center;
@@ -599,11 +599,11 @@
     justify-self: center;
     margin: 0;
   }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header .jar-glass {
+  .game:is(#app .game):not(:has(.opening-guide)) header .jar-glass {
     width: 30px;
     height: 43px;
   }
-  #app .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) .game-top .game-meta {
+  #app .game:is(#app .game):not(:has(.opening-guide)) .game-top .game-meta {
     position: relative;
     margin: -62px 88px 0 43px;
     min-height: 62px;
@@ -621,7 +621,7 @@
   .game .game-top .game-meta #mode { line-height: 1.35; }
   .game .game-meta #game-difficulty { margin: 1px 0; }
   .game .game-meta .field-date-art { display: none; }
-  .game:not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) header #book-top {
+  .game:is(#app .game):not(:has(.opening-guide)) header #book-top {
     grid-column: 4;
     justify-self: end;
   }
@@ -1166,10 +1166,10 @@
 }
 
 @media (orientation: portrait) and (min-height: 650px) {
-  #app .game:not(.is-result):not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) > #viewport {
+  #app .game:not(.is-result):is(#app .game):not(:has(.opening-guide)) > #viewport {
     margin-block-start: 16px;
   }
-  #app .game:not(.is-result):not(:has(#lesson:not([hidden]))):not(:has(.opening-guide)) #board-wrap {
+  #app .game:not(.is-result):is(#app .game):not(:has(.opening-guide)) #board-wrap {
     width: calc(100% - 18px);
     margin: 20px auto 0;
     padding-block-start: 0;
@@ -1179,7 +1179,7 @@
 #dialog #collection .calendar-nav > button { background: transparent; border: 0; }
 
 @media (orientation: portrait) and (min-height: 650px) {
-  .game:not(:has(#lesson:not([hidden]),.opening-guide)) .game-actions .status-wrap:not(:has(#save-notice:not([hidden]),#read-notice:not([hidden]),#recover-task:not([hidden]))) {
+  .game:is(#app .game) .game-actions .status-wrap:not(:has(#save-notice:not([hidden]),#read-notice:not([hidden]),#recover-task:not([hidden]))) {
     --table-status-height: 60px;
     height: var(--table-status-height);
     min-height: var(--table-status-height);

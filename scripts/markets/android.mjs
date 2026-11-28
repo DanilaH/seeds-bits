@@ -5,6 +5,7 @@ import {resolve} from "node:path";
 import assert from "node:assert/strict";
 import {verifyFunctionalAudit} from "./functional-audit.mjs";
 import {verifyFinalUi49} from "./final-ui49.mjs";
+import {verifyFinalTutorial50} from "./final-tutorial50.mjs";
 import {verifyAbsentReminders} from "./reminder-acceptance.mjs";
 import {declineAutomaticReminder} from "./reminder-permission-proof.mjs";
 import {portraitBannerPaintMatches} from "./banner-proof.mjs";
@@ -12,7 +13,7 @@ import {findSdkCloseCross,findSdkStoryNext} from "./sdk-controls.mjs";
 
 const app="com.seedsbits.game.preview", out="test-results/markets-android";
 fs.mkdirSync(out,{recursive:true});
-const [candidate,baseline,optimized,classicBundle,prior12108,prior12109,prior12110,prior12111]=process.argv.slice(2);
+const [candidate,baseline,optimized,classicBundle,prior12108,prior12109,prior12110,prior12111,prior12112]=process.argv.slice(2);
 const prefs=`/data/user/0/${app}/shared_prefs/CapacitorStorage.xml`;
 const progress="seeds-bits.progress.v2", settings="seeds-bits.settings.v1";
 const adb=(...args)=>execFileSync("adb",args,{encoding:"utf8",timeout:26000,maxBuffer:32e6}).trim();
@@ -304,7 +305,7 @@ async function firstNotebookEdge(order, {recordVideo=false}={}) {
     const before=await geometry();
     const copy="document.querySelector('.opening-copy').textContent";
     assert.equal(await ui.evaluate(copy),edgeCaption);
-    assert(await ui.evaluate(textFits(".opening-copy","#page-progress")),"English opening cue clipped");
+    assert(await ui.evaluate(textFits(".opening-copy","#opening-instructions")),"English opening cue clipped");
     if(order[0]===7) shot("acceptance-first-en-200");
     if(recordVideo) {
       // Keep optional video evidence isolated from the core Android acceptance route.
@@ -315,7 +316,7 @@ async function firstNotebookEdge(order, {recordVideo=false}={}) {
     await ui.tap(digit(order[0]),false);
     assert(await ui.evaluate(`document.querySelector('${digit(order[0])}').classList.contains('selected')`));
     assert.equal(await ui.evaluate(copy),order[0]===7?"Find 9: 1 + 9 = 10.":"Find 1: 9 + 1 = 10.");
-    assert(await ui.evaluate(textFits(".opening-copy","#page-progress")),"English selection cue clipped");
+    assert(await ui.evaluate(textFits(".opening-copy","#opening-instructions")),"English selection cue clipped");
     assert.deepEqual(await geometry(),before);
     await ui.tap(digit(order[1]),false);
     await ui.until("!document.querySelector('#win').hidden");
@@ -1536,10 +1537,11 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
-  await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prior12110,prior12111,prefs});
+  await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prior12110,prior12111,prior12112,prefs});
   await verifyAbsentReminders({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
   fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(await verifyDurableClassic(),null,2));
   await verifyFinalUi49({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
+  await verifyFinalTutorial50({adb,profiles,fixture,launchOpeningInputCase,launch,stop,connect,progress,settings,out});
   fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
   fs.writeFileSync(out+"/reach-values.json",JSON.stringify(await verifyReachValues(),null,2));
   if (process.env.SEEDS_ANDROID_CORE_FEEL === "1") {

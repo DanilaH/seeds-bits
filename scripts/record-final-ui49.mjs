@@ -41,7 +41,7 @@ try{
   await sleep(seconds*1000-(performance.now()-start));const end=Date.now()/1000;
   await cdp.send('Page.stopScreencast');await Promise.all(frames.map(f=>f.saved));assert.ok(frames.length>15);assert.deepEqual(errors,[]);
   const list=path.join(dir,'frames.ffconcat');await fs.writeFile(list,'ffconcat version 1.0\n'+frames.map((f,i)=>`file '${f.file}'\nduration ${Math.max(.001,(frames[i+1]?.time??end)-f.time).toFixed(6)}`).join('\n')+`\nfile '${frames.at(-1).file}'\n`);
-  encode(['-f','concat','-safe','0','-i',list,'-vf',`fps=30,scale=390:844:force_original_aspect_ratio=decrease,pad=390:844:(ow-iw)/2:(oh-ih)/2,drawtext=text='${side==='before'?'12111':'12112'} - ${name}':fontcolor=white:fontsize=18:box=1:boxcolor=black@0.65:x=8:y=h-30`,'-c:v','libx264','-threads','2','-preset','fast','-crf','20','-pix_fmt','yuv420p','-movflags','+faststart','-t',String(seconds),path.join(out,name+'.mp4')]);
+  encode(['-f','concat','-safe','0','-i',list,'-vf',`fps=30,scale=390:844:force_original_aspect_ratio=decrease,pad=390:844:(ow-iw)/2:(oh-ih)/2,drawtext=text='${side==='before'?'12111':'12113'} - ${name}':fontcolor=white:fontsize=18:box=1:boxcolor=black@0.65:x=8:y=h-30`,'-c:v','libx264','-threads','2','-preset','fast','-crf','20','-pix_fmt','yuv420p','-movflags','+faststart','-t',String(seconds),path.join(out,name+'.mp4')]);
   report.clips.push({name,kind,theme,width,height,seconds,actualFrames:frames.length,actions,pageErrors:errors});await context.close();
  }
  // Three literal status frames in each theme, identical fixtures on both sources.
@@ -69,6 +69,6 @@ if(side==='after'){
  const before=JSON.parse(await fs.readFile('test-results/final-ui49/before/provenance.json','utf8'));assert.equal(before.source,'f7f30fe9fe1bcd7e8b3b1b6f0121c82b219a307f');
  const parts=[];
  for(const {name} of report.clips){const target=path.resolve('test-results/final-ui49',name+'-comparison.mp4');encode(['-i',`test-results/final-ui49/before/${name}.mp4`,'-i',path.join(out,name+'.mp4'),'-filter_complex','[0:v][1:v]hstack=inputs=2[v]','-map','[v]','-c:v','libx264','-threads','2','-preset','fast','-crf','21','-pix_fmt','yuv420p','-movflags','+faststart',target]);parts.push(target);}
- const list=path.join(temp+'-montage.txt');await fs.writeFile(list,'ffconcat version 1.0\n'+parts.map(f=>`file '${f}'`).join('\n')+'\n');encode(['-f','concat','-safe','0','-i',list,'-c','copy','-movflags','+faststart','test-results/final-ui49/seeds-12111-12112-ui-comparison.mp4']);await fs.rm(list);
+ const list=path.join(temp+'-montage.txt');await fs.writeFile(list,'ffconcat version 1.0\n'+parts.map(f=>`file '${f}'`).join('\n')+'\n');encode(['-f','concat','-safe','0','-i',list,'-c','copy','-movflags','+faststart','test-results/final-ui49/seeds-12111-12113-ui-comparison.mp4']);await fs.rm(list);
  for(const {file} of report.frames)encode(['-i','test-results/final-ui49/before/'+file,'-i',path.join(out,file),'-filter_complex','[0:v][1:v]hstack=inputs=2[v]','-map','[v]','-frames:v','1','test-results/final-ui49/compare-'+file]);
 }
