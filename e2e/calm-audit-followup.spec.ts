@@ -57,7 +57,7 @@ test("progress card targets its own saved notebook after browsing catalogue sect
   }
 });
 
-test("pause menu shows the live notebook cover and a footer near the bottom",async({page})=>{
+test("pause menu shows the live notebook cover and grouped visible navigation (UF02)",async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await seeded(page);
   await page.screenshot({path:"test-results/calm-followup/menu-390x844.jpg",type:"jpeg",quality:90,animations:"disabled"});
@@ -71,14 +71,22 @@ test("pause menu shows the live notebook cover and a footer near the bottom",asy
     const links=document.querySelector(".home-links")!.getBoundingClientRect();
     const qa=document.querySelector("#qa-profile");
     const qaBox=qa && qa.getClientRects().length ? qa.getBoundingClientRect() : null;
-    return {height:a.height, gap:b.top-a.bottom, qaBottom:qaBox?.bottom??links.bottom, screen:innerHeight};
+    const modes=document.querySelector(".mode-nav")!.getBoundingClientRect();
+    const dialog=document.querySelector("#dialog")!,bounds=dialog.getBoundingClientRect();
+    const clipBottom=Math.min(innerHeight,bounds.top+dialog.clientTop+dialog.clientHeight);
+    const controls=[...document.querySelectorAll(".home-links > button")];
+    return {height:a.height, gap:b.top-a.bottom, qaBottom:qaBox?.bottom??links.bottom, screen:innerHeight,
+      footerGap:links.top-modes.bottom,allVisible:controls.every(e=>{const r=e.getBoundingClientRect();return r.top>=Math.max(0,bounds.top)&&r.bottom<=clipBottom&&r.height>=44&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})};
   });
   expect(measure.height).toBeGreaterThanOrEqual(220);
   expect(measure.height).toBeLessThanOrEqual(345);
   expect(measure.gap).toBeGreaterThanOrEqual(0);
   expect(measure.gap).toBeLessThanOrEqual(32);
   expect(measure.screen-measure.qaBottom).toBeGreaterThanOrEqual(0);
-  expect(measure.screen-measure.qaBottom).toBeLessThanOrEqual(45);
+  // Owner49 UF02 groups navigation with modes; the old bottom-pinning rule is superseded.
+  expect(measure.footerGap).toBeGreaterThanOrEqual(0);
+  expect(measure.footerGap).toBeLessThanOrEqual(35);
+  expect(measure.allVisible).toBe(true);
 });
 
 test("full course uses one action plus one rule; answering does not shift board",async({page})=>{
@@ -264,7 +272,9 @@ test("today stays marked but an already started puzzle does not nudge", async ({
   const icon = daily.locator("#home-today-art");
   const calendar = icon.locator(".calendar-picture");
   await expect(daily).toHaveAttribute("data-daily-pending","");
-  expect(await icon.evaluate(el=>getComputedStyle(el,"::after").content)).toBe("none");
+  // Owner49 UF06 replaces the old absent pseudo-element with a static status dot.
+  expect(await icon.evaluate(el=>{const s=getComputedStyle(el,"::after");return {content:s.content,animation:s.animationName,width:s.width,height:s.height,pointer:s.pointerEvents};}))
+    .toEqual({content:'""',animation:"none",width:"7px",height:"7px",pointer:"none"});
   await expect(daily).toHaveAttribute("data-daily-started", "");
   await expect(icon).toHaveCSS("animation-name", "none");
   await expect(calendar).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");

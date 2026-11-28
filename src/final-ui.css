@@ -104,6 +104,7 @@
      the shortest height. The live saved-board preview keeps its dimensions. */
   #dialog[data-screen="home"] .home-current:is([data-new-game],[data-archived]) .quiet-mini-board { display: none; }
   #dialog[data-screen="home"] .home-current[data-archived] #resume { font-size: 15px; line-height: 1.2; }
+  #dialog[data-screen="home"] .home-current[data-archived] #resume-context { font-size: 12px; line-height: 1.2; }
   #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) { height: 38px; font-size: 22px; }
   #dialog[data-screen="home"] .mode-link > .tile-picture i { height: 32px; }
 }

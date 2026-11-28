@@ -4645,8 +4645,7 @@ function renderHomeCurrent() {
   $("resume-context").textContent = isClassic ? `${difficultyLabel()} · ${count} ${digitWord(count)}`
     : book ? next ? t("nav.bookTaskTarget",{book:volumeLabel(volumeOf(next)),task:puzzleNumberInVolume(next)})
       : t("ui.puzzle-3",{"0":puzzleNumberInVolume(id),"1":count,"2":digitWord(count)})
-    : id.slice(9) === today() ? `${date} · ${count} ${digitWord(count)}`
-      : `${count} ${digitWord(count)}`;
+    : `${date} · ${count} ${digitWord(count)}`;
   if (book && !next) {
     homeGoal.hidden = false;
     const done = notebookBrowseStatus(progress,volumeOf(id),new Set(progress.done)).solved;
