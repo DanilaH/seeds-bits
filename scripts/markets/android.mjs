@@ -1537,11 +1537,11 @@ try{
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
+  await verifyFinalTutorial50({adb,profiles,fixture,launchOpeningInputCase,launch,stop,connect,progress,settings,out});
   await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prior12110,prior12111,prior12112,prefs});
   await verifyAbsentReminders({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
   fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(await verifyDurableClassic(),null,2));
   await verifyFinalUi49({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
-  await verifyFinalTutorial50({adb,profiles,fixture,launchOpeningInputCase,launch,stop,connect,progress,settings,out});
   fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
   fs.writeFileSync(out+"/reach-values.json",JSON.stringify(await verifyReachValues(),null,2));
   if (process.env.SEEDS_ANDROID_CORE_FEEL === "1") {

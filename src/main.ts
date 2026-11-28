@@ -2486,6 +2486,7 @@ function render() {
   const game = viewport.closest<HTMLElement>(".game")!;
   game.dataset.mode = lesson < 0 ? gameMode() : "lesson";
   game.classList.toggle("compact-game", lesson >= 0 || progress.active !== "classic");
+  game.classList.toggle("teaching", lesson >= 0 || (progress.active === "book-v1-1" && values.length <= 27));
   $("add").hidden = lesson < 0 && progress.active !== "classic";
   game.classList.toggle("short-board", lesson >= 0 || (values.length <= 54 && count > 0));
   renderJar();
@@ -2499,7 +2500,7 @@ function render() {
   const taskIndex = notebook.findIndex((p) => p.id === progress.active);
   const marks = $("page-progress");
   marks.hidden = lesson < 0 && taskIndex < 0;
-  $("book-top").hidden = lesson >= 0;
+  $("book-top").hidden = false;
   $("mode").hidden = lesson >= 0;
   $("lesson-title").hidden = lesson < 0;
   $("hint").hidden = lesson >= 0;
@@ -4069,7 +4070,7 @@ async function boot() {
       settingsDirty.tutorialDone = false;
       openMenu();
     }
-  } else if (!firstSessionEnabled && !settings.tutorialDone && !protectedContent) startLesson(true);
+  } else if (!firstSessionEnabled && !settings.tutorialDone && !protectedContent && !readWarning && !warning && !saveFailed && !futureSave && !storageConflict) startLesson(true);
   else openMenu();
   bootComplete = true;
   await openDailyNotification();

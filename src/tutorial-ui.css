@@ -1,6 +1,6 @@
-#app .game.compact-game #hint-dock, #app .game.compact-game .status-wrap { min-width: 0; max-width: 100%; }
+#app .game.teaching #hint-dock, #app .game.teaching .status-wrap { min-width: 0; max-width: 100%; }
 /* Teaching uses the same field, status rail and tool slots as ordinary play. */
-#app .game.compact-game:not(.is-result) .status-wrap:not(:has(#save-notice:not([hidden]), #read-notice:not([hidden]), #recover-task:not([hidden]))) {
+#app .game.teaching:not(.is-result) .status-wrap:not(:has(#save-notice:not([hidden]), #read-notice:not([hidden]), #recover-task:not([hidden]))) {
   box-sizing: border-box;
   flex: none;
   height: 4.5em;
@@ -15,7 +15,7 @@
 #app .game:has(#lesson:not([hidden])) #status { display: none; }
 #app .game .game-top .lesson-top { display: contents; }
 #app .game .game-top .lesson-top[hidden] { display: none; }
-#app .game .game-top #skip { grid-column: 4; min-height: 44px; padding: 4px; font-size: 12px; }
+#app .game .game-top #skip { grid-column: 3; width: 44px; justify-self: center; min-height: 44px; padding: 4px; font-size: 12px; }
 #lesson-step { white-space: nowrap; }
 #app .game .status-wrap > #lesson { flex: none; width: 100%; margin: 0; padding: 0; overflow: visible; }
 #app #lesson-title { margin: 0; font-size: inherit; font-weight: 650; line-height: 1.35; overflow-wrap: anywhere; }
@@ -51,7 +51,7 @@
 
 #app .game footer #lesson-next[hidden] { display: flex !important; visibility: hidden; pointer-events: none; }
 
-@media (orientation: landscape) and (min-width: 540px) { #app .game .game-top #skip { grid-column: 3; } }
+@media (orientation: landscape) and (min-width: 540px) { #app .game .game-top #skip { grid-column: 2; } }
 
 /* The retired two-step QA route keeps both optional continuation slots reserved. */
 #app .game:has(#lesson-actions[data-short="true"]) footer > :is(#undo, #add) { display: none; }
@@ -62,3 +62,6 @@
   #app .game:has(#lesson:not([hidden])) > .game-top { height: 97px; min-height: 97px; max-height: 97px; }
   #app .game:has(#lesson:not([hidden])) .game-top .game-meta { height: 62px; min-height: 62px; max-height: 62px; overflow: auto; }
 }
+
+/* Storage authority owns the rail while recovery is required. */
+#app .status-wrap:has(#save-notice:not([hidden]), #read-notice:not([hidden])) > :is(#lesson, #opening-instructions) { display: none; }
