@@ -4596,7 +4596,6 @@ function difficultyLabel() {
   return `${localName(classicDifficultyNames[level])}${level === CLASSIC_MIN ? " "+t("ui.lowest") : level === CLASSIC_MAX ? " "+t("ui.highest") : ""}`;
 }
 function renderHomeCurrent() {
-  $("resume").removeAttribute("aria-label");
   const id = progress.active;
   homeCurrent.toggleAttribute("data-archived", id.startsWith("daily") && id.slice(9) !== today());
   const count = occupied(board());
@@ -4657,9 +4656,7 @@ function renderHomeCurrent() {
   $("resume").textContent = next
     ? t("ui.puzzle",{"0":notebookStarted(progress,next)?t("daily.resume"):t("action.start"),"1":puzzleNumberInVolume(next)})
     : isClassic ? t("ui.resume-classic") : book ? t("ui.resume-puzzle",{"0":puzzleNumberInVolume(id)})
-    : id.slice(9) === today() ? t("daily.resumeToday") : t("daily.resume");
-  if (!isClassic && !book && id.slice(9) !== today())
-    $("resume").setAttribute("aria-label", t("ui.resume-puzzle-for",{"0":date}));
+    : id.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for",{"0":date});
 }
 function refreshStaticJarViews() {
   if (!dialog.open || busy || paused || adActive || engagementActive || rewardRequest) return;
