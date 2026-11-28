@@ -25,3 +25,5 @@ record-tutorial50.mjs: настоящие CDP кадры в реальном в�
 Точные исходник/CI/run/job/hash подписанного APK и полная регрессия закрепляются в финальном описании [PR40](https://github.com/DanilaH/seeds-bits/pull/40) и выдаваемом отчёте12113. Код, browser/Android emulator, физический телефон и live audience — разные гейты. Телефон/понятность новичку/субъективный feel/retention UNKNOWN: установить12113 поверх12112 без очистки; новичок без устных подсказок проходит первое поле, самостоятельно выбирает task2 и находит добровольный Learn. Проверить обе темы, компактный телефон, фон/Back/permission/баннер/звук/вибрацию. Игра не публикуется, PR не сливается.
 
 KIT IMPACT: REUSE — существующие FTUE diagnostic, UX & Art System и Stable Progress UI, общий renderer/owned motion/lifecycle. Нового onboarding engine/API/пинов/контента/механик нет; SOURCE_FEATURES не меняется. Adoption ledger связывает FT01–03 с кодом/PR и отдельной телефонной приёмкой.
+
+Итоговая exact-source поставка: [DELIVERY-12113.md](DELIVERY-12113.md) — подписанный APK, SHA256, результаты проекта, исходные артефакты, сравнительное видео и отдельная физическая приёмка.

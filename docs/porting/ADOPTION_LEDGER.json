@@ -1424,13 +1424,20 @@
       "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
       "evidence": {
         "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/50",
-        "report": "../research/tutorial-final-2026-11-28/README.md",
-        "browser": "Source-matched production-tutorial and first-session jobs plus full regression; see final PR40 acceptance for actual outcomes",
-        "native": "Source-matched offline/demo jobs, actual12112 upgrade/ACK process death, six ADB lessons and task2; see final PR40 acceptance for actual outcomes",
+        "report": "../research/tutorial-final-2026-11-28/DELIVERY-12113.md",
+        "browser": "2790588/12113:195unit,844E2E,71optimized production tutorial cases,420same-data lesson/ordinary comparisons with0px maximum cell delta;38first-session and full45/47/48/49 regression PASS. Exact run/artifact links in delivery report.",
+        "native": "2790588/12113: full offline Android35/WebView124 PASS; actual12112 upgrade preserves histories,wallet999,2048receipts,pins,opt-out; both-theme ACK/process-death/resume,sixADBlessons,repeat/skip,isolatedpractice,+4reward/task2 PASS. Demo attempt2 PASS on unchanged APK; initial SDK dismissal timeout preserved. Run46163189911 SUCCESS; report has both attempts.",
         "phone": "UNKNOWN",
-        "audience": "UNKNOWN"
+        "audience": "UNKNOWN",
+        "artifact": {
+          "source": "27905882b973028cda2e3b03de602838433f941d",
+          "versionCode": 12113,
+          "package": "com.seedsbits.game.preview",
+          "sha256": "51d21b8595191753b1e6405f1a71e100152b708e560a9dcad99c79f6e9a9e267",
+          "signedArtifact": "https://github.com/DanilaH/seeds-bits/actions/runs/46163189911/artifacts/15270073677"
+        }
       },
-      "nextAction": "Final source-matched project CI and signed12113; then autonomous novice physical phone playtest and owner feel gate",
+      "nextAction": "One physical phone/novice playtest and owner feel gate; keep IMPLEMENTED_UNVERIFIED until human acceptance. Automated exact-source acceptance and signed12113 complete; no new runtime work or publication.",
       "kitImpact": "REUSE; no shared runtime/source inventory change"
     }
   ]
