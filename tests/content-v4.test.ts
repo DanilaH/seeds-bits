@@ -102,8 +102,8 @@ test("previously assigned logical slot keeps v4; reload, undo, restart and repla
  bad.bookRevisions={[id]:4};bad.version=11;expect(()=>readProgress(JSON.stringify(bad))).toThrow(FutureProgress);
 });
 test("damaged optional legacy board or metadata still pins its old content rather than silently reassigning",()=>{
- const p=fresh();const q=readProgress(JSON.stringify({...p,active:"book-v1-78",sessions:{...p.sessions,"book-v1-78":{broken:true}},meta:{version:2,attempts:{"book-v1-77":{broken:true}}}}));
- expect(q.active).toBe("classic");expect(q.bookRevisions).toMatchObject({"book-v1-78":1,"book-v1-77":1});
+ const p=fresh();const q=readProgress(JSON.stringify({...p,active:"book-v1-78",sessions:{...p.sessions,"book-v1-78":{broken:true}},meta:{version:2,wallet:9,since:"2026-11-01",completed:-1,unassisted:0,attempts:{"book-v1-77":{id:"kept",completed:false}}}}));
+ expect(q.meta?.wallet).toBe(9);expect(q.meta?.attempts["book-v1-77"].id).toBe("kept");expect(q.active).toBe("classic");expect(q.bookRevisions).toMatchObject({"book-v1-78":1,"book-v1-77":1});
  expect(notebookForTask("book-v1-78",q)).toEqual(notebook[77]);
  expect(readProgress(serializeProgress(q)).bookRevisions).toEqual(q.bookRevisions);
 });

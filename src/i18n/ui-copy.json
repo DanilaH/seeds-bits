@@ -931,11 +931,11 @@
     "pt-BR": "No Android, AppMetrica e Yandex Ads enviam dados técnicos sobre dispositivo, instalação, sessões, falhas e anúncios. Podem usar endereços IP e identificadores de publicidade. O tabuleiro e o salvamento completo ficam fora dos eventos de análise."
   },
   "ui.daily-puzzle-reminders-are-on-by-default-and-use": {
-    "ru": "Напоминание о задаче дня включено по умолчанию и работает по местному времени на устройстве. Его можно выключить в настройках игры. Разрешение Android можно отключить в системных настройках.",
-    "en": "Daily puzzle reminders are on by default and use the device’s local time. You can turn them off in the game settings. Android permission can be revoked in system settings.",
-    "es": "Los recordatorios están activados por defecto y siguen la hora local del dispositivo. Puedes desactivarlos en el juego. El permiso de Android puede revocarse en los ajustes del sistema.",
-    "tr": "Günlük bulmaca hatırlatmaları varsayılan olarak açık ve cihazın yerel saatini kullanır. Oyunun ayarlarından kapatabilirsin. Android iznini sistem ayarlarından kaldırabilirsin.",
-    "pt-BR": "Lembretes diários vêm ativados e seguem o horário local do dispositivo. Você pode desligá-los no jogo. A permissão do Android pode ser revogada nas configurações do sistema."
+    "ru": "Если вы сегодня не заходили в игру, она может напомнить о себе в обед и вечером по местному времени. Уведомления зависят от разрешения и канала Android; отключить их можно в системных настройках. Прежнее отключение сохраняется.",
+    "en": "If you have not opened the game today, it may remind you at lunchtime and in the evening, using local time. Android permission and notification channel settings apply. You can disable notifications in system settings. Previous opt-outs are preserved.",
+    "es": "Si hoy no has abierto el juego, puede recordártelo al mediodía y por la tarde, según la hora local. Se respetan el permiso y el canal de notificaciones de Android. Puedes desactivarlas en los ajustes del sistema. Se conserva cualquier rechazo anterior.",
+    "tr": "Bugün oyunu açmadıysan yerel saatle öğlen ve akşam hatırlatabilir. Android izni ve bildirim kanalı ayarları geçerlidir. Bildirimleri sistem ayarlarından kapatabilirsin. Önceki ret kararları korunur.",
+    "pt-BR": "Se você não abriu o jogo hoje, ele pode lembrar você no almoço e à noite, no horário local. A permissão e o canal de notificações do Android são respeitados. Você pode desativá-las nas configurações do sistema. Recusas anteriores são preservadas."
   },
   "ui.rustore-provides-the-review-window-the-game-receives-neither": {
     "ru": "Окно оценки обслуживает RuStore. Игра не получает текст отзыва и звёзды и не выдаёт за них награду.",
@@ -2338,11 +2338,11 @@
     "pt-BR": "Novo jogo"
   },
   "calm.classic.startNote": {
-    "ru": "Выберите сложность — партия начнётся сразу.",
-    "en": "Choose a difficulty to start a new game.",
-    "es": "Elige una dificultad para empezar.",
-    "tr": "Başlamak için zorluk seçin.",
-    "pt-BR": "Escolha uma dificuldade para começar."
+    "ru": "Выберите сложность.",
+    "en": "Choose a difficulty.",
+    "es": "Elige la dificultad.",
+    "tr": "Zorluk seçin.",
+    "pt-BR": "Escolha a dificuldade."
   },
   "calm.classic.confirmNote": {
     "ru": "Начатая классика заменится только после подтверждения.",
@@ -2511,5 +2511,68 @@
     "es": "Partida guardada",
     "tr": "Kayıtlı oyun",
     "pt-BR": "Partida salva"
+  },
+  "play.noMovesHelp": {
+    "ru": "Верните ход или попробуйте сначала.",
+    "en": "Undo a move or try again from the start.",
+    "es": "Deshaz una jugada o vuelve a empezar.",
+    "tr": "Bir hamleyi geri al veya baştan dene.",
+    "pt-BR": "Desfaça uma jogada ou tente de novo."
+  },
+  "board.reach.valid": {
+    "ru": "Достижима: допустимая пара",
+    "en": "Reachable: valid pair",
+    "es": "Alcanzable: pareja válida",
+    "tr": "Ulaşılabilir: geçerli çift",
+    "pt-BR": "Alcançável: par válido"
+  },
+  "board.reach.invalid": {
+    "ru": "Достижима: числа не образуют пару",
+    "en": "Reachable: numbers do not form a pair",
+    "es": "Alcanzable: los números no forman pareja",
+    "tr": "Ulaşılabilir: sayılar çift oluşturmuyor",
+    "pt-BR": "Alcançável: os números não formam um par"
+  },
+  "ui.saving-game": {
+    "ru": "Сохраняем ход…",
+    "en": "Saving move…",
+    "es": "Guardando jugada…",
+    "tr": "Hamle kaydediliyor…",
+    "pt-BR": "Salvando jogada…"
+  },
+  "feel.jar.collected": {
+    "ru": "Баночка {number} собрана",
+    "en": "Jar {number} collected",
+    "es": "Frasco {number} completado",
+    "tr": "{number}. kavanoz tamamlandı",
+    "pt-BR": "Pote {number} completo"
+  },
+  "save.storageUnavailable": {
+    "ru": "Постоянное хранилище недоступно. Прогресс не сохраняется. Восстановите доступ и повторите сохранение.",
+    "en": "Persistent storage is unavailable. Progress is not saved. Restore access and retry saving.",
+    "es": "El almacenamiento no está disponible. El progreso no se guarda. Restablece el acceso y reintenta guardar.",
+    "tr": "Kalıcı depolamaya erişilemiyor. İlerleme kaydedilmiyor. Erişimi düzeltip yeniden kaydet.",
+    "pt-BR": "O armazenamento não está disponível. O progresso não está salvo. Restaure o acesso e tente salvar novamente."
+  },
+  "save.earnedProtected": {
+    "ru": "Не удалось прочитать накопления или права. Запись отключена: исходный прогресс защищён.",
+    "en": "Earned resources or entitlements could not be read. Saving is off to protect the original progress.",
+    "es": "No se pudieron leer los recursos o derechos. El guardado está desactivado para proteger el progreso original.",
+    "tr": "Kazanımlar veya haklar okunamadı. Orijinal ilerlemeyi korumak için kaydetme kapalı.",
+    "pt-BR": "Não foi possível ler os recursos ou direitos. O salvamento está desativado para proteger o progresso original."
+  },
+  "save.atomicUnavailable": {
+    "ru": "Сохранение отключено: браузер не поддерживает безопасную запись между вкладками. Исходный прогресс защищён. Обновите браузер.",
+    "en": "Saving is off: this browser cannot safely coordinate game writes between tabs. Your original progress is protected. Update your browser.",
+    "es": "El guardado está desactivado: este navegador no puede coordinar escrituras entre pestañas. El progreso original está protegido. Actualiza el navegador.",
+    "tr": "Kaydetme kapalı: tarayıcı sekmeler arasında güvenli kayıt sağlayamıyor. Orijinal ilerlemen korunuyor. Tarayıcıyı güncelle.",
+    "pt-BR": "O salvamento está desativado: o navegador não coordena gravações entre abas com segurança. Seu progresso original está protegido. Atualize o navegador."
+  },
+  "home.daily.done": {
+    "ru": "Решено",
+    "en": "Solved",
+    "es": "Resuelto",
+    "tr": "Çözüldü",
+    "pt-BR": "Resolvido"
   }
 }

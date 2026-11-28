@@ -12,7 +12,7 @@ import org.json.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/** Local, inexact reminder, enabled by default; explicit opt-out and Android permission apply. No service, network request, or exact-alarm permission. */
+/** Local lunch/evening reminders for absent players. Inexact; Android and legacy opt-outs remain authoritative. */
 public class SeedsDailyReminder extends BroadcastReceiver {
   private static final String CHANNEL="daily-task",ACTION="seeds.DAILY_REMINDER";
   private static final int ID=701;
@@ -68,43 +68,65 @@ public class SeedsDailyReminder extends BroadcastReceiver {
     if(Build.VERSION.SDK_INT>=26){NotificationChannel channel=manager(c).getNotificationChannel(CHANNEL);if(channel!=null && channel.getImportance()==NotificationManager.IMPORTANCE_NONE)return false;}
     return true;
   }
-  private static PendingIntent alarmIntent(Context c){
-    return PendingIntent.getBroadcast(c,ID,new Intent(c,SeedsDailyReminder.class).setAction(ACTION),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+  private static final int[] SLOT_MINUTES={12*60+30,19*60};
+  static long slotTime(long now,int slot) {
+    Calendar due=Calendar.getInstance();due.setTimeInMillis(now);
+    due.set(Calendar.HOUR_OF_DAY,SLOT_MINUTES[slot]/60);due.set(Calendar.MINUTE,SLOT_MINUTES[slot]%60);
+    due.set(Calendar.SECOND,0);due.set(Calendar.MILLISECOND,0);return due.getTimeInMillis();
+  }
+  private static PendingIntent alarmIntent(Context c,int slot,long due) {
+    return PendingIntent.getBroadcast(c,ID+slot,new Intent(c,SeedsDailyReminder.class).setAction(ACTION)
+      .putExtra("slot",slot).putExtra("day",day(due)).putExtra("due",due),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+  }
+  /** Entry, not a daily victory, suppresses both slots and removes stale posts. */
+  static synchronized void visit(Context c) {
+    try {
+      String today=day(System.currentTimeMillis());
+      if(!today.equals(prefs(c).getString("last_visit_day","")))prefs(c).edit().putString("last_visit_day",today).commit();
+      manager(c).cancel(ID);manager(c).cancel(ID+1);
+    }catch(Exception ignored){}
   }
   static boolean done(JSONObject p,String day){
     JSONArray done=p.optJSONArray("done");if(done==null)return false;
     String id="daily-v1-"+day;for(int i=0;i<done.length();i++)if(id.equals(done.optString(i)) || ("daily-v3-"+day).equals(done.optString(i)) || ("daily-v4-"+day).equals(done.optString(i)) || ("daily-v5-"+day).equals(done.optString(i)))return true;
     return false;
   }
-  public static void sync(Context c){
+  public static synchronized void sync(Context c){
     try {
-      channel(c);JSONObject s=settings(c);
-      AlarmManager alarms=(AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
-      if(!s.optBoolean("reminders",true) || !allowed(c)){alarms.cancel(alarmIntent(c));manager(c).cancel(ID);return;}
+      channel(c);
+      if(SeedsEngagementPlugin.foreground&&!SeedsEngagementPlugin.externalWindow&&!SeedsMonetizationPlugin.fullscreenActive)visit(c);
+      JSONObject s=settings(c);AlarmManager alarms=(AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
       long now=System.currentTimeMillis();String today=day(now);
-      if(done(progress(c),today))manager(c).cancel(ID);
-      String time=s.optString("reminderTime","12:30");if(!time.matches("([01]\\d|2[0-3]):[0-5]\\d"))time="12:30";
-      String[] fields=time.split(":");Calendar next=Calendar.getInstance();next.set(Calendar.HOUR_OF_DAY,Integer.parseInt(fields[0]));next.set(Calendar.MINUTE,Integer.parseInt(fields[1]));next.set(Calendar.SECOND,0);next.set(Calendar.MILLISECOND,0);
-      if(next.getTimeInMillis()<=now)next.add(Calendar.DAY_OF_YEAR,1);
-      alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,next.getTimeInMillis(),alarmIntent(c));
-    }catch(Exception ignored){/* A reminder must never turn a successful game save into failure. */}
+      boolean enabled=s.optBoolean("reminders",true)&&allowed(c);
+      boolean visited=today.equals(prefs(c).getString("last_visit_day",""));
+      if(!enabled || visited){manager(c).cancel(ID);manager(c).cancel(ID+1);}
+      for(int slot=0;slot<2;slot++){
+        long due=slotTime(now,slot);
+        if(due<=now || visited){Calendar next=Calendar.getInstance();next.setTimeInMillis(due);next.add(Calendar.DAY_OF_YEAR,1);due=next.getTimeInMillis();}
+        PendingIntent alarm=alarmIntent(c,slot,due);
+        if(enabled)alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,due,alarm);else alarms.cancel(alarm);
+      }
+    }catch(Exception ignored){/* Reminder errors never invalidate a committed game. */}
   }
   @Override public void onReceive(Context c,Intent intent){
-    if(ACTION.equals(intent.getAction()))deliver(c);
-    // Clock/timezone changes must not leave a notification with an old personalised promise.
-    else if(Intent.ACTION_TIME_CHANGED.equals(intent.getAction()) || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction()))manager(c).cancel(ID);
+    if(ACTION.equals(intent.getAction()))deliver(c,intent);
+    else if(Intent.ACTION_TIME_CHANGED.equals(intent.getAction()) || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction())){
+      manager(c).cancel(ID);manager(c).cancel(ID+1);
+    }
     sync(c);
   }
-  private static void deliver(Context c){
+  private static synchronized void deliver(Context c,Intent intent){
     try {
       JSONObject s=settings(c),p=progress(c);long now=System.currentTimeMillis();String today=day(now);
-      SharedPreferences preferences=prefs(c);
-      if(!s.optBoolean("reminders",true)||!allowed(c)||SeedsEngagementPlugin.foreground||SeedsEngagementPlugin.externalWindow||SeedsMonetizationPlugin.fullscreenActive||done(p,today)||today.compareTo(preferences.getString("last_day",""))<=0)return;
-      String configured=s.optString("reminderTime","12:30");if(!configured.matches("([01]\\d|2[0-3]):[0-5]\\d"))configured="12:30";
+      SharedPreferences preferences=prefs(c);int slot=intent.getIntExtra("slot",-1);
+      if(slot<0||slot>=2||!today.equals(intent.getStringExtra("day")))return;
+      long due=slotTime(now,slot),scheduled=intent.getLongExtra("due",-1);
+      if(scheduled!=due || now<due || now-due>2*60*60*1000L)return;
+      if(!s.optBoolean("reminders",true)||!allowed(c)||SeedsEngagementPlugin.foreground||SeedsEngagementPlugin.externalWindow||SeedsMonetizationPlugin.fullscreenActive
+        ||today.equals(preferences.getString("last_visit_day",""))
+        ||today.compareTo(preferences.getString("last_day",""))<=0
+        ||today.compareTo(preferences.getString("delivered_slot_"+slot,""))<=0)return;
       Calendar clock=Calendar.getInstance();int hour=clock.get(Calendar.HOUR_OF_DAY);
-      Calendar due=(Calendar)clock.clone();String[] at=configured.split(":");due.set(Calendar.HOUR_OF_DAY,Integer.parseInt(at[0]));due.set(Calendar.MINUTE,Integer.parseInt(at[1]));due.set(Calendar.SECOND,0);due.set(Calendar.MILLISECOND,0);
-      // Honour the chosen time, but discard a message delayed beyond its useful window.
-      long delay=now-due.getTimeInMillis();if(delay<0||delay>2*60*60*1000L)return;
       JSONObject run=p.optJSONObject("meta")==null?null:p.optJSONObject("meta").optJSONObject("daily");
       int next=1;
       if(run!=null && utcDay(today)-utcDay(run.optString("lastDay"))==1)next=run.optInt("count",0)+1;
@@ -147,13 +169,13 @@ public class SeedsDailyReminder extends BroadcastReceiver {
       if(candidates.isEmpty())candidates=pool;
       String[] chosen=candidates.get(new Random().nextInt(candidates.size()));
       List<String> recent=new ArrayList<>();recent.add(chosen[0]);for(String id:history.split(","))if(!id.isEmpty()&&!id.equals(chosen[0])&&recent.size()<3)recent.add(id);
-      if(!preferences.edit().putString("last_day",today).putString("text_history",android.text.TextUtils.join(",",recent)).commit())return;
+      if(!preferences.edit().putString("delivered_slot_"+slot,today).putString("text_history",android.text.TextUtils.join(",",recent)).commit())return;
       Intent open=new Intent(c,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra("seeds_daily_notification",true);
-      PendingIntent tap=PendingIntent.getActivity(c,ID,open,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+      PendingIntent tap=PendingIntent.getActivity(c,ID+slot,open,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
       Notification.Builder builder=Build.VERSION.SDK_INT>=26?new Notification.Builder(c,CHANNEL):new Notification.Builder(c);
       builder.setSmallIcon(R.drawable.ic_seed_notification).setContentTitle(chosen[1]).setContentText(chosen[2]).setStyle(new Notification.BigTextStyle().bigText(chosen[2])).setContentIntent(tap).setAutoCancel(true).setOnlyAlertOnce(true);
       if(Build.VERSION.SDK_INT>=26){Calendar expiry=Calendar.getInstance();expiry.add(Calendar.DAY_OF_YEAR,1);expiry.set(Calendar.HOUR_OF_DAY,0);expiry.set(Calendar.MINUTE,0);expiry.set(Calendar.SECOND,0);builder.setTimeoutAfter(Math.max(1,expiry.getTimeInMillis()-now));}
-      manager(c).notify(ID,builder.build());
+      manager(c).notify(ID+slot,builder.build());
     }catch(Exception ignored){}
   }
 }

@@ -278,7 +278,7 @@ for (const count of [2,24,2400,2496]) {
     await digit(page,0).click(); await digit(page,1).click();
     await expect(page.locator("#win")).toBeVisible();
     await expect(page.locator("#try-notebook")).toBeHidden();
-    await page.locator("#play-again").click();
+    await page.locator("#result-home").click();
     const button=page.locator("#book-quick");
     if (count>=2400) {
       await expect(button).toBeHidden();

@@ -51,7 +51,7 @@ async function classicNew(page: Page, level=1) {
 }
 test("fresh Home presents three modes with no fake resume; Escape cannot enter the game",async({page})=>{
   await install(page);
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   await expect(page.locator("#book-quick")).toHaveText("Начать");
   for(const id of ["classic-mode","book-mode","daily-mode"]) await expect(page.locator("#"+id)).toBeInViewport();
   await expect(page.locator("#dialog #close")).toHaveCount(0);
@@ -87,16 +87,12 @@ test("last played Notebook 91/20 survives reload, browsing and a direct resume",
   await expect(page.locator("#collection .task")).toHaveCount(24);
   await expect(page.locator("#collection .task.started")).toHaveAttribute("data-game",retainedId);
   await page.locator("#all-books").click();
-  await page.locator("#toggle-book-filter").click();
-  await page.locator("#book-filter").selectOption("active");
   await expect(page.locator('[data-book-range="4"]')).toHaveAttribute("aria-pressed","true");
   await page.locator('[data-volume="90"]').click();
   await page.locator("#collection-back").click();
   expect(await route(page)).toBe("book-picker");
-  await expect(page.locator("#book-filter")).toHaveValue("active");
+  await expect(page.locator("#book-filter, #toggle-book-filter")).toHaveCount(0);
   await page.locator("#book-section-themes").click();
-  await expect(page.locator("#book-filter-reset")).toBeVisible();
-  await page.locator("#book-filter-reset").click();
   await expect(page.locator(".theme-shelf [data-volume]")).toHaveCount(4);
   await page.reload();
   await page.locator("#book-quick").click();
@@ -172,18 +168,17 @@ test("result to menu uses one fullscreen route, with stable banner and no immedi
   await install(page,{classic:classicGame([5,5]),[retainedId]:started},"classic",[],true);
   const qa = () => page.evaluate(()=>(window as any).menuQA);
   await page.locator("#resume").click();
-  await expect.poll(async()=>(await qa()).requests.length).toBe(1);
-  await page.evaluate(()=>(window as any).menuQA.finish({shown:true,status:"closed"}));
+  expect((await qa()).requests).toHaveLength(0);
   await expect(page.locator("#dialog")).toBeHidden();
   // Age the JS external suppression without changing a native policy.
   await page.clock.install();
   await page.clock.fastForward(31000);
   await page.locator('[data-index="0"]').click();
   await page.locator('[data-index="1"]').click();
-  await expect(page.locator("#play-again")).toHaveText("В меню");
-  await expect(page.locator("#result-actions button:visible")).toHaveCount(1);
-  await page.locator("#play-again").click();
-  await expect.poll(async()=>(await qa()).requests.length).toBe(2);
+  await expect(page.locator("#result-home")).toHaveText("В меню");
+  await expect(page.locator("#result-actions button:visible")).toHaveCount(2);
+  await page.locator("#result-home").click();
+  await expect.poll(async()=>(await qa()).requests.length).toBe(1);
   expect((await qa()).requests.at(-1).route).toBe("classic-result-home");
   // Web reserves the slot while native decides whether a fullscreen will start.
   expect((await qa()).banner.at(-1).visible).toBe(true);
@@ -191,7 +186,7 @@ test("result to menu uses one fullscreen route, with stable banner and no immedi
   await expect(page.locator("#app")).toHaveAttribute("inert","");
   await page.evaluate(()=>(window as any).menuQA.finish({shown:true,status:"closed"}));
   await expect(home(page)).toBeVisible();
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   await expect.poll(async()=>(await qa()).banner.at(-1)?.visible).toBe(true);
   const before = (await qa()).banner.length;
   await page.locator("#book-mode").click();
@@ -202,19 +197,18 @@ test("result to menu uses one fullscreen route, with stable banner and no immedi
   await page.locator("#collection-back").click();
   await page.locator("#book-quick").click();
   await expect(page.locator("#dialog")).toBeHidden();
-  expect((await qa()).requests).toHaveLength(2);
+  expect((await qa()).requests).toHaveLength(1);
 });
 test("no-fill keeps the app banner and does not consume the external cooldown",async({page})=>{
   await install(page,{classic:classicGame([5,5])},"classic",[],true);
   const ads = () => page.evaluate(()=>(window as any).menuQA);
   await page.locator("#resume").click();
-  await expect.poll(async()=>(await ads()).requests.length).toBe(1);
-  await page.evaluate(()=>(window as any).menuQA.finish({status:"skipped",reason:"not_loaded"}));
+  expect((await ads()).requests).toHaveLength(0);
   await expect(page.locator("#dialog")).toBeHidden();
   await page.locator('[data-index="0"]').click();
   await page.locator('[data-index="1"]').click();
-  await page.locator("#play-again").click();
-  await expect.poll(async()=>(await ads()).requests.length).toBe(2);
+  await page.locator("#result-home").click();
+  await expect.poll(async()=>(await ads()).requests.length).toBe(1);
   await page.evaluate(()=>(window as any).menuQA.finish({status:"skipped",reason:"cooldown"}));
   await expect(home(page)).toBeVisible();
   expect((await ads()).banner.every((call: {visible:boolean})=>call.visible)).toBe(true);
@@ -303,4 +297,68 @@ test("notebook completion markers and tap targets work from zero to all tasks so
     else await expect(page.locator("#continue-book")).toHaveAttribute("data-continue",`book-v1-${volume*24+count+1}`);
     await page.locator("#collection-back").click();
   }
+});
+
+for (const [width, height, language] of [[320,568,"ru"], [360,640,"pt-BR"]] as const) {
+  test(`archive resume leaves the Home links tappable at ${width}×${height}`, async ({page}) => {
+    await page.setViewportSize({width,height});
+    await page.clock.setFixedTime(new Date("2026-11-26T12:00:00+05:00"));
+    const day = "daily-v1-2026-11-24";
+    await install(page,{[day]:classicGame()},day,[],true,"light",language);
+    const links = page.locator(".home-links button");
+    const visible = await links.evaluateAll(buttons => {
+      const shell = document.querySelector("#dialog")!.getBoundingClientRect();
+      const ad = document.querySelector("#ad-space")!.getBoundingClientRect();
+      return buttons.every(button => {
+        const rect = button.getBoundingClientRect();
+        return rect.bottom <= Math.min(shell.bottom,ad.top) &&
+          button.contains(document.elementFromPoint(rect.x + rect.width/2,rect.y + rect.height/2));
+      });
+    });
+    expect(visible).toBe(true);
+    const settings = (await page.locator("#settings-open").boundingBox())!;
+    await page.mouse.click(settings.x + settings.width/2, settings.y + settings.height/2);
+    await expect(page.locator("#dialog")).toHaveAttribute("data-screen","settings");
+  });
+}
+
+test("the last notebook row fits above its continuation button at 320×568", async ({page}) => {
+  await page.setViewportSize({width:320,height:568});
+  await install(page,{[retainedId]:started},retainedId,[],true);
+  await page.locator("#book-mode").click();
+  const grid = (await page.locator(".compact-task-grid").boundingBox())!;
+  const scroll = (await page.locator("#collection").boundingBox())!;
+  const dock = (await page.locator("#notebook-dock").boundingBox())!;
+  expect(grid.y + grid.height).toBeLessThanOrEqual(Math.min(scroll.y + scroll.height,dock.y));
+});
+
+test("app entry protects both a fresh Classic and a parked continuation", async ({page}) => {
+  await install(page,{classic:classicGame([5,5])},"classic",[],true);
+  await page.locator("#resume").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  expect(await page.evaluate(()=>(window as any).menuQA.requests)).toEqual([]);
+  await page.reload();
+  await page.locator("#classic-mode").click();
+  await page.locator("#next-classic").click();
+  await page.locator('[data-classic-level="0"]').click();
+  await page.locator("#confirm-new").click();
+  await expect(page.locator("#dialog")).toBeHidden();
+  expect(await page.evaluate(()=>(window as any).menuQA.requests)).toEqual([]);
+});
+
+test("Classic Next chooses a difficulty before the single ad request", async ({page}) => {
+  await install(page,{classic:classicGame([5,5])},"classic",[],true);
+  await page.locator("#resume").click();
+  await page.locator('[data-index="0"]').click();
+  await page.locator('[data-index="1"]').click();
+  await expect(page.locator("#win")).toBeVisible();
+  await page.locator("#play-again").click();
+  await expect(page.locator("#classic-new-sheet")).toBeVisible();
+  expect(await page.evaluate(()=>(window as any).menuQA.requests)).toEqual([]);
+  await page.locator('[data-classic-level="2"]').click();
+  await expect.poll(async()=>page.evaluate(()=>(window as any).menuQA.requests.length)).toBe(1);
+  expect((await read(page)).meta.classicRun.difficulty).toBe(2);
+  await page.evaluate(()=>(window as any).menuQA.finish({status:"closed",shown:true}));
+  await expect(page.locator("#win")).toBeHidden();
+  await expect(page.locator("#game-difficulty")).toContainText("Высокая");
 });

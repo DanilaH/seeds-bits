@@ -205,7 +205,7 @@ for (const mode of ["book-v1-1", "daily-v1-2026-11-09"])
             (x: any) =>
               Array.isArray(x) &&
               x.join(",") ===
-                (mode.startsWith("book") ? "18,35,24" : "34,45,42,55,62"),
+                "18,35,24", // MF-07: ordinary task/day cue; medal and jar accents are separate.
           ).length,
       )
       .toBe(1);
@@ -218,7 +218,7 @@ for (const mode of ["book-v1-1", "daily-v1-2026-11-09"])
     await page.reload();
     await resetEvents(page);
     if (mode.startsWith("book")) await expect(page.locator("#resume")).toHaveText("Начать · задача 2");
-    else await expect(page.locator("#resume")).toBeHidden();
+    else await expect(page.locator("#resume")).toHaveText("Начать");
     await page.waitForTimeout(1700);
     expect((await pulses(page)).filter((x: any) => Array.isArray(x))).toEqual(
       [],
@@ -429,7 +429,8 @@ test("slow save holds the full jar through its spill instead of shaking the next
     };
   });
   await removePair(page);
-  await expect(page.locator("#jar-meter")).toHaveAttribute("data-full", "true");
+  // A held commit cannot display an earned receipt or start the closing accent.
+  await expect(page.locator("#jar-meter")).toHaveAttribute("data-full", "false");
   await page.waitForTimeout(600);
   await expect(page.locator("#jar-spill")).toHaveCount(0);
   await page.evaluate(() => (window as any).releaseJarSave());
@@ -469,14 +470,19 @@ for (const viewport of [
         const frames = (
           piece.getAnimations()[0].effect as KeyframeEffect
         ).getKeyframes();
-        const first = new DOMMatrixReadOnly(frames[0].transform as string);
-        const last = new DOMMatrixReadOnly(frames.at(-1)!.transform as string);
-        return { x: first.m41, y: first.m42, endY: last.m42 };
+        const positions=frames.map(frame=>new DOMMatrixReadOnly(frame.transform as string));
+        const first=positions[0],last=positions.at(-1)!;
+        return { x: first.m41, y: first.m42, endX: last.m41, endY: last.m42,
+          minY:Math.min(...positions.map(position=>position.m42)),
+          endTime:piece.getAnimations()[0].effect!.getComputedTiming().endTime };
       });
+      const banner=document.querySelector('#ad-space')?.getBoundingClientRect();
       return {
         paths,
         glass: { x: glass.x, top: glass.top, width: glass.width },
         height: innerHeight,
+        width: innerWidth,
+        floor:banner&&banner.height>0?banner.top-4:innerHeight+14,
         pointerEvents: getComputedStyle(layer).pointerEvents,
         overflow: document.documentElement.scrollWidth > innerWidth,
       };
@@ -488,9 +494,14 @@ for (const viewport of [
         (p) =>
           Math.abs(p.x - (geometry.glass.x + geometry.glass.width / 2)) < 20 &&
           Math.abs(p.y - geometry.glass.top) < 15 &&
-          p.endY > geometry.height,
+          p.endX>=7 && p.endX<=geometry.width-7 &&
+          Math.abs(p.endY-geometry.floor)<1 &&
+          Number(p.endTime)>0 && Number(p.endTime)<=2200,
       ),
     ).toBe(true);
+    // VA10 explicitly restores a fan/fall rather than the rejected local circle.
+    expect(geometry.paths.some(p=>Math.abs(p.endX-p.x)>54)).toBe(true);
+    expect(geometry.paths.some(p=>p.minY<p.y-5)).toBe(true);
     expect(await page.locator(".jar-caption").boundingBox()).toEqual(caption);
     await expect(page.locator("#jar-spill")).toHaveCount(0);
     await expect(page.locator("#jar-name")).toHaveText("Баночка 2");

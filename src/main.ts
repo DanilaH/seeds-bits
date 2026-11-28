@@ -1,3 +1,5 @@
+import {optionalResult, optionalSingleFlight} from "./optional-service";
+import { syncGameAppearance } from "./appearance";
 import "./content-pilot.css";
 import { t, plural, choice, localName, word, activeLanguage, launchLanguages, languageNames, resolveLocale, useLanguage, staticCopy, type LanguageChoice } from "./i18n";
 import { WebAcquisition, activityDate, type InstallContext } from "./distribution";
@@ -11,6 +13,7 @@ import {removePair as proofRemovePair} from "./core";
 import {helpFlags, helpPaused, qaProfile, assignHelp} from "./help-config";
 import {receiptProduct, sameBoard, freezeIntent, type HelpIntent, type HelpProduct} from "./help-contract";
 import { dailyRun, streakReward } from "./daily-run";
+import { homeDailySnapshot, homeDailyStatus } from "./home-daily";
 import { hintExplanation } from "./hint-explanation";
 import { readClassicDeals, restartClassic } from "./classic-deals";
 import {
@@ -65,7 +68,7 @@ import { playSound, suspendSound, blockSound, warmSound, type SoundCue } from ".
 import { SeedFlight } from "./seed-flight";
 import { JarSpill } from "./jar-spill";
 import { icon } from "./icons";
-import { installInterfaceMotion } from "./ui-motion";
+import { installInterfaceMotion, presentMenuChange, clearInterfaceMotion } from "./ui-motion";
 import type { HapticCue } from "./haptics";
 import {
   createValueTransferPlan,
@@ -80,6 +83,10 @@ import "./ui-polish.css";
 import "./ui-adaptation.css";
 import "./calm-screens.css";
 import "./compact-navigation.css";
+import "./quiet-table.css";
+import "./visual-acceptance.css";
+import "./final-ui.css";
+import "./tutorial-ui.css";
 import {
   resultKind,
   resultArtwork,
@@ -125,6 +132,7 @@ import {
   serializeProgress,
   FutureProgress,
   ProtectedContentProgress,
+  ProtectedEarnedProgress,
   metadata,
   startAttempt,
   recordCompletion,
@@ -213,10 +221,8 @@ let saveQueue = Promise.resolve(),
   lessonPhase = 0;
 let jarShelfPage = 0;
 let selectedVolume = 0,
-  bookFilter = "all",
   bookRange = 0,
   bookThemes = false,
-  bookFilterOpen = false,
   trophyYear = today().slice(0, 4);
 let rewardSeenDuringBoot = false;
 let bootComplete = false,
@@ -233,13 +239,21 @@ let lastExternalAt = -Infinity,
   activeTick = performance.now(),
   activeSinceSave = 0;
 let visualSeeds: number | undefined;
+let confirmedSeeds: number | undefined;
+let confirmedJars: ReturnType<typeof jars> | undefined;
+let confirmedDaily: ReturnType<typeof homeDailySnapshot> | undefined;
+const storedJarView = () => confirmedJars ?? jars(progress);
+let jarPending = false;
+let rewardScene: Promise<void> | undefined;
 let completedJar:
-  { index: number; capacity: number; until: number } | undefined;
+  { index: number; capacity: number } | undefined;
 let clearContact = () => {};
 let clearTrophyCelebration = () => {};
 let clearResultCelebration = () => {};
 let resultArtKey = "";
-let fullJarTimer: ReturnType<typeof setTimeout> | undefined;
+let jarMilestone: Promise<void> | undefined;
+const presentationWaits = new Set<() => void>();
+let resultMilestone: {session: Session; kind: ReturnType<typeof resultKind>} | undefined;
 let boardRevealCancel: (() => void) | undefined;
 let pendingResult:
   { session: Session; rects: DOMRect[]; saved: boolean } | undefined;
@@ -287,7 +301,7 @@ const lessons = [
   },
 ];
 $("app").innerHTML =
-  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}">${jarGlass("jar-glass")}<span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="result-reminder" class="text-button" hidden>${t("settings.reminder")}</button><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><section id="reminder-settings" hidden><label class="reminder-toggle">${t("settings.reminder")}<input id="reminders" type="checkbox"></label><label class="reminder-time">${t("ui.reminder-time")}<input id="reminder-time" type="time" value="12:30"></label><p id="reminder-permission" class="fine" role="status"></p><button id="notification-permission-request" class="text-button" hidden>${t("ui.allow-notifications")}</button><button id="notification-system-settings" class="text-button" hidden>${t("ui.android-notification-settings")}</button><p class="fine">${t("ui.at-local-time-if-the-puzzle-is-still-unsolved")}</p></section><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
+  `<main class="game"><header><button id="menu" class="plain" aria-label="${t("home.menu")}">${icon("menu")}</button><div class="brand">${t("ui.seeds-bits")}</div><button id="book-top" class="plain" aria-label="${t("home.book.open")}">${icon("book")}</button></header><button id="jar-meter" class="jar-meter" hidden aria-label="${t("ui.jar-collection")}">${jarGlass("jar-glass")}<span class="jar-caption"><strong id="jar-name"></strong><span class="jar-level"><span id="jar-percent"></span><span id="jar-collected" aria-hidden="true">${icon("check")}</span></span></span></button><section class="game-meta"><span id="mode">${t("ui.classic-game")}</span><span><strong id="remaining">28</strong> <span id="noun">${t("ui.numbers")}</span></span></section><div id="page-progress" hidden></div><section id="lesson" hidden><div class="lesson-top"><span id="lesson-step"></span><button id="skip" class="text-button">${t("action.skip")}</button></div><h1 id="lesson-title"></h1><p id="lesson-text"></p><button id="lesson-next" class="primary" hidden>${t("action.next")}</button></section><div id="viewport" tabindex="0" aria-label="${t("ui.vertically-scrollable-board")}"><div id="board-wrap"><div id="board" role="group" aria-label="${t("ui.numbers-on-the-board")}"></div><svg id="paths" aria-hidden="true"></svg></div><div id="win" hidden><span class="win-symbol" aria-hidden="true">${icon("check")}</span><h1>${t("ui.all-pairs-found")}</h1><section class="result-details" aria-label="${t("ui.game-results")}"><p id="win-stats"></p></section><div id="award" hidden></div><p id="completion-status"></p><p id="result-gains" role="status"></p><button id="try-notebook" class="secondary" hidden>${t("home.book.open")}</button><button id="play-again" class="primary">${t("result.again")}</button></div></div><div class="status-wrap"><button id="hint-jump" class="text-button" hidden></button><p id="status" role="status" aria-live="polite"></p><button id="recover-task" class="text-button" hidden></button><button id="restart-task" class="text-button" hidden>${t("ui.restart-puzzle")}</button><button id="retry-save" class="text-button" hidden>${t("save.retry")}</button></div><footer><button id="undo" class="action">${icon("undo")}<span>${t("action.undo")}</span></button><button id="hint" class="action">${icon("hint")}<span id="hint-label"><span class="action-label">${t("action.hint")}</span><span id="hint-count" class="action-count" aria-hidden="true"></span></span></button><button id="add" class="action">${icon("add")}<span id="add-label"><span class="action-label">${t("action.add")}</span><span id="add-count" class="action-count" aria-hidden="true"></span></span></button></footer></main><dialog id="dialog" aria-label="${t("ui.seeds-bits-menu")}"><div class="dialog-head"><h2>${t("ui.seeds-bits-2")}</h2></div><div id="menu-content"><div class="home-title"><svg class="seed-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M29 40C8 40 8 20 24 5c12 16 16 30 5 35Z"/><path d="M35 39c-3-15 5-25 24-26-1 20-9 30-24 26Z"/><path class="seed-line" d="m24 15 4 20m24-15-12 14"/></svg><h1>${t("ui.seeds-bits")}</h1></div><button id="resume" class="primary">${t("action.resume")}</button><p id="resume-context"></p><nav class="mode-nav"><button id="classic-mode" class="mode-link"><span>${t("home.classic")}<small>${t("home.classic.detail")}</small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="book-mode" class="mode-link"><span>${t("home.books")}<small><span id="book-count">${t("home.books.detail")}</span></small></span><span aria-hidden="true">${icon("arrow")}</span></button><button id="daily-mode" class="mode-link"><span>${t("notification.channel")}<small><span id="daily-state">${t("action.start")}</span></small><small id="daily-series" hidden></small></span><span aria-hidden="true">${icon("arrow")}</span></button></nav><button id="calendar-open" class="archive-link"><span id="calendar-open-label">${t("ui.other-days")}</span>${icon("arrow")}</button><div class="home-links"><button id="progress-open" class="text-button">${t("home.progress")}</button><button id="learn" class="text-button">${t("home.how")}</button><button id="settings-open" class="text-button">${t("home.settings")}</button></div></div><section id="settings-panel" hidden><div class="screen-heading"><button id="settings-back" class="text-button" aria-label="${t("ui.back")}">${icon("back")}</button><h2>${t("home.settings")}</h2></div><div class="settings"><label>${t("settings.dark")}<input id="dark" type="checkbox"></label><label>${t("settings.sound")}<input id="sound" type="checkbox"></label><label>${t("settings.vibration")}<input id="vibration" type="checkbox"></label></div><p id="hint-wallet" class="fine"></p><button id="new" class="secondary restart-action">${t("ui.restart-current-game")}</button><p class="intro">${t("settings.autoSave")}</p><button id="privacy-open" class="text-button">${t("ui.privacy")}</button></section><div id="confirm-content" hidden><p>${t("ui.start-a-new-game-the-board-and-undo-history")}</p><button id="confirm-new" class="primary">${t("ui.restart")}</button><button id="cancel-new" class="secondary">${t("ui.keep-current-game")}</button></div><section id="collection" hidden></section></dialog>`;
 let refreshStaticCopy = () => {};
 const globe = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>';
 const languageFlags: Record<(typeof launchLanguages)[number], string> = {
@@ -356,8 +370,9 @@ function renderClassicNewSheet() {
       (current.hidden ? "" : ". "+current.textContent));
   }
 }
-function openClassicNewSheet() {
-  if (classicNewSheet.open || !dialog.open || dialog.dataset.screen !== "home" ||
+function openClassicNewSheet(fromResult = false) {
+  const resultEntry = fromResult && progress.active === "classic" && !occupied(board());
+  if (classicNewSheet.open || (!resultEntry && (!dialog.open || dialog.dataset.screen !== "home")) ||
       busy || saveFailed || futureSave || storageConflict || adActive || rewardRequest ||
       engagementActive || lesson >= 0) return;
   choosingClassicDifficulty = !classicParked();
@@ -441,7 +456,7 @@ function applyLanguage() {
     if(dialog.dataset.screen==="home")renderHomeCurrent();
     else if(dialog.open && (dialog.dataset.screen==="book" || dialog.dataset.screen==="book-picker"))
       openCollection(dialog.dataset.screen,true);
-    updateReminderSettings();
+    updateEngagementCopy();
     showSaveState();
   }
 }
@@ -475,8 +490,6 @@ async function changeLanguage(code:LanguageChoice) {
 languageRow.onclick=()=>openLanguage("settings");
 pauseLanguage.onclick=()=>openLanguage("pause");
 $("language-close").onclick=()=>languageSheet.close();
-// Keep the primary result action ahead of the optional reminder.
-$("play-again").after($("result-reminder"));
 const resultNext = document.createElement("div");
 resultNext.id = "result-next";
 resultNext.className = "result-next";
@@ -484,6 +497,12 @@ resultNext.setAttribute("role", "group");
 resultNext.setAttribute("aria-label", t("ui.next-game"));
 $("play-again").before(resultNext);
 resultNext.append($("play-again"));
+const resultHome = document.createElement("button");
+resultHome.id = "result-home";
+resultHome.className = "text-button";
+resultHome.hidden = true;
+resultHome.onclick = () => void goHomeFromBoard();
+resultNext.append(resultHome);
 const difficultyCaption = document.createElement("p");
 difficultyCaption.id = "classic-difficulty";
 difficultyCaption.hidden = true;
@@ -496,7 +515,6 @@ resultDock.append(
   difficultyCaption,
   resultNext,
   $("try-notebook"),
-  $("result-reminder"),
 );
 document.querySelector(".game")!.append(resultDock);
 const gameDifficulty = document.createElement("small");
@@ -524,6 +542,15 @@ const resultDateArt = document.createElement("div");
 resultDateArt.id = "result-date-art";
 resultDateArt.hidden = true;
 resultTitle.before(resultDateArt);
+const resultPaper = document.createElement("section");
+resultPaper.className = "quiet-result-page";
+const resultRibbon = document.createElement("span");
+resultRibbon.className = "result-ribbon";
+resultRibbon.setAttribute("aria-hidden", "true");
+resultPaper.append(resultRibbon);
+const winSymbol = document.querySelector<HTMLElement>("#win .win-symbol")!;
+winSymbol.before(resultPaper);
+resultPaper.append(winSymbol, resultDateArt, resultTitle, resultSubtitle);
 const choiceFits = new WeakMap<HTMLElement, { base: string; fitted: string }>();
 const choiceObserver = new ResizeObserver(() => scheduleActionLayout());
 function prepareResultLabels() {
@@ -573,12 +600,52 @@ const homeCurrent = document.createElement("section");
 homeCurrent.className = "home-current";
 homeCurrent.setAttribute("aria-labelledby", "home-game-title");
 homeCurrent.innerHTML =
-  '<div class="home-current-copy"><h2 id="home-game-title"></h2></div><div id="home-current-art" aria-hidden="true"></div>';
+  '<div class="home-current-copy"><h2 id="home-game-title"></h2></div>';
+const homePreview = document.createElement("div");
+homePreview.className = "quiet-mini-board";
+homePreview.setAttribute("aria-hidden", "true");
+const homeJar = document.createElement("button");
+homeJar.id = "home-jar";
+homeJar.className = "plain";
+homeJar.onclick = () => {
+  collectionTab = "jars";
+  openCollection("trophies");
+};
+$("menu-content").querySelector(".home-title")!.append(homeJar);
 const homeGoal = document.createElement("div");
 homeGoal.id = "home-goal";
 homeGoal.innerHTML = '<span id="home-goal-caption"></span><progress max="24" aria-hidden="true"></progress>';
-$("new").className = "text-button restart-action";
-homeCurrent.querySelector(".home-current-copy")!.append($("resume-context"), homeGoal);
+$("new").className = "secondary restart-action";
+homeCurrent.querySelector(".home-current-copy")!.append($("resume-context"), homePreview, homeGoal);
+// The hit target stays on the table; only the illustrated child floats.
+const homeNotebook = document.createElement("div");
+homeNotebook.id = "home-notebook";
+homeNotebook.className = "home-notebook-hit";
+homeNotebook.setAttribute("role", "button");
+homeNotebook.setAttribute("aria-labelledby", "home-game-title resume");
+homeNotebook.tabIndex = 0;
+const homeNotebookArt = homeCurrent.querySelector<HTMLElement>(".home-current-copy")!;
+homeNotebookArt.before(homeNotebook);
+homeNotebook.append(homeNotebookArt);
+homeNotebook.onclick = () => {
+  const resume = $<HTMLButtonElement>("resume");
+  if (dialog.open && dialog.dataset.screen === "home" && !busy &&
+      !paused && !resume.hidden && !resume.disabled) resume.click();
+};
+homeNotebook.addEventListener("keydown", event => {
+  if (event.repeat || !["Enter", " "].includes(event.key)) return;
+  event.preventDefault();
+  if (event.key === "Enter") homeNotebook.click();
+  else homeNotebook.setAttribute("data-held", "");
+});
+homeNotebook.addEventListener("keyup", event => {
+  if (event.key !== " ") return;
+  event.preventDefault();
+  const held = homeNotebook.hasAttribute("data-held");
+  homeNotebook.removeAttribute("data-held");
+  if (held) homeNotebook.click();
+});
+homeNotebook.addEventListener("blur", () => homeNotebook.removeAttribute("data-held"));
 homeCurrent.append($("resume"));
 const homeModes = document.createElement("section");
 homeModes.className = "home-modes";
@@ -593,6 +660,9 @@ homeBookCard.append($("book-mode"), bookQuick);
 const homeCalendar = document.createElement("div");
 homeCalendar.className = "home-calendar";
 homeCalendar.append($("daily-mode"), $("calendar-open"));
+const bookTaskCaption = document.createElement("span");
+bookTaskCaption.id = "home-book-task";
+$("book-count").after(bookTaskCaption);
 const homeModeGrid = document.querySelector(".mode-nav")!;
 homeModeGrid.append(homeCalendar);
 homeModes.append(homeModeGrid);
@@ -616,9 +686,9 @@ for (const [id, name] of [["progress-open","progress"],["learn","help"],["settin
 const settingsBasics = document.createElement("section");
 settingsBasics.className = "settings-basics";
 for (const node of [...$("settings-panel").children])
-  if (!node.matches(".screen-heading,#reminder-settings"))
+  if (!node.matches(".screen-heading"))
     settingsBasics.append(node);
-$("settings-panel").insertBefore(settingsBasics, $("reminder-settings"));
+$("settings-panel").append(settingsBasics);
 const settingsRows = document.createElement("section");
 settingsRows.className = "settings-rows";
 settingsRows.append(languageRow, settingsBasics.querySelector(".settings")!);
@@ -628,7 +698,7 @@ hintReserve.className = "settings-reserve";
 $("hint-wallet").before(hintReserve);
 hintReserve.innerHTML = `<strong id="settings-reserve-title">${t("calm.settings.stock")}</strong>`;
 hintReserve.append($("hint-wallet"));
-for (const id of ["dark", "sound", "vibration", "reminders"])
+for (const id of ["dark", "sound", "vibration"])
   $(id).setAttribute("role", "switch");
 let enteredGame = false;
 const openingErrors: Record<string, string> = {
@@ -658,19 +728,42 @@ const noPairsTitle = document.createElement("strong");
 noPairsTitle.id = "no-pairs-title";
 noPairsTitle.hidden = true;
 $("status").before(noPairsTitle);
+const noMovesCard = document.createElement("section");
+noMovesCard.id = "no-moves-card";
+noMovesCard.hidden = true;
+noMovesCard.setAttribute("role", "status");
+noMovesCard.innerHTML = '<strong></strong><p></p><div><button id="no-moves-primary" class="primary"></button><button id="no-moves-undo" class="secondary"></button></div>';
+document.querySelector(".game")!.append(noMovesCard);
+function positionNoMoves() {
+  if (noMovesCard.hidden) return;
+  const frame = viewport.getBoundingClientRect();
+  noMovesCard.style.left = `${frame.left + 8}px`;
+  noMovesCard.style.width = `${frame.width - 16}px`;
+  noMovesCard.style.maxHeight = `${frame.height - 16}px`;
+  noMovesCard.style.top = `${Math.max(frame.top + 8, frame.bottom - noMovesCard.offsetHeight - 10)}px`;
+}
+new ResizeObserver(positionNoMoves).observe($("viewport"));
 const gameTop = document.createElement("div");
 gameTop.className = "game-top";
 const lessonToolbar = document.querySelector<HTMLElement>(".lesson-top")!;
+const lessonStep = $("lesson-step");
+let lessonReturnToMenu = false;
+let lessonReturnEnteredGame = false;
 lessonToolbar.hidden = true;
 gameTop.append(
   document.querySelector("header")!,
   document.querySelector(".game-meta")!,
   $("page-progress"),
-  lessonToolbar,
 );
+gameTop.querySelector("header")!.append(lessonToolbar);
 const gameScreen = document.querySelector(".game")!;
 gameScreen.insertBefore(gameTop, $("viewport"));
 $("viewport").after($("lesson"));
+const openingInstructions = document.createElement("div");
+openingInstructions.id = "opening-instructions";
+openingInstructions.className = "context-guide";
+openingInstructions.hidden = true;
+document.querySelector(".status-wrap")!.prepend(openingInstructions, $("lesson"));
 const gameActions = document.createElement("div");
 gameActions.className = "game-actions";
 gameActions.append(
@@ -710,10 +803,6 @@ function updateBoardEdges() {
 const boardEdgeObserver = new ResizeObserver(updateBoardEdges);
 boardEdgeObserver.observe(viewport);
 boardEdgeObserver.observe($("board-wrap"));
-const calendarActions = document.createElement("div");
-calendarActions.id = "calendar-actions";
-calendarActions.hidden = true;
-dialog.append(calendarActions);
 const notebookDock = document.createElement("div");
 notebookDock.id = "notebook-dock";
 notebookDock.hidden = true;
@@ -750,92 +839,92 @@ function pinDialogHeading(panel: HTMLElement) {
 let actionsFrame = 0;
 function scheduleActionLayout() {
   cancelAnimationFrame(actionsFrame);
-  actionsFrame = requestAnimationFrame(() => {
-    fitResultLabels();
-    const footer = document.querySelector<HTMLElement>("footer")!;
-    const actions = [...footer.querySelectorAll<HTMLElement>(".action")].filter(
-      (b) => getComputedStyle(b).display !== "none" && !b.hidden,
-    );
-    footer.style.setProperty("--help-actions",String(actions.length));
-    const hasAssist=actions.some(button=>button.id==="magnet"||button.id==="plan");
-    let widest = 44;
-    const required = actions.reduce(
-      (width, button) => {
-        const label =
-          button.querySelector<HTMLElement>(".action-label") ??
-          button.querySelector<HTMLElement>("span")!;
-        const range=document.createRange();range.selectNodeContents(label);
-        let needed=Math.max(44,range.getBoundingClientRect().width+6);
-        if(hasAssist){
-          // New four-action toolbars need unwrapped labels. Preserve the established
-          // three-action sidebar measurement so ordinary landscape keeps its height.
-          const probe=document.createElement("span");probe.textContent=label.textContent;
-          Object.assign(probe.style,{position:"fixed",visibility:"hidden",whiteSpace:"nowrap",width:"max-content",maxWidth:"none",font:getComputedStyle(label).font,letterSpacing:getComputedStyle(label).letterSpacing});
-          button.append(probe);range.selectNodeContents(probe);
-          needed=Math.max(44,range.getBoundingClientRect().width+12);probe.remove();
-        }
-        widest = Math.max(widest, needed);
-        return width + needed;
-      },
-      Math.max(0, actions.length - 1) * 2,
-    );
-    const landscape = matchMedia(
-      "(orientation: landscape) and (min-width: 540px)",
-    ).matches;
-    const game = document.querySelector<HTMLElement>(".game")!;
-    // Compare with the stable sidebar width, not a footer that widens after docking.
-    const sideWidth = gameTop.clientWidth;
-    const dock =
-      landscape &&
-      lesson < 0 &&
-      innerHeight <= 420 &&
-      !game.classList.contains("is-result") &&
-      actions.length > 0 &&
-      (inOpening() ||
-        (game.classList.contains("compact-game") && innerWidth<=600 && innerHeight<=340) ||
-        required > sideWidth ||
-        (actions.length === 2 && widest > (sideWidth - 2) / 2));
-    game.classList.toggle("docked-actions", dock);
-    const status = document.querySelector<HTMLElement>(".status-wrap")!;
-    const statusParent = dock ? (inOpening() ? gameTop : hintDock) : gameActions;
-    if (status.parentElement !== statusParent) {
-      if (statusParent === gameTop) gameTop.append(status);
-      else statusParent.prepend(status);
-    }
-    hintDock.hidden = !landscape || lesson >= 0;
-    const jump = $("hint-jump");
-    const jumpParent = landscape && lesson < 0 ? hintDock : status;
-    if (jump.parentElement !== jumpParent) jumpParent.prepend(jump);
-    const availableWidth = dock ? game.clientWidth - 32 : footer.clientWidth;
-    footer.style.setProperty("--assist-columns",actions.length>4&&widest+12<=(availableWidth-12)/3?"3":widest+12>(availableWidth-8)/2?"1":"2");
-    game.classList.toggle(
-      "stacked-actions",
-      actions.length > 0 &&
-        (required > availableWidth ||
-          ((!landscape || hasAssist) &&
-            widest >
-              (availableWidth - Math.max(0, actions.length - 1) * 2) /
-                actions.length)),
-    );
-    const win = $("win");
-    const viewport = $("viewport");
-    if (document.querySelector("#save-notice:not([hidden])")) {
-      const row = document.querySelector("#board .cell")?.getBoundingClientRect();
-      if (row?.height) {
-        const minimum = `${Math.ceil(Math.max(44, row.height + 2))}px`;
-        if (viewport.style.getPropertyValue("--minimum-field-row") !== minimum)
-          viewport.style.setProperty("--minimum-field-row", minimum);
+  actionsFrame = requestAnimationFrame(layoutActions);
+}
+function layoutActions() {
+  fitResultLabels();
+  const footer = document.querySelector<HTMLElement>("footer")!;
+  const actions = [...footer.querySelectorAll<HTMLElement>(".action")].filter(
+    (b) => getComputedStyle(b).display !== "none" && (!b.hidden || (lesson >= 0 && b.id === "lesson-next")),
+  );
+  footer.style.setProperty("--help-actions",String(actions.length));
+  const hasAssist=actions.some(button=>button.id==="magnet"||button.id==="plan");
+  let widest = 44;
+  const required = actions.reduce(
+    (width, button) => {
+      const label =
+        button.querySelector<HTMLElement>(".action-label") ??
+        button.querySelector<HTMLElement>("span") ?? button;
+      const range=document.createRange();range.selectNodeContents(label);
+      let needed=Math.max(44,range.getBoundingClientRect().width+6);
+      if(hasAssist){
+        // New four-action toolbars need unwrapped labels. Preserve the established
+        // three-action sidebar measurement so ordinary landscape keeps its height.
+        const probe=document.createElement("span");probe.textContent=label.textContent;
+        Object.assign(probe.style,{position:"fixed",visibility:"hidden",whiteSpace:"nowrap",width:"max-content",maxWidth:"none",font:getComputedStyle(label).font,letterSpacing:getComputedStyle(label).letterSpacing});
+        button.append(probe);range.selectNodeContents(probe);
+        needed=Math.max(44,range.getBoundingClientRect().width+12);probe.remove();
       }
+      widest = Math.max(widest, needed);
+      return width + needed;
+    },
+    Math.max(0, actions.length - 1) * 2,
+  );
+  const landscape = matchMedia(
+    "(orientation: landscape) and (min-width: 540px)",
+  ).matches;
+  const game = document.querySelector<HTMLElement>(".game")!;
+  // Compare with the stable sidebar width, not a footer that widens after docking.
+  const sideWidth = gameTop.clientWidth;
+  const dock =
+    landscape &&
+    innerHeight <= 420 &&
+    !game.classList.contains("is-result") &&
+    actions.length > 0 &&
+    ((lesson >= 0 && shortLesson) ||
+      (game.classList.contains("compact-game") && innerWidth<=600 && innerHeight<=340) ||
+      required > sideWidth ||
+      (actions.length === 2 && widest > (sideWidth - 2) / 2));
+  game.classList.toggle("docked-actions", dock);
+  const status = document.querySelector<HTMLElement>(".status-wrap")!;
+  const statusParent = dock ? hintDock : gameActions;
+  if (status.parentElement !== statusParent) {
+    if (statusParent === gameTop) gameTop.append(status);
+    else statusParent.prepend(status);
+  }
+  hintDock.hidden = !landscape;
+  const jump = $("hint-jump");
+  const jumpParent = landscape ? hintDock : status;
+  if (jump.parentElement !== jumpParent) jumpParent.prepend(jump);
+  const availableWidth = dock ? game.clientWidth - 32 : footer.clientWidth;
+  footer.style.setProperty("--assist-columns",actions.length>4&&widest+12<=(availableWidth-12)/3?"3":widest+12>(availableWidth-8)/2?"1":"2");
+  game.classList.toggle(
+    "stacked-actions",
+    availableWidth > 0 && actions.length > 0 &&
+      (required > availableWidth ||
+        ((!landscape || hasAssist) &&
+          widest >
+            (availableWidth - Math.max(0, actions.length - 1) * 2) /
+              actions.length)),
+  );
+  const win = $("win");
+  const viewport = $("viewport");
+  if (document.querySelector("#save-notice:not([hidden])")) {
+    const row = document.querySelector("#board .cell")?.getBoundingClientRect();
+    if (row?.height) {
+      const minimum = `${Math.ceil(Math.max(44, row.height + 2))}px`;
+      if (viewport.style.getPropertyValue("--minimum-field-row") !== minimum)
+        viewport.style.setProperty("--minimum-field-row", minimum);
     }
-    const classicResult = !win.hidden && win.dataset.resultKind === "classic";
-    win.classList.toggle(
-      "compact-result",
-      classicResult && viewport.clientHeight < 440,
-    );
-    win.classList.remove("minimal-result");
-    if (classicResult && win.scrollHeight > viewport.clientHeight + 1)
-      win.classList.add("minimal-result");
-  });
+  }
+  const classicResult = !win.hidden && win.dataset.resultKind === "classic";
+  win.classList.toggle(
+    "compact-result",
+    classicResult && viewport.clientHeight < 440,
+  );
+  win.classList.remove("minimal-result");
+  if (classicResult && win.scrollHeight > viewport.clientHeight + 1)
+    win.classList.add("minimal-result");
 }
 const actionObserver = new ResizeObserver(scheduleActionLayout);
 actionObserver.observe(document.querySelector("footer")!);
@@ -860,14 +949,21 @@ function availablePairs(values: readonly number[]) {
   }
   return pairCache;
 }
+let moveSaveRevision = 0, moveSavePending = false, postSaveMessage = "";
+let storageUnsupported = false;
 function message(text: string) {
+  if (moveSavePending && !saveFailed) {
+    postSaveMessage = text;
+    $("status").textContent = t("ui.saving-game");
+    return;
+  }
   const copy = document.querySelector<HTMLElement>(".opening-copy");
   if (inOpening() && copy && highlight) {
     $("status").textContent = "";
     copy.textContent = hintExplanation(board(), highlight);
     return;
   }
-  $("status").textContent = text;
+  $("status").textContent = lesson >= 0 ? "" : text;
   if (lesson >= 0) $("lesson-feedback").textContent = text;
 }
 const notice = document.createElement("aside");
@@ -956,7 +1052,7 @@ function showSaveState() {
   dismissRead.hidden = futureSave;
   readText.textContent = readWarning;
   notice.hidden = !saveFailed;
-  $("save-warning").textContent = storageConflict
+  $("save-warning").textContent = storageUnsupported ? t("save.atomicUnavailable") : storageConflict
     ? t("ui.another-tab-has-a-newer-save-the-newer-save")
     : t("ui.could-not-save-the-game-keep-it-open-and");
   $("load-latest").hidden = !storageConflict;
@@ -983,6 +1079,9 @@ function save(state = progress, game = session) {
   if (bootComplete && enteredGame && lesson < 0 && !busy && !dialog.open) game.current.scroll = viewport.scrollTop;
   state.sessions[state.active] = game;
   const committedEvents = [...(metadata(state).analytics ?? [])];
+  const savedJars = { ...jars(state) };
+  const savedSeeds = savedJars.meter;
+  const savedDaily = homeDailySnapshot(state);
   const bundle = serializeProgress(state),
     prefs = JSON.stringify(settings),
     patch = { ...settingsDirty };
@@ -1018,6 +1117,17 @@ function save(state = progress, game = session) {
         if (resultAwaitingSave === game) resultAwaitingSave = undefined;
         if (pendingResult?.session === game) pendingResult.saved = true;
         lastStored = bundle;
+        const jarViewChanged = !confirmedJars || confirmedJars.meter !== savedJars.meter ||
+          confirmedJars.seeds !== savedJars.seeds || confirmedJars.wins !== savedJars.wins;
+        confirmedJars = savedJars;
+        confirmedSeeds = savedSeeds;
+        confirmedDaily = savedDaily;
+        updateHomeDaily();
+        // A cancelled/static scene follows a later acknowledgement without replay.
+        if (!flights.running && !completedJar && !jarMilestone && !rewardScene && !pendingResult) {
+          visualSeeds = Math.max(visualSeeds ?? 0, confirmedSeeds);
+          renderJar();
+        }
         // Dispatch only events contained in this successfully written snapshot.
         // A crash before the next cleanup write can replay IDs; native deduplicates.
         if (adsBridge || webAcquisition)
@@ -1027,8 +1137,12 @@ function save(state = progress, game = session) {
               acknowledgeAnalytics(metadata(progress), id);
           });
         const recovered = saveFailed;
+        storageUnsupported = false;
         saveFailed = false;
         showSaveState();
+        if (jarViewChanged) refreshStaticJarViews();
+        if (jarPending && completedJar && !pendingResult && !jarMilestone)
+          void presentFullJar(jarStateForHold(completedJar), resultJarCard.hidden ? $("jar-glass") : $("result-jar-glass"), presentationRevision);
         if (lesson < 0 && !occupied(board())) {
           renderWin();
           maybeCelebrateResult();
@@ -1040,6 +1154,7 @@ function save(state = progress, game = session) {
           message(t("ui.game-saved"));
         }
       } catch (error) {
+        storageUnsupported = error instanceof platform.AtomicStorageUnavailable;
         storageConflict = error instanceof platform.SaveConflict;
         if (!saveFailed)
           track("save_error", {
@@ -1054,6 +1169,27 @@ function save(state = progress, game = session) {
       }
     });
   return saveQueue;
+}
+function persistMove() {
+  // Gameplay stays synchronous, including remapping and bursts of legal moves.
+  // Only the latest move's completed write can acknowledge the visible party.
+  const revision = ++moveSaveRevision;
+  $("board").setAttribute("aria-busy", "true");
+  document.querySelector<HTMLElement>(".game")!.dataset.persistence = "pending";
+  if (!moveSavePending) postSaveMessage = $("status").textContent ?? "";
+  moveSavePending = true;
+  $("status").textContent = t("ui.saving-game");
+  return Promise.resolve(save()).then(() => {
+    if (revision !== moveSaveRevision) return;
+    $("board").removeAttribute("aria-busy");
+    moveSavePending = false;
+    document.querySelector<HTMLElement>(".game")!.dataset.persistence =
+      saveFailed || storageConflict || futureSave ? "failed" : "saved";
+    if (!saveFailed) {
+      message(postSaveMessage);
+      if (pendingDailyOpen) void openDailyNotification();
+    }
+  });
 }
 function applySettings(incoming: Record<string, unknown>) {
   if (Object.hasOwn(incoming,"languageChoice")) {
@@ -1087,7 +1223,7 @@ function applySettings(incoming: Record<string, unknown>) {
   $<HTMLInputElement>("sound").checked = settings.sound;
   $<HTMLInputElement>("vibration").checked = settings.vibration;
   platform.setHapticState(settings.vibration, paused);
-  updateReminderSettings();
+  updateEngagementCopy();
 }
 window.addEventListener("storage", (event) => {
   if (!event.newValue || !event.key?.startsWith(SETTINGS)) return;
@@ -1115,14 +1251,16 @@ window.addEventListener("storage", (event) => {
   }
 });
 function applyTheme() {
+  syncGameAppearance(settings.theme === "dark");
   if (document.documentElement.dataset.theme === settings.theme) return;
+  clearMotions();
   document.documentElement.dataset.theme = settings.theme;
   $<HTMLInputElement>("dark").checked = settings.theme === "dark";
   document
     .querySelector('meta[name="theme-color"]')
     ?.setAttribute(
       "content",
-      settings.theme === "dark" ? "#202724" : "#fafbf9",
+      settings.theme === "dark" ? "#303e31" : "#e5ddbe",
     );
 }
 function setTheme(dark: boolean) {
@@ -1228,162 +1366,155 @@ function revealAddedCells(start: number, end: number) {
 function settlePresentation() {
   presentationRevision++;
   clearMotions();
+  clearInterfaceMotion();
   jarSpill.clear();
   clearContact();
   clearTrophyCelebration();
   clearResultCelebration();
   clearBoardReveal();
   clearPairFeedback();
-  clearTimeout(fullJarTimer);
+  for (const cancel of [...presentationWaits]) cancel();
   completedJar = undefined;
+  jarPending = false;
+  rewardScene = undefined;
   pendingResult = undefined;
   flights.clear();
-  visualSeeds = jars(progress).meter;
+  jarMilestone=undefined;
+  document.querySelectorAll("[data-reward-phase]").forEach(node=>node.removeAttribute("data-reward-phase"));
+  visualSeeds = confirmedSeeds ?? jars(progress).meter;
   renderJar();
 }
-function animateSeeds(rects: DOMRect[], amount: number, result = false) {
-  if (!amount || !rects.length) return;
-  const plan = createValueTransferPlan(amount, {
-    minDurationMs: 420,
-    maxDurationMs: 720,
-    maxVisualTokens: 2,
-    maxAudioEvents: 2,
+/** This wait owns presentation only; cancellation resolves it without continuation. */
+function presentationPause(ms: number) {
+  return new Promise<boolean>(resolve => {
+    const cancel = () => finish(false);
+    const finish = (active: boolean) => { clearTimeout(timer); presentationWaits.delete(cancel); resolve(active); };
+    const timer = setTimeout(() => finish(true), ms);
+    presentationWaits.add(cancel);
   });
-  const tokens = Array.from(
-    { length: plan.visualTokenCount },
-    (_, i) => rects[i % rects.length],
-  );
-  const target = result && !resultJarCard.hidden ? $("result-jar-glass") : $("jar-glass");
-  flights.fly(tokens, target, (index, silent) => {
-    const quantity =
-      valueAfterVisualArrival(plan, index) -
-      (index ? valueAfterVisualArrival(plan, index - 1) : 0);
-    const before = jarState(visualSeeds ?? 0);
-    visualSeeds = Math.min(jars(progress).meter, (visualSeeds ?? 0) + quantity);
-    const after = jarState(visualSeeds);
-    const full = after.index > before.index;
-    if (full && !silent) {
-      clearTimeout(fullJarTimer);
-      completedJar = {
-        index: before.index,
-        capacity: before.capacity,
-        until: performance.now() + 1100,
-      };
-      const nextJar = () => {
-        completedJar = undefined;
-        renderJar();
-        if (!dialog.open && !paused)
-          motion(
-            $("jar-glass"),
-            [
-              { opacity: 0.5, transform: "scale(.92)" },
-              { opacity: 1, transform: "scale(1)" },
-            ],
-            160,
-          );
-      };
-      fullJarTimer = setTimeout(nextJar, 1110);
-      const completion = completedJar;
-      const revision = presentationRevision;
-      // A failed/delayed write must not emit a new milestone, nor may an old
-      // arrival restart it after navigation. This effect owns no saved reward.
-      void Promise.resolve()
-        .then(() => saveQueue)
-        .then(() => {
-          if (
-            revision !== presentationRevision ||
-            completedJar !== completion ||
-            performance.now() >= completion.until ||
-            saveFailed ||
-            storageConflict ||
-            futureSave ||
-            dialog.open ||
-            hintOffer.open ||
-            paused ||
-            document.hidden
-          )
-            return;
-          // Keep the old, full jar through the whole shake if persistence was slow.
-          completion.until = performance.now() + 1100;
-          clearTimeout(fullJarTimer);
-          fullJarTimer = setTimeout(nextJar, 1110);
-          jarSpill.play($("jar-glass"));
-          feedback("full");
-        });
-    }
+}
+function presentationActive(revision: number) {
+  return revision === presentationRevision && !paused && !document.hidden &&
+    !dialog.open && !hintOffer.open && !languageSheet.open && !classicNewSheet.open;
+}
+function jarStateForHold(held: {index: number; capacity: number}) {
+  return {...jarState(0),...held,filled:held.capacity,percent:100,name:localName(jarNames[held.index%6]),color:jarColors[held.index%6]};
+}
+async function presentFullJar(before: ReturnType<typeof jarState>, target: HTMLElement, revision: number) {
+  if (jarMilestone) return jarMilestone;
+  // Keep the receiving vessel in place even if its flight beats disk commit.
+  completedJar ??= {index:before.index,capacity:before.capacity};
+  jarPending = true;
+  renderJar();
+  // The captured write, never an animation, authorizes the earned accent.
+  await saveQueue;
+  if (!presentationActive(revision) || saveFailed || storageConflict || futureSave || reduced()) return;
+  if (jarMilestone) return jarMilestone;
+  if (jarState(confirmedSeeds ?? 0).index <= before.index) return;
+  jarPending = false;
+  const run = async () => {
+    completedJar = {index: before.index, capacity: before.capacity};
     renderJar();
-    if (silent || dialog.open || paused) return;
-    if (full || completedJar) return;
-    feedback("land", !result);
-    motion(
-      target,
-      [
-        { transform: "rotate(-3deg) scale(1.05)" },
-        { transform: "rotate(2deg)" },
-        { transform: "none" },
-      ],
-      180,
-    );
+    target.dataset.rewardPhase = "full";
+    if (!await presentationPause(180) || !presentationActive(revision)) return;
+    target.dataset.rewardPhase = "closing";
+    feedback("full");
+    await jarSpill.play(target);
+    if (!presentationActive(revision)) return;
+    completedJar = undefined;
+    visualSeeds = flights.running
+      ? Math.min(visualSeeds ?? 0, confirmedSeeds ?? 0)
+      : confirmedSeeds ?? 0;
+    renderJar();
+    target.dataset.rewardPhase = "next";
+    const a = motion(target,[{opacity:.75,transform:"scale(.94)"},{opacity:1,transform:"none"}],160);
+    await a?.finished.catch(()=>{});
+    if (presentationActive(revision)) delete target.dataset.rewardPhase;
+  };
+  const current = run(); jarMilestone = current;
+  try { await current; } finally { if (jarMilestone === current) jarMilestone = undefined; }
+}
+function animateSeeds(rects: DOMRect[], amount: number, result = false): Promise<void> {
+  if (!amount || !rects.length) return Promise.resolve();
+  const revision = presentationRevision;
+  if (reduced() || !presentationActive(revision)) {
+    visualSeeds = confirmedSeeds ?? jars(progress).meter;
+    renderJar(); return Promise.resolve();
+  }
+  const plan = createValueTransferPlan(amount, {
+    minDurationMs:420,maxDurationMs:720,maxVisualTokens:2,maxAudioEvents:2,
+  });
+  const tokens = Array.from({length:plan.visualTokenCount},(_,i)=>rects[i%rects.length]);
+  const target = result && !resultJarCard.hidden ? $("result-jar-glass") : $("jar-glass");
+  const start = jarState(visualSeeds ?? 0);
+  let remaining=tokens.length;
+  let fullPromise: Promise<void> | undefined;
+  return new Promise(resolve => {
+    flights.fly(tokens,target,(index,silent)=>{
+      if (!presentationActive(revision)) { if (!--remaining) resolve(); return; }
+      const quantity=valueAfterVisualArrival(plan,index)-(index?valueAfterVisualArrival(plan,index-1):0);
+      visualSeeds=Math.min(jars(progress).meter,(visualSeeds??0)+quantity);
+      // Establish the old-vessel hold before the first threshold render.
+      if (jarState(visualSeeds).index>start.index && !completedJar) {
+        completedJar={index:start.index,capacity:start.capacity};jarPending=true;
+      }
+      renderJar();
+      if (!silent && presentationActive(revision) && jarState(visualSeeds).index===start.index && !completedJar) {
+        feedback("land",!result);
+        motion(target,[{transform:"rotate(-3deg) scale(1.05)"},{transform:"rotate(2deg)"},{transform:"none"}],180);
+      }
+      if (!silent && presentationActive(revision) && jarState(visualSeeds).index>start.index && !fullPromise)
+        fullPromise=presentFullJar(start,target,revision);
+      if (--remaining) return;
+      if (!fullPromise && !completedJar && !flights.running) {
+        visualSeeds = Math.max(visualSeeds ?? 0, confirmedSeeds ?? 0);
+        renderJar();
+      }
+      if (fullPromise) void fullPromise.then(resolve); else resolve();
+    });
   });
 }
 function maybeCelebrateResult() {
-  const pending = pendingResult;
-  if (
-    !pending ||
-    pending.session !== session ||
-    !pending.saved ||
-    busy ||
-    paused ||
-    dialog.open ||
-    occupied(board()) ||
-    saveFailed ||
-    storageConflict ||
-    futureSave
-  )
-    return;
-  pendingResult = undefined;
-  const kind = resultKind(progress.active, progress.done, notebook);
-  feedback(kind === "classic" || kind === "daily" ? "win" : kind);
+  const pending=pendingResult;
+  if (!pending || pending.session!==session || !pending.saved || busy || paused ||
+      dialog.open || occupied(board()) || saveFailed || storageConflict || futureSave) return;
+  pendingResult=undefined;
+  // Hand off any still-flying field feedback to this one result scene.
+  presentationRevision++;
+  for (const cancel of [...presentationWaits]) cancel();
+  flights.clear();jarSpill.clear();completedJar=undefined;jarPending=false;jarMilestone=undefined;
+  const revision=presentationRevision, current=session, amount=earnedSeeds+resultPairSeeds;
+  visualSeeds=Math.max(0,jars(progress).meter-amount);renderJar();
+  const kind=resultMilestone?.session===session ? resultMilestone.kind : resultKind(progress.active,progress.done,notebook,false);
+  const award=earnedAward;
+  feedback(kind==="classic"?"win":kind==="daily"?"task":kind);
   clearResultCelebration();
-  clearResultCelebration = celebrateResult(
-    document.querySelector<HTMLElement>(".win-symbol")!,
-    kind,
-    reduced(),
-  );
-  if (earnedSeeds) animateSeeds(pending.rects, earnedSeeds, true);
-  if (earnedSeeds || earnedHints)
-    motion(
-      $("result-gains"),
-      [
-        { opacity: 0.1, transform: "translateY(5px)" },
-        { opacity: 1, transform: "translateY(0)" },
-      ],
-      200,
-    );
-  if (progress.active.startsWith("daily") && earnedSeeds) {
-    const month = progress.active.slice(9, 16);
-    const monthTrophy = trophy(month, progress.done);
-    for (const fill of $("award").querySelectorAll<SVGElement>(
-      ".medal-liquid, .medal-ink-level",
-    )) {
-      const target = Number(fill.dataset.target);
-      const after = Math.min(monthTrophy.count, target);
-      motion(
-        fill,
-        [
-          {
-            transform: `scaleY(${after ? Math.min(Math.max(0, monthTrophy.count - 1), target) / after : 1})`,
-          },
-          { transform: "scaleY(1)" },
-        ],
-        420,
-      );
+  if (reduced()) { visualSeeds=jars(progress).meter;renderJar();return; }
+  const scene=celebrateResult(resultPaper,kind,reduced());
+  clearResultCelebration=scene;
+  // One hierarchy: readable win → newly earned medal → jar transaction.
+  // Every next action stays live; leaving settles directly to the durable totals.
+  const sequence = (async()=>{
+    await scene.finished;
+    if (!presentationActive(revision) || session!==current) return;
+    if (progress.active.startsWith("daily") && amount) {
+      const month=progress.active.slice(9,16), mark=trophy(month,progress.done);
+      for (const fill of $("award").querySelectorAll<SVGElement>(".medal-liquid,.medal-ink-level")) {
+        const target=Number(fill.dataset.target), after=Math.min(mark.count,target);
+        motion(fill,[{transform:`scaleY(${after?Math.min(Math.max(0,mark.count-1),target)/after:1})`},{transform:"scaleY(1)"}],300);
+      }
+      if (award) {
+        feedback("full");
+        const medal=celebrateTrophy($("award"),mark.tier,reduced());
+        clearTrophyCelebration=medal;
+        await medal.finished;
+        if (!presentationActive(revision) || session!==current) return;
+      }
     }
-    if (earnedAward) {
-      clearTrophyCelebration();
-      clearTrophyCelebration = celebrateTrophy($("award"), monthTrophy.tier, reduced());
-    }
-  }
+    if (amount) await animateSeeds(pending.rects,amount,true);
+  })();
+  rewardScene=sequence;
+  void sequence.finally(()=>{if(rewardScene===sequence){rewardScene=undefined;if(presentationActive(revision)&&session===current)void tryResultEngagement();}});
 }
 function cellCenter(index: number, origin: DOMRect, boardBox: DOMRect) {
   const box = cell(index)?.getBoundingClientRect();
@@ -1512,11 +1643,13 @@ function showPairWave(path: Connection, blocked = false) {
   if (!blocked) pairFeedbackTimer = setTimeout(clearPairFeedback, 240);
   return true;
 }
-const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reducedPreference = matchMedia("(prefers-reduced-motion: reduce)");
+const reduced = () => reducedPreference.matches;
+reducedPreference.addEventListener("change",()=>settlePresentation());
 const ownedDomMotion = new OwnedDomMotion();
 const cellColorMotions = new Map<Element, {animation: Animation; selection: string}>();
 const cellSelection = (el: Element) =>
-  `${el.classList.contains("selected")}/${el.classList.contains("hinted")}`;
+  `${el.classList.contains("selected")}/${el.classList.contains("hinted")}/${el.classList.contains("reachable-valid")}/${el.classList.contains("reachable-invalid")}`;
 function clearMotions() {
   ownedDomMotion.cancelAll();
   feelRowSlides = [];
@@ -1637,7 +1770,9 @@ function reconcileCellMotions() {
     if (owner.selection === cellSelection(el)) continue;
     const visible = getComputedStyle(el).backgroundColor;
     const target = el.classList.contains("selected") ? "var(--selected)"
-      : el.classList.contains("hinted") ? "var(--highlight)" : "transparent";
+      : el.classList.contains("hinted") ? "var(--highlight)"
+      : el.classList.contains("reachable-invalid") ? "var(--table-reachable-invalid)"
+      : el.classList.contains("reachable-valid") ? "var(--table-reachable)" : "transparent";
     motion(el, [{background:visible}, {background:target}], 100);
   }
 }
@@ -1685,6 +1820,7 @@ let appForeground = true;
 let backgroundAt: number | undefined;
 let platformPaused = false;
 function syncPauseState() {
+  const wasPaused = paused;
   paused =
     !appForeground ||
     platformPaused ||
@@ -1693,6 +1829,8 @@ function syncPauseState() {
     rewardRequest ||
     engagementActive;
   $("app").inert = adActive || rewardRequest || engagementActive;
+  homeNotebook.toggleAttribute("data-paused", paused);
+  if (paused) homeNotebook.removeAttribute("data-held");
   blockSound(paused);
   platform.setHapticState(settings.vibration, paused, !paused);
   if (paused) {
@@ -1702,6 +1840,7 @@ function syncPauseState() {
     suspendSound();
   }
   if (!busy) render();
+  if (wasPaused && !paused) refreshStaticJarViews();
   platform.gameplay(!paused && !dialog.open && occupied(board()) > 0);
   updateBanner();
   if (!paused) queueMicrotask(() => void applyEarnedHelp());
@@ -1727,7 +1866,8 @@ const lessonActions = document.createElement("div");
 lessonActions.id = "lesson-actions";
 lessonActions.hidden = true;
 lessonActions.append($("lesson-next"), lessonQuick);
-document.querySelector(".game")!.insertBefore(lessonActions, gameActions);
+document.querySelector("footer")!.insertBefore(lessonActions, $("hint"));
+$("lesson-next").className = "action ready";
 const lessonDetail = document.createElement("p");
 lessonDetail.id = "lesson-detail";
 $("lesson-title").after(lessonDetail);
@@ -1736,6 +1876,7 @@ const lessonFeedback = document.createElement("p");
 lessonFeedback.id = "lesson-feedback";
 lessonFeedback.setAttribute("role", "status");
 $("lesson").append(lessonFeedback);
+document.querySelector(".mode-description")!.append($("lesson-title"));
 lessonQuick.onclick = () => {
   const task = notebook.find((p) => !progress.done.includes(p.id));
   if (!task || busy) return;
@@ -1794,9 +1935,9 @@ function markGameStarted() {
   });
 }
 function bannerEligible() {
-  const guardedScreen = dialog.open && ["settings","confirm","privacy"].includes(dialog.dataset.screen ?? "");
+  const guardedScreen = dialog.open && ["confirm","privacy"].includes(dialog.dataset.screen ?? "");
   return appForeground && !platformPaused && !rewardRequest && !engagementActive &&
-    !document.hidden && document.hasFocus() && lesson < 0 && !guardedScreen && !languageSheet.open && !classicNewSheet.open && !hintOffer.open &&
+    !document.hidden && (platform.native || document.hasFocus()) && lesson < 0 && !guardedScreen && !languageSheet.open && !classicNewSheet.open && !hintOffer.open &&
     !document.querySelector("dialog[open]:not(#dialog)");
 }
 function updateBanner() {
@@ -1859,6 +2000,13 @@ async function persistHelp(candidate: Progress, game = session): Promise<boolean
     return true;
   } finally { busy = wasBusy; }
 }
+function recoverNativeReward() {
+  return optionalSingleFlight("pending-reward", async () => {
+    const pending = await adsBridge?.pending();
+    if (pending?.reward) await receiveReward(pending.reward);
+    return pending;
+  });
+}
 function receiveReward(r: RewardReceipt): Promise<void> {
   if (!bootComplete) rewardSeenDuringBoot = true;
   rewardQueue = rewardQueue.catch(() => {}).then(async () => {
@@ -1877,7 +2025,7 @@ function receiveReward(r: RewardReceipt): Promise<void> {
       });
     }
     if (!await persistHelp(candidate)) return;
-    await adsBridge?.acknowledge({token: r.token}).catch(() => {});
+    await optionalSingleFlight("reward-ack:"+r.token, async () => { await adsBridge?.acknowledge({token:r.token}); });
     void refreshRewarded();
     if (!busy) render();
   });
@@ -2035,7 +2183,7 @@ function offerHints(intent: HelpIntent) {
   helpEvent("offer", intent, {ready_state: rewardedReadiness.state});
   void refreshRewarded(true);
   if (rewardedReadiness.reason === "pending_receipt") void (async () => {
-    const pending = await adsBridge?.pending().catch(() => undefined);
+    const pending = await recoverNativeReward();
     if (pending?.reward) {await receiveReward(pending.reward); if (!saveFailed && offeredIntent?.id === intent.id) {hintOffer.close(); offeredIntent = undefined; message(t("ui.previously-earned-reward-restored"));}}
   })();
   updateBanner();
@@ -2112,8 +2260,9 @@ $("watch-hints").onclick = async () => {
 };
 let earnedAward = "",
   earnedSeeds = 0,
+  resultPairSeeds = 0,
   earnedHints = 0;
-function complete(rects: DOMRect[]) {
+function complete(rects: DOMRect[], pairSeeds = 0) {
   const alreadyCompleted =
     metadata(progress).attempts[progress.active]?.completed;
   const id = progress.active,
@@ -2121,7 +2270,9 @@ function complete(rects: DOMRect[]) {
   const before = id.startsWith("daily")
     ? trophy(month, progress.done).tier
     : 0;
+  const newlyCompleted = !progress.done.includes(id);
   const gains = recordCompletion(progress, id);
+  resultMilestone = {session,kind:resultKind(id,progress.done,notebook,newlyCompleted)};
   resultAwaitingSave = session;
   pendingResult = { session, rects, saved: false };
   if (gains.hints)
@@ -2131,6 +2282,7 @@ function complete(rects: DOMRect[]) {
       attempt: hintAttempt(progress).id,
     });
   earnedSeeds = gains.seeds;
+  resultPairSeeds = pairSeeds;
   earnedHints = gains.hints;
   if (!alreadyCompleted)
     durableEvent("game_complete", {
@@ -2158,7 +2310,7 @@ function complete(rects: DOMRect[]) {
 function renderWin() {
   const id = progress.active;
   renderClassicChoices();
-  const kind = resultKind(id, progress.done, notebook);
+  const kind = resultMilestone?.session === session ? resultMilestone.kind : resultKind(id, progress.done, notebook, false);
   const dailyResult = kind === "daily";
   resultDateArt.hidden = !dailyResult;
   if (dailyResult) resultDateArt.innerHTML = calendarPicture(id.slice(9));
@@ -2190,13 +2342,13 @@ function renderWin() {
     resultSubtitle.textContent = themeOf(volumeOf(id)) ? t("content.progress",{theme:volumeLabel(volumeOf(id)),solved}) : t("result.progress", { "book": volumeOf(id) + 1, "solved": solved });
   }
   resultSubtitle.hidden = !resultSubtitle.textContent;
-  resultJarCard.hidden = !openingWin;
+  resultJarCard.hidden = false;
   resultBookCard.hidden = !openingWin;
   const resultGains = $("result-gains");
+  updateResultJar();
   if (openingWin) {
     if (resultGains.parentElement !== resultJarCard) $("result-jar-amount").before(resultGains);
     resultBookCard.innerHTML = `${bookPicture(volumeOf(id) + 1)}<span><strong>${volumeLabel(volumeOf(id))}</strong><small>${t("ui.of-24-puzzles", { "0": volumeTasks(volumeOf(id)).filter(task => progress.done.includes(task.id)).length })}</small></span>`;
-    updateResultJar();
   } else if (resultGains.parentElement === resultJarCard) {
     $("completion-status").after(resultGains);
   }
@@ -2234,7 +2386,7 @@ function renderWin() {
       ? t("result.nextTask", { puzzle })
       : taskLabel(next);
   } else {
-    nextButton.textContent = i >= 0 ? t("books.back") : dailyResult ? t("result.calendar") : t("nav.menu");
+    nextButton.textContent = i >= 0 ? t("books.back") : dailyResult ? t("result.calendar") : t("action.next");
   }
   $("completion-status").textContent =
     i >= 0 &&
@@ -2247,13 +2399,6 @@ function renderWin() {
           : id.startsWith("daily")
             ? t("ui.all-available-days-complete")
             : "";
-  $("result-reminder").hidden =
-    !engagementAvailable ||
-    settings.reminders ||
-    !id.startsWith("daily") ||
-    Boolean(
-      metadata(progress).flags?.includes("reminder_permission_requested"),
-    );
   $("result-gains").style.minHeight =
     earnedSeeds || earnedHints
       ? `${((earnedSeeds ? 1 : 0) + (earnedHints ? 1 : 0)) * 1.5}em`
@@ -2273,6 +2418,8 @@ function renderWin() {
         .join("");
   $("try-notebook").hidden = !helpFlags.result || id !== "classic" || !notebookTarget(progress);
   const award = $("award");
+  if (dailyResult) resultPaper.append(award);
+  else if (award.parentElement === resultPaper) $("completion-status").before(award);
   award.hidden = true;
   if (i >= 0) {
     const page = Math.floor(i / 6);
@@ -2299,6 +2446,7 @@ function classicDifficulty(): ClassicDifficulty {
 }
 function renderClassicChoices() {
   const isClassic = progress.active === "classic";
+  const isDaily = progress.active.startsWith("daily");
   const level = classicDifficulty();
   const blocked = busy || saveFailed || storageConflict || futureSave || resultAwaitingSave === session;
   resultNext.classList.toggle("is-classic", isClassic);
@@ -2310,6 +2458,13 @@ function renderClassicChoices() {
         ? t("ui.difficulty-highest")
         : t("ui.difficulty", { "0": localName(classicDifficultyNames[level]) });
   $<HTMLButtonElement>("play-again").disabled = blocked;
+  resultHome.hidden = !isClassic && !isDaily;
+  resultHome.className = isDaily ? "primary" : "text-button";
+  $("play-again").className = isDaily ? "secondary archive-next" : "primary";
+  const primary = isDaily ? resultHome : $("play-again");
+  if (resultNext.firstElementChild !== primary) resultNext.prepend(primary);
+  resultHome.textContent = t("nav.menu");
+  resultHome.disabled = blocked;
 }
 function compactCount(n: number) {
   return n > 999 ? "999+" : String(n);
@@ -2330,38 +2485,48 @@ function render() {
     available = availablePairs(values);
   const game = viewport.closest<HTMLElement>(".game")!;
   game.dataset.mode = lesson < 0 ? gameMode() : "lesson";
-  game.classList.toggle("compact-game", lesson < 0 && progress.active !== "classic");
+  game.classList.toggle("compact-game", lesson >= 0 || progress.active !== "classic");
+  game.classList.toggle("teaching", lesson >= 0 || (progress.active === "book-v1-1" && values.length <= 27));
   $("add").hidden = lesson < 0 && progress.active !== "classic";
-  game.classList.toggle("short-board", values.length <= 54 && count > 0 && lesson < 0);
+  game.classList.toggle("short-board", lesson >= 0 || (values.length <= 54 && count > 0));
   renderJar();
   gameDifficulty.hidden = lesson >= 0 || progress.active !== "classic";
   gameDifficulty.textContent = difficultyLabel();
   gameDifficulty.dataset.level = String(classicDifficulty());
   const ended = count === 0 && lesson < 0;
+  const leavingResult = !ended && game.classList.contains("is-result");
   game.classList.toggle("is-result", ended);
   resultDock.hidden = !ended;
   const taskIndex = notebook.findIndex((p) => p.id === progress.active);
   const marks = $("page-progress");
-  marks.hidden = lesson >= 0 || taskIndex < 0;
-  marks.classList.toggle("opening-guide", inOpening());
+  marks.hidden = lesson < 0 && taskIndex < 0;
+  $("book-top").hidden = false;
+  $("mode").hidden = lesson >= 0;
+  $("lesson-title").hidden = lesson < 0;
+  $("hint").hidden = lesson >= 0;
+  openingInstructions.hidden = !inOpening();
+  if (!inOpening()) openingInstructions.replaceChildren();
   if (inOpening()) {
-    delete marks.dataset.renderedProgress;
-    if (!marks.querySelector(".opening-copy")) {
-      marks.replaceChildren();
+    if (!openingInstructions.querySelector(".opening-copy")) {
       const copy = document.createElement("span");
       copy.className = "opening-copy";
       copy.setAttribute("role", "status");
-      marks.append(copy);
+      openingInstructions.append(copy);
     }
-    marks.removeAttribute("aria-label");
-    const copy = marks.querySelector<HTMLElement>(".opening-copy")!;
+    const copy = openingInstructions.querySelector<HTMLElement>(".opening-copy")!;
     let cue = t("ui.find-the-next-pair");
     if (highlight) cue = hintExplanation(values, highlight);
     else if (selected >= 0) cue = openingSelection(values, selected);
     else if (requiredRule(available)) cue = requiredRule(available)!;
     else if (!session.current.moves) cue = openingGoal();
     if (copy.textContent !== cue) copy.textContent = cue;
+  }
+  if (lesson >= 0) {
+    if (lessonStep.parentElement !== marks) marks.replaceChildren(lessonStep);
+    delete marks.dataset.renderedProgress;
+    marks.setAttribute("aria-label", t("home.how"));
   } else if (taskIndex >= 0) {
+    if (lessonStep.parentElement === marks) lessonToolbar.prepend(lessonStep);
     const pageIndex = Math.floor(taskIndex / 6);
     const progressMarkup = `<span>${t("ui.page", { "0": (pageIndex % 4) + 1 })}</span><div>${notebook
       .slice(pageIndex * 6, pageIndex * 6 + 6)
@@ -2406,7 +2571,7 @@ function render() {
     planHighlighted=Boolean(plan?.pair);
   }
   updatePlanRail(plan);
-  boardView.render(values, selected, highlight);
+  boardView.render(values, selected, highlight, true);
   reconcileCellMotions();
   $("win").hidden = count > 0 || lesson >= 0;
   document.querySelector<HTMLElement>("footer")!.hidden = !count && lesson < 0;
@@ -2504,6 +2669,25 @@ function render() {
                   : t("calm.classic.copy", { copied, count, digits: digitWord(count) })
               : t(session.history.length ? "game.noMoves" : "calm.noPairs"),
     );
+  // The hidden result footer has no width. Settle the next field's actions
+  // before it paints instead of carrying a layout measured on the result.
+  if (leavingResult) layoutActions();
+  const noMoves = lesson < 0 && count > 0 && !available.length;
+  noMovesCard.hidden = !noMoves || dialog.open || saveFailed || Boolean(readWarning);
+  noMovesCard.querySelector("strong")!.textContent = t("calm.noPairs");
+  noMovesCard.querySelector("p")!.textContent = progress.active === "classic" ? $("status").textContent : t("play.noMovesHelp");
+  $("no-moves-primary").textContent = progress.active === "classic" && canAdd
+    ? t("calm.classic.add", {count}) : t("ui.restart-puzzle");
+  $<HTMLButtonElement>("no-moves-primary").disabled = busy || paused;
+  $("no-moves-undo").textContent = t("action.undo");
+  $("no-moves-undo").hidden = !session.history.length;
+  $<HTMLButtonElement>("no-moves-undo").disabled = busy || paused;
+  $("no-moves-primary").onclick = () => {
+    if (progress.active === "classic" && canAdd) void add();
+    else requestRestart();
+  };
+  $("no-moves-undo").onclick = undoAction;
+  positionNoMoves();
   drawPath(highlight);
   clipPairTrace();
   if (focusedIndex !== undefined) {
@@ -2530,6 +2714,8 @@ function clearSelection() {
 function startLesson(short = false) {
   shortLesson = short;
   if (busy) return;
+  lessonReturnEnteredGame = enteredGame;
+  lessonReturnToMenu = !short && !enteredGame;
   if (!metadata(progress).flags?.includes("tutorial_end"))
     firstEvent("tutorial_start", { short });
   session.current.scroll = viewport.scrollTop;
@@ -2546,6 +2732,9 @@ const lessonRules = [
   "lesson.diagonal.rule", "lesson.edge.rule", "lesson.undo.rule",
 ] as const;
 function renderLessonCopy() {
+  $("skip").innerHTML = icon("close");
+  $("skip").setAttribute("aria-label", t("action.skip"));
+  $("skip").title = t("action.skip");
   $("lesson-title").textContent = lessons[lesson].title;
   // Keep one command and one rule in the space below the field.
   $("lesson-detail").textContent = t(shortLesson && lesson === 1 ? "lesson.ten-short.rule" : lessonRules[lesson]);
@@ -2569,6 +2758,7 @@ function loadLesson() {
   // The invisible continuation slot must already have its final text geometry.
   $("lesson-next").textContent = lessonNextText();
   $("lesson").scrollTop = 0;
+  document.querySelector(".status-wrap")!.scrollTop = 0;
   lessonActions.scrollTop = 0;
   viewport.scrollTop = 0;
   render();
@@ -2582,7 +2772,7 @@ function finishLesson(outcome: "complete" | "skip" = "skip") {
     firstEvent("tutorial_end", { outcome, step: lesson + 1 });
   lesson = -1;
   lessonQuick.hidden = true;
-  enteredGame = true;
+  enteredGame = shortLesson || lessonReturnEnteredGame;
   settings.tutorialDone = true;
   settingsDirty.tutorialDone = true;
   $("lesson").hidden = true;
@@ -2591,6 +2781,7 @@ function finishLesson(outcome: "complete" | "skip" = "skip") {
   viewport.scrollTop = session.current.scroll;
   save();
   platform.gameplay(true);
+  if (lessonReturnToMenu) openMenu();
 }
 async function choose(i: number) {
   cancelHint();
@@ -2628,7 +2819,7 @@ async function choose(i: number) {
     selected = i;
     highlight = null;
     render();
-    const blockers = lesson < 0 ? pairBlockers(values, a, i, result.reason) : [];
+    const blockers = pairBlockers(values, a, i, result.reason);
     showPairBlockers(blockers);
     const blockedEdge = result.reason === "direction" && blockers.length > 0;
     const firstBlocker = a < i ? blockers[0] : blockers.at(-1);
@@ -2690,7 +2881,7 @@ async function choose(i: number) {
     .map((n) => n!.getBoundingClientRect());
   const next = removePair(values, a, i);
   const ending = lesson < 0 && !occupied(next);
-  const fast = lesson < 0 && !ending;
+  const fast = !ending;
   busy = true;
   highlight = result.path;
   if (!fast) render();
@@ -2732,13 +2923,13 @@ async function choose(i: number) {
       progress.seen.push("reading");
     removedPairs.set(session.current.board, [a, i]);
     hintIndex = 0;
-    if (progress.active === "classic") {
-      const gain = collectPair(progress, session.current.moves);
-      if (gain) animateSeeds(flightRects, gain, ending);
-    }
-    if (!occupied(next)) complete(flightRects);
-    save();
-  }
+    const gain = progress.active === "classic" ? collectPair(progress, session.current.moves) : 0;
+    if (gain && !ending) void animateSeeds(flightRects, gain);
+    if (!occupied(next)) complete(flightRects, gain);
+    // Publish fast input immediately with an explicit pending-save state.
+    // The queue acknowledges durability independently of decorative animation.
+    void persistMove();
+  } else lessonBoard = next;
   // Lessons and finishing routes get their full explanation. Ordinary Feel
   // moves swap the hit targets immediately, independently of the erase ghosts.
   if (!fast)
@@ -2753,7 +2944,9 @@ async function choose(i: number) {
     const viewRect = viewport.getBoundingClientRect();
     const boardRect = $("board").getBoundingClientRect();
     const rowHeight = cell(0)?.getBoundingClientRect().height || boardRect.width / WIDTH;
-    const firstRow = Math.max(0, Math.floor((viewRect.top - boardRect.top) / rowHeight));
+    const topRow = (viewRect.top - boardRect.top) / rowHeight;
+    const firstRow = Math.max(0, Math.floor(topRow));
+    const firstAnchorRow = Math.max(0, Math.ceil(topRow));
     const lastRow = Math.ceil((viewRect.bottom - boardRect.top) / rowHeight);
     for (const [nextIndex, oldIndex] of positions) {
       const oldRow = Math.floor(oldIndex / WIDTH),
@@ -2765,7 +2958,7 @@ async function choose(i: number) {
         continue;
       const node = cell(oldIndex);
       if (!node) continue;
-      if (!anchor && viewport.scrollTop > 1 && oldRow >= firstRow && oldRow < lastRow && blank[oldIndex])
+      if (!anchor && viewport.scrollTop > 1 && oldRow >= firstAnchorRow && oldRow < lastRow && blank[oldIndex])
         anchor = node;
       if (animateCollapse || node === anchor) oldTops.set(node, node.getBoundingClientRect().top);
     }
@@ -2884,7 +3077,7 @@ function add() {
     } else {
       session = commit(session, next, "add", viewport.scrollTop);
       markGameStarted();
-      save();
+      void persistMove();
     }
     clearSelection();
     render();
@@ -2945,7 +3138,9 @@ function undoAction() {
     [{ transform: "rotate(-18deg)" }, { transform: "rotate(0)" }],
     160,
   );
-  save();
+  // Snapshot after restoring the saved viewport, as before. Persisting earlier
+  // would replace the restored scroll with the collapsed/added board's offset.
+  void persistMove();
   platform.gameplay(occupied(board()) > 0);
 }
 async function hint() {
@@ -3009,7 +3204,7 @@ async function hint() {
           viewport.focus({preventScroll:true});
           feedback("undo");
           message(t("ui.board-restored-continue-on-your-own-or-tap-hint"));
-          void save();
+          void persistMove();
         };
         message(
           advice.kind === "dead"
@@ -3017,6 +3212,18 @@ async function hint() {
             : t("ui.we-could-not-check-whether-there-is-a-solution"),
         );
       } else message(t("ui.there-is-no-solution-from-here-restart-the-puzzle"));
+      noMovesCard.hidden = false;
+      noMovesCard.querySelector("strong")!.textContent = $("status").textContent;
+      noMovesCard.querySelector("p")!.textContent = t("play.noMovesHelp");
+      $("no-moves-primary").textContent = recovery >= 0 ? $("recover-task").textContent : t("ui.restart-puzzle");
+      $("no-moves-primary").onclick = () => {
+        if (recovery >= 0) $("recover-task").click();
+        else requestRestart();
+      };
+      $("no-moves-undo").hidden = recovery < 0;
+      $("no-moves-undo").textContent = t("ui.restart-puzzle");
+      $("no-moves-undo").onclick = () => requestRestart();
+      positionNoMoves();
       return;
     }
     if (advice.kind !== "move") {
@@ -3104,7 +3311,7 @@ function displayHint(pair: Connection,quiet=false) {
 type CollectionScreen = "book" | "book-picker" | "calendar" | "trophies" | "progress";
 const navigationTrail: {
   screen: string; scroll: number; focus: string;
-  volume: number; range: number; themes: boolean; filter: string; filterOpen: boolean;
+  volume: number; range: number; themes: boolean;
 }[] = [];
 let collectionTab: "jars" | "months" = "jars";
 let featuredTrophyMonth = "";
@@ -3115,7 +3322,7 @@ function rememberNavigation(target: string) {
   navigationTrail.push({
     screen,
     scroll: dialogScroller().scrollTop,
-    volume: selectedVolume, range: bookRange, themes: bookThemes, filter: bookFilter, filterOpen: bookFilterOpen,
+    volume: selectedVolume, range: bookRange, themes: bookThemes,
     focus:
       element?.id ||
       (element?.dataset.month
@@ -3135,8 +3342,6 @@ function returnToPrevious() {
     selectedVolume = previous.volume;
     bookRange = previous.range;
     bookThemes = previous.themes;
-    bookFilter = previous.filter;
-    bookFilterOpen = previous.filterOpen;
   }
   if (!previous || previous.screen === "home") openMenu(true);
   else if (previous.screen === "settings") openSettings(true);
@@ -3186,6 +3391,7 @@ function playBoardEntrance() {
 function closeMenu() {
   if (protectedContent) return;
   if (lesson < 0) enteredGame = true;
+  entryAdProtected = false;
   navigationTrail.length = 0;
   dialog.close();
   render();
@@ -3193,6 +3399,7 @@ function closeMenu() {
   playBoardEntrance();
   showSaveState();
   document.body.classList.remove("navigation-open");
+  positionNoMoves();
   platform.gameplay(!paused && occupied(board()) > 0);
   fieldActivity();
 }
@@ -3214,6 +3421,7 @@ function navigateBack(native = false): boolean {
   return true;
 }
 function openMenu(preserve: unknown = false) {
+  noMovesCard.hidden = true;
   if (busy || adActive || rewardRequest || engagementActive) return;
   if (!dialog.open) {
     if (lesson < 0 && enteredGame) session.current.scroll = viewport.scrollTop;
@@ -3222,8 +3430,6 @@ function openMenu(preserve: unknown = false) {
   if (preserve !== true) navigationTrail.length = 0;
   settlePresentation();
   releaseDialogHeading();
-  calendarActions.replaceChildren();
-  calendarActions.hidden = true;
   notebookDock.replaceChildren();
   notebookDock.hidden = true;
   updateHome();
@@ -3364,7 +3570,7 @@ async function beginClassic(
     busy = switching = false;
     dialog.inert = false;
     earnedAward = "";
-    earnedSeeds = earnedHints = 0;
+    earnedSeeds = earnedHints = resultPairSeeds = 0;
     saveRecovered = false;
     clearSelection();
     closeMenu();
@@ -3407,6 +3613,7 @@ $("hint").onclick = hint;
 $("add").onclick = add;
 $("menu").onclick = () => void goHomeFromBoard();
 $("resume").onclick = () => {
+  if (homeCurrent.hasAttribute("data-new-game")) { openClassicNewSheet(); return; }
   if (lesson >= 0 || protectedContent) { closeMenu(); return; }
   if (progress.active.startsWith("book") && !unfinished(session)) {
     const target = notebookTarget(progress);
@@ -3473,7 +3680,7 @@ function openSettings(restoring = false) {
   $("menu-content").hidden = true;
   $("settings-panel").hidden = false;
   dialog.dataset.screen = "settings";
-  updateReminderSettings();
+  updateEngagementCopy();
   pinDialogHeading($("settings-panel"));
   if (!restoring) dialogScroller().scrollTop = 0;
   $("settings-back").focus({ preventScroll: true });
@@ -3498,11 +3705,12 @@ $("confirm-new").onclick = () => {
   else reset();
 };
 $("restart-task").onclick = () => requestRestart();
+let entryAdProtected = true;
 async function transitionAd(route: string) {
   const transitionId = crypto.randomUUID();
   const adSession = crypto.randomUUID();
   const detail = {route, transition_id:transitionId, ad_session_id:adSession, mode:gameMode()};
-  const reason = !monetized ? "disabled"
+  const reason = entryAdProtected ? "app_entry" : !monetized ? "disabled"
     : !appForeground || document.hidden ? "background"
     : skipNextInterstitial || performance.now() - lastExternalAt <= 30000 ? "external_suppression"
     : "request";
@@ -3545,7 +3753,7 @@ async function goHomeFromBoard() {
 }
 $("play-again").onclick = () => {
   const id = progress.active;
-  if (id === "classic") { void goHomeFromBoard(); return; }
+  if (id === "classic") { openClassicNewSheet(true); return; }
   const next = $("play-again").dataset.destination;
   if (next) void switchGame(next, "next");
   else if (id.startsWith("book")) openHomeNotebook();
@@ -3582,19 +3790,25 @@ for (const key of ["sound", "vibration"] as const)
     save();
   };
 $("retry-save").onclick = async () => {
+  const revision = moveSaveRevision;
   await save();
   if (saveFailed || storageConflict || futureSave) return;
+  if (revision === moveSaveRevision) {
+    moveSavePending = false;
+    $("board").removeAttribute("aria-busy");
+    document.querySelector<HTMLElement>(".game")!.dataset.persistence = "saved";
+  }
   // A failed reward save leaves its native receipt pending until a durable retry.
   try {
-    const pending = await adsBridge?.pending();
-    if (pending?.reward) await receiveReward(pending.reward);
+    await recoverNativeReward();
   } catch {
     // Keep the receipt for the next retry or launch; the game remains usable.
   }
   await applyEarnedHelp();
+  if (pendingDailyOpen) void openDailyNotification();
 };
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && dialog.open) {
+  if (e.key === "Escape" && (dialog.open || lesson >= 0)) {
     e.preventDefault();
     navigateBack();
   }
@@ -3625,6 +3839,7 @@ document.addEventListener("visibilitychange", () => {
   else fieldActivity();
 });
 window.addEventListener("pagehide", () => {
+  settlePresentation();
   if (!busy) save();
 });
 async function boot() {
@@ -3668,7 +3883,11 @@ async function boot() {
   } catch (error) {
     futureSave = error instanceof FutureProgress;
     protectedContent = error instanceof ProtectedContentProgress;
-    warning = protectedContent ? t("save.contentIdentity") : futureSave
+    if ((error as Error)?.name === "SecurityError") {
+      hadStoredState = true;
+      saveFailed = true;
+    }
+    warning = (error as Error)?.name === "SecurityError" ? t("save.storageUnavailable") : error instanceof ProtectedEarnedProgress ? t("save.earnedProtected") : protectedContent ? t("save.contentIdentity") : futureSave
       ? t("ui.this-save-is-from-a-newer-version-update-the")
       : t("ui.could-not-read-the-save-a-new-game-was");
     readWarning = warning;
@@ -3700,6 +3919,10 @@ async function boot() {
     hadBackup = backup !== null || (await platform.read(PROGRESS + ".damaged")) !== null;
     recoveryAvailable = restorable(backup);
   } catch { hadBackup = true; }
+  confirmedJars = { ...jars(progress) };
+  confirmedDaily = homeDailySnapshot(progress);
+  confirmedSeeds = confirmedJars.meter;
+  visualSeeds = confirmedSeeds;
   if (settings.sound) void warmSound();
   if (recoveryAvailable && !readWarning)
     readWarning =
@@ -3744,7 +3967,7 @@ async function boot() {
     warning = t("service.offline");
   }
   if(platform.native) {
-    const acquisition=await adsBridge?.installContext?.().catch(()=>undefined);
+    const acquisition=await optionalResult(adsBridge?.installContext?.() ?? Promise.resolve(undefined));
     if(acquisition) {
       nativeAcquisition=acquisition;
       if(acquisition.locales?.length) deviceLanguages=acquisition.locales;
@@ -3771,9 +3994,9 @@ async function boot() {
     label.textContent = t("ui.qa-test-ads", { "0": firstSessionEnabled?t("ui.first-launch"):qaProfile==="baseline"?t("ui.standard-game"):qaProfile==="all"?t("ui.all-features"):qaProfile }); $("menu-content").append(label);
   }
   await save();
-  await adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}).catch(() => {});
+  await optionalResult(adsBridge?.configureContext?.({...assignment, anchor: String(assignment.anchor), qa: String(assignment.qa)}) ?? Promise.resolve());
   experience(progress).sessions++;
-  await initializeMonetization(() => syncPauseState(), receiveReward);
+  await optionalResult(initializeMonetization(() => syncPauseState(), receiveReward));
   viewport.scrollTop = session.current.scroll;
   if (
     !futureSave &&
@@ -3785,17 +4008,19 @@ async function boot() {
     // A failed SharedPreferences commit can remain in process memory. A read on
     // WebView recreation is not a disk acknowledgement: confirm it with a write.
     await save();
-  if (engagementBridge)
-    try {
-      await engagementBridge.addListener("dailyOpen", () => {
-        pendingDailyOpen = true;
-        void openDailyNotification();
-      });
-      const config = await engagementBridge.configuration();
-      engagementAvailable = config.available;
-      notificationGranted = config.granted;
-      pendingDailyOpen = Boolean(config.entry);
-    } catch {}
+  if (engagementBridge) {
+    // Optional permission/configuration services cannot hold core startup.
+    void engagementBridge.addListener("dailyOpen", () => {
+      pendingDailyOpen=true;void openDailyNotification();
+    }).catch(()=>{});
+    const readConfiguration = optionalSingleFlight("notification-configuration", () => engagementBridge!.configuration().then(config=>{
+      engagementAvailable=config.available;notificationGranted=config.granted;
+      pendingDailyOpen ||= Boolean(config.entry);
+      updateEngagementCopy();void openDailyNotification();
+      return config;
+    }));
+    await readConfiguration;
+  }
   syncPauseState();
   trackOpen("resume");
   void platform
@@ -3804,6 +4029,7 @@ async function boot() {
       if (!active && !adActive && !rewardRequest && !engagementActive)
         backgroundAt = Date.now();
       if (active) {
+        if (backgroundAt !== undefined) entryAdProtected = true;
         if (
           backgroundAt !== undefined &&
           Date.now() - backgroundAt >= 30 * 60 * 1000
@@ -3811,11 +4037,11 @@ async function boot() {
           experience(progress).sessions++;
         backgroundAt = undefined;
         if (engagementBridge)
-          void engagementBridge
-            .configuration()
+          void optionalSingleFlight("notification-configuration", () => engagementBridge!.configuration())
             .then((c) => {
+              if (!c) return;
               notificationGranted = c.granted;
-              updateReminderSettings();
+              updateEngagementCopy();
               if (c.entry) {
                 pendingDailyOpen = true;
                 void openDailyNotification();
@@ -3844,7 +4070,7 @@ async function boot() {
       settingsDirty.tutorialDone = false;
       openMenu();
     }
-  } else if (!settings.tutorialDone && !protectedContent) startLesson(true);
+  } else if (!firstSessionEnabled && !settings.tutorialDone && !protectedContent && !readWarning && !warning && !saveFailed && !futureSave && !storageConflict) startLesson(true);
   else openMenu();
   bootComplete = true;
   await openDailyNotification();
@@ -3976,7 +4202,7 @@ async function switchGame(id: string, route?: string) {
   busy = false;
   if (saveFailed || futureSave || storageConflict) return;
   earnedAward = "";
-  earnedSeeds = earnedHints = 0;
+  earnedSeeds = earnedHints = resultPairSeeds = 0;
   saveRecovered = false;
   progress = candidate;
   session = nextSession;
@@ -4003,6 +4229,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   if (busy) return;
   const sameScreen = dialog.open && dialog.dataset.screen === kind;
   const oldScroll = dialogScroller().scrollTop;
+  const previousKey = dialog.dataset.contentKey ?? "";
   const focused = document.activeElement as HTMLElement | null;
   const focusId = focused?.id;
   const focusVolume = focused?.dataset.volume;
@@ -4023,12 +4250,12 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       progress.done.includes(p.id),
     ).length;
     const completedDaily = new Set(progress.done.map(dailyDay).filter(Boolean)).size;
-    const j = jarState(jars(progress).meter);
+    const j = jarState(storedJarView().meter);
     const nextVolume = nextBookVolume();
     const nextDone = volumeTasks(nextVolume).filter((p) =>
       progress.done.includes(p.id),
     ).length;
-    html += `<h2>${t("home.progress")}</h2>${jarHero(j)}<button id="progress-book" class="progress-book" data-volume="${nextVolume}">${bookPicture(nextVolume + 1)}<span><strong>${volumeLabel(nextVolume)}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${volumeLabel(nextVolume)}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p><button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button>`;
+    html += `<h2>${t("home.progress")}</h2>${jarHero(j).replace('<section','<button type="button" id="progress-jar"').replace('</section>','</button>')}<button id="progress-book" class="progress-book" data-volume="${nextVolume}">${bookPicture(nextVolume + 1)}<span><strong>${volumeLabel(nextVolume)}</strong><small>${t("ui.of-24-puzzles", { "0": nextDone })}</small></span>${icon("arrow")}<progress max="24" value="${nextDone}" aria-label="${volumeLabel(nextVolume)}"></progress></button><dl class="progress-stats"><div><dt>${t("ui.book-puzzles")}</dt><dd>${t("ui.of", { "0": completedBook, "1": notebook.length })}</dd></div><div><dt>${t("ui.daily-puzzles")}</dt><dd>${completedDaily}</dd></div><div><dt>${t("ui.games-completed")}</dt><dd>${m.completed}</dd></div><div><dt>${t("ui.without-hints")}</dt><dd>${m.unassisted}</dd></div></dl><details class="explanation"><summary>${t("ui.how-progress-is-counted")}</summary><p>${t("ui.games-and-wins-without-hints-are-counted-from-earlier", { "0": new Date(m.since).toLocaleDateString(activeLanguage) })}</p></details><p class="fine">${t("ui.progress-is-saved-on-this-device")}</p><button id="progress-trophies" class="secondary">${t("ui.jars-and-trophies", { "0": icon("arrow") })}</button>`;
   } else if (kind === "book") {
     html += renderNotebook();
   } else if (kind === "book-picker") {
@@ -4047,7 +4274,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ).getDay() +
           6) %
         7;
-    html += `<h2>${t("notification.channel")}</h2><section class="calendar-hero">${calendarPicture(date)}<div><small>${t("calm.calendar.today")}</small><strong>${taskDate(date)}</strong><span>${t(todayAction === "play" ? "daily.tagline" : todayAction === "replay" ? "daily.replay" : "daily.resume")}</span></div></section><div class="month-nav calendar-nav"><button id="prev-month" aria-label="${t("ui.previous-month")}" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>${icon("back")}</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="${t("ui.choose-month")}">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="${t("ui.next-month")}" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>${icon("arrow")}</button></div><div class="calendar">${[t("ui.mon"), t("ui.tue"), t("ui.wed"), t("ui.thu"), t("ui.fri"), t("ui.sat"), t("ui.sun")].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
+    html += `<h2>${t("notification.channel")}</h2><section class="calendar-hero">${calendarPicture(date)}<div><small>${monthName(date.slice(0,7))}</small><strong>${new Date(date).toLocaleDateString(activeLanguage,{weekday:"long",timeZone:"UTC"})}</strong><span>${t(todayAction === "play" ? "daily.tagline" : todayAction === "replay" ? "daily.replay" : "daily.resume")}</span></div></section><div class="month-nav calendar-nav"><button id="prev-month" aria-label="${t("ui.previous-month")}" ${calendarMonth <= FIRST_MONTH ? "disabled" : ""}>${icon("back")}</button><details id="calendar-picker" ${pickerOpen ? "open" : ""}><summary aria-label="${t("ui.choose-month")}">${monthName(calendarMonth)}</summary>${calendarControls()}</details><button id="next-month" aria-label="${t("ui.next-month")}" ${calendarMonth >= today().slice(0, 7) ? "disabled" : ""}>${icon("arrow")}</button></div><div class="calendar">${[t("ui.mon"), t("ui.tue"), t("ui.wed"), t("ui.thu"), t("ui.fri"), t("ui.sat"), t("ui.sun")].map((x) => `<span>${x}</span>`).join("")}${"<i></i>".repeat(weekday)}${days(
       calendarMonth,
     )
       .map(
@@ -4059,24 +4286,11 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       )}</div><p class="fine calendar-note">${t("ui.you-can-play-past-days-any-time")}</p><details id="calendar-extras" ${calendarExtrasOpen ? "open" : ""}><summary>${t("calm.calendar.more")}</summary>${streakPanel()}<section class="calendar-trophies" aria-label="${t("ui.monthly-trophies")}">${trophyMark(calendarMonth, monthTrophy.count, days(calendarMonth).length)}</section><p>${t("ui.of-puzzles-solved", { "0": monthTrophy.count, "1": days(calendarMonth).length })}</p><details class="explanation"><summary>${t("ui.how-streaks-work")}</summary><p>${t("ui.solve-todays-puzzle-today-archive-puzzles-count-towards-monthly")}</p></details><details class="explanation"><summary>${t("ui.monthly-trophies")}</summary><p>${t("ui.bronze-7-puzzles-silver-14-gold-the-whole-month-2")}</p></details></details><button class="primary calendar-today" id="today-task" data-continue="${todayId}">${t("calm.calendar." + todayAction, { date: taskDate(date) })}</button>`;
   } else {
     html += `<h2>${t("ui.collection")}</h2><div class="collection-tabs" role="group" aria-label="${t("ui.collection-section")}"><button id="jars-tab" aria-pressed="${collectionTab === "jars"}">${t("ui.jars")}</button><button id="trophies-mode" aria-pressed="${collectionTab === "months"}">${t("ui.monthly-trophies")}</button></div>`;
-    const j = jarState(jars(progress).meter);
-    jarShelfPage = Math.min(
-      jarShelfPage,
-      Math.max(0, Math.ceil(j.index / 12) - 1),
-    );
-    const shelfEnd = j.index - jarShelfPage * 12,
-      shelfStart = Math.max(0, shelfEnd - 12);
-    const seedCount = jars(progress).seeds;
+    const j = jarState(storedJarView().meter);
+    const { start: shelfStart, end: shelfEnd } = jarShelfBounds(j.index);
+    const seedCount = storedJarView().seeds;
     const seedNoun = word(seedCount, t("ui.seed"), t("ui.seed-plural"), t("ui.seeds"));
-    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}>${jarHero(j)}<p class="jar-collected-count">${t("ui.collected-seeds", { "0": j.index, "1": seedCount, "2": seedNoun })}</p><div class="jar-shelf">${Array.from(
-      { length: shelfEnd - shelfStart },
-      (_, n) => {
-        const i = shelfStart + n;
-        return `<div class="jar-keepsake" style="--jar-color:${jarColors[i % 6]};--fill:100%">${jarGlass(undefined, 24)}<small>${localName(jarNames[i % 6])} · ${i + 1}</small></div>`;
-      },
-    ).join(
-      "",
-    )}</div><div class="month-nav" ${j.index ? "" : "hidden"}><button id="older-jars" ${shelfStart === 0 ? "disabled" : ""}>${t("ui.earlier")}</button><span>${j.index ? `${shelfStart + 1}–${shelfEnd}` : t("ui.nothing-yet")}</span><button id="newer-jars" ${jarShelfPage === 0 ? "disabled" : ""}>${t("ui.newer")}</button></div><details class="explanation"><summary>${t("ui.how-jars-fill-up")}</summary><p>${t("ui.earn-two-seeds-for-each-new-move-in-classic")}</p></details><p>${t("ui.boards-cleared", { "0": jars(progress).wins })}</p><p class="fine">${jars(progress).wins >= 100 ? t("ui.master-100-boards") : jars(progress).wins >= 25 ? t("ui.expert-25-boards") : jars(progress).wins >= 5 ? t("ui.solid-start-5-boards") : t("ui.clear-5-boards-to-earn-your-first-badge")}</p><button id="jar-play" class="secondary">${t("action.playClassic")}</button></section>`;
+    html += `<section class="jar-collection" ${collectionTab !== "jars" ? "hidden" : ""}>${jarHero(j)}<p class="jar-collected-count">${t("ui.collected-seeds", { "0": j.index, "1": seedCount, "2": seedNoun })}</p><div class="jar-shelf">${jarKeepsakes(shelfStart, shelfEnd)}</div>${jarShelfNavigation(j.index, shelfStart, shelfEnd)}<details class="explanation"><summary>${t("ui.how-jars-fill-up")}</summary><p class="jar-percent-detail">${j.percent}% · ${t("ui.of-seeds", {"0":j.filled,"1":j.capacity})}</p><p>${t("ui.earn-two-seeds-for-each-new-move-in-classic")}</p></details><p class="jar-wins">${t("ui.boards-cleared", { "0": storedJarView().wins })}</p><p class="fine jar-rank">${jarRank(storedJarView().wins)}</p><button id="jar-play" class="secondary">${t("action.playClassic")}</button></section>`;
     html += `<section class="monthly-collection" ${collectionTab !== "months" ? "hidden" : ""}><p class="fine">${t("ui.bronze-7-puzzles-silver-14-gold-the-whole-month")}</p><label class="year-picker">${t("ui.trophy-year")}<select id="trophy-year">${years()
       .map((y) => `<option ${y === trophyYear ? "selected" : ""}>${y}</option>`)
       .join("")}</select></label>`;
@@ -4100,8 +4314,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   if (kind === "calendar") {
     const todayTask = $("today-task");
     todayTask.toggleAttribute("data-daily-pending", !progress.done.includes(todayTask.dataset.continue!));
-    calendarActions.append(todayTask);
-    calendarActions.hidden = false;
+    panel.querySelector(".calendar-hero")!.after(todayTask);
     const layout = document.createElement("div");
     layout.className = "calendar-layout";
     const activity = document.createElement("section");
@@ -4110,7 +4323,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     month.className = "calendar-month";
     for (const node of [...panel.children]) {
       if (node.matches(".screen-back,h2")) continue;
-      (node.matches(".calendar-hero,#calendar-extras") ? activity : month).append(node);
+      (node.matches(".calendar-hero,#today-task") ? activity : month).append(node);
     }
     layout.append(activity, month);
     panel.append(layout);
@@ -4122,11 +4335,32 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     const history = document.createElement("div");
     history.className = "jar-history";
     const summary = jars.querySelector(".jar-collected-count");
+    const play = jars.querySelector("#jar-play")!;
+    play.className = "primary";
+    overview.append(play);
+    const shelf = jars.querySelector(".jar-shelf")!;
+    const shelfNav = jars.querySelector(".month-nav")!;
+    const shelfHeading = document.createElement("div");
+    shelfHeading.className = "jar-shelf-heading";
+    shelfHeading.innerHTML = `<h3>${t("ui.jars")}</h3>`;
+    shelfHeading.append(shelfNav);
+    shelf.before(shelfHeading);
+    if (!shelf.childElementCount) {
+      shelf.remove();
+      shelfHeading.remove();
+      const empty = document.createElement("p");
+      empty.className = "jar-empty";
+      empty.textContent = t("ui.nothing-yet");
+      jars.prepend(empty);
+    }
     for (const node of [...jars.children])
-      (node.matches("h3,.progress-hero") || node === summary
+      (node.matches("h3,.progress-hero,#jar-play") || node === summary
         ? overview
         : history
       ).append(node);
+    overview.append(play);
+    const rules = history.querySelector("details")!;
+    for (const p of [...history.querySelectorAll(":scope > p:not(.jar-empty)")]) rules.append(p);
     jars.append(overview, history);
   }
   const screenHeading = document.createElement("div");
@@ -4134,18 +4368,24 @@ function openCollection(kind: CollectionScreen, restoring = false) {
   screenHeading.append($("collection-back"), panel.querySelector("h2")!);
   panel.prepend(screenHeading);
   const bookAction = panel.querySelector(".notebook-action");
-  if (bookAction) {
-    notebookDock.append(bookAction);
-    notebookDock.hidden = false;
+  if (kind === "book" || kind === "book-picker") {
+    const paper = document.createElement("div");
+    paper.className = "quiet-book-page";
+    for (const child of [...panel.children]) if (child !== screenHeading) paper.append(child);
+    panel.append(paper);
+    if (bookAction) {
+      notebookDock.append(bookAction);
+      notebookDock.hidden = false;
+    }
   }
   pinDialogHeading(panel);
   if (kind === "progress") {
-    $("progress-trophies").onclick = () => openCollection("trophies");
+    $("progress-trophies").onclick = $("progress-jar").onclick = () => {collectionTab="jars";openCollection("trophies");};
+    $("progress-jar").setAttribute("aria-label",t("ui.jar-collection"));
     $("progress-book").onclick = () => {
       // An addressable progress card must open its own book, not the first
-      // candidate remaining under a previously selected catalog filter.
+      // candidate from the last browsed catalog section.
       selectedVolume = Number($<HTMLButtonElement>("progress-book").dataset.volume);
-      bookFilter = "all";
       openCollection("book");
     };
   }
@@ -4179,11 +4419,6 @@ function openCollection(kind: CollectionScreen, restoring = false) {
     for (const range of panel.querySelectorAll<HTMLButtonElement>("[data-book-range]")) {
       range.onclick = () => { bookRange = Number(range.dataset.bookRange); updatePicker(); };
     }
-    $("toggle-book-filter").onclick = () => { bookFilterOpen = !bookFilterOpen; updatePicker(); };
-    const filter = document.querySelector<HTMLSelectElement>("#book-filter");
-    if (filter) filter.onchange = () => { bookFilter = filter.value; updatePicker(); };
-    const reset = document.getElementById("book-filter-reset");
-    if (reset) reset.onclick = () => { bookFilter = "all"; updatePicker(); };
     for (const button of panel.querySelectorAll<HTMLButtonElement>("[data-volume]")) {
       button.onclick = () => {
         rememberNavigation("book");
@@ -4202,14 +4437,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       collectionTab = "months";
       openCollection("trophies");
     };
-    $("older-jars").onclick = () => {
-      jarShelfPage++;
-      openCollection("trophies");
-    };
-    $("newer-jars").onclick = () => {
-      jarShelfPage--;
-      openCollection("trophies");
-    };
+    bindJarShelfNavigation();
     $("trophy-year").onchange = () => {
       trophyYear = $<HTMLSelectElement>("trophy-year").value;
       openCollection("trophies");
@@ -4245,6 +4473,13 @@ function openCollection(kind: CollectionScreen, restoring = false) {
       void switchGame($("today-task").dataset.continue!, "calendar-today");
     };
   }
+  const contentKey=kind==="book-picker"?`${bookThemes}:${bookRange}`:kind==="trophies"?`${collectionTab}:${jarShelfPage}:${trophyYear}`:kind==="calendar"?calendarMonth:String(selectedVolume);
+  dialog.dataset.contentKey=contentKey;
+  if (sameScreen && contentKey!==previousKey) {
+    clearInterfaceMotion();
+    const local=panel.querySelector(kind==="calendar"?".calendar":kind==="book-picker"?".volume-shelf":kind==="trophies"?(collectionTab==="jars"?".jar-collection":".monthly-collection"):".quiet-book-page");
+    presentMenuChange(local??panel,"page");
+  }
   if (sameScreen) {
     dialogScroller().scrollTop = oldScroll;
     if (focusId)
@@ -4255,7 +4490,7 @@ function openCollection(kind: CollectionScreen, restoring = false) {
         ?.focus({ preventScroll: true });
   } else if (!restoring) dialogScroller().scrollTop = 0;
 }
-$("classic-mode").onclick = openClassicNewSheet;
+$("classic-mode").onclick = () => openClassicNewSheet();
 $("book-mode").onclick = openHomeNotebook;
 bookQuick.onclick = () => {
   const target = notebookTarget(progress);
@@ -4304,24 +4539,19 @@ function renderNotebookPicker() {
   const volumes = Array.from({length:VOLUMES},(_,volume)=>volume)
     .filter(volume=>Boolean(themeOf(volume))===bookThemes)
     .map(volume=>({volume, ...notebookBrowseStatus(progress,volume,done)}));
-  const matching = volumes.filter(({solved,started})=>bookFilter==="all" ||
-    (bookFilter==="new" ? !started : bookFilter==="done" ? solved===24 : started && solved<24));
-  const ranges = [...new Set(matching.map(({volume})=>Math.floor(volume/20)))];
+  const ranges = [...new Set(volumes.map(({volume})=>Math.floor(volume/20)))];
   if (!bookThemes && ranges.length && !ranges.includes(bookRange)) bookRange = ranges[0];
   const rangeButtons = bookThemes ? "" : `<div class="book-ranges">${Array.from({length:5},(_,i)=>
     `<button class="text-button" id="book-range-${i}" data-book-range="${i}" aria-pressed="${bookRange===i}" ${ranges.includes(i)?"":"disabled"}>${i*20+1}–${(i+1)*20}</button>`).join("")}</div>`;
-  const options = [["all",t("ui.all")],["active",t("ui.in-progress")],["done",t("ui.completed")],["new",t("ui.not-started")]];
-  const filterLabel=options.find(([id])=>id===bookFilter)?.[1] ?? t("ui.all");
-  const filter = `<div class="notebook-toolbar"><span>${filterLabel}</span><button id="toggle-book-filter" class="text-button" aria-expanded="${bookFilterOpen}">${t("nav.filter")}</button></div>
-    ${bookFilterOpen ? `<select id="book-filter" aria-label="${t("nav.filter")}">${options.map(([id,label])=>`<option value="${id}" ${id===bookFilter?"selected":""}>${label}</option>`).join("")}</select>`:""}`;
-  const buttons = matching.filter(({volume})=>bookThemes || Math.floor(volume/20)===bookRange)
+  const buttons = volumes.filter(({volume})=>bookThemes || Math.floor(volume/20)===bookRange)
     .map(({volume,solved,started})=>`<button class="volume-cover ${solved===24?"done":started?"started":""}" data-volume="${volume}" aria-pressed="${volume===selectedVolume}"
-      aria-label="${bookThemes ? volumeLabel(volume)+", "+solved+"/24" : t("ui.puzzle-book-of-24",{"0":volume+1,"1":solved})}"><strong>${bookThemes?volumeLabel(volume):volume+1}</strong><small>${solved}/24${solved===24?" ✓":started?" ▸":""}</small></button>`).join("");
+      aria-label="${bookThemes ? volumeLabel(volume)+", "+solved+"/24" : t("ui.puzzle-book-of-24",{"0":volume+1,"1":solved})}">${bookThemes
+        ? `<span class="volume-illustration" aria-hidden="true"></span><strong class="volume-title">${volumeLabel(volume)}</strong><small>${solved}/24${solved===24?" ✓":started?" ▸":""}</small>`
+        : `<span class="volume-illustration" aria-hidden="true"><strong${volume===99?' class="volume-number-long"':""}>${volume+1}</strong></span><small>${solved}/24${solved===24?" ✓":started?" ▸":""}</small>`}</button>`).join("");
   return `<h2>${t("nav.booksAll")}</h2><div class="book-sections" role="group" aria-label="${t("nav.booksAll")}">
     <button id="book-section-main" data-book-section="main" aria-pressed="${!bookThemes}">${t("nav.bookMain")}</button>
     <button id="book-section-themes" data-book-section="themes" aria-pressed="${bookThemes}">${t("nav.bookThemes")}</button></div>
-    ${rangeButtons}${filter}${buttons?`<div class="volume-shelf compact-volume-shelf ${bookThemes?"theme-shelf":""}">${buttons}</div>`:
-      `<p>${t("ui.no-puzzle-books-in-this-section-have-that-status")}</p><button class="secondary" id="book-filter-reset">${t("ui.show-all-in-this-section")}</button>`}`;
+    ${rangeButtons}<div class="volume-shelf compact-volume-shelf ${bookThemes?"theme-shelf":""}">${buttons}</div>`;
 }
 function volumeLabel(volume: number) {
   const theme = themeOf(volume);
@@ -4351,7 +4581,7 @@ function jarGrains(count: number) {
   }).join("");
 }
 function jarGlass(id?: string, seedCount = 0) {
-  return `<span class="jar-glass"${id ? ` id="${id}"` : ""}><span class="jar-fill"><span class="jar-grains" aria-hidden="true" data-count="${seedCount}">${jarGrains(seedCount)}</span></span><span class="jar-lid"></span></span>`;
+  return `<span class="jar-glass"${id ? ` id="${id}"` : ""}><span class="jar-interior"><span class="jar-fill"><span class="jar-grains" aria-hidden="true" data-count="${seedCount}">${jarGrains(seedCount)}</span></span></span><span class="jar-lid"></span></span>`;
 }
 function syncJarGrains(host: HTMLElement, seedCount: number) {
   const grains = host.querySelector<HTMLElement>(".jar-grains");
@@ -4360,10 +4590,32 @@ function syncJarGrains(host: HTMLElement, seedCount: number) {
   grains.innerHTML = jarGrains(seedCount);
 }
 function jarPicture(j: ReturnType<typeof jarState>) {
-  return `<span class="jar-picture" style="--fill:${j.percent}%;--jar-color:${j.color}" aria-hidden="true">${jarGlass(undefined, j.filled)}</span>`;
+  return `<span class="jar-picture" style="--fill:${j.filled / j.capacity * 100}%;--jar-color:${j.color}" aria-hidden="true">${jarGlass(undefined, j.filled)}</span>`;
 }
 function jarHero(j: ReturnType<typeof jarState>) {
-  return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-value">${j.percent}<span>%</span></p><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p></div></section>`;
+  return `<section class="progress-hero" aria-label="${t("ui.next-jar")}">${jarPicture(j)}<div><span class="hero-kicker">${t("ui.jar-3", { "0": j.index + 1 })}</span><h3 class="hero-jar-name">${j.name}</h3><p class="hero-count">${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}</p><progress max="${j.capacity}" value="${j.filled}" aria-label="${t("ui.jar-fill")}"></progress><p class="fine">${t("ui.to-the-next-jar", { "0": j.capacity - j.filled })}</p><span class="progress-jar-cue">${t("ui.jar-collection")}${icon("arrow")}</span></div></section>`;
+}
+function jarShelfBounds(index: number) {
+  jarShelfPage = Math.min(jarShelfPage, Math.max(0, Math.ceil(index / 12) - 1));
+  const end = index - jarShelfPage * 12;
+  return { start: Math.max(0, end - 12), end };
+}
+function jarKeepsakes(start: number, end: number) {
+  return Array.from({length:end-start}, (_,n) => {
+    const i=start+n;
+    return `<div class="jar-keepsake" style="--jar-color:${jarColors[i%6]};--fill:100%">${jarGlass(undefined,24)}<small>${localName(jarNames[i%6])} · ${i+1}</small></div>`;
+  }).join("");
+}
+function jarShelfNavigation(index: number, start: number, end: number) {
+  return `<div class="month-nav" ${index ? "" : "hidden"}><button id="older-jars" ${start===0 ? "disabled" : ""}>${t("ui.earlier")}</button><span>${index ? `${start+1}–${end}` : t("ui.nothing-yet")}</span><button id="newer-jars" ${jarShelfPage===0 ? "disabled" : ""}>${t("ui.newer")}</button></div>`;
+}
+function bindJarShelfNavigation() {
+  const older=document.getElementById("older-jars"),newer=document.getElementById("newer-jars");
+  if(older)older.onclick=()=>{jarShelfPage++;openCollection("trophies");};
+  if(newer)newer.onclick=()=>{jarShelfPage--;openCollection("trophies");};
+}
+function jarRank(wins: number) {
+  return t(wins>=100 ? "ui.master-100-boards" : wins>=25 ? "ui.expert-25-boards" : wins>=5 ? "ui.solid-start-5-boards" : "ui.clear-5-boards-to-earn-your-first-badge");
 }
 function difficultyLabel() {
   const level = classicDifficulty();
@@ -4371,32 +4623,52 @@ function difficultyLabel() {
 }
 function renderHomeCurrent() {
   const id = progress.active;
+  homeCurrent.toggleAttribute("data-archived", id.startsWith("daily") && id.slice(9) !== today());
   const count = occupied(board());
-  const classic = id === "classic";
+  const isClassic = id === "classic";
   const book = id.startsWith("book");
   const next = book && !count ? notebookTarget(progress) : undefined;
   const show = lesson >= 0 || Boolean(next) ||
-    count > 0 && (classic ? classicParked() : Boolean(progress.sessions[id]));
-  homeCurrent.hidden = !show;
+    count > 0 && (isClassic ? classicParked() : Boolean(progress.sessions[id]));
+  homeCurrent.hidden = false;
+  homeCurrent.toggleAttribute("data-new-game", !show);
+  homePreview.hidden = lesson >= 0 || count === 0;
+  if (!homePreview.hidden && show) {
+    const cells = board().slice(0, 27);
+    homePreview.replaceChildren(...cells.map(digit => {
+      const cell = document.createElement("span");
+      cell.textContent = digit ? String(digit) : "";
+      return cell;
+    }));
+  }
   homeGoal.hidden = true;
   $("new").hidden = lesson >= 0 || !unfinished(session);
-  $("new").textContent = classic ? t("ui.restart") : t("ui.restart-puzzle");
-  if (!show) return;
+  $("new").textContent = isClassic ? t("ui.restart") : t("ui.restart-puzzle");
+  if (!show) {
+    homePreview.hidden = false;
+    homePreview.replaceChildren(...classic().slice(0,18).map(digit => {
+      const cell = document.createElement("span");
+      cell.textContent = String(digit);
+      return cell;
+    }));
+    $("home-game-title").textContent = t("calm.classic.new");
+    $("resume-context").textContent = t("calm.classic.startNote");
+    $("resume").hidden = false;
+    $("resume").textContent = t("action.start");
+    return;
+  }
   $("resume").hidden = false;
   if (lesson >= 0) {
-    $("home-current-art").innerHTML = `<span class="home-lesson-art">${icon("help")}</span>`;
     $("home-game-title").textContent = t("ui.tutorial");
     $("resume-context").textContent = t("ui.step-of", {"0": lesson+1,"1":shortLesson?2:lessons.length});
     $("resume").textContent = t("ui.continue-tutorial");
     return;
   }
-  const date = !classic && !book ? taskDate(id.slice(9),id.slice(9,13)!==today().slice(0,4)) : "";
-  $("home-current-art").innerHTML = classic ? classicPicture
-    : book ? bookPicture(volumeOf(next ?? id) + 1) : calendarPicture(id.slice(9), true);
-  $("home-game-title").textContent = classic ? t("home.classic")
+  const date = !isClassic && !book ? taskDate(id.slice(9),id.slice(9,13)!==today().slice(0,4)) : "";
+  $("home-game-title").textContent = isClassic ? t("home.classic")
     : book ? volumeLabel(volumeOf(next ?? id)) : id.slice(9) === today()
       ? t("notification.channel") : t("home.daily.date", {date});
-  $("resume-context").textContent = classic ? `${difficultyLabel()} · ${count} ${digitWord(count)}`
+  $("resume-context").textContent = isClassic ? `${difficultyLabel()} · ${count} ${digitWord(count)}`
     : book ? next ? t("nav.bookTaskTarget",{book:volumeLabel(volumeOf(next)),task:puzzleNumberInVolume(next)})
       : t("ui.puzzle-3",{"0":puzzleNumberInVolume(id),"1":count,"2":digitWord(count)})
     : `${date} · ${count} ${digitWord(count)}`;
@@ -4408,10 +4680,58 @@ function renderHomeCurrent() {
   }
   $("resume").textContent = next
     ? t("ui.puzzle",{"0":notebookStarted(progress,next)?t("daily.resume"):t("action.start"),"1":puzzleNumberInVolume(next)})
-    : classic ? t("ui.resume-classic") : book ? t("ui.resume-puzzle",{"0":puzzleNumberInVolume(id)})
+    : isClassic ? t("ui.resume-classic") : book ? t("ui.resume-puzzle",{"0":puzzleNumberInVolume(id)})
     : id.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for",{"0":date});
 }
+function refreshStaticJarViews() {
+  if (!dialog.open || busy || paused || adActive || engagementActive || rewardRequest) return;
+  const screen = dialog.dataset.screen;
+  if (screen === "home") { updateHomeJar(); return; }
+  if (screen !== "progress" && screen !== "trophies") return;
+  const j=jarState(storedJarView().meter),template=document.createElement("template");
+  template.innerHTML=jarHero(j);
+  // Keep the buttons, focus, held contacts, details and scroll owners in place.
+  for(const hero of $("collection").querySelectorAll(".progress-hero")) {
+    const fresh=template.content.firstElementChild!.cloneNode(true) as HTMLElement;
+    hero.replaceChildren(...fresh.childNodes);
+  }
+  if(screen!=="trophies")return;
+  const collection=$("collection").querySelector<HTMLElement>(".jar-collection");
+  const history=collection?.querySelector<HTMLElement>(".jar-history");
+  if(!collection||!history)return;
+  const {start,end}=jarShelfBounds(j.index);
+  let shelf=history.querySelector<HTMLElement>(".jar-shelf");
+  if(j.index&&!shelf) {
+    const heading=document.createElement("div");heading.className="jar-shelf-heading";
+    heading.innerHTML=`<h3>${t("ui.jars")}</h3>${jarShelfNavigation(j.index,start,end)}`;
+    shelf=document.createElement("div");shelf.className="jar-shelf";
+    history.querySelector(".jar-empty")?.remove();history.prepend(heading,shelf);
+    bindJarShelfNavigation();
+  }
+  if(shelf)shelf.innerHTML=jarKeepsakes(start,end);
+  const nav=history.querySelector<HTMLElement>(".month-nav");
+  if(nav) {
+    nav.hidden=!j.index;
+    const older=nav.querySelector<HTMLButtonElement>("#older-jars"),newer=nav.querySelector<HTMLButtonElement>("#newer-jars");
+    if(older)older.disabled=start===0;
+    if(newer)newer.disabled=jarShelfPage===0;
+    const label=nav.querySelector("span");if(label)label.textContent=j.index ? `${start+1}–${end}` : t("ui.nothing-yet");
+  }
+  const seeds=storedJarView().seeds,wins=storedJarView().wins;
+  const copy:Record<string,string>={
+    '.jar-collected-count':t("ui.collected-seeds",{"0":j.index,"1":seeds,"2":word(seeds,t("ui.seed"),t("ui.seed-plural"),t("ui.seeds"))}),
+    '.jar-percent-detail':`${j.percent}% · ${t("ui.of-seeds",{"0":j.filled,"1":j.capacity})}`,
+    '.jar-wins':t("ui.boards-cleared",{"0":wins}),'.jar-rank':jarRank(wins),
+  };
+  for(const [selector,text] of Object.entries(copy)){const node=collection.querySelector(selector);if(node)node.textContent=text;}
+}
+function updateHomeJar() {
+  const jar = jarState(storedJarView().meter);
+  homeJar.setAttribute("aria-label", t("ui.jar-collection"));
+  homeJar.innerHTML = jarPicture(jar);
+}
 function updateHome() {
+  updateHomeJar();
   const finished = new Set(progress.done);
   const target = notebookTarget(progress);
   const volume = target ? volumeOf(target) : nextBookVolume();
@@ -4422,25 +4742,43 @@ function updateHome() {
     ? t("nav.bookTaskTarget",{book:volumeLabel(volume),task:puzzleNumberInVolume(target)})
     : t("nav.mainComplete");
   $("book-count").textContent = target ? `${context} · ${solved}/24` : context;
+  bookTaskCaption.textContent = target
+    ? t("ui.puzzle-2", {"0": puzzleNumberInVolume(target), "1": ""}).trim()
+    : context;
   bookMode.setAttribute("aria-label", `${t("home.books")}. ${context}`);
   bookQuick.hidden = progress.active.startsWith("book") || !target;
   if (target) {
     bookQuick.textContent = notebookStarted(progress,target) ? t("daily.resume") : t("action.start");
     bookQuick.setAttribute("aria-label",`${bookQuick.textContent}. ${context}`);
   }
+  updateHomeDaily();
+}
+function updateHomeDaily() {
   const date = today();
   const id = dailyIdFor(date,progress);
-  $("daily-mode").toggleAttribute("data-daily-pending", !dailyDone(progress.done,date));
-  $("home-today-art").innerHTML = calendarPicture(date, true);
-  const run = dailyRun(progress);
+  const status = homeDailyStatus(confirmedDaily ?? homeDailySnapshot(progress), date, id);
+  const doneToday = status === "done";
+  const startedToday = status === "started";
+  const dailyCaption = t(doneToday ? "daily.replay" : startedToday ? "daily.resume" : "daily.tagline");
+  $("daily-mode").toggleAttribute("data-daily-pending", !doneToday);
+  $("daily-mode").toggleAttribute("data-daily-started", startedToday);
+  $("daily-mode").dataset.dailyStatus = status;
+  $("daily-mode").setAttribute("aria-label", `${t("notification.channel")}. ${taskDate(date)}. ${dailyCaption}`);
+  // Keep both the illustration and its pseudo-element animation alive across
+  // ordinary renders/saves. Only an actual date/language change replaces copy.
+  const art = $("home-today-art");
+  const artKey = `${date}:${activeLanguage}`;
+  if (art.dataset.date !== artKey) {
+    art.innerHTML = calendarPicture(date, true);
+    art.dataset.date = artKey;
+  }
+  const run = dailyRun(confirmedDaily
+    ? {...progress, meta: {...metadata(progress), daily: confirmedDaily.daily}}
+    : progress);
   $("daily-series").hidden = run.count === 0;
   $("daily-series").textContent =
     t("ui.in-a-row", { "0": run.count, "1": dayWord(run.count), "2": run.solvedToday ? "" : t("ui.until-reward", { "0": run.until, "1": dayWord(run.until) }) });
-  $("daily-state").textContent = dailyDone(progress.done,date)
-    ? t("daily.replay")
-    : progress.sessions[id]?.history.length
-      ? t("daily.resume")
-      : t("daily.tagline");
+  $("daily-state").textContent = doneToday ? t("home.daily.done") : dailyCaption;
 }
 let displayedDate = today();
 function refreshDate() {
@@ -4489,8 +4827,8 @@ function renderJar() {
   if (meter.hidden) return;
   visualSeeds ??= jars(progress).meter;
   const j = jarState(visualSeeds);
-  const celebrating = completedJar && performance.now() < completedJar.until;
-  if (celebrating) {
+  const celebrating = Boolean(completedJar) && !jarPending;
+  if (completedJar) {
     j.index = completedJar!.index;
     j.percent = 100;
     j.filled = j.capacity = completedJar!.capacity;
@@ -4498,9 +4836,11 @@ function renderJar() {
     j.color = jarColors[j.index % 6];
   }
   meter.style.setProperty("--jar-color", j.color);
-  meter.style.setProperty("--fill", `${j.percent}%`);
+  meter.style.setProperty("--fill", `${j.filled / j.capacity * 100}%`);
   syncJarGrains(meter, j.filled);
-  $("jar-name").textContent = t("ui.jar-3", { "0": j.index + 1 });
+  const through = celebrating ? jarState(visualSeeds).index : j.index + 1;
+  const ordinal = through > j.index + 1 ? `${j.index+1}–${through}` : j.index+1;
+  $("jar-name").textContent = t("ui.jar-3", { "0": ordinal });
   $("jar-percent").textContent = `${j.percent}%`;
   meter.dataset.full = String(Boolean(celebrating));
   $("jar-collected").title = celebrating ? t("ui.jar-collected") : "";
@@ -4516,11 +4856,20 @@ function updateResultJar() {
   if (resultJarCard.hidden) return;
   const total = jars(progress).meter;
   const displayed = visualSeeds ?? total;
-  const j = jarState(resultAwaitingSave === session ? Math.min(displayed, total - earnedSeeds) : displayed);
+  const j = jarState(resultAwaitingSave === session ? Math.min(displayed, total - earnedSeeds - resultPairSeeds) : displayed);
+  if (completedJar) Object.assign(j,{index:completedJar.index,filled:completedJar.capacity,capacity:completedJar.capacity,percent:100,
+    name:localName(jarNames[completedJar.index%6]),color:jarColors[completedJar.index%6]});
+  resultJarCard.dataset.filled=String(j.filled);
+  resultJarCard.dataset.capacity=String(j.capacity);
+  resultJarCard.dataset.jarIndex=String(j.index);
   resultJarCard.style.setProperty("--jar-color", j.color);
-  resultJarCard.style.setProperty("--fill", `${j.percent}%`);
+  resultJarCard.style.setProperty("--fill", `${j.filled / j.capacity * 100}%`);
   syncJarGrains(resultJarCard, j.filled);
-  $("result-jar-amount").textContent = `${j.name} · ${t("ui.of-seeds", { "0": j.filled, "1": j.capacity })}`;
+  const lastJar=jarState(displayed).index;
+  const ordinal=lastJar>j.index+1 ? `${j.index+1}–${lastJar}` : j.index+1;
+  $("result-jar-amount").textContent = completedJar && !jarPending
+    ? `${t("feel.jar.collected",{number:ordinal})} · ${j.filled}/${j.capacity}`
+    : `${j.name} · ${t("ui.of-seeds", {"0":j.filled,"1":j.capacity})}`;
 }
 $("jar-meter").onclick = () => {
   collectionTab = "jars";
@@ -4579,50 +4928,13 @@ function firstEvent(
   durableEvent(name, data);
   return true;
 }
-function updateReminderSettings() {
-  $("reminder-settings").hidden = !engagementAvailable;
-  $<HTMLInputElement>("reminders").checked = settings.reminders;
-  $<HTMLInputElement>("reminder-time").value = settings.reminderTime;
-  const requested = Boolean(
-    metadata(progress).flags?.includes("reminder_permission_requested"),
-  );
-  const failed = metadata(progress).flags?.includes(
-    "reminder_permission_error",
-  );
-  const denied = !notificationGranted && requested && !failed;
-  const pending =
-    !notificationGranted && ((settings.reminders && !requested) || failed);
-  $<HTMLInputElement>("reminders").disabled = notificationRequestPending;
-  $<HTMLButtonElement>("notification-permission-request").disabled =
-    notificationRequestPending;
-  $("reminder-permission").textContent = notificationRequestPending
-    ? notificationSaving
-      ? t("ui.saving-settings")
-      : t("ui.waiting-for-android")
-    : notificationGranted
-      ? settings.reminders
-        ? t("ui.reminder-on")
-        : t("ui.reminder-off")
-      : failed
-        ? t("ui.could-not-open-the-android-prompt-try-again-or")
-        : denied
-          ? t("ui.notifications-are-off-in-android-allow-them-in-system")
-          : pending
-            ? t("ui.android-permission-is-needed-well-ask-after-your-first")
-            : "";
-  $("notification-permission-request").hidden =
-    !pending || notificationRequestPending;
-  $("notification-permission-request").textContent = failed
-    ? t("ui.try-again")
-    : t("ui.allow-notifications");
-  $("notification-system-settings").hidden =
-    notificationRequestPending || notificationGranted || (!denied && !failed);
+function updateEngagementCopy() {
   const wallet = metadata(progress).wallet;
   $("settings-reserve-title").textContent = t("calm.settings.stock");
   $("hint-wallet").textContent =
     t("ui.shared-balance-your-three-free-hints-for-this-game", { "0": wallet, "1": hintWord(wallet) });
 }
-async function enableReminder(enabled: boolean) {
+async function requestAutomaticReminders() {
   if (
     !engagementBridge ||
     engagementActive ||
@@ -4631,12 +4943,7 @@ async function enableReminder(enabled: boolean) {
     rewardRequest
   )
     return;
-  if (!enabled) {
-    const flags = metadata(progress).flags;
-    const errorIndex = flags?.indexOf("reminder_permission_error") ?? -1;
-    if (errorIndex >= 0) flags!.splice(errorIndex, 1);
-  }
-  if (enabled && !notificationGranted) {
+  if (!notificationGranted) {
     engagementActive = true;
     notificationRequestPending = true;
     notificationSaving = true;
@@ -4656,18 +4963,21 @@ async function enableReminder(enabled: boolean) {
       }
       if (firstRequest) track("reminder_permission_requested");
       notificationSaving = false;
-      updateReminderSettings();
+      updateEngagementCopy();
       const state = await requestNotificationPermission(engagementBridge);
       if (!state.available) throw new Error("notification_unavailable");
       notificationGranted = state.granted;
       const errorIndex = flags.indexOf("reminder_permission_error");
       if (errorIndex >= 0) flags.splice(errorIndex, 1);
+      const deniedIndex=flags.indexOf("reminder_permission_denied");
+      if (!state.granted && deniedIndex<0) flags.push("reminder_permission_denied");
+      if (state.granted && deniedIndex>=0) flags.splice(deniedIndex,1);
       track("reminder_permission", { granted: state.granted });
     } catch {
       if (!flags.includes("reminder_permission_error"))
         flags.push("reminder_permission_error");
       // Preserve the reminder preference on a bridge failure; this is not a
-      // user's denial. Keep the failed request retryable across process restarts.
+      // user's denial. Its saved request marker prevents automatic retries.
       await save();
       return;
     } finally {
@@ -4676,35 +4986,14 @@ async function enableReminder(enabled: boolean) {
       notificationSaving = false;
       lastExternalAt = performance.now();
       syncPauseState();
-      updateReminderSettings();
+      updateEngagementCopy();
     }
   }
-  settings.reminders = enabled && notificationGranted;
-  settingsDirty.reminders = settings.reminders;
+  // New Android refusals are system state, distinct from legacy game opt-outs.
+  // A later explicit grant in Android can resume the automatic policy.
   await save();
-  track("reminder_toggle", { enabled: settings.reminders });
-  updateReminderSettings();
+  updateEngagementCopy();
 }
-$("notification-system-settings").onclick = () => {
-  lastExternalAt = performance.now();
-  void engagementBridge?.openNotificationSettings?.().catch(() => {});
-};
-$("notification-permission-request").onclick = () => {
-  void enableReminder(true);
-};
-$("reminders").onchange = () => {
-  void enableReminder($<HTMLInputElement>("reminders").checked);
-};
-$("result-reminder").onclick = () => {
-  void enableReminder(true);
-};
-$("reminder-time").onchange = () => {
-  const time = $<HTMLInputElement>("reminder-time").value;
-  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return;
-  settings.reminderTime = time;
-  settingsDirty.reminderTime = time;
-  void save();
-};
 async function openDailyNotification() {
   if (
     !bootComplete ||
@@ -4715,21 +5004,28 @@ async function openDailyNotification() {
     rewardRequest ||
     engagementActive ||
     futureSave ||
-    storageConflict
+    storageConflict ||
+    saveFailed ||
+    moveSavePending ||
+    resultAwaitingSave === session
   )
     return;
   pendingDailyOpen = false;
   skipNextInterstitial = true;
   track("reminder_open");
-  await switchGame(dailyIdFor(today(),progress));
+  const id = dailyIdFor(today(),progress);
+  await switchGame(id);
+  if (progress.active !== id || saveFailed || storageConflict || futureSave)
+    pendingDailyOpen = true;
 }
 async function tryResultEngagement() {
+  if (rewardScene || jarMilestone || resultAwaitingSave === session || moveSavePending) return;
   if (
     engagementAvailable &&
     settings.reminders &&
     !notificationGranted &&
     !metadata(progress).flags?.includes("reminder_permission_requested") &&
-    dailyDay(progress.active) === today() &&
+    metadata(progress).completed > 0 &&
     bootComplete &&
     lesson < 0 &&
     !occupied(board()) &&
@@ -4741,7 +5037,7 @@ async function tryResultEngagement() {
     !storageConflict &&
     !futureSave
   ) {
-    await enableReminder(true);
+    await requestAutomaticReminders();
     return;
   }
   await tryReview();
@@ -4766,7 +5062,7 @@ async function tryReview() {
     return;
   // Give the first daily result to notifications without a second native dialog.
   if (
-    progress.active.startsWith("daily") &&
+    settings.reminders &&
     !metadata(progress).flags?.includes("reminder_permission_requested") &&
     !notificationGranted
   )
@@ -4864,10 +5160,11 @@ if (import.meta.env.DEV || import.meta.env.VITE_SEEDS_QA_PROFILE) {
   if(qaProfile==="all"){qaTools.innerHTML='<h3>Проверка новых фич</h3>';$("menu-content").append(qaTools);}
   installHelpLab(qaProfile,qaProfile==="all"?qaTools:$("menu-content"),assistFeedback);
   const scenes=qaProfile==="all"?["magnet","plan","a3"]:[qaProfile].filter(profile=>["magnet","plan","a3"].includes(profile));
+  if(scenes.length && !qaTools.isConnected)$("menu-content").append(qaTools);
   for (const scene of scenes) {
     const scenario = document.createElement("button"); scenario.id = qaProfile==="all"?`qa-${scene}-scene`:"qa-help-scene"; scenario.className = "secondary";
     scenario.textContent = scene === "magnet" ? "QA: пример Магнита" : scene === "plan" ? "QA: пример плана" : "QA: подсказки за видео";
-    if(qaProfile==="all")qaTools.append(scenario);else $("home-goal").after(scenario);
+    qaTools.append(scenario);
     scenario.onclick = async () => {
       if (busy || rewardRequest || adActive) return;
       const candidate = cloneProgress(progress);

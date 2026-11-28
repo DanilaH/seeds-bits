@@ -76,7 +76,9 @@ for (const [width, height, scale] of [
       ).toBe(true);
       if (route === "calendar-open") {
         const today = (await page.locator("#today-task").boundingBox())!;
-        expect(Math.abs(today.x - a.x)).toBeLessThan(1);
+        const paper = (await page.locator(".calendar-layout").boundingBox())!;
+        expect(today.x).toBeGreaterThanOrEqual(paper.x);
+        expect(today.x + today.width).toBeLessThanOrEqual(paper.x + paper.width + 1);
         expect(
           await page.locator(".calendar").evaluate((e) => {
             const rail = e.closest(".dialog-scroll")!.getBoundingClientRect();
@@ -246,7 +248,7 @@ test("short landscape menu grows with its enlarged labels", async ({
       await button.evaluate((e) => {
         const b = e.getBoundingClientRect();
         const range = document.createRange();
-        range.selectNodeContents(e.firstElementChild!);
+        range.selectNodeContents(e.lastElementChild!);
         return [...range.getClientRects()].every(
           (t) => t.top >= b.top - 1 && t.bottom <= b.bottom + 1,
         );
@@ -297,4 +299,16 @@ test("large-text hint offer keeps both whole buttons reachable by scrolling", as
   }
   await page.locator("#cancel-hints").click();
   await expect(page.locator("#hint-offer")).not.toBeVisible();
+});
+
+test("calendar keeps its rail when crossing from 380 to 381 pixels", async ({page}) => {
+  await page.setViewportSize({width:380,height:713});
+  await install(page);
+  await page.locator("#calendar-open").click();
+  const calendar = page.locator(".calendar");
+  const before = (await calendar.boundingBox())!;
+  await page.setViewportSize({width:381,height:713});
+  const after = (await calendar.boundingBox())!;
+  expect(Math.abs(after.x - before.x)).toBeLessThanOrEqual(1);
+  expect(after.width).toBeGreaterThanOrEqual(before.width);
 });

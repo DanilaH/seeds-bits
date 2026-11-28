@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
 test("wide Home displays all modes and uses an explicit return",async({page})=>{
   await page.setViewportSize({width:1280,height:800});
   await page.goto("/");
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   for(const id of ["classic-mode","book-mode","daily-mode"]) await expect(page.locator("#"+id)).toBeInViewport();
   await page.keyboard.press("Escape");
   await expect(page.locator("#dialog")).toBeVisible();
@@ -44,7 +44,7 @@ test("progress has a meaningful jar figure and reachable continuation, switches 
   await page.goto("/");
   await page.locator("#progress-open").click();
   await expect(page.locator(".progress-hero .jar-glass")).toBeVisible();
-  await expect(page.locator(".hero-value")).toContainText("0");
+  await expect(page.locator(".hero-count")).toContainText("0");
   await page.locator("#progress-book").click();
   await expect(page.locator("#continue-book")).toBeVisible();
   await page.locator("#collection-back").click();

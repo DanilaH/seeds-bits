@@ -48,20 +48,36 @@ public class SeedsMonetizationPlugin extends Plugin {
   private long bannerRevision;
   private String bannerEpoch = "";
   private int measuredWebWidth, measuredWebHeight;
+  private int placedWindowWidth, placedWindowHeight, placedWindowX, placedWindowY, placedWebWidth, placedScreenLeft, placedScreenTop;
   private boolean bannerExpected;
   private int bannerRequests, bannerLoads, bannerImpressions, bannerFrames, bannerHiddenFrames;
+  private int bannerDraws, bannerMovedFrames, expectedLeft, expectedTop, expectedWidth, expectedHeight;
+  private boolean expectedRectSet;
+  private JSObject bannerPreDraw, bannerAtRequest;
+  private final List<PluginCall> bannerDiagnosticCalls = new ArrayList<>();
+  private final List<JSObject> bannerGeometryTrace = new ArrayList<>();
+  private String bannerGeometryKey = "";
+  private final ViewTreeObserver.OnDrawListener bannerDrawProbe = this::sampleBannerDraw;
+  private String bannerHiddenReason = "not_requested";
+  private final java.util.Map<String,Integer> bannerHiddenReasons = new java.util.HashMap<>();
   private String showingRoute = "", showingTransition = "";
+  private String lastFullscreenKind = "", lastFullscreenStatus = "idle", lastFullscreenReason = "";
+  private int fullscreenShowCalls;
   private final ViewTreeObserver.OnWindowFocusChangeListener bannerFocus = this::windowFocusChanged;
   private final View.OnLayoutChangeListener bannerLayout = (view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
     if (right-left != oldRight-oldLeft || bottom-top != oldBottom-oldTop) {
-      hideBanner();
+      deferBannerGeometry("native_state");
       requestBannerRefresh();
     }
   };
   private final ViewTreeObserver.OnPreDrawListener bannerProbe = () -> {
+    bannerPreDraw = bannerSnapshot("preDraw");
     if (bannerExpected) {
       bannerFrames++;
-      if (bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) bannerHiddenFrames++;
+      if (bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) {
+        bannerHiddenFrames++;
+        bannerHiddenReasons.put(bannerHiddenReason,bannerHiddenReasons.getOrDefault(bannerHiddenReason,0)+1);
+      }
     }
     return true;
   };
@@ -116,7 +132,10 @@ public class SeedsMonetizationPlugin extends Plugin {
       web.addOnLayoutChangeListener(bannerLayout);
       ViewTreeObserver observer = web.getViewTreeObserver();
       observer.addOnWindowFocusChangeListener(bannerFocus);
-      if (demoAds()) observer.addOnPreDrawListener(bannerProbe);
+      if (demoAds()) {
+        observer.addOnPreDrawListener(bannerProbe);
+        observer.addOnDrawListener(bannerDrawProbe);
+      }
       YandexAds.initialize(getContext(), () -> getActivity().runOnUiThread(() -> {
         if (destroyed) return;
         initialized = true;
@@ -361,13 +380,16 @@ public class SeedsMonetizationPlugin extends Plugin {
   @PluginMethod public void show(PluginCall call) { getActivity().runOnUiThread(() -> showOnMain(call)); }
   private void showOnMain(PluginCall call) {
     String kind = call.getString("kind", "");
+    fullscreenShowCalls++; lastFullscreenKind=kind; lastFullscreenStatus="requested"; lastFullscreenReason="";
     if (!kind.equals("rewarded") && !kind.equals("interstitial")) { call.reject("Invalid format"); return; }
-    if (destroyed || !resumed || !getActivity().hasWindowFocus() || showing != null || !initialized || !enabled()) { call.resolve(new JSObject().put("status", "unavailable").put("reason", rewardedState().optString("reason","unavailable"))); return; }
+    if (destroyed || !resumed || !getActivity().hasWindowFocus() || showing != null || !initialized || !enabled()) { lastFullscreenStatus="unavailable"; lastFullscreenReason="native_state"; call.resolve(new JSObject().put("status", "unavailable").put("reason", rewardedState().optString("reason","unavailable"))); return; }
     long since = System.currentTimeMillis() - prefs.getLong("last_fullscreen", System.currentTimeMillis());
     if (kind.equals("interstitial") && (since < INTERVAL || interstitial == null)) {
+      lastFullscreenStatus="skipped"; lastFullscreenReason=since<INTERVAL?"cooldown":"not_loaded";
       call.resolve(new JSObject().put("status", "skipped").put("reason", since < INTERVAL ? "cooldown" : "not_loaded")); preloadAds(); return;
     }
     if (kind.equals("rewarded") && (rewarded == null || pendingReceipt() || call.getString("attempt", "").isEmpty())) {
+      lastFullscreenStatus="unavailable"; lastFullscreenReason=rewardedState().optString("reason","invalid_request");
       JSObject result = new JSObject().put("status", "unavailable").put("reason", rewardedState().optString("reason","invalid_request")); if (receipt() != null) result.put("reward", receipt());
       call.resolve(result); preloadAds(); return;
     }
@@ -418,12 +440,13 @@ public class SeedsMonetizationPlugin extends Plugin {
   }
   private void didShow() {
     if (showing == null) return;
-    shown = true; handler.removeCallbacks(showDeadline);
+    shown = true; lastFullscreenStatus="shown"; handler.removeCallbacks(showDeadline);
     prefs.edit().putLong("last_fullscreen", System.currentTimeMillis()).apply();
     event("ad_shown", showingKind);
   }
   private void finish(String status) {
     if (showing == null) return;
+    lastFullscreenStatus=status;
     handler.removeCallbacks(showDeadline);
     recoverReceipt();
     JSObject result = new JSObject().put("shown", shown).put("status", status).put("ad_session_id", showingSession);
@@ -447,15 +470,37 @@ public class SeedsMonetizationPlugin extends Plugin {
     preloadAds(); publishReadiness();
   }
   private void windowFocusChanged(boolean focused) {
-    if (!focused) hideBanner();
+    if (!focused) hideBanner("window_focus");
     // Only the SDK can dismiss a shown fullscreen. Focus alone can return under its overlay.
     else if (showing == null && bannerPlacement != null) applyBanner(bannerPlacement);
   }
   private boolean canPlaceBanner() {
     return initialized && !destroyed && enabled() && !fullscreenActive && resumed && getActivity().hasWindowFocus();
   }
-  private void hideBanner() {
+  private void hideBanner(String reason) {
+    bannerHiddenReason = reason;
     if (bannerHost != null) bannerHost.setVisibility(View.GONE);
+  }
+  private void deferBannerGeometry(String reason) {
+    FrameLayout root = getActivity().findViewById(android.R.id.content);
+    View decor = getActivity().getWindow().getDecorView();
+    int[] windowLocation = new int[2], rootLocation = new int[2];
+    decor.getLocationOnScreen(windowLocation);
+    // SystemBars can briefly remove/reapply WebView insets during uiMode changes.
+    // Keep the last validated SDK placement while the physical window/width stay
+    // unchanged. Real resize, modal intent and lifecycle still hide immediately.
+    if (canPlaceBanner() && bannerPlacement != null && bannerPlacement.visible &&
+        bannerHost != null && bannerHost.getVisibility() == View.VISIBLE && root != null &&
+        decor.getWidth() == placedWindowWidth && decor.getHeight() == placedWindowHeight &&
+        windowLocation[0] == placedWindowX && windowLocation[1] == placedWindowY &&
+        getBridge().getWebView().getWidth() == placedWebWidth) {
+      root.getLocationOnScreen(rootLocation);
+      // The content root itself moves when DecorView insets are cleared/reapplied.
+      // Compensate its origin so the already validated creative stays on screen.
+      positionBanner(placedScreenLeft-rootLocation[0]-root.getPaddingLeft(), placedScreenTop-rootLocation[1]-root.getPaddingTop());
+      return;
+    }
+    hideBanner(reason);
   }
   private void clearBanner() {
     if (banner != null) { banner.setBannerAdEventListener(null); banner.destroy(); banner = null; }
@@ -478,44 +523,121 @@ public class SeedsMonetizationPlugin extends Plugin {
     call.resolve();
   }); }
   @PluginMethod public void bannerExpectation(PluginCall call) { getActivity().runOnUiThread(() -> {
-    if (demoAds()) bannerExpected = call.getBoolean("visible",false);
+    if (demoAds()) {
+      bannerExpected = call.getBoolean("visible",false);
+      expectedRectSet = false;
+    }
     call.resolve();
   }); }
   @PluginMethod public void bannerDiagnostics(PluginCall call) { getActivity().runOnUiThread(() -> {
     if (!demoAds()) { call.resolve(new JSObject()); return; }
+    // getLocationOnScreen between setLayoutParams and traversal combines the
+    // new root origin with the host's OLD laid-out top. It is not a painted frame.
+    // Visible geometry is acknowledged by OnDraw, after all preDraw listeners.
+    if (!canPlaceBanner() || bannerHost == null || bannerHost.getVisibility() != View.VISIBLE) {
+      call.resolve(bannerSnapshot("hidden"));
+      return;
+    }
+    bannerAtRequest=bannerSnapshot("request");
+    bannerDiagnosticCalls.add(call);
+    getActivity().getWindow().getDecorView().invalidate();
+  }); }
+  @PluginMethod public void bannerGeometryTrace(PluginCall call) { getActivity().runOnUiThread(() -> {
+    JSONArray trace = new JSONArray();
+    if (demoAds()) for (JSObject frame : bannerGeometryTrace) trace.put(frame);
+    call.resolve(new JSObject().put("trace",trace));
+  }); }
+  private JSObject bannerSnapshot(String phase) {
     View web = getBridge().getWebView();
-    int[] webLocation = new int[2], bannerLocation = new int[2];
+    View decor = getActivity().getWindow().getDecorView();
+    FrameLayout root = getActivity().findViewById(android.R.id.content);
+    int[] webLocation = new int[2], bannerLocation = new int[2], rootLocation = new int[2], windowLocation = new int[2];
     web.getLocationOnScreen(webLocation);
+    decor.getLocationOnScreen(windowLocation);
+    if (root != null) root.getLocationOnScreen(rootLocation);
     if (bannerHost != null) bannerHost.getLocationOnScreen(bannerLocation);
-    call.resolve(new JSObject()
+    JSObject hiddenReasons = new JSObject();
+    for (var entry : bannerHiddenReasons.entrySet()) hiddenReasons.put(entry.getKey(),entry.getValue());
+    return new JSObject().put("phase",phase).put("nativeMs",SystemClock.elapsedRealtime())
       .put("measuredRevision",bannerRevision).put("request",bannerRequests)
       .put("view",banner==null?0:System.identityHashCode(banner))
       .put("loaded",bannerLoads).put("impressions",bannerImpressions)
       .put("visible",bannerHost!=null&&bannerHost.getVisibility()==View.VISIBLE)
+      .put("hiddenReason",bannerHiddenReason)
+      .put("hiddenReasons",hiddenReasons)
       .put("expected",bannerExpected).put("requestedVisible",bannerPlacement!=null&&bannerPlacement.visible)
       .put("fullscreen",fullscreenActive).put("resumed",resumed)
+      .put("fullscreenShowCalls",fullscreenShowCalls).put("lastFullscreenKind",lastFullscreenKind)
+      .put("lastFullscreenStatus",lastFullscreenStatus).put("lastFullscreenReason",lastFullscreenReason)
+      .put("interstitialReady",interstitial!=null).put("interstitialLoading",loadingInterstitial)
+      .put("rewardedReady",rewarded!=null).put("rewardedLoading",loadingRewarded)
+      .put("cooldownRemainingMs",Math.max(0,INTERVAL-(System.currentTimeMillis()-prefs.getLong("last_fullscreen",System.currentTimeMillis()))))
       .put("focused",getActivity().hasWindowFocus())
       .put("frames",bannerFrames).put("hiddenFrames",bannerHiddenFrames)
+      .put("draws",bannerDraws).put("movedFrames",bannerMovedFrames)
       .put("width",bannerWidth).put("height",bannerPixelHeight)
       .put("left",bannerLeft).put("top",bannerTop)
       .put("screenLeft",bannerLocation[0]).put("screenTop",bannerLocation[1])
+      .put("hostLeft",bannerHost==null?0:bannerHost.getLeft()).put("hostTop",bannerHost==null?0:bannerHost.getTop())
+      .put("hostLayoutPending",bannerHost!=null&&bannerHost.isLayoutRequested())
+      .put("rootX",rootLocation[0]).put("rootY",rootLocation[1])
+      .put("rootWidth",root==null?0:root.getWidth()).put("rootHeight",root==null?0:root.getHeight())
+      .put("rootPaddingTop",root==null?0:root.getPaddingTop()).put("rootPaddingBottom",root==null?0:root.getPaddingBottom())
+      .put("rootLayoutPending",root!=null&&root.isLayoutRequested())
+      .put("windowX",windowLocation[0]).put("windowY",windowLocation[1])
+      .put("windowWidth",decor.getWidth()).put("windowHeight",decor.getHeight())
+      .put("windowPaddingTop",decor.getPaddingTop()).put("windowPaddingBottom",decor.getPaddingBottom())
       .put("webX",webLocation[0]).put("webY",webLocation[1])
-      .put("webWidth",web.getWidth()).put("webHeight",web.getHeight()));
-  }); }
+      .put("webWidth",web.getWidth()).put("webHeight",web.getHeight());
+  }
+  private void sampleBannerDraw() {
+    bannerDraws++;
+    JSObject sample = bannerSnapshot("draw");
+    boolean visible = Boolean.TRUE.equals(sample.opt("visible"));
+    int left=((Number)sample.opt("screenLeft")).intValue(), top=((Number)sample.opt("screenTop")).intValue();
+    if (bannerExpected && visible) {
+      if (expectedRectSet && (left!=expectedLeft || top!=expectedTop || bannerWidth!=expectedWidth || bannerPixelHeight!=expectedHeight)) bannerMovedFrames++;
+      else if (!expectedRectSet) {
+        expectedLeft=left; expectedTop=top; expectedWidth=bannerWidth; expectedHeight=bannerPixelHeight; expectedRectSet=true;
+      }
+    }
+    sample.put("movedFrames",bannerMovedFrames);
+    String key = visible+":"+left+":"+top+":"+bannerWidth+":"+bannerPixelHeight+":"+
+      sample.opt("rootY")+":"+sample.opt("rootHeight")+":"+sample.opt("windowPaddingTop")+":"+bannerRevision;
+    if (!key.equals(bannerGeometryKey)) {
+      bannerGeometryKey=key;
+      recordBannerGeometry(sample);
+    }
+    if (!bannerDiagnosticCalls.isEmpty()) {
+      List<PluginCall> calls=new ArrayList<>(bannerDiagnosticCalls); bannerDiagnosticCalls.clear();
+      JSObject diagnostic=sample.put("preDraw",bannerPreDraw).put("atRequest",bannerAtRequest);
+      handler.post(() -> { for (PluginCall call : calls) call.resolve(diagnostic); });
+    }
+  }
+  private void recordBannerGeometry(JSObject sample) {
+    if (bannerGeometryTrace.size()>=2048) bannerGeometryTrace.remove(0);
+    bannerGeometryTrace.add(sample);
+  }
   private void applyBanner(BannerPlacement placement) {
-    if (!canPlaceBanner() || !placement.visible || !placement.valid()) { hideBanner(); return; }
+    if (!canPlaceBanner()) { hideBanner("native_lifecycle"); return; }
+    if (!placement.visible) { hideBanner("web_requested_hidden"); return; }
+    if (!placement.valid()) { hideBanner("invalid_placement"); return; }
     View web = getBridge().getWebView();
     FrameLayout root = getActivity().findViewById(android.R.id.content);
     if (web.getWidth() <= 0 || web.getHeight() <= 0 || root == null ||
-        web.getWidth() != measuredWebWidth || web.getHeight() != measuredWebHeight) { hideBanner(); return; }
+        web.getWidth() != measuredWebWidth || web.getHeight() != measuredWebHeight) { deferBannerGeometry("native_bounds_changed"); return; }
     // Native bounds can resize before CSS reports its new viewport. Keep the SDK view
     // until both measurements refer to the same width, with one CSS pixel of rounding.
     if (Double.isFinite(placement.pixelRatio) && placement.pixelRatio > 0 &&
         Math.abs(web.getWidth() - placement.viewportWidth * placement.pixelRatio) > Math.max(1, placement.pixelRatio)) {
-      hideBanner();
+      hideBanner("scale_mismatch");
       return;
     }
     double scale = web.getWidth() / placement.viewportWidth;
+    if (Math.abs(web.getHeight() - placement.viewportHeight * scale) > Math.max(1, scale)) {
+      deferBannerGeometry("height_mismatch");
+      return;
+    }
     int[] webLocation = new int[2], rootLocation = new int[2];
     web.getLocationOnScreen(webLocation); root.getLocationOnScreen(rootLocation);
     int offsetX = webLocation[0] - rootLocation[0], offsetY = webLocation[1] - rootLocation[1];
@@ -528,7 +650,7 @@ public class SeedsMonetizationPlugin extends Plugin {
         || top < Math.max(offsetY, root.getPaddingTop())
         || right > Math.min(offsetX + web.getWidth(), root.getWidth() - root.getPaddingRight())
         || bottom > Math.min(offsetY + web.getHeight(), root.getHeight() - root.getPaddingBottom())) {
-      hideBanner();
+      hideBanner("outside_bounds");
       return;
     }
     int dp = Math.max(1, (int) Math.floor(width / getContext().getResources().getDisplayMetrics().density));
@@ -555,18 +677,30 @@ public class SeedsMonetizationPlugin extends Plugin {
       bannerRequests++; event("ad_request", "banner"); banner.loadAd(new AdRequest.Builder(unit("banner")).build());
     }
     if (bannerHost == null) return; // A synchronous load failure may have removed this view.
-    if (bannerPixelHeight > height) { publishBannerHeight(bannerPixelHeight + (height == bannerPixelHeight - 1 ? 1 : 0), scale, true); hideBanner(); return; }
+    if (bannerPixelHeight > height) { publishBannerHeight(bannerPixelHeight + (height == bannerPixelHeight - 1 ? 1 : 0), scale, true); hideBanner("creative_height"); return; }
     int parentLeft = left - root.getPaddingLeft();
     int parentTop = bottom - bannerPixelHeight - root.getPaddingTop();
-    if (bannerLeft != parentLeft || bannerTop != parentTop) {
-      FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(width, bannerPixelHeight);
+    positionBanner(parentLeft,parentTop);
+    if (bannerHost.getVisibility() != View.VISIBLE) bannerHost.setVisibility(View.VISIBLE);
+    View decor = getActivity().getWindow().getDecorView();
+    int[] windowLocation = new int[2]; decor.getLocationOnScreen(windowLocation);
+    placedWindowWidth=decor.getWidth(); placedWindowHeight=decor.getHeight(); placedWindowX=windowLocation[0]; placedWindowY=windowLocation[1];
+    placedWebWidth=web.getWidth(); placedScreenLeft=rootLocation[0]+left; placedScreenTop=rootLocation[1]+bottom-bannerPixelHeight;
+    bannerHiddenReason = "";
+  }
+  private void positionBanner(int parentLeft,int parentTop) {
+    if (bannerHost != null && (bannerLeft != parentLeft || bannerTop != parentTop)) {
+      FrameLayout.LayoutParams layout = new FrameLayout.LayoutParams(bannerWidth, bannerPixelHeight);
       layout.leftMargin = parentLeft;
       layout.topMargin = parentTop;
       bannerHost.setLayoutParams(layout);
       bannerLeft = parentLeft;
       bannerTop = parentTop;
+      // Retain the requested margins beside the OLD laid-out host rectangle.
+      // This sample is intent, never a physical-continuity frame. The next
+      // OnDraw sample establishes what actually reached the renderer.
+      if (demoAds()) recordBannerGeometry(bannerSnapshot("layout-request"));
     }
-    if (bannerHost.getVisibility() != View.VISIBLE) bannerHost.setVisibility(View.VISIBLE);
   }
   private void publishBannerHeight(int pixels, double scale, boolean grow) {
     int cssHeight = (int) Math.ceil(pixels / scale);
@@ -586,8 +720,11 @@ public class SeedsMonetizationPlugin extends Plugin {
     if (observer.isAlive()) {
       observer.removeOnWindowFocusChangeListener(bannerFocus);
       observer.removeOnPreDrawListener(bannerProbe);
+      observer.removeOnDrawListener(bannerDrawProbe);
     }
     getBridge().getWebView().removeOnLayoutChangeListener(bannerLayout);
+    for (PluginCall call : bannerDiagnosticCalls) call.resolve(bannerSnapshot("destroyed"));
+    bannerDiagnosticCalls.clear();
     if (interstitial != null) interstitial.setAdEventListener(null);
     if (rewarded != null && (showingReward == null || showingReward.failed)) rewarded.setAdEventListener(null);
     if (showing != null) { showing.resolve(new JSObject().put("status", "interrupted")); showing = null; }

@@ -30,7 +30,7 @@ test("corrupt save notice remains visible until dismissed and original bytes are
       localStorage.getItem("seeds-bits.progress.v2.recovery"),
     ),
   ).toBe("{broken");
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   await openClassicNew(page,1);
   await page.locator('[data-index="0"]').click();
   await expect(page.locator("#read-notice")).toBeVisible();

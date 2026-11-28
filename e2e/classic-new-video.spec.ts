@@ -13,7 +13,7 @@ test("New Classic: home -> difficulty sheet -> ordinary board -> resume",async({
     }));
   });
   await page.goto("/");
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   await page.waitForTimeout(350);
   await page.locator("#classic-mode").click();
   await expect(page.locator("#classic-new-sheet")).toBeVisible();

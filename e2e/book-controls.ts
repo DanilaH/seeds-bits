@@ -15,10 +15,3 @@ export async function chooseBookVolume(page: Page, volume: number) {
   }
   await page.locator(`[data-volume="${volume}"]`).click();
 }
-
-export async function exposeBookFilter(page: Page) {
-  await openBookPicker(page);
-  const filter = page.locator("#book-filter");
-  if (!(await filter.isVisible())) await page.locator("#toggle-book-filter").click();
-  return filter;
-}

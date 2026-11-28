@@ -1,5 +1,5 @@
 import { it, expect } from "vitest";
-import { fresh, readProgress } from "../src/progress";
+import { fresh, readProgress, metadata } from "../src/progress";
 it("one malformed task does not erase valid games and completion marks", () => {
   const p = fresh();
   p.sessions.classic.current.moves = 7;
@@ -20,7 +20,7 @@ it("damaged optional statistics preserve valid sessions, history and trophies", 
   p.sessions.classic.current.moves = 17;
   let recovered = 0;
   const restored = readProgress(
-    JSON.stringify({ ...p, meta: { version: 1, completed: -1 } }),
+    JSON.stringify({ ...p, meta: { ...metadata(p), completed: -1 } }),
     () => recovered++,
   );
   expect(restored.done).toEqual(p.done);

@@ -57,13 +57,17 @@ public class AtomicFile {
  public void failWrite(FileOutputStream output){try{output.close();}catch(IOException ignored){}}
 }''')
 put('android/os/Looper.java','package android.os;public class Looper {public static Looper getMainLooper(){return new Looper();}}')
-put('android/os/Handler.java','''package android.os;import java.util.*;public class Handler {public static List<Runnable> tasks=new ArrayList<>();public Handler(Looper l){}public void postDelayed(Runnable r,long m){tasks.add(r);}public void removeCallbacks(Runnable r){tasks.remove(r);}public void removeCallbacksAndMessages(Object x){tasks.clear();}public static void fire(){for(Runnable r:new ArrayList<>(tasks))r.run();tasks.clear();}}''')
+put('android/os/Handler.java','''package android.os;import java.util.*;public class Handler {public static List<Runnable> tasks=new ArrayList<>();public Handler(Looper l){}public void post(Runnable r){r.run();}public void postDelayed(Runnable r,long m){tasks.add(r);}public void removeCallbacks(Runnable r){tasks.remove(r);}public void removeCallbacksAndMessages(Object x){tasks.clear();}public static void fire(){for(Runnable r:new ArrayList<>(tasks))r.run();tasks.clear();}}''')
 put('android/os/SystemClock.java','package android.os;public class SystemClock {public static long now=1000000;public static long elapsedRealtime(){return now;}}')
 put('android/R.java','package android;public class R {public static class id {public static int content=1;}}')
-put('android/view/View.java','''package android.view;public class View {public interface OnLayoutChangeListener{void onLayoutChange(View v,int l,int t,int r,int b,int ol,int ot,int or_,int ob);}public void addOnLayoutChangeListener(OnLayoutChangeListener listener){}public void removeOnLayoutChangeListener(OnLayoutChangeListener listener){}public static int GONE=8,VISIBLE=0;public int visibility=VISIBLE;public ViewGroup parent;public Object layoutParams;public int width=390,height=844;public int getVisibility(){return visibility;}public int getPaddingLeft(){return 0;}public int getPaddingRight(){return 0;}public int getPaddingTop(){return 0;}public int getPaddingBottom(){return 0;}public ViewTreeObserver observer=new ViewTreeObserver();public ViewTreeObserver getViewTreeObserver(){return observer;}public void setVisibility(int v){visibility=v;}public int getWidth(){return width;}public int getHeight(){return height;}public void getLocationOnScreen(int[] p){p[0]=0;p[1]=0;}public ViewGroup getParent(){return parent;}public void setLayoutParams(Object p){layoutParams=p;}}''')
+put('android/view/View.java','''package android.view;public class View {public interface OnLayoutChangeListener{void onLayoutChange(View v,int l,int t,int r,int b,int ol,int ot,int or_,int ob);}public void addOnLayoutChangeListener(OnLayoutChangeListener listener){}public void removeOnLayoutChangeListener(OnLayoutChangeListener listener){}public static int GONE=8,VISIBLE=0;public int visibility=VISIBLE;public ViewGroup parent;public Object layoutParams;public static boolean deferDraw;public boolean layoutPending;public int laidOutTop,laidOutLeft;public int width=390,height=844,screenX,screenY;public int getVisibility(){return visibility;}public int getPaddingLeft(){return 0;}public int getPaddingRight(){return 0;}public int getPaddingTop(){return 0;}public int getPaddingBottom(){return 0;}public int getLeft(){return layoutParams instanceof android.widget.FrameLayout.LayoutParams?((android.widget.FrameLayout.LayoutParams)layoutParams).leftMargin:0;}public int getTop(){return layoutParams instanceof android.widget.FrameLayout.LayoutParams?((android.widget.FrameLayout.LayoutParams)layoutParams).topMargin:0;}public boolean isLayoutRequested(){return layoutPending;}public void invalidate(){if(!deferDraw&&ViewTreeObserver.draw!=null)ViewTreeObserver.draw.onDraw();}public ViewTreeObserver observer=new ViewTreeObserver();public ViewTreeObserver getViewTreeObserver(){return observer;}public void setVisibility(int v){visibility=v;}public int getWidth(){return width;}public int getHeight(){return height;}public void getLocationOnScreen(int[] p){if(parent!=null){parent.getLocationOnScreen(p);p[0]+=laidOutLeft;p[1]+=laidOutTop;}else{p[0]=screenX;p[1]=screenY;}}public ViewGroup getParent(){return parent;}public void setLayoutParams(Object p){layoutParams=p;layoutPending=true;}}''')
 put('android/view/ViewTreeObserver.java','''package android.view;public class ViewTreeObserver {
  public interface OnWindowFocusChangeListener{void onWindowFocusChanged(boolean focused);}
  public interface OnPreDrawListener{boolean onPreDraw();}
+ public interface OnDrawListener{void onDraw();}
+ public static OnDrawListener draw;
+ public void addOnDrawListener(OnDrawListener listener){draw=listener;}
+ public void removeOnDrawListener(OnDrawListener listener){if(draw==listener)draw=null;}
  public OnWindowFocusChangeListener focus;
  public void addOnWindowFocusChangeListener(OnWindowFocusChangeListener listener){focus=listener;}
  public void removeOnWindowFocusChangeListener(OnWindowFocusChangeListener listener){}
@@ -73,9 +77,10 @@ put('android/view/ViewTreeObserver.java','''package android.view;public class Vi
  public boolean isAlive(){return true;}
 }''')
 put('android/view/ViewGroup.java','''package android.view;public class ViewGroup extends View {public void removeView(View v){v.parent=null;}public void addView(View v){v.parent=this;}}''')
+put('android/view/Window.java','package android.view;public class Window {public View decor=new View();public View getDecorView(){return decor;}}')
 put('android/view/Gravity.java','package android.view;public class Gravity {public static int CENTER=17;}')
 put('android/widget/FrameLayout.java','''package android.widget;import android.view.*;import android.content.Context;public class FrameLayout extends ViewGroup {public FrameLayout(Context c){}public void addView(View v,LayoutParams p){super.addView(v);}public static class LayoutParams {public int leftMargin,topMargin,width,height;public LayoutParams(int w,int h){width=w;height=h;}public LayoutParams(int w,int h,int g){this(w,h);}}}''')
-put('android/app/Activity.java','''package android.app;import android.content.Context;import android.widget.FrameLayout;public class Activity extends Context {public static int MODE_PRIVATE=0;public boolean focused=true;public boolean hasWindowFocus(){return focused;}public FrameLayout root=new FrameLayout(this);public void runOnUiThread(Runnable r){r.run();}public <T>T findViewById(int i){return (T)root;}}''')
+put('android/app/Activity.java','''package android.app;import android.content.Context;import android.widget.FrameLayout;public class Activity extends Context {public static int MODE_PRIVATE=0;public boolean focused=true;public boolean hasWindowFocus(){return focused;}public FrameLayout root=new FrameLayout(this);public android.view.Window window=new android.view.Window();public android.view.Window getWindow(){return window;}public void runOnUiThread(Runnable r){r.run();}public <T>T findViewById(int i){return (T)root;}}''')
 put('com/getcapacitor/JSObject.java','''package com.getcapacitor;import java.util.*;public class JSObject extends HashMap<String,Object>{public Object opt(String k){return get(k);}public String optString(String k,String d){return String.valueOf(getOrDefault(k,d));}public JSObject put(String k,Object v){super.put(k,v);return this;}}''')
 put('com/getcapacitor/PluginCall.java','''package com.getcapacitor;public class PluginCall {public JSObject args=new JSObject(),result;public PluginCall(){}public PluginCall(JSObject a){args=a;}public JSObject getData(){return args;}public String getString(String k,String d){return (String)args.getOrDefault(k,d);}public Float getFloat(String k,Float d){return ((Number)args.getOrDefault(k,d)).floatValue();}public Boolean getBoolean(String k,boolean d){return (Boolean)args.getOrDefault(k,d);}public JSObject getObject(String k,JSObject d){return (JSObject)args.getOrDefault(k,d);}public void resolve(){result=new JSObject();}public void resolve(JSObject o){result=o;}public void reject(String m){throw new RuntimeException(m);}public void reject(String m,String code){throw new RuntimeException(code);}}''')
 put('com/getcapacitor/PluginMethod.java','package com.getcapacitor;public @interface PluginMethod{}')
@@ -102,7 +107,7 @@ put(base+'banner/BannerAdView.java','''package com.yandex.mobile.ads.banner;impo
 put('com/seedsbits/game/preview/SeedsDailyReminder.java','package com.seedsbits.game.preview;public class SeedsDailyReminder{public static boolean fail;public static void sync(android.content.Context c){if(fail)throw new RuntimeException();}}')
 put('com/seedsbits/game/preview/SeedsAdRevenue.java','package com.seedsbits.game.preview;final class SeedsAdRevenue{static void report(android.content.Context c,String kind,com.yandex.mobile.ads.common.ImpressionData d){}static void report(android.content.Context c,String k,com.yandex.mobile.ads.common.ImpressionData d,String i,String s){}}')
 put('com/seedsbits/game/preview/SeedsApplication.java','package com.seedsbits.game.preview;public class SeedsApplication {public static int calls;static void report(android.content.Context c,String n,com.getcapacitor.JSObject d){calls++;}}')
-put('org/json/JSONArray.java','''package org.json;import java.util.*;public class JSONArray {List<String> items=new ArrayList<>();public JSONArray(){}public JSONArray(String s){String body=s.substring(1,s.length()-1);if(!body.isEmpty())for(String x:body.split(","))items.add(x.substring(1,x.length()-1));}public int length(){return items.size();}public String optString(int i){return items.get(i);}public JSONArray put(String s){items.add(s);return this;}public String toString(){List<String> quoted=new ArrayList<>();for(String s:items)quoted.add(((char)34)+s+((char)34));return "["+String.join(",",quoted)+"]";}}''')
+put('org/json/JSONArray.java','''package org.json;import java.util.*;public class JSONArray {List<String> items=new ArrayList<>();public JSONArray(){}public JSONArray(String s){String body=s.substring(1,s.length()-1);if(!body.isEmpty())for(String x:body.split(","))items.add(x.substring(1,x.length()-1));}public int length(){return items.size();}public String optString(int i){return items.get(i);}public JSONArray put(String s){items.add(s);return this;}public JSONArray put(Object s){items.add(String.valueOf(s));return this;}public String toString(){List<String> quoted=new ArrayList<>();for(String s:items)quoted.add(((char)34)+s+((char)34));return "["+String.join(",",quoted)+"]";}}''')
 put('org/json/JSONObject.java','''package org.json;public class JSONObject {
  private final String data;
  public JSONObject(String data){this.data=data;}
@@ -226,6 +231,52 @@ public class AuditHarness {
   PluginCall wideViewport=box();wideViewport.args.put("viewportWidth",360).put("viewportHeight",648).put("width",328).put("y",594).put("height",50).put("pixelRatio",2);
   p.banner(wideViewport);
   check("N52_resize_waits_for_matching_viewport",preserved && BannerAdView.all.size()==2 && beforeResize.destroyed && BannerAdView.all.get(1).requests==1,"one replacement after the native and CSS widths agree");
+
+  p=fresh(true);android.content.res.Resources.density=2;
+  p.bridge.web.width=p.activity.root.width=640;p.bridge.web.height=p.activity.root.height=1136;
+  p.activity.window.decor.width=640;p.activity.window.decor.height=1232;p.activity.root.screenY=p.bridge.web.screenY=48;
+  PluginCall fixedSlot=box();fixedSlot.args.put("viewportWidth",320).put("viewportHeight",568).put("width",288).put("y",514).put("height",50).put("pixelRatio",2);
+  p.banner(fixedSlot);BannerAdView retainedInset=BannerAdView.all.get(0);
+  p.bannerExpectation(new PluginCall(new JSObject().put("visible",true)));
+  int fixedTop=p.activity.root.screenY+((android.widget.FrameLayout.LayoutParams)retainedInset.getParent().layoutParams).topMargin;
+  p.activity.root.height=p.bridge.web.height=1232;p.activity.root.screenY=p.bridge.web.screenY=0;fixedSlot.args.put("revision",++revision);p.banner(fixedSlot);p.bridge.web.observer.preDraw.onPreDraw();
+  boolean insetRetained=retainedInset.getParent().visibility==android.view.View.VISIBLE && p.activity.root.screenY+((android.widget.FrameLayout.LayoutParams)retainedInset.getParent().layoutParams).topMargin==fixedTop;
+  p.activity.root.height=p.bridge.web.height=1136;p.activity.root.screenY=p.bridge.web.screenY=48;fixedSlot.args.put("revision",++revision);p.banner(fixedSlot);p.bridge.web.observer.preDraw.onPreDraw();
+  PluginCall insetSample=new PluginCall();p.bannerDiagnostics(insetSample);
+  check("N53_insets_bounce_retains_slot",insetRetained && BannerAdView.all.size()==1 && retainedInset.requests==1 && Integer.valueOf(0).equals(insetSample.result.get("hiddenFrames")),"transient WebView height cannot move or hide a validated same-window banner");
+  p.activity.focused=false;p.bridge.web.observer.focus.onWindowFocusChanged(false);
+  check("N54_insets_hold_never_overrides_background",retainedInset.getParent().visibility==android.view.View.GONE,"a retained slot still hides immediately when the Activity loses focus");
+  p.activity.focused=true;fixedSlot.args.put("revision",++revision);p.banner(fixedSlot);
+  boolean visibleBeforeHeightResize=retainedInset.getParent().visibility==android.view.View.VISIBLE;
+  p.activity.window.decor.height=1392;p.activity.root.height=p.bridge.web.height=1296;fixedSlot.args.put("revision",++revision);p.banner(fixedSlot);
+  check("N55_real_window_height_resize_hides",visibleBeforeHeightResize && retainedInset.getParent().visibility==android.view.View.GONE,"retention never carries a creative through a real physical window resize");
+
+  p=fresh(true);p.banner(box());
+  android.view.View hostForDraw=BannerAdView.all.get(0).getParent();
+  hostForDraw.laidOutTop=1000;p.activity.root.screenY=48;
+  android.view.View.deferDraw=true;PluginCall drawSample=new PluginCall();p.bannerDiagnostics(drawSample);
+  boolean pendingDiagnostic=drawSample.result==null;
+  hostForDraw.laidOutTop=952;hostForDraw.layoutPending=false;p.bridge.web.observer.preDraw.onPreDraw();
+  android.view.ViewTreeObserver.draw.onDraw();android.view.View.deferDraw=false;
+  JSObject requestSample=(JSObject)drawSample.result.get("atRequest");
+  check("N56_diagnostics_wait_for_draw",pendingDiagnostic && "draw".equals(drawSample.result.get("phase")) &&
+    Integer.valueOf(1048).equals(requestSample.get("screenTop")) && Integer.valueOf(1000).equals(drawSample.result.get("screenTop")) &&
+    Boolean.TRUE.equals(requestSample.get("hostLayoutPending")) && Boolean.FALSE.equals(drawSample.result.get("hostLayoutPending")),
+    "request sees old layout plus new origin; draw sample records only the rendered rectangle");
+  p.bannerExpectation(new PluginCall(new JSObject().put("visible",true)));android.view.ViewTreeObserver.draw.onDraw();
+  hostForDraw.laidOutTop++;android.view.ViewTreeObserver.draw.onDraw();
+  PluginCall shiftedFrame=new PluginCall();p.bannerDiagnostics(shiftedFrame);
+  check("N57_each_draw_checks_physical_continuity",((Number)shiftedFrame.result.get("movedFrames")).intValue()>0,
+    "a real single-frame displacement is recorded even if endpoint screenshots match");
+
+  p=fresh(true);p.banner(box());BannerAdView.all.get(0).listener.onAdLoaded();
+  PluginCall bannerOnly=new PluginCall();p.bannerDiagnostics(bannerOnly);
+  boolean bannerIsNotInterstitial=Boolean.FALSE.equals(bannerOnly.result.get("interstitialReady"));
+  InterstitialAdLoader.last.listener.onAdLoaded(new InterstitialAd());
+  PluginCall fullscreenLoaded=new PluginCall();p.bannerDiagnostics(fullscreenLoaded);
+  check("N58_independent_fullscreen_readiness",bannerIsNotInterstitial && Boolean.TRUE.equals(fullscreenLoaded.result.get("interstitialReady")) &&
+    Boolean.FALSE.equals(fullscreenLoaded.result.get("rewardedReady")) && fullscreenLoaded.result.containsKey("nativeMs") && !fullscreenLoaded.result.containsKey("ms"),
+    "banner load never stands in for a fullscreen load; native timestamps cannot overwrite the recorder clock");
 
   p=fresh(true);PluginCall lab=new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","lab-only"));p.persistLabState(lab);game=p.activity.getSharedPreferences("CapacitorStorage",0);boolean isolated=lab.result!=null && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1"));boolean invalidLab=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.progress.v2").put("value","bad")));}catch(RuntimeException failure){invalidLab=true;}check("N42_lab_storage_namespace",isolated&&invalidLab&&!game.data.containsKey("seeds-bits.progress.v2"),"lab method cannot write production progress");
   game.fail=true;boolean labFailure=false;try{p.persistLabState(new PluginCall(new JSObject().put("key","seeds-bits.lab.trials.v1").put("value","not-saved")));}catch(RuntimeException failure){labFailure=true;}check("N43_lab_storage_failure",labFailure && "lab-only".equals(game.durable.get("seeds-bits.lab.trials.v1")) && "lab-only".equals(game.data.get("seeds-bits.lab.trials.v1")),"failed lab commit retains previous authority");

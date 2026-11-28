@@ -570,6 +570,56 @@
         "Наблюдение оригинала для точного сравнения момента показа. Плейтест нового сценария в нашей игре."
       ],
       "consumerTest": "../research/first-session-2026-11-20/replay.mjs"
+    },
+    {
+      "id": "owner-ui-audit-20261126",
+      "sourceFeatureId": "owner.seeds.ui-consistency-and-reachability.2026-11-26",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "ownerDecision": "Пять замечаний владельца с кадрами и прямое предложение подсвечивать достижимые цифры при выборе, 26 ноября 2026. Не утверждение о Easybrain/NADO.",
+      "currentImplementation": "src/main.ts:renderNotebookPicker; src/quiet-table.css shared radii/insets/shadow; src/core.ts:reachableNumbers; src/board-view.ts reachable set and remap",
+      "acceptanceEvidence": {
+        "report": "../research/ui-audit-2026-11-26/DELIVERY-12103.md",
+        "code": "IMPLEMENTED",
+        "browser": "161 unit; 24 UI; 12 broad layout; 31 prior results; 8 focused follow-ups; CI preview 38/19/19 PASS",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN",
+        "apk": "12103 signed; same cert as 12102; 675 unsigned entries retained; 21 local game files match",
+        "androidDemo": "FAILED: waiting for task 2 after ADB #play-again tap; root cause UNKNOWN; API35 frame/report linked in delivery",
+        "androidOffline": "RUNNING at delivery"
+      },
+      "nextAction": "Разобрать Android demo next-task tap с актуальными WebView bounds и pointer/click trace; проверить 12103 на физическом телефоне: подписи, тень и достижимость.",
+      "kitImpact": "REUSE",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40"
+    },
+    {
+      "id": "owner-quiet-polish-ui-43",
+      "sourceFeatureId": "owner.seeds.quiet-table.polish.2026-11-26",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/43",
+      "currentImplementation": "src/quiet-table.css; src/main.ts jarHero/openCollection; native/android/MainActivity.java and SeedsAppearancePlugin.java",
+      "acceptanceEvidence": {
+        "report": "../research/quiet-polish-2026-11-26/README.md",
+        "browser": "local target checks; final project CI pending",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Повторить project visual/native CI, сверить APK и сравнимые кадры.",
+      "kitImpact": "REUSE"
+    },
+    {
+      "id": "owner-quiet-reach-values-44",
+      "sourceFeatureId": "owner.seeds.reachable-valid-invalid.2026-11-26",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/44",
+      "currentImplementation": "src/board-view.ts checkPair classification; src/main.ts cellSelection/reconcileCellMotions; src/quiet-table.css semantic colors/borders; src/i18n/ui-copy.json",
+      "acceptanceEvidence": {
+        "report": "../research/quiet-polish-2026-11-26/README.md",
+        "browser": "81 value combinations and mixed fixtures in e2e/quiet-polish.spec.ts",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Подтвердить классификацию и сбросы на подписанном Android preview.",
+      "kitImpact": "REUSE"
     }
   ],
   "localAdaptations": [
@@ -1003,6 +1053,392 @@
       },
       "nextAction": "Сверить demo SDK, затем наблюдать навигацию и баннер на физическом телефоне.",
       "kitImpact": "REUSE"
+    },
+    {
+      "id": "owner-playtest-quiet-table-20261126",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "ownerDecision": "14 замечаний владельца 26 ноября 2026 и дополнение по финалу дейлика.",
+      "currentImplementation": "src/main.ts: entryAdProtected, resultHome, noMovesCard; src/result-presentation.ts; src/quiet-table.css; src/audio/sources.json; src/main.ts: homeNotebook; отдельная тень/левитация и отключение старой фоновой анимации календаря в src/quiet-table.css",
+      "acceptanceEvidence": {
+        "report": "../research/playtest-2026-11-26/README.md",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN",
+        "browser": "158 unit; 62 целевых Playwright; отдельный regression зелёного фона календаря"
+      },
+      "nextAction": "Плейтест подписанного preview 12102 на физическом телефоне; оценить новые звуки и вибрацию.",
+      "kitImpact": "REUSE",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40"
+    },
+    {
+      "id": "seeds-quiet-stability-12105",
+      "sourceFeatureIds": [],
+      "scope": "Собственная техническая приёмка №45: durable move/Undo/Add, atomic Classic start, native drawn banner geometry",
+      "status": "PRODUCT_IMPLEMENTED",
+      "code": [
+        "src/main.ts",
+        "e2e/restore-game.ts",
+        "e2e/stability12105.spec.ts",
+        "native/android/SeedsMonetizationPlugin.java",
+        "scripts/markets/android.mjs"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "issue": "https://github.com/DanilaH/seeds-bits/issues/45",
+        "report": "../research/stability-2026-11-26/DELIVERY-12105.md",
+        "local": "172 unit and TypeScript/web build PASS; natural baseline old12104 fails2/20 plus deterministic held-write UI26/disk28 trace",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN",
+        "generalCI": "https://github.com/DanilaH/seeds-bits/actions/runs/45867651382",
+        "storageCI": "https://github.com/DanilaH/seeds-bits/actions/runs/45866037928",
+        "nativeDemo": "https://github.com/DanilaH/seeds-bits/actions/runs/45864381070/artifacts/15139982808",
+        "sameSourceDemoRetry": "https://github.com/DanilaH/seeds-bits/actions/runs/45867651090/artifacts/15141859844"
+      },
+      "nextAction": "Телефонный плейтест подписанного12105 после exact-HEAD CI/native gates: update без стирания данных, durable26/Undo28/Add, New Classic completion/dedup, banner/fullscreen. Уточнение draw-aligned diagnostics остаётся кандидатом для kit, без обновления runtime pins. Отдельно UNKNOWN по looping SDK demo: SDK sample/API35/phone comparison per acceptance README; do not synthesize dismissal.",
+      "kitImpact": "REUSE; CANDIDATE draw-aligned native diagnostics",
+      "localIssueIds": [
+        "QT-ACCEPT-01",
+        "QT-ACCEPT-02",
+        "QT-ACCEPT-03"
+      ],
+      "verification": {
+        "code": "PASS: 62ee0c2, Check and build45866037951:172 unit+2 model+15 regression browser+552 e2e;140 fault/atomic/resume+80 original repeats45866037928. Final exact-HEAD gates and signed source/hash are recorded in PR40/delivery bundle before issue.",
+        "emulator": "Android API35/WebView124: aefeb1b native demo PASS (45864381070/artifact15139982808), raw layout1124→draw1076 at nativeMs90455, hiddenFrames0/movedFrames0;20 offline force-stop/Undo cycles PASS (artifact15140028846). Expert disk-read precommit race diagnosed and driver corrected; full final matrix is a mandatory delivery gate.",
+        "phone": "UNKNOWN: install12105 over12104, durable move/Undo/Add, new Classic and native banner/fullscreen in DELIVERY-12105.md.",
+        "audience": "UNKNOWN: no retention/revenue or player-observation claim.",
+        "sdkDemoVariant": "UNKNOWN: 48d5561/45867651090/artifact15141069958, looping Yandex demo interstitial with no visible Next/Close; no SDK dismissal within unchanged160s. Not attributed to app or SDK without comparison. Retry same SHA/new response; if repeated compare media/logcat/activity evidence with official SDK sample on API35 and phone. Same-SHA rerun PASS: artifact15141859844/job140085978867, no code/SDK ID/deadline/callback changes; failed artifact remains. This narrows the observation to response/conditions, not proven vendor attribution."
+      }
+    },
+    {
+      "id": "seeds-quiet-bookmark-12106",
+      "sourceFeatureIds": [],
+      "scope": "Собственный UI: финиши тетрадковой задачи/страницы/тома и карточка новой Классики в Home",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/quiet-table.css",
+        "src/i18n/ui-copy.json",
+        "e2e/bookmark-followup.spec.ts"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "ownerReport": "Плейтест12105: кривой финиш/съехавшая закладка; английская подпись новой игры поверх закладки.",
+        "report": "../research/bookmark-followup-2026-11-26/README.md",
+        "code": "Убрана ротация тетрадковых финишей; ribbon внутри листа; короткая подпись с отдельным резервом под ribbon.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Exact-source CI/PNG review и подписанный12106; телефонный повтор финиша и Home без текущей партии.",
+      "kitImpact": "REUSE: established UI tokens and decoration safe area; no runtime change."
+    },
+    {
+      "id": "seeds-menu-reward-feel-46",
+      "sourceFeatureIds": [],
+      "scope": "Собственный Menu & Reward Feel по №46 поверх12106",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/main.ts",
+        "src/ui-motion.ts",
+        "src/result-presentation.ts",
+        "src/jar-spill.ts",
+        "src/trophies.ts",
+        "src/quiet-table.css",
+        "e2e/menu-reward-feel.spec.ts"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "report": "../research/menu-reward-feel-2026-11-27/README.md",
+        "code": "Декоративная последовательность после durable commit; milestone novelty Session-only; actual jar target; bound particles; local owned transitions",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Exact-source CI/native gates, before/after actual-audio videos, signed12107 и телефонный плейтест.",
+      "kitImpact": "REUSE: UI Motion Recipes / OwnedDomMotion / StableProgress / TierProgress; runtime pins unchanged."
+    },
+    {
+      "id": "seeds-quiet-style-residue-20261127",
+      "sourceFeatureIds": [],
+      "scope": "Аудит остатков прежнего оформления по прямому поручению владельца поверх12107",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/quiet-table.css",
+        "src/ui-polish.css",
+        "src/calm-screens.css",
+        "src/compact-navigation.css",
+        "scripts/quiet-style-probe.mjs",
+        "scripts/independent-quiet-audit.mjs",
+        "e2e/menu-reward-feel.spec.ts"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "report": "../research/style-residue-2026-11-27/README.md",
+        "code": "Удалены контейнерные плашки; intrinsic language dialog; семантическая палитра медалей/теней/scrim; реальный privacy selector и banner reserve color;155 сопоставимых состояний и computed rule provenance.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Exact-source project CI/native, signed12108; телефонная проверка обеих тем и меню.",
+      "kitImpact": "REUSE: UX & Art System / accepted component roles / Reference Protocol; runtime pins unchanged."
+    },
+    {
+      "id": "seeds-functional-audit-47",
+      "sourceFeatureIds": [],
+      "scope": "Собственный функциональный аудит FA01–08 поверх12108/e592866",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/platform.ts",
+        "src/progress.ts",
+        "src/main.ts",
+        "src/optional-service.ts",
+        "src/monetization.ts",
+        "e2e/functional-audit-fixes.spec.ts",
+        "tests/functional-size.test.ts",
+        "scripts/markets/functional-audit.mjs",
+        "scripts/patch-capacitor-bridge.mjs",
+        "scripts/capacitor-bridge-harness.py"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "audit": "https://github.com/DanilaH/seeds-bits/issues/47",
+        "report": "../research/functional-fixes-2026-11-27/README.md",
+        "code": "Durable recovery; independent stats salvage/protected earned authority; Web Locks CAS / explicit unsupported writable-mode guard; explicit persistent-storage failure; optional service single-flight/deadlines.",
+        "phone": "UNKNOWN",
+        "commercial": "UNKNOWN",
+        "audience": "UNKNOWN",
+        "automatedCandidate": {
+          "source": "ca8d8ba30e4664fdb3528be7f81017b705a407be",
+          "general": "https://github.com/DanilaH/seeds-bits/actions/runs/45963331958",
+          "functional": "https://github.com/DanilaH/seeds-bits/actions/runs/45963331976",
+          "nativeFunctional": "https://github.com/DanilaH/seeds-bits/actions/runs/45963331864/artifacts/15182853067",
+          "scope": "193 unit/616 e2e; native functional3recoveries/3archives/update12108/reboot PASS. Full offline job timed out at prior25min budget; not final acceptance."
+        },
+        "qaOracle": "SharedPreferences disk oracle respects AOSP .bak authority and is tested with real controlled interrupted-write reload; guest DNS precondition precedes real demo paint check.",
+        "automatedFollowup": {
+          "source": "13defc3f0e9fcae7a54dab3338d6e7cd87463aa7",
+          "nativeFunctional": "https://github.com/DanilaH/seeds-bits/actions/runs/45971272294/artifacts/15185882337",
+          "scope": "All new native functional checks PASS, demo PASS; following old Classic input failed before first pair (Resume ADB trace empty). Final QA strengthens awake/foreground/native-input preconditions; full offline acceptance still pending."
+        },
+        "bridgeRace": {
+          "dependency": "@capacitor/android8.5.3",
+          "upstream": "https://github.com/ionic-team/capacitor/issues/8616",
+          "rawFailure": "https://github.com/DanilaH/seeds-bits/actions/runs/45974489816/artifacts/15186443487",
+          "level": "Actual pinned source deterministic race harness PASS;10 real Android reload/native roundtrips and exact histories/rights PASS on 96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
+          "change": "Bind current reply proxy before dispatch; guarded exact version/source patch, modern origin scope unchanged"
+        },
+        "automatedAcceptance": {
+          "source": "96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
+          "status": "PASS",
+          "scope": "FA01–04 and automatable FA05–08; physical/commercial gates remain open",
+          "report": "../research/functional-fixes-2026-11-27/DELIVERY-12109.md",
+          "ci": [
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976686110",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976677271",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976677220",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976677107",
+            "https://github.com/DanilaH/seeds-bits/actions/runs/45976677053"
+          ],
+          "nativeOffline": "https://github.com/DanilaH/seeds-bits/actions/runs/45976677220/artifacts/15188539062",
+          "nativeDemo": "https://github.com/DanilaH/seeds-bits/actions/runs/45976677220/artifacts/15187398836",
+          "signedPreview": "https://github.com/DanilaH/seeds-bits/actions/runs/45976677220/artifacts/15187682120",
+          "versionCode": 12109,
+          "sha256": "224d3e16fb84bace07e564f336b24cd572bdaa07810404ffa9cfeda9ef7b756c",
+          "certificateSHA256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+          "nativeRecoveryTrials": 3,
+          "archiveProfiles": [
+            1,
+            3,
+            5
+          ],
+          "nativeReloads": 10,
+          "classicForceStops": 20
+        }
+      },
+      "nextAction": "Physical low/mid Android/full disk/RAM/frame jank/TalkBack/audio/vibration and live commercial checks; separate production policy/signing acceptance. Automatic CI and signed preview12109 are complete; issue48 remains separate.",
+      "kitImpact": "REUSE durable receipt/shared writer/optional SDK contracts; CANDIDATE independent cross-document/denied/quota probes; runtime pins unchanged."
+    },
+    {
+      "id": "seeds-visual-acceptance-48",
+      "sourceFeatureIds": [],
+      "scope": "VA01–13; owner notification/banner/jar corrections after12109",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "ownerDecisionRef": "https://github.com/DanilaH/seeds-bits/issues/48#issuecomment-7218627968",
+      "code": [
+        "src/main.ts",
+        "src/jar-spill.ts",
+        "src/visual-acceptance.css",
+        "native/android/SeedsDailyReminder.java",
+        "native/android/SeedsEngagementPlugin.java"
+      ],
+      "evidence": {
+        "phone": "UNKNOWN",
+        "commercial": "UNKNOWN",
+        "audience": "UNKNOWN",
+        "baseline": "12109/96f5ae19588c151c0dd884e80a7f4e56c1d1f71d",
+        "reference": "Internal12106/125606e4a90e06b844fe6eb8f83249032cb7057f",
+        "automated": "PASS on exact source 6daea5abd6609008e2338476d81e24171714c50a; all six workflows and both complete native jobs",
+        "delivery": "docs/research/visual-acceptance-2026-11-27/DELIVERY-12110.md",
+        "apk": {
+          "source": "6daea5abd6609008e2338476d81e24171714c50a",
+          "versionCode": 12110,
+          "firstSession": true,
+          "helpProfile": "baseline",
+          "analytics": false,
+          "package": "com.seedsbits.game.preview",
+          "versionName": "1.1.2",
+          "bytes": 6091755,
+          "sha256": "eb851f94d7362be26e53e7f972a63d6e914142a767ede172f0faaa658fcc633f",
+          "certificateSHA256": "ee910b7ef7ed79fe27f15c26f8b70324133ac77c87d137a09c492e7b2bb7de30",
+          "v2": true,
+          "v3": true,
+          "zipalign16k": true,
+          "unsignedEntriesIdentical": 675,
+          "debugWebAssetsIdentical": 23
+        },
+        "ciRuns": {
+          "preview": 46023909431,
+          "visual48": 46023909446,
+          "functional47": 46023909359,
+          "stability45": 46023909493,
+          "checksPush": 46023909474,
+          "checksPR": 46023919944
+        },
+        "browser": {
+          "e2e": 725,
+          "focusedVA48": 204,
+          "functionalFocused": 74,
+          "candidateStorageRepeats": 220,
+          "independentVisualStatesPerSource": 442,
+          "pageErrors": 0
+        },
+        "androidDemo": {
+          "status": "PASS",
+          "artifact": 15211092584,
+          "seconds": 252.435,
+          "observations": 91,
+          "expectedFrames": 5546,
+          "unexpectedHidden": 0,
+          "unexpectedMoved": 0,
+          "actualPermissionDenial": true,
+          "sameSettingsBanner": true
+        },
+        "androidOffline": {
+          "status": "PASS",
+          "artifact": 15213490637,
+          "recoveryTrials": 3,
+          "archiveYears": [
+            1,
+            3,
+            5
+          ],
+          "actual12109Upgrade": true,
+          "receipts": 2048,
+          "wallet": 999,
+          "pinsAndLegacyOptOutRetained": true,
+          "nativeAbsenceCases": 16,
+          "bridgeReloads": 10,
+          "actualEmulatorReboot": true,
+          "durableForceStopTrials": 20,
+          "fullPreviousRegression": true
+        }
+      },
+      "nextAction": "Owner phone review on low/mid Android: install over12109 without erasing data, all result/jar scenes and audio/vibration, TalkBack, memory/frame pacing; unattended lunch/evening delivery under actual battery policy, then entry between slots. Separate live commercial inventory/audience observations. No publication or return of paused experiments.",
+      "kitImpact": "REUSE existing owned motion, viewport and durable authority; no runtime pin changes.",
+      "implementationSource": "6daea5abd6609008e2338476d81e24171714c50a",
+      "requirementIds": [
+        "VA-01",
+        "VA-02",
+        "VA-03",
+        "VA-04",
+        "VA-05",
+        "VA-06",
+        "VA-07",
+        "VA-08",
+        "VA-09",
+        "VA-10",
+        "VA-11",
+        "VA-12",
+        "VA-13"
+      ]
+    },
+    {
+      "id": "seeds-visual-acceptance-48-residual",
+      "sourceFeatureIds": [],
+      "scope": "Собственные остаточные дефекты VA-06R/VA-02R/VA-04R по независимой приёмке12110; малый CSS-пакет поверх PR40",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "requirementIds": [
+        "VA-06R",
+        "VA-02R",
+        "VA-04R"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "code": [
+        "src/visual-acceptance.css",
+        "e2e/visual48-residual.spec.ts",
+        "scripts/check-visual48-residual.mjs"
+      ],
+      "evidence": {
+        "audit": "https://github.com/DanilaH/seeds-bits/issues/48#issuecomment-7237368017",
+        "baseline": "12110/6daea5abd6609008e2338476d81e24171714c50a",
+        "report": "../research/visual-residual-2026-11-28/README.md",
+        "automated": "PENDING exact-source project CI",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Project CI/full native regression/signed12111, then owner install over12110: exact compact Home in5languages/both themes, actual far hint, own landscape labels, jars/saves/reminders/permanent Settings banner. No publication.",
+      "kitImpact": "NONE runtime; CANDIDATE separate metric acquisition from known-defect thresholds"
+    },
+    {
+      "id": "seeds-final-ui-49-20261128",
+      "sourceFeatureIds": [],
+      "scope": "Owner UI/UX/Feel UF01–06 and residual48; no new reference mechanic",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/final-ui.css",
+        "src/home-daily.ts",
+        "src/main.ts",
+        "e2e/final-ui49.spec.ts",
+        "scripts/record-final-ui49.mjs"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/49#issuecomment-7237667847",
+        "report": "../research/final-ui-2026-11-28/README.md",
+        "browser": "4ce4cd4/12112: all6 project workflows and17jobs SUCCESS;195unit/844e2e/323focused, full native offline/demo; final PR40 acceptance",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN"
+      },
+      "nextAction": "Physical phone/feel/aesthetic owner gate; automatic source4ce4cd4 accepted",
+      "kitImpact": "REUSE; no shared runtime/source inventory change"
+    },
+    {
+      "id": "seeds-final-tutorial-50-20261128",
+      "sourceFeatureIds": [],
+      "scope": "Owner FT01–03: real first notebook entry in production candidate, common game surface, voluntary six-step course; no new reference mechanic",
+      "status": "IMPLEMENTED_UNVERIFIED",
+      "code": [
+        "src/first-session.ts",
+        "src/main.ts",
+        "src/tutorial-ui.css",
+        "scripts/configure-android.mjs",
+        "e2e/final-tutorial50.spec.ts",
+        "scripts/markets/final-tutorial50.mjs"
+      ],
+      "implementationPR": "https://github.com/DanilaH/seeds-bits/pull/40",
+      "evidence": {
+        "ownerDecision": "https://github.com/DanilaH/seeds-bits/issues/50",
+        "report": "../research/tutorial-final-2026-11-28/DELIVERY-12113.md",
+        "browser": "2790588/12113:195unit,844E2E,71optimized production tutorial cases,420same-data lesson/ordinary comparisons with0px maximum cell delta;38first-session and full45/47/48/49 regression PASS. Exact run/artifact links in delivery report.",
+        "native": "2790588/12113: full offline Android35/WebView124 PASS; actual12112 upgrade preserves histories,wallet999,2048receipts,pins,opt-out; both-theme ACK/process-death/resume,sixADBlessons,repeat/skip,isolatedpractice,+4reward/task2 PASS. Demo attempt2 PASS on unchanged APK; initial SDK dismissal timeout preserved. Run46163189911 SUCCESS; report has both attempts.",
+        "phone": "UNKNOWN",
+        "audience": "UNKNOWN",
+        "artifact": {
+          "source": "27905882b973028cda2e3b03de602838433f941d",
+          "versionCode": 12113,
+          "package": "com.seedsbits.game.preview",
+          "sha256": "51d21b8595191753b1e6405f1a71e100152b708e560a9dcad99c79f6e9a9e267",
+          "signedArtifact": "https://github.com/DanilaH/seeds-bits/actions/runs/46163189911/artifacts/15270073677"
+        }
+      },
+      "nextAction": "One physical phone/novice playtest and owner feel gate; keep IMPLEMENTED_UNVERIFIED until human acceptance. Automated exact-source acceptance and signed12113 complete; no new runtime work or publication.",
+      "kitImpact": "REUSE; no shared runtime/source inventory change"
     }
   ]
 }

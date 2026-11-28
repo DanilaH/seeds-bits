@@ -1,3 +1,63 @@
+# №50 · автоматическая приёмка12113 · 28 ноября2026
+
+Исполняемый исходник2790588 поверх12112/4ce4cd4: настоящая первая задача по умолчанию и в production candidate; общий игровой экран и устойчивые пояснения; добровольный шестишаговый Learn. Все шесть запусков CI проекта SUCCESS:195unit/844E2E/71production-tutorial,420сравнений с0pxразницы, прежняя45/47/48/49регрессия и полные offline/demo Android. Demo прошёл второй попыткой на том же APK; первоначальный SDK dismissal timeout сохранён.
+
+Один подписанный1.1.2/12113,com.seedsbits.game.preview,SHA25651d21b8595191753b1e6405f1a71e100152b708e560a9dcad99c79f6e9a9e267; прежний preview-сертификат,630файлов payload побайтно сверены. Actual12112upgrade сохранил партии/history/resources/pins/opt-out. [Точный отчёт,CI,APK,сравнительное видео и физическая приёмка](research/tutorial-final-2026-11-28/DELIVERY-12113.md). Телефон/понятность новичку/live audience UNKNOWN; PR40draft,без merge/публикации. KIT IMPACT REUSE.
+
+# №49 · автоматическая приёмка12112 · 28 ноября2026
+
+Исходник4ce4cd4 прошёл все6workflows и17jobs проекта;195unit/844e2e/323focused, полные offline/demo Android35 (demo повторен без изменения APK). Подписанный1.1.2/12112 с прежним сертификатом, SHA25685735cd8463be1cd86607c9d408b915d689dab39b9257acffc71065891bcfc94. [Финальные CI/APK/кадры/видео и телефонный gate](https://github.com/DanilaH/seeds-bits/pull/40). №48/49/50 остаются открыты до физического плейтеста.
+
+# Остатки №48 · автоматическая приёмка12111 · 28 ноября2026
+
+VA-06R/VA-02R/VA-04R исправлены небольшим CSS-пакетом. [Полный exact-source отчёт,6зелёных workflows и оба Android jobs](research/visual-residual-2026-11-28/DELIVERY-12111.md). Исходникf7f30fe, подписанный APK1.1.2/12111 с прежним сертификатом; телефон UNKNOWN. Банки/сохранения/уведомления/Settings banner и остальные функциональные исправления12110 сохранены.
+
+# Визуальная приёмка №48 · автоматическая приёмка 12110 · 27 ноября 2026
+
+VA-01–VA-13 реализованы поверх принятой 12109. Исполняемый исходник `6daea5abd6609008e2338476d81e24171714c50a` прошёл все 6 workflows и оба полных Android jobs. Готовы геометрия финалов/меню/языка, пропорциональная внутренняя шкала банки, выразительное рассыпание и durable old→full→next. Из игры удалены управление уведомлениями/временем и result CTA. Два приблизительных native слота 12:30/19:00 предназначены не заходившим сегодня; Android permission/channel и legacy opt-out сохранены. Обычные Settings сохраняют настоящий banner view/request; реальные исключения прежние.
+
+PASS: 193 unit + 2 model + 15 regression browser + 725 e2e; 204 focused VA48; 16 + 74 FA47; 220 повторных проверок кандидата №45; visual 180 + 8; menu 32; first-session/markets/default-feedback 38 + 19 + 19; 93 Java SDK/feedback harness и Capacitor race oracle. Native offline: 3 recovery, 1/3/5-летние архивы, actual 12109 upgrade/2048 receipts/wallet999/pins/legacy opt-out, 16 absence cases, permissions/timezones/reboot/10 reloads, 20 force-stop и весь прежний набор. Demo: 252,435 с, 91 наблюдение, 5546 expected frames, unexpected hidden/moved=0; настоящий permission/Deny, обе Settings round-trip, fullscreen/rewarded/dedup/reload. Пересекающиеся выборки не суммируются.
+
+Выдан подписанный preview 1.1.2/12110, `com.seedsbits.game.preview`, 6 091 755 байт, SHA256 `eb851f94d7362be26e53e7f972a63d6e914142a767ede172f0faaa658fcc633f`; прежний preview certificate, v2/v3, 16K zipalign, 675 payload/23 web assets сверены. [Полная поставка, 13 требований, CI, видео и ограничения](research/visual-acceptance-2026-11-27/DELIVERY-12110.md). Последующий docs-only commit не создаёт новый runtime. Правила, контент, экономика, права, исправления 12109 и шесть paused experiments сохранены. Телефон/субъективный feel/live/audience UNKNOWN; публикации и merge нет. KIT IMPACT REUSE/CANDIDATE; pins и kit CI прежние.
+
+# Функциональный аудит №47 · автоматическая приёмка 12109 · 27 ноября 2026
+
+Исполняемый исходник `96f5ae19588c151c0dd884e80a7f4e56c1d1f71d`, база 12108/e592866. Все 5 CI-прогонов прошли полностью: 193 unit, 616 e2e, 74 focused browser, production config/release compile, visual/menu/feedback/storage и native harness. Полный Android offline PASS: 3 recovery/force-stop, 3 больших архива, обновление 12108/atomic backup, permissions/timezone/notification/reboot, 10 WebView reload с точным сохранением историй и прав, 20 Classic force-stop и прежняя полная регрессия. Demo PASS: 257.625 с, 73 наблюдения, 7150 ожидаемых кадров баннера, hidden=0/moved=0, настоящие fullscreen/rewarded закрылись; награда сохранена один раз.
+
+FA01–04 и дополнительные optional-SDK/notification/reply-proxy дефекты исправлены. Подписанный preview 1.1.2/12109, `com.seedsbits.game.preview`, SHA256 `224d3e16fb84bace07e564f336b24cd572bdaa07810404ffa9cfeda9ef7b756c`, прежний preview certificate; 675 файлов payload и 23 web assets сверены. [Точная поставка, CI, артефакты и ограничения](research/functional-fixes-2026-11-27/DELIVERY-12109.md). Документальная запись после указанного исходника не является новым runtime. Телефон, low/mid/full disk, TalkBack/звук/вибрация и live/commercial/production-signing gates открыты; широкая запись реестра не повышена до полной приёмки. Issue 48 остаётся отдельным визуальным пакетом. KIT IMPACT — REUSE / CANDIDATE; pins прежние.
+
+# Аудит остатков оформления · 27 ноября 2026
+
+Поверх12107 убраны лишние подложки переключателей коллекции/каталога, восстановлен компактный язык, текущая палитра медальных маркеров/превью/теней и scrim, исправлен несуществующий selector приватности и приоритет цвета баннерного резерва. [Причины, охват155 состояний и before/after](research/style-residue-2026-11-27/README.md). Целевой signed preview12108; точные CI/native/source/hash закрепляются в PR40 перед выдачей. Игровые и рекламные контракты прежние; физический телефон UNKNOWN. KIT IMPACT — REUSE.
+
+# Menu & Reward Feel №46 · 27 ноября 2026
+
+Поверх PR40/12106 реализованы одна наградная последовательность и закрытие фактически видимой банки, защита milestones от replay/restore, непрерывная upright поза тетради, локальные переходы/тактильность меню и компактный язык. [Причины, изменения и приёмка](research/menu-reward-feel-2026-11-27/README.md). Целевой signed preview12107; exact-source CI/native/audio/hash перед выдачей закрепляются в PR40. Экономика, сохранения, Core Feel поля, pins, реклама и paused experiments прежние. Телефон UNKNOWN. KIT IMPACT — REUSE.
+
+# Тетрадковый финиш и подпись новой игры · 26 ноября 2026
+
+По плейтесту12105 выпрямлены карточки финиша задачи/страницы/тетради; закладка закреплена внутри листа. Подпись новой игры сокращена до «Выберите сложность.» / «Choose a difficulty.»; для неё зарезервировано место перед закладкой без уменьшения шрифта. [Сценарии и кадры](research/bookmark-followup-2026-11-26/README.md). Целевой подписанный preview12106; точные итоговые gates/hash — в PR40 после CI. Физический телефон UNKNOWN. Сохранения и весь технический контракт №45 сохранены. KIT IMPACT — REUSE.
+
+# Quiet Table · техническая стабильность №45 · 26 ноября 2026
+
+В PR40 исправлен контракт durable move/Undo/Add: мгновенный ввод сохранён, pending/failure явные, последнее подтверждение записи не может подтвердить более новый ход. New Classic был атомарным; исправлены преждевременные ожидания новой партии и Resume в тестах. Реальный Android trace воспроизвёл raw1124 → draw1076 в одной nativeMs при pending layout; позиционирование и рекламная политика прежние. Native demo aefeb1b — PASS: непрерывный баннер, genuine fullscreen/dismissal/reward и dedup.20 Android process-death циклов — PASS; старый Expert disk-read переведён на тот же durable barrier. [Причины и доказательства](research/stability-2026-11-26/README.md), [приёмка12105 и правила выдачи](research/stability-2026-11-26/DELIVERY-12105.md).
+
+Общий CI62ee0c2 — PASS:172 unit +2 model +15 regression browser +552 e2e; отдельная серия140 fault/atomic/resume +80 исходных повторов — PASS. На неизменённой12104 исходный26→28 воспроизведён2/20. Preview12105 подписывается прежним сертификатом; **выдача требует полного CI и обоих native jobs на точном итоговом HEAD**, source/hash берутся из финального signed artifact, итоговые ссылки — в PR40. Стиль №43 и reach №44 приняты и сохранены; Wire10, права, раскладки и шесть выключенных экспериментов не менялись. Физический телефон/аудитория UNKNOWN. KIT IMPACT — REUSE / CANDIDATE draw-aligned QA.
+
+SDK demo48d5561 отдельно зафиксировал повторяющееся видео без видимого Close; причина UNKNOWN до сравнения с официальным SDK sample/телефоном. Повтор demo того же48d5561 — PASS ([artifact15141859844](https://github.com/DanilaH/seeds-bits/actions/runs/45867651090/artifacts/15141859844)); первый FAIL не удалён. Пассивные logcat/media/activity diagnostics добавлены в QA-драйвер, policy/callbacks не менялись. Собственная ошибка scope последнего Expert assertion исправлена; полный native gate повторяется перед выдачей. Неуспешные прогоны не считаются приёмкой.
+
+# Quiet Table · полировка №43–44 · 26 ноября 2026
+
+Принят пакет [визуальной полировки](research/quiet-polish-2026-11-26/README.md): полоса подменю и native bars, компактные баночки, цветной архив финала, безопасная закладка, Home/каталог/настройки/подтверждения. Reach-кандидаты классифицируются существующим checkPair в зелёные и мягкие красные. База12104; последующая техническая приёмка и сборка12105 описаны выше. Стиль и экономика прежние. KIT IMPACT — REUSE.
+
+# UI-аудит после плейтеста · 26 ноября 2026
+
+В PR40 исправлены повторяющиеся переполнения подписей тетрадей, смешанные рамки/скругления, отступы предложения подсказки и почти невидимая тень меню. Фильтр каталога удалён. По прямому запросу владельца добавлена подсветка геометрически достижимых цифр при выборе; значение пары по-прежнему проверяется обычными правилами. [Изменения, сценарии и границы проверки](research/ui-audit-2026-11-26/README.md). Подписан [preview 12103](research/ui-audit-2026-11-26/DELIVERY-12103.md), сертификат совпадает с 12102. Физический телефон и аудитория проверяются отдельно. KIT IMPACT — REUSE.
+
+# Плейтест «Тихого стола» · 26 ноября 2026
+
+PR40 дополнен защитой входа от интерстишиала, выбором следующей Классики из результата, явным выходом в меню, прогрессом медали на листе дейлика, праздником победы и заметным восстановлением тупика. Меню без партии сохраняет иллюстрированную карточку. Звуковой банк заменён на OGG-фишки Kenney Casino Audio. [Сценарии и границы проверки](research/playtest-2026-11-26/README.md). Тетрадка меню нажимается, левитирует с отдельной связанной тенью и учитывает reduced motion/фон. Preview 12102 собирается штатным подписанием. Физический плейтест звука и вибрации остаётся за владельцем. KIT IMPACT — REUSE.
+
 # Меню, тетради и реклама · 25 ноября 2026
 
 [PR №32](https://github.com/DanilaH/seeds-bits/pull/32) реализует [задачу №31](https://github.com/DanilaH/seeds-bits/issues/31) поверх PR25 и preview 12088. В меню доступны три режима. Результат Классики ведёт в меню, сложность выбирается при старте новой партии. Тетрадь открывает сетку из 24 задач и отдельный выбор номера или темы. Быстрое продолжение берёт адрес последней сыгранной задачи из сохранения.

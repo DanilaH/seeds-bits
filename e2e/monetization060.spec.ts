@@ -209,7 +209,11 @@ test("banner reserves space in both orientations and only conceals at an actual 
     )
     .toBe(true);
   await page.locator("#settings-open").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(true);
+  await page.locator("#privacy-open").click();
   await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(false);
+  await page.locator("#privacy-back").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(true);
   await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await page.setViewportSize({ width: 844, height: 390 });
@@ -233,7 +237,7 @@ test("unavailable interstitial leaves Classic result for Home on the explicit ac
   await page.locator("#board button").last().click();
   await expect(page.locator("#win")).toBeVisible();
   expect(await page.evaluate(() => (window as any).adsCalls.length)).toBe(0);
-  await page.locator("#play-again").click();
+  await page.locator("#result-home").click();
   await expect(page.locator("#classic-mode")).toBeVisible();
   expect(
     await page.evaluate(() => (window as any).adsCalls.map((o: any) => o.kind)),
@@ -357,7 +361,11 @@ test("banner shelf fits short phones and landscape with safe insets, in both the
     )
     .toBe(true);
   await page.locator("#settings-open").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(true);
+  await page.locator("#privacy-open").click();
   await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(false);
+  await page.locator("#privacy-back").click();
+  await expect.poll(() => page.evaluate(() => (window as any).bannerCalls.at(-1)?.visible)).toBe(true);
   await page.locator("#settings-back").click();
   await page.locator("#resume").click();
   await expect
@@ -388,14 +396,17 @@ test("analytics starts once on gameplay, not on opening home or returning to a s
           .length,
     ),
   ).toBe(1);
+  const startId=await page.evaluate(()=>(window as any).adsEvents.find((e:any)=>e.name==="game_start").data.event_id);
+  expect(typeof startId).toBe("string");
   await page.reload();
   await page.locator("#resume").click();
   await page.locator("#board button").nth(0).click();
   expect(
     await page.evaluate(
-      () =>
+      (startId) =>
         (window as any).adsEvents.filter((e: any) => e.name === "game_start")
-          .length,
+          .filter((e:any)=>e.data.event_id!==startId).length,
+      startId,
     ),
   ).toBe(0);
 });

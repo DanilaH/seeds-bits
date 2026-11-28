@@ -110,10 +110,12 @@ for (const [width, height, scale] of [[390,844,1],[320,568,1],[390,844,1.5],[568
     expect(Math.abs(after!.height - before!.height)).toBeLessThanOrEqual(1);
     expect(Math.abs(after!.y - before!.y)).toBeLessThanOrEqual(1);
     const intercepted = () => page.evaluate(() => {
-      const v = document.getElementById("viewport")!.getBoundingClientRect();
+      const viewport = document.getElementById("viewport")!;
+      const contentTop = viewport.getBoundingClientRect().top + viewport.clientTop;
+      const contentBottom = contentTop + viewport.clientHeight;
       return [...document.querySelectorAll<HTMLElement>("#board button")].filter(el => {
         const r = el.getBoundingClientRect(), x = r.x + r.width/2, y = r.y + r.height/2;
-        return y >= v.top && y < v.bottom && !el.contains(document.elementFromPoint(x,y));
+        return y >= contentTop && y < contentBottom && !el.contains(document.elementFromPoint(x,y));
       }).map(el => el.dataset.index);
     });
     expect(await intercepted()).toEqual([]);
@@ -188,5 +190,39 @@ test("LAYOUT-04: privacy links and jar captions wrap at 200%", async ({page}) =>
     await page.setViewportSize({width,height}); await textScale(page,2);
     const overflow = await page.locator(".progress-hero").evaluate(el => [...el.querySelectorAll<HTMLElement>(".hero-kicker,.hero-value,.hero-count,.fine")].filter(child => child.scrollWidth > child.clientWidth+1).map(child => ({text:child.textContent,width:child.clientWidth,scroll:child.scrollWidth})));
     expect(overflow, `${width}x${height}`).toEqual([]);
+  }
+});
+
+test("short-board threshold and double-line Add status preserve the field rail", async ({browser}) => {
+  const page = await browser.newPage({viewport:{width:320,height:568},locale:"ru-RU"});
+  try {
+    await page.emulateMedia({reducedMotion:"reduce"});
+    await seed(page,[5,5,0,0,0,0,0,0,0,...Array.from({length:54},(_,i)=>i%2 ? 2 : 8)]);
+    const grid = page.locator("#board");
+    const before = (await grid.boundingBox())!.y;
+    await digit(page,0);
+    await digit(page,1);
+    await expect(page.locator("#remaining")).toHaveText("54");
+    expect((await grid.boundingBox())!.y).toBe(before);
+    await rawClick(page,"#undo");
+    expect((await grid.boundingBox())!.y).toBe(before);
+  } finally {
+    await page.context().close();
+  }
+
+  const noPairs = await browser.newPage({viewport:{width:320,height:568},locale:"ru-RU"});
+  try {
+    await noPairs.emulateMedia({reducedMotion:"reduce"});
+    await seed(noPairs,[1,2,3,4]);
+    const viewport = noPairs.locator("#viewport");
+    const before = await viewport.boundingBox();
+    await rawClick(noPairs,"#add");
+    await expect(noPairs.locator("#remaining")).toHaveText("8");
+    expect(await viewport.boundingBox()).toEqual(before);
+    await rawClick(noPairs,"#undo");
+    await expect(noPairs.locator("#remaining")).toHaveText("4");
+    expect(await viewport.boundingBox()).toEqual(before);
+  } finally {
+    await noPairs.context().close();
   }
 });

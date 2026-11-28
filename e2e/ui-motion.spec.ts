@@ -196,6 +196,8 @@ for(const reduce of [false,true])test(`result/Continue and background cleanup ${
     // too. Exercise the real baseline continuation with a no-fill SDK result.
     (window as any).unavailable=true;
   });
-  await rawClick(page,'#play-again');await expect(page.locator('#win')).toBeHidden();
+  await rawClick(page,'#play-again');
+  await page.locator('#classic-new-sheet [data-classic-level="1"]').click();
+  await expect(page.locator('#win')).toBeHidden();
   await page.waitForTimeout(650);expect(await page.locator('.result-seed-burst').count()).toBe(0);
 });

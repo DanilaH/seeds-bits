@@ -1,6 +1,6 @@
 # Agent contract — Семечки
 
-Read [project decisions](docs/PROJECT_DECISIONS.md), [current status](docs/STATUS.md) and [README](README.md). Establish the actual branch/HEAD and requested scope before editing. The current working baseline is `feat/monetization-assists-20261113` (verified `a6aa3f4c80a2642ff8c4696a94f7677a5810872e` before the 14 November UI pass); `main` is older in gameplay. Preserve subsequent work. All six assistance experiments stay off; ordinary controls are Undo, Hint and Add. Historical publication claims are not evidence of a store release.
+Read [project decisions](docs/PROJECT_DECISIONS.md), [current status](docs/STATUS.md) and [README](README.md). Establish the actual branch/HEAD and requested scope before editing. The current working branch is `feat/quiet-table-20261126` (stacked PR #40); `main` is substantially older in gameplay. Recheck the actual branch head and CI before editing. The historical ordinary-game base was `feat/monetization-assists-20261113` / `a6aa3f4c80a2642ff8c4696a94f7677a5810872e` before the 14 November UI pass. Preserve subsequent work. The technical save/banner contract for #45 is in [stability acceptance](docs/research/stability-2026-11-26/README.md). Fast field feedback can be explicitly pending; only the latest completed move write acknowledges durability. Preserve same-turn Core Feel and durable reward authority. All six assistance experiments stay off; ordinary controls are Undo, Hint and Add. Historical publication claims are not evidence of a store release.
 
 This is an offline-first TypeScript/Vite/DOM game with Capacitor, targeting Android/RuStore. The separate Yandex Games web build is a prototype; its web SDK is not Yandex Mobile Ads Android. Do not install a Phaser/bootstrap runtime into this existing game.
 
@@ -25,3 +25,13 @@ Use [NEW_PROJECT_SETUP.md](docs/kit-guidance/NEW_PROJECT_SETUP.md) only for setu
 Choose checks for the actual change. Browser CI, synthetic gestures, SDK doubles and demo ads do not establish physical phone feel, live revenue, player retention or publisher payout. Never claim an unread source was inspected. Do not publish to a store, change other games or alter dashboard settings as a side effect of documentation work.
 
 At the end of a material task report **KIT IMPACT**: NONE / REUSE / IMPROVE / CANDIDATE / EXTRACTED, with evidence and any targeted proposal, following [KIT_FEEDBACK_LOOP.md](docs/kit-guidance/KIT_FEEDBACK_LOOP.md). Do not turn a project-specific mechanic into a generic API without a demonstrated shared contract.
+
+## Active owner package48 (27 November)
+
+Preserve the complete12109 functional source96f5ae1. Issue48 VA01–13 authorizes local layout repairs, proportional jar fill and the restored expressive12106 spill. Earned jar replacement follows the current durable acknowledgement; cancellation settles only to confirmed totals. Ordinary Settings keeps its native banner; confirm/privacy/actual modals/fullscreen/background remain exceptions.
+
+In-game reminder switches/time/result CTA are removed by owner instruction. Inexact native lunch/evening slots12:30/19:00 target players with no entry/foreground today, not unfinished daily puzzles. Android permission/channel and legacy opt-out apply; one saved request after a successful result and completed reward sequence, no automatic repeat. Keep review/ads from overlapping this gate. Use seeds-bits CI, not kit CI; deliver signed preview plus normal-speed comparisons12106/12109/candidate. No publication.
+
+## Owner package50 — 28 November
+
+The real book-v1-1 contextual entry is now the default product/production candidate route, superseding the historical preview-only decision. Explicit FIRST_SESSION=0 is retired short-course QA only; release configuration rejects it. Existing/uncertain profiles retain protected recovery/menu and saved boards. The voluntary six-step Learn course shares the ordinary renderer, HUD/status/tool slots and Core Feel; it never pays game rewards. Preserve all12112 fixes. See [FT01–03 evidence boundaries](docs/research/tutorial-final-2026-11-28/README.md). Deliver one signed preview12113 through this project's CI, no publication or merge.

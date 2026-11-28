@@ -2,6 +2,7 @@
 export class SeedFlight {
   private layer = document.createElement("div");
   private active = new Map<HTMLElement, (silent?: boolean) => void>();
+  get running() { return this.active.size > 0; }
   constructor() {
     this.layer.id = "seed-flights";
     this.layer.setAttribute("aria-hidden", "true");

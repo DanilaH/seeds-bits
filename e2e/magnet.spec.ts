@@ -16,10 +16,14 @@ async function position(page:Page,charges=0,demo=false,state="ready") {
 async function data(page:Page){return page.evaluate(k=>JSON.parse(localStorage.getItem(k)!),key);}
 async function preview(page:Page){await page.locator("#magnet").click();await expect(page.locator("#hint-offer")).toBeVisible();await expect(page.locator("#help-offer-copy")).toContainText("2 хода");}
 test("M01/07/08/12/13: preview is reversible; demo, Undo, replay and ordinary completion",async({page})=>{
-  await position(page);const before=await data(page);await preview(page);
+  await position(page);
+  // The first durable write may flush this launch's engagement session count.
+  // Cancellation must preserve the board, attempts, stock and earned rewards.
+  const cancelState=async()=>{const p=await data(page);delete p.meta.engagement;return p;};
+  const before=await cancelState();await preview(page);
   await expect(page.locator("#help-preview .magnet-mark")).toHaveCount(2);
   if(process.env.SEEDS_RECORD_HELP){await page.waitForTimeout(250);await page.screenshot({path:test.info().outputPath("magnet-preview.png")});await page.waitForTimeout(800);}
-  await page.locator("#cancel-hints").click();expect(await data(page)).toEqual(before);
+  await page.locator("#cancel-hints").click();expect(await cancelState()).toEqual(before);
   await preview(page);await page.locator("#watch-hints").click();
   await expect(page.locator("#remaining")).toHaveText("4");let p=await data(page);
   if(process.env.SEEDS_RECORD_HELP){await page.screenshot({path:test.info().outputPath("magnet-after.png")});await page.waitForTimeout(700);}

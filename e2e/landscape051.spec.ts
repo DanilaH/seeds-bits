@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { resumeStoredGame } from "./restore-game";
 for (const [width, height] of [
   [568, 320],
   [667, 375],
@@ -32,7 +33,7 @@ for (const [width, height] of [
       );
     });
     await page.goto("/");
-    await page.locator("#resume").click();
+    await resumeStoredGame(page);
     const geometry = await page.evaluate(() => {
       const v = document.querySelector("#viewport")!.getBoundingClientRect();
       const c = document.querySelector(".cell")!.getBoundingClientRect();
@@ -72,7 +73,7 @@ for (const [width, height] of [
       localStorage.setItem(k, JSON.stringify(p));
     });
     await page.reload();
-    await page.locator("#resume").click();
+    await resumeStoredGame(page);
     await page.locator('[data-index="0"]').click();
     await page.locator('[data-index="1"]').click();
     await expect(page.locator("#win-stats")).toBeVisible();
@@ -80,7 +81,7 @@ for (const [width, height] of [
     await page.locator("#play-again").scrollIntoViewIfNeeded();
     await expect(page.locator("#play-again")).toBeInViewport();
     await page.screenshot({ path: `test-results/result-${width}.png` });
-    await page.locator("#play-again").click();
+    await page.locator("#result-home").click();
     await expect(page.locator("#classic-mode")).toBeVisible();
     await expect(page.locator("#book-mode")).toBeVisible();
     await expect(page.locator("#daily-mode")).toBeVisible();

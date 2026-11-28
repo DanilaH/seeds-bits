@@ -20,6 +20,11 @@ describe("result significance follows actual unique completion order", () => {
     expect(resultKind(ids[0], ids.slice(0, 6), tasks)).toBe("task");
     expect(resultKind(ids[5], ids.slice(0, 6), tasks)).toBe("page");
   });
+  it("does not celebrate the exact final task again or on restoration", () => {
+    expect(resultKind(ids[5], ids.slice(0,6), tasks, false)).toBe("task");
+    expect(resultKind(ids[23], ids.slice(0,24), tasks, false)).toBe("task");
+    expect(resultKind(ids[1], [...ids.slice(0,1),...ids.slice(2,6),ids[1]], tasks, false)).toBe("task");
+  });
   it("book completion takes precedence and cannot be borrowed from another volume", () => {
     const done = [...ids.slice(0, 3), ...ids.slice(4, 24), ids[3], ids[24]];
     expect(resultKind(ids[3], done, tasks)).toBe("book");

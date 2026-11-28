@@ -1,4 +1,4 @@
-import { chooseBookVolume, exposeBookFilter } from "./book-controls";
+import { chooseBookVolume } from "./book-controls";
 import {test, expect, type Page} from "@playwright/test";
 import notebook from "../src/notebook.json" with {type:"json"};
 import {pairs, removePair} from "../src/core";
@@ -30,13 +30,14 @@ async function seeded(page:Page, options:{active?:string; done?:string[]; seeds?
 }
 const boardTop=async (page:Page) => (await page.locator("#viewport").boundingBox())!.y;
 
-test("progress card targets its own saved notebook after New and Completed catalog filters",async({page})=>{
+test("progress card targets its own saved notebook after browsing catalogue sections and ranges",async({page})=>{
   await page.emulateMedia({reducedMotion:"reduce"});
   await seeded(page);
-  for(const filter of ["new","done"]) {
+  for(const filter of ["themes","range"]) {
     await page.locator("#book-mode").click();
-    await (await exposeBookFilter(page)).selectOption(filter);
-    await expect(page.locator("#book-filter")).toHaveValue(filter);
+    await page.locator("#all-books").click();
+    if(filter === "themes") await page.locator("#book-section-themes").click();
+    else await page.locator('[data-book-range="4"]').click();
     await page.locator("#collection-back").click();
     await page.locator("#collection-back").click();
     await page.locator("#progress-open").click();
@@ -56,11 +57,13 @@ test("progress card targets its own saved notebook after New and Completed catal
   }
 });
 
-test("pause menu has a compact card gap at 390x844 with footer near bottom",async({page})=>{
+test("pause menu shows the live notebook cover and grouped visible navigation (UF02)",async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await seeded(page);
   await page.screenshot({path:"test-results/calm-followup/menu-390x844.jpg",type:"jpeg",quality:90,animations:"disabled"});
-  await expect(page.locator("#home-current-art .book-cover-number")).toHaveText("№1");
+  await expect(page.locator("#home-game-title")).toHaveText("Тетрадь 1");
+  await expect(page.locator(".quiet-mini-board")).toBeVisible();
+  await expect(page.locator(".home-current-copy")).toHaveCSS("background-image", /svg/);
   await expect(page.locator("#home-goal progress")).toHaveJSProperty("value",1);
   const measure=await page.evaluate(()=>{
     const a=document.querySelector(".home-current")!.getBoundingClientRect();
@@ -68,13 +71,22 @@ test("pause menu has a compact card gap at 390x844 with footer near bottom",asyn
     const links=document.querySelector(".home-links")!.getBoundingClientRect();
     const qa=document.querySelector("#qa-profile");
     const qaBox=qa && qa.getClientRects().length ? qa.getBoundingClientRect() : null;
-    return {height:a.height, gap:b.top-a.bottom, qaBottom:qaBox?.bottom??links.bottom, screen:innerHeight};
+    const modes=document.querySelector(".mode-nav")!.getBoundingClientRect();
+    const dialog=document.querySelector("#dialog")!,bounds=dialog.getBoundingClientRect();
+    const clipBottom=Math.min(innerHeight,bounds.top+dialog.clientTop+dialog.clientHeight);
+    const controls=[...document.querySelectorAll(".home-links > button")];
+    return {height:a.height, gap:b.top-a.bottom, qaBottom:qaBox?.bottom??links.bottom, screen:innerHeight,
+      footerGap:links.top-modes.bottom,allVisible:controls.every(e=>{const r=e.getBoundingClientRect();return r.top>=Math.max(0,bounds.top)&&r.bottom<=clipBottom&&r.height>=44&&e.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})};
   });
-  expect(measure.height).toBeLessThanOrEqual(150);
+  expect(measure.height).toBeGreaterThanOrEqual(220);
+  expect(measure.height).toBeLessThanOrEqual(345);
   expect(measure.gap).toBeGreaterThanOrEqual(0);
-  expect(measure.gap).toBeLessThanOrEqual(20);
+  expect(measure.gap).toBeLessThanOrEqual(32);
   expect(measure.screen-measure.qaBottom).toBeGreaterThanOrEqual(0);
-  expect(measure.screen-measure.qaBottom).toBeLessThanOrEqual(45);
+  // Owner49 UF02 groups navigation with modes; the old bottom-pinning rule is superseded.
+  expect(measure.footerGap).toBeGreaterThanOrEqual(0);
+  expect(measure.footerGap).toBeLessThanOrEqual(35);
+  expect(measure.allVisible).toBe(true);
 });
 
 test("full course uses one action plus one rule; answering does not shift board",async({page})=>{
@@ -119,7 +131,7 @@ test("full course uses one action plus one rule; answering does not shift board"
   expect(Math.abs(endSlot!.height - originalSlot!.height)).toBeLessThanOrEqual(1);
 });
 
-test("entering a lesson in landscape excludes the game hint dock on the first layout", async ({page}) => {
+test("entering a lesson reuses the status rail without a stale game hint on the first layout", async ({page}) => {
   await page.setViewportSize({ width: 568, height: 320 });
   await seeded(page);
   await page.locator("#resume").click();
@@ -128,9 +140,9 @@ test("entering a lesson in landscape excludes the game hint dock on the first la
   await page.locator("#menu").click();
   const firstLayout = await page.locator("#learn").evaluate((button: HTMLElement) => {
     button.click();
-    return document.querySelector("#hint-dock")!.getBoundingClientRect().height;
+    return {jumpHidden:(document.querySelector("#hint-jump") as HTMLElement).hidden,teachingInRail:!!document.querySelector(".status-wrap #lesson:not([hidden])")};
   });
-  expect(firstLayout).toBe(0);
+  expect(firstLayout).toEqual({jumpHidden:true,teachingInRail:true});
   await expect(page.locator("#lesson")).toBeVisible();
 });
 
@@ -139,7 +151,7 @@ test("field header follows the grid and the compact language rows keep their mar
   await seeded(page);
   await page.locator("#resume").click();
   const menu = await page.locator("#menu").boundingBox();
-  const board = await page.locator("#board").boundingBox();
+  const board = await page.locator("#viewport").boundingBox();
   expect(Math.abs(menu!.x - board!.x)).toBeLessThanOrEqual(1);
   expect(menu!.width).toBeGreaterThanOrEqual(44);
   for (const id of ["menu","book-top"]) {
@@ -181,26 +193,23 @@ test("Home mode art aligns with the compact labels and stays on-screen", async (
   await expect(page.locator("#book-mode .book-cover-number")).toHaveText("№1");
   await expect(page.locator("#book-count")).toHaveText("Тетрадь 1 · задача 2 · 1/24");
   const dimensions = await page.evaluate(() => {
-    return [["#classic-mode", "#classic-mode .tile-picture"], [".home-book-card", "#book-mode .book-picture"], [".home-calendar", "#home-today-art .calendar-picture"]]
-      .map(([card, art]) => {
-        const frame = document.querySelector(card)!.getBoundingClientRect();
-        const artwork = document.querySelector(art)!;
+    return ["#classic-mode .tile-picture", "#book-mode .book-picture", "#home-today-art"]
+      .map(selector => {
+        const artwork = document.querySelector(selector)!;
         const icon = artwork.getBoundingClientRect();
-        const label = artwork.closest("button")!.lastElementChild!;
-        return { cardLeft: frame.left, height: frame.height, iconLeft: icon.left, iconRight: icon.right,
-          iconWidth: icon.width, labelLeft: label.getBoundingClientRect().left };
+        const label = artwork.closest("button")!.lastElementChild!.getBoundingClientRect();
+        return {top: icon.top, bottom: icon.bottom, width: icon.width,
+          left: icon.left, right: icon.right, labelTop: label.top, labelCenter: (label.left + label.right) / 2};
       });
   });
-  for (const { cardLeft, iconLeft, iconRight, iconWidth, labelLeft } of dimensions) {
-    expect(iconLeft).toBeGreaterThan(0);
-    expect(iconLeft).toBeGreaterThanOrEqual(cardLeft - 1);
-    expect(iconWidth).toBeGreaterThanOrEqual(24);
-    expect(iconRight).toBeLessThan(labelLeft);
+  for (const icon of dimensions) {
+    expect(icon.left).toBeGreaterThan(0);
+    expect(icon.right).toBeLessThanOrEqual(320);
+    expect(icon.width).toBeGreaterThanOrEqual(24);
+    expect(icon.bottom).toBeLessThanOrEqual(icon.labelTop);
+    expect(Math.abs((icon.left + icon.right) / 2 - icon.labelCenter)).toBeLessThanOrEqual(1);
   }
-  const insets = dimensions.map(({ cardLeft, labelLeft }) => labelLeft - cardLeft);
-  const heights = dimensions.map(({ height }) => height);
-  expect(Math.max(...insets)-Math.min(...insets)).toBeLessThanOrEqual(1);
-  expect(Math.max(...heights)-Math.min(...heights)).toBeLessThanOrEqual(1);
+  expect(Math.max(...dimensions.map(icon => icon.top)) - Math.min(...dimensions.map(icon => icon.top))).toBeLessThanOrEqual(1);
   await expect(page.locator("#calendar-open")).toBeVisible();
 });
 
@@ -221,15 +230,13 @@ test("the Home notebook cover shows progress for the volume it opens", async ({ 
 test("the three-digit recommended notebook number fits on the cover at 320px", async ({ page }) => {
   await page.setViewportSize({ width:320,height:568 });
   await seeded(page,{active:"book-v3-links-1",done:[]});
-  for (const selector of ["#book-mode .book-cover-number","#home-current-art .book-cover-number"]) {
-    const number=page.locator(selector);
-    await expect(number).toHaveText("№101");
-    expect(await number.evaluate(label=>{
-      const cover=label.parentElement!;
-      const style=getComputedStyle(cover);
-      return (label as HTMLElement).offsetWidth + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) <= cover.clientWidth;
-    })).toBe(true);
-  }
+  const number = page.locator("#book-mode .book-cover-number");
+  await expect(number).toHaveText("№101");
+  expect(await number.evaluate(label => {
+    const cover = label.parentElement!;
+    const style = getComputedStyle(cover);
+    return (label as HTMLElement).offsetWidth + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) <= cover.clientWidth;
+  })).toBe(true);
 });
 
 test.describe("month on the home calendar", () => {
@@ -257,7 +264,7 @@ test.describe("month on the home calendar", () => {
   });
 });
 
-test("today is emphasized until its puzzle is completed", async ({page}) => {
+test("today stays marked but an already started puzzle does not nudge", async ({page}) => {
   await page.clock.setFixedTime(new Date("2026-11-23T12:00:00+05:00"));
   const id = "daily-v1-2026-11-23";
   await seeded(page,{active:id,done:["daily-v1-2026-11-22"]});
@@ -265,8 +272,12 @@ test("today is emphasized until its puzzle is completed", async ({page}) => {
   const icon = daily.locator("#home-today-art");
   const calendar = icon.locator(".calendar-picture");
   await expect(daily).toHaveAttribute("data-daily-pending","");
-  expect(await icon.evaluate(el=>getComputedStyle(el,"::after").content)).toBe("none");
-  await expect(calendar).toHaveCSS("animation-name", "today-calendar-glow");
+  // Owner49 UF06 replaces the old absent pseudo-element with a static status dot.
+  expect(await icon.evaluate(el=>{const s=getComputedStyle(el,"::after");return {content:s.content,animation:s.animationName,width:s.width,height:s.height,pointer:s.pointerEvents};}))
+    .toEqual({content:'""',animation:"none",width:"7px",height:"7px",pointer:"none"});
+  await expect(daily).toHaveAttribute("data-daily-started", "");
+  await expect(icon).toHaveCSS("animation-name", "none");
+  await expect(calendar).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await page.emulateMedia({reducedMotion:"reduce"});
   await expect(calendar).toHaveCSS("animation-name", "none");
   await page.locator("#calendar-open").click();

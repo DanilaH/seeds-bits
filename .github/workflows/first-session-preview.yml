@@ -1,14 +1,16 @@
 name: First session preview
 on:
   push:
-    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125, feat/menu-rails-20261125, feat/core-feel-pilot-20261125]
-    paths: [src/**, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, tests/**, e2e/**, scripts/configure-android.mjs, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
+    branches: [research/seeds-first-session-20261120, feat/seeds-content-v5-20261124, feat/seeds-v5-quality-20261125, feat/menu-package-20261125, feat/menu-audit-33-20261125, feat/menu-rails-20261125, feat/core-feel-pilot-20261125, feat/quiet-table-20261126]
+    paths: [docs/STATUS.md, docs/porting/ADOPTION_LEDGER.json, docs/research/stability-2026-11-26/**, src/**, package.json, package-lock.json, scripts/patch-capacitor-bridge.mjs, scripts/capacitor-bridge-harness.py, scripts/classic-pilot.mjs, scripts/classic-series.mjs, native/android/**, scripts/markets/**, scripts/functional-*.mjs, tests/**, e2e/**, scripts/configure-android.mjs, scripts/gradle-maven-mirror.init.gradle, scripts/first-session-android.mjs, playwright.first-session.config.ts, .github/workflows/first-session-preview.yml]
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: first-session-preview-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' }}
+  # Keep the in-flight input/layout diagnostic while the native dialog oracle
+  # distinguishes request preparation from actual Android visibility.
+  group: first-session-preview-visual48-native-proof-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126' }}
 jobs:
   browser:
     runs-on: ubuntu-24.04
@@ -34,7 +36,7 @@ jobs:
         with: {name: first-session-browser, path: test-results/}
       - run: npx playwright test --config playwright.markets.config.ts
       - name: Verify default sound and board feedback
-        if: github.ref_name == 'feat/core-feel-pilot-20261125'
+        if: github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126'
         run: npx playwright test --config playwright.core-feel.config.ts
       - run: VITE_SEEDS_MARKET_QA=1 npm run build:yandex
       - uses: actions/upload-artifact@v4
@@ -44,13 +46,125 @@ jobs:
         if: always()
         with: {name: markets-browser-controls, path: test-results/markets/}
 
+  visual-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - run: SEEDS_VISUAL_BASELINE=7fd75255817ce2776383603b36b2fba20d749912 node scripts/run-quiet-audit.mjs
+      - name: Compare unchanged 12107 with the same read-only style probe
+        run: |
+          git worktree add "$RUNNER_TEMP/style-before" 7fd75255817ce2776383603b36b2fba20d749912
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/style-before/node_modules"
+          cp scripts/independent-quiet-audit.mjs scripts/quiet-style-probe.mjs "$RUNNER_TEMP/style-before/scripts/"
+          (cd "$RUNNER_TEMP/style-before" && GITHUB_SHA=7fd75255817ce2776383603b36b2fba20d749912 SEEDS_VISUAL_BASELINE=7fd75255817ce2776383603b36b2fba20d749912 SEEDS_VISUAL_OUT="$GITHUB_WORKSPACE/test-results/style-residue-before" node scripts/run-quiet-audit.mjs)
+      - run: npx playwright test e2e/quiet-polish.spec.ts e2e/ui-audit12103.spec.ts e2e/playtest-followup.spec.ts e2e/gold-layout.spec.ts e2e/feel.spec.ts e2e/menu-package.spec.ts e2e/pair-feedback.spec.ts --workers=2
+      - name: Verify notebook finishes and fresh-game bookmark clearance
+        run: VITE_SEEDS_FIRST_SESSION=1 npx playwright test e2e/bookmark-followup.spec.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: quiet-polish-visual-audit, path: test-results/}
+
+  menu-reward-feel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - run: npx playwright test e2e/menu-reward-feel.spec.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: menu-reward-feel-tests
+          path: test-results/
+
+  production-tutorial:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - name: Exercise actual optimized product entry and shared tutorial UI
+        run: npx playwright test --config playwright.tutorial50.config.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: tutorial50-production-evidence, path: test-results/tutorial50/}
+
+  menu-reward-recordings:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: baseline
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - name: Record original dynamic audit and actual application audio before and after
+        if: ${{ !cancelled() }}
+        run: |
+          command -v ffmpeg >/dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
+          git worktree add "$RUNNER_TEMP/menu-before" 125606e4a90e06b844fe6eb8f83249032cb7057f
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/menu-before/node_modules"
+          git worktree add "$RUNNER_TEMP/menu-baseline" 0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/menu-baseline/node_modules"
+          git worktree add "$RUNNER_TEMP/ui49-before" f7f30fe9fe1bcd7e8b3b1b6f0121c82b219a307f
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/ui49-before/node_modules"
+          git worktree add "$RUNNER_TEMP/tutorial50-before" 4ce4cd4bf56a6b9723af1f9f0bfcf76371aeb77e
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/tutorial50-before/node_modules"
+          npx vite --host 127.0.0.1 --port 5191 > "$RUNNER_TEMP/menu-after.log" 2>&1 &
+          candidate_pid=$!
+          (cd "$RUNNER_TEMP/menu-before" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5192) > "$RUNNER_TEMP/menu-before.log" 2>&1 &
+          baseline_pid=$!
+          (cd "$RUNNER_TEMP/menu-baseline" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5193) > "$RUNNER_TEMP/menu-baseline.log" 2>&1 &
+          middle_pid=$!
+          (cd "$RUNNER_TEMP/ui49-before" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5194) > "$RUNNER_TEMP/ui49-before.log" 2>&1 &
+          ui49_pid=$!
+          (cd "$RUNNER_TEMP/tutorial50-before" && "$GITHUB_WORKSPACE/node_modules/.bin/vite" --host 127.0.0.1 --port 5196) > "$RUNNER_TEMP/tutorial50-before.log" 2>&1 &
+          tutorial50_pid=$!
+          trap 'kill "$candidate_pid" "$baseline_pid" "$middle_pid" "$ui49_pid" "$tutorial50_pid" || true' EXIT
+          for port in 5191 5192 5193 5194 5196; do for attempt in $(seq 1 30); do curl -fsS "http://127.0.0.1:$port" >/dev/null && break || sleep 1; done; done
+          GITHUB_SHA=125606e4a90e06b844fe6eb8f83249032cb7057f SEEDS_MENU_URL=http://127.0.0.1:5192 SEEDS_MENU_OUT=test-results/menu-feel-before node scripts/independent-menu-feel.mjs
+          SEEDS_MENU_URL=http://127.0.0.1:5191 SEEDS_MENU_OUT=test-results/menu-feel-after node scripts/independent-menu-feel.mjs
+          SEEDS_FEEL_URL=http://127.0.0.1:5192 node scripts/record-menu-reward.mjs before
+          SEEDS_FEEL_SOURCE=0f7c6a60a672e12c5b346fdd3175692fa8fb2c4c SEEDS_FEEL_URL=http://127.0.0.1:5193 node scripts/record-menu-reward.mjs baseline
+          SEEDS_FEEL_URL=http://127.0.0.1:5191 node scripts/record-menu-reward.mjs after
+          node scripts/compare-visual48-video.mjs
+          SEEDS_UI49_SOURCE=f7f30fe9fe1bcd7e8b3b1b6f0121c82b219a307f SEEDS_UI49_URL=http://127.0.0.1:5194 node scripts/record-final-ui49.mjs before
+          SEEDS_UI49_URL=http://127.0.0.1:5191 node scripts/record-final-ui49.mjs after
+          node scripts/record-tutorial50.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: menu-reward-feel-evidence
+          path: test-results/
+
   preview:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
-      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
+      GITHUB_RUN_NUMBER_PREVIEW: ${{ github.ref_name == 'feat/quiet-table-20261126' && '1013' || github.ref_name == 'feat/core-feel-pilot-20261125' && '997' || '994' }}
+      SEEDS_MAVEN_CENTRAL_MIRROR: google
       SEEDS_BUILD_FLAVOR: preview
       ADS_MODE: test
       SEEDS_ARTIFACT_CHANNEL: rustore
@@ -71,8 +185,8 @@ jobs:
       - run: |
           chmod +x android/gradlew
           cd android
-          if ! ./gradlew assembleRelease assembleDebug; then
-            ./gradlew --refresh-dependencies assembleRelease assembleDebug
+          if ! ./gradlew -I ../scripts/gradle-maven-mirror.init.gradle assembleRelease assembleDebug; then
+            ./gradlew -I ../scripts/gradle-maven-mirror.init.gradle --refresh-dependencies assembleRelease assembleDebug
           fi
       - run: |
           mkdir -p test-results/first-session-apk
@@ -85,16 +199,16 @@ jobs:
         with: {name: first-session-preview-unsigned, path: test-results/first-session-apk/}
 
   android-regression:
-    needs: preview
+    needs: [preview, browser, visual-audit, menu-reward-feel]
     strategy:
       fail-fast: false
       matrix:
         mode: [offline, demo]
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 40
     env:
       SEEDS_ANDROID_TEST_MODE: ${{ matrix.mode }}
-      SEEDS_ANDROID_CORE_FEEL: ${{ github.ref_name == 'feat/core-feel-pilot-20261125' && '1' || '0' }}
+      SEEDS_ANDROID_CORE_FEEL: ${{ (github.ref_name == 'feat/core-feel-pilot-20261125' || github.ref_name == 'feat/quiet-table-20261126') && '1' || '0' }}
       VITE_SEEDS_FIRST_SESSION: "1"
       VITE_SEEDS_QA_PROFILE: baseline
       SEEDS_BUILD_FLAVOR: preview
@@ -112,8 +226,7 @@ jobs:
         with: {distribution: temurin, java-version: 21}
       - uses: android-actions/setup-android@v4
       - run: sdkmanager "build-tools;36.0.0"
-      - name: Check the video tools
-        if: matrix.mode == 'demo'
+      - name: Check screenshot and video tools
         run: |
           command -v ffmpeg > /dev/null || { sudo apt-get update && sudo apt-get install -y ffmpeg; }
       - run: npm ci --no-audit --no-fund
@@ -126,6 +239,46 @@ jobs:
           run-id: 45579802309
           github-token: ${{ github.token }}
           path: baseline
+      - uses: actions/download-artifact@v4
+        if: matrix.mode == 'offline'
+        with:
+          artifact-ids: 15177864110
+          merge-multiple: true
+          run-id: 45954682191
+          github-token: ${{ github.token }}
+          path: baseline12108
+      - uses: actions/download-artifact@v4
+        if: matrix.mode == 'offline'
+        with:
+          artifact-ids: 15188046253
+          merge-multiple: true
+          run-id: 45976677220
+          github-token: ${{ github.token }}
+          path: baseline12109
+      - uses: actions/download-artifact@v4
+        if: matrix.mode == 'offline'
+        with:
+          artifact-ids: 15211986217
+          merge-multiple: true
+          run-id: 46023909431
+          github-token: ${{ github.token }}
+          path: baseline12110
+      - uses: actions/download-artifact@v4
+        if: matrix.mode == 'offline'
+        with:
+          artifact-ids: 15259292650
+          merge-multiple: true
+          run-id: 46134792302
+          github-token: ${{ github.token }}
+          path: baseline12111
+      - uses: actions/download-artifact@v4
+        if: matrix.mode == 'offline'
+        with:
+          artifact-ids: 15262099965
+          merge-multiple: true
+          run-id: 46144750753
+          github-token: ${{ github.token }}
+          path: baseline12112
       - run: |
           echo '4de5a8398d5deb9748cec6c5e89b9b78a44258a2f29f0b26f18dc1096ff7daf9  baseline/seeds-first-session-12088-unsigned.apk' | sha256sum -c -
           keytool -genkeypair -alias acceptance -keyalg RSA -keysize 2048 -validity 2 -dname 'CN=Ephemeral CI acceptance' -keystore "$RUNNER_TEMP/first-session-ci.p12" -storepass only-for-ci -keypass only-for-ci
@@ -134,6 +287,21 @@ jobs:
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/old-ci.apk" baseline/seeds-first-session-12088-unsigned.apk
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/release-ci.apk" "candidate/seeds-first-session-${version_code}-unsigned.apk"
           "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/new-ci.apk" "candidate/seeds-first-session-${version_code}-debug.apk"
+          if [[ "$SEEDS_ANDROID_TEST_MODE" == offline ]]; then
+            node -e 'const p=require("./baseline12108/source.json");if(p.source!=="e592866145b0c2f537f01d21fb62a0e9e471d5e4"||p.versionCode!==12108)throw Error("Wrong previous build");'
+            "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12108-ci.apk" baseline12108/seeds-first-session-12108-debug.apk
+            node -e 'const p=require("./baseline12109/source.json");if(p.source!=="96f5ae19588c151c0dd884e80a7f4e56c1d1f71d"||p.versionCode!==12109)throw Error("Wrong12109 baseline");'
+            "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12109-ci.apk" baseline12109/seeds-first-session-12109-debug.apk
+            node -e 'const p=require("./baseline12110/source.json");if(p.source!=="6daea5abd6609008e2338476d81e24171714c50a"||p.versionCode!==12110)throw Error("Wrong12110 baseline");'
+            "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12110-ci.apk" baseline12110/seeds-first-session-12110-debug.apk
+            node -e 'const p=require("./baseline12111/source.json");if(p.source!=="f7f30fe9fe1bcd7e8b3b1b6f0121c82b219a307f"||p.versionCode!==12111)throw Error("Wrong12111 baseline");'
+            "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12111-ci.apk" baseline12111/seeds-first-session-12111-debug.apk
+            node -e 'const p=require("./baseline12112/source.json");if(p.source!=="4ce4cd4bf56a6b9723af1f9f0bfcf76371aeb77e"||p.versionCode!==12112)throw Error("Wrong12112 baseline");'
+            "$build_tools_dir" sign --ks "$RUNNER_TEMP/first-session-ci.p12" --ks-key-alias acceptance --ks-pass pass:only-for-ci --out "$RUNNER_TEMP/prior12112-ci.apk" baseline12112/seeds-first-session-12112-debug.apk
+          fi
+      - name: Generate real large profiles for the Android persistence audit
+        if: matrix.mode == 'offline'
+        run: npx vitest run tests/functional-size.test.ts
       - run: node scripts/classic-series.mjs --before eae2bcbeaaa1a5c76872dddc7a7f79844988b60e
         if: matrix.mode == 'offline'
       - uses: actions/upload-artifact@v4
@@ -146,7 +314,9 @@ jobs:
           sdkmanager 'emulator' 'system-images;android-35;google_apis;x86_64'
           echo no | avdmanager create avd --force --name firstsession --package 'system-images;android-35;google_apis;x86_64'
           sudo chmod 666 /dev/kvm
-          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 > test-results/first-session-android/emulator.log 2>&1 &
+          emulator_network_args=()
+          if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then emulator_network_args=(-dns-server 8.8.8.8,8.8.4.4); fi
+          "$ANDROID_HOME/emulator/emulator" -avd firstsession -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -memory 2048 -cores 2 "${emulator_network_args[@]}" > test-results/first-session-android/emulator.log 2>&1 &
           emulator_pid=$!
           for attempt in $(seq 1 120); do
             if ! kill -0 "$emulator_pid" 2>/dev/null; then cat test-results/first-session-android/emulator.log; exit 1; fi
@@ -162,6 +332,7 @@ jobs:
           test "$(adb shell id -u | tr -d '\r')" = 0
           adb shell input keyevent 82
           if [[ "$SEEDS_ANDROID_TEST_MODE" == demo ]]; then
+            node scripts/markets/check-emulator-network.mjs
             SEEDS_BANNER_ONLINE=1 node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk"
             exit
           fi
@@ -170,7 +341,7 @@ jobs:
           adb shell iptables -I OUTPUT '!' -o lo -j REJECT
           adb shell ip6tables -I OUTPUT '!' -o lo -j REJECT
           adb shell input keyevent 82
-          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js"
+          node scripts/markets/android.mjs "$RUNNER_TEMP/new-ci.apk" "$RUNNER_TEMP/old-ci.apk" "$RUNNER_TEMP/release-ci.apk" "$RUNNER_TEMP/seeds-classic-pilot.bundle.js" "$RUNNER_TEMP/prior12108-ci.apk" "$RUNNER_TEMP/prior12109-ci.apk" "$RUNNER_TEMP/prior12110-ci.apk" "$RUNNER_TEMP/prior12111-ci.apk" "$RUNNER_TEMP/prior12112-ci.apk"
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: 'markets-android-${{ matrix.mode }}', path: "test-results/markets-android/\ntest-results/first-session-android/emulator.log"}

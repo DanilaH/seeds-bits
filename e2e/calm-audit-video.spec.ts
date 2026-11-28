@@ -1,4 +1,4 @@
-import { chooseBookVolume, exposeBookFilter } from "./book-controls";
+import { chooseBookVolume } from "./book-controls";
 // Real playable browser capture for PR #11. Recording enabled at file scope,
 // as required by Playwright's worker isolation rules.
 import {test,expect} from "@playwright/test";
@@ -7,7 +7,7 @@ import {pairs,removePair} from "../src/core";
 
 test.use({video:"on"});
 
-test("record saved task 2 after selecting New filter in catalog",async({page})=>{
+test("record saved task 2 after browsing catalogue themes",async({page})=>{
   await page.setViewportSize({width:390,height:844});
   const board=notebook[1].board,match=pairs(board)[0];
   const progress={
@@ -25,8 +25,8 @@ test("record saved task 2 after selecting New filter in catalog",async({page})=>
   await page.goto("/");
   await expect(page.locator("#dialog")).toHaveAttribute("open","");
   await page.locator("#book-mode").click();
-  await (await exposeBookFilter(page)).selectOption("new");
-  await expect(page.locator("#book-filter")).toHaveValue("new");
+  await page.locator("#all-books").click();
+  await page.locator("#book-section-themes").click();
   await page.locator("#collection-back").click();
   await page.locator("#collection-back").click();
   await page.locator("#progress-open").click();
@@ -43,5 +43,5 @@ test("record saved task 2 after selecting New filter in catalog",async({page})=>
   const video=page.video();
   expect(video).not.toBeNull();
   await page.close();
-  await video!.saveAs("test-results/calm-followup/progress-filter-to-task-2.webm");
+  await video!.saveAs("test-results/calm-followup/progress-catalogue-to-task-2.webm");
 });

@@ -1,0 +1,84 @@
+name: Functional audit fixes 47
+on:
+  push:
+    branches: [feat/quiet-table-20261126]
+    paths: [src/**, tests/**, e2e/**, native/**, scripts/**, docs/STATUS.md, docs/porting/ADOPTION_LEDGER.json, .github/workflows/**]
+permissions:
+  contents: read
+concurrency:
+  group: functional-fixes-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  independent-model-and-faults:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx vitest run tests/functional-audit-12108.test.ts tests/functional-audit-followup.test.ts tests/functional-audit-fixes.test.ts tests/functional-size.test.ts tests/optional-service.test.ts
+      - run: npx playwright install chromium
+      - run: npx playwright test e2e/functional-audit-fixes.spec.ts e2e/monetization060.spec.ts e2e/ux111.spec.ts e2e/update110.spec.ts e2e/hardening.spec.ts e2e/store-release.spec.ts --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: functional-audit-fixes
+          path: test-results/
+  production-configuration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SEEDS_BUILD_FLAVOR: release
+      VITE_SEEDS_FIRST_SESSION: "1"
+      VITE_SEEDS_QA_PROFILE: ""
+      SEEDS_MAVEN_CENTRAL_MIRROR: google
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: 21}
+      - uses: android-actions/setup-android@v4
+      - run: npm ci --no-audit --no-fund
+      - run: npm run setup:android
+      - name: Validate actual production configuration without logging values
+        env:
+          APPMETRICA_API_KEY: ${{ secrets.APPMETRICA_API_KEY || vars.APPMETRICA_API_KEY }}
+          YANDEX_BANNER_AD_UNIT_ID: ${{ secrets.YANDEX_BANNER_AD_UNIT_ID || vars.YANDEX_BANNER_AD_UNIT_ID }}
+          YANDEX_INTERSTITIAL_AD_UNIT_ID: ${{ secrets.YANDEX_INTERSTITIAL_AD_UNIT_ID || vars.YANDEX_INTERSTITIAL_AD_UNIT_ID }}
+          YANDEX_REWARDED_AD_UNIT_ID: ${{ secrets.YANDEX_REWARDED_AD_UNIT_ID || vars.YANDEX_REWARDED_AD_UNIT_ID }}
+          ADS_MODE: live
+          REQUIRE_MOBILE_CONFIG: true
+          GITHUB_RUN_NUMBER: "900"
+        run: |
+          node scripts/configure-android.mjs
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          values={e.attrib['name']:e.text or '' for e in ET.parse('android/app/src/main/res/values/seeds-services.xml').getroot()}
+          assert values['analytics_channel']=='release' and values['ads_test_mode']=='false'
+          assert values['appmetrica_api_key']
+          assert len({values[k] for k in ['yandex_banner_id','yandex_interstitial_id','yandex_rewarded_id']})==3
+          assert 'applicationId "com.seedsbits.game"' in Path('android/app/build.gradle').read_text()
+          print('PASS: production package/channel, checked live IDs, analytics configuration; no dashboard or store write')
+          PY
+      - run: chmod +x android/gradlew && cd android && ./gradlew -I ../scripts/gradle-maven-mirror.init.gradle assembleRelease
+      - name: Verify no development bridge injection in optimized production assets
+        run: |
+          python3 - <<'PY'
+          import zipfile,json,os
+          from pathlib import Path
+          apk=Path('android/app/build/outputs/apk/release/app-release-unsigned.apk')
+          with zipfile.ZipFile(apk) as z:
+            assets=b'\n'.join(z.read(n) for n in z.namelist() if n.startswith('assets/public/') and n.endswith('.js'))
+          for token in [b'__SEEDS_ADS_TEST__',b'__SEEDS_ENGAGEMENT_TEST__',b'__SEEDS_FEEDBACK_TEST__']:
+            assert token not in assets,token
+          Path('test-results').mkdir(exist_ok=True)
+          Path('test-results/production-configuration.json').write_text(json.dumps({'source':os.environ['GITHUB_SHA'],'unsignedOnly':True,'published':False,'firstSession':True,'productionConfiguration':True,'liveDelivery':'UNKNOWN','releaseSigning':'NOT_RUN'},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: functional-production-configuration
+          path: test-results/production-configuration.json

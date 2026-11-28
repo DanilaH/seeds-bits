@@ -1,0 +1,17 @@
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository
+
+// CI-only transport override. Apply before every project, including Capacitor's
+// separate buildscript classpath. Google/Android, RuStore and local repos remain.
+// https://docs.gradle.org/current/userguide/init_scripts.html
+if (System.getenv('SEEDS_MAVEN_CENTRAL_MIRROR') == 'google') {
+    gradle.beforeProject { project ->
+        def redirect = { repo ->
+            if (repo instanceof MavenArtifactRepository &&
+                repo.url?.host in ['repo.maven.apache.org', 'repo1.maven.org']) {
+                repo.setUrl('https://maven-central.storage-download.googleapis.com/maven2/')
+            }
+        }
+        project.buildscript.repositories.all { repo -> redirect(repo) }
+        project.repositories.all { repo -> redirect(repo) }
+    }
+}

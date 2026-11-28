@@ -18,7 +18,7 @@ if (
   ![major, minor, patch].every(Number.isSafeInteger) ||
   minor > 9 ||
   patch > 99 ||
-  build > 999
+  (storeRelease && build > 999)
 )
   throw Error("Version/build outside Android version-code range");
 const versionCode = storeRelease
@@ -57,6 +57,10 @@ if (!storeRelease) values.APPMETRICA_API_KEY = qaKey;
 const test = process.env.ADS_MODE !== "live";
 if (storeRelease && (test || process.env.REQUIRE_MOBILE_CONFIG !== "true"))
   throw Error("Store builds require checked live configuration");
+if (storeRelease && new Set([values.YANDEX_BANNER_AD_UNIT_ID, values.YANDEX_INTERSTITIAL_AD_UNIT_ID, values.YANDEX_REWARDED_AD_UNIT_ID]).size !== 3)
+  throw Error("Store builds require distinct placement IDs");
+if (storeRelease && process.env.VITE_SEEDS_FIRST_SESSION === "0")
+  throw Error("Store builds require the owner-approved first notebook entry");
 let gradle = readFileSync(path, "utf8")
   .replace(/versionCode \d+/, `versionCode ${versionCode}`)
   .replace(/versionName "[^"]+"/, `versionName "${version}"`);
@@ -91,6 +95,7 @@ for (const name of [
   "SeedsMonetizationPlugin",
   "SeedsEngagementPlugin",
   "SeedsFeedbackPlugin",
+  "SeedsAppearancePlugin",
   "SeedsDailyReminder",
   "SeedsAdRevenue",
 ]) {
@@ -102,6 +107,14 @@ for (const name of [
 }
 const rootGradle = "android/build.gradle";
 let rootScript = readFileSync(rootGradle, "utf8");
+// CI egress can be rate-limited by repo.maven.apache.org (HTTP 429).
+// Same Maven Central coordinates, via the mirror documented by Google Cloud:
+// https://docs.cloud.google.com/docs/buildpacks/java#google_cloud_hosted_maven_central_mirror
+if (process.env.SEEDS_MAVEN_CENTRAL_MIRROR === "google")
+  rootScript = rootScript.replaceAll(
+    "mavenCentral()",
+    'maven { url "https://maven-central.storage-download.googleapis.com/maven2/" }',
+  );
 if (!rootScript.includes("maven-rustore-exposed"))
   rootScript = rootScript.replace(
     /repositories \{/g,

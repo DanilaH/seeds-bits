@@ -1,3 +1,16 @@
+import {OwnedDomMotion} from "./vendor/mini-games-kit/owned-dom-motion";
+const owner = new OwnedDomMotion();
+export function clearInterfaceMotion() { owner.cancelAll(); }
+/** The semantic page is already installed. Local page fades retain every hit rectangle. */
+export function presentMenuChange(node: Element | null, kind: "open"|"back"|"page"|"modal"|"route" = "page") {
+  if (document.hidden || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const opening=kind==="open",back=kind==="back";
+  const animation=owner.animate(node,[
+    {opacity:opening?.9:.86,transform:opening?"perspective(900px) rotateY(4deg) scale(.99)":kind==="modal"?"translateY(6px) scale(.985)":kind==="route"||back?`translateY(${back?-3:4}px)`:"none"},
+    {opacity:1,transform:"none"},
+  ],{duration:opening?200:back?120:kind==="modal"?170:140,easing:"cubic-bezier(.2,.8,.3,1)"});
+  if (animation) animation.id=`menu-${kind}`;
+}
 /** Pointer feedback does not own activation: scrolling/cancellation never clicks a control. */
 export function installInterfaceMotion(
   onActivate: (control: HTMLElement) => void,
@@ -95,21 +108,11 @@ export function installInterfaceMotion(
                 ? "confirm-content"
                 : "collection",
         );
-        panel?.getAnimations().forEach((a) => a.cancel());
-        panel?.animate(
-          [
-            { opacity: 0, transform: "translateY(4px)" },
-            { opacity: 1, transform: "translateY(0)" },
-          ],
-          { duration: 140, easing: "ease-out" },
-        );
+        clearInterfaceMotion();
+        const paper=panel?.querySelector(".quiet-book-page");
+        presentMenuChange(paper??panel??null,next==="home"?"back":paper?"open":"route");
       } else if (!open && wasOpen) {
-        document
-          .querySelector(".game")
-          ?.animate([{ opacity: 0.78 }, { opacity: 1 }], {
-            duration: 100,
-            easing: "ease-out",
-          });
+        clearInterfaceMotion();
       }
     }
     screen = next;
@@ -119,5 +122,15 @@ export function installInterfaceMotion(
     attributes: true,
     attributeFilter: ["open", "data-screen"],
   });
+  for (const sheet of document.querySelectorAll<HTMLDialogElement>("dialog:not(#dialog)")) {
+    const watch = new MutationObserver(()=>{
+      owner.cancel(sheet);
+      if (sheet.open && !blocked()) presentMenuChange(sheet,"modal");
+    });
+    watch.observe(sheet,{attributes:true,attributeFilter:["open"]});
+  }
+  for (const event of ["visibilitychange","pagehide","resize"]) window.addEventListener(event,clearInterfaceMotion);
+  document.addEventListener("visibilitychange",clearInterfaceMotion);
+  matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change",clearInterfaceMotion);
   return clear;
 }

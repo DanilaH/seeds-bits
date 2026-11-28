@@ -3,13 +3,20 @@ import {execFileSync, spawn} from "node:child_process";
 import fs from "node:fs";
 import {resolve} from "node:path";
 import assert from "node:assert/strict";
+import {verifyFunctionalAudit} from "./functional-audit.mjs";
+import {verifyFinalUi49} from "./final-ui49.mjs";
+import {verifyFinalTutorial50} from "./final-tutorial50.mjs";
+import {verifyAbsentReminders} from "./reminder-acceptance.mjs";
+import {declineAutomaticReminder} from "./reminder-permission-proof.mjs";
+import {portraitBannerPaintMatches} from "./banner-proof.mjs";
+import {findSdkCloseCross,findSdkStoryNext} from "./sdk-controls.mjs";
 
 const app="com.seedsbits.game.preview", out="test-results/markets-android";
 fs.mkdirSync(out,{recursive:true});
-const [candidate,baseline,optimized,classicBundle]=process.argv.slice(2);
+const [candidate,baseline,optimized,classicBundle,prior12108,prior12109,prior12110,prior12111,prior12112]=process.argv.slice(2);
 const prefs=`/data/user/0/${app}/shared_prefs/CapacitorStorage.xml`;
 const progress="seeds-bits.progress.v2", settings="seeds-bits.settings.v1";
-const adb=(...args)=>execFileSync("adb",args,{encoding:"utf8",timeout:26000,maxBuffer:8e6}).trim();
+const adb=(...args)=>execFileSync("adb",args,{encoding:"utf8",timeout:26000,maxBuffer:32e6}).trim();
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const launch=()=>adb("shell","am","start","-W","-n",app+"/.MainActivity");
 const stop=()=>adb("shell","am","force-stop",app);
@@ -17,11 +24,20 @@ function lockDeviceRotation(rotation) {
   adb("shell","wm","user-rotation","lock",String(rotation));
   assert.equal(adb("shell","settings","get","system","user_rotation"),String(rotation));
 }
+function launchOpeningInputCase() {
+  assert.equal(adb("shell","pm","clear",app),"Success");
+  // These cases measure native input/layout, with permission already granted.
+  // The genuine first-result prompt/denial is a separate demo-SDK case.
+  adb("shell","pm","grant",app,"android.permission.POST_NOTIFICATIONS");
+  launch();
+}
 const shot=name=>fs.writeFileSync(`${out}/${name}.png`,execFileSync("adb",["exec-out","screencap","-p"]));
 const decode=s=>s.replaceAll("&quot;",'"').replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&amp;","&");
 const encode=s=>s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
 function profiles() {
-  const xml=adb("shell","cat",prefs);
+  // Match SharedPreferencesImpl.loadFromDisk: an existing .bak wins even
+  // when the primary XML is present but belongs to an interrupted write.
+  const xml=adb("shell",`if [ -f ${prefs}.bak ]; then cat ${prefs}.bak 2>/dev/null || cat ${prefs}; else cat ${prefs} 2>/dev/null || cat ${prefs}.bak; fi`);
   return {xml,values:Object.fromEntries([...xml.matchAll(/<string name="([^"]+)">([\s\S]*?)<\/string>/g)].map(m=>[m[1],JSON.parse(decode(m[2]))]))};
 }
 async function expectSavedBoard(id, board) {
@@ -54,15 +70,21 @@ async function connect() {
   for(let i=0;i<70;i++){
     try{
       adb("forward","tcp:9223","localabstract:webview_devtools_remote_"+adb("shell","pidof",app));
-      target=(await (await fetch("http://127.0.0.1:9223/json/list")).json()).find(t=>t.type==="page");
+      const targets=await (await fetch("http://127.0.0.1:9223/json/list")).json();
+      // The ads SDK also creates debuggable WebViews in this process.
+      target=targets.find(t=>t.type==="page" && /^https?:\/\/localhost(?:[/:?#]|$)/.test(t.url));
       if(target)break;
     }catch{}
     await wait(250);
   }
-  assert(target,"No debug WebView");
+  assert(target,"No game debug WebView at the configured localhost origin");
   const ws=new WebSocket(target.webSocketDebuggerUrl), pending=new Map();let id=0;
   await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
-  ws.onmessage=({data})=>{const resp=JSON.parse(data);pending.get(resp.id)?.(resp);};
+  ws.onmessage=({data})=>{const resp=JSON.parse(data);pending.get(resp.id)?.(resp);
+    if(resp.method==="Runtime.exceptionThrown" || resp.method==="Runtime.consoleAPICalled" && ["error","warning"].includes(resp.params?.type))
+      fs.appendFileSync(out+"/webview-errors.jsonl",JSON.stringify(resp)+"\n");
+  };
+  ws.send(JSON.stringify({id:++id,method:"Runtime.enable"}));
   const evaluate=async expression=>{
     const seq=++id;
     const promise=new Promise((resolve,reject)=>{
@@ -75,10 +97,28 @@ async function connect() {
     return res.result.result.value;
   };
   const until=async expression=>{
-    for(let i=0;i<80;i++){if(await evaluate(expression))return;await wait(150);}
+    for(let i=0;i<80;i++){
+      try {if(await evaluate(expression))return;}
+      catch(error){
+        // Navigation briefly has no default execution context. Retry only
+        // that CDP handoff; application exceptions and RPC timeouts still fail.
+        if(!/Cannot find (?:default execution )?context|Execution context was destroyed|Inspected target navigated/.test(String(error)))throw error;
+      }
+      await wait(150);
+    }
+    try {
+      const state=await evaluate(`({url:location.href,ready:document.readyState,hidden:document.hidden,focus:document.hasFocus(),
+        root:document.documentElement.className,body:document.body?.outerHTML.slice(0,18000),
+        resources:performance.getEntriesByType('resource').map(e=>({name:e.name,duration:e.duration,bytes:e.transferSize}))})`);
+      fs.writeFileSync(out+"/webview-wait-failure.json",JSON.stringify({expression,state},null,2));
+      fs.writeFileSync(out+"/webview-logcat.txt",adb("logcat","-d","-t","500"));
+    } catch(diagnosticError) {console.warn("WebView failure details:",String(diagnosticError));}
     throw Error(expression);
   };
   await until("document.querySelector('#dialog')&&!document.querySelector('#app').inert&&!document.querySelector('.locale-pending')");
+  // A loaded debug document can survive while Android has not delivered
+  // foreground/focus after reboot. ADB touches require the visible activity.
+  await until("!document.hidden && document.hasFocus()");
   // Demo builds expose the native WebView rectangle. Accessibility dumps can
   // stay busy while a creative is animated and return no hierarchy.
   let bounds;
@@ -98,7 +138,27 @@ async function connect() {
     await wait(200);
   }
   assert(bounds,"No WebView bounds");
+  // Insets and the banner may settle after connect(). Project each gesture
+  // through the current native WebView, not a cached startup rectangle.
+  async function refreshBounds() {
+    try {
+      const f=await evaluate("window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics()");
+      if(f?.webWidth>0 && f?.webHeight>0) bounds=[f.webX,f.webY,f.webX+f.webWidth,f.webY+f.webHeight];
+    } catch { /* Existing accessibility bounds remain a fallback. */ }
+  }
+  await evaluate(`(()=>{
+    if(window.__seedsNativeInputTrace)return;
+    window.__seedsNativeInputTrace=[];
+    for(const type of ['pointerdown','pointerup','click']) document.addEventListener(type,event=>{
+      const selector=window.__seedsNativeInputSelector;
+      window.__seedsNativeInputTrace.push({type,x:event.clientX,y:event.clientY,time:performance.now(),target:event.target.id||event.target.tagName,
+        hit:!!selector&&event.composedPath().some(node=>node instanceof Element&&node.matches(selector))});
+      if(window.__seedsNativeInputTrace.length>200)window.__seedsNativeInputTrace.shift();
+    },true);
+  })()`);
   async function tap(selector,scroll=true) {
+    await refreshBounds();
+    await evaluate(`window.__seedsNativeInputSelector=${JSON.stringify(selector)};window.__seedsNativeInputTrace=[]`);
     const hitTest=`(()=>{
       const e=document.querySelector(${JSON.stringify(selector)});
       if(!e || e.matches(':disabled') || e.closest('[inert]')) return {ok:false};
@@ -113,12 +173,23 @@ async function connect() {
       if(p.ok)break;
       await wait(100);
     }
+    if(!p.ok){
+      shot("input-failure");
+      fs.writeFileSync(out+"/input-failure.json",JSON.stringify({selector,point:p,
+        state:await evaluate("({hidden:document.hidden,focus:document.hasFocus(),dialog:document.querySelector('#dialog')?.open,hit:document.elementFromPoint("+Number(p.x??0)+","+Number(p.y??0)+")?.outerHTML})"),
+        power:adb("shell","dumpsys","power"),window:adb("shell","dumpsys","window")},null,2));
+    }
     assert(p.ok,selector+" "+JSON.stringify(p));
+    await refreshBounds();
     adb("shell","input","tap",String(Math.round(bounds[0]+p.x*(bounds[2]-bounds[0])/p.w)),
       String(Math.round(bounds[1]+p.y*(bounds[3]-bounds[1])/p.h)));
     await wait(200);
+    const trace=await evaluate("window.__seedsNativeInputTrace");
+    fs.appendFileSync(out+"/native-input.jsonl",JSON.stringify({selector,bounds,point:p,events:trace})+"\n");
+    assert(trace.some(event=>event.type==="pointerdown"&&event.hit),"Native touch did not reach "+selector);
   }
   async function swipeBoardUp() {
+    await refreshBounds();
     const p=await evaluate(`(()=>{
       const r=document.querySelector("#viewport").getBoundingClientRect();
       return {x:r.x+r.width*.5,from:r.y+r.height*.8,to:r.y+r.height*.25,w:innerWidth,h:innerHeight};
@@ -234,7 +305,7 @@ async function firstNotebookEdge(order, {recordVideo=false}={}) {
     const before=await geometry();
     const copy="document.querySelector('.opening-copy').textContent";
     assert.equal(await ui.evaluate(copy),edgeCaption);
-    assert(await ui.evaluate(textFits(".opening-copy","#page-progress")),"English opening cue clipped");
+    assert(await ui.evaluate(textFits(".opening-copy","#opening-instructions")),"English opening cue clipped");
     if(order[0]===7) shot("acceptance-first-en-200");
     if(recordVideo) {
       // Keep optional video evidence isolated from the core Android acceptance route.
@@ -245,7 +316,7 @@ async function firstNotebookEdge(order, {recordVideo=false}={}) {
     await ui.tap(digit(order[0]),false);
     assert(await ui.evaluate(`document.querySelector('${digit(order[0])}').classList.contains('selected')`));
     assert.equal(await ui.evaluate(copy),order[0]===7?"Find 9: 1 + 9 = 10.":"Find 1: 9 + 1 = 10.");
-    assert(await ui.evaluate(textFits(".opening-copy","#page-progress")),"English selection cue clipped");
+    assert(await ui.evaluate(textFits(".opening-copy","#opening-instructions")),"English selection cue clipped");
     assert.deepEqual(await geometry(),before);
     await ui.tap(digit(order[1]),false);
     await ui.until("!document.querySelector('#win').hidden");
@@ -732,7 +803,16 @@ return (${code})(SeedsClassicQA);})()`;
     return v.hasAttribute("data-scroll-above")===${above} && v.hasAttribute("data-scroll-below")===${below}
       && (getComputedStyle(v).maskImage!=="none")===${above||below};})()`;
   const timing=[];
-  let geometry, savedScroll, expertCount;
+  const durableMove=async label=>{
+    const before=await ui.evaluate("({count:document.querySelector('#remaining').textContent,persistence:document.querySelector('.game').dataset.persistence})");
+    await ui.until("document.querySelector('.game').dataset.persistence==='saved'");
+    const disk=profiles().values[progress].sessions.classic;
+    fs.appendFileSync(out+"/classic-pilot-durable.jsonl",JSON.stringify({label,before,
+      diskCount:disk.current.board.filter(Boolean).length,moves:disk.current.moves,
+      history:(disk.history??disk.packedHistory).length})+"\n");
+    return disk;
+  };
+  let geometry, savedScroll, expertCount, savedExpert;
   const generated = [];
   try {
     assertViewportResult(await depth());
@@ -741,6 +821,7 @@ return (${code})(SeedsClassicQA);})()`;
     await ui.until(left(25));
     await ui.tap("#undo");
     await ui.until(left(27));
+    await durableMove("legacy Undo27");
     await expectSavedBoard("classic",oldHighBoard);
     await ui.tap("#menu");
     const { counts, holes } = await ui.evaluate(withGenerator(
@@ -776,7 +857,7 @@ return (${code})(SeedsClassicQA);})()`;
       if (level===3) expertCount=count;
     }
     const natural=await depth();
-    const savedExpert=profiles().values[progress].sessions.classic.current.board;
+    savedExpert=profiles().values[progress].sessions.classic.current.board;
     assert.equal(savedExpert.filter(Boolean).length,expertCount);
     const reservesBanner=await ui.evaluate("document.documentElement.classList.contains('has-mobile-ads')");
     if (!reservesBanner) {
@@ -810,11 +891,12 @@ return (${code})(SeedsClassicQA);})()`;
     await ui.until(left(expertCount-2));
     await ui.tap("#undo");
     await ui.until(left(expertCount));
-    assert.deepEqual(profiles().values[progress].sessions.classic.current.board,savedExpert);
+    assert.deepEqual((await durableMove("Expert bottom Undo")).current.board,savedExpert);
     shot("classic-expert-bottom-320-dark");
     await ui.tap(digit(bottomPair.a));
     await ui.tap(digit(bottomPair.b));
     await ui.until(left(expertCount-2));
+    await durableMove("Expert bottom pair before restart");
     savedScroll=(await depth()).scroll;
     for(const level of [0,1,2,3]){
       timing.push(await ui.evaluate(withGenerator(`({generateClassic,newClassicRun})=>{
@@ -842,11 +924,14 @@ return (${code})(SeedsClassicQA);})()`;
   const resumed=await connect();
   try{
     await resumed.tap("#resume");
+    await resumed.until("!document.querySelector('#dialog').open");
     await resumed.until(left(expertCount-2));
     const restoredScroll=await resumed.evaluate("document.querySelector('#viewport').scrollTop");
     if(geometry.realBannerReserve)assert(Math.abs(restoredScroll-savedScroll)<=1,"Lost Expert scroll after restart");
     await resumed.tap("#undo");
     await resumed.until(left(expertCount));
+    await resumed.until("document.querySelector('.game').dataset.persistence==='saved'");
+    assert.deepEqual(profiles().values[progress].sessions.classic.current.board,savedExpert);
     return {timing,generated,geometry,scrollEdges:true,scrollRestore:{before:savedScroll,after:restoredScroll,realReserve:geometry.realBannerReserve},
       physicalPhone:false,viewport320:true,legacy27Undo:true,legacyWallet:7,
       bottomTouch:true,undo:true,restartAndContinue:true,
@@ -896,11 +981,11 @@ async function verifyAppBanner() {
   let video = resolve(out,"banner-continuity.webm");
   const guestVideo = "/sdcard/seeds-banner-continuity.mp4";
   const captureStart=performance.now();
-  const trace=(label, detail={})=>report.observed.push({label,ms:Math.round(performance.now()-captureStart),...detail});
+  const trace=(label, detail={})=>report.observed.push({...detail,label,ms:Math.round(performance.now()-captureStart)});
   try {
     // Capture the emulator display on the host without a guest codec or desktop compositor.
     try {
-      const start=adb("emu","screenrecord","start","--time-limit","360",video);
+      const start=adb("emu","screenrecord","start","--time-limit","1200",video);
       assert(!start.includes("KO"),start);
       report.recorder="emulator-console";
     } catch(error) {
@@ -934,10 +1019,10 @@ async function verifyAppBanner() {
       new Promise((_,reject)=>setTimeout(()=>reject(Error("Banner diagnostics did not respond")),5000))
     ])`);
     const capturePixels = async () => {
-      let raw, width, height;
+      let png, raw, width, height;
       for (let attempt=0;attempt<3;attempt++) {
         try {
-          const png=execFileSync("adb",["exec-out","screencap","-p"],{maxBuffer:20e6,timeout:12000});
+          png=execFileSync("adb",["exec-out","screencap","-p"],{maxBuffer:20e6,timeout:12000});
           assert(png.length>24&&png.toString("ascii",1,4)==="PNG","Android returned an incomplete PNG");
           width=png.readUInt32BE(16); height=png.readUInt32BE(20);
           raw=execFileSync("ffmpeg",["-v","error","-threads","1","-f","image2pipe","-vcodec","png","-i","pipe:0",
@@ -949,10 +1034,10 @@ async function verifyAppBanner() {
           await wait(650);
         }
       }
-      return {raw,width,height};
+      return {png,raw,width,height};
     };
-    const paint = async frame => {
-      const {raw,width,height}=await capturePixels();
+    const paint = async (frame,pixels) => {
+      const {raw,width,height}=pixels??await capturePixels();
       const left=frame.screenLeft, top=frame.screenTop;
       assert(left>=0&&top>=0&&left+frame.width<=width&&top+frame.height<=height,
         "The native banner frame is outside the screenshot");
@@ -963,20 +1048,29 @@ async function verifyAppBanner() {
       }
       return colors.size;
     };
-    let painted, initial;
+    let painted, initial, initialPixels;
+    report.initialPaintAttempts=[];
     for(let i=0;i<36;i++) {
-      initial=await diagnostics();
-      if(initial.loaded>0&&initial.visible&&(painted=await paint(initial))>20)break;
-      await wait(650);
+      const before=await diagnostics();
+      if(before.loaded>0&&before.visible) {
+        const pixels=await capturePixels(),after=await diagnostics();
+        const coherent=portraitBannerPaintMatches(before,after);
+        report.initialPaintAttempts.push({before,after,coherent});
+        if(coherent) {
+          initial=after;painted=await paint(initial,pixels);
+          if(painted>20){initialPixels=pixels.png;break;}
+        }
+      }
+      await wait(650); // Existing SDK availability polling; never an elapsed-time layout assertion.
     }
     report.initial=initial;
     report.paintColorBuckets=painted??0;
-    if(!(initial.loaded>0&&initial.visible&&painted>20)){
+    if(!(initial?.loaded>0&&initial.visible&&painted>20)){
       report.status="UNAVAILABLE";
       throw Error("Android did not paint a demo banner");
     }
     trace("first verified paint",{...initial,paintColorBuckets:painted});
-    shot("banner-painted-start");
+    fs.writeFileSync(out+"/banner-painted-start.png",initialPixels);
     const expected=async(visible,reason)=>{
       const mark=()=>ui.evaluate(`window.Capacitor.Plugins.SeedsMonetization.bannerExpectation({visible:${visible}})`);
       try { await mark(); }
@@ -992,10 +1086,15 @@ async function verifyAppBanner() {
     let retained=initial;
     const stable=async(label)=>{
       const current=await diagnostics();
+      const dom=await ui.evaluate(`({focus:document.hasFocus(),hidden:document.hidden,active:document.activeElement?.id,
+        dialogs:[...document.querySelectorAll('dialog[open]')].map(e=>e.id),inert:document.querySelector('#app').inert})`);
+      trace(label+" observed",{...current,dom});
       assert.equal(current.view,retained.view,label);
       assert.equal(current.request,retained.request,label);
       assert.equal(current.visible,true,label);
       assert.equal(current.hiddenFrames,retained.hiddenFrames,label);
+      assert.equal(current.phase,"draw",label+" geometry must belong to a rendered frame");
+      assert.equal(current.movedFrames,retained.movedFrames,label+" unexpected physical movement in rendered frames");
       for (const dimension of ["screenLeft","screenTop","width","height"])
         assert.equal(current[dimension],retained[dimension],label+" "+dimension);
       const paintColorBuckets=await paint(current);
@@ -1003,10 +1102,21 @@ async function verifyAppBanner() {
       assert(paintColorBuckets>20,label+" creative band lost color");
     };
     await expected(true,"ordinary scene transitions begin");
+    await stable("paired baseline before input");
     for(const [a,b,n] of [[8,17,6],[4,5,4],[9,11,2],[7,14,0]]) {
+      if(n===0)await expected(false,"first stored result may open the guarded Android permission dialog");
       await ui.tap(digit(a)); await ui.tap(digit(b));
       await ui.until(`document.querySelector('#remaining').textContent==='${n}'`);
     }
+    report.automaticReminderPermission=await declineAutomaticReminder({ui,adb,profiles,progress,settings,out,shot});
+    await ui.until("window.Capacitor.Plugins.SeedsMonetization.bannerDiagnostics().then(d=>d.visible && d.phase==='draw')");
+    const afterPermission=await diagnostics();
+    for(const key of ["view","request","screenLeft","screenTop","width","height"])
+      assert.equal(afterPermission[key],retained[key],"Permission dialog retains banner "+key);
+    assert(afterPermission.visible,"Banner returns after the genuine system dialog");
+    trace("actual Android notification prompt declined",{...afterPermission,permission:report.automaticReminderPermission});
+    retained=afterPermission; // Legitimate guarded-window frames are recorded separately.
+    await expected(true,"ordinary scenes resume after the permission dialog");
     await stable("game to result");
     await ui.tap("#play-again");
     await ui.until("document.querySelector('#mode').textContent.includes('2')");
@@ -1027,6 +1137,33 @@ async function verifyAppBanner() {
     await expected(true,"language modal closed");
     await ui.tap("#resume"); await stable("explicit Home to game");
     await ui.tap("#menu"); await stable("Home before background");
+    const beforeSettings=await diagnostics();
+    await ui.tap("#settings-open");
+    await stable("Home to ordinary Settings");
+    assert.equal((await diagnostics()).view,beforeSettings.view);
+    assert.equal((await diagnostics()).request,beforeSettings.request);
+    shot("settings-painted-banner");
+    await ui.tap("#dark");
+    await ui.until("document.documentElement.dataset.theme==='dark'");
+    await stable("ordinary Settings changes theme with retained banner");
+    await expected(false,"privacy is a guarded document");
+    await ui.tap("#privacy-open");
+    assert.equal((await diagnostics()).visible,false);
+    await ui.tap("#privacy-back");
+    await stable("privacy returns to Settings");
+    await expected(true,"ordinary Settings restored");
+    assert.equal((await diagnostics()).view,beforeSettings.view);
+    assert.equal((await diagnostics()).request,beforeSettings.request);
+    await ui.tap("#settings-back");
+    await stable("saved dark theme returns to Home");
+    await expected(true,"theme change finished");
+    await ui.tap("#resume");
+    await stable("Settings Back Home Game keeps the same banner");
+    assert.equal((await diagnostics()).view,beforeSettings.view);
+    assert.equal((await diagnostics()).request,beforeSettings.request);
+    await ui.tap("#menu");await stable("Game returns to Home before Settings");
+    await ui.tap("#settings-open");await stable("reverse entry into ordinary Settings");
+    await ui.tap("#settings-back");await stable("Settings returns before background");
     await expected(false,"Home backgrounds");
     adb("shell","am","start","-a","android.settings.SETTINGS");
     await wait(450);
@@ -1080,24 +1217,63 @@ async function verifyAppBanner() {
         await diagnostics();
       }
     }
+    // A painted banner does not imply that the independent interstitial loader
+    // has delivered a creative. Wait on real SDK state before testing a show.
+    let fullscreenReady;
+    for(let i=0;i<180;i++) {
+      fullscreenReady=await diagnostics();
+      if(fullscreenReady.interstitialReady&&fullscreenReady.cooldownRemainingMs===0)break;
+      if(i%30===0)await ui.evaluate("window.Capacitor.Plugins.SeedsMonetization.preload()");
+      await wait(1000);
+    }
+    trace("interstitial SDK precondition",fullscreenReady);
+    assert(fullscreenReady.interstitialReady&&fullscreenReady.cooldownRemainingMs===0,"Interstitial did not satisfy actual SDK load/cooldown preconditions");
+    // The first field entry after returning to the app is protected. Verify
+    // that entry before exercising an internal Home-to-game transition.
+    await stable("before protected app entry");
+    await ui.tap("#resume");
+    await ui.until("!document.querySelector('#dialog').open");
+    await stable("protected app entry keeps the banner");
+    await ui.tap("#menu");
+    await ui.until("document.querySelector('#dialog').open");
     await stable("before genuine interstitial");
+    const interstitialBaselineCalls=(await diagnostics()).fullscreenShowCalls;
     await expected(false,"fullscreen request");
     await ui.tap("#resume");
     let shown;
-    for (let attempt=0;attempt<24;attempt++) {
+    for (let attempt=0;attempt<120;attempt++) {
       shown=await diagnostics();
-      if(shown.fullscreen && !shown.focused)break;
+      if(shown.fullscreen && !shown.focused && shown.lastFullscreenStatus==="shown")break;
+      if(shown.fullscreenShowCalls>interstitialBaselineCalls && shown.lastFullscreenKind==="interstitial" && ["error","skipped","unavailable"].includes(shown.lastFullscreenStatus))break;
       await wait(150);
     }
-    assert(shown.fullscreen && !shown.focused,"SDK did not open the demo interstitial");
+    trace("interstitial show outcome",shown);
+    assert(shown.fullscreen && !shown.focused && shown.lastFullscreenStatus==="shown","SDK did not open the demo interstitial: "+JSON.stringify(shown));
     assert.equal(shown.visible,false);
     trace("genuine interstitial hides native banner",{...shown,expected:false});
     shot("banner-hidden-by-interstitial");
-    const sdkPlayerDeadline=performance.now()+100000;
+    const dismissFullscreen=async()=>{
+    const sdkPlayerStarted=performance.now(), sdkPlayerDeadline=sdkPlayerStarted+160000;
+    let backDelivered=false;
     // The demo can serve a multi-part video. Give its own close control time to appear.
     while((await diagnostics()).fullscreen && performance.now()<sdkPlayerDeadline) {
       await wait(6000);
       if(!(await diagnostics()).fullscreen)break;
+      // Yandex's demo story also displays an unlabelled Next/Close icon in this rail.
+      const {raw,width,height}=await capturePixels();
+      const storyNext=findSdkStoryNext(raw,width,height);
+      if(storyNext){trace("visible SDK story Next control tapped",storyNext);adb("shell","input","tap",String(storyNext.x),String(storyNext.y));continue;}
+      const closeCross=findSdkCloseCross(raw,width,height);
+      if(closeCross){trace("visible SDK close control tapped",closeCross);adb("shell","input","tap",String(closeCross.x),String(closeCross.y));continue;}
+      // Android Back is a real SDK-window input, not a synthetic dismissal or
+      // app-side finish(). Some demo video players expose no close glyph while
+      // accessibility remains permanently busy. Require the actual SDK callback.
+      if(!backDelivered && performance.now()-sdkPlayerStarted>30000) {
+        trace("Android Back delivered to the focused SDK window");
+        adb("shell","input","keyevent","KEYCODE_BACK");
+        backDelivered=true;
+        continue;
+      }
       try {
         adb("shell","uiautomator","dump","/sdcard/demo-fullscreen.xml");
         const hierarchy=adb("shell","cat","/sdcard/demo-fullscreen.xml");
@@ -1109,23 +1285,47 @@ async function verifyAppBanner() {
         }
       } catch(error) { console.warn("Reading the ad close control:",String(error)); }
       if(!(await diagnostics()).fullscreen)break;
-      // Yandex's demo story also displays an unlabelled light Next/Close icon in this rail.
-      const {raw,width}=await capturePixels();
-      const x=Math.round(width*.922), y=Math.round(width*.100), half=Math.round(width*.023);
-      let lightPixels=0;
-      for(let row=y-half;row<=y+half;row++)for(let col=x-half;col<=x+half;col++){
-        const i=(row*width+col)*4;
-        if(Math.min(raw[i],raw[i+1],raw[i+2])>=132)lightPixels++;
-      }
-      if(lightPixels>=40){
-        trace("visible SDK player control tapped",{x,y,lightPixels});
-        adb("shell","input","tap",String(x),String(y));
-      } else adb("shell","input","keyevent","4");
+
     }
     assert(!(await diagnostics()).fullscreen,"Demo creative has not provided an SDK dismissal");
+    };
+    await dismissFullscreen();
     await ui.until("!document.querySelector('#dialog').open && document.hasFocus()");
     await stable("after genuine interstitial");
     await expected(true,"fullscreen dismissed");
+    let rewardedReady;
+    for(let i=0;i<120;i++){rewardedReady=await diagnostics();if(rewardedReady.rewardedReady)break;if(i%30===0)await ui.evaluate("window.Capacitor.Plugins.SeedsMonetization.preload()");await wait(500);}
+    trace("rewarded SDK precondition",rewardedReady);
+    assert(rewardedReady.rewardedReady,"Rewarded SDK did not deliver a loaded creative");
+    await expected(false,"explicit QA rewarded bridge request");
+    const beforeReward=profiles().values[progress];
+    await ui.evaluate(`(async()=>{
+      window.__qtRewardResult=null; window.__qtRewardReceipt=null;
+      window.__qtRewardHandle=await window.Capacitor.Plugins.SeedsMonetization.addListener("reward",receipt=>window.__qtRewardReceipt=receipt);
+      window.Capacitor.Plugins.SeedsMonetization.show({kind:"rewarded",product:"hint_pack_3",
+        attempt:${JSON.stringify(beforeReward.meta.attempts[beforeReward.active].id)},intent_id:"qt45-native-acceptance",offer_id:"qt45-native-acceptance"})
+        .then(result=>window.__qtRewardResult=result);
+      return true;
+    })()`);
+    let rewardShown;
+    for(let i=0;i<120;i++){rewardShown=await diagnostics();if(rewardShown.fullscreen&&!rewardShown.focused&&rewardShown.lastFullscreenStatus==="shown")break;if(rewardShown.fullscreenShowCalls>rewardedReady.fullscreenShowCalls&&rewardShown.lastFullscreenKind==="rewarded"&&["error","skipped","unavailable"].includes(rewardShown.lastFullscreenStatus))break;await wait(150);}
+    assert(rewardShown.fullscreen&&!rewardShown.visible&&rewardShown.lastFullscreenStatus==="shown","SDK did not open/hide the banner for rewarded: "+JSON.stringify(rewardShown));
+    trace("genuine rewarded hides native banner",rewardShown);
+    await dismissFullscreen();
+    await ui.until("document.hasFocus() && window.__qtRewardResult!==null");
+    const rewardResult=await ui.evaluate("window.__qtRewardResult");
+    assert.equal(rewardResult.shown,true);
+    await ui.until("Boolean(window.__qtRewardReceipt?.token)");
+    const earnedReceipt=await ui.evaluate("window.__qtRewardReceipt");
+    // Delivery/receipt settlement is authoritative; the SDK callback is not a fabricated grant.
+    await ui.until(`window.Capacitor.Plugins.SeedsMonetization.pending().then(p=>!p.reward)`);
+    const afterReward=profiles().values[progress];
+    assert.equal(afterReward.meta.wallet,beforeReward.meta.wallet+3);
+    assert.equal(afterReward.meta.rewardReceipts.filter(id=>id===earnedReceipt.token).length,1);
+    trace("earned rewarded saved exactly once",{token:earnedReceipt.token,walletBefore:beforeReward.meta.wallet,walletAfter:afterReward.meta.wallet});
+    await ui.evaluate("window.__qtRewardHandle.remove();true");
+    await stable("after genuine rewarded");
+    await expected(true,"rewarded dismissed");
     await ui.tap("#menu"); await stable("interstitial round trip to Home");
     report.status="PASS";
     return report;
@@ -1133,6 +1333,15 @@ async function verifyAppBanner() {
     if (report.status !== "UNAVAILABLE") report.status="ERROR";
     report.error=String(error);
     try { shot("banner-failure"); } catch (captureError) { console.warn(String(captureError)); }
+    // Keep SDK/player evidence before finally() stops the process. A looping
+    // remote demo without a close control is an observed failure, not proof of
+    // an app placement defect or permission to manufacture onAdDismissed.
+    for(const [name,args]of [
+      ["logcat",["logcat","-d","-t","2500"]],
+      ["media",["shell","dumpsys","media.metrics"]],
+      ["activities",["shell","dumpsys","activity","top"]],
+    ])try{fs.writeFileSync(out+"/banner-failure-"+name+".txt",adb(...args));}
+      catch(diagnosticError){console.warn("SDK failure diagnostics:",String(diagnosticError));}
     throw error;
   } finally {
     if(recording) {
@@ -1154,12 +1363,131 @@ async function verifyAppBanner() {
         if(report.status==="PASS") { report.status="ERROR"; report.error=String(error); }
       }
     }
+    if(ui)try{report.geometryTrace=await ui.evaluate("window.Capacitor.Plugins.SeedsMonetization.bannerGeometryTrace()");}catch(error){report.traceError=String(error);}
     fs.writeFileSync(out+"/banner-continuity.json",JSON.stringify(report,null,2));
     ui?.close();
     try { stop(); adb("uninstall",app); } catch (cleanupError) { console.warn(String(cleanupError)); }
     if(report.status==="ERROR")process.exitCode=1;
   }
 }
+async function verifyDurableClassic() {
+  const records=[], savedProfile=profiles().values;
+  const report={source:process.env.GITHUB_SHA,device:"Android API35 offline",physicalPhone:false,records,status:"RUNNING"};
+  const checkpoint=()=>fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(report,null,2));
+  checkpoint();
+  const initial=Array.from({length:19},(_,i)=>String(i+1)).join("").replaceAll("0","").split("").map(Number);
+  const next=moved(initial,[0,9]);
+  try {
+    for(let trial=0;trial<20;trial++) {
+      const snapshot={board:initial,moves:0,additions:0,scroll:0}, attempt="qt45-native-"+trial;
+      const data={version:3,active:"classic",done:[],seen:[],hints:{},sessions:{classic:{rules:1,current:snapshot,history:[]}},
+        meta:{version:2,since:"2026-11-26T00:00:00Z",completed:0,unassisted:0,wallet:0,
+          attempts:{classic:{id:attempt,completed:false}},classicRun:{version:1,seed:73,difficulty:1,recent:[initial.join("")],current:{attempt,board:initial}}}};
+      await fixture({[progress]:data,[settings]:{tutorialDone:true,languageChoice:"en",sound:false,vibration:false,theme:"light"}});
+      launch();let ui=await connect();
+      try {
+        await ui.tap("#resume");await ui.tap(digit(0));
+        // Dispatch the final input and observe the counter in the WebView, then
+        // force-stop immediately. No post-move sleep or disk polling precedes it.
+        await ui.evaluate(`document.querySelector('${digit(9)}').click();true`);
+        await ui.until("document.querySelector('#remaining').textContent==='26' && document.querySelector('.game').dataset.persistence==='saved'");
+        stop();ui.close();
+        const disk=profiles().values[progress];
+        assert.deepEqual(disk.sessions.classic.current.board,next);
+        assert.equal(disk.sessions.classic.current.moves,1);
+        assert.equal((disk.sessions.classic.history??disk.sessions.classic.packedHistory).length,1);
+        launch();ui=await connect();await ui.tap("#resume");
+        await ui.until("!document.querySelector('#dialog').open && !document.querySelector('#undo').disabled");
+        assert.equal(await ui.evaluate("document.querySelector('#remaining').textContent"),"26");
+        await ui.evaluate("document.querySelector('#undo').click();true");
+        await ui.until("document.querySelector('#remaining').textContent==='28' && document.querySelector('.game').dataset.persistence==='saved'");
+        stop();ui.close();
+        const undone=profiles().values[progress];assert.deepEqual(undone.sessions.classic.current.board,initial);
+        assert.equal(undone.sessions.classic.current.moves,0);
+        assert.equal(undone.jars.meter,2); // Undo does not repay or remove earned depth.
+        records.push({trial,forceStopAfterVisible26:true,durableAcknowledgement:true,noPostAcknowledgementSleep:true,restored26:true,undoDurable28:true,attempt});
+        checkpoint();
+      }finally{ui.close();stop();}
+    }
+    report.status="PASS";return report;
+  }catch(error){report.status="ERROR";report.error=String(error);throw error;}
+  finally{checkpoint();await fixture(savedProfile);}
+}
+async function verifyAppearance() {
+  launch();
+  const records=[];
+  const original=profiles().values[settings]?.theme || "light";
+  let ui=await connect();
+  const inspect=async(name,dark)=>{
+    const state=await ui.evaluate("window.Capacitor.Plugins.SeedsAppearance.diagnostics()");
+    assert.equal(state.dark,dark,name+" saved theme");
+    assert.equal(state.darkStatusIcons,!dark,name+" status icons");
+    assert.equal(state.darkNavigationIcons,!dark,name+" navigation icons");
+    await wait(250);
+    shot(name);
+    const png=fs.readFileSync(out+"/"+name+".png"),w=png.readUInt32BE(16),h=png.readUInt32BE(20);
+    const raw=execFileSync("ffmpeg",["-v","error","-threads","1","-i",out+"/"+name+".png","-frames:v","1","-f","rawvideo","-pix_fmt","rgba","-threads","1","pipe:1"],{maxBuffer:20e6});
+    const color=(x,y)=>[...raw.subarray((y*w+x)*4,(y*w+x)*4+3)];
+    const top=color(8,8),bottom=color(8,h-8);
+    const near=(actual,expected)=>actual.every((v,i)=>Math.abs(v-expected[i])<18);
+    assert(near(top,dark?[48,62,49]:[229,221,190]),name+" status pixels "+top);
+    assert(near(bottom,dark?[35,49,39]:[197,190,159]),name+" navigation pixels "+bottom);
+    records.push({name,dark,state,top,bottom});
+  };
+  try {
+    for(const dark of [false,true]) {
+      await ui.tap("#settings-open");
+      if(await ui.evaluate("document.querySelector('#dark').checked")!==dark)await ui.tap("#dark");
+      await ui.until("document.documentElement.dataset.theme==='"+(dark?"dark":"light")+"'");
+      await inspect("appearance-"+(dark?"dark":"light")+"-settings",dark);
+      adb("shell","cmd","uimode","night",dark?"no":"yes");
+      await inspect("appearance-"+(dark?"dark":"light")+"-system-config",dark);
+      await ui.tap("#settings-back");
+      await ui.tap("#pause-language");await inspect("appearance-"+(dark?"dark":"light")+"-modal",dark);
+      adb("shell","input","keyevent","4");await ui.until("!document.querySelector('#language-sheet').open");
+      await ui.tap("#resume");await inspect("appearance-"+(dark?"dark":"light")+"-field",dark);
+      adb("shell","input","keyevent","3");await wait(150);launch();await inspect("appearance-"+(dark?"dark":"light")+"-resume",dark);
+      await ui.tap("#menu");
+    }
+    ui.close();stop();launch();ui=await connect();await inspect("appearance-dark-cold",true);
+    await ui.tap("#settings-open");if((original==="dark")!==await ui.evaluate("document.querySelector('#dark').checked"))await ui.tap("#dark");
+    await ui.tap("#settings-back");
+    return {records,physicalPhone:false};
+  } finally {ui.close();}
+}
+
+async function verifyReachValues() {
+  const original=profiles().values,records=[];
+  try {
+    for(const theme of ["light","dark"])for(const kind of ["mixed","invalid"]) {
+      const board=Array(45).fill(0);
+      for(const [i,n] of [[0,4],[2,kind==="mixed"?4:1],[4,6],[8,6],[9,2],[10,kind==="mixed"?6:3],[20,8],[44,4]])board[i]=n;
+      await fixture({
+        [settings]:{...original[settings],theme,tutorialDone:true,languageChoice:"en"},
+        [progress]:{version:3,active:"classic",done:[],seen:[],hints:{},
+          sessions:{classic:{rules:1,current:{board,moves:1,additions:0,scroll:0},history:[]}}},
+      });
+      launch();const ui=await connect();
+      try {
+        await ui.tap("#resume");await ui.until("!document.querySelector('#dialog').open");
+        await ui.tap(digit(0));await ui.until("document.querySelectorAll('.reachable').length===3");
+        const result=await ui.evaluate(`({green:[...document.querySelectorAll('.reachable-valid')].map(e=>+e.dataset.index),
+          red:[...document.querySelectorAll('.reachable-invalid')].map(e=>+e.dataset.index),
+          blocked:[4,20].every(i=>!document.querySelector('[data-index="'+i+'"]').classList.contains('reachable')),
+          redEdges:[...document.querySelectorAll('.reachable-invalid')].map(e=>getComputedStyle(e).outlineStyle)})`);
+        assert.deepEqual(result.green,kind==="mixed"?[2,10]:[]);
+        assert.deepEqual(result.red,kind==="mixed"?[9]:[2,9,10]);
+        assert(result.blocked);assert(result.redEdges.every(edge=>edge==="dashed"));
+        shot("reach-"+theme+"-"+kind);
+        await ui.tap(digit(0));await ui.until("document.querySelectorAll('.reachable').length===0");
+        assert.deepEqual(profiles().values[progress].sessions.classic.current.board,board);
+        records.push({theme,kind,...result});
+      } finally {ui.close();}
+    }
+    return {records,physicalPhone:false};
+  } finally {await fixture({[settings]:original[settings],[progress]:original[progress]});}
+}
+
 async function verifyCoreFeel() {
   const initial = [2,8,4,4,1,9];
   const after = [0,0,4,4,1,9];
@@ -1202,10 +1530,20 @@ if(process.env.SEEDS_BANNER_ONLINE==="1"){
   process.exit(process.exitCode??0);
 }
 try{
+  // Dedicated CI device: keep native input available throughout the long run,
+  // including the real reboot. Background/foreground remains explicitly tested.
+  adb("shell","svc","power","stayon","true");
   adb("shell","wm","density","320");
   adb("shell","wm","size","780x1688");
   lockDeviceRotation(0);
   const upgrade=await update();
+  await verifyFinalTutorial50({adb,profiles,fixture,launchOpeningInputCase,launch,stop,connect,progress,settings,out});
+  await verifyFunctionalAudit({adb,profiles,fixture,launch,stop,connect,progress,settings,out,candidate,prior12108,prior12109,prior12110,prior12111,prior12112,prefs});
+  await verifyAbsentReminders({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
+  fs.writeFileSync(out+"/durable-classic.json",JSON.stringify(await verifyDurableClassic(),null,2));
+  await verifyFinalUi49({adb,profiles,fixture,launch,stop,connect,progress,settings,out});
+  fs.writeFileSync(out+"/appearance.json",JSON.stringify(await verifyAppearance(),null,2));
+  fs.writeFileSync(out+"/reach-values.json",JSON.stringify(await verifyReachValues(),null,2));
   if (process.env.SEEDS_ANDROID_CORE_FEEL === "1") {
     const pilot=await verifyCoreFeel();
     fs.writeFileSync(out+"/core-feel.json",JSON.stringify({source:process.env.GITHUB_SHA,...pilot},null,2));
@@ -1221,15 +1559,13 @@ try{
     assert.deepEqual(gameText[scale],gameText[1],"Game text changed at system font scale "+scale);
   }
   fs.writeFileSync(out+"/fixed-text.json",JSON.stringify(gameText,null,2));
-  assert.equal(adb("shell","pm","clear",app),"Success");
-  launch();
+  launchOpeningInputCase();
   const opening=[await firstNotebookEdge([7,14])];
   const file=installRecord();
   assert.equal(file.install_store,"unknown");
   assert.equal(file.artifact_channel,"rustore");
   assert.equal(file.acquisition_state,"fresh");
-  assert.equal(adb("shell","pm","clear",app),"Success");
-  launch();
+  launchOpeningInputCase();
   opening.push(await firstNotebookEdge([14,7]));
   const archives=[];
   archives.push(await archiveAtLargeFont("es","Reto del archivo · 13 de noviembre","Deshacer"));
@@ -1243,6 +1579,7 @@ try{
   }
   fs.writeFileSync(out+"/result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode,
     physicalPhone:false,systemFont:2,forwardedFile:file,upgrade,updatePreservedSave:true,opening,archives,controls,
+    openingInputPermissionPrecondition:"granted; actual first-result prompt and denial verified separately in demo",
     webview:adb("shell","dumpsys","webviewupdate").split("\n").find(x=>x.includes("Current WebView package"))},null,2));
   // The player report requires a native touch regression, separate from solver proof.
   const report78=await verifyReport78Taps();
@@ -1266,8 +1603,7 @@ try{
   // An optional recording must never turn a passing game regression into a red CI.
   // Log camera/emulator failures separately so the real acceptance result survives.
   try {
-    assert.equal(adb("shell","pm","clear",app),"Success");
-    launch();
+    launchOpeningInputCase();
     await firstNotebookEdge([7,14],{recordVideo:true});
     fs.writeFileSync(out+"/video-result.json",JSON.stringify({source:process.env.GITHUB_SHA,package:app,versionCode,physicalPhone:false,recorded:true},null,2));
   } catch(videoError) {

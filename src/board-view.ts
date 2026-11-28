@@ -1,10 +1,11 @@
 import { t } from "./i18n";
-import { WIDTH, type Board, type Connection } from "./core";
+import { WIDTH, reachableNumbers, checkPair, type Board, type Connection } from "./core";
 /** Preserve cell nodes during selection and retain surviving nodes on row collapse. */
 export class BoardView {
   private nodes: HTMLElement[] = [];
   private values: number[] = [];
   private marked = new Set<number>();
+  private reachable = new Set<number>();
   private remapped = false;
   private focusIndex = 0;
   private measuredDigit: HTMLElement | null = null;
@@ -51,6 +52,9 @@ export class BoardView {
   }
   remap(positions: Map<number, number>) {
     const old = this.nodes;
+    for (const i of this.reachable) old[i]?.classList.remove("reachable", "reachable-valid", "reachable-invalid");
+    for (const i of this.reachable) old[i]?.removeAttribute("aria-description");
+    this.reachable.clear();
     this.remapped =
       positions.size !== old.length ||
       [...positions].some(([to, from]) => to !== from);
@@ -65,13 +69,15 @@ export class BoardView {
     );
   }
   relabel() {
-    for (const [i,node] of this.nodes.entries()) if (this.values[i])
+    for (const [i,node] of this.nodes.entries()) if (this.values[i]) {
       node.setAttribute("aria-label",this.label(this.values[i],i));
+      if(node.classList.contains("reachable")) node.setAttribute("aria-description",t(node.classList.contains("reachable-valid") ? "board.reach.valid" : "board.reach.invalid"));
+    }
   }
   private label(value:number,i:number) {
     return t("board.cell",{value,row:Math.floor(i/WIDTH)+1,column:i%WIDTH+1});
   }
-  render(values: Board, selected: number, hint: Connection | null) {
+  render(values: Board, selected: number, hint: Connection | null, showReach = true) {
     const changed =
       this.remapped ||
       values.length !== this.values.length ||
@@ -111,8 +117,9 @@ export class BoardView {
           if (node.getAttribute("aria-label") !== label)
             node.setAttribute("aria-label", label);
         }
-        if (node.matches(".erasing, .selected, .hinted"))
-          node.classList.remove("erasing", "selected", "hinted");
+        if (node.matches(".erasing, .selected, .hinted, .reachable"))
+          node.classList.remove("erasing", "selected", "hinted", "reachable", "reachable-valid", "reachable-invalid");
+        node.removeAttribute("aria-description");
         if (value && node.getAttribute("aria-pressed") !== "false")
           node.setAttribute("aria-pressed", "false");
         desired.push(node);
@@ -150,6 +157,19 @@ export class BoardView {
         n.setAttribute("aria-pressed", String(i === selected));
     }
     this.marked = marked;
+    const reachable = new Set(showReach ? reachableNumbers(values, selected) : []);
+    for (const i of new Set([...this.reachable, ...reachable])) {
+      const node = this.nodes[i];
+      if (!node) continue;
+      const visible = reachable.has(i);
+      const valid = visible && checkPair(values, selected, i).ok;
+      node.classList.toggle("reachable", visible);
+      node.classList.toggle("reachable-valid", valid);
+      node.classList.toggle("reachable-invalid", visible && !valid);
+      if (visible) node.setAttribute("aria-description", t(valid ? "board.reach.valid" : "board.reach.invalid"));
+      else node.removeAttribute("aria-description");
+    }
+    this.reachable = reachable;
     this.tabStops();
   }
 }

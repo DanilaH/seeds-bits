@@ -198,7 +198,7 @@ async function runSection(section, fixture, route) {
 async function opening() {
   await ui.shown(".opening-copy");
   const field = () => ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().toJSON()");
-  await checkpoint("first-start", {command:".opening-copy",within:"#page-progress"});
+  await checkpoint("first-start", {command:".opening-copy",within:"#opening-instructions"});
   if (await ui.evaluate("document.documentElement.lang !== 'ru'")) {
     await ui.tap("#menu");
     await ui.tap("#pause-language");
@@ -209,15 +209,15 @@ async function opening() {
   }
   const start = await field();
   await ui.digit(4, {scroll:false});
-  await checkpoint("first-two-partners", {command:".opening-copy",within:"#page-progress"});
+  await checkpoint("first-two-partners", {command:".opening-copy",within:"#opening-instructions"});
   await ui.digit(4);
   await ui.move(8,17);
   await ui.move(4,5);
   assert.match(await ui.text(".opening-copy"), /Пустые клетки/);
-  await checkpoint("first-gap", {command:".opening-copy",within:"#page-progress"});
+  await checkpoint("first-gap", {command:".opening-copy",within:"#opening-instructions"});
   await ui.move(9,11);
   assert.match(await ui.text(".opening-copy"), /края/);
-  await checkpoint("first-edge", {command:".opening-copy",within:"#page-progress"});
+  await checkpoint("first-edge", {command:".opening-copy",within:"#opening-instructions"});
   assert.deepEqual(await field(), start, "First-task field moved with the explanation");
   await ui.move(14,7);
   await ui.shown("#win");

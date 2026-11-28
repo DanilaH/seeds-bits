@@ -785,7 +785,7 @@
       "en": "Settings",
       "es": "Ajustes",
       "tr": "Ayarlar",
-      "pt-BR": "Configurações",
+      "pt-BR": "Ajustes",
       "fr": "Paramètres",
       "de": "Einstellungen",
       "it": "Impostazioni",
@@ -1197,7 +1197,7 @@
     },
     "language.auto": {
       "source": "new:language-picker",
-      "ru": "Автоматически",
+      "ru": "Авто",
       "en": "Automatic",
       "es": "Automático",
       "tr": "Otomatik",

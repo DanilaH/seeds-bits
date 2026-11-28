@@ -1,0 +1,50 @@
+name: Issue 45 stability evidence
+on:
+  push:
+    branches: [feat/quiet-table-20261126, verify/quiet-stability-12105]
+permissions:
+  contents: read
+concurrency:
+  group: issue45-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  storage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install chromium
+      - name: Reproduce the unmodified 12104 tutorial reload twenty times
+        id: baseline
+        continue-on-error: true
+        run: |
+          git worktree add "$RUNNER_TEMP/seeds12104" 253daea010cd6d48296db719050f9c4855ae4b6a
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/seeds12104/node_modules"
+          cd "$RUNNER_TEMP/seeds12104"
+          npx playwright test e2e/game.spec.ts --grep 'complete tutorial' --repeat-each=20 --workers=2
+      - name: Capture deterministic baseline trace while the real storage lock is held
+        continue-on-error: true
+        run: |
+          cp e2e/stability12105.spec.ts "$RUNNER_TEMP/seeds12104/e2e/"
+          cp e2e/restore-game.ts "$RUNNER_TEMP/seeds12104/e2e/"
+          cd "$RUNNER_TEMP/seeds12104"
+          npx playwright test e2e/stability12105.spec.ts --grep 'QT01 delayed' --workers=1 --output=test-results/held-baseline
+      - name: Preserve baseline outcome
+        if: always()
+        run: |
+          mkdir -p test-results/issue45
+          printf '%s\n' '${{ steps.baseline.outcome }}' > test-results/issue45/baseline-outcome.txt
+          cp -r "$RUNNER_TEMP/seeds12104/test-results" test-results/issue45/baseline-results
+      - name: Twenty repetitions of each deterministic storage fault and atomic start
+        run: npx playwright test e2e/stability12105.spec.ts --repeat-each=20 --workers=2
+      - name: Repeat the original immediate reload and new Classic regressions
+        run: npx playwright test e2e/game.spec.ts e2e/repairs041.spec.ts --grep 'complete tutorial|A04' --repeat-each=20 --workers=2
+      - name: Repeat large-board focus and landscape scroll after actual resume
+        run: npx playwright test e2e/update110.spec.ts e2e/landscape051.spec.ts --grep 'large board has one Tab stop|landscape 844x390' --repeat-each=20 --workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: issue45-storage-evidence, path: test-results/}

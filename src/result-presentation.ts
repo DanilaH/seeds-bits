@@ -1,5 +1,6 @@
 import { t } from "./i18n";
 import { icon } from "./icons";
+import { OwnedDomMotion } from "./vendor/mini-games-kit/owned-dom-motion";
 
 export type ResultKind = "classic" | "daily" | "task" | "page" | "book";
 
@@ -9,9 +10,11 @@ export function resultKind(
   id: string,
   done: readonly string[],
   tasks: readonly { id: string }[],
+  newlyCompleted = true,
 ): ResultKind {
   if (id === "classic") return "classic";
   if (id.startsWith("daily")) return "daily";
+  if (!newlyCompleted) return "task";
   const index = tasks.findIndex((t) => t.id === id);
   if (index < 0) return "task";
   const finished = new Set(done);
@@ -60,19 +63,25 @@ export function celebrateResult(
   kind: ResultKind,
   reduced: boolean,
 ) {
-  if (reduced) return () => {};
+  if (reduced) return Object.assign(() => {}, {finished: Promise.resolve()});
+  const owner = new OwnedDomMotion();
+  const pose = getComputedStyle(host).transform;
+  const base = pose === "none" ? "rotate(0deg)" : pose;
   const animations: Animation[] = [];
   const animate = (
     node: Element | null,
     frames: Keyframe[],
     duration: number,
   ) => {
-    if (node)
-      animations.push(
-        node.animate(frames, { duration, easing: "cubic-bezier(.2,.8,.3,1)" }),
-      );
+    const animation = owner.animate(node, frames, {duration, easing: "cubic-bezier(.2,.8,.3,1)"});
+    if (animation) animations.push(animation);
   };
-  if (kind === "classic") {
+  if (kind === "classic" || kind === "daily") {
+    animate(host, [
+      {transform: `${base} scale(.96)`},
+      {transform: `${base} scale(1.025)`,offset:.5},
+      {transform: `${base} scale(1)`},
+    ], kind === "classic" ? 500 : 420);
     animate(
       host.querySelector(".result-clearing-cells"),
       [
@@ -99,17 +108,21 @@ export function celebrateResult(
       500,
     );
   } else if (kind === "book") {
+    animate(host, [
+      {transform: `${base} scale(.96)`},
+      {transform: `${base} scale(1.035)`,offset:.4},
+      {transform: `${base} scale(1)`},
+    ], 680);
     for (const [i, leaf] of [
       ...host.querySelectorAll(".result-leaf"),
-    ].entries())
-      animate(
-        leaf,
-        [
-          { transform: `translateY(${-i * 5}px) rotate(${8 + i * 4}deg)` },
-          { transform: "translateY(0) rotate(0)" },
-        ],
-        500,
-      );
+    ].entries()) {
+      const rest=getComputedStyle(leaf).transform;
+      const baseLeaf=rest==="none"?"translate(0,0)":rest;
+      animate(leaf,[
+        {transform:`${baseLeaf} translateY(${-i*5}px) rotate(${8+i*4}deg)`},
+        {transform:baseLeaf},
+      ],500);
+    }
     animate(
       host.querySelector(".result-cover"),
       [
@@ -129,12 +142,13 @@ export function celebrateResult(
     );
   } else
     animate(
-      host,
+      host.querySelector(".win-symbol"),
       [
-        { opacity: 0, transform: "scale(.85)" },
-        { opacity: 1, transform: "scale(1)" },
+        { transform: "scale(.82)" },
+        { transform: "scale(1.05)", offset: .55 },
+        { transform: "scale(1)" },
       ],
-      240,
+      300,
     );
   animate(
     host.querySelector(".result-stamp"),
@@ -147,32 +161,32 @@ export function celebrateResult(
   const burst = document.createElement("span");
   burst.className = "result-seed-burst";
   burst.setAttribute("aria-hidden", "true");
-  if (kind === "book") {
-    for (let i = 0; i < 10; i++) {
+  if (kind === "book" || kind === "classic") {
+    host.append(burst);
+    const count = kind === "book" ? 12 : 8;
+    for (let i = 0; i < count; i++) {
       const grain = document.createElement("i");
       burst.append(grain);
-      const a = (i * Math.PI * 2) / 10;
+      const a = (i * Math.PI * 2) / count;
+      grain.style.background = ["var(--table-cover)", "#ac5b3e", "#be983d"][i % 3];
       animate(
         grain,
         [
           { transform: "translate(0,0) scale(.3)", opacity: 0 },
           { opacity: 1, offset: 0.2 },
           {
-            transform: `translate(${Math.cos(a) * 72}px,${Math.sin(a) * 60}px) rotate(${i * 43}deg)`,
+            transform: `translate(${Math.cos(a) * (92 + i % 3 * 14)}px,${Math.sin(a) * 90 + 28}px) rotate(${i * 43}deg)`,
             opacity: 0,
           },
         ],
-        580,
+        620 + i % 3 * 35,
       );
     }
-    host.append(burst);
   }
   const clear = () => {
-    for (const a of animations) a.cancel();
+    owner.cancelAll();
     burst.remove();
   };
-  void Promise.allSettled(animations.map((a) => a.finished)).then(() =>
-    burst.remove(),
-  );
-  return clear;
+  const finished = Promise.allSettled(animations.map((a) => a.finished)).then(() => { burst.remove(); });
+  return Object.assign(clear, {finished});
 }

@@ -1,0 +1,16 @@
+{
+  "author": "Kenney",
+  "pack": "Casino Audio",
+  "license": "CC0-1.0",
+  "source": "https://kenney.nl/assets/casino-audio",
+  "mirrorRevision": "34bbe8b525b5ceff3804915ea745532af11f6055",
+  "mirror": "https://github.com/Mcamento8/open-game-sfx-index/tree/34bbe8b525b5ceff3804915ea745532af11f6055/audio/casino-audio",
+  "sha256": {
+    "chip-lay-1.ogg": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c",
+    "chip-lay-2.ogg": "8ca8b2d450741c04ed7b4ba51ed3f73c2400c8b3dbe83b974be4fe4774a76712",
+    "chip-lay-3.ogg": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa",
+    "chips-collide-1.ogg": "f41b3d106360fc68ebc061a211d4265b4cb5fa1fbe86e4d57d3673510e2c3784",
+    "chips-stack-1.ogg": "12bf175b9afcea112175b241ad3336c6244ac5fdcdff8b5942ecc03f2225e0c4",
+    "chips-stack-2.ogg": "9f985e766c3557eef1764240b48e30b2f0ffa870a99f05de85cd6bf0ea758ef5"
+  }
+}

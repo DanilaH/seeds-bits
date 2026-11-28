@@ -1,5 +1,9 @@
 # Семечки — project decisions
 
+## 28 November — owner package50, final tutorial
+
+[№50](https://github.com/DanilaH/seeds-bits/issues/50) approves the real book-v1-1 contextual entry for the production candidate, superseding the20November preview-only flag decision. The default product route is ON; explicit0 remains legacy QA only and release configuration rejects it. Stored/uncertain profiles keep their former protected entry. The six-step Learn course is voluntary, uses the common board/HUD/tools/status/Core Feel and restores the real game/menu without rewards. Preserve12112/№45–49 and all six paused experiments; no publication or release signing. [Scenarios/verification limits](research/tutorial-final-2026-11-28/README.md).
+
 Recorded 13 November 2026. This is the working project baseline, not proof of publication or approval of every research idea. Inspect actual HEAD and later owner instructions before implementation.
 
 ## Source, platform and release baseline
@@ -79,3 +83,42 @@ The shared module deliberately fixes shorthand/longhand overlap with var() throu
 ## 25 ноября 2026 · Меню, тетради и реклама
 
 Решение по [№31](https://github.com/DanilaH/seeds-bits/issues/31) заменяет прежние действия «Легче», «Сложнее» и повторный старт из результата Классики. Одна CTA «В меню», четыре сложности доступны при запуске новой Классики. Баннер сохраняет view и резерв на игровых и обычных навигационных экранах. Реальные модальные окна, фон и fullscreen скрывают view. Действует существующий общий интервал показа. [Контракт и область проверок](research/menu-package-2026-11-25/README.md).
+
+## Owner playtest follow-up · 26 November 2026
+
+- The first field entry after each application launch is protected from interstitials. Further transitions use the existing shared advertising gate.
+- Classic results offer Next, which opens the difficulty chooser before the new-game interstitial, and a separate Home button. Daily results also have an explicit Home button.
+- Results fit the supported portrait viewport at the app's fixed 100% text scale. Daily medal progress belongs on the illustrated result sheet.
+- A completed notebook, Classic and daily use visible bounded celebrations with the existing sound/vibration settings and lifecycle cancellation.
+- No-pair states expose a prominent contextual Add or Restart action and Undo when available. Solver recovery actions use the same visible card.
+- With no resumable session, Home keeps its illustrated object and offers New Classic with a difficulty choice. Today's untouched daily receives a periodic calendar nudge until first entry.
+
+## Owner UI correction · 26 November 2026
+
+The owner requests consistent control/panel geometry and padding, readable notebook labels, a visible synchronized ground shadow and removal of the notebook filter. Main/Themes and numbered ranges remain. Text must fit the safe area of the illustration, not merely its outer button. See [UI audit](research/ui-audit-2026-11-26/README.md).
+
+The owner separately authorizes subtle geometric reachability when selecting a number: the first occupied number on each clear ray plus reading-order neighbours, regardless of value. This free visual state spends no stock, makes no winning-pair promise and leaves all six paused assistance experiments disabled. It is suppressed in the scripted tutorial. No progression/reward/save contract changes are authorized by this addition.
+
+## Quiet Table polish #43 / reach classification #44 · 26 November 2026
+
+The owner preserves Variant A and requests local geometry/density fixes across the existing screens; no dashboard or new art direction. System bars follow the saved in-game theme without changing the banner slot or hiding navigation. Jar counts, IDs, rewards and details remain available; visible duplicates may move into existing details. Daily archive becomes a colored secondary button; Home remains primary.
+
+Reachability remains the exact existing geometric set. Existing checkPair supplies valid/invalid classification: soft green with solid edge versus soft red with dashed edge and localized accessible descriptions. Unreachable cells remain neutral. Hint/budget/save/rules and all six paused experiments remain unchanged. See [package and acceptance](research/quiet-polish-2026-11-26/README.md).
+
+## 27 November · visual residue audit after12107
+
+The owner requests an audit and immediate repair of remaining previous-skin surfaces, starting with the common background under the collection tabs. Remove confirmed redundant wrappers and unmapped decoration; preserve Quiet Table, meaningful selected/progress/error states, layout/input, saved rights and ad policy. Verify computed CSS and comparable real frames, including rare earned medals and recovery states. See [audit](research/style-residue-2026-11-27/README.md).
+
+## 26 November · technical stability #45
+
+The owner requests continuation of PR40 on `feat/quiet-table-20261126`, with accepted Quiet Table art/reach classification, preserved Core Feel, content pins, rights, economy and all six paused experiments. The implementation distinguishes optimistic field input from durable acknowledgement: pending is explicit in the existing status rail, an old queued write cannot acknowledge a later move, and a failed write uses the existing recovery controls. Twelve same-turn moves remain accepted. Reload/process-death acceptance after a commit retains the exact board/history; reload while explicitly pending may restore the previous committed state. Rewards/one-time milestones retain their existing durable authority.
+
+A new Classic is published after its full candidate commits; its test barrier is the new saved attempt, not the visibility of an old result. Native banner continuity uses rendered geometry after layout/preDraw, a per-draw movement check, actual creative pixels and a raw recording. SDK readiness for a fullscreen is independent of banner readiness. These are technical acceptance decisions under [#45](https://github.com/DanilaH/seeds-bits/issues/45), not a new ad cadence or a redesign. [Evidence and limits](research/stability-2026-11-26/README.md).
+
+## 27 November — owner visual/notification package №48
+
+Owner instruction and [issue48 additions VA09–13](https://github.com/DanilaH/seeds-bits/issues/48#issuecomment-7218627968) supersede earlier reminder-settings and guarded-settings policies. Ordinary Settings retains the same native banner/view/request. Only genuine modal/confirm/privacy/external/background/FTUE exceptions hide it. No ad cadence change.
+
+Remove in-game notification controls and result CTA. Inexact local reminders use12:30/19:00 (implementation choices for lunch/evening); any real daily foreground/entry suppresses both, including Classic/notebooks, and clears old posts. Android permission/channel and legacy explicit opt-out remain authoritative. One durable recorded permission request after the first successful meaningful result, after its reward scene, without competing review/ad. No repeated automatic prompt, push server/token or exact-alarm permission. Legacy custom time is preserved as historical data and no longer selects delivery time.
+
+Restore expressive finite jar spill from internal12106 reference with owned cancellation, proportional internal glass volume and durable old→full→new presentation. No new reward authority, currencies/content or reactivation of the six paused experiments. All VA01–13 are in scope; phone/live acceptance remains distinct from project CI.

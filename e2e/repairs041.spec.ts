@@ -146,7 +146,7 @@ test("A04 finished result, reload and restart count exactly once per attempt", a
     "4",
   ]);
   await page.locator("#collection-back").click();
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   await openClassicNew(page,1);
   await expect(page.locator("#win")).toBeHidden();
   const saved = await data(page);
@@ -231,7 +231,7 @@ test("A08 offline already loaded APK web assets remain playable and save/reload"
   await expect(page.locator("#win")).toBeVisible();
   await context.setOffline(false);
   await page.reload();
-  await expect(page.locator("#resume")).toBeHidden();
+  await expect(page.locator("#resume")).toHaveText("Начать");
   expect((await data(page)).meta.completed).toBe(6);
 });
 test("A09 reduced motion has no running decorative animations during selection and menus", async ({

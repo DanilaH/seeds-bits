@@ -141,36 +141,24 @@ test("restart belongs to the current-game menu and cancelling preserves the boar
   await expect(page.locator("#remaining")).toHaveText("4");
 });
 for (const state of ["grant", "deny", "error", "hang"] as const)
-  test(`notification ${state} always leaves usable navigation`, async ({
-    page,
-  }) => {
-    await seed(page, state);
-    await page.locator("#settings-open").click();
-    await page.locator("#notification-permission-request").click();
-    if (state === "hang") await page.waitForTimeout(20500);
-    if (state === "error" || state === "hang") {
-      await expect(page.locator("#reminder-permission")).toContainText(
-        "Не удалось открыть",
-      );
-      await expect(
-        page.locator("#notification-permission-request"),
-      ).toBeEnabled();
-      await page.locator("#reminders").uncheck();
-      await expect(
-        page.locator("#notification-permission-request"),
-      ).toBeHidden();
-    } else if (state === "deny")
-      await expect(page.locator("#reminders")).not.toBeChecked();
-    else
-      await expect(page.locator("#reminder-permission")).toHaveText(
-        "Напоминание включено.",
-      );
-    await page.locator("#settings-back").click();
-    await page.locator("#resume").click();
-    await page.locator('[data-index="0"]').click();
-    await page.locator('[data-index="1"]').click();
-    await expect(page.locator("#remaining")).toHaveText("4");
+  test(`automatic notification ${state} leaves usable navigation without game settings`,async({page})=>{
+    await seed(page,state);await page.locator('#resume').click();
+    for(let pair=0;pair<3;pair++){
+      await page.locator(`#board button[data-index="${pair*2}"]`).click();
+      await page.locator(`#board button[data-index="${pair*2+1}"]`).click();
+      await expect(page.locator('#remaining')).toHaveText(String(4-pair*2));
+    }
+    await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).meta.flags?.includes('reminder_permission_requested'),key)).toBe(true);
+    await expect(page.locator('#app')).not.toHaveAttribute('inert','',{timeout:25000});
+    await expect(page.locator('#reminder-settings,#result-reminder')).toHaveCount(0);
+    await page.locator('#result-home').click();await page.locator('#settings-open').click();
+    await page.locator('#dark').check();await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+    await page.locator('#settings-back').click();
+    await expect(page.locator('#classic-mode')).toBeEnabled();
+    const p=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!),key);
+    if(state==='error'||state==='hang')expect(p.meta.flags).toContain('reminder_permission_error');
   });
+
 test("invalid raw data is preserved without offering a guaranteed failing restore", async ({
   page,
 }) => {

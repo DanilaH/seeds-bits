@@ -1,7 +1,7 @@
 import { requestRestartFromSettings } from "./restore-game";
 import { installLegacyClassic } from "./restore-game";
 import { openClassicNew } from "./restore-game";
-import { openBookPicker, exposeBookFilter } from "./book-controls";
+import { openBookPicker } from "./book-controls";
 import { test, expect, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 const out = "test-results/gold-layout";
@@ -228,7 +228,7 @@ for (const [completed, tier] of [
       /earned/,
     );
     const burst = page.locator("#award .trophy-confetti");
-    await expect(burst.locator("i")).toHaveCount(32);
+    await expect(burst.locator("i")).toHaveCount(12);
     expect(await burst.locator('[data-white="true"]').count()).toBeGreaterThan(
       0,
     );
@@ -276,7 +276,7 @@ for (const [completed, tier] of [
       animations: "disabled",
     });
     await page.reload();
-    await expect(page.locator("#resume")).toBeHidden();
+    await expect(page.locator("#resume")).toHaveText("Начать");
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seeds-bits.progress.v2")!).done)).toContain("daily-v1-2026-10-31");
     await page.locator("#progress-open").click();
     await page.locator("#progress-trophies").click();
@@ -375,9 +375,8 @@ test("all screens contain their text with ads, themes, narrow landscape and tabl
       await page.locator("#book-mode").click();
       await check("books");
       await openBookPicker(page);
-      await (await exposeBookFilter(page)).selectOption("done");
-      await check("book-empty");
-      await page.locator("#book-filter-reset").click();
+      await page.locator("#book-section-themes").click();
+      await check("book-themes");
       await page.locator("#collection-back").click();
       await page.locator("#continue-book").click();
       await check("game");
@@ -466,6 +465,7 @@ test("enlarged text remains contained in screens and game controls", async ({
     await check("calendar");
     for (let i = 0; i < 3; i++) await page.locator("#collection-back").click();
     await page.locator("#resume").click();
+    await expect(page.locator("#dialog")).toBeHidden();
     await check("game");
     await context.close();
   }
@@ -609,98 +609,14 @@ test("one medal fills the next stage and keeps already earned stages in its capt
   }
 });
 
-test("native reminder hours, minutes and AM/PM remain visible after editing at narrow widths and large text", async ({
-  browser,
-}) => {
-  for (const locale of ["ru-RU", "en-US"])
-    for (const [width, height] of [
-      [320, 568],
-      [568, 320],
-    ])
-      for (const scale of [1, 1.5]) {
-        const context = await browser.newContext({
-          viewport: { width, height },
-          locale,
-          reducedMotion: "reduce",
-        });
-        const page = await context.newPage();
-        await seed(page);
-        await page.locator("#settings-open").click();
-        if (scale !== 1)
-          await page.evaluate((scale) => {
-            const sizes = [
-              ...document.querySelectorAll<HTMLElement>("body, body *"),
-            ].map(
-              (el) =>
-                [
-                  el,
-                  parseFloat(getComputedStyle(el).fontSize) * scale,
-                ] as const,
-            );
-            for (const [el, size] of sizes) el.style.fontSize = `${size}px`;
-          }, scale);
-        const input = page.locator("#reminder-time");
-        const client = await context.newCDPSession(page);
-        await client.send("DOM.enable");
-        const doc = await client.send("DOM.getDocument", {
-          depth: 0,
-          pierce: true,
-        });
-        const id = await client.send("DOM.querySelector", {
-          nodeId: doc.root.nodeId,
-          selector: "#reminder-time",
-        });
-        for (const value of ["00:00", "12:30", "13:00", "23:59"]) {
-          await input.fill(value);
-          await input.blur();
-          await input.scrollIntoViewIfNeeded();
-          await expect(input).toHaveValue(value);
-          const tree = await client.send("DOM.describeNode", {
-            nodeId: id.nodeId,
-            depth: -1,
-            pierce: true,
-          });
-          const nodes: any[] = [];
-          function walk(n: any) {
-            nodes.push(n);
-            for (const c of [...(n.children || []), ...(n.shadowRoots || [])])
-              walk(c);
-          }
-          walk(tree.node);
-          const nativeEdit = nodes.find((n) =>
-            (n.attributes || []).includes("-webkit-datetime-edit"),
-          );
-          const fields = nodes.filter((n) =>
-            (n.attributes || []).some((a: string) =>
-              /^-webkit-datetime-edit-(hour|minute|ampm)-field$/.test(a),
-            ),
-          );
-          expect(nativeEdit).toBeTruthy();
-          expect(fields.length).toBeGreaterThanOrEqual(2);
-          const bounds = async (n: any) => {
-            const { model } = await client.send("DOM.getBoxModel", {
-              backendNodeId: n.backendNodeId,
-            });
-            const b = model.border;
-            return {
-              left: Math.min(b[0], b[2], b[4], b[6]),
-              right: Math.max(b[0], b[2], b[4], b[6]),
-            };
-          };
-          const clip = await bounds(nativeEdit);
-          for (const field of fields) {
-            const b = await bounds(field);
-            expect(
-              b.left,
-              `${locale} ${width} ${scale} ${value}: clipped native time segment`,
-            ).toBeGreaterThanOrEqual(clip.left - 1);
-            expect(b.right).toBeLessThanOrEqual(clip.right + 1);
-          }
-          expect((await input.boundingBox())!.height).toBeGreaterThanOrEqual(
-            44,
-          );
-        }
-        expect(await textOverflow(page)).toEqual([]);
-        await context.close();
-      }
+test("notification controls stay absent at narrow widths and enlarged text",async({browser})=>{
+  for(const locale of ['ru-RU','en-US'])for(const [width,height] of [[320,568],[568,320]])for(const scale of [1,1.5]){
+    const context=await browser.newContext({viewport:{width,height},locale,reducedMotion:'reduce'});
+    const page=await context.newPage();await seed(page);await page.locator('#settings-open').click();
+    await page.evaluate(scale=>document.documentElement.style.fontSize=`${16*scale}px`,scale);
+    await expect(page.locator('#reminder-settings,#reminder-time,#reminders,#result-reminder')).toHaveCount(0);
+    await expect(page.locator('#dark')).toBeVisible();await expect(page.locator('#sound')).toBeVisible();
+    await page.locator('#settings-back').click();await expect(page.locator('#dialog')).toHaveAttribute('data-screen','home');
+    await context.close();
+  }
 });

@@ -1,120 +1,79 @@
-/** One saved jar milestone: transform-only grains, no reward state or frame loop. */
+import {OwnedDomMotion} from "./vendor/mini-games-kit/owned-dom-motion";
+
+/** One owned, finite spill on the visible, durably earned jar. No grant. */
 export class JarSpill {
-  private layer: HTMLElement | undefined;
-  private animations: Animation[] = [];
-
-  constructor() {
-    window.addEventListener("resize", () => this.clear());
-    matchMedia("(prefers-reduced-motion: reduce)").addEventListener?.(
-      "change",
-      () => this.clear(),
-    );
-  }
-
-  play(glass: HTMLElement) {
+  private layer?: HTMLElement;
+  private owner = new OwnedDomMotion();
+  play(glass: HTMLElement): Promise<void> {
     this.clear();
-    if (
-      document.hidden ||
-      matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return;
+    if (document.hidden || matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return Promise.resolve();
     const box = glass.getBoundingClientRect();
-    if (!box.width || !box.height || box.bottom < 0 || box.top > innerHeight)
-      return;
+    if (!box.width || !box.height) return Promise.resolve();
     const layer = document.createElement("div");
     layer.id = "jar-spill";
+    layer.dataset.target = glass.id;
     layer.setAttribute("aria-hidden", "true");
-    layer.style.setProperty(
-      "--spill-color",
-      getComputedStyle(glass).getPropertyValue("--jar-color").trim() ||
-        "#b58b51",
-    );
     this.layer = layer;
     document.body.append(layer);
-    this.animations.push(
-      glass.animate(
-        [
-          { transform: "rotate(0) translateY(0)" },
-          { transform: "rotate(-8deg) translateY(-2px)", offset: 0.14 },
-          { transform: "rotate(7deg) translateY(-1px)", offset: 0.32 },
-          { transform: "rotate(-5deg) translateY(0)", offset: 0.5 },
-          { transform: "rotate(3deg)", offset: 0.68 },
-          { transform: "rotate(-1deg)", offset: 0.84 },
-          { transform: "rotate(0) translateY(0)" },
-        ],
-        { duration: 620, easing: "ease-in-out" },
-      ),
-    );
-    const lid = glass.querySelector(".jar-lid");
-    if (lid)
-      this.animations.push(
-        lid.animate(
-          [
-            { transform: "translateY(0) rotate(0)" },
-            { transform: "translateY(-5px) rotate(-7deg)", offset: 0.18 },
-            { transform: "translateY(-4px) rotate(5deg)", offset: 0.55 },
-            { transform: "translateY(0) rotate(0)" },
-          ],
-          { duration: 590, easing: "ease-in-out" },
-        ),
-      );
-
-    const originX = box.left + box.width / 2;
-    const originY = Math.max(8, box.top - 2);
-    let remaining = 24;
-    for (let i = 0; i < 24; i++) {
-      const piece = document.createElement("i");
-      piece.className = "jar-spill-grain";
-      piece.dataset.shape = i % 4 === 0 ? "glint" : "seed";
-      piece.style.setProperty("--grain-size", `${4 + (i % 3)}px`);
-      layer.append(piece);
-
-      const side = i % 2 ? 1 : -1;
-      const x = originX + side * box.width * 0.18;
-      const y = originY + (i % 3);
-      const lift = 95 + Math.random() * 75;
-      const gravity = 1050 + Math.random() * 350;
-      const distance = innerHeight + 14 - y;
-      const seconds =
-        (lift + Math.sqrt(lift * lift + 2 * gravity * distance)) / gravity;
-      const room = Math.max(0, side < 0 ? x - 8 : innerWidth - x - 8);
-      const spread =
-        Math.min(room, innerWidth * 0.62) * (0.35 + Math.random() * 0.6);
-      const spin = side * (180 + Math.random() * 390);
-      const tilt = Math.random() * 90;
-      const frames = Array.from({ length: 33 }, (_, step) => {
-        const t = step / 32;
-        const elapsed = seconds * t;
-        // Start as a narrow spill, then fan out below the header caption.
-        const px = x + side * spread * t ** 1.8;
-        const py = y - lift * elapsed + (gravity * elapsed * elapsed) / 2;
-        return {
-          transform: `translate3d(${px}px,${py}px,0) rotate(${tilt + spin * t}deg) scaleX(${0.75 + Math.abs(Math.cos(t * Math.PI * 2 + i)) * 0.25})`,
-          opacity: Math.min(0.95, t * 22, (1 - t) * 7),
-          offset: t,
-        };
+    const animations: Animation[] = [];
+    const animate = (node: Element | null, frames: Keyframe[], duration: number) => {
+      const a = this.owner.animate(node, frames, {duration, easing:"ease-out"});
+      if (a) animations.push(a);
+    };
+    const large = box.height >= 60;
+    const bounce = large ? 8 : 5;
+    animate(glass, [
+      {transform:"none"},
+      {transform:"scale(1.13,.87) translateY(2px)",offset:.14},
+      {transform:`translateY(-${bounce}px) scale(.93,1.1) rotate(-6deg)`,offset:.34},
+      {transform:"scale(1.06,.96) rotate(4deg)",offset:.58},
+      {transform:"rotate(-2deg)",offset:.78},
+      {transform:"none"},
+    ],680);
+    animate(glass.querySelector(".jar-lid"),[
+      {transform:"none"},
+      {transform:`translateY(-${large ? 13 : 8}px) rotate(-13deg)`,offset:.3},
+      {transform:"translateY(-3px) rotate(7deg)",offset:.65},
+      {transform:"none"},
+    ],660);
+    const color = getComputedStyle(glass).getPropertyValue("--jar-color") || "#b58b51";
+    layer.style.setProperty("--spill-color",color);
+    // All trajectories stop above the native banner, outside the playable web
+    // area if there is no banner. Nothing touches SDK geometry or input.
+    const banner = document.querySelector("#ad-space")?.getBoundingClientRect();
+    const floor = banner && banner.height > 0 ? banner.top - 4 : innerHeight + 14;
+    layer.style.bottom="auto";
+    layer.style.height=`${Math.max(0,Math.min(innerHeight,floor))}px`;
+    const originX=box.x+box.width/2, originY=Math.max(9,box.y+box.height*.06);
+    for (let i=0;i<24;i++) {
+      const grain = document.createElement("i");
+      grain.className = "jar-spill-grain";
+      grain.dataset.shape=i%6===0?"glint":"seed";
+      grain.style.setProperty("--grain-size",`${(large?5:4)+i%3}px`);
+      layer.append(grain);
+      const side=i%2?1:-1, x=originX+side*box.width*.15;
+      const lift=(large?130:105)+Math.random()*65, gravity=1100+Math.random()*260;
+      const seconds=(lift+Math.sqrt(lift*lift+2*gravity*Math.max(20,floor-originY)))/gravity;
+      const room=Math.max(0,side<0?x-8:innerWidth-x-8);
+      const spread=Math.min(room,innerWidth*.55)*(.4+Math.random()*.55);
+      const spin=side*(210+Math.random()*370);
+      const frames=Array.from({length:33},(_,step)=>{
+        const t=step/32, elapsed=seconds*t;
+        return {transform:`translate3d(${x+side*spread*t**1.45}px,${originY-lift*elapsed+gravity*elapsed**2/2}px,0) rotate(${i*17+spin*t}deg)`,
+          opacity:Math.min(.98,t*24,(1-t)*9),offset:t};
       });
-      const animation = piece.animate(frames, {
-        duration: seconds * 1000,
-        delay: 75 + (i % 3) * 90 + Math.floor(i / 3) * 6,
-        easing: "linear",
-        fill: "both",
-      });
-      this.animations.push(animation);
-      animation.onfinish = () => {
-        piece.remove();
-        if (--remaining === 0 && this.layer === layer) this.clear();
-      };
+      const a=this.owner.animate(grain,frames,{duration:seconds*1000,delay:70+i%3*45+Math.floor(i/3)*5,easing:"linear",fill:"backwards"});
+      if(a){animations.push(a);void a.finished.then(()=>grain.remove(),()=>grain.remove());}
     }
+    return Promise.allSettled(animations.map(a=>a.finished)).then(()=>{
+      layer.remove();
+      if (this.layer===layer) this.layer=undefined;
+    });
   }
-
   clear() {
-    for (const animation of this.animations) {
-      animation.onfinish = null;
-      animation.cancel();
-    }
-    this.animations = [];
+    this.owner.cancelAll();
     this.layer?.remove();
-    this.layer = undefined;
+    this.layer=undefined;
   }
 }
