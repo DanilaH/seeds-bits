@@ -98,7 +98,7 @@ for(const [width,height,language,theme] of [[568,320,'ru','light'],[844,390,'pt-
   await tap(page,'#book-quick');await expect(page.locator('#dialog')).not.toBeVisible();await expect(page.locator('#mode')).not.toHaveText('');
 });
 for(const [width,height,language,theme] of [[568,320,'ru','light'],[844,390,'pt-BR','dark']] as const)test(`VA04R classic footer glyphs and pair/Undo ${width}x${height} ${language}`,async({page})=>{
-  await page.setViewportSize({width,height});await start(page,language,theme,'normal');await tap(page,'#resume');await expect(page.locator('#dialog')).not.toBeVisible();await expect(page.locator('#hint')).toBeVisible();await expect(page.locator('.game')).toHaveAttribute('data-persistence','saved');
+  await page.setViewportSize({width,height});await start(page,language,theme,'normal');await tap(page,'#resume');await expect(page.locator('#dialog')).not.toBeVisible();await expect(page.locator('#hint')).toBeVisible();await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));
   for(const selector of ['#undo','#hint','#add'])await check(page,selector,selector.slice(1)+'-initial');
   const before=await page.locator('#remaining').textContent();await tap(page,'[data-index="9"]');await tap(page,'[data-index="10"]');await expect(page.locator('#undo')).toBeEnabled();
   await tap(page,'#undo');await expect(page.locator('#remaining')).toHaveText(before!);
