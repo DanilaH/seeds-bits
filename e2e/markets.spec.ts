@@ -195,7 +195,7 @@ for(const [first,second] of [[7,14],[14,7]]) {
     await setup(context,"en",[]);
     await page.setViewportSize({width:320,height:568});
     await page.goto("/");
-    const cue=page.locator(".opening-copy"), rail=page.locator("#page-progress");
+    const cue=page.locator(".opening-copy"), rail=page.locator("#opening-instructions");
     await expect(cue).toHaveText("Tap any number.");
     await page.evaluate(()=>document.documentElement.classList.add("has-mobile-ads"));
     await doubleText(page);

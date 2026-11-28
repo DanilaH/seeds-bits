@@ -100,7 +100,7 @@ async function fresh(){
 }
 async function font200(){
   adb("shell","pm","clear",app);adb("shell","wm","size","640x1136");adb("shell","settings","put","system","font_scale","2");launch();const ui=await attach();
-  try{await ui.until("!!document.querySelector('.opening-copy')");await ui.fullText(".opening-copy","#page-progress");shot("first-launch-200");const top=await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top");await ui.move(8,17);await ui.move(4,5);assert.equal(await ui.evaluate("document.querySelector('.opening-copy').textContent"),"Пустые клетки можно пропускать.");await ui.tap("#hint");assert((await ui.evaluate("document.querySelector('.opening-copy').textContent")).includes("3 и 3"));assert.equal(await ui.evaluate("document.querySelector('#status').textContent"),"");shot("gap-hint-200");
+  try{await ui.until("!!document.querySelector('.opening-copy')");await ui.fullText(".opening-copy","#opening-instructions");shot("first-launch-200");const top=await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top");await ui.move(8,17);await ui.move(4,5);assert.equal(await ui.evaluate("document.querySelector('.opening-copy').textContent"),"Пустые клетки можно пропускать.");await ui.tap("#hint");assert((await ui.evaluate("document.querySelector('.opening-copy').textContent")).includes("3 и 3"));assert.equal(await ui.evaluate("document.querySelector('#status').textContent"),"");shot("gap-hint-200");
     await ui.tap("#menu");await ui.tap("#learn","#dialog");await ui.fullText("#lesson-text","#lesson");assert.equal(await ui.evaluate("document.querySelector('#lesson-text').textContent"),"Нажмите на две четвёрки.");shot("lesson-command-200");const lessonTop=await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top");await ui.digit(0);await ui.digit(1);await ui.until("!document.querySelector('#lesson-next').hidden");await ui.tap("#lesson-next","#lesson-actions");await ui.fullText("#lesson-text","#lesson");assert(Math.abs((await ui.evaluate("document.querySelector('#viewport').getBoundingClientRect().top"))-lessonTop)<=1);
     fs.writeFileSync(out+"/font-200.json",JSON.stringify({cssViewport:await ui.evaluate("[innerWidth,innerHeight]"),systemFont:adb("shell","settings","get","system","font_scale"),openingInstructionFullyVisible:true,lessonInstructionFullyVisible:true,lessonFieldTopStable:true,openingFieldTop:top,explicitHintReplacesOldInstruction:true},null,2));
   }finally{ui.close();stop();}
@@ -119,8 +119,8 @@ async function landscapeFont200() {
     const viewport = "JSON.stringify(document.querySelector('#viewport').getBoundingClientRect())";
     const before = await ui.evaluate(viewport);
     const measure = async () => {
-      await ui.fullText(".opening-copy", "#page-progress");
-      await ui.fullText(".opening-copy", ".game-top");
+      await ui.fullText(".opening-copy", "#opening-instructions");
+      await ui.fullText(".opening-copy", ".status-wrap");
     };
     assert.equal(await ui.evaluate(text), "Нажмите любую цифру.");
     await measure();
