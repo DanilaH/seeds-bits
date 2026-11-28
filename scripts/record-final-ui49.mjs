@@ -50,6 +50,19 @@ try{
   await page.addInitScript(({status,theme})=>{const id='daily-v1-2026-11-28',session={rules:1,current:{board:[5,5],moves:1,additions:0,scroll:0},history:[]},active=status==='started'?id:'classic';localStorage.setItem('seeds-bits.progress.v2',JSON.stringify({version:3,active,sessions:{[active]:session},done:status==='done'?[id]:[],seen:[],hints:{},meta:{version:2,since:'2026-11-01',wallet:0,completed:0,unassisted:0,attempts:{[active]:{id:'state',completed:false}}}}));localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true,languageChoice:'ru',theme,sound:false,vibration:false}));}, {status,theme});
   await page.goto(process.env.SEEDS_UI49_URL??'http://127.0.0.1:5191');await page.locator('#dialog[open]').waitFor();await page.evaluate(()=>document.fonts.ready);const file=`state-${theme}-${status}.png`;await page.screenshot({path:path.join(out,file)});report.frames.push({file,status,theme,width:390,height:844});await context.close();
  }
+ // Matched Home composition matrix, including the correctly absent book quick.
+ for(const theme of ['light','dark'])for(const language of ['ru','en','es','tr','pt-BR'])for(const [width,height] of [[320,520],[390,844],[768,1024],[568,320]])for(const kind of ['fresh','classic','book','started','done']){
+  const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'}),page=await context.newPage();await page.clock.setFixedTime(new Date('2026-11-28T12:00:00Z'));
+  await page.addInitScript(({kind,theme,language})=>{
+   const id='daily-v1-2026-11-28',active=kind==='started'||kind==='done'?id:kind==='book'?'book-v1-9':'classic';
+   const session={rules:1,current:{board:kind==='done'?[]:kind==='fresh'?Array.from({length:19},(_,i)=>String(i+1)).join('').replaceAll('0','').split('').map(Number):[4,0,6,7,0,3,0,0,1,5,5,8,0,2,9,0,2,0],moves:kind==='fresh'?0:1,additions:0,scroll:0},history:[]};
+   localStorage.setItem('seeds-bits.progress.v2',JSON.stringify({version:3,active,sessions:{classic:session,[active]:session,...(kind==='classic'?{'book-v1-9':session}:{})},done:kind==='done'?[id]:[],seen:[],hints:{},meta:{version:2,since:'2026-11-01',wallet:0,completed:1,unassisted:1,attempts:{[active]:{id:'uf49-grid',completed:kind==='done'}}}}));
+   localStorage.setItem('seeds-bits.settings.v1',JSON.stringify({tutorialDone:true,languageChoice:language,theme,sound:false,vibration:false}));
+   window.__SEEDS_ADS_TEST__={initialize:async()=>({enabled:true,test:true,readiness:{state:'ready'}}),addListener:async()=>({remove:async()=>{}}),banner:async()=>{},pending:async()=>({}),report:async()=>({accepted:true}),readiness:async()=>({state:'ready'}),preload:async()=>{},show:async()=>({status:'unavailable'})};
+  },{kind,theme,language});
+  await page.goto(process.env.SEEDS_UI49_URL??'http://127.0.0.1:5191');await page.locator('#dialog[open]').waitFor();await page.evaluate(()=>document.fonts.ready);
+  const file=`grid-${kind}-${theme}-${language}-${width}x${height}.png`;await page.screenshot({path:path.join(out,file)});report.frames.push({file,kind,theme,language,width,height});await context.close();
+ }
  await fs.writeFile(path.join(out,'provenance.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({side,source,clips:report.clips.map(x=>({name:x.name,frames:x.actualFrames})),states:report.frames.length}));
 }finally{await browser.close();await fs.rm(temp,{recursive:true,force:true});}
 if(side==='after'){

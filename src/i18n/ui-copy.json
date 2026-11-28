@@ -2567,5 +2567,12 @@
     "es": "El guardado está desactivado: este navegador no puede coordinar escrituras entre pestañas. El progreso original está protegido. Actualiza el navegador.",
     "tr": "Kaydetme kapalı: tarayıcı sekmeler arasında güvenli kayıt sağlayamıyor. Orijinal ilerlemen korunuyor. Tarayıcıyı güncelle.",
     "pt-BR": "O salvamento está desativado: o navegador não coordena gravações entre abas com segurança. Seu progresso original está protegido. Atualize o navegador."
+  },
+  "home.daily.done": {
+    "ru": "Решено",
+    "en": "Solved",
+    "es": "Resuelto",
+    "tr": "Çözüldü",
+    "pt-BR": "Resolvido"
   }
 }

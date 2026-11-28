@@ -4596,7 +4596,9 @@ function difficultyLabel() {
   return `${localName(classicDifficultyNames[level])}${level === CLASSIC_MIN ? " "+t("ui.lowest") : level === CLASSIC_MAX ? " "+t("ui.highest") : ""}`;
 }
 function renderHomeCurrent() {
+  $("resume").removeAttribute("aria-label");
   const id = progress.active;
+  homeCurrent.toggleAttribute("data-archived", id.startsWith("daily") && id.slice(9) !== today());
   const count = occupied(board());
   const isClassic = id === "classic";
   const book = id.startsWith("book");
@@ -4644,7 +4646,8 @@ function renderHomeCurrent() {
   $("resume-context").textContent = isClassic ? `${difficultyLabel()} · ${count} ${digitWord(count)}`
     : book ? next ? t("nav.bookTaskTarget",{book:volumeLabel(volumeOf(next)),task:puzzleNumberInVolume(next)})
       : t("ui.puzzle-3",{"0":puzzleNumberInVolume(id),"1":count,"2":digitWord(count)})
-    : `${date} · ${count} ${digitWord(count)}`;
+    : id.slice(9) === today() ? `${date} · ${count} ${digitWord(count)}`
+      : `${count} ${digitWord(count)}`;
   if (book && !next) {
     homeGoal.hidden = false;
     const done = notebookBrowseStatus(progress,volumeOf(id),new Set(progress.done)).solved;
@@ -4654,7 +4657,9 @@ function renderHomeCurrent() {
   $("resume").textContent = next
     ? t("ui.puzzle",{"0":notebookStarted(progress,next)?t("daily.resume"):t("action.start"),"1":puzzleNumberInVolume(next)})
     : isClassic ? t("ui.resume-classic") : book ? t("ui.resume-puzzle",{"0":puzzleNumberInVolume(id)})
-    : id.slice(9) === today() ? t("daily.resumeToday") : t("ui.resume-puzzle-for",{"0":date});
+    : id.slice(9) === today() ? t("daily.resumeToday") : t("daily.resume");
+  if (!isClassic && !book && id.slice(9) !== today())
+    $("resume").setAttribute("aria-label", t("ui.resume-puzzle-for",{"0":date}));
 }
 function refreshStaticJarViews() {
   if (!dialog.open || busy || paused || adActive || engagementActive || rewardRequest) return;
@@ -4751,7 +4756,7 @@ function updateHomeDaily() {
   $("daily-series").hidden = run.count === 0;
   $("daily-series").textContent =
     t("ui.in-a-row", { "0": run.count, "1": dayWord(run.count), "2": run.solvedToday ? "" : t("ui.until-reward", { "0": run.until, "1": dayWord(run.until) }) });
-  $("daily-state").textContent = dailyCaption;
+  $("daily-state").textContent = doneToday ? t("home.daily.done") : dailyCaption;
 }
 let displayedDate = today();
 function refreshDate() {

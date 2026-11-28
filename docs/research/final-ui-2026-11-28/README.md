@@ -4,12 +4,14 @@
 
 | Требование | Сценарий → ожидаемый результат | Код / доказательство |
 |---|---|---|
-| UF01 | Home Classic/book/today/archive/fresh/completed,320×520 и выше, полный5s sweep/press/resize → jar и её края доступны отдельно от Resume | final-ui.css резервирует верхний swept edge; landscape колонки сохраняют геометрию; final-ui49.spec.ts реальные hitpoints и9 фаз |
+| UF01 | Home Classic/book/today/archive/fresh/completed,320×520 и выше, полный5s sweep/press/resize → jar и её края доступны отдельно от Resume | final-ui.css убирает дублированный внутренний padding иллюстрации jar и резервирует верхний swept edge; landscape колонки сохраняют геометрию; final-ui49.spec.ts реальные hitpoints,actual jar-glass contour и9 фаз |
 | UF02 | Три режима в одном ряду → общий слот иллюстраций и первая строка заголовков; настоящие вторичные CTA на одной линии, Classic без лишней кнопки; навигация рядом | final-ui.css; все5языков×2темы×6размеров, собственные кадры |
 | UF03 | Progress/Help/Settings/Language → существующие16px SVG +12px читаемая подпись,44px hit target; header согласован по толщине штриха | final-ui.css; raw center/edge hitpoints, остаточные27проверок №48 |
 | UF04 | Книги/каталог/календарь/месяцы/медали/jars/settings/language/results → сохранить выбранные/начатые/завершённые/earned состояния и переносы | существующие ui-audit12103/quiet-polish/visual48/gold-layout/markets, неизменённые независимые style/visual probes; усилена контрастность подписей Home |
 | UF05 | Переходы/Back/focus/scroll/ranges/tabs/months/modals/fullscreen/background/resize/reduced motion → немедленная реакция, отмена чужих эффектов, durable наградная последовательность | существующие ui-motion/menu-reward-feel/feel/stability/native tests; исходные runtime pins, звуки и наградные реализации сохранены |
 | UF06 | Сегодня unplayed → terracotta calendar +7px dot, только dot2×2s+6s pause,scale1.12; started → статично+Continue; durable done → статичный зелёный✓+Solved/replay | home-daily.ts снимок существующих done/sessions/accepted attempts; main.ts публикует на save ACK, повтор использует done; final-ui.css псевдоэлемент стабильного слота; final-ui49.spec.ts pending/fail/retry/replay/date/pause/reduced |
+
+Компактные длинные состояния сохраняют шрифты/размеры mini-board и48px вторичных CTA: убраны внешние margin мини-поля; только на самой короткой высоте декоративная миниатюра в новой/архивной обложке уступает место длинному заголовку (живые размеры текущего поля сохранены); убраны повтор даты из архивного контекста (дата остаётся в заголовке), завершённый Home получает короткое локализованное «Решено»; доступное имя сохраняет действие повторения.
 
 Дополнительный таймер не вводится: используется прежний refreshDate/visibility/focus/native lifecycle. Метаданные мерцания не сохраняются. Отдельно захвачена серия daily в том же durable snapshot, поэтому её подпись не опережает запись. Предзагруженный session без принятой попытки/игровых действий/активного выбора не считается начатым. Готовая галочка определяется существующими dailyDone aliases, даже после повторного запуска поля.
 

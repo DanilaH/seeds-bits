@@ -1,13 +1,14 @@
 import {test, expect, type Page} from '@playwright/test';
+import {classic} from '../src/core';
 const key='seeds-bits.progress.v2';
 const day='2026-11-28',daily='daily-v1-'+day;
 async function seed(page:Page,kind='classic',language='ru',theme='light',motion:'reduce'|'no-preference'='reduce') {
   const session=(moves=1)=>({rules:1,current:{board:[5,5],moves,additions:0,scroll:0},history:[]});
-  const active=kind==='book'?'book-v1-9':kind==='daily'||kind==='done'?daily:kind==='archive'?'daily-v1-2026-11-27':'classic';
+  const active=kind==='book100'?'book-v1-2399':kind==='book'?'book-v1-9':kind==='daily'||kind==='done'?daily:kind==='archive'?'daily-v1-2026-11-27':'classic';
   const state:any={version:3,active,sessions:{classic:session(),'book-v1-9':session(),[active]:session()},seen:[],hints:{},done:kind==='done'?[daily]:[],
     meta:{version:2,since:'2026-11-01',wallet:0,completed:1,unassisted:1,attempts:{[active]:{id:'uf49',completed:kind==='done'}}}};
   if(kind==='preloaded')state.sessions[daily]=session(0);
-  if(kind==='fresh')state.sessions.classic=session(0);
+  if(kind==='fresh'){state.sessions.classic=session(0);state.sessions.classic.current.board=classic();state.meta.completed=0;state.meta.unassisted=0;}
   if(kind==='done')state.sessions[daily].current.board=[];
   await page.emulateMedia({reducedMotion:motion});await page.clock.setFixedTime(new Date(day+'T12:00:00Z'));
   await page.addInitScript(({key,state,language,theme})=>{
@@ -25,9 +26,9 @@ async function raw(page:Page,selector:string,click=false){
 }
 async function geometry(page:Page){return page.evaluate(()=>{
   const r=(s:string)=>document.querySelector(s)!.getBoundingClientRect().toJSON();
-  const jar=r('#home-jar'),cover=r('.home-current-copy'),controls=['#classic-mode','#book-mode','#daily-mode'].map(r);
+  const jar=r('#home-jar'),jarArt=r('#home-jar .jar-glass'),cover=r('.home-current-copy'),controls=['#classic-mode','#book-mode','#daily-mode'].map(r);
   const titleY=['#classic-mode','#book-mode','#daily-mode'].map(s=>{const e=document.querySelector(s+' > span:last-child')!,node=e.firstChild!,range=document.createRange();range.selectNodeContents(node);return range.getClientRects()[0]?.top;});
-  return {jar,cover,controls,titleY,overlap:cover.left<jar.right&&cover.right>jar.left&&cover.top<jar.bottom&&cover.bottom>jar.top,
+  return {jar,jarArt,cover,controls,titleY,overlap:cover.left<Math.max(jar.right,jarArt.right)&&cover.right>Math.min(jar.left,jarArt.left)&&cover.top<Math.max(jar.bottom,jarArt.bottom)&&cover.bottom>Math.min(jar.top,jarArt.top),
     secondary:['#book-quick','#calendar-open'].map(s=>({r:r(s),hidden:(document.querySelector(s) as HTMLElement).hidden})),
     nav:r('.home-links'),modes:r('.mode-nav')};
 });}
@@ -39,7 +40,7 @@ for(const language of ['ru','en','es','tr','pt-BR'])for(const theme of ['light',
     await page.waitForTimeout(240); // existing route transition, not a durability barrier
     for(const fraction of [0,.125,.25,.375,.5,.625,.75,.875,1]){
       await page.locator('.home-current-copy').evaluate((e,t)=>{for(const a of e.getAnimations())a.currentTime=t;},fraction*5000);
-      const m=await geometry(page);records.push({width,height,fraction,...m});expect(m.overlap,JSON.stringify({width,height,fraction,jar:m.jar,cover:m.cover})).toBe(false);
+      const m=await geometry(page);records.push({width,height,fraction,...m});expect(m.overlap,JSON.stringify({width,height,fraction,jar:m.jar,jarArt:m.jarArt,cover:m.cover})).toBe(false);
       for(const s of ['#home-jar','#progress-open','#learn','#settings-open','#pause-language'])await raw(page,s);
     }
     const m=await geometry(page);expect(Math.max(...m.titleY)-Math.min(...m.titleY)).toBeLessThanOrEqual(1);
@@ -53,15 +54,16 @@ for(const language of ['ru','en','es','tr','pt-BR'])for(const theme of ['light',
   await test.info().attach('swept-geometry.json',{body:JSON.stringify(records),contentType:'application/json'});
   await raw(page,'#home-notebook',true);await expect(page.locator('#dialog')).toBeHidden();
 });
-for(const kind of ['book','daily','archive','fresh','preloaded','done'])for(const theme of ['light','dark'])test(`UF01/06 Home ${kind} ${theme}`,async({page})=>{
-  await page.setViewportSize({width:320,height:520});await seed(page,kind,'ru',theme);
+for(const kind of ['book','book100','daily','archive','fresh','preloaded','done'])for(const theme of ['light','dark'])for(const language of ['ru','en','es','tr','pt-BR'])test(`UF01/06 Home ${kind} ${theme} ${language}`,async({page})=>{
+  await page.setViewportSize({width:320,height:520});await seed(page,kind,language,theme);
   const status=kind==='done'?'done':kind==='daily'?'started':'unplayed';
   await expect(page.locator('#daily-mode')).toHaveAttribute('data-daily-status',status);
   expect((await geometry(page)).overlap).toBe(false);
   await raw(page,'#home-jar');for(const s of ['#progress-open','#learn','#settings-open','#pause-language'])await raw(page,s);
   const dot=await page.locator('#home-today-art').evaluate(e=>{const s=getComputedStyle(e,'::after');return {content:s.content,animation:s.animationName,pointer:s.pointerEvents};});
   expect(dot.animation).toBe('none');expect(dot.pointer).toBe('none');expect(dot.content).toBe(kind==='done'?'"✓"':'""');
-  if(kind==='daily')await expect(page.locator('#daily-state')).toHaveText('Продолжить');
+  if(kind==='fresh')await expect(page.locator('.home-current')).toHaveAttribute('data-new-game','');
+  if(kind==='daily')await expect(page.locator('#daily-state')).toHaveText(({ru:'Продолжить',en:'Continue',es:'Continuar',tr:'Devam et','pt-BR':'Continuar'} as Record<string,string>)[language]);
   await page.screenshot({path:test.info().outputPath('state.png')});
 });
 test('UF06 two soft cycles, stable phase, modal/background/reduced motion and midnight',async({page})=>{

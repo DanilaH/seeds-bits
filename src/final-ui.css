@@ -1,4 +1,5 @@
 /* Owner package49: local Quiet Table refinements, same routes and hit targets. */
+#home-jar > .jar-picture { padding: 0; }
 #dialog[data-screen="home"] .home-current {
   /* Reserve the cover's complete rotated/floating upper edge, including press. */
   padding-block-start: 22px;
@@ -98,6 +99,10 @@
   #dialog[data-screen="home"] .home-layout:has(.home-current:not([hidden])) { gap: 2px; }
   #dialog[data-screen="home"] .home-links { margin-block-start: 0; }
   #dialog[data-screen="home"] .home-links > button { min-height: 44px; }
+  #dialog[data-screen="home"] .quiet-mini-board { margin-block: 1px; }
+  /* The date/new-game heading takes priority over the decorative miniature at
+     the shortest height. The live saved-board preview keeps its dimensions. */
+  #dialog[data-screen="home"] .home-current:is([data-new-game],[data-archived]) .quiet-mini-board { display: none; }
   #dialog[data-screen="home"] :is(.mode-link > .tile-picture, #book-mode > .book-picture, #home-today-art) { height: 38px; font-size: 22px; }
   #dialog[data-screen="home"] .mode-link > .tile-picture i { height: 32px; }
 }
